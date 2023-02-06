@@ -1,5 +1,10 @@
 {
-  "name": "fracture",
+  "name": "@sumoc/fracture",
+  "description": "The fracture library.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sumoinc/fracture"
+  },
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",
@@ -20,6 +25,11 @@
     "watch": "npx projen watch",
     "projen": "npx projen"
   },
+  "author": {
+    "name": "Cameron Childress",
+    "email": "cameronc@sumoc.com",
+    "organization": true
+  },
   "devDependencies": {
     "@types/jest": "^29.4.0",
     "@types/node": "^14",
@@ -37,8 +47,11 @@
     "ts-jest": "^29.0.5",
     "typescript": "^4.9.5"
   },
+  "dependencies": {
+    "projen": "^0.67.36"
+  },
   "main": "lib/index.js",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "version": "0.0.0",
   "jest": {
     "testMatch": [
