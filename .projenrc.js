@@ -1,3 +1,4 @@
+const { VsCodeConfiguration } = require('@sumoc/projen-lib');
 const { typescript } = require('projen');
 
 const authorName = 'Cameron Childress';
@@ -19,6 +20,10 @@ const project = new typescript.TypeScriptProject({
   authorEmail: authorAddress,
   releaseToNpm: true,
   deps: ['projen'],
+  devDeps: ['@sumoc/projen-lib'],
 });
+
+// configure vscode
+new VsCodeConfiguration(project);
 
 project.synth();

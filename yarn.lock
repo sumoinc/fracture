@@ -765,6 +765,13 @@
   dependencies:
     "@sinonjs/commons" "^2.0.0"
 
+"@sumoc/projen-lib@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@sumoc/projen-lib/-/projen-lib-0.0.1.tgz#f37bc6a89fe431539ec041d01235ef94da1b37e0"
+  integrity sha512-vGS1nsxYDW7ppwHTU+rFMfI3+pBvu0sPU2HvRY0obkSqpcV0oe3zUb6aTd0d5wVBeG2GXH0FEkM3UcS78A5HfQ==
+  dependencies:
+    projen "^0.67.36"
+
 "@szmarczak/http-timer@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@szmarczak/http-timer/-/http-timer-5.0.1.tgz#c7c1bf1141cdd4751b0399c8fc7b8b664cd5be3a"
