@@ -1,10 +1,12 @@
-const { typescript } = require('projen');
+import { JsiiProject } from 'projen/lib/cdk';
+import { NodePackageManager } from 'projen/lib/javascript';
+import { VsCodeConfiguration } from './src/config/vscode';
 
 const authorName = 'Cameron Childress';
 const authorAddress = 'cameronc@sumoc.com';
 const repository = 'https://github.com/sumoinc/fracture';
 
-const project = new typescript.TypeScriptProject({
+const project = new JsiiProject({
   defaultReleaseBranch: 'main',
   name: '@sumoc/fracture',
   description: 'The fracture library.',
@@ -19,6 +21,10 @@ const project = new typescript.TypeScriptProject({
   authorEmail: authorAddress,
   releaseToNpm: true,
   deps: ['projen'],
+  projenrcTs: true,
+  packageManager: NodePackageManager.PNPM,
 });
+
+new VsCodeConfiguration(project);
 
 project.synth();
