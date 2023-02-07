@@ -1,6 +1,6 @@
 import { JsiiProject } from 'projen/lib/cdk';
 import { NodePackageManager } from 'projen/lib/javascript';
-import { VsCodeConfiguration } from './src/config/vscode';
+import { VsCodeConfiguration } from './src/config-projen/vscode';
 
 const authorName = 'Cameron Childress';
 const authorAddress = 'cameronc@sumoc.com';

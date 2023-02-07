@@ -1,10 +1,6 @@
 {
   "dependencies": [
     {
-      "name": "@sumoc/projen-lib",
-      "type": "build"
-    },
-    {
       "name": "@types/jest",
       "version": "^27",
       "type": "build"
