@@ -1,6 +1,7 @@
 import { JsiiProject } from 'projen/lib/cdk';
 import { NodePackageManager } from 'projen/lib/javascript';
-import { VsCodeConfiguration } from './src/config-projen/vscode';
+import { ExampleApp } from './example';
+import { VsCodeConfiguration } from './src/projen/vscode';
 
 const authorName = 'Cameron Childress';
 const authorAddress = 'cameronc@sumoc.com';
@@ -20,10 +21,18 @@ const project = new JsiiProject({
   authorAddress: authorAddress,
   authorEmail: authorAddress,
   releaseToNpm: true,
-  deps: ['projen'],
+  deps: ['projen', 'change-case', 'type-fest'],
   projenrcTs: true,
   packageManager: NodePackageManager.PNPM,
 });
+
+// add example app
+new ExampleApp(project);
+
+// make example visible to typescript
+project.tsconfigDev.addInclude('example/**/*.ts');
+project.gitignore.include('/example/');
+project.npmignore?.exclude('/example/');
 
 new VsCodeConfiguration(project);
 

@@ -101,7 +101,15 @@
       "type": "override"
     },
     {
+      "name": "change-case",
+      "type": "runtime"
+    },
+    {
       "name": "projen",
+      "type": "runtime"
+    },
+    {
+      "name": "type-fest",
       "type": "runtime"
     }
   ],
