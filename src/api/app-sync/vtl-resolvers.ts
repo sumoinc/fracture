@@ -15,13 +15,6 @@ export class VtlResolvers extends FractureComponent {
   }
 
   public preSynthesize() {
-    // generate an array of all the entities in this fracture scope.
-    const isEntity = (c: FractureComponent): c is Entity =>
-      c instanceof Entity && c.namespace === this.namespace;
-    const entities = (this.project.components as FractureComponent[]).filter(
-      isEntity
-    );
-
     /**
      *  Build a VTL file and make sure it's marked as being managed by projen.
      *
@@ -176,7 +169,7 @@ export class VtlResolvers extends FractureComponent {
       responseResolver.line("$util.toJson($ctx.result)");
     };
 
-    entities.forEach((e) => {
+    this.fracture.entities.forEach((e) => {
       // build CRUD resolvers
       createItemResolver(e);
       readItemResolver(e);
