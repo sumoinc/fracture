@@ -1,4 +1,4 @@
-import { paramCase } from "change-case";
+import { camelCase, paramCase, pascalCase } from "change-case";
 import {
   Attribute,
   AttributeGenerator,
@@ -6,7 +6,7 @@ import {
   AttributeType,
 } from "./attribute";
 import { FractureComponent } from "../core/component";
-import { Fracture } from "../core/fracture";
+import { Fracture, NamingStrategyType } from "../core/fracture";
 
 export interface EntityOptions {
   /**
@@ -20,17 +20,17 @@ export interface EntityOptions {
 }
 
 export class Entity extends FractureComponent {
-  public readonly name: string;
-  public readonly shortName: string;
+  private readonly _name: string;
+  private readonly _shortName: string;
   public attributes: Attribute[];
 
   constructor(fracture: Fracture, options: EntityOptions) {
     super(fracture);
 
-    this.name = paramCase(options.name);
-    this.shortName = options.shortName
+    this._name = paramCase(options.name);
+    this._shortName = options.shortName
       ? paramCase(options.shortName)
-      : this.name;
+      : this._name;
 
     this.attributes = [];
 
@@ -78,6 +78,31 @@ export class Entity extends FractureComponent {
       type: AttributeType.STRING,
       createGenerator: AttributeGenerator.TYPE,
     });
+  }
+
+  /**
+   * Get name based on naming strategy.
+   */
+  public get name(): string {
+    switch (this.fracture.namingStrategy.entityStrategy) {
+      case NamingStrategyType.PASCAL_CASE:
+        return pascalCase(this._name);
+        break;
+      case NamingStrategyType.CAMEL_CASE:
+        return camelCase(this._name);
+      default:
+        throw new Error(
+          `Invalid naming strategy ${this.fracture.namingStrategy.entityStrategy}`
+        );
+        break;
+    }
+  }
+
+  /**
+   * Get shortName, no dashes, all lowercase
+   */
+  public get shortName(): string {
+    return pascalCase(this._shortName).toLowerCase();
   }
 
   /**

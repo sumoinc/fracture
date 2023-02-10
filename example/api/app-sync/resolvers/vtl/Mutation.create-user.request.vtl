@@ -2,20 +2,20 @@
 
 ## VALIDATIONS
 ## CREATE SHAPE
-#set( $user = {
+#set( $User = {
   "id": "$util.autoId()"
   "cd": "$util.time.nowISO8601()"
   "v": "$util.time.nowISO8601()"
-  "t": "user"
+  "t": "User"
 })
 
 ## USER INPUTS
-#if( $ctx.args.input.first-name )
-  $util.quiet($user.put("first-name", "$ctx.args.input.first-name")
+#if( $ctx.args.input.firstname )
+  $util.quiet($User.put("firstname", "$ctx.args.input.firstName")
 #end
 
-#if( $ctx.args.input.last-name )
-  $util.quiet($user.put("last-name", "$ctx.args.input.last-name")
+#if( $ctx.args.input.lastname )
+  $util.quiet($User.put("lastname", "$ctx.args.input.lastName")
 #end
 
 ## DYNAMODB PUT
@@ -23,8 +23,8 @@
   "version" : "2018-05-29",
   "operation" : "PutItem",
   "key": {
-    "pk": $util.dynamodb.toDynamoDBJson($user.pk),
-    "sk": $util.dynamodb.toDynamoDBJson($user.sk)
+    "pk": $util.dynamodb.toDynamoDBJson($User.pk),
+    "sk": $util.dynamodb.toDynamoDBJson($User.sk)
   },
-  "attributeValues": $util.toJson($user)
+  "attributeValues": $util.toJson($User)
 }

@@ -6,16 +6,16 @@
 #end
 
 ## CREATE SHAPE
-#set( $group = {
+#set( $Group = {
   "id": "$util.autoId()"
   "cd": "$util.time.nowISO8601()"
   "v": "$util.time.nowISO8601()"
-  "t": "group"
+  "t": "Group"
 })
 
 ## USER INPUTS
 #if( $ctx.args.input.name )
-  $util.quiet($group.put("name", "$ctx.args.input.name")
+  $util.quiet($Group.put("name", "$ctx.args.input.name")
 #end
 
 ## DYNAMODB PUT
@@ -23,8 +23,8 @@
   "version" : "2018-05-29",
   "operation" : "PutItem",
   "key": {
-    "pk": $util.dynamodb.toDynamoDBJson($group.pk),
-    "sk": $util.dynamodb.toDynamoDBJson($group.sk)
+    "pk": $util.dynamodb.toDynamoDBJson($Group.pk),
+    "sk": $util.dynamodb.toDynamoDBJson($Group.sk)
   },
-  "attributeValues": $util.toJson($group)
+  "attributeValues": $util.toJson($Group)
 }

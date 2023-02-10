@@ -43,7 +43,7 @@ export class VtlResolvers extends FractureComponent {
         case AttributeGenerator.GUID:
           return `"${a.shortName}": "$util.autoId()"`;
         case AttributeGenerator.TYPE:
-          return `"${a.shortName}": "${a.entity.shortName}"`;
+          return `"${a.shortName}": "${a.entity.name}"`;
         default:
           throw new Error(`Unknown generator: ${g}`);
       }

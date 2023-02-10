@@ -1,7 +1,8 @@
-import { paramCase } from "change-case";
+import { camelCase, paramCase, pascalCase } from "change-case";
 import { ValueOf } from "type-fest";
 import { Entity } from "./entity";
 import { FractureComponent } from "../core/component";
+import { NamingStrategyType } from "../core/fracture";
 
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
@@ -166,10 +167,6 @@ export type AttributeOptions = {
    */
   isRequired?: boolean;
   /**
-   *  The type for this attribute.
-   */
-  dynamoDbType?: ValueOf<typeof DynamoDbType>;
-  /**
    * The generator to use for this attribute when creating it.
    * @default AttributeGenerator.NONE
    */
@@ -191,11 +188,12 @@ export type AttributeOptions = {
 
 export class Attribute extends FractureComponent {
   public readonly entity: Entity;
-  public readonly name: string;
-  public readonly shortName: string;
+  private readonly _name: string;
+  private readonly _shortName: string;
   public readonly type: ValueOf<typeof AttributeType>;
   public readonly isRequired: boolean;
   public readonly dynamoDbType: ValueOf<typeof DynamoDbType>;
+  public readonly typeScriptType: string;
   public readonly createGenerator: ValueOf<typeof AttributeGenerator>;
   public readonly updateGenerator: ValueOf<typeof AttributeGenerator>;
   public readonly deleteGenerator: ValueOf<typeof AttributeGenerator>;
@@ -212,8 +210,8 @@ export class Attribute extends FractureComponent {
     super(entity.fracture);
 
     this.entity = entity;
-    this.name = paramCase(options.name);
-    this.shortName = options.shortName
+    this._name = paramCase(options.name);
+    this._shortName = options.shortName
       ? paramCase(options.shortName)
       : this.name;
     this.type = options.type ?? AttributeType.STRING;
@@ -232,6 +230,7 @@ export class Attribute extends FractureComponent {
       case AttributeType.JSON:
       case AttributeType.IPADDRESS:
         this.dynamoDbType = DynamoDbType.STRING;
+        this.typeScriptType = "string";
         break;
       case AttributeType.INT:
       case AttributeType.FLOAT:
@@ -240,13 +239,17 @@ export class Attribute extends FractureComponent {
       case AttributeType.AVERAGE:
       case AttributeType.SUM:
         this.dynamoDbType = DynamoDbType.NUMBER;
+        this.typeScriptType = "number";
         break;
       case AttributeType.BOOLEAN:
         this.dynamoDbType = DynamoDbType.BOOLEAN;
+        this.typeScriptType = "boolean";
         break;
       default:
         throw new Error(`Unknown attribute type: ${this.type}`);
     }
+
+    //typeScriptType
 
     // deterine generators
     this.createGenerator = options.createGenerator ?? AttributeGenerator.NONE;
@@ -277,5 +280,28 @@ export class Attribute extends FractureComponent {
       this.updateValidations.unshift(ValidationRule.REQUIRED);
       this.deleteValidations.unshift(ValidationRule.REQUIRED);
     }
+  }
+
+  /**
+   * Get name based on naming strategy.
+   */
+  public get name(): string {
+    switch (this.fracture.namingStrategy.attributeStrategy) {
+      case NamingStrategyType.PASCAL_CASE:
+        return pascalCase(this._name);
+      case NamingStrategyType.CAMEL_CASE:
+        return camelCase(this._name);
+      default:
+        throw new Error(
+          `Invalid naming strategy ${this.fracture.namingStrategy.entityStrategy}`
+        );
+    }
+  }
+
+  /**
+   * Get shortName, no dashes, all lowercase
+   */
+  public get shortName(): string {
+    return pascalCase(this._shortName).toLowerCase();
   }
 }

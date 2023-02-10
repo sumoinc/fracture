@@ -1,8 +1,10 @@
 import { Component, Project } from "projen";
+import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { ApiGateway } from "../api/api-gateway/api-gateway";
 import { AppSync } from "../api/app-sync/app-sync";
 import { Entity, EntityOptions } from "../model";
+import { TypeScript } from "../typescript/typescript";
 
 export interface FractureOptions {
   /**
@@ -23,6 +25,16 @@ export interface FractureOptions {
   apigateway?: boolean;
 }
 
+export const NamingStrategyType = {
+  PASCAL_CASE: "pascalCase",
+  CAMEL_CASE: "camelCase",
+} as const;
+
+export interface NamingStrategy {
+  entityStrategy: ValueOf<typeof NamingStrategyType>;
+  attributeStrategy: ValueOf<typeof NamingStrategyType>;
+}
+
 /**
  * The root of the entire application.
  */
@@ -32,6 +44,7 @@ export class Fracture extends Component {
   public readonly gendir: string;
   public readonly appsync: boolean;
   public readonly apigateway: boolean;
+  public readonly namingStrategy: NamingStrategy;
 
   constructor(
     project: Project,
@@ -45,6 +58,13 @@ export class Fracture extends Component {
     this.gendir = options.gendir ?? project.outdir;
     this.appsync = options.appsync ?? true;
     this.apigateway = options.apigateway ?? true;
+    this.namingStrategy = {
+      attributeStrategy: NamingStrategyType.CAMEL_CASE,
+      entityStrategy: NamingStrategyType.PASCAL_CASE,
+    };
+
+    // typescript type generation
+    new TypeScript(this);
 
     // if appsync's enabled, set it up
     if (this.appsync) {
