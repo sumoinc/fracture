@@ -36,4 +36,5 @@ project.npmignore?.exclude('/example/');
 
 new VsCodeConfiguration(project);
 
+// generate
 project.synth();

@@ -1,5 +1,5 @@
 import { Component, Project } from 'projen';
-import { Fracture } from '../src/fracture';
+import { Fracture } from '../src/core/fracture';
 
 export class ExampleApp extends Component {
 
@@ -14,7 +14,7 @@ export class ExampleApp extends Component {
       .addAttribute({ name: 'first-name' })
       .addAttribute({ name: 'last-name' });
 
-    fracture.addEntity({ name: 'group' });
+    fracture.addEntity({ name: 'group' });//.addAttribute({ name: 'name' });
 
   }
 

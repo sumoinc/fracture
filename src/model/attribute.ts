@@ -1,7 +1,7 @@
 import { paramCase } from 'change-case';
-import { Project } from 'projen';
 import { ValueOf } from 'type-fest';
-import { FractureComponent } from '../component';
+import { FractureComponent } from '../core/component';
+import { Fracture } from '../core/fracture';
 
 export const AttributeType = {
   /*****************************************************************************
@@ -175,11 +175,10 @@ export class Attribute extends FractureComponent {
   public readonly dynamoDbType: ValueOf<typeof DynamoDbType>;
 
   constructor(
-    project: Project,
-    namespace: string,
+    fracture: Fracture,
     options: AttributeOptions,
   ) {
-    super(project, namespace);
+    super(fracture);
 
     this.name = paramCase(options.name);
     this.shortName = options.shortName ? paramCase(options.shortName) : this.name;

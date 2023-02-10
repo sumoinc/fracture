@@ -1,6 +1,6 @@
-import { Project } from 'projen';
 import { Attribute, AttributeOptions } from './attribute';
-import { FractureComponent } from '../component';
+import { FractureComponent } from '../core/component';
+import { Fracture } from '../core/fracture';
 
 export interface EntityOptions {
   /**
@@ -13,11 +13,10 @@ export class Entity extends FractureComponent {
   public readonly name: string;
 
   constructor(
-    project: Project,
-    namespace: string,
+    fracture: Fracture,
     options : EntityOptions,
   ) {
-    super(project, namespace);
+    super(fracture);
 
     this.name = options.name.toLowerCase();
   }
@@ -26,7 +25,7 @@ export class Entity extends FractureComponent {
    * Adds an attribute
    */
   public addAttribute(options: AttributeOptions) {
-    new Attribute(this.project, this.namespace, options);
+    new Attribute(this.fracture, options);
     return this;
   }
 
