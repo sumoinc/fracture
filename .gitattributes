@@ -18,6 +18,14 @@
 /.vscode/extensions.json linguist-generated
 /.vscode/settings.json linguist-generated
 /API.md linguist-generated
+/example/appsync/vtl/delete-group.request.vtl linguist-generated
+/example/appsync/vtl/delete-user.request.vtl linguist-generated
+/example/appsync/vtl/Mutation.create-group.request.vtl linguist-generated
+/example/appsync/vtl/Mutation.create-user.request.vtl linguist-generated
+/example/appsync/vtl/read-group.request.vtl linguist-generated
+/example/appsync/vtl/read-user.request.vtl linguist-generated
+/example/appsync/vtl/update-group.request.vtl linguist-generated
+/example/appsync/vtl/update-user.request.vtl linguist-generated
 /LICENSE linguist-generated
 /package.json linguist-generated
 /pnpm-lock.yaml linguist-generated

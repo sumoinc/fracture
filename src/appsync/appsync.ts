@@ -1,5 +1,5 @@
 import { Project } from 'projen';
-import { Vtl } from './vtl';
+import { Vtl } from './vtl-file';
 import { FractureComponent } from '../component';
 
 export interface AppSyncOptions {

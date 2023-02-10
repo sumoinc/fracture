@@ -53,3 +53,11 @@ tsconfig.json
 !/example/
 !/.vscode/settings.json
 !/.vscode/extensions.json
+!/example/appsync/vtl/Mutation.create-user.request.vtl
+!/example/appsync/vtl/read-user.request.vtl
+!/example/appsync/vtl/update-user.request.vtl
+!/example/appsync/vtl/delete-user.request.vtl
+!/example/appsync/vtl/Mutation.create-group.request.vtl
+!/example/appsync/vtl/read-group.request.vtl
+!/example/appsync/vtl/update-group.request.vtl
+!/example/appsync/vtl/delete-group.request.vtl
