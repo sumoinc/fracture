@@ -1,8 +1,8 @@
-import { Component, Project } from 'projen';
-import { FractureComponent } from './component';
-import { ApiGateway } from '../api/api-gateway/api-gateway';
-import { AppSync } from '../api/app-sync/app-sync';
-import { Entity, EntityOptions } from '../model';
+import { Component, Project } from "projen";
+import { FractureComponent } from "./component";
+import { ApiGateway } from "../api/api-gateway/api-gateway";
+import { AppSync } from "../api/app-sync/app-sync";
+import { Entity, EntityOptions } from "../model";
 
 export interface FractureOptions {
   /**
@@ -23,7 +23,6 @@ export interface FractureOptions {
   apigateway?: boolean;
 }
 
-
 /**
  * The root of the entire application.
  */
@@ -36,8 +35,8 @@ export class Fracture extends Component {
 
   constructor(
     project: Project,
-    namespace: string = 'fracture',
-    options: FractureOptions = {},
+    namespace: string = "fracture",
+    options: FractureOptions = {}
   ) {
     super(project);
 
@@ -62,12 +61,12 @@ export class Fracture extends Component {
    * Get all entities in this project's namespace.
    */
   public get entities(): Entity[] {
-    const isEntity = (c: FractureComponent): c is Entity => c instanceof Entity && c.namespace === this.namespace;
+    const isEntity = (c: FractureComponent): c is Entity =>
+      c instanceof Entity && c.namespace === this.namespace;
     return (this.project.components as FractureComponent[]).filter(isEntity);
   }
 
   public addEntity(options: EntityOptions) {
     return new Entity(this, options);
   }
-
 }
