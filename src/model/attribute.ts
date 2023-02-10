@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
 import { ValueOf } from "type-fest";
+import { Entity } from "./entity";
 import { FractureComponent } from "../core/component";
-import { Fracture } from "../core/fracture";
 
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
@@ -118,11 +118,14 @@ export const AttributeType = {
 export const AttributeGenerator = {
   AUTO_INCREMENT: "Increment",
   GUID: "Guid",
-  DATE_TIME_STAMP: "DateTimeStamp",
-  VERSION: "Version",
-  VERSION_EXP: "Ttl",
+  CURRENT_DATE_TIME_STAMP: "CurrentDateTimeStamp",
   TYPE: "Type",
   NONE: "None",
+} as const;
+
+export const ValidationRule = {
+  REQUIRED: "Required",
+  TYPE: "Type",
 } as const;
 
 export const DynamoDbType = {
@@ -158,25 +161,63 @@ export type AttributeOptions = {
    */
   type?: ValueOf<typeof AttributeType>;
   /**
+   * Is this attribute required for all mutations?
+   * @default false
+   */
+  isRequired?: boolean;
+  /**
    *  The type for this attribute.
    */
   dynamoDbType?: ValueOf<typeof DynamoDbType>;
+  /**
+   * The generator to use for this attribute when creating it.
+   * @default AttributeGenerator.NONE
+   */
+  createGenerator?: ValueOf<typeof AttributeGenerator>;
+  /**
+   * The generator to use for this attribute when updating it.
+   * @default AttributeGenerator.NONE
+   */
+  updateGenerator?: ValueOf<typeof AttributeGenerator>;
+  /**
+   * The generator to use for this attribute when deleting it.
+   * @default AttributeGenerator.NONE
+   */
+  deleteGenerator?: ValueOf<typeof AttributeGenerator>;
+  createValidations?: ValueOf<typeof ValidationRule>[];
+  updateValidations?: ValueOf<typeof ValidationRule>[];
+  deleteValidations?: ValueOf<typeof ValidationRule>[];
 };
 
 export class Attribute extends FractureComponent {
+  public readonly entity: Entity;
   public readonly name: string;
   public readonly shortName: string;
   public readonly type: ValueOf<typeof AttributeType>;
+  public readonly isRequired: boolean;
   public readonly dynamoDbType: ValueOf<typeof DynamoDbType>;
+  public readonly createGenerator: ValueOf<typeof AttributeGenerator>;
+  public readonly updateGenerator: ValueOf<typeof AttributeGenerator>;
+  public readonly deleteGenerator: ValueOf<typeof AttributeGenerator>;
+  /**
+   * This value is managed automatically and cannot be set using outside
+   * interfaces. This is useful for fields which are automatically generated.
+   */
+  public readonly isSystem: boolean;
+  public readonly createValidations: ValueOf<typeof ValidationRule>[];
+  public readonly updateValidations: ValueOf<typeof ValidationRule>[];
+  public readonly deleteValidations: ValueOf<typeof ValidationRule>[];
 
-  constructor(fracture: Fracture, options: AttributeOptions) {
-    super(fracture);
+  constructor(entity: Entity, options: AttributeOptions) {
+    super(entity.fracture);
 
+    this.entity = entity;
     this.name = paramCase(options.name);
     this.shortName = options.shortName
       ? paramCase(options.shortName)
       : this.name;
     this.type = options.type ?? AttributeType.STRING;
+    this.isRequired = options.isRequired ?? false;
 
     // dynamo types
     switch (this.type) {
@@ -205,6 +246,36 @@ export class Attribute extends FractureComponent {
         break;
       default:
         throw new Error(`Unknown attribute type: ${this.type}`);
+    }
+
+    // deterine generators
+    this.createGenerator = options.createGenerator ?? AttributeGenerator.NONE;
+    this.updateGenerator = options.updateGenerator ?? AttributeGenerator.NONE;
+    this.deleteGenerator = options.deleteGenerator ?? AttributeGenerator.NONE;
+
+    // determine if this is a system managed attribute.
+    this.isSystem =
+      this.createGenerator !== AttributeGenerator.NONE ||
+      this.updateGenerator !== AttributeGenerator.NONE ||
+      this.deleteGenerator !== AttributeGenerator.NONE;
+
+    // setup validation rules
+    this.createValidations = options.createValidations ?? [];
+    this.updateValidations = options.updateValidations ?? [];
+    this.deleteValidations = options.deleteValidations ?? [];
+
+    // validate type for all non-system managed values
+    if (!this.isSystem) {
+      this.createValidations.push(ValidationRule.TYPE);
+      this.updateValidations.push(ValidationRule.TYPE);
+      this.deleteValidations.push(ValidationRule.TYPE);
+    }
+
+    // add required validation if required field. make sure it's the first item in the array.
+    if (this.isRequired) {
+      this.createValidations.unshift(ValidationRule.REQUIRED);
+      this.updateValidations.unshift(ValidationRule.REQUIRED);
+      this.deleteValidations.unshift(ValidationRule.REQUIRED);
     }
   }
 }

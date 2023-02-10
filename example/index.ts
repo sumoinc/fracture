@@ -12,6 +12,8 @@ export class ExampleApp extends Component {
       .addAttribute({ name: "first-name" })
       .addAttribute({ name: "last-name" });
 
-    fracture.addEntity({ name: "group" }).addAttribute({ name: "name" });
+    fracture
+      .addEntity({ name: "group" })
+      .addAttribute({ name: "name", isRequired: true });
   }
 }
