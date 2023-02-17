@@ -1,10 +1,10 @@
 import { Component, Project } from "projen";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
-import { ApiGateway } from "../api/api-gateway/api-gateway";
-import { AppSync } from "../api/app-sync/app-sync";
+import { ApiGateway } from "../generators/api/api-gateway/api-gateway";
+import { AppSync } from "../generators/api/app-sync/app-sync";
 import { Entity, EntityOptions } from "../model";
-import { TypeScript } from "../typescript/typescript";
+import { TypeScript } from "../generators/typescript/typescript";
 
 export interface FractureOptions {
   /**
@@ -53,6 +53,12 @@ export class Fracture extends Component {
   ) {
     super(project);
 
+    /***************************************************************************
+     * 
+     *  INIT FRACTURE PROJECT
+     * 
+     **************************************************************************/
+
     this.project = project;
     this.namespace = namespace;
     this.gendir = options.gendir ?? project.outdir;
@@ -62,6 +68,12 @@ export class Fracture extends Component {
       attributeStrategy: NamingStrategyType.CAMEL_CASE,
       entityStrategy: NamingStrategyType.PASCAL_CASE,
     };
+
+    /***************************************************************************
+     * 
+     *  CODE GENERATION
+     * 
+     **************************************************************************/
 
     // typescript type generation
     new TypeScript(this);
@@ -76,6 +88,12 @@ export class Fracture extends Component {
       new ApiGateway(this);
     }
   }
+
+  /*****************************************************************************
+   * 
+   *  GETTERS / HELPERS
+   * 
+   ****************************************************************************/
 
   /**
    * Get all entities in this project's namespace.

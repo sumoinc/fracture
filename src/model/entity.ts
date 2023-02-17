@@ -17,11 +17,17 @@ export interface EntityOptions {
    * Short name for the Entity.
    */
   shortName?: string;
+  /**
+   * Comment lines to add to the Entity.
+   * @default []
+   */
+  comment?: string[];
 }
 
 export class Entity extends FractureComponent {
   private readonly _name: string;
   private readonly _shortName: string;
+  private readonly _comment: string[];
   public attributes: Attribute[];
 
   constructor(fracture: Fracture, options: EntityOptions) {
@@ -31,6 +37,7 @@ export class Entity extends FractureComponent {
     this._shortName = options.shortName
       ? paramCase(options.shortName)
       : this._name;
+    this._comment = options.comment ?? [`A ${this.name}.`];
 
     this.attributes = [];
 
@@ -40,6 +47,7 @@ export class Entity extends FractureComponent {
     // entity id
     this.addAttribute({
       name: "id",
+      comment: [`The unique identifier for this ${this.name}.`],
       type: AttributeType.GUID,
       createGenerator: AttributeGenerator.GUID,
     });
@@ -47,6 +55,7 @@ export class Entity extends FractureComponent {
     this.addAttribute({
       name: "createdAt",
       shortName: "_cd",
+      comment: [`The date and time this ${this.name} was created.`],
       type: AttributeType.DATE_TIME,
       createGenerator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
     });
@@ -54,6 +63,7 @@ export class Entity extends FractureComponent {
     this.addAttribute({
       name: "updatedAt",
       shortName: "_ud",
+      comment: [`The date and time this ${this.name} was last updated.`],
       type: AttributeType.DATE_TIME,
       updateGenerator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
     });
@@ -61,6 +71,7 @@ export class Entity extends FractureComponent {
     this.addAttribute({
       name: "deletedAt",
       shortName: "_dd",
+      comment: [`The date and time this ${this.name} was deleted.`],
       type: AttributeType.DATE_TIME,
       deleteGenerator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
     });
@@ -68,13 +79,17 @@ export class Entity extends FractureComponent {
     this.addAttribute({
       name: "version",
       shortName: "_v",
-      type: AttributeType.DATE_TIME,
+      comment: [
+        `The date and time this ${this.name} version was created, or "LATEST" for the most recent version.`,
+      ],
+      type: AttributeType.STRING,
       createGenerator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
     });
     // versioned by datestamp
     this.addAttribute({
       name: "type",
       shortName: "_t",
+      comment: [`The type for this ${this.name}.`],
       type: AttributeType.STRING,
       createGenerator: AttributeGenerator.TYPE,
     });
@@ -103,6 +118,13 @@ export class Entity extends FractureComponent {
    */
   public get shortName(): string {
     return pascalCase(this._shortName).toLowerCase();
+  }
+
+  /**
+   * Get comment lines.
+   */
+  public get comment(): string[] {
+    return this._comment;
   }
 
   /**

@@ -26,12 +26,12 @@ export class VsCodeConfiguration extends Component {
     vsSettings.addSetting("editor.formatOnSave", true, "typescript");
     vsSettings.addSetting(
       "editor.defaultFormatter",
-      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
       "typescript"
     );
 
     // VSCODE: extensions
     const vsExtensions = new VsCodeRecommendedExtensions(vscode);
-    vsExtensions.addRecommendations("dbaeumer.vscode-eslint");
+    vsExtensions.addRecommendations("esbenp.prettier-vscode");
   }
 }

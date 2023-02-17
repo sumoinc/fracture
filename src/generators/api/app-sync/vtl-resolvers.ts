@@ -1,13 +1,13 @@
 import { SourceCode } from "projen";
 import { ValueOf } from "type-fest";
-import { FractureComponent } from "../../core/component";
-import { Fracture } from "../../core/fracture";
+import { FractureComponent } from "../../../core/component";
+import { Fracture } from "../../../core/fracture";
 import {
   Attribute,
   AttributeGenerator,
   Entity,
   ValidationRule,
-} from "../../model";
+} from "../../../model";
 
 export class VtlResolvers extends FractureComponent {
   constructor(fracture: Fracture) {

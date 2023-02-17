@@ -1,5 +1,7 @@
 import { Component, Project } from "projen";
-import { Fracture } from "../src/core/fracture";
+import { Fracture } from "../src";
+
+
 
 export class ExampleApp extends Component {
   constructor(project: Project) {

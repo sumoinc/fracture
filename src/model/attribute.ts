@@ -144,21 +144,24 @@ export const DynamoDbType = {
 
 export type AttributeOptions = {
   /**
-   *  Full long name for this attribute.
-   *
-   *  eg: 'phone-number'
-   *
+   * Full long name for this attribute.
+   * @example 'phone-number'
    */
   name: string;
   /**
-   *  Brief name used when storing data to save space.
-   *
-   *  eg: 'pn'
-   *
+   * Brief name used when storing data to save space.
+   * @example 'pn'
+   * @default AttributeOptions.name
    */
   shortName?: string;
   /**
-   *  The type for this attribute.
+   * Comment lines to add to the Entity.
+   * @default []
+   */
+  comment?: string[];
+  /**
+   * The type for this attribute.
+   * @default AttributeType.STRING
    */
   type?: ValueOf<typeof AttributeType>;
   /**
@@ -181,8 +184,20 @@ export type AttributeOptions = {
    * @default AttributeGenerator.NONE
    */
   deleteGenerator?: ValueOf<typeof AttributeGenerator>;
+  /**
+   * Validations to run when creating this attribute.
+   * @default []
+   */
   createValidations?: ValueOf<typeof ValidationRule>[];
+  /**
+   * Validations to run when updating this attribute.
+   * @default []
+   */
   updateValidations?: ValueOf<typeof ValidationRule>[];
+  /**
+   * Validations to run when deleting this attribute.
+   * @default []
+   */
   deleteValidations?: ValueOf<typeof ValidationRule>[];
 };
 
@@ -190,6 +205,7 @@ export class Attribute extends FractureComponent {
   public readonly entity: Entity;
   private readonly _name: string;
   private readonly _shortName: string;
+  private readonly _comment: string[];
   public readonly type: ValueOf<typeof AttributeType>;
   public readonly isRequired: boolean;
   public readonly dynamoDbType: ValueOf<typeof DynamoDbType>;
@@ -214,6 +230,7 @@ export class Attribute extends FractureComponent {
     this._shortName = options.shortName
       ? paramCase(options.shortName)
       : this.name;
+    this._comment = options.comment ?? [`A ${this.name}.`];
     this.type = options.type ?? AttributeType.STRING;
     this.isRequired = options.isRequired ?? false;
 
@@ -248,8 +265,6 @@ export class Attribute extends FractureComponent {
       default:
         throw new Error(`Unknown attribute type: ${this.type}`);
     }
-
-    //typeScriptType
 
     // deterine generators
     this.createGenerator = options.createGenerator ?? AttributeGenerator.NONE;
@@ -303,5 +318,26 @@ export class Attribute extends FractureComponent {
    */
   public get shortName(): string {
     return pascalCase(this._shortName).toLowerCase();
+  }
+
+  /**
+   * Get comment lines.
+   */
+  public get comment(): string[] {
+    const c = [...this._comment];
+
+    // attribute type
+    if (this.type === AttributeType.GUID) {
+      c.push(`@type A GUID string.`);
+    }
+
+    // it's sytem managed
+    if (this.isSystem) {
+      c.push(
+        `@readonly This attribute is managed automatically by the system.`
+      );
+    }
+
+    return c;
   }
 }
