@@ -25,6 +25,10 @@ const project = new JsiiProject({
   projenrcTs: true,
   packageManager: NodePackageManager.PNPM,
   prettier: true,
+
+  // autoapproval of auto update PRs
+  autoApproveUpgrades: true,
+  autoApproveOptions: { allowedUsernames: ['sumoc-automations'] },
 });
 
 // add example app

@@ -20,15 +20,11 @@ specifiers:
   jest-junit: ^13
   jsii: ^1.75.0
   jsii-diff: ^1.75.0
-  jsii-docgen: ^7.0.235
+  jsii-docgen: ^7.1.0
   jsii-pacmak: ^1.75.0
   npm-check-updates: ^16
-<<<<<<< HEAD
   prettier: ^2.8.4
-  projen: ^0.67.44
-=======
-  projen: ^0.67.57
->>>>>>> main
+  projen: ^0.67.58
   standard-version: ^9
   ts-jest: ^27
   ts-node: ^10.9.1
@@ -36,49 +32,29 @@ specifiers:
   typescript: ^4.9.5
 
 dependencies:
-<<<<<<< HEAD
   change-case: 4.1.2
-  projen: 0.67.44
+  projen: 0.67.58
   type-fest: 2.19.0
-=======
-  projen: 0.67.57
->>>>>>> main
 
 devDependencies:
   '@types/jest': 27.5.2
   '@types/node': 14.18.36
-<<<<<<< HEAD
-  '@typescript-eslint/eslint-plugin': 5.51.0_b635kmla6dsb4frxfihkw4m47e
-  '@typescript-eslint/parser': 5.51.0_4vsywjlpuriuw3tl5oq6zy5a64
-  eslint: 8.33.0
-  eslint-config-prettier: 8.6.0_eslint@8.33.0
-  eslint-import-resolver-node: 0.3.7
-  eslint-import-resolver-typescript: 3.5.3_ohdts44xlqyeyrlje4qnefqeay
-  eslint-plugin-import: 2.27.5_kuqv7qxblf6fgldep4hddd7xwa
-  eslint-plugin-prettier: 4.2.1_qa2thblfovmfepmgrc7z2owbo4
-  jest: 27.5.1_ts-node@10.9.1
-  jest-junit: 13.2.0
-  jsii: 1.74.0
-  jsii-diff: 1.74.0
-  jsii-docgen: 7.0.228
-  jsii-pacmak: 1.74.0
-  npm-check-updates: 16.7.2
-  prettier: 2.8.4
-=======
   '@typescript-eslint/eslint-plugin': 5.52.0_6cfvjsbua5ptj65675bqcn6oza
   '@typescript-eslint/parser': 5.52.0_7kw3g6rralp5ps6mg3uyzz6azm
   eslint: 8.34.0
+  eslint-config-prettier: 8.6.0_eslint@8.34.0
   eslint-import-resolver-node: 0.3.7
   eslint-import-resolver-typescript: 3.5.3_mvgyw3chnqkp6sgfmmtihyjpnm
   eslint-plugin-import: 2.27.5_gndiqgw2wrzfeqy4ccfxbmtnsi
+  eslint-plugin-prettier: 4.2.1_u5wnrdwibbfomslmnramz52buy
   jest: 27.5.1_ts-node@10.9.1
   jest-junit: 13.2.0
   jsii: 1.75.0
   jsii-diff: 1.75.0
-  jsii-docgen: 7.0.235
+  jsii-docgen: 7.1.0
   jsii-pacmak: 1.75.0
   npm-check-updates: 16.7.4
->>>>>>> main
+  prettier: 2.8.4
   standard-version: 9.5.0
   ts-jest: 27.1.5_n4jzo3ixy42kfaqevs43wjx5ui
   ts-node: 10.9.1_7iyetdgfmqiorh7qupktbe7tm4
@@ -2495,13 +2471,13 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-config-prettier/8.6.0_eslint@8.33.0:
+  /eslint-config-prettier/8.6.0_eslint@8.34.0:
     resolution: {integrity: sha512-bAF0eLpLVqP5oEVUFKpMA+NnRFICwn9X8B5jrR9FcqnYBuPbqWEjTEspPWMj5ye6czoSLDweCzSo3Ko7gGrZaA==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
     dependencies:
-      eslint: 8.33.0
+      eslint: 8.34.0
     dev: true
 
   /eslint-import-resolver-node/0.3.7:
@@ -2597,7 +2573,7 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-prettier/4.2.1_qa2thblfovmfepmgrc7z2owbo4:
+  /eslint-plugin-prettier/4.2.1_u5wnrdwibbfomslmnramz52buy:
     resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -2608,8 +2584,8 @@ packages:
       eslint-config-prettier:
         optional: true
     dependencies:
-      eslint: 8.33.0
-      eslint-config-prettier: 8.6.0_eslint@8.33.0
+      eslint: 8.34.0
+      eslint-config-prettier: 8.6.0_eslint@8.34.0
       prettier: 2.8.4
       prettier-linter-helpers: 1.0.0
     dev: true
@@ -4318,8 +4294,8 @@ packages:
       - supports-color
     dev: true
 
-  /jsii-docgen/7.0.235:
-    resolution: {integrity: sha512-esS/206w3+xhSpTPJaNWqIb2DIVCQiAoaSnbsKwhmrSE8Fll2mzIhHoipJTmfYzizhUk/ft6Y8/eC2NvDOhjwg==}
+  /jsii-docgen/7.1.0:
+    resolution: {integrity: sha512-7k90mHani3yNr2U/Gx2JBrgke3p2pp0qnNesb9gwoVj7mNgzUmWdssDy9dz+4GA+JqzAV0eI4mIJcEOvwzzN8w==}
     engines: {node: '>= 14.17.0'}
     hasBin: true
     dependencies:
@@ -5484,8 +5460,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen/0.67.57:
-    resolution: {integrity: sha512-0FGTllWD6tf9ZDgcjBnnbBJmUjtwMOOiZAu6oI4GwIqoySt7uyCTv6uG71OjyQPhsM6iXiLeBJVz57PSJu4g/g==}
+  /projen/0.67.58:
+    resolution: {integrity: sha512-Y7+pd7wv/G/Wn2rS0IJbVZTmUqIegvmUDF8HNoIWIx9Xem1+KBXLaYePdbmH31ovjNDLIFr5MyvVp27FHSVDoA==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
