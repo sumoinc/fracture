@@ -1,4 +1,4 @@
-import { camelCase, paramCase, pascalCase } from "change-case";
+import { paramCase, pascalCase } from "change-case";
 import {
   Attribute,
   AttributeGenerator,
@@ -6,7 +6,8 @@ import {
   AttributeType,
 } from "./attribute";
 import { FractureComponent } from "../core/component";
-import { Fracture, NamingStrategyType } from "../core/fracture";
+import { Fracture } from "../core/fracture";
+import { formatLabel } from "../lib/format-label";
 
 export interface EntityOptions {
   /**
@@ -49,12 +50,13 @@ export class Entity extends FractureComponent {
       name: "id",
       comment: [`The unique identifier for this ${this.name}.`],
       type: AttributeType.GUID,
+      isKey: true,
       createGenerator: AttributeGenerator.GUID,
     });
     // created timestamp
     this.addAttribute({
       name: "createdAt",
-      shortName: "_cd",
+      shortName: "cd",
       comment: [`The date and time this ${this.name} was created.`],
       type: AttributeType.DATE_TIME,
       createGenerator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
@@ -62,7 +64,7 @@ export class Entity extends FractureComponent {
     // updated timestamp
     this.addAttribute({
       name: "updatedAt",
-      shortName: "_ud",
+      shortName: "ud",
       comment: [`The date and time this ${this.name} was last updated.`],
       type: AttributeType.DATE_TIME,
       updateGenerator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
@@ -70,7 +72,7 @@ export class Entity extends FractureComponent {
     // deleted timestamp
     this.addAttribute({
       name: "deletedAt",
-      shortName: "_dd",
+      shortName: "dd",
       comment: [`The date and time this ${this.name} was deleted.`],
       type: AttributeType.DATE_TIME,
       deleteGenerator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
@@ -78,7 +80,7 @@ export class Entity extends FractureComponent {
     // versioned by datestamp
     this.addAttribute({
       name: "version",
-      shortName: "_v",
+      shortName: "v",
       comment: [
         `The date and time this ${this.name} version was created, or "LATEST" for the most recent version.`,
       ],
@@ -88,29 +90,61 @@ export class Entity extends FractureComponent {
     // versioned by datestamp
     this.addAttribute({
       name: "type",
-      shortName: "_t",
+      shortName: "t",
       comment: [`The type for this ${this.name}.`],
       type: AttributeType.STRING,
       createGenerator: AttributeGenerator.TYPE,
     });
+    // remote id, if imported
+    // this.addAttribute({
+    //   name: "remote-id",
+    //   shortName: "_rid",
+    //   comment: [
+    //     `For imported records, the external/remote unique identifier for this ${this.name}.`,
+    //   ],
+    //   type: AttributeType.GUID,
+    //   isRemoteKey: true,
+    // });
+    // // remote creation date, if imported
+    // this.addAttribute({
+    //   name: "remote-created-at",
+    //   shortName: "_rcd",
+    //   comment: [
+    //     `For imported records, the external/remote creation timestamp for this ${this.name}.`,
+    //   ],
+    //   type: AttributeType.DATE_TIME,
+    //   isRemoteField: true,
+    // });
+    // // remote updated date, if imported
+    // this.addAttribute({
+    //   name: "remote-updated-at",
+    //   shortName: "_rud",
+    //   comment: [
+    //     `For imported records, the external/remote last updated timestamp for this ${this.name}.`,
+    //   ],
+    //   type: AttributeType.DATE_TIME,
+    //   isRemoteField: true,
+    // });
+    // // remote version, if imported
+    // this.addAttribute({
+    //   name: "remote-version",
+    //   shortName: "_rv",
+    //   comment: [
+    //     `For imported records, the external/remote version for this ${this.name}.`,
+    //   ],
+    //   type: AttributeType.STRING,
+    //   isRemoteField: true,
+    // });
   }
 
   /**
    * Get name based on naming strategy.
    */
   public get name(): string {
-    switch (this.fracture.namingStrategy.entityStrategy) {
-      case NamingStrategyType.PASCAL_CASE:
-        return pascalCase(this._name);
-        break;
-      case NamingStrategyType.CAMEL_CASE:
-        return camelCase(this._name);
-      default:
-        throw new Error(
-          `Invalid naming strategy ${this.fracture.namingStrategy.entityStrategy}`
-        );
-        break;
-    }
+    return formatLabel(
+      this._name,
+      this.fracture.typeScriptNamingStrategy.namingStrategy.entityStrategy
+    );
   }
 
   /**
@@ -134,5 +168,18 @@ export class Entity extends FractureComponent {
     const a = new Attribute(this, options);
     this.attributes.push(a);
     return this;
+  }
+
+  /**
+   * Attributes used in crud operations and commands
+   */
+  public get keyAttributes(): Attribute[] {
+    return this.attributes.filter((a) => a.isKey);
+  }
+  public get dataAttributes(): Attribute[] {
+    return this.attributes.filter((a) => a.isData);
+  }
+  public get listAttributes(): Attribute[] {
+    return this.attributes.filter((a) => a.isListInput);
   }
 }

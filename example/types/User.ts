@@ -9,7 +9,7 @@ export interface User {
    * @type A GUID string.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The date and time this User was created.
    * @readonly This attribute is managed automatically by the system.
@@ -43,4 +43,33 @@ export interface User {
    * A lastName.
    */
   lastName?: string;
+}
+
+export interface UserInput {
+  firstName?: string;
+  lastName?: string;
+}
+
+export interface CreateUserCommandInput {
+  userInput: UserInput;
+}
+
+export interface ReadUserCommandInput {
+  id: string;
+}
+
+export interface UpdateUserCommandInput {
+  id: string;
+  userInput: UserInput;
+}
+
+export interface DeleteUserCommandInput {
+  id: string;
+}
+
+export interface ListUserCommandInput {
+}
+
+export interface CreateUserCommandOutput {
+  user: User;
 }

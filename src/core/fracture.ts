@@ -26,13 +26,41 @@ export interface FractureOptions {
 }
 
 export const NamingStrategyType = {
+  /**
+   * PascalCase
+   */
   PASCAL_CASE: "pascalCase",
+  /**
+   * camelCase
+   */
   CAMEL_CASE: "camelCase",
 } as const;
 
 export interface NamingStrategy {
   entityStrategy: ValueOf<typeof NamingStrategyType>;
   attributeStrategy: ValueOf<typeof NamingStrategyType>;
+}
+
+export interface TypeScriptNamingStrategy {
+  namingStrategy: NamingStrategy;
+  commandNamingStrategy: CommandNamingStrategy;
+  crudNamingStrategy: CrudNamingStrategy;
+}
+
+export interface CommandNamingStrategy {
+  inputDataLabel: string;
+  commandLabel: string;
+  commandInputLabel: string;
+  commandOutputLabel: string;
+}
+
+export interface CrudNamingStrategy {
+  createLabel: string;
+  readLabel: string;
+  updateLabel: string;
+  deleteLabel: string;
+  listLabel: string;
+  importLabel: string;
 }
 
 /**
@@ -44,7 +72,7 @@ export class Fracture extends Component {
   public readonly gendir: string;
   public readonly appsync: boolean;
   public readonly apigateway: boolean;
-  public readonly namingStrategy: NamingStrategy;
+  public readonly typeScriptNamingStrategy: TypeScriptNamingStrategy;
 
   constructor(
     project: Project,
@@ -54,9 +82,9 @@ export class Fracture extends Component {
     super(project);
 
     /***************************************************************************
-     * 
+     *
      *  INIT FRACTURE PROJECT
-     * 
+     *
      **************************************************************************/
 
     this.project = project;
@@ -64,15 +92,31 @@ export class Fracture extends Component {
     this.gendir = options.gendir ?? project.outdir;
     this.appsync = options.appsync ?? true;
     this.apigateway = options.apigateway ?? true;
-    this.namingStrategy = {
-      attributeStrategy: NamingStrategyType.CAMEL_CASE,
-      entityStrategy: NamingStrategyType.PASCAL_CASE,
+    this.typeScriptNamingStrategy = {
+      namingStrategy: {
+        attributeStrategy: NamingStrategyType.CAMEL_CASE,
+        entityStrategy: NamingStrategyType.PASCAL_CASE,
+      },
+      commandNamingStrategy: {
+        inputDataLabel: "Input",
+        commandLabel: "Command",
+        commandInputLabel: "CommandInput",
+        commandOutputLabel: "CommandOutput",
+      },
+      crudNamingStrategy: {
+        createLabel: "Create",
+        readLabel: "Read",
+        updateLabel: "Update",
+        deleteLabel: "Delete",
+        listLabel: "List",
+        importLabel: "Import",
+      },
     };
 
     /***************************************************************************
-     * 
+     *
      *  CODE GENERATION
-     * 
+     *
      **************************************************************************/
 
     // typescript type generation
@@ -90,9 +134,9 @@ export class Fracture extends Component {
   }
 
   /*****************************************************************************
-   * 
+   *
    *  GETTERS / HELPERS
-   * 
+   *
    ****************************************************************************/
 
   /**

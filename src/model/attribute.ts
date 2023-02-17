@@ -1,8 +1,8 @@
-import { camelCase, paramCase, pascalCase } from "change-case";
+import { paramCase, pascalCase } from "change-case";
 import { ValueOf } from "type-fest";
 import { Entity } from "./entity";
 import { FractureComponent } from "../core/component";
-import { NamingStrategyType } from "../core/fracture";
+import { formatLabel } from "../lib/format-label";
 
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
@@ -165,6 +165,22 @@ export type AttributeOptions = {
    */
   type?: ValueOf<typeof AttributeType>;
   /**
+   * Is this attribute a key for the Entity?
+   * @default false
+   */
+  isKey?: boolean;
+  /**
+   * Is this attribute a key for data sources form a remote system?
+   * @default false
+   */
+  isRemoteKey?: boolean;
+  /**
+   * Is this attribute sourced from remote imported data only?
+   * If true, cannot be edited by local system.
+   * @default false
+   */
+  isRemoteField?: boolean;
+  /**
    * Is this attribute required for all mutations?
    * @default false
    */
@@ -207,20 +223,34 @@ export class Attribute extends FractureComponent {
   private readonly _shortName: string;
   private readonly _comment: string[];
   public readonly type: ValueOf<typeof AttributeType>;
+
+  public readonly isKey: boolean;
+  public readonly isRemoteKey: boolean;
+  public readonly isRemoteField: boolean;
   public readonly isRequired: boolean;
+
   public readonly dynamoDbType: ValueOf<typeof DynamoDbType>;
   public readonly typeScriptType: string;
   public readonly createGenerator: ValueOf<typeof AttributeGenerator>;
   public readonly updateGenerator: ValueOf<typeof AttributeGenerator>;
   public readonly deleteGenerator: ValueOf<typeof AttributeGenerator>;
+
+  public readonly createValidations: ValueOf<typeof ValidationRule>[];
+  public readonly updateValidations: ValueOf<typeof ValidationRule>[];
+  public readonly deleteValidations: ValueOf<typeof ValidationRule>[];
+
   /**
    * This value is managed automatically and cannot be set using outside
    * interfaces. This is useful for fields which are automatically generated.
    */
   public readonly isSystem: boolean;
-  public readonly createValidations: ValueOf<typeof ValidationRule>[];
-  public readonly updateValidations: ValueOf<typeof ValidationRule>[];
-  public readonly deleteValidations: ValueOf<typeof ValidationRule>[];
+  public readonly isData: boolean;
+  public readonly isCreateInput: boolean;
+  public readonly isReadInput: boolean;
+  public readonly isUpdateInput: boolean;
+  public readonly isDeleteInput: boolean;
+  public readonly isListInput: boolean;
+  public readonly isImportInput: boolean;
 
   constructor(entity: Entity, options: AttributeOptions) {
     super(entity.fracture);
@@ -232,7 +262,12 @@ export class Attribute extends FractureComponent {
       : this.name;
     this._comment = options.comment ?? [`A ${this.name}.`];
     this.type = options.type ?? AttributeType.STRING;
-    this.isRequired = options.isRequired ?? false;
+    this.isKey = options.isKey ?? false;
+    this.isRemoteKey = options.isRemoteKey ?? false;
+    this.isRemoteField =
+      (options.isRemoteField || options.isRemoteKey) ?? false;
+    this.isRequired =
+      (options.isRequired || options.isKey || options.isRemoteKey) ?? false;
 
     // dynamo types
     switch (this.type) {
@@ -295,22 +330,25 @@ export class Attribute extends FractureComponent {
       this.updateValidations.unshift(ValidationRule.REQUIRED);
       this.deleteValidations.unshift(ValidationRule.REQUIRED);
     }
+
+    // CRUD flags
+    this.isData = !this.isSystem && !this.isKey && !this.isRemoteField;
+    this.isCreateInput = !this.isSystem && !this.isKey && !this.isRemoteField;
+    this.isReadInput = this.isKey;
+    this.isUpdateInput = !this.isSystem && !this.isRemoteField;
+    this.isDeleteInput = this.isKey;
+    this.isListInput = false;
+    this.isImportInput = !this.isSystem || this.isRemoteField;
   }
 
   /**
    * Get name based on naming strategy.
    */
   public get name(): string {
-    switch (this.fracture.namingStrategy.attributeStrategy) {
-      case NamingStrategyType.PASCAL_CASE:
-        return pascalCase(this._name);
-      case NamingStrategyType.CAMEL_CASE:
-        return camelCase(this._name);
-      default:
-        throw new Error(
-          `Invalid naming strategy ${this.fracture.namingStrategy.entityStrategy}`
-        );
-    }
+    return formatLabel(
+      this._name,
+      this.fracture.typeScriptNamingStrategy.namingStrategy.attributeStrategy
+    );
   }
 
   /**

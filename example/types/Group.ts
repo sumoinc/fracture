@@ -9,7 +9,7 @@ export interface Group {
    * @type A GUID string.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The date and time this Group was created.
    * @readonly This attribute is managed automatically by the system.
@@ -39,4 +39,32 @@ export interface Group {
    * A name.
    */
   name: string;
+}
+
+export interface GroupInput {
+  name: string;
+}
+
+export interface CreateGroupCommandInput {
+  groupInput: GroupInput;
+}
+
+export interface ReadGroupCommandInput {
+  id: string;
+}
+
+export interface UpdateGroupCommandInput {
+  id: string;
+  groupInput: GroupInput;
+}
+
+export interface DeleteGroupCommandInput {
+  id: string;
+}
+
+export interface ListGroupCommandInput {
+}
+
+export interface CreateGroupCommandOutput {
+  group: Group;
 }
