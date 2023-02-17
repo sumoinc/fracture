@@ -17,17 +17,17 @@ specifiers:
   jest-junit: ^13
   jsii: ^1.75.0
   jsii-diff: ^1.75.0
-  jsii-docgen: ^7.0.235
+  jsii-docgen: ^7.1.0
   jsii-pacmak: ^1.75.0
   npm-check-updates: ^16
-  projen: ^0.67.57
+  projen: ^0.67.58
   standard-version: ^9
   ts-jest: ^27
   ts-node: ^10.9.1
   typescript: ^4.9.5
 
 dependencies:
-  projen: 0.67.57
+  projen: 0.67.58
 
 devDependencies:
   '@types/jest': 27.5.2
@@ -42,7 +42,7 @@ devDependencies:
   jest-junit: 13.2.0
   jsii: 1.75.0
   jsii-diff: 1.75.0
-  jsii-docgen: 7.0.235
+  jsii-docgen: 7.1.0
   jsii-pacmak: 1.75.0
   npm-check-updates: 16.7.4
   standard-version: 9.5.0
@@ -1519,7 +1519,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001454
+      caniuse-lite: 1.0.30001456
       electron-to-chromium: 1.4.301
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10_browserslist@4.21.5
@@ -1649,8 +1649,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /caniuse-lite/1.0.30001454:
-    resolution: {integrity: sha512-4E63M5TBbgDoA9dQoFRdjL6iAmzTrz3rwYWoKDlvnvyvBxjCZ0rrUoX3THhEMie0/RYuTCeMbeTYLGAWgnLwEg==}
+  /caniuse-lite/1.0.30001456:
+    resolution: {integrity: sha512-XFHJY5dUgmpMV25UqaD4kVq2LsiaU5rS8fb0f17pCoXQiQslzmFgnfOxfvo1bTpTqf7dwG/N/05CnLCnOEKmzA==}
     dev: true
 
   /case/1.6.3:
@@ -4200,8 +4200,8 @@ packages:
       - supports-color
     dev: true
 
-  /jsii-docgen/7.0.235:
-    resolution: {integrity: sha512-esS/206w3+xhSpTPJaNWqIb2DIVCQiAoaSnbsKwhmrSE8Fll2mzIhHoipJTmfYzizhUk/ft6Y8/eC2NvDOhjwg==}
+  /jsii-docgen/7.1.0:
+    resolution: {integrity: sha512-7k90mHani3yNr2U/Gx2JBrgke3p2pp0qnNesb9gwoVj7mNgzUmWdssDy9dz+4GA+JqzAV0eI4mIJcEOvwzzN8w==}
     engines: {node: '>= 14.17.0'}
     hasBin: true
     dependencies:
@@ -5319,8 +5319,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen/0.67.57:
-    resolution: {integrity: sha512-0FGTllWD6tf9ZDgcjBnnbBJmUjtwMOOiZAu6oI4GwIqoySt7uyCTv6uG71OjyQPhsM6iXiLeBJVz57PSJu4g/g==}
+  /projen/0.67.58:
+    resolution: {integrity: sha512-Y7+pd7wv/G/Wn2rS0IJbVZTmUqIegvmUDF8HNoIWIx9Xem1+KBXLaYePdbmH31ovjNDLIFr5MyvVp27FHSVDoA==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
