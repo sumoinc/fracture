@@ -23,6 +23,10 @@ const project = new JsiiProject({
   deps: ['projen'],
   projenrcTs: true,
   packageManager: NodePackageManager.PNPM,
+
+  // autoapproval of auto update PRs
+  autoApproveUpgrades: true,
+  autoApproveOptions: { allowedUsernames: ['sumoc-automations'] },
 });
 
 new VsCodeConfiguration(project);
