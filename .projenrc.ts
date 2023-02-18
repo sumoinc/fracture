@@ -26,6 +26,9 @@ const project = new JsiiProject({
   packageManager: NodePackageManager.PNPM,
   prettier: true,
 
+  // generate code coverage stats
+  codeCov: true,
+
   // autoapproval of auto update PRs
   autoApproveUpgrades: true,
   autoApproveOptions: { allowedUsernames: ['sumoc-automations'] },
