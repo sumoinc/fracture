@@ -24,7 +24,7 @@ export class VtlResolvers extends FractureComponent {
     const vtlFile = (name: string): SourceCode => {
       const f = new SourceCode(
         this.project,
-        `${this.fracture.gendir}/api/app-sync/resolvers/vtl/${name}`
+        `${this.fracture.outdir}/api/app-sync/resolvers/vtl/${name}`
       );
       f.line("## " + f.marker);
       return f;

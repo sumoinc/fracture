@@ -1,13 +1,10 @@
 import { Component, Project } from "projen";
 import { Fracture } from "../src";
-
-
-
 export class ExampleApp extends Component {
   constructor(project: Project) {
     super(project);
 
-    const fracture = new Fracture(project, "foo", { gendir: "example" });
+    const fracture = new Fracture(project, "foo", { outdir: "example" });
 
     fracture
       .addEntity({ name: "user" })

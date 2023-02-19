@@ -3,26 +3,33 @@ import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { ApiGateway } from "../generators/api/api-gateway/api-gateway";
 import { AppSync } from "../generators/api/app-sync/app-sync";
-import { Entity, EntityOptions } from "../model";
 import { TypeScript } from "../generators/typescript/typescript";
+import { Entity, EntityOptions } from "../model";
 
 export interface FractureOptions {
   /**
    * Directory where generated code will be placed.
+   * @default project.outdir + "/" + namespace
    */
-  gendir?: string;
+  outdir?: string;
   /**
-   * Enable AppSync for your application.
+   * Generate AppSync code for your application.
    *
    * @default true
    */
   appsync?: boolean;
   /**
-   * Enable Api Gateway for your application.
+   * Generate Api Gateway code for your application.
    *
    * @default true
    */
   apigateway?: boolean;
+  /**
+   * Generate TypeScript code for your application.
+   *
+   * @default true
+   */
+  typescript?: boolean;
 }
 
 export const NamingStrategyType = {
@@ -69,9 +76,10 @@ export interface CrudNamingStrategy {
 export class Fracture extends Component {
   public readonly project: Project;
   public readonly namespace: string;
-  public readonly gendir: string;
+  public readonly outdir: string;
   public readonly appsync: boolean;
   public readonly apigateway: boolean;
+  public readonly typescript: boolean;
   public readonly typeScriptNamingStrategy: TypeScriptNamingStrategy;
 
   constructor(
@@ -89,9 +97,10 @@ export class Fracture extends Component {
 
     this.project = project;
     this.namespace = namespace;
-    this.gendir = options.gendir ?? project.outdir;
+    this.outdir = (options.outdir ?? project.outdir) + "/" + namespace;
     this.appsync = options.appsync ?? true;
     this.apigateway = options.apigateway ?? true;
+    this.typescript = options.typescript ?? true;
     this.typeScriptNamingStrategy = {
       namingStrategy: {
         attributeStrategy: NamingStrategyType.CAMEL_CASE,
@@ -117,19 +126,21 @@ export class Fracture extends Component {
      *
      *  CODE GENERATION
      *
+     *  Generate code based on flag inputs.
+     *
      **************************************************************************/
 
-    // typescript type generation
-    new TypeScript(this);
-
-    // if appsync's enabled, set it up
     if (this.appsync) {
       new AppSync(this);
     }
 
-    // if api gateway's enabled, set it up
     if (this.apigateway) {
       new ApiGateway(this);
+    }
+
+    // typescript type generation
+    if (this.typescript) {
+      new TypeScript(this);
     }
   }
 

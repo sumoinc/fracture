@@ -1,6 +1,10 @@
-import { Entity } from '../../src/model/entity';
+import { Entity } from "../../src";
+import { TestFracture } from "../util";
 
-test('Smoke test', () => {
-  const foo = new Entity({ name: 'foo' });
-  expect(foo).toBeTruthy();
+test("Smoke test", () => {
+  const entity = new Entity(new TestFracture(), { name: "foo" });
+  expect(entity).toBeTruthy();
+
+  //const foo = synthSnapshot(entity.fracture.project);
+  //console.log(foo);
 });

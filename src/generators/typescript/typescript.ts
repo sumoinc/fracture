@@ -33,7 +33,7 @@ export class TypeScript extends FractureComponent {
     const typeScriptFile = (name: string): SourceCode => {
       const f = new SourceCode(
         this.project,
-        `${this.fracture.gendir}/types/${name}`
+        `${this.fracture.outdir}/types/${name}`
       );
       f.line("// " + f.marker);
       f.line("\n");
