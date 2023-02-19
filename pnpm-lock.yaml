@@ -17,17 +17,17 @@ specifiers:
   jest-junit: ^13
   jsii: ^1.75.0
   jsii-diff: ^1.75.0
-  jsii-docgen: ^7.1.0
+  jsii-docgen: ^7.1.1
   jsii-pacmak: ^1.75.0
   npm-check-updates: ^16
-  projen: ^0.67.58
+  projen: ^0.67.59
   standard-version: ^9
   ts-jest: ^27
   ts-node: ^10.9.1
   typescript: ^4.9.5
 
 dependencies:
-  projen: 0.67.58
+  projen: 0.67.59
 
 devDependencies:
   '@types/jest': 27.5.2
@@ -42,7 +42,7 @@ devDependencies:
   jest-junit: 13.2.0
   jsii: 1.75.0
   jsii-diff: 1.75.0
-  jsii-docgen: 7.1.0
+  jsii-docgen: 7.1.1
   jsii-pacmak: 1.75.0
   npm-check-updates: 16.7.5
   standard-version: 9.5.0
@@ -4200,8 +4200,8 @@ packages:
       - supports-color
     dev: true
 
-  /jsii-docgen/7.1.0:
-    resolution: {integrity: sha512-7k90mHani3yNr2U/Gx2JBrgke3p2pp0qnNesb9gwoVj7mNgzUmWdssDy9dz+4GA+JqzAV0eI4mIJcEOvwzzN8w==}
+  /jsii-docgen/7.1.1:
+    resolution: {integrity: sha512-62g0/atGJllFeJRBo/limdSsmPzxJOZiQZ9Ki5djarzvtK0AeJmnCiKpnn6qTJJkkPTTp6sVQPx56ihMwKVtYA==}
     engines: {node: '>= 14.17.0'}
     hasBin: true
     dependencies:
@@ -5320,8 +5320,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen/0.67.58:
-    resolution: {integrity: sha512-Y7+pd7wv/G/Wn2rS0IJbVZTmUqIegvmUDF8HNoIWIx9Xem1+KBXLaYePdbmH31ovjNDLIFr5MyvVp27FHSVDoA==}
+  /projen/0.67.59:
+    resolution: {integrity: sha512-cBn/1sNKefHODxWyd7L6BB8vHlPd7CQTcAPD1c3w4zFPxL2+jMdXAqLxB+soJ1B3L7bxbJeBJgiV+OXudY/J2A==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
