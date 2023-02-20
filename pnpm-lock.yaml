@@ -17,7 +17,7 @@ specifiers:
   jest-junit: ^13
   jsii: ^1.75.0
   jsii-diff: ^1.75.0
-  jsii-docgen: ^7.1.1
+  jsii-docgen: ^7.1.2
   jsii-pacmak: ^1.75.0
   npm-check-updates: ^16
   projen: ^0.67.59
@@ -42,7 +42,7 @@ devDependencies:
   jest-junit: 13.2.0
   jsii: 1.75.0
   jsii-diff: 1.75.0
-  jsii-docgen: 7.1.1
+  jsii-docgen: 7.1.2
   jsii-pacmak: 1.75.0
   npm-check-updates: 16.7.5
   standard-version: 9.5.0
@@ -4200,8 +4200,8 @@ packages:
       - supports-color
     dev: true
 
-  /jsii-docgen/7.1.1:
-    resolution: {integrity: sha512-62g0/atGJllFeJRBo/limdSsmPzxJOZiQZ9Ki5djarzvtK0AeJmnCiKpnn6qTJJkkPTTp6sVQPx56ihMwKVtYA==}
+  /jsii-docgen/7.1.2:
+    resolution: {integrity: sha512-aAk1ex+iGf3WBMy3ohB72vrW87tTbEYq/dfjnuNZOhC5WAvDJpKJxG6hQg1i1ccQL2cEFDF09Yx/pUKF7G32ag==}
     engines: {node: '>= 14.17.0'}
     hasBin: true
     dependencies:
