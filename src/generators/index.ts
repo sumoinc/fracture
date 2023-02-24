@@ -1,2 +1,2 @@
 export * from "./api";
-export * from "./typescript";
+export * from "./ts";

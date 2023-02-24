@@ -1,9 +1,11 @@
 import { Component, Project } from "projen";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
+import { Account, AccountOptions } from "../aws/account";
+import { Organization, OrganizationOptions } from "../aws/organization";
 import { ApiGateway } from "../generators/api/api-gateway/api-gateway";
 import { AppSync } from "../generators/api/app-sync/app-sync";
-import { TypeScript } from "../generators/typescript/typescript";
+import { TypeScriptModel } from "../generators/ts/typescript-model";
 import { Entity, EntityOptions } from "../model";
 
 export interface FractureOptions {
@@ -24,12 +26,6 @@ export interface FractureOptions {
    * @default true
    */
   apigateway?: boolean;
-  /**
-   * Generate TypeScript code for your application.
-   *
-   * @default true
-   */
-  typescript?: boolean;
 }
 
 export const NamingStrategyType = {
@@ -79,7 +75,6 @@ export class Fracture extends Component {
   public readonly outdir: string;
   public readonly appsync: boolean;
   public readonly apigateway: boolean;
-  public readonly typescript: boolean;
   public readonly typeScriptNamingStrategy: TypeScriptNamingStrategy;
 
   constructor(
@@ -97,10 +92,9 @@ export class Fracture extends Component {
 
     this.project = project;
     this.namespace = namespace;
-    this.outdir = (options.outdir ?? project.outdir) + "/" + namespace;
+    this.outdir = options.outdir ?? namespace;
     this.appsync = options.appsync ?? true;
     this.apigateway = options.apigateway ?? true;
-    this.typescript = options.typescript ?? true;
     this.typeScriptNamingStrategy = {
       namingStrategy: {
         attributeStrategy: NamingStrategyType.CAMEL_CASE,
@@ -138,10 +132,8 @@ export class Fracture extends Component {
       new ApiGateway(this);
     }
 
-    // typescript type generation
-    if (this.typescript) {
-      new TypeScript(this);
-    }
+    // typescript model generation
+    new TypeScriptModel(this);
   }
 
   /*****************************************************************************
@@ -161,5 +153,15 @@ export class Fracture extends Component {
 
   public addEntity(options: EntityOptions) {
     return new Entity(this, options);
+  }
+
+  public addOrganization(options: OrganizationOptions) {
+    new Organization(this, options);
+    return this;
+  }
+
+  public addAccount(options: AccountOptions) {
+    new Account(this, options);
+    return this;
   }
 }

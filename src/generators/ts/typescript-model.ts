@@ -8,7 +8,7 @@ import {
 } from "../../core/fracture";
 import { formatLabel } from "../../lib/format-label";
 
-export class TypeScript extends FractureComponent {
+export class TypeScriptModel extends FractureComponent {
   public readonly namingStrategy: NamingStrategy;
   public readonly commandLabels: CommandNamingStrategy;
   public readonly crudLabels: CrudNamingStrategy;
@@ -40,7 +40,9 @@ export class TypeScript extends FractureComponent {
       return f;
     };
 
-    // create index file
+    /**
+     * Crerate index file and import all entity types.
+     */
     const indexFile = typeScriptFile("index.ts");
 
     /**
