@@ -20,8 +20,8 @@ export class ExampleApp extends Component {
 
     fracture
       .addEntity({ name: "user" })
-      .addAttribute({ name: "first-name" })
-      .addAttribute({ name: "last-name" });
+      .addAttribute({ name: "first-name", shortName: "fn" })
+      .addAttribute({ name: "last-name", shortName: "ln" });
 
     fracture
       .addEntity({ name: "group" })

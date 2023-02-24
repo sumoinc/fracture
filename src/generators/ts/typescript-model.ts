@@ -1,25 +1,11 @@
 import { TypeScriptEntity } from "./typescript-entity";
 import { TypeScriptSource } from "./typescript-source";
 import { FractureComponent } from "../../core/component";
-import {
-  CommandNamingStrategy,
-  CrudNamingStrategy,
-  Fracture,
-  NamingStrategy,
-} from "../../core/fracture";
+import { Fracture } from "../../core/fracture";
 
 export class TypeScriptModel extends FractureComponent {
-  public readonly namingStrategy: NamingStrategy;
-  public readonly commandLabels: CommandNamingStrategy;
-  public readonly crudLabels: CrudNamingStrategy;
-
   constructor(fracture: Fracture) {
     super(fracture);
-
-    const ns = fracture.typeScriptNamingStrategy;
-    this.namingStrategy = ns.namingStrategy;
-    this.commandLabels = ns.commandNamingStrategy;
-    this.crudLabels = ns.crudNamingStrategy;
   }
 
   public preSynthesize() {

@@ -2,15 +2,20 @@ import { addInterface } from "./lib/add-interface";
 import { TypeScriptSource } from "./typescript-source";
 import { FractureComponent } from "../../core/component";
 import { Fracture } from "../../core/fracture";
+import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Entity } from "../../model";
 
 export class TypeScriptEntity extends FractureComponent {
   constructor(fracture: Fracture, entity: Entity) {
     super(fracture);
 
+    const fileName = formatStringByNamingStrategy(
+      entity.name,
+      this.fracture.namingStrategy.ts.file
+    );
     const tsEntity = new TypeScriptSource(
       this.fracture,
-      `/types/${entity.name}.ts`
+      `/types/${fileName}.ts`
     );
 
     // entity definition as an interface.

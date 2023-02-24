@@ -7,7 +7,6 @@ import {
 } from "./attribute";
 import { FractureComponent } from "../core/component";
 import { Fracture } from "../core/fracture";
-import { formatLabel } from "../lib/format-label";
 
 export interface EntityOptions {
   /**
@@ -26,18 +25,18 @@ export interface EntityOptions {
 }
 
 export class Entity extends FractureComponent {
-  private readonly _name: string;
-  private readonly _shortName: string;
+  public readonly name: string;
+  public readonly shortName: string;
   private readonly _comment: string[];
   public attributes: Attribute[];
 
   constructor(fracture: Fracture, options: EntityOptions) {
     super(fracture);
 
-    this._name = paramCase(options.name);
-    this._shortName = options.shortName
-      ? paramCase(options.shortName)
-      : this._name;
+    this.name = paramCase(options.name);
+    this.shortName = options.shortName
+      ? pascalCase(options.shortName).toLowerCase()
+      : pascalCase(options.name).toLowerCase();
     this._comment = options.comment ?? [`A ${this.name}.`];
 
     this.attributes = [];
@@ -135,23 +134,6 @@ export class Entity extends FractureComponent {
     //   type: AttributeType.STRING,
     //   isRemoteField: true,
     // });
-  }
-
-  /**
-   * Get name based on naming strategy.
-   */
-  public get name(): string {
-    return formatLabel(
-      this._name,
-      this.fracture.typeScriptNamingStrategy.namingStrategy.entityStrategy
-    );
-  }
-
-  /**
-   * Get shortName, no dashes, all lowercase
-   */
-  public get shortName(): string {
-    return pascalCase(this._shortName).toLowerCase();
   }
 
   /**

@@ -2,7 +2,6 @@ import { paramCase, pascalCase } from "change-case";
 import { ValueOf } from "type-fest";
 import { Entity } from "./entity";
 import { FractureComponent } from "../core/component";
-import { formatLabel } from "../lib/format-label";
 
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
@@ -219,8 +218,8 @@ export type AttributeOptions = {
 
 export class Attribute extends FractureComponent {
   public readonly entity: Entity;
-  private readonly _name: string;
-  private readonly _shortName: string;
+  public readonly name: string;
+  public readonly shortName: string;
   private readonly _comment: string[];
   public readonly type: ValueOf<typeof AttributeType>;
 
@@ -256,10 +255,10 @@ export class Attribute extends FractureComponent {
     super(entity.fracture);
 
     this.entity = entity;
-    this._name = paramCase(options.name);
-    this._shortName = options.shortName
-      ? paramCase(options.shortName)
-      : this.name;
+    this.name = paramCase(options.name);
+    this.shortName = options.shortName
+      ? pascalCase(options.shortName).toLowerCase()
+      : pascalCase(options.name).toLowerCase();
     this._comment = options.comment ?? [`A ${this.name}.`];
     this.type = options.type ?? AttributeType.STRING;
     this.isKey = options.isKey ?? false;
@@ -339,23 +338,6 @@ export class Attribute extends FractureComponent {
     this.isDeleteInput = this.isKey;
     this.isListInput = false;
     this.isImportInput = !this.isSystem || this.isRemoteField;
-  }
-
-  /**
-   * Get name based on naming strategy.
-   */
-  public get name(): string {
-    return formatLabel(
-      this._name,
-      this.fracture.typeScriptNamingStrategy.namingStrategy.attributeStrategy
-    );
-  }
-
-  /**
-   * Get shortName, no dashes, all lowercase
-   */
-  public get shortName(): string {
-    return pascalCase(this._shortName).toLowerCase();
   }
 
   /**

@@ -1,6 +1,6 @@
 import { Component, Project } from "projen";
-import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
+import { defaultNamingStrategy, NamingStrategy } from "./naming-strategy";
 import { Account, AccountOptions } from "../aws/account";
 import { Organization, OrganizationOptions } from "../aws/organization";
 import { ApiGateway } from "../generators/api-gateway/api-gateway";
@@ -14,46 +14,12 @@ export interface FractureOptions {
    * @default project.outdir + "/" + namespace
    */
   outdir?: string;
-}
-
-export const NamingStrategyType = {
   /**
-   * PascalCase
+   * The naming strategy to use for generated code.
+   * @default defaultNamingStrategyConfig
    */
-  PASCAL_CASE: "pascalCase",
-  /**
-   * camelCase
-   */
-  CAMEL_CASE: "camelCase",
-} as const;
-
-export interface NamingStrategy {
-  entityStrategy: ValueOf<typeof NamingStrategyType>;
-  attributeStrategy: ValueOf<typeof NamingStrategyType>;
+  namingStrategy?: NamingStrategy;
 }
-
-export interface TypeScriptNamingStrategy {
-  namingStrategy: NamingStrategy;
-  commandNamingStrategy: CommandNamingStrategy;
-  crudNamingStrategy: CrudNamingStrategy;
-}
-
-export interface CommandNamingStrategy {
-  inputDataLabel: string;
-  commandLabel: string;
-  commandInputLabel: string;
-  commandOutputLabel: string;
-}
-
-export interface CrudNamingStrategy {
-  createLabel: string;
-  readLabel: string;
-  updateLabel: string;
-  deleteLabel: string;
-  listLabel: string;
-  importLabel: string;
-}
-
 /**
  * The root of the entire application.
  */
@@ -61,7 +27,7 @@ export class Fracture extends Component {
   public readonly project: Project;
   public readonly namespace: string;
   public readonly outdir: string;
-  public readonly typeScriptNamingStrategy: TypeScriptNamingStrategy;
+  public readonly namingStrategy: NamingStrategy;
 
   constructor(
     project: Project,
@@ -79,7 +45,9 @@ export class Fracture extends Component {
     this.project = project;
     this.namespace = namespace;
     this.outdir = options.outdir ?? namespace;
-    this.typeScriptNamingStrategy = {
+    this.namingStrategy = options.namingStrategy ?? defaultNamingStrategy;
+
+    /*this.typeScriptNamingStrategy = {
       namingStrategy: {
         attributeStrategy: NamingStrategyType.CAMEL_CASE,
         entityStrategy: NamingStrategyType.PASCAL_CASE,
@@ -99,6 +67,7 @@ export class Fracture extends Component {
         importLabel: "Import",
       },
     };
+    */
 
     /***************************************************************************
      *
