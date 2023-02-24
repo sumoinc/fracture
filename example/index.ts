@@ -30,5 +30,8 @@ export class ExampleApp extends Component {
     /***************************************************************************
      *  Build some services
      **************************************************************************/
+
+    fracture.addService({ name: "foo" });
+    fracture.addService({ name: "bar" });
   }
 }

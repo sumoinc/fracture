@@ -1,8 +1,8 @@
 import { FractureComponent } from "../../core/component";
-import { Fracture } from "../../core/fracture";
+import { Service } from "../../core/service";
 
 export class ApiGateway extends FractureComponent {
-  constructor(fracture: Fracture) {
-    super(fracture);
+  constructor(service: Service) {
+    super(service.fracture);
   }
 }

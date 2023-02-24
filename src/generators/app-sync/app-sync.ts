@@ -1,12 +1,16 @@
 import { VtlResolvers } from "./vtl-resolvers";
 import { FractureComponent } from "../../core/component";
-import { Fracture } from "../../core/fracture";
+import { Service } from "../../core/service";
 
 export class AppSync extends FractureComponent {
-  constructor(fracture: Fracture) {
-    super(fracture);
+  public readonly service: Service;
+
+  constructor(service: Service) {
+    super(service.fracture);
+
+    this.service = service;
 
     // add VTL revsolvers to the app
-    new VtlResolvers(fracture);
+    new VtlResolvers(service);
   }
 }

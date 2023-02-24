@@ -243,6 +243,7 @@ export class Attribute extends FractureComponent {
    * interfaces. This is useful for fields which are automatically generated.
    */
   public readonly isSystem: boolean;
+  /*
   public readonly isData: boolean;
   public readonly isCreateInput: boolean;
   public readonly isReadInput: boolean;
@@ -250,6 +251,7 @@ export class Attribute extends FractureComponent {
   public readonly isDeleteInput: boolean;
   public readonly isListInput: boolean;
   public readonly isImportInput: boolean;
+  */
 
   constructor(entity: Entity, options: AttributeOptions) {
     super(entity.fracture);
@@ -329,15 +331,28 @@ export class Attribute extends FractureComponent {
       this.updateValidations.unshift(ValidationRule.REQUIRED);
       this.deleteValidations.unshift(ValidationRule.REQUIRED);
     }
+  }
 
-    // CRUD flags
-    this.isData = !this.isSystem && !this.isKey && !this.isRemoteField;
-    this.isCreateInput = !this.isSystem && !this.isKey && !this.isRemoteField;
-    this.isReadInput = this.isKey;
-    this.isUpdateInput = !this.isSystem && !this.isRemoteField;
-    this.isDeleteInput = this.isKey;
-    this.isListInput = false;
-    this.isImportInput = !this.isSystem || this.isRemoteField;
+  public get isData(): boolean {
+    return !this.isSystem && !this.isKey && !this.isRemoteField;
+  }
+  public get isCreateInput(): boolean {
+    return !this.isSystem && !this.isKey && !this.isRemoteField;
+  }
+  public get isReadInput(): boolean {
+    return this.isKey;
+  }
+  public get isUpdateInput(): boolean {
+    return !this.isSystem && !this.isRemoteField;
+  }
+  public get isDeleteInput(): boolean {
+    return this.isKey;
+  }
+  public get isListInput(): boolean {
+    return false;
+  }
+  public get isImportInput(): boolean {
+    return !this.isSystem || this.isRemoteField;
   }
 
   /**

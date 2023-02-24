@@ -1,17 +1,18 @@
 import { addValidations } from "./add-validations";
 import { setSytemAttribute } from "./set-system-attribute";
 import { formatStringByNamingStrategy } from "../../../../core/naming-strategy";
+import { Service } from "../../../../core/service";
 import { AttributeGenerator, Entity } from "../../../../model";
 import { VtlSource } from "../../../vtl/vtl-source";
 
-export const addCreateRequest = (e: Entity) => {
+export const addCreateRequest = (service: Service, e: Entity) => {
   const operationName = `${e.fracture.namingStrategy.operations.crud.createName}-${e.name}`;
   const fileName = formatStringByNamingStrategy(
     `mutation-${operationName}-request`,
     e.fracture.namingStrategy.appsync.vtl.file
   );
 
-  const resolver = new VtlSource(e.fracture, `app-sync/vtl/${fileName}.vtl`);
+  const resolver = new VtlSource(service, `app-sync/vtl/${fileName}.vtl`);
 
   const entityName = formatStringByNamingStrategy(
     e.name,
@@ -50,6 +51,17 @@ export const addCreateRequest = (e: Entity) => {
       resolver.line("\n");
     });
 
+  // assign keys
+  // const ap = e.keyPattern;
+  // resolver.line(`## KEYS`);
+  // resolver.open(`#set( $${entityName}.pk = {`);
+  // resolver.line(
+  //   `$util.quiet($${entityName}.put("${a.shortName}", "$ctx.args.input.${attributeName}")`
+  // );
+  // resolver.close(`})`);
+  // resolver.line("\n");
+
+  // dynamo command
   resolver.line(`## DYNAMODB PUT`);
   resolver.open(`{`);
   resolver.line(`"version" : "2018-05-29",`);

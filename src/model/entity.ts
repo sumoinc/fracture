@@ -1,4 +1,5 @@
 import { paramCase, pascalCase } from "change-case";
+import { AccessPattern } from "./access-pattern";
 import {
   Attribute,
   AttributeGenerator,
@@ -29,6 +30,7 @@ export class Entity extends FractureComponent {
   public readonly shortName: string;
   private readonly _comment: string[];
   public attributes: Attribute[];
+  public keyPattern: AccessPattern;
 
   constructor(fracture: Fracture, options: EntityOptions) {
     super(fracture);
@@ -134,6 +136,12 @@ export class Entity extends FractureComponent {
     //   type: AttributeType.STRING,
     //   isRemoteField: true,
     // });
+
+    // default access pattern for now
+    this.keyPattern = new AccessPattern(this, {
+      pk: ["id"],
+      sk: ["type", "version"],
+    });
   }
 
   /**

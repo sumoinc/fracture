@@ -7,23 +7,27 @@ import { addReadResponse } from "./lib/vtl/add-read-response";
 import { addUpdateRequest } from "./lib/vtl/add-update-request";
 import { addUpdateResponse } from "./lib/vtl/add-update-response";
 import { FractureComponent } from "../../core/component";
-import { Fracture } from "../../core/fracture";
+import { Service } from "../../core/service";
 
 export class VtlResolvers extends FractureComponent {
-  constructor(fracture: Fracture) {
-    super(fracture);
+  public readonly service: Service;
+
+  constructor(service: Service) {
+    super(service.fracture);
+
+    this.service = service;
   }
 
   public preSynthesize() {
-    this.fracture.entities.forEach((e) => {
-      addCreateRequest(e);
-      addCreateResponse(e);
-      addReadRequest(e);
-      addReadResponse(e);
-      addUpdateRequest(e);
-      addUpdateResponse(e);
-      addDeleteRequest(e);
-      addDeleteResponse(e);
+    this.service.entities.forEach((e) => {
+      addCreateRequest(this.service, e);
+      addCreateResponse(this.service, e);
+      addReadRequest(this.service, e);
+      addReadResponse(this.service, e);
+      addUpdateRequest(this.service, e);
+      addUpdateResponse(this.service, e);
+      addDeleteRequest(this.service, e);
+      addDeleteResponse(this.service, e);
     });
   }
 }
