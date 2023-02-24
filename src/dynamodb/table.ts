@@ -1,6 +1,6 @@
 import { Gsi } from "./gsi";
 import { FractureComponent } from "../core/component";
-import { Fracture } from "../core/fracture";
+import { Service } from "../core/service";
 
 export interface TableOptions {
   /**
@@ -13,8 +13,8 @@ export class Table extends FractureComponent {
   public readonly name: string;
   public readonly primaryGsi: Gsi;
 
-  constructor(fracture: Fracture, options: TableOptions) {
-    super(fracture);
+  constructor(service: Service, options: TableOptions) {
+    super(service.fracture);
 
     this.name = options.name;
     this.primaryGsi = new Gsi(this, {

@@ -21,10 +21,14 @@ export class AccessPattern extends FractureComponent {
   }
 
   public get pk(): Attribute[] {
-    return this.entity.attributes.filter((a) => a.name === this._pk[0]);
+    return this._pk.map(
+      (name) => this.entity.attributes.filter((a) => a.name === name)[0]
+    );
   }
 
   public get sk(): Attribute[] {
-    return this.entity.attributes.filter((a) => a.name === this._sk[0]);
+    return this._sk.map(
+      (name) => this.entity.attributes.filter((a) => a.name === name)[0]
+    );
   }
 }

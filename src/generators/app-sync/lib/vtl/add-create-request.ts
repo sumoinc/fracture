@@ -53,13 +53,19 @@ export const addCreateRequest = (service: Service, e: Entity) => {
 
   // assign keys
   // const ap = e.keyPattern;
-  // resolver.line(`## KEYS`);
-  // resolver.open(`#set( $${entityName}.pk = {`);
-  // resolver.line(
-  //   `$util.quiet($${entityName}.put("${a.shortName}", "$ctx.args.input.${attributeName}")`
-  // );
-  // resolver.close(`})`);
-  // resolver.line("\n");
+  const gsi = service.dynamodb.primaryGsi;
+  resolver.line(`## KEYS`);
+  resolver.line(
+    `$util.quiet($${entityName}.put("${
+      gsi.pkName
+    }", "$${entityName}.${e.keyPattern.pk.map((k) => k.shortName).join("#")}"))`
+  );
+  resolver.line(
+    `$util.quiet($${entityName}.put("${gsi.skName}", "${e.keyPattern.sk
+      .map((k) => "$" + entityName + "." + k.shortName)
+      .join("#")}"))`
+  );
+  resolver.line("\n");
 
   // dynamo command
   resolver.line(`## DYNAMODB PUT`);

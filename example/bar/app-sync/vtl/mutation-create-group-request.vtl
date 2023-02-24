@@ -22,6 +22,10 @@
   $util.quiet($Group.put("name", "$ctx.args.input.name")
 #end
 
+## KEYS
+$util.quiet($Group.put("pk", "$Group.id"))
+$util.quiet($Group.put("sk", "$Group.t#$Group.v"))
+
 ## DYNAMODB PUT
 {
   "version" : "2018-05-29",

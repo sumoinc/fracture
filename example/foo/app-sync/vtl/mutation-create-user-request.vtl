@@ -22,6 +22,10 @@
   $util.quiet($User.put("ln", "$ctx.args.input.lastName")
 #end
 
+## KEYS
+$util.quiet($User.put("pk", "$User.id"))
+$util.quiet($User.put("sk", "$User.t#$User.v"))
+
 ## DYNAMODB PUT
 {
   "version" : "2018-05-29",
