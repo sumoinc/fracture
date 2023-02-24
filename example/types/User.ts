@@ -44,32 +44,3 @@ export interface User {
    */
   lastName?: string;
 }
-
-export interface UserInput {
-  firstName?: string;
-  lastName?: string;
-}
-
-export interface CreateUserCommandInput {
-  userInput: UserInput;
-}
-
-export interface ReadUserCommandInput {
-  id: string;
-}
-
-export interface UpdateUserCommandInput {
-  id: string;
-  userInput: UserInput;
-}
-
-export interface DeleteUserCommandInput {
-  id: string;
-}
-
-export interface ListUserCommandInput {
-}
-
-export interface CreateUserCommandOutput {
-  user: User;
-}

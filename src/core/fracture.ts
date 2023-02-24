@@ -3,8 +3,8 @@ import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Account, AccountOptions } from "../aws/account";
 import { Organization, OrganizationOptions } from "../aws/organization";
-import { ApiGateway } from "../generators/api/api-gateway/api-gateway";
-import { AppSync } from "../generators/api/app-sync/app-sync";
+import { ApiGateway } from "../generators/api-gateway/api-gateway";
+import { AppSync } from "../generators/app-sync/app-sync";
 import { TypeScriptModel } from "../generators/ts/typescript-model";
 import { Entity, EntityOptions } from "../model";
 
@@ -14,18 +14,6 @@ export interface FractureOptions {
    * @default project.outdir + "/" + namespace
    */
   outdir?: string;
-  /**
-   * Generate AppSync code for your application.
-   *
-   * @default true
-   */
-  appsync?: boolean;
-  /**
-   * Generate Api Gateway code for your application.
-   *
-   * @default true
-   */
-  apigateway?: boolean;
 }
 
 export const NamingStrategyType = {
@@ -73,8 +61,6 @@ export class Fracture extends Component {
   public readonly project: Project;
   public readonly namespace: string;
   public readonly outdir: string;
-  public readonly appsync: boolean;
-  public readonly apigateway: boolean;
   public readonly typeScriptNamingStrategy: TypeScriptNamingStrategy;
 
   constructor(
@@ -93,8 +79,6 @@ export class Fracture extends Component {
     this.project = project;
     this.namespace = namespace;
     this.outdir = options.outdir ?? namespace;
-    this.appsync = options.appsync ?? true;
-    this.apigateway = options.apigateway ?? true;
     this.typeScriptNamingStrategy = {
       namingStrategy: {
         attributeStrategy: NamingStrategyType.CAMEL_CASE,
@@ -120,20 +104,13 @@ export class Fracture extends Component {
      *
      *  CODE GENERATION
      *
-     *  Generate code based on flag inputs.
+     *  Generate code for various services.
      *
      **************************************************************************/
 
-    if (this.appsync) {
-      new AppSync(this);
-    }
-
-    if (this.apigateway) {
-      new ApiGateway(this);
-    }
-
-    // typescript model generation
     new TypeScriptModel(this);
+    new AppSync(this);
+    new ApiGateway(this);
   }
 
   /*****************************************************************************

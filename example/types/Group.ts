@@ -40,31 +40,3 @@ export interface Group {
    */
   name: string;
 }
-
-export interface GroupInput {
-  name: string;
-}
-
-export interface CreateGroupCommandInput {
-  groupInput: GroupInput;
-}
-
-export interface ReadGroupCommandInput {
-  id: string;
-}
-
-export interface UpdateGroupCommandInput {
-  id: string;
-  groupInput: GroupInput;
-}
-
-export interface DeleteGroupCommandInput {
-  id: string;
-}
-
-export interface ListGroupCommandInput {
-}
-
-export interface CreateGroupCommandOutput {
-  group: Group;
-}

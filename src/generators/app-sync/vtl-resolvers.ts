@@ -1,13 +1,14 @@
 import { SourceCode } from "projen";
 import { ValueOf } from "type-fest";
-import { FractureComponent } from "../../../core/component";
-import { Fracture } from "../../../core/fracture";
+import { FractureComponent } from "../../core/component";
+import { Fracture } from "../../core/fracture";
 import {
   Attribute,
   AttributeGenerator,
   Entity,
   ValidationRule,
-} from "../../../model";
+} from "../../model";
+import { VtlSource } from "../vtl/vtl-source";
 
 export class VtlResolvers extends FractureComponent {
   constructor(fracture: Fracture) {
@@ -15,21 +16,6 @@ export class VtlResolvers extends FractureComponent {
   }
 
   public preSynthesize() {
-    /**
-     *  Build a VTL file and make sure it's marked as being managed by projen.
-     *
-     * @param name
-     * @returns {SourceCode]
-     */
-    const vtlFile = (name: string): SourceCode => {
-      const f = new SourceCode(
-        this.project,
-        `${this.fracture.outdir}/api/app-sync/resolvers/vtl/${name}`
-      );
-      f.line("## " + f.marker);
-      return f;
-    };
-
     /**
      * Configures generated values for entity attributes.
      */
@@ -76,7 +62,10 @@ export class VtlResolvers extends FractureComponent {
      */
     const createItemResolver = (e: Entity) => {
       // request header
-      const requestResolver = vtlFile(`/Mutation.create-${e.name}.request.vtl`);
+      const requestResolver = new VtlSource(
+        this.fracture,
+        `app-sync/vtl/Mutation.create-${e.name}.request.vtl`
+      );
       requestResolver.line("\n");
 
       // validations
@@ -129,8 +118,9 @@ export class VtlResolvers extends FractureComponent {
       requestResolver.line("\n");
 
       // result resolver
-      const responseResolver = vtlFile(
-        `/Mutation.create-${e.name}.response.vtl`
+      const responseResolver = new VtlSource(
+        this.fracture,
+        `app-sync/vtl/Mutation.create-${e.name}.response.vtl`
       );
       responseResolver.line("$util.toJson($ctx.result)");
     };
@@ -139,9 +129,15 @@ export class VtlResolvers extends FractureComponent {
      * Build read resolver for entity.
      */
     const readItemResolver = (e: Entity) => {
-      const requestResolver = vtlFile(`/Query.read-${e.name}.request.vtl`);
+      const requestResolver = new VtlSource(
+        this.fracture,
+        `app-sync/vtl/Query.read-${e.name}.request.vtl`
+      );
       requestResolver.line("{}");
-      const responseResolver = vtlFile(`/Query.read-${e.name}.response.vtl`);
+      const responseResolver = new VtlSource(
+        this.fracture,
+        `app-sync/vtl/Query.read-${e.name}.response.vtl`
+      );
       responseResolver.line("$util.toJson($ctx.result)");
     };
 
@@ -149,10 +145,14 @@ export class VtlResolvers extends FractureComponent {
      * Build update resolver for entity.
      */
     const updateItemResolver = (e: Entity) => {
-      const requestResolver = vtlFile(`/Mutation.update-${e.name}.request.vtl`);
+      const requestResolver = new VtlSource(
+        this.fracture,
+        `app-sync/vtl/Mutation.update-${e.name}.request.vtl`
+      );
       requestResolver.line("{}");
-      const responseResolver = vtlFile(
-        `/Mutation.update-${e.name}.response.vtl`
+      const responseResolver = new VtlSource(
+        this.fracture,
+        `app-sync/vtl/Mutation.update-${e.name}.response.vtl`
       );
       responseResolver.line("$util.toJson($ctx.result)");
     };
@@ -161,10 +161,14 @@ export class VtlResolvers extends FractureComponent {
      * Build delete resolver for entity.
      */
     const deleteItemResolver = (e: Entity) => {
-      const requestResolver = vtlFile(`/Mutation.delete-${e.name}.request.vtl`);
+      const requestResolver = new VtlSource(
+        this.fracture,
+        `app-sync/vtl/Mutation.delete-${e.name}.request.vtl`
+      );
       requestResolver.line("{}");
-      const responseResolver = vtlFile(
-        `/Mutation.delete-${e.name}.response.vtl`
+      const responseResolver = new VtlSource(
+        this.fracture,
+        `app-sync/vtl/Mutation.delete-${e.name}.response.vtl`
       );
       responseResolver.line("$util.toJson($ctx.result)");
     };
