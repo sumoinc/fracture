@@ -15,23 +15,26 @@ export class ExampleApp extends Component {
       .addAccount({ account: "000000000000" });
 
     /***************************************************************************
-     *  Build the model
+     *  User Service
      **************************************************************************/
 
-    fracture
+    const userService = fracture.addService({ name: "user" });
+    userService
       .addEntity({ name: "user" })
       .addAttribute({ name: "first-name", shortName: "fn" })
       .addAttribute({ name: "last-name", shortName: "ln" });
 
-    fracture
+    userService
       .addEntity({ name: "group" })
       .addAttribute({ name: "name", isRequired: true });
 
     /***************************************************************************
-     *  Build some services
+     *  Tenant Service
      **************************************************************************/
 
-    fracture.addService({ name: "foo" });
-    fracture.addService({ name: "bar" });
+    const tenantService = fracture.addService({ name: "tenant" });
+    tenantService
+      .addEntity({ name: "tenant" })
+      .addAttribute({ name: "name", isRequired: true });
   }
 }

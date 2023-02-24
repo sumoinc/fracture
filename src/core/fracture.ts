@@ -4,7 +4,7 @@ import { defaultNamingStrategy, NamingStrategy } from "./naming-strategy";
 import { Service, ServiceOptions } from "./service";
 import { Account, AccountOptions } from "../aws/account";
 import { Organization, OrganizationOptions } from "../aws/organization";
-import { Entity, EntityOptions } from "../model";
+import { Entity } from "../model";
 
 export interface FractureOptions {
   /**
@@ -55,6 +55,7 @@ export class Fracture extends Component {
   /**
    * Get all entities in this project's namespace.
    */
+  /*
   public get entities(): Entity[] {
     const isEntity = (c: FractureComponent): c is Entity =>
       c instanceof Entity && c.namespace === this.namespace;
@@ -64,6 +65,7 @@ export class Fracture extends Component {
   public addEntity(options: EntityOptions) {
     return new Entity(this, options);
   }
+  */
 
   public get services(): Service[] {
     const isService = (c: FractureComponent): c is Service =>

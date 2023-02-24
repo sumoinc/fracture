@@ -7,7 +7,7 @@ import {
   AttributeType,
 } from "./attribute";
 import { FractureComponent } from "../core/component";
-import { Fracture } from "../core/fracture";
+import { Service } from "../core/service";
 
 export interface EntityOptions {
   /**
@@ -26,15 +26,17 @@ export interface EntityOptions {
 }
 
 export class Entity extends FractureComponent {
+  public readonly service: Service;
   public readonly name: string;
   public readonly shortName: string;
   private readonly _comment: string[];
   public attributes: Attribute[];
   public keyPattern: AccessPattern;
 
-  constructor(fracture: Fracture, options: EntityOptions) {
-    super(fracture);
+  constructor(service: Service, options: EntityOptions) {
+    super(service.fracture);
 
+    this.service = service;
     this.name = paramCase(options.name);
     this.shortName = options.shortName
       ? pascalCase(options.shortName).toLowerCase()

@@ -2,7 +2,7 @@ import { Fracture, FractureComponent } from ".";
 import { Table } from "../dynamodb/table";
 import { ApiGateway, AppSync } from "../generators";
 import { TypeScriptModel } from "../generators/ts/typescript-model";
-import { Entity } from "../model";
+import { Entity, EntityOptions } from "../model";
 
 export interface ServiceOptions {
   name: string;
@@ -37,6 +37,14 @@ export class Service extends FractureComponent {
    * Get all entities for this service.
    */
   public get entities(): Entity[] {
-    return this.fracture.entities;
+    const isEntity = (c: FractureComponent): c is Entity =>
+      c instanceof Entity &&
+      c.namespace === this.namespace &&
+      c.service.name === this.name;
+    return (this.project.components as FractureComponent[]).filter(isEntity);
+  }
+
+  public addEntity(options: EntityOptions) {
+    return new Entity(this, options);
   }
 }

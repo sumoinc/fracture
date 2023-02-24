@@ -73,8 +73,12 @@ export const addCreateRequest = (service: Service, e: Entity) => {
   resolver.line(`"version" : "2018-05-29",`);
   resolver.line(`"operation" : "PutItem",`);
   resolver.open(`"key": {`);
-  resolver.line(`"pk": $util.dynamodb.toDynamoDBJson($${entityName}.pk),`);
-  resolver.line(`"sk": $util.dynamodb.toDynamoDBJson($${entityName}.sk)`);
+  resolver.line(
+    `"${gsi.pkName}": $util.dynamodb.toDynamoDBJson($${entityName}.${gsi.pkName}),`
+  );
+  resolver.line(
+    `"${gsi.skName}": $util.dynamodb.toDynamoDBJson($${entityName}.${gsi.skName})`
+  );
   resolver.close(`},`);
   resolver.line(`"attributeValues": $util.toJson($${entityName})`);
   resolver.close(`}`);

@@ -17,7 +17,7 @@ export class TypeScriptModel extends FractureComponent {
      * Crerate index file and import all entity types.
      */
     const indexFile = new TypeScriptSource(this.service, `types/index.ts`);
-    this.fracture.entities.forEach((e) => {
+    this.service.entities.forEach((e) => {
       indexFile.line(`export * from "./${e.name}";`);
     });
     indexFile.line("\n");
@@ -25,7 +25,7 @@ export class TypeScriptModel extends FractureComponent {
     /**
      * Generate types for each entity.
      */
-    this.fracture.entities.forEach((e) => {
+    this.service.entities.forEach((e) => {
       new TypeScriptEntity(this.service, e);
     });
   }

@@ -10,29 +10,29 @@
 #end
 
 ## Initialise Shape
-#set( $Group = {
+#set( $Tenant = {
   "id": "$util.autoId()"
   "cd": "$util.time.nowISO8601()"
   "v": "$util.time.nowISO8601()"
-  "t": "Group"
+  "t": "Tenant"
 })
 
 ## USER INPUTS
 #if( $ctx.args.input.name )
-  $util.quiet($Group.put("name", "$ctx.args.input.name")
+  $util.quiet($Tenant.put("name", "$ctx.args.input.name")
 #end
 
 ## KEYS
-$util.quiet($Group.put("pk", "$Group.id"))
-$util.quiet($Group.put("sk", "$Group.t#$Group.v"))
+$util.quiet($Tenant.put("pk", "$Tenant.id"))
+$util.quiet($Tenant.put("sk", "$Tenant.t#$Tenant.v"))
 
 ## DYNAMODB PUT
 {
   "version" : "2018-05-29",
   "operation" : "PutItem",
   "key": {
-    "pk": $util.dynamodb.toDynamoDBJson($Group.pk),
-    "sk": $util.dynamodb.toDynamoDBJson($Group.sk)
+    "pk": $util.dynamodb.toDynamoDBJson($Tenant.pk),
+    "sk": $util.dynamodb.toDynamoDBJson($Tenant.sk)
   },
-  "attributeValues": $util.toJson($Group)
+  "attributeValues": $util.toJson($Tenant)
 }
