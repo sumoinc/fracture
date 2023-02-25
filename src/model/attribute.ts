@@ -1,12 +1,12 @@
 import { paramCase, pascalCase } from "change-case";
 import { ValueOf } from "type-fest";
-import { Entity } from "./entity";
+import { Shape } from "./shape";
 import { FractureComponent } from "../core/component";
 
 /**
- * Each Attribute has a type that is used to determine how we will construct other generated code.
+ * Each ShapeAttribute has a type that is used to determine how we will construct other generated code.
  */
-export const AttributeType = {
+export const ShapeAttributeType = {
   /**
    *  A unique identifier for an object. This scalar is serialized like a String but isn't meant to be human-readable.
    *  Long format GUID
@@ -115,7 +115,7 @@ export const AttributeType = {
   SUM: "Sum",
 } as const;
 
-export const AttributeGenerator = {
+export const ShapeAttributeGenerator = {
   AUTO_INCREMENT: "Increment",
   GUID: "Guid",
   CURRENT_DATE_TIME_STAMP: "CurrentDateTimeStamp",
@@ -141,7 +141,7 @@ export const DynamoDbType = {
   BOOLEAN: "BOOL",
 } as const;
 
-export type AttributeOptions = {
+export type ShapeAttributeOptions = {
   /**
    * Full long name for this attribute.
    * @example 'phone-number'
@@ -150,21 +150,21 @@ export type AttributeOptions = {
   /**
    * Brief name used when storing data to save space.
    * @example 'pn'
-   * @default AttributeOptions.name
+   * @default ShapeAttributeOptions.name
    */
   shortName?: string;
   /**
-   * Comment lines to add to the Entity.
+   * Comment lines to add to the Shape.
    * @default []
    */
   comment?: string[];
   /**
    * The type for this attribute.
-   * @default AttributeType.STRING
+   * @default ShapeAttributeType.STRING
    */
-  type?: ValueOf<typeof AttributeType>;
+  type?: ValueOf<typeof ShapeAttributeType>;
   /**
-   * Is this attribute a key for the Entity?
+   * Is this attribute a key for the Shape?
    * @default false
    */
   isKey?: boolean;
@@ -186,19 +186,19 @@ export type AttributeOptions = {
   isRequired?: boolean;
   /**
    * The generator to use for this attribute when creating it.
-   * @default AttributeGenerator.NONE
+   * @default ShapeAttributeGenerator.NONE
    */
-  createGenerator?: ValueOf<typeof AttributeGenerator>;
+  createGenerator?: ValueOf<typeof ShapeAttributeGenerator>;
   /**
    * The generator to use for this attribute when updating it.
-   * @default AttributeGenerator.NONE
+   * @default ShapeAttributeGenerator.NONE
    */
-  updateGenerator?: ValueOf<typeof AttributeGenerator>;
+  updateGenerator?: ValueOf<typeof ShapeAttributeGenerator>;
   /**
    * The generator to use for this attribute when deleting it.
-   * @default AttributeGenerator.NONE
+   * @default ShapeAttributeGenerator.NONE
    */
-  deleteGenerator?: ValueOf<typeof AttributeGenerator>;
+  deleteGenerator?: ValueOf<typeof ShapeAttributeGenerator>;
   /**
    * Validations to run when creating this attribute.
    * @default []
@@ -216,12 +216,12 @@ export type AttributeOptions = {
   deleteValidations?: ValueOf<typeof ValidationRule>[];
 };
 
-export class Attribute extends FractureComponent {
-  public readonly entity: Entity;
+export class ShapeAttribute extends FractureComponent {
+  public readonly shape: Shape;
   public readonly name: string;
   public readonly shortName: string;
   private readonly _comment: string[];
-  public readonly type: ValueOf<typeof AttributeType>;
+  public readonly type: ValueOf<typeof ShapeAttributeType>;
 
   public readonly isKey: boolean;
   public readonly isRemoteKey: boolean;
@@ -230,9 +230,9 @@ export class Attribute extends FractureComponent {
 
   public readonly dynamoDbType: ValueOf<typeof DynamoDbType>;
   public readonly typeScriptType: string;
-  public readonly createGenerator: ValueOf<typeof AttributeGenerator>;
-  public readonly updateGenerator: ValueOf<typeof AttributeGenerator>;
-  public readonly deleteGenerator: ValueOf<typeof AttributeGenerator>;
+  public readonly createGenerator: ValueOf<typeof ShapeAttributeGenerator>;
+  public readonly updateGenerator: ValueOf<typeof ShapeAttributeGenerator>;
+  public readonly deleteGenerator: ValueOf<typeof ShapeAttributeGenerator>;
 
   public readonly createValidations: ValueOf<typeof ValidationRule>[];
   public readonly updateValidations: ValueOf<typeof ValidationRule>[];
@@ -253,16 +253,16 @@ export class Attribute extends FractureComponent {
   public readonly isImportInput: boolean;
   */
 
-  constructor(entity: Entity, options: AttributeOptions) {
-    super(entity.fracture);
+  constructor(shape: Shape, options: ShapeAttributeOptions) {
+    super(shape.fracture);
 
-    this.entity = entity;
+    this.shape = shape;
     this.name = paramCase(options.name);
     this.shortName = options.shortName
       ? pascalCase(options.shortName).toLowerCase()
       : pascalCase(options.name).toLowerCase();
     this._comment = options.comment ?? [`A ${this.name}.`];
-    this.type = options.type ?? AttributeType.STRING;
+    this.type = options.type ?? ShapeAttributeType.STRING;
     this.isKey = options.isKey ?? false;
     this.isRemoteKey = options.isRemoteKey ?? false;
     this.isRemoteField =
@@ -272,29 +272,29 @@ export class Attribute extends FractureComponent {
 
     // dynamo types
     switch (this.type) {
-      case AttributeType.GUID:
-      case AttributeType.STRING:
-      case AttributeType.EMAIL:
-      case AttributeType.PHONE:
-      case AttributeType.URL:
-      case AttributeType.DATE:
-      case AttributeType.TIME:
-      case AttributeType.DATE_TIME:
-      case AttributeType.JSON:
-      case AttributeType.IPADDRESS:
+      case ShapeAttributeType.GUID:
+      case ShapeAttributeType.STRING:
+      case ShapeAttributeType.EMAIL:
+      case ShapeAttributeType.PHONE:
+      case ShapeAttributeType.URL:
+      case ShapeAttributeType.DATE:
+      case ShapeAttributeType.TIME:
+      case ShapeAttributeType.DATE_TIME:
+      case ShapeAttributeType.JSON:
+      case ShapeAttributeType.IPADDRESS:
         this.dynamoDbType = DynamoDbType.STRING;
         this.typeScriptType = "string";
         break;
-      case AttributeType.INT:
-      case AttributeType.FLOAT:
-      case AttributeType.TIMESTAMP:
-      case AttributeType.COUNT:
-      case AttributeType.AVERAGE:
-      case AttributeType.SUM:
+      case ShapeAttributeType.INT:
+      case ShapeAttributeType.FLOAT:
+      case ShapeAttributeType.TIMESTAMP:
+      case ShapeAttributeType.COUNT:
+      case ShapeAttributeType.AVERAGE:
+      case ShapeAttributeType.SUM:
         this.dynamoDbType = DynamoDbType.NUMBER;
         this.typeScriptType = "number";
         break;
-      case AttributeType.BOOLEAN:
+      case ShapeAttributeType.BOOLEAN:
         this.dynamoDbType = DynamoDbType.BOOLEAN;
         this.typeScriptType = "boolean";
         break;
@@ -303,15 +303,18 @@ export class Attribute extends FractureComponent {
     }
 
     // deterine generators
-    this.createGenerator = options.createGenerator ?? AttributeGenerator.NONE;
-    this.updateGenerator = options.updateGenerator ?? AttributeGenerator.NONE;
-    this.deleteGenerator = options.deleteGenerator ?? AttributeGenerator.NONE;
+    this.createGenerator =
+      options.createGenerator ?? ShapeAttributeGenerator.NONE;
+    this.updateGenerator =
+      options.updateGenerator ?? ShapeAttributeGenerator.NONE;
+    this.deleteGenerator =
+      options.deleteGenerator ?? ShapeAttributeGenerator.NONE;
 
     // determine if this is a system managed attribute.
     this.isSystem =
-      this.createGenerator !== AttributeGenerator.NONE ||
-      this.updateGenerator !== AttributeGenerator.NONE ||
-      this.deleteGenerator !== AttributeGenerator.NONE;
+      this.createGenerator !== ShapeAttributeGenerator.NONE ||
+      this.updateGenerator !== ShapeAttributeGenerator.NONE ||
+      this.deleteGenerator !== ShapeAttributeGenerator.NONE;
 
     // setup validation rules
     this.createValidations = options.createValidations ?? [];
@@ -362,7 +365,7 @@ export class Attribute extends FractureComponent {
     const c = [...this._comment];
 
     // attribute type
-    if (this.type === AttributeType.GUID) {
+    if (this.type === ShapeAttributeType.GUID) {
       c.push(`@type A GUID string.`);
     }
 

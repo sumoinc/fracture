@@ -19,7 +19,7 @@ export class VtlResolvers extends FractureComponent {
   }
 
   public preSynthesize() {
-    this.service.entities.forEach((e) => {
+    this.service.shapes.forEach((e) => {
       addCreateRequest(this.service, e);
       addCreateResponse(this.service, e);
       addReadRequest(this.service, e);

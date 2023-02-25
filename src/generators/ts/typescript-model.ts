@@ -1,4 +1,4 @@
-import { TypeScriptEntity } from "./typescript-entity";
+import { TypeScriptShape } from "./typescript-shape";
 import { TypeScriptSource } from "./typescript-source";
 import { FractureComponent } from "../../core/component";
 import { Service } from "../../core/service";
@@ -14,19 +14,19 @@ export class TypeScriptModel extends FractureComponent {
 
   public preSynthesize() {
     /**
-     * Crerate index file and import all entity types.
+     * Crerate index file and import all shape types.
      */
     const indexFile = new TypeScriptSource(this.service, `types/index.ts`);
-    this.service.entities.forEach((e) => {
+    this.service.shapes.forEach((e) => {
       indexFile.line(`export * from "./${e.name}";`);
     });
     indexFile.line("\n");
 
     /**
-     * Generate types for each entity.
+     * Generate types for each shape.
      */
-    this.service.entities.forEach((e) => {
-      new TypeScriptEntity(this.service, e);
+    this.service.shapes.forEach((e) => {
+      new TypeScriptShape(this.service, e);
     });
   }
 }

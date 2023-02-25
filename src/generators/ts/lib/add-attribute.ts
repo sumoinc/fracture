@@ -1,10 +1,10 @@
-import { addAttributeComment } from "./add-attribute-comment";
+import { addShapeAttributeComment } from "./add-attribute-comment";
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
-import { Attribute } from "../../../model";
+import { ShapeAttribute } from "../../../model";
 import { TypeScriptSource } from "../typescript-source";
 
-export const addAttribute = (f: TypeScriptSource, a: Attribute) => {
-  addAttributeComment(f, a);
+export const addShapeAttribute = (f: TypeScriptSource, a: ShapeAttribute) => {
+  addShapeAttributeComment(f, a);
 
   const attributeName = formatStringByNamingStrategy(
     a.name,

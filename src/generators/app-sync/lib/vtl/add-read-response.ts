@@ -1,9 +1,9 @@
 import { formatStringByNamingStrategy } from "../../../../core/naming-strategy";
 import { Service } from "../../../../core/service";
-import { Entity } from "../../../../model";
+import { Shape } from "../../../../model";
 import { VtlSource } from "../../../vtl/vtl-source";
 
-export const addReadResponse = (service: Service, e: Entity) => {
+export const addReadResponse = (service: Service, e: Shape) => {
   const operationName = `${e.fracture.namingStrategy.operations.crud.readName}-${e.name}`;
   const fileName = formatStringByNamingStrategy(
     `query-${operationName}-response`,

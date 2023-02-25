@@ -1,5 +1,5 @@
-import { Attribute } from "./attribute";
-import { Entity } from "./entity";
+import { ShapeAttribute } from "./attribute";
+import { Shape } from "./shape";
 import { FractureComponent } from "../core/component";
 
 export interface AccessPatternOptions {
@@ -8,27 +8,27 @@ export interface AccessPatternOptions {
 }
 
 export class AccessPattern extends FractureComponent {
-  public readonly entity: Entity;
+  public readonly shape: Shape;
   private readonly _pk: string[];
   private readonly _sk: string[];
 
-  constructor(entity: Entity, options: AccessPatternOptions) {
-    super(entity.fracture);
+  constructor(shape: Shape, options: AccessPatternOptions) {
+    super(shape.fracture);
 
-    this.entity = entity;
+    this.shape = shape;
     this._pk = options.pk;
     this._sk = options.sk;
   }
 
-  public get pk(): Attribute[] {
+  public get pk(): ShapeAttribute[] {
     return this._pk.map(
-      (name) => this.entity.attributes.filter((a) => a.name === name)[0]
+      (name) => this.shape.attributes.filter((a) => a.name === name)[0]
     );
   }
 
-  public get sk(): Attribute[] {
+  public get sk(): ShapeAttribute[] {
     return this._sk.map(
-      (name) => this.entity.attributes.filter((a) => a.name === name)[0]
+      (name) => this.shape.attributes.filter((a) => a.name === name)[0]
     );
   }
 }

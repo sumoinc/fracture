@@ -27,7 +27,7 @@ export const NAMING_STRATEGY_TYPE = {
 export type NamingStrategy = {
   model: {
     attributeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-    entityName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
+    shapeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   };
   ts: {
     file: ValueOf<typeof NAMING_STRATEGY_TYPE>;
@@ -61,7 +61,7 @@ export type NamingStrategy = {
 export const defaultNamingStrategy: NamingStrategy = {
   model: {
     attributeName: NAMING_STRATEGY_TYPE.CAMEL_CASE,
-    entityName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
+    shapeName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
   },
   ts: {
     file: NAMING_STRATEGY_TYPE.PASCAL_CASE,

@@ -1,7 +1,10 @@
-import { Attribute } from "../../../model";
+import { ShapeAttribute } from "../../../model";
 import { TypeScriptSource } from "../typescript-source";
 
-export const addAttributeComment = (f: TypeScriptSource, a: Attribute) => {
+export const addShapeAttributeComment = (
+  f: TypeScriptSource,
+  a: ShapeAttribute
+) => {
   f.line(`/**`);
   a.comment.forEach((c) => f.line(` * ${c}`));
   f.line(` */`);

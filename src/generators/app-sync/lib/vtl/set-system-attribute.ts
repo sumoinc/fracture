@@ -1,22 +1,22 @@
 import { ValueOf } from "type-fest";
 import { formatStringByNamingStrategy } from "../../../../core/naming-strategy";
-import { Attribute, AttributeGenerator } from "../../../../model";
+import { ShapeAttribute, ShapeAttributeGenerator } from "../../../../model";
 
-export const setSytemAttribute = (
-  a: Attribute,
-  g: ValueOf<typeof AttributeGenerator>
+export const setSytemShapeAttribute = (
+  a: ShapeAttribute,
+  g: ValueOf<typeof ShapeAttributeGenerator>
 ) => {
   switch (g) {
-    case AttributeGenerator.CURRENT_DATE_TIME_STAMP:
+    case ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP:
       return `"${a.shortName}": "$util.time.nowISO8601()"`;
-    case AttributeGenerator.GUID:
+    case ShapeAttributeGenerator.GUID:
       return `"${a.shortName}": "$util.autoId()"`;
-    case AttributeGenerator.TYPE:
-      const entityName = formatStringByNamingStrategy(
-        a.entity.name,
-        a.fracture.namingStrategy.model.entityName
+    case ShapeAttributeGenerator.TYPE:
+      const shapeName = formatStringByNamingStrategy(
+        a.shape.name,
+        a.fracture.namingStrategy.model.shapeName
       );
-      return `"${a.shortName}": "${entityName}"`;
+      return `"${a.shortName}": "${shapeName}"`;
     default:
       throw new Error(`Unknown generator: ${g}`);
   }

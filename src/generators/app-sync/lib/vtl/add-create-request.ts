@@ -1,11 +1,11 @@
 import { addValidations } from "./add-validations";
-import { setSytemAttribute } from "./set-system-attribute";
+import { setSytemShapeAttribute } from "./set-system-attribute";
 import { formatStringByNamingStrategy } from "../../../../core/naming-strategy";
 import { Service } from "../../../../core/service";
-import { AttributeGenerator, Entity } from "../../../../model";
+import { ShapeAttributeGenerator, Shape } from "../../../../model";
 import { VtlSource } from "../../../vtl/vtl-source";
 
-export const addCreateRequest = (service: Service, e: Entity) => {
+export const addCreateRequest = (service: Service, e: Shape) => {
   const operationName = `${e.fracture.namingStrategy.operations.crud.createName}-${e.name}`;
   const fileName = formatStringByNamingStrategy(
     `mutation-${operationName}-request`,
@@ -14,9 +14,9 @@ export const addCreateRequest = (service: Service, e: Entity) => {
 
   const resolver = new VtlSource(service, `app-sync/vtl/${fileName}.vtl`);
 
-  const entityName = formatStringByNamingStrategy(
+  const shapeName = formatStringByNamingStrategy(
     e.name,
-    e.fracture.namingStrategy.model.entityName
+    e.fracture.namingStrategy.model.shapeName
   );
 
   // validate imputs
@@ -24,11 +24,13 @@ export const addCreateRequest = (service: Service, e: Entity) => {
 
   // initialise the shape + system values
   resolver.line(`## Initialise Shape`);
-  resolver.open(`#set( $${entityName} = {`);
+  resolver.open(`#set( $${shapeName} = {`);
   e.attributes
-    .filter((a) => a.isSystem && a.createGenerator !== AttributeGenerator.NONE)
+    .filter(
+      (a) => a.isSystem && a.createGenerator !== ShapeAttributeGenerator.NONE
+    )
     .forEach((a) => {
-      resolver.line(setSytemAttribute(a, a.createGenerator));
+      resolver.line(setSytemShapeAttribute(a, a.createGenerator));
     });
   resolver.close(`})`);
   resolver.line("\n");
@@ -44,7 +46,7 @@ export const addCreateRequest = (service: Service, e: Entity) => {
       );
       resolver.open(`#if( $ctx.args.input.${attributeName} )`);
       resolver.line(
-        `$util.quiet($${entityName}.put("${a.shortName}", "$ctx.args.input.${attributeName}")`
+        `$util.quiet($${shapeName}.put("${a.shortName}", "$ctx.args.input.${attributeName}")`
       );
 
       resolver.close(`#end`);
@@ -56,13 +58,13 @@ export const addCreateRequest = (service: Service, e: Entity) => {
   const gsi = service.dynamodb.primaryGsi;
   resolver.line(`## KEYS`);
   resolver.line(
-    `$util.quiet($${entityName}.put("${
+    `$util.quiet($${shapeName}.put("${
       gsi.pkName
-    }", "$${entityName}.${e.keyPattern.pk.map((k) => k.shortName).join("#")}"))`
+    }", "$${shapeName}.${e.keyPattern.pk.map((k) => k.shortName).join("#")}"))`
   );
   resolver.line(
-    `$util.quiet($${entityName}.put("${gsi.skName}", "${e.keyPattern.sk
-      .map((k) => "$" + entityName + "." + k.shortName)
+    `$util.quiet($${shapeName}.put("${gsi.skName}", "${e.keyPattern.sk
+      .map((k) => "$" + shapeName + "." + k.shortName)
       .join("#")}"))`
   );
   resolver.line("\n");
@@ -74,13 +76,13 @@ export const addCreateRequest = (service: Service, e: Entity) => {
   resolver.line(`"operation" : "PutItem",`);
   resolver.open(`"key": {`);
   resolver.line(
-    `"${gsi.pkName}": $util.dynamodb.toDynamoDBJson($${entityName}.${gsi.pkName}),`
+    `"${gsi.pkName}": $util.dynamodb.toDynamoDBJson($${shapeName}.${gsi.pkName}),`
   );
   resolver.line(
-    `"${gsi.skName}": $util.dynamodb.toDynamoDBJson($${entityName}.${gsi.skName})`
+    `"${gsi.skName}": $util.dynamodb.toDynamoDBJson($${shapeName}.${gsi.skName})`
   );
   resolver.close(`},`);
-  resolver.line(`"attributeValues": $util.toJson($${entityName})`);
+  resolver.line(`"attributeValues": $util.toJson($${shapeName})`);
   resolver.close(`}`);
   resolver.line("\n");
 };

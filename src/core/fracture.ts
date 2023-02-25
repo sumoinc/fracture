@@ -4,7 +4,7 @@ import { defaultNamingStrategy, NamingStrategy } from "./naming-strategy";
 import { Service, ServiceOptions } from "./service";
 import { Account, AccountOptions } from "../aws/account";
 import { Organization, OrganizationOptions } from "../aws/organization";
-import { Entity } from "../model";
+import { Shape } from "../model";
 
 export interface FractureOptions {
   /**
@@ -53,23 +53,23 @@ export class Fracture extends Component {
    ****************************************************************************/
 
   /**
-   * Get all entities in this project's namespace.
+   * Get all shapes in this project's namespace.
    */
   /*
-  public get entities(): Entity[] {
-    const isEntity = (c: FractureComponent): c is Entity =>
-      c instanceof Entity && c.namespace === this.namespace;
-    return (this.project.components as FractureComponent[]).filter(isEntity);
+  public get shapes(): Shape[] {
+    const isShape = (c: FractureComponent): c is Shape =>
+      c instanceof Shape && c.namespace === this.namespace;
+    return (this.project.components as FractureComponent[]).filter(isShape);
   }
 
-  public addEntity(options: EntityOptions) {
-    return new Entity(this, options);
+  public addShape(options: ShapeOptions) {
+    return new Shape(this, options);
   }
   */
 
   public get services(): Service[] {
     const isService = (c: FractureComponent): c is Service =>
-      c instanceof Entity && c.namespace === this.namespace;
+      c instanceof Shape && c.namespace === this.namespace;
     return (this.project.components as FractureComponent[]).filter(isService);
   }
 

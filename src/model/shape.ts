@@ -1,39 +1,39 @@
 import { paramCase, pascalCase } from "change-case";
 import { AccessPattern } from "./access-pattern";
 import {
-  Attribute,
-  AttributeGenerator,
-  AttributeOptions,
-  AttributeType,
+  ShapeAttribute,
+  ShapeAttributeGenerator,
+  ShapeAttributeOptions,
+  ShapeAttributeType,
 } from "./attribute";
 import { FractureComponent } from "../core/component";
 import { Service } from "../core/service";
 
-export interface EntityOptions {
+export interface ShapeOptions {
   /**
-   *  Name for the Entity.
+   *  Name for the Shape.
    */
   name: string;
   /**
-   * Short name for the Entity.
+   * Short name for the Shape.
    */
   shortName?: string;
   /**
-   * Comment lines to add to the Entity.
+   * Comment lines to add to the Shape.
    * @default []
    */
   comment?: string[];
 }
 
-export class Entity extends FractureComponent {
+export class Shape extends FractureComponent {
   public readonly service: Service;
   public readonly name: string;
   public readonly shortName: string;
   private readonly _comment: string[];
-  public attributes: Attribute[];
+  public attributes: ShapeAttribute[];
   public keyPattern: AccessPattern;
 
-  constructor(service: Service, options: EntityOptions) {
+  constructor(service: Service, options: ShapeOptions) {
     super(service.fracture);
 
     this.service = service;
@@ -48,94 +48,94 @@ export class Entity extends FractureComponent {
     /**
      * These should become optional inputs later but hardcoding them for now.
      */
-    // entity id
-    this.addAttribute({
+    // shape id
+    this.addShapeAttribute({
       name: "id",
       comment: [`The unique identifier for this ${this.name}.`],
-      type: AttributeType.GUID,
+      type: ShapeAttributeType.GUID,
       isKey: true,
-      createGenerator: AttributeGenerator.GUID,
+      createGenerator: ShapeAttributeGenerator.GUID,
     });
     // created timestamp
-    this.addAttribute({
+    this.addShapeAttribute({
       name: "createdAt",
       shortName: "cd",
       comment: [`The date and time this ${this.name} was created.`],
-      type: AttributeType.DATE_TIME,
-      createGenerator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
+      type: ShapeAttributeType.DATE_TIME,
+      createGenerator: ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP,
     });
     // updated timestamp
-    this.addAttribute({
+    this.addShapeAttribute({
       name: "updatedAt",
       shortName: "ud",
       comment: [`The date and time this ${this.name} was last updated.`],
-      type: AttributeType.DATE_TIME,
-      updateGenerator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
+      type: ShapeAttributeType.DATE_TIME,
+      updateGenerator: ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP,
     });
     // deleted timestamp
-    this.addAttribute({
+    this.addShapeAttribute({
       name: "deletedAt",
       shortName: "dd",
       comment: [`The date and time this ${this.name} was deleted.`],
-      type: AttributeType.DATE_TIME,
-      deleteGenerator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
+      type: ShapeAttributeType.DATE_TIME,
+      deleteGenerator: ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP,
     });
     // versioned by datestamp
-    this.addAttribute({
+    this.addShapeAttribute({
       name: "version",
       shortName: "v",
       comment: [
         `The date and time this ${this.name} version was created, or "LATEST" for the most recent version.`,
       ],
-      type: AttributeType.STRING,
-      createGenerator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
+      type: ShapeAttributeType.STRING,
+      createGenerator: ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP,
     });
     // versioned by datestamp
-    this.addAttribute({
+    this.addShapeAttribute({
       name: "type",
       shortName: "t",
       comment: [`The type for this ${this.name}.`],
-      type: AttributeType.STRING,
-      createGenerator: AttributeGenerator.TYPE,
+      type: ShapeAttributeType.STRING,
+      createGenerator: ShapeAttributeGenerator.TYPE,
     });
     // remote id, if imported
-    // this.addAttribute({
+    // this.addShapeAttribute({
     //   name: "remote-id",
     //   shortName: "_rid",
     //   comment: [
     //     `For imported records, the external/remote unique identifier for this ${this.name}.`,
     //   ],
-    //   type: AttributeType.GUID,
+    //   type: ShapeAttributeType.GUID,
     //   isRemoteKey: true,
     // });
     // // remote creation date, if imported
-    // this.addAttribute({
+    // this.addShapeAttribute({
     //   name: "remote-created-at",
     //   shortName: "_rcd",
     //   comment: [
     //     `For imported records, the external/remote creation timestamp for this ${this.name}.`,
     //   ],
-    //   type: AttributeType.DATE_TIME,
+    //   type: ShapeAttributeType.DATE_TIME,
     //   isRemoteField: true,
     // });
     // // remote updated date, if imported
-    // this.addAttribute({
+    // this.addShapeAttribute({
     //   name: "remote-updated-at",
     //   shortName: "_rud",
     //   comment: [
     //     `For imported records, the external/remote last updated timestamp for this ${this.name}.`,
     //   ],
-    //   type: AttributeType.DATE_TIME,
+    //   type: ShapeAttributeType.DATE_TIME,
     //   isRemoteField: true,
     // });
     // // remote version, if imported
-    // this.addAttribute({
+    // this.addShapeAttribute({
     //   name: "remote-version",
     //   shortName: "_rv",
     //   comment: [
     //     `For imported records, the external/remote version for this ${this.name}.`,
     //   ],
-    //   type: AttributeType.STRING,
+    //   type: ShapeAttributeType.STRING,
     //   isRemoteField: true,
     // });
 
@@ -156,22 +156,22 @@ export class Entity extends FractureComponent {
   /**
    * Adds an attribute
    */
-  public addAttribute(options: AttributeOptions) {
-    const a = new Attribute(this, options);
+  public addShapeAttribute(options: ShapeAttributeOptions) {
+    const a = new ShapeAttribute(this, options);
     this.attributes.push(a);
     return this;
   }
 
   /**
-   * Attributes used in crud operations and commands
+   * ShapeAttributes used in crud operations and commands
    */
-  public get keyAttributes(): Attribute[] {
+  public get keyShapeAttributes(): ShapeAttribute[] {
     return this.attributes.filter((a) => a.isKey);
   }
-  public get dataAttributes(): Attribute[] {
+  public get dataShapeAttributes(): ShapeAttribute[] {
     return this.attributes.filter((a) => a.isData);
   }
-  public get listAttributes(): Attribute[] {
+  public get listShapeAttributes(): ShapeAttribute[] {
     return this.attributes.filter((a) => a.isListInput);
   }
 }

@@ -29,6 +29,7 @@
 /example/tenant/app-sync/vtl/mutation-update-tenant-response.vtl linguist-generated
 /example/tenant/app-sync/vtl/query-read-tenant-request.vtl linguist-generated
 /example/tenant/app-sync/vtl/query-read-tenant-response.vtl linguist-generated
+/example/tenant/commands/CreateTenantCommand.ts linguist-generated
 /example/tenant/types/index.ts linguist-generated
 /example/tenant/types/Tenant.ts linguist-generated
 /example/user/app-sync/vtl/mutation-create-group-request.vtl linguist-generated
@@ -47,6 +48,8 @@
 /example/user/app-sync/vtl/query-read-group-response.vtl linguist-generated
 /example/user/app-sync/vtl/query-read-user-request.vtl linguist-generated
 /example/user/app-sync/vtl/query-read-user-response.vtl linguist-generated
+/example/user/commands/CreateGroupCommand.ts linguist-generated
+/example/user/commands/CreateUserCommand.ts linguist-generated
 /example/user/types/Group.ts linguist-generated
 /example/user/types/index.ts linguist-generated
 /example/user/types/User.ts linguist-generated

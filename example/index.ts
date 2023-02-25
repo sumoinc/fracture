@@ -20,13 +20,13 @@ export class ExampleApp extends Component {
 
     const userService = fracture.addService({ name: "user" });
     userService
-      .addEntity({ name: "user" })
-      .addAttribute({ name: "first-name", shortName: "fn" })
-      .addAttribute({ name: "last-name", shortName: "ln" });
+      .addShape({ name: "user" })
+      .addShapeAttribute({ name: "first-name", shortName: "fn" })
+      .addShapeAttribute({ name: "last-name", shortName: "ln" });
 
     userService
-      .addEntity({ name: "group" })
-      .addAttribute({ name: "name", isRequired: true });
+      .addShape({ name: "group" })
+      .addShapeAttribute({ name: "name", isRequired: true });
 
     /***************************************************************************
      *  Tenant Service
@@ -34,7 +34,7 @@ export class ExampleApp extends Component {
 
     const tenantService = fracture.addService({ name: "tenant" });
     tenantService
-      .addEntity({ name: "tenant" })
-      .addAttribute({ name: "name", isRequired: true });
+      .addShape({ name: "tenant" })
+      .addShapeAttribute({ name: "name", isRequired: true });
   }
 }
