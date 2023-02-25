@@ -1,3 +1,4 @@
+import { join } from "path";
 import { Fracture, FractureComponent } from ".";
 import { Table } from "../dynamodb/table";
 import { ApiGateway, AppSync } from "../generators";
@@ -10,12 +11,14 @@ export interface ServiceOptions {
 
 export class Service extends FractureComponent {
   public readonly name: string;
+  public readonly outdir: string;
   public readonly dynamodb: Table;
 
   constructor(fracture: Fracture, options: ServiceOptions) {
     super(fracture);
 
     this.name = options.name;
+    this.outdir = join(fracture.outdir, this.name);
 
     // each service gets it's own dynamodb table
     this.dynamodb = new Table(this, { name: this.name });

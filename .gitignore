@@ -57,9 +57,9 @@ tsconfig.json
 !/.vscode/settings.json
 !/.vscode/extensions.json
 !/example/user/types/index.ts
-!/example/user/types/User.ts
+!/example/user/shapes/User.ts
 !/example/user/commands/CreateUserCommand.ts
-!/example/user/types/Group.ts
+!/example/user/shapes/Group.ts
 !/example/user/commands/CreateGroupCommand.ts
 !/example/user/app-sync/vtl/mutation-create-user-request.vtl
 !/example/user/app-sync/vtl/mutation-create-user-response.vtl
@@ -78,7 +78,7 @@ tsconfig.json
 !/example/user/app-sync/vtl/mutation-delete-group-request.vtl
 !/example/user/app-sync/vtl/mutation-delete-group-response.vtl
 !/example/tenant/types/index.ts
-!/example/tenant/types/Tenant.ts
+!/example/tenant/shapes/Tenant.ts
 !/example/tenant/commands/CreateTenantCommand.ts
 !/example/tenant/app-sync/vtl/mutation-create-tenant-request.vtl
 !/example/tenant/app-sync/vtl/mutation-create-tenant-response.vtl

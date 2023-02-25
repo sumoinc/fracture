@@ -18,7 +18,7 @@ export class TypeScriptShape extends FractureComponent {
       shape.name,
       this.fracture.namingStrategy.ts.file
     );
-    const tsShape = new TypeScriptSource(this.service, `/types/${fileName}.ts`);
+    const tsShape = new TypeScriptSource(this.service, `shapes/${fileName}.ts`);
 
     // shape definition as an interface.
     addInterface(tsShape, shape);
