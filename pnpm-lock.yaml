@@ -17,7 +17,7 @@ specifiers:
   jest-junit: ^13
   jsii: ^1.76.0
   jsii-diff: ^1.76.0
-  jsii-docgen: ^7.1.7
+  jsii-docgen: ^7.1.8
   jsii-pacmak: ^1.76.0
   npm-check-updates: ^16
   projen: ^0.67.65
@@ -42,7 +42,7 @@ devDependencies:
   jest-junit: 13.2.0
   jsii: 1.76.0
   jsii-diff: 1.76.0
-  jsii-docgen: 7.1.7
+  jsii-docgen: 7.1.8
   jsii-pacmak: 1.76.0
   npm-check-updates: 16.7.9
   standard-version: 9.5.0
@@ -1520,7 +1520,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001457
+      caniuse-lite: 1.0.30001458
       electron-to-chromium: 1.4.311
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10_browserslist@4.21.5
@@ -1650,8 +1650,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /caniuse-lite/1.0.30001457:
-    resolution: {integrity: sha512-SDIV6bgE1aVbK6XyxdURbUE89zY7+k1BBBaOwYwkNCglXlel/E7mELiHC64HQ+W0xSKlqWhV9Wh7iHxUjMs4fA==}
+  /caniuse-lite/1.0.30001458:
+    resolution: {integrity: sha512-lQ1VlUUq5q9ro9X+5gOEyH7i3vm+AYVT1WDCVB69XOZ17KZRhnZ9J0Sqz7wTHQaLBJccNCHq8/Ww5LlOIZbB0w==}
     dev: true
 
   /case/1.6.3:
@@ -2501,7 +2501,7 @@ packages:
       object.values: 1.1.6
       resolve: 1.22.1
       semver: 6.3.0
-      tsconfig-paths: 3.14.1
+      tsconfig-paths: 3.14.2
     transitivePeerDependencies:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
@@ -4201,8 +4201,8 @@ packages:
       - supports-color
     dev: true
 
-  /jsii-docgen/7.1.7:
-    resolution: {integrity: sha512-k9zN1Tvs+tFnNb138iO7P0djjM0o3V+lKmCkZvlI/FQrFrE9RVCj91e1v823aTIsPdtc4PYMK9GLeSj2m7NnLw==}
+  /jsii-docgen/7.1.8:
+    resolution: {integrity: sha512-hbcZd0F5jcCDAqavE5Ye+SC1rSbk514hdjwZLnZUA4L5cXJqRfetB/ylxbfRbZFUTf+zvqibxf//6rCefkfxGA==}
     engines: {node: '>= 14.17.0'}
     hasBin: true
     dependencies:
@@ -6291,8 +6291,8 @@ packages:
       yn: 3.1.1
     dev: true
 
-  /tsconfig-paths/3.14.1:
-    resolution: {integrity: sha512-fxDhWnFSLt3VuTwtvJt5fpwxBHg5AdKWMsgcPOOIilyjymcYVZoCQF8fvFRezCNfblEXmi+PcM1eYHeOAgXCOQ==}
+  /tsconfig-paths/3.14.2:
+    resolution: {integrity: sha512-o/9iXgCYc5L/JxCHPe3Hvh8Q/2xm5Z+p18PESBU6Ff33695QnCHBEjcytY2q19ua7Mbl/DavtBOLq+oG0RCL+g==}
     dependencies:
       '@types/json5': 0.0.29
       json5: 1.0.2
