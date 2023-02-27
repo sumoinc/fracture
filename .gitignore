@@ -80,6 +80,7 @@ tsconfig.json
 !/example/tenant/shapes/index.ts
 !/example/tenant/shapes/tenant.ts
 !/example/tenant/commands/create-tenant-command.ts
+!/example/tenant/shapes/saas-identity.ts
 !/example/tenant/app-sync/vtl/mutation-create-tenant-request.vtl
 !/example/tenant/app-sync/vtl/mutation-create-tenant-response.vtl
 !/example/tenant/app-sync/vtl/query-read-tenant-request.vtl

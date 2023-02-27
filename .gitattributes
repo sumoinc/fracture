@@ -31,6 +31,7 @@
 /example/tenant/app-sync/vtl/query-read-tenant-response.vtl linguist-generated
 /example/tenant/commands/create-tenant-command.ts linguist-generated
 /example/tenant/shapes/index.ts linguist-generated
+/example/tenant/shapes/saas-identity.ts linguist-generated
 /example/tenant/shapes/tenant.ts linguist-generated
 /example/user/app-sync/vtl/mutation-create-group-request.vtl linguist-generated
 /example/user/app-sync/vtl/mutation-create-group-response.vtl linguist-generated

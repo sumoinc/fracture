@@ -1,2 +1,2 @@
-export * from "./attribute";
+export * from "./shape-attribute";
 export * from "./shape";

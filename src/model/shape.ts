@@ -1,6 +1,6 @@
 import { paramCase, pascalCase } from "change-case";
 import { AccessPattern } from "./access-pattern";
-import { ShapeAttribute, ShapeAttributeOptions } from "./attribute";
+import { ShapeAttribute, ShapeAttributeOptions } from "./shape-attribute";
 import { AuditStrategy } from "../core/audit-strategy";
 import { FractureComponent } from "../core/component";
 import { PartitionKeyStrategy } from "../core/partition-key-strategy";
@@ -22,6 +22,11 @@ export interface ShapeOptions {
    * @default []
    */
   comment?: string[];
+  /**
+   * Should this shape be persisted to a database?
+   * @default true
+   */
+  persistant?: boolean;
   /**
    * The type strategy to use for the partition key.
    */
@@ -50,6 +55,7 @@ export class Shape extends FractureComponent {
   public readonly name: string;
   public readonly shortName: string;
   private readonly _comment: string[];
+  public readonly persistant: boolean;
   public readonly partitionKeyStrategy: PartitionKeyStrategy;
   public readonly versioned: boolean;
   public readonly versioningStrategy: VersioningStrategy;
@@ -67,6 +73,7 @@ export class Shape extends FractureComponent {
       ? pascalCase(options.shortName).toLowerCase()
       : pascalCase(options.name).toLowerCase();
     this._comment = options.comment ?? [`A ${this.name}.`];
+    this.persistant = options.persistant ?? true;
     this.partitionKeyStrategy =
       options.partitionKeyStrategy ?? service.partitionKeyStrategy;
     this.versioned = options.versioned ?? service.versioned;
@@ -80,7 +87,9 @@ export class Shape extends FractureComponent {
     /**
      * Add the partition key attribute.
      */
-    this.addShapeAttribute(this.partitionKeyStrategy);
+    if (this.persistant) {
+      this.addShapeAttribute(this.partitionKeyStrategy);
+    }
 
     /**
      * Add type attribute.
@@ -90,33 +99,34 @@ export class Shape extends FractureComponent {
     /**
      * Add the version attribute if versioned.
      */
-    if (this.versioned) {
+    if (this.versioned && this.persistant) {
       this.addShapeAttribute(this.versioningStrategy.attribute);
     }
 
     /**
      * Add an (optional) Audit Strategies
      */
-    if (this.auditStrategy.create.dateAttribute) {
+    if (this.auditStrategy.create.dateAttribute && this.persistant) {
       this.addShapeAttribute(this.auditStrategy.create.dateAttribute);
     }
-    if (this.auditStrategy.create.userAttribute) {
+    if (this.auditStrategy.create.userAttribute && this.persistant) {
       this.addShapeAttribute(this.auditStrategy.create.userAttribute);
     }
-    if (this.auditStrategy.update.dateAttribute) {
+    if (this.auditStrategy.update.dateAttribute && this.persistant) {
       this.addShapeAttribute(this.auditStrategy.update.dateAttribute);
     }
-    if (this.auditStrategy.update.userAttribute) {
+    if (this.auditStrategy.update.userAttribute && this.persistant) {
       this.addShapeAttribute(this.auditStrategy.update.userAttribute);
     }
-    if (this.auditStrategy.delete.dateAttribute) {
+    if (this.auditStrategy.delete.dateAttribute && this.persistant) {
       this.addShapeAttribute(this.auditStrategy.delete.dateAttribute);
     }
-    if (this.auditStrategy.delete.userAttribute) {
+    if (this.auditStrategy.delete.userAttribute && this.persistant) {
       this.addShapeAttribute(this.auditStrategy.delete.userAttribute);
     }
 
     // default access pattern for now
+
     this.keyPattern = new AccessPattern(this, {
       pk: ["id"],
       sk: ["type", "version"],

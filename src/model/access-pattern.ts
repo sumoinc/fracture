@@ -1,4 +1,4 @@
-import { ShapeAttribute } from "./attribute";
+import { ShapeAttribute } from "./shape-attribute";
 import { Shape } from "./shape";
 import { FractureComponent } from "../core/component";
 

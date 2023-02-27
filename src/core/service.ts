@@ -8,6 +8,7 @@ import { Table } from "../dynamodb/table";
 import { ApiGateway, AppSync } from "../generators";
 import { TypeScriptModel } from "../generators/ts/typescript-model";
 import { Shape, ShapeOptions } from "../model";
+import { EnumShape, EnumShapeOptions } from "../model/enum";
 
 export interface ServiceOptions {
   name: string;
@@ -86,5 +87,20 @@ export class Service extends FractureComponent {
 
   public addShape(options: ShapeOptions) {
     return new Shape(this, options);
+  }
+
+  /**
+   * Get all enums for this service.
+   */
+  public get enumShapes(): Shape[] {
+    const isShape = (c: FractureComponent): c is Shape =>
+      c instanceof EnumShape &&
+      c.namespace === this.namespace &&
+      c.service.name === this.name;
+    return (this.project.components as FractureComponent[]).filter(isShape);
+  }
+
+  public addEnum(options: EnumShapeOptions) {
+    return new EnumShape(this, options);
   }
 }

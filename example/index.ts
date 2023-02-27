@@ -36,5 +36,11 @@ export class ExampleApp extends Component {
     tenantService
       .addShape({ name: "tenant" })
       .addShapeAttribute({ name: "name", isRequired: true });
+
+    tenantService
+      .addShape({ name: "saas-identity", persistant: false })
+      .addShapeAttribute({ name: "actor-type" })
+      .addShapeAttribute({ name: "actor" })
+      .addShapeAttribute({ name: "scope" });
   }
 }

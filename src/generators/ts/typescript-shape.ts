@@ -24,7 +24,9 @@ export class TypeScriptShape extends FractureComponent {
     addInterface(tsShape, shape);
 
     // CRUD commands
-    addCreateCommand(shape);
+    if (shape.persistant) {
+      addCreateCommand(shape);
+    }
   }
 
   // public preSynthesize() {
