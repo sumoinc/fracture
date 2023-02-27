@@ -64,7 +64,7 @@ export const defaultNamingStrategy: NamingStrategy = {
     shapeName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
   },
   ts: {
-    file: NAMING_STRATEGY_TYPE.PASCAL_CASE,
+    file: NAMING_STRATEGY_TYPE.PARAM_CASE,
   },
   appsync: {
     vtl: {

@@ -16,7 +16,7 @@ export class TypeScriptModel extends FractureComponent {
     /**
      * Crerate index file and import all shape types.
      */
-    const indexFile = new TypeScriptSource(this.service, `types/index.ts`);
+    const indexFile = new TypeScriptSource(this.service, `shapes/index.ts`);
     this.service.shapes.forEach((e) => {
       indexFile.line(`export * from "./${e.name}";`);
     });
