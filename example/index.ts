@@ -18,23 +18,23 @@ export class ExampleApp extends Component {
      *  User Service
      **************************************************************************/
 
-    // const userService = fracture.addService({ name: "user" });
-    // userService
-    //   .addShape({ name: "user" })
-    //   .addShapeAttribute({ name: "first-name", shortName: "fn" })
-    //   .addShapeAttribute({ name: "last-name", shortName: "ln" });
+    const userService = fracture.addService({ name: "user" });
+    userService
+      .addShape({ name: "user" })
+      .addShapeAttribute({ name: "first-name", shortName: "fn" })
+      .addShapeAttribute({ name: "last-name", shortName: "ln" });
 
-    // userService
-    //   .addShape({ name: "group" })
-    //   .addShapeAttribute({ name: "name", isRequired: true });
+    userService
+      .addShape({ name: "group" })
+      .addShapeAttribute({ name: "name", isRequired: true });
 
-    // /***************************************************************************
-    //  *  Tenant Service
-    //  **************************************************************************/
+    /***************************************************************************
+     *  Tenant Service
+     **************************************************************************/
 
-    // const tenantService = fracture.addService({ name: "tenant" });
-    // tenantService
-    //   .addShape({ name: "tenant" })
-    //   .addShapeAttribute({ name: "name", isRequired: true });
+    const tenantService = fracture.addService({ name: "tenant" });
+    tenantService
+      .addShape({ name: "tenant" })
+      .addShapeAttribute({ name: "name", isRequired: true });
   }
 }
