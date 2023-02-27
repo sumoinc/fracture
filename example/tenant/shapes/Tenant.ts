@@ -5,36 +5,36 @@
  */
 export interface Tenant {
   /**
-   * The unique identifier for this tenant.
+   * The unique identifier for this record.
    * @type A GUID string.
    * @readonly This attribute is managed automatically by the system.
    */
-  id: string;
+  id?: string;
   /**
-   * The date and time this tenant was created.
+   * The type for this record.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  type?: string;
+  /**
+   * The version of this record
+   * @default "LATEST"
+   */
+  version?: string;
+  /**
+   * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
   createdAt?: string;
   /**
-   * The date and time this tenant was last updated.
+   * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
   updatedAt?: string;
   /**
-   * The date and time this tenant was deleted.
+   * The date and time this record was deleted.
    * @readonly This attribute is managed automatically by the system.
    */
   deletedAt?: string;
-  /**
-   * The date and time this tenant version was created, or "LATEST" for the most recent version.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version?: string;
-  /**
-   * The type for this tenant.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type?: string;
   /**
    * A name.
    */

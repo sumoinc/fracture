@@ -55,7 +55,7 @@ export const addCreateRequest = (service: Service, e: Shape) => {
 
   // assign keys
   // const ap = e.keyPattern;
-  const gsi = service.dynamodb.primaryGsi;
+  const gsi = service.dynamodb.keyGsi;
   resolver.line(`## KEYS`);
   resolver.line(
     `$util.quiet($${shapeName}.put("${

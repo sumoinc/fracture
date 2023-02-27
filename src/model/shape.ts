@@ -1,13 +1,12 @@
 import { paramCase, pascalCase } from "change-case";
 import { AccessPattern } from "./access-pattern";
-import {
-  ShapeAttribute,
-  ShapeAttributeGenerator,
-  ShapeAttributeOptions,
-  ShapeAttributeType,
-} from "./attribute";
+import { ShapeAttribute, ShapeAttributeOptions } from "./attribute";
+import { AuditStrategy } from "../core/audit-strategy";
 import { FractureComponent } from "../core/component";
+import { PartitionKeyStrategy } from "../core/partition-key-strategy";
 import { Service } from "../core/service";
+import { TypeStrategy } from "../core/type-strategy";
+import { VersioningStrategy } from "../core/versioning-strategy";
 
 export interface ShapeOptions {
   /**
@@ -23,6 +22,27 @@ export interface ShapeOptions {
    * @default []
    */
   comment?: string[];
+  /**
+   * The type strategy to use for the partition key.
+   */
+  partitionKeyStrategy?: PartitionKeyStrategy;
+  /**
+   * Versioned.
+   * @default service's default
+   */
+  versioned?: boolean;
+  /**
+   * The versioning strategy to use for generated code.
+   */
+  versioningStrategy?: VersioningStrategy;
+  /**
+   * The type strategy to use for generated code.
+   */
+  typeStrategy?: TypeStrategy;
+  /**
+   * The audit strategy to use for generated code.
+   */
+  auditStrategy?: AuditStrategy;
 }
 
 export class Shape extends FractureComponent {
@@ -30,6 +50,11 @@ export class Shape extends FractureComponent {
   public readonly name: string;
   public readonly shortName: string;
   private readonly _comment: string[];
+  public readonly partitionKeyStrategy: PartitionKeyStrategy;
+  public readonly versioned: boolean;
+  public readonly versioningStrategy: VersioningStrategy;
+  public readonly typeStrategy: TypeStrategy;
+  public readonly auditStrategy: AuditStrategy;
   public attributes: ShapeAttribute[];
   public keyPattern: AccessPattern;
 
@@ -42,102 +67,54 @@ export class Shape extends FractureComponent {
       ? pascalCase(options.shortName).toLowerCase()
       : pascalCase(options.name).toLowerCase();
     this._comment = options.comment ?? [`A ${this.name}.`];
+    this.partitionKeyStrategy =
+      options.partitionKeyStrategy ?? service.partitionKeyStrategy;
+    this.versioned = options.versioned ?? service.versioned;
+    this.versioningStrategy =
+      options.versioningStrategy ?? service.versioningStrategy;
+    this.typeStrategy = options.typeStrategy ?? service.typeStrategy;
+    this.auditStrategy = options.auditStrategy ?? service.auditStrategy;
 
     this.attributes = [];
 
     /**
-     * These should become optional inputs later but hardcoding them for now.
+     * Add the partition key attribute.
      */
-    // shape id
-    this.addShapeAttribute({
-      name: "id",
-      comment: [`The unique identifier for this ${this.name}.`],
-      type: ShapeAttributeType.GUID,
-      isKey: true,
-      createGenerator: ShapeAttributeGenerator.GUID,
-    });
-    // created timestamp
-    this.addShapeAttribute({
-      name: "createdAt",
-      shortName: "cd",
-      comment: [`The date and time this ${this.name} was created.`],
-      type: ShapeAttributeType.DATE_TIME,
-      createGenerator: ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP,
-    });
-    // updated timestamp
-    this.addShapeAttribute({
-      name: "updatedAt",
-      shortName: "ud",
-      comment: [`The date and time this ${this.name} was last updated.`],
-      type: ShapeAttributeType.DATE_TIME,
-      updateGenerator: ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP,
-    });
-    // deleted timestamp
-    this.addShapeAttribute({
-      name: "deletedAt",
-      shortName: "dd",
-      comment: [`The date and time this ${this.name} was deleted.`],
-      type: ShapeAttributeType.DATE_TIME,
-      deleteGenerator: ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP,
-    });
-    // versioned by datestamp
-    this.addShapeAttribute({
-      name: "version",
-      shortName: "v",
-      comment: [
-        `The date and time this ${this.name} version was created, or "LATEST" for the most recent version.`,
-      ],
-      type: ShapeAttributeType.STRING,
-      createGenerator: ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP,
-    });
-    // versioned by datestamp
-    this.addShapeAttribute({
-      name: "type",
-      shortName: "t",
-      comment: [`The type for this ${this.name}.`],
-      type: ShapeAttributeType.STRING,
-      createGenerator: ShapeAttributeGenerator.TYPE,
-    });
-    // remote id, if imported
-    // this.addShapeAttribute({
-    //   name: "remote-id",
-    //   shortName: "_rid",
-    //   comment: [
-    //     `For imported records, the external/remote unique identifier for this ${this.name}.`,
-    //   ],
-    //   type: ShapeAttributeType.GUID,
-    //   isRemoteKey: true,
-    // });
-    // // remote creation date, if imported
-    // this.addShapeAttribute({
-    //   name: "remote-created-at",
-    //   shortName: "_rcd",
-    //   comment: [
-    //     `For imported records, the external/remote creation timestamp for this ${this.name}.`,
-    //   ],
-    //   type: ShapeAttributeType.DATE_TIME,
-    //   isRemoteField: true,
-    // });
-    // // remote updated date, if imported
-    // this.addShapeAttribute({
-    //   name: "remote-updated-at",
-    //   shortName: "_rud",
-    //   comment: [
-    //     `For imported records, the external/remote last updated timestamp for this ${this.name}.`,
-    //   ],
-    //   type: ShapeAttributeType.DATE_TIME,
-    //   isRemoteField: true,
-    // });
-    // // remote version, if imported
-    // this.addShapeAttribute({
-    //   name: "remote-version",
-    //   shortName: "_rv",
-    //   comment: [
-    //     `For imported records, the external/remote version for this ${this.name}.`,
-    //   ],
-    //   type: ShapeAttributeType.STRING,
-    //   isRemoteField: true,
-    // });
+    this.addShapeAttribute(this.partitionKeyStrategy);
+
+    /**
+     * Add type attribute.
+     */
+    this.addShapeAttribute(this.typeStrategy);
+
+    /**
+     * Add the version attribute if versioned.
+     */
+    if (this.versioned) {
+      this.addShapeAttribute(this.versioningStrategy.attribute);
+    }
+
+    /**
+     * Add an (optional) Audit Strategies
+     */
+    if (this.auditStrategy.create.dateAttribute) {
+      this.addShapeAttribute(this.auditStrategy.create.dateAttribute);
+    }
+    if (this.auditStrategy.create.userAttribute) {
+      this.addShapeAttribute(this.auditStrategy.create.userAttribute);
+    }
+    if (this.auditStrategy.update.dateAttribute) {
+      this.addShapeAttribute(this.auditStrategy.update.dateAttribute);
+    }
+    if (this.auditStrategy.update.userAttribute) {
+      this.addShapeAttribute(this.auditStrategy.update.userAttribute);
+    }
+    if (this.auditStrategy.delete.dateAttribute) {
+      this.addShapeAttribute(this.auditStrategy.delete.dateAttribute);
+    }
+    if (this.auditStrategy.delete.userAttribute) {
+      this.addShapeAttribute(this.auditStrategy.delete.userAttribute);
+    }
 
     // default access pattern for now
     this.keyPattern = new AccessPattern(this, {

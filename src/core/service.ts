@@ -1,5 +1,9 @@
 import { join } from "path";
 import { Fracture, FractureComponent } from ".";
+import { AuditStrategy } from "./audit-strategy";
+import { PartitionKeyStrategy } from "./partition-key-strategy";
+import { TypeStrategy } from "./type-strategy";
+import { VersioningStrategy } from "./versioning-strategy";
 import { Table } from "../dynamodb/table";
 import { ApiGateway, AppSync } from "../generators";
 import { TypeScriptModel } from "../generators/ts/typescript-model";
@@ -7,11 +11,37 @@ import { Shape, ShapeOptions } from "../model";
 
 export interface ServiceOptions {
   name: string;
+  /**
+   * The type strategy to use for the partition key.
+   */
+  partitionKeyStrategy?: PartitionKeyStrategy;
+  /**
+   * Versioned.
+   * @default fracture default
+   */
+  versioned?: boolean;
+  /**
+   * The versioning strategy to use for generated code.
+   */
+  versioningStrategy?: VersioningStrategy;
+  /**
+   * The type strategy to use for generated code.
+   */
+  typeStrategy?: TypeStrategy;
+  /**
+   * The audit strategy to use for generated code.
+   */
+  auditStrategy?: AuditStrategy;
 }
 
 export class Service extends FractureComponent {
   public readonly name: string;
   public readonly outdir: string;
+  public readonly partitionKeyStrategy: PartitionKeyStrategy;
+  public readonly versioned: boolean;
+  public readonly versioningStrategy: VersioningStrategy;
+  public readonly typeStrategy: TypeStrategy;
+  public readonly auditStrategy: AuditStrategy;
   public readonly dynamodb: Table;
 
   constructor(fracture: Fracture, options: ServiceOptions) {
@@ -19,6 +49,13 @@ export class Service extends FractureComponent {
 
     this.name = options.name;
     this.outdir = join(fracture.outdir, this.name);
+    this.partitionKeyStrategy =
+      options.partitionKeyStrategy ?? fracture.partitionKeyStrategy;
+    this.versioned = options.versioned ?? fracture.versioned;
+    this.versioningStrategy =
+      options.versioningStrategy ?? fracture.versioningStrategy;
+    this.typeStrategy = options.typeStrategy ?? fracture.typeStrategy;
+    this.auditStrategy = options.auditStrategy ?? fracture.auditStrategy;
 
     // each service gets it's own dynamodb table
     this.dynamodb = new Table(this, { name: this.name });

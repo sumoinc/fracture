@@ -11,16 +11,24 @@ export interface TableOptions {
 
 export class Table extends FractureComponent {
   public readonly name: string;
-  public readonly primaryGsi: Gsi;
+  public readonly keyGsi: Gsi;
+  public readonly gsi: Gsi[];
 
   constructor(service: Service, options: TableOptions) {
     super(service.fracture);
 
     this.name = options.name;
-    this.primaryGsi = new Gsi(this, {
+    this.keyGsi = new Gsi(this, {
       name: "primary",
       pkName: "pk",
       skName: "sk",
     });
+    this.gsi = [
+      new Gsi(this, {
+        name: "gsi0",
+        pkName: "pk0",
+        skName: "sk0",
+      }),
+    ];
   }
 }
