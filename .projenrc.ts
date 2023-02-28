@@ -21,7 +21,7 @@ const project = new JsiiProject({
   authorAddress: authorAddress,
   authorEmail: authorAddress,
   releaseToNpm: true,
-  deps: ["projen", "change-case", "type-fest"],
+  deps: ["@types/aws-lambda", "change-case", "projen", "type-fest"],
   projenrcTs: true,
   packageManager: NodePackageManager.PNPM,
   prettier: true,

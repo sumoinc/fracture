@@ -1,9 +1,9 @@
-import { formatStringByNamingStrategy } from "../../../../core/naming-strategy";
-import { Service } from "../../../../core/service";
-import { Shape } from "../../../../model";
-import { VtlSource } from "../../../vtl/vtl-source";
+import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
+import { Service } from "../../../core/service";
+import { Shape } from "../../../model";
+import { VtlSource } from "../../vtl/vtl-source";
 
-export const addUpdateResponse = (service: Service, e: Shape) => {
+export const buildUpdateResponse = (service: Service, e: Shape) => {
   const operationName = `${e.fracture.namingStrategy.operations.crud.updateName}-${e.name}`;
   const fileName = formatStringByNamingStrategy(
     `mutation-${operationName}-response`,

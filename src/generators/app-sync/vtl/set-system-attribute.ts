@@ -1,6 +1,6 @@
 import { ValueOf } from "type-fest";
-import { formatStringByNamingStrategy } from "../../../../core/naming-strategy";
-import { ShapeAttribute, ShapeAttributeGenerator } from "../../../../model";
+import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
+import { ShapeAttribute, ShapeAttributeGenerator } from "../../../model";
 
 export const setSytemShapeAttribute = (
   a: ShapeAttribute,
@@ -17,6 +17,8 @@ export const setSytemShapeAttribute = (
         a.fracture.namingStrategy.model.shapeName
       );
       return `"${a.shortName}": "${shapeName}"`;
+    case ShapeAttributeGenerator.VERSION:
+      return `"${a.shortName}": "${a.shape.versioningStrategy.currentVersion}}"`;
     default:
       throw new Error(`Unknown generator: ${g}`);
   }

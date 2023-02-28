@@ -113,6 +113,10 @@
       "type": "override"
     },
     {
+      "name": "@types/aws-lambda",
+      "type": "runtime"
+    },
+    {
       "name": "change-case",
       "type": "runtime"
     },

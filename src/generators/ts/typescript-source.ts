@@ -9,8 +9,13 @@ import { Service } from "../../core/service";
 export class TypeScriptSource extends SourceCode {
   constructor(service: Service, public readonly filePath: string) {
     super(service.project, join(service.outdir, filePath));
+    return this;
+  }
+
+  // mark as managed
+  preSynthesize() {
     this.line("// " + this.marker);
     this.line("\n");
-    return this;
+    super.preSynthesize();
   }
 }

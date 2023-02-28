@@ -12,8 +12,13 @@ export class VtlSource extends SourceCode {
       service.project,
       join(service.fracture.outdir, service.name, filePath)
     );
-    this.line("// " + this.marker);
-    this.line("\n");
     return this;
+  }
+
+  // mark as managed
+  preSynthesize() {
+    this.line("## " + this.marker);
+    this.line("\n");
+    super.preSynthesize();
   }
 }

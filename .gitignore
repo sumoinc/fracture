@@ -58,9 +58,7 @@ tsconfig.json
 !/.vscode/extensions.json
 !/example/user/shapes/index.ts
 !/example/user/shapes/user.ts
-!/example/user/commands/create-user-command.ts
 !/example/user/shapes/group.ts
-!/example/user/commands/create-group-command.ts
 !/example/user/app-sync/vtl/mutation-create-user-request.vtl
 !/example/user/app-sync/vtl/mutation-create-user-response.vtl
 !/example/user/app-sync/vtl/query-read-user-request.vtl
@@ -69,6 +67,7 @@ tsconfig.json
 !/example/user/app-sync/vtl/mutation-update-user-response.vtl
 !/example/user/app-sync/vtl/mutation-delete-user-request.vtl
 !/example/user/app-sync/vtl/mutation-delete-user-response.vtl
+!/example/user/app-sync/lambda/create-user-command/handler.ts
 !/example/user/app-sync/vtl/mutation-create-group-request.vtl
 !/example/user/app-sync/vtl/mutation-create-group-response.vtl
 !/example/user/app-sync/vtl/query-read-group-request.vtl
@@ -77,9 +76,9 @@ tsconfig.json
 !/example/user/app-sync/vtl/mutation-update-group-response.vtl
 !/example/user/app-sync/vtl/mutation-delete-group-request.vtl
 !/example/user/app-sync/vtl/mutation-delete-group-response.vtl
+!/example/user/app-sync/lambda/create-group-command/handler.ts
 !/example/tenant/shapes/index.ts
 !/example/tenant/shapes/tenant.ts
-!/example/tenant/commands/create-tenant-command.ts
 !/example/tenant/shapes/saas-identity.ts
 !/example/tenant/app-sync/vtl/mutation-create-tenant-request.vtl
 !/example/tenant/app-sync/vtl/mutation-create-tenant-response.vtl
@@ -89,3 +88,4 @@ tsconfig.json
 !/example/tenant/app-sync/vtl/mutation-update-tenant-response.vtl
 !/example/tenant/app-sync/vtl/mutation-delete-tenant-request.vtl
 !/example/tenant/app-sync/vtl/mutation-delete-tenant-response.vtl
+!/example/tenant/app-sync/lambda/create-tenant-command/handler.ts

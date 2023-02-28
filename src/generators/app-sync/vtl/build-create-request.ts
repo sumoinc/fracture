@@ -1,11 +1,11 @@
-import { addValidations } from "./add-validations";
+import { buildValidations } from "./build-validations";
 import { setSytemShapeAttribute } from "./set-system-attribute";
-import { formatStringByNamingStrategy } from "../../../../core/naming-strategy";
-import { Service } from "../../../../core/service";
-import { ShapeAttributeGenerator, Shape } from "../../../../model";
-import { VtlSource } from "../../../vtl/vtl-source";
+import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
+import { Service } from "../../../core/service";
+import { ShapeAttributeGenerator, Shape } from "../../../model";
+import { VtlSource } from "../../vtl/vtl-source";
 
-export const addCreateRequest = (service: Service, e: Shape) => {
+export const buildCreateRequest = (service: Service, e: Shape) => {
   const operationName = `${e.fracture.namingStrategy.operations.crud.createName}-${e.name}`;
   const fileName = formatStringByNamingStrategy(
     `mutation-${operationName}-request`,
@@ -20,7 +20,7 @@ export const addCreateRequest = (service: Service, e: Shape) => {
   );
 
   // validate imputs
-  addValidations(resolver, e);
+  buildValidations(resolver, e);
 
   // initialise the shape + system values
   resolver.line(`## Initialise Shape`);

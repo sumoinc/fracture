@@ -1,11 +1,11 @@
-import { addShapeAttribute } from "./add-attribute";
-import { addInterfaceComment } from "./add-interface-comment";
+import { buildShapeAttribute } from "./build-attribute";
+import { buildInterfaceComment } from "./build-interface-comment";
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
 import { Shape } from "../../../model";
 import { TypeScriptSource } from "../typescript-source";
 
-export const addInterface = (f: TypeScriptSource, e: Shape) => {
-  addInterfaceComment(f, e);
+export const buildInterface = (f: TypeScriptSource, e: Shape) => {
+  buildInterfaceComment(f, e);
 
   const shapeName = formatStringByNamingStrategy(
     e.name,
@@ -14,7 +14,7 @@ export const addInterface = (f: TypeScriptSource, e: Shape) => {
 
   f.open(`export interface ${shapeName} {`);
   e.attributes.forEach((a) => {
-    addShapeAttribute(f, a);
+    buildShapeAttribute(f, a);
   });
   f.close(`}`);
   f.line("\n");

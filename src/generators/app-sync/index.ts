@@ -1,2 +1,2 @@
 export * from "./app-sync";
-export * from "./vtl-resolvers";
+export * from "./vtl/build-all-vtl";

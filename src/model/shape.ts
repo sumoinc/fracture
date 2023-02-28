@@ -155,6 +155,9 @@ export class Shape extends FractureComponent {
   public get keyShapeAttributes(): ShapeAttribute[] {
     return this.attributes.filter((a) => a.isKey);
   }
+  public get partitionKeyAttributes(): ShapeAttribute[] {
+    return this.attributes.filter((a) => a.isPartitionKey);
+  }
   public get dataShapeAttributes(): ShapeAttribute[] {
     return this.attributes.filter((a) => a.isData);
   }

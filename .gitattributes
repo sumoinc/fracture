@@ -21,6 +21,7 @@
 /.vscode/extensions.json linguist-generated
 /.vscode/settings.json linguist-generated
 /API.md linguist-generated
+/example/tenant/app-sync/lambda/create-tenant-command/handler.ts linguist-generated
 /example/tenant/app-sync/vtl/mutation-create-tenant-request.vtl linguist-generated
 /example/tenant/app-sync/vtl/mutation-create-tenant-response.vtl linguist-generated
 /example/tenant/app-sync/vtl/mutation-delete-tenant-request.vtl linguist-generated
@@ -29,10 +30,11 @@
 /example/tenant/app-sync/vtl/mutation-update-tenant-response.vtl linguist-generated
 /example/tenant/app-sync/vtl/query-read-tenant-request.vtl linguist-generated
 /example/tenant/app-sync/vtl/query-read-tenant-response.vtl linguist-generated
-/example/tenant/commands/create-tenant-command.ts linguist-generated
 /example/tenant/shapes/index.ts linguist-generated
 /example/tenant/shapes/saas-identity.ts linguist-generated
 /example/tenant/shapes/tenant.ts linguist-generated
+/example/user/app-sync/lambda/create-group-command/handler.ts linguist-generated
+/example/user/app-sync/lambda/create-user-command/handler.ts linguist-generated
 /example/user/app-sync/vtl/mutation-create-group-request.vtl linguist-generated
 /example/user/app-sync/vtl/mutation-create-group-response.vtl linguist-generated
 /example/user/app-sync/vtl/mutation-create-user-request.vtl linguist-generated
@@ -49,8 +51,6 @@
 /example/user/app-sync/vtl/query-read-group-response.vtl linguist-generated
 /example/user/app-sync/vtl/query-read-user-request.vtl linguist-generated
 /example/user/app-sync/vtl/query-read-user-response.vtl linguist-generated
-/example/user/commands/create-group-command.ts linguist-generated
-/example/user/commands/create-user-command.ts linguist-generated
 /example/user/shapes/group.ts linguist-generated
 /example/user/shapes/index.ts linguist-generated
 /example/user/shapes/user.ts linguist-generated

@@ -1,4 +1,5 @@
-import { VtlResolvers } from "./vtl-resolvers";
+import { buildAllLambda } from "./lambda/build-all-lambda";
+import { buildAllVtl } from "./vtl/build-all-vtl";
 import { FractureComponent } from "../../core/component";
 import { Service } from "../../core/service";
 
@@ -9,8 +10,14 @@ export class AppSync extends FractureComponent {
     super(service.fracture);
 
     this.service = service;
+  }
 
-    // add VTL revsolvers to the app
-    new VtlResolvers(service);
+  public preSynthesize() {
+    this.service.shapes
+      .filter((e) => e.persistant)
+      .forEach((e) => {
+        buildAllVtl(this.service, e);
+        buildAllLambda(e);
+      });
   }
 }

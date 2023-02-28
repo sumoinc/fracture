@@ -60,6 +60,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
+    "@types/aws-lambda": "^8.10.111",
     "change-case": "^4.1.2",
     "projen": "^0.67.66",
     "type-fest": "^2.19.0"

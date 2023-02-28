@@ -1,7 +1,7 @@
-import { Shape, ValidationRule } from "../../../../model";
-import { VtlSource } from "../../../vtl/vtl-source";
+import { Shape, ValidationRule } from "../../../model";
+import { VtlSource } from "../../vtl/vtl-source";
 
-export const addValidations = (resolver: VtlSource, e: Shape) => {
+export const buildValidations = (resolver: VtlSource, e: Shape) => {
   resolver.line("## Validations");
   e.attributes.forEach((a) => {
     a.createValidations.forEach((rule) => {

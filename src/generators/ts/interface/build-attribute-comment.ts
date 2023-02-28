@@ -1,7 +1,7 @@
 import { ShapeAttribute } from "../../../model";
 import { TypeScriptSource } from "../typescript-source";
 
-export const addShapeAttributeComment = (
+export const buildShapeAttributeComment = (
   f: TypeScriptSource,
   a: ShapeAttribute
 ) => {

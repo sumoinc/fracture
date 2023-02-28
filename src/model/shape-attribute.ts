@@ -121,6 +121,7 @@ export const ShapeAttributeGenerator = {
   CURRENT_DATE_TIME_STAMP: "CurrentDateTimeStamp",
   TYPE: "Type",
   NONE: "None",
+  VERSION: "Version",
 } as const;
 
 export const ValidationRule = {
@@ -336,6 +337,12 @@ export class ShapeAttribute extends FractureComponent {
     }
   }
 
+  public get isPartitionKey(): boolean {
+    return this.name === this.shape.partitionKeyStrategy.name;
+  }
+  /**
+   * This attribute is not metadata, it's actual shape data
+   */
   public get isData(): boolean {
     return !this.isSystem && !this.isKey && !this.isRemoteField;
   }

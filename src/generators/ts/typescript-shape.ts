@@ -1,5 +1,5 @@
-import { addCreateCommand } from "./lib/add-create-command";
-import { addInterface } from "./lib/add-interface";
+import { buildCommandInputOutput } from "./command/build-command-input-output";
+import { buildInterface } from "./interface/build-interface";
 import { TypeScriptSource } from "./typescript-source";
 import { FractureComponent } from "../../core/component";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
@@ -18,14 +18,14 @@ export class TypeScriptShape extends FractureComponent {
       shape.name,
       this.fracture.namingStrategy.ts.file
     );
-    const tsShape = new TypeScriptSource(this.service, `shapes/${fileName}.ts`);
+    const f = new TypeScriptSource(this.service, `shapes/${fileName}.ts`);
 
     // shape definition as an interface.
-    addInterface(tsShape, shape);
+    buildInterface(f, shape);
 
-    // CRUD commands
+    // CRUD command input / output shapes
     if (shape.persistant) {
-      addCreateCommand(shape);
+      buildCommandInputOutput(f, shape);
     }
   }
 

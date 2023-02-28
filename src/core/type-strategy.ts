@@ -12,4 +12,5 @@ export const defaultTypeStrategy: TypeStrategy = {
   comment: ["The type for this record."],
   type: ShapeAttributeType.STRING,
   createGenerator: ShapeAttributeGenerator.TYPE,
+  isRequired: true,
 };
