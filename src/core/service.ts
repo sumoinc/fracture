@@ -5,8 +5,6 @@ import { PartitionKeyStrategy } from "./partition-key-strategy";
 import { TypeStrategy } from "./type-strategy";
 import { VersioningStrategy } from "./versioning-strategy";
 import { Table } from "../dynamodb/table";
-import { ApiGateway, AppSync } from "../generators";
-import { TypeScriptModel } from "../generators/ts/typescript-model";
 import { Shape, ShapeOptions } from "../model";
 import { EnumShape, EnumShapeOptions } from "../model/enum";
 
@@ -69,9 +67,9 @@ export class Service extends FractureComponent {
      *
      **************************************************************************/
 
-    new TypeScriptModel(this);
-    new AppSync(this);
-    new ApiGateway(this);
+    //new TypeScriptModel(this);
+    //new AppSync(this);
+    //new ApiGateway(this);
   }
 
   /**

@@ -26,7 +26,7 @@ export class TypeScriptModel extends FractureComponent {
      * Generate types for each shape.
      */
     this.service.shapes.forEach((e) => {
-      new TypeScriptShape(this.service, e);
+      new TypeScriptShape(e);
     });
   }
 }

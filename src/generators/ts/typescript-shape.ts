@@ -1,32 +1,34 @@
-import { buildCommandInputOutput } from "./command/build-command-input-output";
-import { buildInterface } from "./interface/build-interface";
-import { TypeScriptSource } from "./typescript-source";
 import { FractureComponent } from "../../core/component";
-import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Service } from "../../core/service";
 import { Shape } from "../../model";
 
 export class TypeScriptShape extends FractureComponent {
   public readonly service: Service;
 
-  constructor(service: Service, shape: Shape) {
-    super(service.fracture);
+  constructor(shape: Shape) {
+    super(shape.service.fracture);
 
-    this.service = service;
+    this.service = shape.service;
 
+    /*
     const fileName = formatStringByNamingStrategy(
       shape.name,
       this.fracture.namingStrategy.ts.file
     );
-    const f = new TypeScriptSource(this.service, `shapes/${fileName}.ts`);
+    */
+    //const f = new TypeScriptSource(this.service, `shapes/${fileName}.ts`);
+    //const f = new TypeScriptSource(this.service, shape.names.ts.interface.file);
 
     // shape definition as an interface.
-    buildInterface(f, shape);
+    // new TypeScriptInterface(shape);
+    // buildInterface(f, shape);
 
     // CRUD command input / output shapes
+    /*
     if (shape.persistant) {
       buildCommandInputOutput(f, shape);
     }
+    */
   }
 
   // public preSynthesize() {

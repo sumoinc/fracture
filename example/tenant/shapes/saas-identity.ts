@@ -1,6 +1,3 @@
-/**
- * A saas-identity.
- */
 export interface SaasIdentity {
   /**
    * The type for this record.

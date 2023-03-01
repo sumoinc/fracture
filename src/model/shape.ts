@@ -7,6 +7,7 @@ import { PartitionKeyStrategy } from "../core/partition-key-strategy";
 import { Service } from "../core/service";
 import { TypeStrategy } from "../core/type-strategy";
 import { VersioningStrategy } from "../core/versioning-strategy";
+import { TypeScriptInterface } from "../generators/ts/typescript-interface";
 
 export interface ShapeOptions {
   /**
@@ -164,4 +165,90 @@ export class Shape extends FractureComponent {
   public get listShapeAttributes(): ShapeAttribute[] {
     return this.attributes.filter((a) => a.isListInput);
   }
+
+  preSynthesize() {
+    new TypeScriptInterface(this);
+    super.preSynthesize();
+  }
+
+  /**
+   * Builds the names used by various parts of fracture when doing codegen.
+   */
+  /*
+  public get names() {
+    // we'll use this build the names of the commands
+    const { commands, crud } = this.fracture.namingStrategy.operations;
+    const { model } = this.fracture.namingStrategy;
+    const { file } = this.fracture.namingStrategy.ts;
+
+    // output command names
+    return {
+      ts: {
+        create: {
+          file: join(
+            this.service.name,
+            "commands",
+            formatStringByNamingStrategy(
+              `${commands.commandPrefix}-${crud.createName}-${this.name}-${commands.commandSuffix}`,
+              file
+            ) + ".ts"
+          ),
+          command: formatStringByNamingStrategy(
+            `${commands.commandPrefix}-${crud.createName}-${this.name}-${commands.commandSuffix}`,
+            model.shapeName
+          ),
+          input: formatStringByNamingStrategy(
+            `${commands.inputPrefix}-${crud.createName}-${this.name}-${commands.inputSuffix}`,
+            model.shapeName
+          ),
+          output: formatStringByNamingStrategy(
+            `${commands.outputPrefix}-${crud.createName}-${this.name}-${commands.outputSuffix}`,
+            model.shapeName
+          ),
+        },
+        read: {
+          command: formatStringByNamingStrategy(
+            `${commands.commandPrefix}-${crud.readName}-${this.name}-${commands.commandSuffix}`,
+            model.shapeName
+          ),
+          input: formatStringByNamingStrategy(
+            `${commands.inputPrefix}-${crud.readName}-${this.name}-${commands.inputSuffix}`,
+            model.shapeName
+          ),
+          output: formatStringByNamingStrategy(
+            `${commands.outputPrefix}-${crud.readName}-${this.name}-${commands.outputSuffix}`,
+            model.shapeName
+          ),
+        },
+        update: {
+          command: formatStringByNamingStrategy(
+            `${commands.commandPrefix}-${crud.updateName}-${this.name}-${commands.commandSuffix}`,
+            model.shapeName
+          ),
+          input: formatStringByNamingStrategy(
+            `${commands.inputPrefix}-${crud.updateName}-${this.name}-${commands.inputSuffix}`,
+            model.shapeName
+          ),
+          output: formatStringByNamingStrategy(
+            `${commands.outputPrefix}-${crud.updateName}-${this.name}-${commands.outputSuffix}`,
+            model.shapeName
+          ),
+        },
+        delete: {
+          command: formatStringByNamingStrategy(
+            `${commands.commandPrefix}-${crud.deleteName}-${this.name}-${commands.commandSuffix}`,
+            model.shapeName
+          ),
+          input: formatStringByNamingStrategy(
+            `${commands.inputPrefix}-${crud.deleteName}-${this.name}-${commands.inputSuffix}`,
+            model.shapeName
+          ),
+          output: formatStringByNamingStrategy(
+            `${commands.outputPrefix}-${crud.deleteName}-${this.name}-${commands.outputSuffix}`,
+            model.shapeName
+          ),
+        },
+      },
+    };
+  }*/
 }
