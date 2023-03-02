@@ -2,6 +2,7 @@ import { paramCase, pascalCase } from "change-case";
 import { AccessPattern } from "./access-pattern";
 import { AuditStrategy } from "./audit-strategy";
 import { FractureComponent } from "./component";
+import { Operation, OPERATION_SUB_TYPE, OPERATION_TYPE } from "./operation";
 import { PartitionKeyStrategy } from "./partition-key-strategy";
 import {
   ResourceAttribute,
@@ -137,11 +138,49 @@ export class Resource extends FractureComponent {
     });
   }
 
+  public build() {
+    /**
+     * ADD CRUD OPERATIONS
+     */
+    new Operation(this, {
+      operationType: OPERATION_TYPE.MUTATION,
+      operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
+    });
+    new Operation(this, {
+      operationType: OPERATION_TYPE.QUERY,
+      operationSubType: OPERATION_SUB_TYPE.READ_ONE,
+    });
+    new Operation(this, {
+      operationType: OPERATION_TYPE.MUTATION,
+      operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE,
+    });
+    new Operation(this, {
+      operationType: OPERATION_TYPE.MUTATION,
+      operationSubType: OPERATION_SUB_TYPE.DELETE_ONE,
+    });
+    new Operation(this, {
+      operationType: OPERATION_TYPE.MUTATION,
+      operationSubType: OPERATION_SUB_TYPE.IMPORT_ONE,
+    });
+  }
+
   /**
    * Get comment lines.
    */
   public get comment(): string[] {
     return this._comment;
+  }
+
+  /**
+   * Get all resources for this service.
+   */
+  public get operations(): Operation[] {
+    const isOperation = (c: FractureComponent): c is Operation =>
+      c instanceof Operation &&
+      c.namespace === this.namespace &&
+      c.resource.service.name === this.name &&
+      c.resource.name === this.name;
+    return (this.project.components as FractureComponent[]).filter(isOperation);
   }
 
   /**
@@ -165,6 +204,10 @@ export class Resource extends FractureComponent {
   public get listAttributes(): ResourceAttribute[] {
     return this.attributes.filter((a) => a.isListInput);
   }
+
+  /**
+   * Build default operations
+   */
 
   preSynthesize() {
     new TypeScriptInterface(this);

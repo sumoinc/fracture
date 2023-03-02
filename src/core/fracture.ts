@@ -89,6 +89,10 @@ export class Fracture extends Component {
     this.auditStrategy = options.auditStrategy ?? defaultAuditStrategy;
   }
 
+  public build() {
+    this.services.forEach((s) => s.build());
+  }
+
   /*****************************************************************************
    *
    *  GETTERS / HELPERS

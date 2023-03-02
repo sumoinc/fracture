@@ -335,7 +335,7 @@ export class ResourceAttribute extends FractureComponent {
    * This attribute is not metadata, it's actual resource data
    */
   public get isData(): boolean {
-    return !this.isSystem && !this.isKey && !this.isRemoteField;
+    return !this.isSystem;
   }
   public get isCreateInput(): boolean {
     return !this.isSystem && !this.isKey && !this.isRemoteField;

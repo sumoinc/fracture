@@ -42,5 +42,8 @@ export class ExampleApp extends Component {
       .addResourceAttribute({ name: "actor-type" })
       .addResourceAttribute({ name: "actor" })
       .addResourceAttribute({ name: "scope" });
+
+    // build out defaults
+    fracture.build();
   }
 }

@@ -71,6 +71,10 @@ export class Service extends FractureComponent {
     //new ApiGateway(this);
   }
 
+  public build() {
+    this.resources.forEach((r) => r.build());
+  }
+
   /**
    * Get all resources for this service.
    */

@@ -1,3 +1,6 @@
+/**
+ * A group.
+ */
 export interface Group {
   /**
    * The unique identifier for this record.
