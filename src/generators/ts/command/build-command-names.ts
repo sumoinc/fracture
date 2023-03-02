@@ -1,71 +1,71 @@
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
-import { Shape } from "../../../model";
+import { Resource } from "../../../core/resource";
 
-export const buildCommandNames = (shape: Shape) => {
+export const buildCommandNames = (resource: Resource) => {
   // we'll use this build the names of the commands
-  const { commands, crud } = shape.fracture.namingStrategy.operations;
-  const { model } = shape.fracture.namingStrategy;
-  const { file } = shape.fracture.namingStrategy.ts;
+  const { commands, crud } = resource.fracture.namingStrategy.operations;
+  const { model } = resource.fracture.namingStrategy;
+  const { file } = resource.fracture.namingStrategy.ts;
 
   // output command names
   return {
     create: {
       file: formatStringByNamingStrategy(
-        `${commands.commandPrefix}-${crud.createName}-${shape.name}-${commands.commandSuffix}`,
+        `${commands.commandPrefix}-${crud.createName}-${resource.name}-${commands.commandSuffix}`,
         file
       ),
       command: formatStringByNamingStrategy(
-        `${commands.commandPrefix}-${crud.createName}-${shape.name}-${commands.commandSuffix}`,
+        `${commands.commandPrefix}-${crud.createName}-${resource.name}-${commands.commandSuffix}`,
         model.shapeName
       ),
       input: formatStringByNamingStrategy(
-        `${commands.inputPrefix}-${crud.createName}-${shape.name}-${commands.inputSuffix}`,
+        `${commands.inputPrefix}-${crud.createName}-${resource.name}-${commands.inputSuffix}`,
         model.shapeName
       ),
       output: formatStringByNamingStrategy(
-        `${commands.outputPrefix}-${crud.createName}-${shape.name}-${commands.outputSuffix}`,
+        `${commands.outputPrefix}-${crud.createName}-${resource.name}-${commands.outputSuffix}`,
         model.shapeName
       ),
     },
     read: {
       command: formatStringByNamingStrategy(
-        `${commands.commandPrefix}-${crud.readName}-${shape.name}-${commands.commandSuffix}`,
+        `${commands.commandPrefix}-${crud.readName}-${resource.name}-${commands.commandSuffix}`,
         model.shapeName
       ),
       input: formatStringByNamingStrategy(
-        `${commands.inputPrefix}-${crud.readName}-${shape.name}-${commands.inputSuffix}`,
+        `${commands.inputPrefix}-${crud.readName}-${resource.name}-${commands.inputSuffix}`,
         model.shapeName
       ),
       output: formatStringByNamingStrategy(
-        `${commands.outputPrefix}-${crud.readName}-${shape.name}-${commands.outputSuffix}`,
+        `${commands.outputPrefix}-${crud.readName}-${resource.name}-${commands.outputSuffix}`,
         model.shapeName
       ),
     },
     update: {
       command: formatStringByNamingStrategy(
-        `${commands.commandPrefix}-${crud.updateName}-${shape.name}-${commands.commandSuffix}`,
+        `${commands.commandPrefix}-${crud.updateName}-${resource.name}-${commands.commandSuffix}`,
         model.shapeName
       ),
       input: formatStringByNamingStrategy(
-        `${commands.inputPrefix}-${crud.updateName}-${shape.name}-${commands.inputSuffix}`,
+        `${commands.inputPrefix}-${crud.updateName}-${resource.name}-${commands.inputSuffix}`,
         model.shapeName
       ),
       output: formatStringByNamingStrategy(
-        `${commands.outputPrefix}-${crud.updateName}-${shape.name}-${commands.outputSuffix}`,
+        `${commands.outputPrefix}-${crud.updateName}-${resource.name}-${commands.outputSuffix}`,
         model.shapeName
       ),
     },
     delete: {
       command: formatStringByNamingStrategy(
-        `${commands.commandPrefix}-${crud.deleteName}-${shape.name}-${commands.commandSuffix}`,
+        `${commands.commandPrefix}-${crud.deleteName}-${resource.name}-${commands.commandSuffix}`,
         model.shapeName
       ),
       input: formatStringByNamingStrategy(
-        `${commands.inputPrefix}-${crud.deleteName}-${shape.name}-${commands.inputSuffix}`,
+        `${commands.inputPrefix}-${crud.deleteName}-${resource.name}-${commands.inputSuffix}`,
         model.shapeName
       ),
       output: formatStringByNamingStrategy(
-        `${commands.outputPrefix}-${crud.deleteName}-${shape.name}-${commands.outputSuffix}`,
+        `${commands.outputPrefix}-${crud.deleteName}-${resource.name}-${commands.outputSuffix}`,
         model.shapeName
       ),
     },

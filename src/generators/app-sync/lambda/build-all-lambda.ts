@@ -1,6 +1,6 @@
 import { buildCreateLambda } from "./build-create-lambda";
-import { Shape } from "../../../model";
+import { Resource } from "../../../core/resource";
 
-export const buildAllLambda = (e: Shape) => {
+export const buildAllLambda = (e: Resource) => {
   buildCreateLambda(e);
 };

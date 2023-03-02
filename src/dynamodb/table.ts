@@ -4,7 +4,7 @@ import { Service } from "../core/service";
 
 export interface TableOptions {
   /**
-   *  Name for the Shape.
+   *  Name for the Resource.
    */
   name: string;
 }

@@ -1,22 +1,22 @@
 import {
-  ShapeAttributeGenerator,
-  ShapeAttributeOptions,
-  ShapeAttributeType,
-} from "../model";
+  ResourceAttributeGenerator,
+  ResourceAttributeOptions,
+  ResourceAttributeType,
+} from "./resource-attribute";
 
 export type AuditStrategy = {
   create: {
-    dateAttribute?: ShapeAttributeOptions;
-    userAttribute?: ShapeAttributeOptions;
+    dateAttribute?: ResourceAttributeOptions;
+    userAttribute?: ResourceAttributeOptions;
   };
   update: {
-    dateAttribute?: ShapeAttributeOptions;
-    userAttribute?: ShapeAttributeOptions;
+    dateAttribute?: ResourceAttributeOptions;
+    userAttribute?: ResourceAttributeOptions;
   };
   // turning this on activates soft deletes
   delete: {
-    dateAttribute?: ShapeAttributeOptions;
-    userAttribute?: ShapeAttributeOptions;
+    dateAttribute?: ResourceAttributeOptions;
+    userAttribute?: ResourceAttributeOptions;
   };
 };
 
@@ -26,8 +26,8 @@ export const defaultAuditStrategy: AuditStrategy = {
       name: "createdAt",
       shortName: "cd",
       comment: [`The date and time this record was created.`],
-      type: ShapeAttributeType.DATE_TIME,
-      createGenerator: ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP,
+      type: ResourceAttributeType.DATE_TIME,
+      createGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
     },
   },
   update: {
@@ -35,8 +35,8 @@ export const defaultAuditStrategy: AuditStrategy = {
       name: "updatedAt",
       shortName: "ud",
       comment: [`The date and time this record was last updated.`],
-      type: ShapeAttributeType.DATE_TIME,
-      updateGenerator: ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP,
+      type: ResourceAttributeType.DATE_TIME,
+      updateGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
     },
   },
   delete: {
@@ -44,8 +44,8 @@ export const defaultAuditStrategy: AuditStrategy = {
       name: "deletedAt",
       shortName: "dd",
       comment: [`The date and time this record was deleted.`],
-      type: ShapeAttributeType.DATE_TIME,
-      deleteGenerator: ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP,
+      type: ResourceAttributeType.DATE_TIME,
+      deleteGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
     },
   },
 };

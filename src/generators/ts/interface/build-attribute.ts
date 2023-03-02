@@ -1,14 +1,17 @@
-import { buildShapeAttributeComment } from "./build-attribute-comment";
+import { buildResourceAttributeComment } from "./build-attribute-comment";
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
-import { ShapeAttribute, ShapeAttributeOptions } from "../../../model";
+import {
+  ResourceAttribute,
+  ResourceAttributeOptions,
+} from "../../../core/resource-attribute";
 import { TypeScriptSource } from "../typescript-source";
 
-export const buildShapeAttribute = (
+export const buildResourceAttribute = (
   f: TypeScriptSource,
-  a: ShapeAttribute,
-  options: Partial<ShapeAttributeOptions> = {}
+  a: ResourceAttribute,
+  options: Partial<ResourceAttributeOptions> = {}
 ) => {
-  buildShapeAttributeComment(f, a);
+  buildResourceAttributeComment(f, a);
 
   const attributeName = formatStringByNamingStrategy(
     a.name,

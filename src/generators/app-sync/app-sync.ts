@@ -13,7 +13,7 @@ export class AppSync extends FractureComponent {
   }
 
   public preSynthesize() {
-    this.service.shapes
+    this.service.resources
       .filter((e) => e.persistant)
       .forEach((e) => {
         buildAllVtl(this.service, e);

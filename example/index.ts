@@ -20,13 +20,13 @@ export class ExampleApp extends Component {
 
     const userService = fracture.addService({ name: "user" });
     userService
-      .addShape({ name: "user" })
-      .addShapeAttribute({ name: "first-name", shortName: "fn" })
-      .addShapeAttribute({ name: "last-name", shortName: "ln" });
+      .addResource({ name: "user" })
+      .addResourceAttribute({ name: "first-name", shortName: "fn" })
+      .addResourceAttribute({ name: "last-name", shortName: "ln" });
 
     userService
-      .addShape({ name: "group" })
-      .addShapeAttribute({ name: "name", isRequired: true });
+      .addResource({ name: "group" })
+      .addResourceAttribute({ name: "name", isRequired: true });
 
     /***************************************************************************
      *  Tenant Service
@@ -34,13 +34,13 @@ export class ExampleApp extends Component {
 
     const tenantService = fracture.addService({ name: "tenant" });
     tenantService
-      .addShape({ name: "tenant" })
-      .addShapeAttribute({ name: "name", isRequired: true });
+      .addResource({ name: "tenant" })
+      .addResourceAttribute({ name: "name", isRequired: true });
 
     tenantService
-      .addShape({ name: "saas-identity", persistant: false })
-      .addShapeAttribute({ name: "actor-type" })
-      .addShapeAttribute({ name: "actor" })
-      .addShapeAttribute({ name: "scope" });
+      .addResource({ name: "saas-identity", persistant: false })
+      .addResourceAttribute({ name: "actor-type" })
+      .addResourceAttribute({ name: "actor" })
+      .addResourceAttribute({ name: "scope" });
   }
 }

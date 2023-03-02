@@ -1,9 +1,9 @@
-import { ShapeAttribute } from "../../../model";
+import { ResourceAttribute } from "../../../core/resource-attribute";
 import { TypeScriptSource } from "../typescript-source";
 
-export const buildShapeAttributeComment = (
+export const buildResourceAttributeComment = (
   f: TypeScriptSource,
-  a: ShapeAttribute
+  a: ResourceAttribute
 ) => {
   f.line(`/**`);
   a.comment.forEach((c) => f.line(` * ${c}`));

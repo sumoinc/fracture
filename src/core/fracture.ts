@@ -14,7 +14,7 @@ import {
 } from "./versioning-strategy";
 import { Account, AccountOptions } from "../aws/account";
 import { Organization, OrganizationOptions } from "../aws/organization";
-import { Shape } from "../model";
+import { Resource } from "../core/resource";
 
 export interface FractureOptions {
   /**
@@ -95,24 +95,9 @@ export class Fracture extends Component {
    *
    ****************************************************************************/
 
-  /**
-   * Get all shapes in this project's namespace.
-   */
-  /*
-  public get shapes(): Shape[] {
-    const isShape = (c: FractureComponent): c is Shape =>
-      c instanceof Shape && c.namespace === this.namespace;
-    return (this.project.components as FractureComponent[]).filter(isShape);
-  }
-
-  public addShape(options: ShapeOptions) {
-    return new Shape(this, options);
-  }
-  */
-
   public get services(): Service[] {
     const isService = (c: FractureComponent): c is Service =>
-      c instanceof Shape && c.namespace === this.namespace;
+      c instanceof Resource && c.namespace === this.namespace;
     return (this.project.components as FractureComponent[]).filter(isService);
   }
 

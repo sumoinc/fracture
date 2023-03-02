@@ -1,11 +1,11 @@
 import { FractureComponent } from "../../core/component";
+import { Resource } from "../../core/resource";
 import { Service } from "../../core/service";
-import { Shape } from "../../model";
 
-export class TypeScriptShape extends FractureComponent {
+export class TypeScriptResource extends FractureComponent {
   public readonly service: Service;
 
-  constructor(shape: Shape) {
+  constructor(shape: Resource) {
     super(shape.service.fracture);
 
     this.service = shape.service;
@@ -80,7 +80,7 @@ export class TypeScriptShape extends FractureComponent {
   //     tsFile.open(
   //       `export interface ${e.name}${this.commandLabels.inputDataLabel} {`
   //     );
-  //     e.dataShapeAttributes.forEach((a) => {
+  //     e.dataResourceAttributes.forEach((a) => {
   //       const q = a.isRequired ? "" : "?";
   //       tsFile.line(`${a.name}${q}: ${a.typeScriptType};`);
   //     });
@@ -111,7 +111,7 @@ export class TypeScriptShape extends FractureComponent {
   //     tsFile.open(
   //       `export interface ${this.crudLabels.readLabel}${e.name}${this.commandLabels.commandInputLabel} {`
   //     );
-  //     e.keyShapeAttributes.forEach((a) => {
+  //     e.keyResourceAttributes.forEach((a) => {
   //       // write type definition
   //       const q = a.isRequired ? "" : "?";
   //       tsFile.line(`${a.name}${q}: ${a.typeScriptType};`);
@@ -126,7 +126,7 @@ export class TypeScriptShape extends FractureComponent {
   //     tsFile.open(
   //       `export interface ${this.crudLabels.updateLabel}${e.name}${this.commandLabels.commandInputLabel} {`
   //     );
-  //     e.keyShapeAttributes.forEach((a) => {
+  //     e.keyResourceAttributes.forEach((a) => {
   //       // write type definition
   //       const q = a.isRequired ? "" : "?";
   //       tsFile.line(`${a.name}${q}: ${a.typeScriptType};`);
@@ -148,7 +148,7 @@ export class TypeScriptShape extends FractureComponent {
   //     tsFile.open(
   //       `export interface ${this.crudLabels.deleteLabel}${e.name}${this.commandLabels.commandInputLabel} {`
   //     );
-  //     e.keyShapeAttributes.forEach((a) => {
+  //     e.keyResourceAttributes.forEach((a) => {
   //       // write type definition
   //       const q = a.isRequired ? "" : "?";
   //       tsFile.line(`${a.name}${q}: ${a.typeScriptType};`);
@@ -163,7 +163,7 @@ export class TypeScriptShape extends FractureComponent {
   //     tsFile.open(
   //       `export interface ${this.crudLabels.listLabel}${e.name}${this.commandLabels.commandInputLabel} {`
   //     );
-  //     e.listShapeAttributes.forEach((a) => {
+  //     e.listResourceAttributes.forEach((a) => {
   //       // write type definition
   //       const q = a.isRequired ? "" : "?";
   //       tsFile.line(`${a.name}${q}: ${a.typeScriptType};`);

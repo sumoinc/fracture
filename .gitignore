@@ -56,7 +56,7 @@ tsconfig.json
 !/example/
 !/.vscode/settings.json
 !/.vscode/extensions.json
-!/example/user/shapes/user.ts
-!/example/user/shapes/group.ts
-!/example/tenant/shapes/tenant.ts
-!/example/tenant/shapes/saas-identity.ts
+!/example/user/ts/user.ts
+!/example/user/ts/group.ts
+!/example/tenant/ts/tenant.ts
+!/example/tenant/ts/saas-identity.ts

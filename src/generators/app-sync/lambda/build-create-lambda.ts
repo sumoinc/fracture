@@ -1,24 +1,24 @@
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
-import { Shape } from "../../../model";
+import { Resource } from "../../../core/resource";
 import { buildCommandNames } from "../../ts/command/build-command-names";
 import { TypeScriptSource } from "../../ts/typescript-source";
 
-export const buildCreateLambda = (shape: Shape) => {
-  const names = buildCommandNames(shape);
+export const buildCreateLambda = (resource: Resource) => {
+  const names = buildCommandNames(resource);
 
   const f = new TypeScriptSource(
-    shape.service,
+    resource.service,
     `app-sync/lambda/${names.create.file}/handler.ts`
   );
 
-  const shapeFileName = formatStringByNamingStrategy(
-    shape.name,
-    shape.fracture.namingStrategy.ts.file
+  const resourceFileName = formatStringByNamingStrategy(
+    resource.name,
+    resource.fracture.namingStrategy.ts.file
   );
 
   f.line('import { AppSyncResolverEvent } from "aws-lambda";');
   f.line(
-    `import { ${names.create.input}, ${names.create.output} } from "../../../shapes/${shapeFileName}";`
+    `import { ${names.create.input}, ${names.create.output} } from "../../../resources/${resourceFileName}";`
   );
   f.line("\n");
 

@@ -1,12 +1,12 @@
 import { paramCase, pascalCase } from "change-case";
 import { ValueOf } from "type-fest";
-import { Shape } from "./shape";
-import { FractureComponent } from "../core/component";
+import { FractureComponent } from "./component";
+import { Resource } from "./resource";
 
 /**
- * Each ShapeAttribute has a type that is used to determine how we will construct other generated code.
+ * Each ResourceAttribute has a type that is used to determine how we will construct other generated code.
  */
-export const ShapeAttributeType = {
+export const ResourceAttributeType = {
   /**
    *  A unique identifier for an object. This scalar is serialized like a String but isn't meant to be human-readable.
    *  Long format GUID
@@ -115,7 +115,7 @@ export const ShapeAttributeType = {
   SUM: "Sum",
 } as const;
 
-export const ShapeAttributeGenerator = {
+export const ResourceAttributeGenerator = {
   AUTO_INCREMENT: "Increment",
   GUID: "Guid",
   CURRENT_DATE_TIME_STAMP: "CurrentDateTimeStamp",
@@ -142,7 +142,7 @@ export const DynamoDbType = {
   BOOLEAN: "BOOL",
 } as const;
 
-export type ShapeAttributeOptions = {
+export type ResourceAttributeOptions = {
   /**
    * Full long name for this attribute.
    * @example 'phone-number'
@@ -151,21 +151,21 @@ export type ShapeAttributeOptions = {
   /**
    * Brief name used when storing data to save space.
    * @example 'pn'
-   * @default ShapeAttributeOptions.name
+   * @default ResourceAttributeOptions.name
    */
   shortName?: string;
   /**
-   * Comment lines to add to the Shape.
+   * Comment lines to add to the Resource.
    * @default []
    */
   comment?: string[];
   /**
    * The type for this attribute.
-   * @default ShapeAttributeType.STRING
+   * @default ResourceAttributeType.STRING
    */
-  type?: ValueOf<typeof ShapeAttributeType>;
+  type?: ValueOf<typeof ResourceAttributeType>;
   /**
-   * Is this attribute a key for the Shape?
+   * Is this attribute a key for the Resource?
    * @default false
    */
   isKey?: boolean;
@@ -187,19 +187,19 @@ export type ShapeAttributeOptions = {
   isRequired?: boolean;
   /**
    * The generator to use for this attribute when creating it.
-   * @default ShapeAttributeGenerator.NONE
+   * @default ResourceAttributeGenerator.NONE
    */
-  createGenerator?: ValueOf<typeof ShapeAttributeGenerator>;
+  createGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
   /**
    * The generator to use for this attribute when updating it.
-   * @default ShapeAttributeGenerator.NONE
+   * @default ResourceAttributeGenerator.NONE
    */
-  updateGenerator?: ValueOf<typeof ShapeAttributeGenerator>;
+  updateGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
   /**
    * The generator to use for this attribute when deleting it.
-   * @default ShapeAttributeGenerator.NONE
+   * @default ResourceAttributeGenerator.NONE
    */
-  deleteGenerator?: ValueOf<typeof ShapeAttributeGenerator>;
+  deleteGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
   /**
    * Validations to run when creating this attribute.
    * @default []
@@ -217,12 +217,12 @@ export type ShapeAttributeOptions = {
   deleteValidations?: ValueOf<typeof ValidationRule>[];
 };
 
-export class ShapeAttribute extends FractureComponent {
-  public readonly shape: Shape;
+export class ResourceAttribute extends FractureComponent {
+  public readonly resource: Resource;
   public readonly name: string;
   public readonly shortName: string;
   private readonly _comment: string[];
-  public readonly type: ValueOf<typeof ShapeAttributeType>;
+  public readonly type: ValueOf<typeof ResourceAttributeType>;
 
   public readonly isKey: boolean;
   public readonly isRemoteKey: boolean;
@@ -231,9 +231,9 @@ export class ShapeAttribute extends FractureComponent {
 
   public readonly dynamoDbType: ValueOf<typeof DynamoDbType>;
   public readonly typeScriptType: string;
-  public readonly createGenerator: ValueOf<typeof ShapeAttributeGenerator>;
-  public readonly updateGenerator: ValueOf<typeof ShapeAttributeGenerator>;
-  public readonly deleteGenerator: ValueOf<typeof ShapeAttributeGenerator>;
+  public readonly createGenerator: ValueOf<typeof ResourceAttributeGenerator>;
+  public readonly updateGenerator: ValueOf<typeof ResourceAttributeGenerator>;
+  public readonly deleteGenerator: ValueOf<typeof ResourceAttributeGenerator>;
 
   public readonly createValidations: ValueOf<typeof ValidationRule>[];
   public readonly updateValidations: ValueOf<typeof ValidationRule>[];
@@ -244,26 +244,17 @@ export class ShapeAttribute extends FractureComponent {
    * interfaces. This is useful for fields which are automatically generated.
    */
   public readonly isSystem: boolean;
-  /*
-  public readonly isData: boolean;
-  public readonly isCreateInput: boolean;
-  public readonly isReadInput: boolean;
-  public readonly isUpdateInput: boolean;
-  public readonly isDeleteInput: boolean;
-  public readonly isListInput: boolean;
-  public readonly isImportInput: boolean;
-  */
 
-  constructor(shape: Shape, options: ShapeAttributeOptions) {
-    super(shape.fracture);
+  constructor(resource: Resource, options: ResourceAttributeOptions) {
+    super(resource.fracture);
 
-    this.shape = shape;
+    this.resource = resource;
     this.name = paramCase(options.name);
     this.shortName = options.shortName
       ? pascalCase(options.shortName).toLowerCase()
       : pascalCase(options.name).toLowerCase();
     this._comment = options.comment ?? [`A ${this.name}.`];
-    this.type = options.type ?? ShapeAttributeType.STRING;
+    this.type = options.type ?? ResourceAttributeType.STRING;
     this.isKey = options.isKey ?? false;
     this.isRemoteKey = options.isRemoteKey ?? false;
     this.isRemoteField =
@@ -273,29 +264,29 @@ export class ShapeAttribute extends FractureComponent {
 
     // dynamo types
     switch (this.type) {
-      case ShapeAttributeType.GUID:
-      case ShapeAttributeType.STRING:
-      case ShapeAttributeType.EMAIL:
-      case ShapeAttributeType.PHONE:
-      case ShapeAttributeType.URL:
-      case ShapeAttributeType.DATE:
-      case ShapeAttributeType.TIME:
-      case ShapeAttributeType.DATE_TIME:
-      case ShapeAttributeType.JSON:
-      case ShapeAttributeType.IPADDRESS:
+      case ResourceAttributeType.GUID:
+      case ResourceAttributeType.STRING:
+      case ResourceAttributeType.EMAIL:
+      case ResourceAttributeType.PHONE:
+      case ResourceAttributeType.URL:
+      case ResourceAttributeType.DATE:
+      case ResourceAttributeType.TIME:
+      case ResourceAttributeType.DATE_TIME:
+      case ResourceAttributeType.JSON:
+      case ResourceAttributeType.IPADDRESS:
         this.dynamoDbType = DynamoDbType.STRING;
         this.typeScriptType = "string";
         break;
-      case ShapeAttributeType.INT:
-      case ShapeAttributeType.FLOAT:
-      case ShapeAttributeType.TIMESTAMP:
-      case ShapeAttributeType.COUNT:
-      case ShapeAttributeType.AVERAGE:
-      case ShapeAttributeType.SUM:
+      case ResourceAttributeType.INT:
+      case ResourceAttributeType.FLOAT:
+      case ResourceAttributeType.TIMESTAMP:
+      case ResourceAttributeType.COUNT:
+      case ResourceAttributeType.AVERAGE:
+      case ResourceAttributeType.SUM:
         this.dynamoDbType = DynamoDbType.NUMBER;
         this.typeScriptType = "number";
         break;
-      case ShapeAttributeType.BOOLEAN:
+      case ResourceAttributeType.BOOLEAN:
         this.dynamoDbType = DynamoDbType.BOOLEAN;
         this.typeScriptType = "boolean";
         break;
@@ -305,17 +296,17 @@ export class ShapeAttribute extends FractureComponent {
 
     // deterine generators
     this.createGenerator =
-      options.createGenerator ?? ShapeAttributeGenerator.NONE;
+      options.createGenerator ?? ResourceAttributeGenerator.NONE;
     this.updateGenerator =
-      options.updateGenerator ?? ShapeAttributeGenerator.NONE;
+      options.updateGenerator ?? ResourceAttributeGenerator.NONE;
     this.deleteGenerator =
-      options.deleteGenerator ?? ShapeAttributeGenerator.NONE;
+      options.deleteGenerator ?? ResourceAttributeGenerator.NONE;
 
     // determine if this is a system managed attribute.
     this.isSystem =
-      this.createGenerator !== ShapeAttributeGenerator.NONE ||
-      this.updateGenerator !== ShapeAttributeGenerator.NONE ||
-      this.deleteGenerator !== ShapeAttributeGenerator.NONE;
+      this.createGenerator !== ResourceAttributeGenerator.NONE ||
+      this.updateGenerator !== ResourceAttributeGenerator.NONE ||
+      this.deleteGenerator !== ResourceAttributeGenerator.NONE;
 
     // setup validation rules
     this.createValidations = options.createValidations ?? [];
@@ -338,10 +329,10 @@ export class ShapeAttribute extends FractureComponent {
   }
 
   public get isPartitionKey(): boolean {
-    return this.name === this.shape.partitionKeyStrategy.name;
+    return this.name === this.resource.partitionKeyStrategy.name;
   }
   /**
-   * This attribute is not metadata, it's actual shape data
+   * This attribute is not metadata, it's actual resource data
    */
   public get isData(): boolean {
     return !this.isSystem && !this.isKey && !this.isRemoteField;
@@ -372,7 +363,7 @@ export class ShapeAttribute extends FractureComponent {
     const c = [...this._comment];
 
     // attribute type
-    if (this.type === ShapeAttributeType.GUID) {
+    if (this.type === ResourceAttributeType.GUID) {
       c.push(`@type A GUID string.`);
     }
 

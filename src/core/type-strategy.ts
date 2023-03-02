@@ -1,16 +1,16 @@
 import {
-  ShapeAttributeGenerator,
-  ShapeAttributeOptions,
-  ShapeAttributeType,
-} from "../model";
+  ResourceAttributeGenerator,
+  ResourceAttributeOptions,
+  ResourceAttributeType,
+} from "../core/resource-attribute";
 
-export type TypeStrategy = ShapeAttributeOptions;
+export type TypeStrategy = ResourceAttributeOptions;
 
 export const defaultTypeStrategy: TypeStrategy = {
   name: "type",
   shortName: "t",
   comment: ["The type for this record."],
-  type: ShapeAttributeType.STRING,
-  createGenerator: ShapeAttributeGenerator.TYPE,
+  type: ResourceAttributeType.STRING,
+  createGenerator: ResourceAttributeGenerator.TYPE,
   isRequired: true,
 };

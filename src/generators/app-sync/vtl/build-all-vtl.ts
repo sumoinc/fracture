@@ -6,10 +6,10 @@ import { buildReadRequest } from "./build-read-request";
 import { buildReadResponse } from "./build-read-response";
 import { buildUpdateRequest } from "./build-update-request";
 import { buildUpdateResponse } from "./build-update-response";
+import { Resource } from "../../../core/resource";
 import { Service } from "../../../core/service";
-import { Shape } from "../../../model";
 
-export const buildAllVtl = (service: Service, e: Shape) => {
+export const buildAllVtl = (service: Service, e: Resource) => {
   buildCreateRequest(service, e);
   buildCreateResponse(service, e);
   buildReadRequest(service, e);

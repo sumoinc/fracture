@@ -1,24 +1,27 @@
 import { ValueOf } from "type-fest";
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
-import { ShapeAttribute, ShapeAttributeGenerator } from "../../../model";
+import {
+  ResourceAttribute,
+  ResourceAttributeGenerator,
+} from "../../../core/resource-attribute";
 
-export const setSytemShapeAttribute = (
-  a: ShapeAttribute,
-  g: ValueOf<typeof ShapeAttributeGenerator>
+export const setSytemResourceAttribute = (
+  a: ResourceAttribute,
+  g: ValueOf<typeof ResourceAttributeGenerator>
 ) => {
   switch (g) {
-    case ShapeAttributeGenerator.CURRENT_DATE_TIME_STAMP:
+    case ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP:
       return `"${a.shortName}": "$util.time.nowISO8601()"`;
-    case ShapeAttributeGenerator.GUID:
+    case ResourceAttributeGenerator.GUID:
       return `"${a.shortName}": "$util.autoId()"`;
-    case ShapeAttributeGenerator.TYPE:
-      const shapeName = formatStringByNamingStrategy(
-        a.shape.name,
+    case ResourceAttributeGenerator.TYPE:
+      const resourceName = formatStringByNamingStrategy(
+        a.resource.name,
         a.fracture.namingStrategy.model.shapeName
       );
-      return `"${a.shortName}": "${shapeName}"`;
-    case ShapeAttributeGenerator.VERSION:
-      return `"${a.shortName}": "${a.shape.versioningStrategy.currentVersion}}"`;
+      return `"${a.shortName}": "${resourceName}"`;
+    case ResourceAttributeGenerator.VERSION:
+      return `"${a.shortName}": "${a.resource.versioningStrategy.currentVersion}}"`;
     default:
       throw new Error(`Unknown generator: ${g}`);
   }

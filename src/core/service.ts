@@ -2,11 +2,10 @@ import { join } from "path";
 import { Fracture, FractureComponent } from ".";
 import { AuditStrategy } from "./audit-strategy";
 import { PartitionKeyStrategy } from "./partition-key-strategy";
+import { Resource, ResourceOptions } from "./resource";
 import { TypeStrategy } from "./type-strategy";
 import { VersioningStrategy } from "./versioning-strategy";
 import { Table } from "../dynamodb/table";
-import { Shape, ShapeOptions } from "../model";
-import { EnumShape, EnumShapeOptions } from "../model/enum";
 
 export interface ServiceOptions {
   name: string;
@@ -73,32 +72,17 @@ export class Service extends FractureComponent {
   }
 
   /**
-   * Get all shapes for this service.
+   * Get all resources for this service.
    */
-  public get shapes(): Shape[] {
-    const isShape = (c: FractureComponent): c is Shape =>
-      c instanceof Shape &&
+  public get resources(): Resource[] {
+    const isResource = (c: FractureComponent): c is Resource =>
+      c instanceof Resource &&
       c.namespace === this.namespace &&
       c.service.name === this.name;
-    return (this.project.components as FractureComponent[]).filter(isShape);
+    return (this.project.components as FractureComponent[]).filter(isResource);
   }
 
-  public addShape(options: ShapeOptions) {
-    return new Shape(this, options);
-  }
-
-  /**
-   * Get all enums for this service.
-   */
-  public get enumShapes(): Shape[] {
-    const isShape = (c: FractureComponent): c is Shape =>
-      c instanceof EnumShape &&
-      c.namespace === this.namespace &&
-      c.service.name === this.name;
-    return (this.project.components as FractureComponent[]).filter(isShape);
-  }
-
-  public addEnum(options: EnumShapeOptions) {
-    return new EnumShape(this, options);
+  public addResource(options: ResourceOptions) {
+    return new Resource(this, options);
   }
 }

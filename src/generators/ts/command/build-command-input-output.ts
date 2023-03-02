@@ -1,9 +1,9 @@
 import { buildCommandNames } from "./build-command-names";
-import { Shape } from "../../../model";
-import { buildShapeAttribute } from "../interface/build-attribute";
+import { Resource } from "../../../core/resource";
+import { buildResourceAttribute } from "../interface/build-attribute";
 import { TypeScriptSource } from "../typescript-source";
 
-export const buildCommandInputOutput = (f: TypeScriptSource, e: Shape) => {
+export const buildCommandInputOutput = (f: TypeScriptSource, e: Resource) => {
   const names = buildCommandNames(e);
 
   /*****************************************************************************
@@ -11,15 +11,15 @@ export const buildCommandInputOutput = (f: TypeScriptSource, e: Shape) => {
    ****************************************************************************/
 
   f.open(`export interface ${names.create.input} {`);
-  e.dataShapeAttributes.forEach((a) => {
-    buildShapeAttribute(f, a);
+  e.dataAttributes.forEach((a) => {
+    buildResourceAttribute(f, a);
   });
   f.close(`}`);
   f.line("\n");
 
   f.open(`export interface ${names.create.output} {`);
   e.partitionKeyAttributes.forEach((a) => {
-    buildShapeAttribute(f, a);
+    buildResourceAttribute(f, a);
   });
   f.close(`}`);
   f.line("\n");
@@ -30,7 +30,7 @@ export const buildCommandInputOutput = (f: TypeScriptSource, e: Shape) => {
 
   f.open(`export interface ${names.read.input} {`);
   e.partitionKeyAttributes.forEach((a) => {
-    buildShapeAttribute(f, a);
+    buildResourceAttribute(f, a);
   });
   f.close(`}`);
   f.line("\n");
@@ -41,17 +41,17 @@ export const buildCommandInputOutput = (f: TypeScriptSource, e: Shape) => {
 
   f.open(`export interface ${names.update.input} {`);
   e.partitionKeyAttributes.forEach((a) => {
-    buildShapeAttribute(f, a);
+    buildResourceAttribute(f, a);
   });
-  e.dataShapeAttributes.forEach((a) => {
-    buildShapeAttribute(f, a);
+  e.dataAttributes.forEach((a) => {
+    buildResourceAttribute(f, a);
   });
   f.close(`}`);
   f.line("\n");
 
   f.open(`export interface ${names.update.output} {`);
   e.partitionKeyAttributes.forEach((a) => {
-    buildShapeAttribute(f, a);
+    buildResourceAttribute(f, a);
   });
   f.close(`}`);
   f.line("\n");
@@ -62,14 +62,14 @@ export const buildCommandInputOutput = (f: TypeScriptSource, e: Shape) => {
 
   f.open(`export interface ${names.delete.input} {`);
   e.partitionKeyAttributes.forEach((a) => {
-    buildShapeAttribute(f, a);
+    buildResourceAttribute(f, a);
   });
   f.close(`}`);
   f.line("\n");
 
   f.open(`export interface ${names.update.output} {`);
   e.partitionKeyAttributes.forEach((a) => {
-    buildShapeAttribute(f, a);
+    buildResourceAttribute(f, a);
   });
   f.close(`}`);
   f.line("\n");

@@ -1,16 +1,16 @@
 import {
-  ShapeAttributeGenerator,
-  ShapeAttributeOptions,
-  ShapeAttributeType,
-} from "../model";
+  ResourceAttributeGenerator,
+  ResourceAttributeOptions,
+  ResourceAttributeType,
+} from "./resource-attribute";
 
-export type PartitionKeyStrategy = ShapeAttributeOptions;
+export type PartitionKeyStrategy = ResourceAttributeOptions;
 
 export const guidPartitionKeyStrategy: PartitionKeyStrategy = {
   name: "id",
   comment: [`The unique identifier for this record.`],
-  type: ShapeAttributeType.GUID,
-  createGenerator: ShapeAttributeGenerator.GUID,
+  type: ResourceAttributeType.GUID,
+  createGenerator: ResourceAttributeGenerator.GUID,
   isRequired: true,
 };
 

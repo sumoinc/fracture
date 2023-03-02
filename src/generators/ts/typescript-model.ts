@@ -1,4 +1,4 @@
-import { TypeScriptShape } from "./typescript-shape";
+import { TypeScriptResource } from "./typescript-shape";
 import { TypeScriptSource } from "./typescript-source";
 import { FractureComponent } from "../../core/component";
 import { Service } from "../../core/service";
@@ -16,8 +16,8 @@ export class TypeScriptModel extends FractureComponent {
     /**
      * Crerate index file and import all shape types.
      */
-    const indexFile = new TypeScriptSource(this.service, `shapes/index.ts`);
-    this.service.shapes.forEach((e) => {
+    const indexFile = new TypeScriptSource(this.service, `resources/index.ts`);
+    this.service.resources.forEach((e) => {
       indexFile.line(`export * from "./${e.name}";`);
     });
     indexFile.line("\n");
@@ -25,8 +25,8 @@ export class TypeScriptModel extends FractureComponent {
     /**
      * Generate types for each shape.
      */
-    this.service.shapes.forEach((e) => {
-      new TypeScriptShape(e);
+    this.service.resources.forEach((e) => {
+      new TypeScriptResource(e);
     });
   }
 }

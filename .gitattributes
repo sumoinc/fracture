@@ -21,10 +21,10 @@
 /.vscode/extensions.json linguist-generated
 /.vscode/settings.json linguist-generated
 /API.md linguist-generated
-/example/tenant/shapes/saas-identity.ts linguist-generated
-/example/tenant/shapes/tenant.ts linguist-generated
-/example/user/shapes/group.ts linguist-generated
-/example/user/shapes/user.ts linguist-generated
+/example/tenant/ts/saas-identity.ts linguist-generated
+/example/tenant/ts/tenant.ts linguist-generated
+/example/user/ts/group.ts linguist-generated
+/example/user/ts/user.ts linguist-generated
 /LICENSE linguist-generated
 /package.json linguist-generated
 /pnpm-lock.yaml linguist-generated

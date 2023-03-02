@@ -4,15 +4,19 @@ import {
   formatStringByNamingStrategy,
   NAMING_STRATEGY_TYPE,
 } from "../../core/naming-strategy";
-import { Shape, ShapeAttribute, ShapeAttributeOptions } from "../../model";
+import { Resource } from "../../core/resource";
+import {
+  ResourceAttribute,
+  ResourceAttributeOptions,
+} from "../../core/resource-attribute";
 
 export class TypeScriptInterface extends TypeScriptSource {
-  public readonly shape: Shape;
+  public readonly shape: Resource;
   public readonly shapeNameStrategy: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   public readonly attributeNameStrategy: ValueOf<typeof NAMING_STRATEGY_TYPE>;
 
-  constructor(shape: Shape) {
-    super(shape.service, `shapes/${shape.name}.ts`);
+  constructor(shape: Resource) {
+    super(shape.service, `ts/${shape.name}.ts`);
     this.shape = shape;
     this.shapeNameStrategy = this.shape.fracture.namingStrategy.model.shapeName;
     this.attributeNameStrategy =
@@ -31,7 +35,7 @@ export class TypeScriptInterface extends TypeScriptSource {
      * Constructs the comment block above each attribute in the shape
      * @param attribute
      */
-    const buildAttributeComment = (attribute: ShapeAttribute) => {
+    const buildAttributeComment = (attribute: ResourceAttribute) => {
       this.line(`/**`);
       attribute.comment.forEach((c) => this.line(` * ${c}`));
       this.line(` */`);
@@ -43,8 +47,8 @@ export class TypeScriptInterface extends TypeScriptSource {
      * @param options
      */
     const buildAttribute = (
-      attribute: ShapeAttribute,
-      options: Partial<ShapeAttributeOptions> = {}
+      attribute: ResourceAttribute,
+      options: Partial<ResourceAttributeOptions> = {}
     ) => {
       buildAttributeComment(attribute);
 

@@ -1,11 +1,12 @@
 import { buildValidations } from "./build-validations";
-import { setSytemShapeAttribute } from "./set-system-attribute";
+import { setSytemResourceAttribute } from "./set-system-attribute";
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
+import { Resource } from "../../../core/resource";
+import { ResourceAttributeGenerator } from "../../../core/resource-attribute";
 import { Service } from "../../../core/service";
-import { ShapeAttributeGenerator, Shape } from "../../../model";
 import { VtlSource } from "../../vtl/vtl-source";
 
-export const buildCreateRequest = (service: Service, e: Shape) => {
+export const buildCreateRequest = (service: Service, e: Resource) => {
   const operationName = `${e.fracture.namingStrategy.operations.crud.createName}-${e.name}`;
   const fileName = formatStringByNamingStrategy(
     `mutation-${operationName}-request`,
@@ -23,14 +24,14 @@ export const buildCreateRequest = (service: Service, e: Shape) => {
   buildValidations(resolver, e);
 
   // initialise the shape + system values
-  resolver.line(`## Initialise Shape`);
+  resolver.line(`## Initialise Resource`);
   resolver.open(`#set( $${shapeName} = {`);
   e.attributes
     .filter(
-      (a) => a.isSystem && a.createGenerator !== ShapeAttributeGenerator.NONE
+      (a) => a.isSystem && a.createGenerator !== ResourceAttributeGenerator.NONE
     )
     .forEach((a) => {
-      resolver.line(setSytemShapeAttribute(a, a.createGenerator));
+      resolver.line(setSytemResourceAttribute(a, a.createGenerator));
     });
   resolver.close(`})`);
   resolver.line("\n");
