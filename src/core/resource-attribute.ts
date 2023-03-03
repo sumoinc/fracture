@@ -1,6 +1,7 @@
 import { paramCase, pascalCase } from "change-case";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
+import { formatStringByNamingStrategy } from "./naming-strategy";
 import { Resource } from "./resource";
 
 /**
@@ -191,6 +192,11 @@ export type ResourceAttributeOptions = {
    */
   createGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
   /**
+   * The generator to use for this attribute when reading it.
+   * @default ResourceAttributeGenerator.NONE
+   */
+  readGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  /**
    * The generator to use for this attribute when updating it.
    * @default ResourceAttributeGenerator.NONE
    */
@@ -205,6 +211,11 @@ export type ResourceAttributeOptions = {
    * @default []
    */
   createValidations?: ValueOf<typeof ValidationRule>[];
+  /**
+   * Validations to run when reading data
+   * @default []
+   */
+  readValidations?: ValueOf<typeof ValidationRule>[];
   /**
    * Validations to run when updating this attribute.
    * @default []
@@ -232,10 +243,12 @@ export class ResourceAttribute extends FractureComponent {
   public readonly dynamoDbType: ValueOf<typeof DynamoDbType>;
   public readonly typeScriptType: string;
   public readonly createGenerator: ValueOf<typeof ResourceAttributeGenerator>;
+  public readonly readGenerator: ValueOf<typeof ResourceAttributeGenerator>;
   public readonly updateGenerator: ValueOf<typeof ResourceAttributeGenerator>;
   public readonly deleteGenerator: ValueOf<typeof ResourceAttributeGenerator>;
 
   public readonly createValidations: ValueOf<typeof ValidationRule>[];
+  public readonly readValidations: ValueOf<typeof ValidationRule>[];
   public readonly updateValidations: ValueOf<typeof ValidationRule>[];
   public readonly deleteValidations: ValueOf<typeof ValidationRule>[];
 
@@ -297,6 +310,8 @@ export class ResourceAttribute extends FractureComponent {
     // deterine generators
     this.createGenerator =
       options.createGenerator ?? ResourceAttributeGenerator.NONE;
+    this.readGenerator =
+      options.readGenerator ?? ResourceAttributeGenerator.NONE;
     this.updateGenerator =
       options.updateGenerator ?? ResourceAttributeGenerator.NONE;
     this.deleteGenerator =
@@ -305,11 +320,13 @@ export class ResourceAttribute extends FractureComponent {
     // determine if this is a system managed attribute.
     this.isSystem =
       this.createGenerator !== ResourceAttributeGenerator.NONE ||
+      this.readGenerator !== ResourceAttributeGenerator.NONE ||
       this.updateGenerator !== ResourceAttributeGenerator.NONE ||
       this.deleteGenerator !== ResourceAttributeGenerator.NONE;
 
     // setup validation rules
     this.createValidations = options.createValidations ?? [];
+    this.readValidations = options.readValidations ?? [];
     this.updateValidations = options.updateValidations ?? [];
     this.deleteValidations = options.deleteValidations ?? [];
 
@@ -356,6 +373,20 @@ export class ResourceAttribute extends FractureComponent {
     return !this.isSystem || this.isRemoteField;
   }
 
+  // generated fields
+  public get isCreateGenerated(): boolean {
+    return this.createGenerator !== ResourceAttributeGenerator.NONE;
+  }
+  public get isReadGenerated(): boolean {
+    return this.readGenerator !== ResourceAttributeGenerator.NONE;
+  }
+  public get isUpdateGenerated(): boolean {
+    return this.updateGenerator !== ResourceAttributeGenerator.NONE;
+  }
+  public get isDeleteGenerated(): boolean {
+    return this.deleteGenerator !== ResourceAttributeGenerator.NONE;
+  }
+
   /**
    * Get comment lines.
    */
@@ -375,5 +406,12 @@ export class ResourceAttribute extends FractureComponent {
     }
 
     return c;
+  }
+
+  public get attributeName() {
+    return formatStringByNamingStrategy(
+      this.shortName,
+      this.resource.service.fracture.namingStrategy.model.attributeName
+    );
   }
 }

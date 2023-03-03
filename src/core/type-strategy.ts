@@ -12,5 +12,8 @@ export const defaultTypeStrategy: TypeStrategy = {
   comment: ["The type for this record."],
   type: ResourceAttributeType.STRING,
   createGenerator: ResourceAttributeGenerator.TYPE,
+  readGenerator: ResourceAttributeGenerator.TYPE,
+  updateGenerator: ResourceAttributeGenerator.TYPE,
+  deleteGenerator: ResourceAttributeGenerator.TYPE,
   isRequired: true,
 };

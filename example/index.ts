@@ -17,7 +17,7 @@ export class ExampleApp extends Component {
     /***************************************************************************
      *  User Service
      **************************************************************************/
-
+    /*
     const userService = fracture.addService({ name: "user" });
     userService
       .addResource({ name: "user" })
@@ -27,7 +27,7 @@ export class ExampleApp extends Component {
     userService
       .addResource({ name: "group" })
       .addResourceAttribute({ name: "name", isRequired: true });
-
+*/
     /***************************************************************************
      *  Tenant Service
      **************************************************************************/
@@ -36,13 +36,13 @@ export class ExampleApp extends Component {
     tenantService
       .addResource({ name: "tenant" })
       .addResourceAttribute({ name: "name", isRequired: true });
-
+    /*
     tenantService
       .addResource({ name: "saas-identity", persistant: false })
       .addResourceAttribute({ name: "actor-type" })
       .addResourceAttribute({ name: "actor" })
       .addResourceAttribute({ name: "scope" });
-
+*/
     // build out defaults
     fracture.build();
   }

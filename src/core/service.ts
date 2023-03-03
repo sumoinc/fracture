@@ -6,6 +6,8 @@ import { Resource, ResourceOptions } from "./resource";
 import { TypeStrategy } from "./type-strategy";
 import { VersioningStrategy } from "./versioning-strategy";
 import { Table } from "../dynamodb/table";
+import { TypeScriptInterfaces } from "../generators/ts/typescript-interfaces";
+import { TypeScriptSource } from "../generators/ts/typescript-source";
 
 export interface ServiceOptions {
   name: string;
@@ -88,5 +90,15 @@ export class Service extends FractureComponent {
 
   public addResource(options: ResourceOptions) {
     return new Resource(this, options);
+  }
+
+  public get tsInterfaceFile(): TypeScriptInterfaces {
+    const isInterfaceFile = (c: TypeScriptSource): c is TypeScriptInterfaces =>
+      c instanceof TypeScriptInterfaces &&
+      c.resource.namespace === this.namespace;
+    const interfaceFile = (
+      this.project.components as TypeScriptSource[]
+    ).filter(isInterfaceFile);
+    return interfaceFile[0];
   }
 }

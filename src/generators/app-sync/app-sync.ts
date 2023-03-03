@@ -1,4 +1,3 @@
-import { buildAllLambda } from "./lambda/build-all-lambda";
 import { buildAllVtl } from "./vtl/build-all-vtl";
 import { FractureComponent } from "../../core/component";
 import { Service } from "../../core/service";
@@ -17,7 +16,7 @@ export class AppSync extends FractureComponent {
       .filter((e) => e.persistant)
       .forEach((e) => {
         buildAllVtl(this.service, e);
-        buildAllLambda(e);
+        //buildAllLambda(e);
       });
   }
 }

@@ -1,7 +1,12 @@
+import { join } from "path";
 import { paramCase, pascalCase } from "change-case";
 import { AccessPattern } from "./access-pattern";
 import { AuditStrategy } from "./audit-strategy";
 import { FractureComponent } from "./component";
+import {
+  formatStringByNamingStrategy,
+  NAMING_STRATEGY_TYPE,
+} from "./naming-strategy";
 import { Operation, OPERATION_SUB_TYPE, OPERATION_TYPE } from "./operation";
 import { PartitionKeyStrategy } from "./partition-key-strategy";
 import {
@@ -11,7 +16,8 @@ import {
 import { Service } from "./service";
 import { TypeStrategy } from "./type-strategy";
 import { VersioningStrategy } from "./versioning-strategy";
-import { TypeScriptInterface } from "../generators/ts/typescript-interface";
+import { TypeScriptLambdaCommands } from "../generators/ts/lambda-commands/lambda-commands";
+import { TypeScriptInterfaces } from "../generators/ts/typescript-interfaces";
 
 export interface ResourceOptions {
   /**
@@ -59,6 +65,7 @@ export class Resource extends FractureComponent {
   public readonly service: Service;
   public readonly name: string;
   public readonly shortName: string;
+  public readonly outdir: string;
   private readonly _comment: string[];
   public readonly persistant: boolean;
   public readonly partitionKeyStrategy: PartitionKeyStrategy;
@@ -77,6 +84,7 @@ export class Resource extends FractureComponent {
     this.shortName = options.shortName
       ? pascalCase(options.shortName).toLowerCase()
       : pascalCase(options.name).toLowerCase();
+    this.outdir = join(service.outdir, this.name);
     this._comment = options.comment ?? [`A ${this.name}.`];
     this.persistant = options.persistant ?? true;
     this.partitionKeyStrategy =
@@ -171,6 +179,20 @@ export class Resource extends FractureComponent {
     return this._comment;
   }
 
+  public get interfaceName() {
+    return formatStringByNamingStrategy(
+      this.name,
+      NAMING_STRATEGY_TYPE.PASCAL_CASE
+    );
+  }
+
+  public get interfaceNameDynamo() {
+    return formatStringByNamingStrategy(
+      `dynamo-${this.name}`,
+      NAMING_STRATEGY_TYPE.PASCAL_CASE
+    );
+  }
+
   /**
    * Get all resources for this service.
    */
@@ -204,13 +226,27 @@ export class Resource extends FractureComponent {
   public get listAttributes(): ResourceAttribute[] {
     return this.attributes.filter((a) => a.isListInput);
   }
+  // generated attrubutes
+  public get createGeneratedAttributes(): ResourceAttribute[] {
+    return this.attributes.filter((a) => a.isCreateGenerated);
+  }
+  public get readGeneratedAttributes(): ResourceAttribute[] {
+    return this.attributes.filter((a) => a.isReadGenerated);
+  }
+  public get updateGeneratedAttributes(): ResourceAttribute[] {
+    return this.attributes.filter((a) => a.isUpdateGenerated);
+  }
+  public get deleteGeneratedAttributes(): ResourceAttribute[] {
+    return this.attributes.filter((a) => a.isDeleteGenerated);
+  }
 
   /**
    * Build default operations
    */
 
   preSynthesize() {
-    new TypeScriptInterface(this);
+    new TypeScriptInterfaces(this);
+    new TypeScriptLambdaCommands(this);
     super.preSynthesize();
   }
 }

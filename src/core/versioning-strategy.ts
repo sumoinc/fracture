@@ -23,6 +23,7 @@ export const defaultVersioningStrategy: VersioningStrategy = {
     comment: [`The version of this record`, `@default "LATEST"`],
     type: ResourceAttributeType.STRING,
     createGenerator: ResourceAttributeGenerator.VERSION,
+    readGenerator: ResourceAttributeGenerator.VERSION,
     updateGenerator: ResourceAttributeGenerator.VERSION,
     deleteGenerator: ResourceAttributeGenerator.VERSION,
   },

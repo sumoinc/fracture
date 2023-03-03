@@ -1,6 +1,14 @@
 {
   "dependencies": [
     {
+      "name": "@aws-sdk/smithy-client",
+      "type": "build"
+    },
+    {
+      "name": "@aws-sdk/types",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "version": "^27",
       "type": "build"
@@ -113,6 +121,26 @@
       "type": "override"
     },
     {
+      "name": "@aws-sdk/smithy-client",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-sdk/types",
+      "type": "peer"
+    },
+    {
+      "name": "@aws-sdk/client-dynamodb",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/lib-dynamodb",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/util-dynamodb",
+      "type": "runtime"
+    },
+    {
       "name": "@types/aws-lambda",
       "type": "runtime"
     },
@@ -126,6 +154,10 @@
     },
     {
       "name": "type-fest",
+      "type": "runtime"
+    },
+    {
+      "name": "uuid",
       "type": "runtime"
     }
   ],

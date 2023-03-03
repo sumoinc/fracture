@@ -40,6 +40,47 @@ export interface Tenant {
   name: string;
 }
 
+export interface DynamoTenant {
+  /**
+   * The unique identifier for this record.
+   * @type A GUID string.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  id?: string;
+  /**
+   * The type for this record.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  t?: string;
+  /**
+   * The version of this record
+   * @default "LATEST"
+   * @readonly This attribute is managed automatically by the system.
+   */
+  v?: string;
+  /**
+   * The date and time this record was created.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  cd?: string;
+  /**
+   * The date and time this record was last updated.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  ud?: string;
+  /**
+   * The date and time this record was deleted.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  dd?: string;
+  /**
+   * A name.
+   */
+  name?: string;
+  pk?: string;
+  sk?: string;
+}
+
 export interface CreateTenantInput {
   /**
    * A name.

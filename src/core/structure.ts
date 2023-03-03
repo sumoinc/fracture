@@ -1,6 +1,10 @@
 import { paramCase } from "change-case";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
+import {
+  formatStringByNamingStrategy,
+  NAMING_STRATEGY_TYPE,
+} from "./naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { StructureAttribute } from "./structure-attribute";
 
@@ -148,6 +152,13 @@ export class Structure extends FractureComponent {
         this.addAllAttributes();
       }
     }
+  }
+
+  public get interfaceName() {
+    return formatStringByNamingStrategy(
+      this.name,
+      NAMING_STRATEGY_TYPE.PASCAL_CASE
+    );
   }
 
   addPartitionKeyAttributes = () => {
