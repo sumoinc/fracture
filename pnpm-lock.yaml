@@ -17,17 +17,17 @@ specifiers:
   jest-junit: ^13
   jsii: ^1.76.0
   jsii-diff: ^1.76.0
-  jsii-docgen: ^7.1.13
+  jsii-docgen: ^7.1.14
   jsii-pacmak: ^1.76.0
   npm-check-updates: ^16
-  projen: ^0.67.70
+  projen: ^0.67.71
   standard-version: ^9
   ts-jest: ^27
   ts-node: ^10.9.1
   typescript: ^4.9.5
 
 dependencies:
-  projen: 0.67.70
+  projen: 0.67.71
 
 devDependencies:
   '@types/jest': 27.5.2
@@ -42,7 +42,7 @@ devDependencies:
   jest-junit: 13.2.0
   jsii: 1.76.0
   jsii-diff: 1.76.0
-  jsii-docgen: 7.1.13
+  jsii-docgen: 7.1.14
   jsii-pacmak: 1.76.0
   npm-check-updates: 16.7.10
   standard-version: 9.5.0
@@ -1491,8 +1491,8 @@ packages:
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  /boxen/7.0.1:
-    resolution: {integrity: sha512-8k2eH6SRAK00NDl1iX5q17RJ8rfl53TajdYxE3ssMLehbg487dEVgsad4pIsZb/QqBgYWIl6JOauMTLGX2Kpkw==}
+  /boxen/7.0.2:
+    resolution: {integrity: sha512-1Z4UJabXUP1/R9rLpoU3O2lEMnG3pPLAs/ZD2lF3t2q7qD5lM8rqbtnvtvm4N0wEyNlE+9yZVTVAGmd1V5jabg==}
     engines: {node: '>=14.16'}
     dependencies:
       ansi-align: 3.0.1
@@ -1532,8 +1532,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001458
-      electron-to-chromium: 1.4.317
+      caniuse-lite: 1.0.30001460
+      electron-to-chromium: 1.4.320
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10_browserslist@4.21.5
     dev: true
@@ -1662,8 +1662,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /caniuse-lite/1.0.30001458:
-    resolution: {integrity: sha512-lQ1VlUUq5q9ro9X+5gOEyH7i3vm+AYVT1WDCVB69XOZ17KZRhnZ9J0Sqz7wTHQaLBJccNCHq8/Ww5LlOIZbB0w==}
+  /caniuse-lite/1.0.30001460:
+    resolution: {integrity: sha512-Bud7abqjvEjipUkpLs4D7gR0l8hBYBHoa+tGtKJHvT2AYzLp1z7EmVkUT4ERpVUfca8S2HGIVs883D8pUH1ZzQ==}
     dev: true
 
   /case/1.6.3:
@@ -2276,8 +2276,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /electron-to-chromium/1.4.317:
-    resolution: {integrity: sha512-JhCRm9v30FMNzQSsjl4kXaygU+qHBD0Yh7mKxyjmF0V8VwYVB6qpBRX28GyAucrM9wDCpSUctT6FpMUQxbyKuA==}
+  /electron-to-chromium/1.4.320:
+    resolution: {integrity: sha512-h70iRscrNluMZPVICXYl5SSB+rBKo22XfuIS1ER0OQxQZpKTnFpuS6coj7wY9M/3trv7OR88rRMOlKmRvDty7Q==}
     dev: true
 
   /emittery/0.8.1:
@@ -3100,8 +3100,8 @@ packages:
       get-intrinsic: 1.2.0
     dev: true
 
-  /got/12.5.3:
-    resolution: {integrity: sha512-8wKnb9MGU8IPGRIo+/ukTy9XLJBwDiCpIf5TVzQ9Cpol50eMTpBq2GAuDsuDIz7hTYmZgMgC1e9ydr6kSDWs3w==}
+  /got/12.6.0:
+    resolution: {integrity: sha512-WTcaQ963xV97MN3x0/CbAriXFZcXCfgxVp91I+Ze6pawQOa7SgzwSx2zIJJsX+kTajMnVs0xcFD1TxZKFqhdnQ==}
     engines: {node: '>=14.16'}
     dependencies:
       '@sindresorhus/is': 5.3.0
@@ -4224,8 +4224,8 @@ packages:
       - supports-color
     dev: true
 
-  /jsii-docgen/7.1.13:
-    resolution: {integrity: sha512-z7tMi+zvWdKyFh0jwgMf08YbESQvjmQghc1vLVm1wGiJk3A5b+4SvtEIM6XC89l9b1wJQt5Cne3qmtIqneo1CQ==}
+  /jsii-docgen/7.1.14:
+    resolution: {integrity: sha512-Ji1Dji9VxdFMj/VE2ZPL4O+T/qK2vb0s3IdvWLRejNTEbVJBS2id2IRf33X3cpMB4u2DMnS82ft2aR6/U6K//Q==}
     engines: {node: '>= 14.17.0'}
     hasBin: true
     dependencies:
@@ -5184,7 +5184,7 @@ packages:
     resolution: {integrity: sha512-hySwcV8RAWeAfPsXb9/HGSPn8lwDnv6fabH+obUZKX169QknRkRhPxd1yMubpKDskLFATkl3jHpNtVtDPFA0Wg==}
     engines: {node: '>=14.16'}
     dependencies:
-      got: 12.5.3
+      got: 12.6.0
       registry-auth-token: 5.0.1
       registry-url: 6.0.1
       semver: 7.3.8
@@ -5359,8 +5359,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen/0.67.70:
-    resolution: {integrity: sha512-ruQZAQK2ROXS4UEXhM6j4uLvbvPkmI2EpQBMl2rcJcPkrCr4rmOzcdS8HgNVK8HblKfhzNZuJBuWN6DET8wyBg==}
+  /projen/0.67.71:
+    resolution: {integrity: sha512-gqNxWAl33kAorX9mLWzfhs+UfqzDUDCxXuu0lDuQlZvzPMzO8dlEOjlhvjmZRJYFaW+YLVgm37HsVvirdRtFJA==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
@@ -5829,7 +5829,7 @@ packages:
     hasBin: true
     dependencies:
       make-fetch-happen: 11.0.3
-      tuf-js: 1.1.0
+      tuf-js: 1.1.1
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -6358,8 +6358,8 @@ packages:
       typescript: 4.9.5
     dev: true
 
-  /tuf-js/1.1.0:
-    resolution: {integrity: sha512-Tsqlm419OAlrkCE6rsf1WuPvww44vfK1ZHz+Uq9Mpq5JiV5qnJ9LLItvsbM9OipIIeSG3rydVBS4BmD40ts2uA==}
+  /tuf-js/1.1.1:
+    resolution: {integrity: sha512-WTp382/PR96k0dI4GD5RdiRhgOU0rAC7+lnoih/5pZg3cyb3aNMqDozleEEWwyfT3+FOg7Qz9JU3n6A44tLSHw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       '@tufjs/models': 1.0.0
@@ -6539,7 +6539,7 @@ packages:
     resolution: {integrity: sha512-EDxhTEVPZZRLWYcJ4ZXjGFN0oP7qYvbXWzEgRm/Yql4dHX5wDbvh89YHP6PK1lzZJYrMtXUuZZz8XGK+U6U1og==}
     engines: {node: '>=14.16'}
     dependencies:
-      boxen: 7.0.1
+      boxen: 7.0.2
       chalk: 5.2.0
       configstore: 6.0.0
       has-yarn: 3.0.0
