@@ -17,17 +17,17 @@ specifiers:
   jest-junit: ^13
   jsii: ^1.76.0
   jsii-diff: ^1.76.0
-  jsii-docgen: ^7.1.15
+  jsii-docgen: ^7.1.16
   jsii-pacmak: ^1.76.0
   npm-check-updates: ^16
-  projen: ^0.67.72
+  projen: ^0.67.73
   standard-version: ^9
   ts-jest: ^27
   ts-node: ^10.9.1
   typescript: ^4.9.5
 
 dependencies:
-  projen: 0.67.72
+  projen: 0.67.73
 
 devDependencies:
   '@types/jest': 27.5.2
@@ -42,7 +42,7 @@ devDependencies:
   jest-junit: 13.2.0
   jsii: 1.76.0
   jsii-diff: 1.76.0
-  jsii-docgen: 7.1.15
+  jsii-docgen: 7.1.16
   jsii-pacmak: 1.76.0
   npm-check-updates: 16.7.10
   standard-version: 9.5.0
@@ -753,7 +753,7 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       '@npmcli/promise-spawn': 6.0.2
-      lru-cache: 7.18.1
+      lru-cache: 7.18.3
       mkdirp: 1.0.4
       npm-pick-manifest: 8.0.1
       proc-log: 3.0.0
@@ -850,6 +850,11 @@ packages:
       tslib: 2.5.0
     dev: true
 
+  /@pnpm/config.env-replace/1.0.0:
+    resolution: {integrity: sha512-ZVPVDi1E8oeXlYqkGRtX0CkzLTwE2zt62bjWaWKaAvI8NZqHzlMvGeSNDpW+JB3+aKanYb4UETJOF1/CxGPemA==}
+    engines: {node: '>=12.22.0'}
+    dev: true
+
   /@pnpm/network.ca-file/1.0.2:
     resolution: {integrity: sha512-YcPQ8a0jwYU9bTdJDpXjMi7Brhkr1mXsXrUJvjqM2mQDgkRiz8jFaQGOdaLxgjtUfQgZhKy/O3cG/YwmgKaxLA==}
     engines: {node: '>=12.22.0'}
@@ -857,10 +862,11 @@ packages:
       graceful-fs: 4.2.10
     dev: true
 
-  /@pnpm/npm-conf/1.0.5:
-    resolution: {integrity: sha512-hD8ml183638O3R6/Txrh0L8VzGOrFXgRtRDG4qQC4tONdZ5Z1M+tlUUDUvrjYdmK6G+JTBTeaCLMna11cXzi8A==}
+  /@pnpm/npm-conf/2.1.0:
+    resolution: {integrity: sha512-Oe6ntvgsMTE3hDIqy6sajqHF+MnzJrOF06qC2QSiUEybLL7cp6tjoKUa32gpd9+KPVl4QyMs3E3nsXrx/Vdnlw==}
     engines: {node: '>=12'}
     dependencies:
+      '@pnpm/config.env-replace': 1.0.0
       '@pnpm/network.ca-file': 1.0.2
       config-chain: 1.1.13
     dev: true
@@ -1571,7 +1577,7 @@ packages:
       fs-minipass: 2.1.0
       glob: 8.1.0
       infer-owner: 1.0.4
-      lru-cache: 7.18.1
+      lru-cache: 7.18.3
       minipass: 3.3.6
       minipass-collect: 1.0.2
       minipass-flush: 1.0.5
@@ -1594,7 +1600,7 @@ packages:
       '@npmcli/fs': 3.1.0
       fs-minipass: 3.0.1
       glob: 8.1.0
-      lru-cache: 7.18.1
+      lru-cache: 7.18.3
       minipass: 4.2.4
       minipass-collect: 1.0.2
       minipass-flush: 1.0.5
@@ -3213,14 +3219,14 @@ packages:
     resolution: {integrity: sha512-xIcQYMnhcx2Nr4JTjsFmwwnr9vldugPy9uVm0o87bjqqWMv9GaqsTeT+i99wTl0mk1uLxJtHxLb8kymqTENQsw==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
     dependencies:
-      lru-cache: 7.18.1
+      lru-cache: 7.18.3
     dev: true
 
   /hosted-git-info/6.1.1:
     resolution: {integrity: sha512-r0EI+HBMcXadMrugk0GCQ+6BQV39PiWAZVfq7oIckeGiN7sjRGyQxPdft3nQekFTCQbYxLBH+/axZMeH8UX6+w==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      lru-cache: 7.18.1
+      lru-cache: 7.18.3
     dev: true
 
   /html-encoding-sniffer/2.0.1:
@@ -4224,8 +4230,8 @@ packages:
       - supports-color
     dev: true
 
-  /jsii-docgen/7.1.15:
-    resolution: {integrity: sha512-DqeRA4ZAwgnYsgoAn7QCkh3Fngz0/Vs6gIowaBkkXXLClfxcgQ1aHLqxIBMcAjof1H/QUBgT0XLWSyb5RdKUvg==}
+  /jsii-docgen/7.1.16:
+    resolution: {integrity: sha512-kEqsg7/9tCLTRQWRgg9v0CD+VD15OrxyZXku/dPBpoum/YlxoUcCLw0El18VxLCKvVmLpeQDW5VhriypipEXTw==}
     engines: {node: '>= 14.17.0'}
     hasBin: true
     dependencies:
@@ -4532,8 +4538,8 @@ packages:
     dependencies:
       yallist: 4.0.0
 
-  /lru-cache/7.18.1:
-    resolution: {integrity: sha512-8/HcIENyQnfUTCDizRu9rrDyG6XG/21M4X7/YEGZeD76ZJilFPAUVb/2zysFf7VVO1LEjCDFyHp8pMMvozIrvg==}
+  /lru-cache/7.18.3:
+    resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
     dev: true
 
@@ -4558,7 +4564,7 @@ packages:
       http-proxy-agent: 5.0.0
       https-proxy-agent: 5.0.1
       is-lambda: 1.0.1
-      lru-cache: 7.18.1
+      lru-cache: 7.18.3
       minipass: 3.3.6
       minipass-collect: 1.0.2
       minipass-fetch: 2.1.2
@@ -4583,7 +4589,7 @@ packages:
       http-proxy-agent: 5.0.0
       https-proxy-agent: 5.0.1
       is-lambda: 1.0.1
-      lru-cache: 7.18.1
+      lru-cache: 7.18.3
       minipass: 4.2.4
       minipass-fetch: 3.0.1
       minipass-flush: 1.0.5
@@ -5185,7 +5191,7 @@ packages:
     engines: {node: '>=14.16'}
     dependencies:
       got: 12.6.0
-      registry-auth-token: 5.0.1
+      registry-auth-token: 5.0.2
       registry-url: 6.0.1
       semver: 7.3.8
     dev: true
@@ -5279,7 +5285,7 @@ packages:
     resolution: {integrity: sha512-OW+5s+7cw6253Q4E+8qQ/u1fVvcJQCJo/VFD8pje+dbJCF1n5ZRMV2AEHbGp+5Q7jxQIYJxkHopnj6nzdGeZLA==}
     engines: {node: '>=14'}
     dependencies:
-      lru-cache: 7.18.1
+      lru-cache: 7.18.3
       minipass: 4.2.4
     dev: true
 
@@ -5359,8 +5365,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen/0.67.72:
-    resolution: {integrity: sha512-Wi3R/CbNtrIUB5sJySH+cQAFi2NhalE1llfe0z9N7Wgv2tq/Dgn1V6amxRSKn51MH2NDVYZEOGDlwQ+GPqhwKA==}
+  /projen/0.67.73:
+    resolution: {integrity: sha512-cEHzyirttdYIXvTIE+OGmEODcFvyGRpbW+jlub3gMGuXaZR7J169xdLUicSiPa0wd7Ld1Y40pqY7iETKyeCuOg==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
@@ -5602,11 +5608,11 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /registry-auth-token/5.0.1:
-    resolution: {integrity: sha512-UfxVOj8seK1yaIOiieV4FIP01vfBDLsY0H9sQzi9EbbUdJiuuBjJgLa1DpImXMNPnVkBD4eVxTEXcrZA6kfpJA==}
+  /registry-auth-token/5.0.2:
+    resolution: {integrity: sha512-o/3ikDxtXaA59BmZuZrJZDJv8NMDGSj+6j6XaeBmHw8eY1i1qd9+6H+LjVvQXx3HN6aRCGa1cUdJ9RaJZUugnQ==}
     engines: {node: '>=14'}
     dependencies:
-      '@pnpm/npm-conf': 1.0.5
+      '@pnpm/npm-conf': 2.1.0
     dev: true
 
   /registry-url/6.0.1:
