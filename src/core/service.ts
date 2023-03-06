@@ -6,8 +6,6 @@ import { Resource, ResourceOptions } from "./resource";
 import { TypeStrategy } from "./type-strategy";
 import { VersionStrategy } from "./version-strategy";
 import { Table } from "../dynamodb/table";
-import { TypeScriptInterfaces } from "../generators/ts/typescript-interfaces";
-import { TypeScriptSource } from "../generators/ts/typescript-source";
 
 export interface ServiceOptions {
   name: string;
@@ -60,9 +58,22 @@ export class Service extends FractureComponent {
     this.dynamodb = new Table(this, { name: this.name });
   }
 
+  /**
+   * Build the project.
+   *
+   * Call this when you've configured everything, prior to preSynthesize
+   * Called by Fracture.build()
+   * @returns void
+   */
   public build() {
     this.resources.forEach((r) => r.build());
   }
+
+  /*****************************************************************************
+   *
+   *  Fracture Component Helpers
+   *
+   ****************************************************************************/
 
   /**
    * Get all resources for this service.
@@ -75,17 +86,19 @@ export class Service extends FractureComponent {
     return (this.project.components as FractureComponent[]).filter(isResource);
   }
 
+  /*****************************************************************************
+   *
+   *  Configuration Helpers
+   *
+   ****************************************************************************/
+
+  /**
+   * Add a resource to the fracture project.
+   *
+   * @param {ResourceOptions}
+   * @returns {Resource}
+   */
   public addResource(options: ResourceOptions) {
     return new Resource(this, options);
-  }
-
-  public get tsInterfaceFile(): TypeScriptInterfaces {
-    const isInterfaceFile = (c: TypeScriptSource): c is TypeScriptInterfaces =>
-      c instanceof TypeScriptInterfaces &&
-      c.resource.namespace === this.namespace;
-    const interfaceFile = (
-      this.project.components as TypeScriptSource[]
-    ).filter(isInterfaceFile);
-    return interfaceFile[0];
   }
 }

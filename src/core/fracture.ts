@@ -87,7 +87,7 @@ export class Fracture extends Component {
    * Build the project.
    *
    * Call this when you've configured everything, prior to preSynthesize
-   *
+   *  @returns void
    */
   public build() {
     this.services.forEach((s) => s.build());
@@ -95,7 +95,7 @@ export class Fracture extends Component {
 
   /*****************************************************************************
    *
-   *  GETTERS / HELPERS
+   *  Fracture Component Helpers
    *
    ****************************************************************************/
 

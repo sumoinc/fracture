@@ -2,9 +2,14 @@ import { Service } from "../../src/core/service";
 import { TestFracture } from "../util";
 
 test("Smoke test", () => {
-  const entity = new Service(new TestFracture(), { name: "foo" });
-  expect(entity).toBeTruthy();
+  const service = new Service(new TestFracture(), { name: "foo" });
+  service.build();
+  expect(service).toBeTruthy();
+});
 
-  //const foo = synthSnapshot(entity.fracture.project);
-  //console.log(foo);
+test("Can add resources", () => {
+  const service = new Service(new TestFracture(), { name: "foo" });
+  expect(service.resources.length).toBe(0);
+  service.addResource({ name: "bar" });
+  expect(service.resources.length).toBe(1);
 });

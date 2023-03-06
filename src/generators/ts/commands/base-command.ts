@@ -38,7 +38,7 @@ export class BaseCommand extends TypeScriptSource {
   }
 
   public get tsInterfaceFile(): TypeScriptInterfaces {
-    return this.service.tsInterfaceFile;
+    return this.resource.tsInterfaceFile;
   }
 
   public get pathToInterfaces(): string {

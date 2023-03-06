@@ -18,6 +18,7 @@ import {
 import { Service } from "./service";
 import { TypeStrategy } from "./type-strategy";
 import { VersionStrategy } from "./version-strategy";
+import { TypeScriptSource } from "../generators";
 import { BuildTypeScriptCommands } from "../generators/ts/commands/build-commands";
 import { TypeScriptInterfaces } from "../generators/ts/typescript-interfaces";
 
@@ -171,6 +172,10 @@ export class Resource extends FractureComponent {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.IMPORT_ONE,
     });
+
+    // add a bunch of files
+    new TypeScriptInterfaces(this);
+    new BuildTypeScriptCommands(this);
   }
 
   /**
@@ -208,6 +213,27 @@ export class Resource extends FractureComponent {
       c.resource.service.name === this.name &&
       c.resource.name === this.name;
     return (this.project.components as FractureComponent[]).filter(isOperation);
+  }
+
+  /**
+   * Return the interfadce file for this resource. The interface file contains
+   * the type definitions for all basic inputs and outputs for this resource
+   *
+   * @returns {TypeScriptInterfaces}
+   */
+  public get tsInterfaceFile(): TypeScriptInterfaces {
+    const isInterfaceFile = (
+      c: TypeScriptSource
+    ): c is TypeScriptInterfaces => {
+      if (c instanceof TypeScriptInterfaces) {
+        console.log(c.resource.name, this.name);
+      }
+      return c instanceof TypeScriptInterfaces && c.resource.name === this.name;
+    };
+    const interfaceFile = (
+      this.project.components as TypeScriptSource[]
+    ).filter(isInterfaceFile);
+    return interfaceFile[0];
   }
 
   /**
@@ -279,8 +305,6 @@ export class Resource extends FractureComponent {
    */
 
   preSynthesize() {
-    new TypeScriptInterfaces(this);
-    new BuildTypeScriptCommands(this);
     super.preSynthesize();
   }
 }
