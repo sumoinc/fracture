@@ -3,7 +3,7 @@ import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Resource } from "./resource";
 import { Structure, STRUCTURE_TYPE } from "./structure";
-import { BaseCommand } from "../generators/ts/lambda-commands/base-command";
+import { BaseCommand } from "../generators/ts/commands/base-command";
 
 /******************************************************************************
  * TYPES

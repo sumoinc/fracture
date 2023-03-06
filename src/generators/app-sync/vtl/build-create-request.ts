@@ -17,7 +17,7 @@ export const buildCreateRequest = (service: Service, e: Resource) => {
 
   const shapeName = formatStringByNamingStrategy(
     e.name,
-    e.fracture.namingStrategy.model.shapeName
+    e.fracture.namingStrategy.model.interfaceName
   );
 
   // validate imputs

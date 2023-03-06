@@ -15,5 +15,6 @@ export const defaultTypeStrategy: TypeStrategy = {
   readGenerator: ResourceAttributeGenerator.TYPE,
   updateGenerator: ResourceAttributeGenerator.TYPE,
   deleteGenerator: ResourceAttributeGenerator.TYPE,
+  importGenerator: ResourceAttributeGenerator.TYPE,
   isRequired: true,
 };

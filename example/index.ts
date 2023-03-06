@@ -1,8 +1,8 @@
-import { Component } from "projen";
-import { JsiiProject } from "projen/lib/cdk";
+import { Component, Project } from "projen";
+
 import { Fracture } from "../src";
 export class ExampleApp extends Component {
-  constructor(project: JsiiProject) {
+  constructor(project: Project) {
     super(project);
 
     /***************************************************************************
@@ -11,9 +11,8 @@ export class ExampleApp extends Component {
 
     const fracture = new Fracture(project, "foo", { outdir: "example" });
 
-    fracture
-      .addOrganization({ orgId: "o-abcdef" })
-      .addAccount({ account: "000000000000" });
+    const org = fracture.addOrganization({ orgId: "o-abcdef" });
+    const account = org.addAccount({ account: "0000000000" });
 
     /***************************************************************************
      *  User Service

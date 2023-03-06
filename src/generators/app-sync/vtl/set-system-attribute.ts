@@ -17,11 +17,11 @@ export const setSytemResourceAttribute = (
     case ResourceAttributeGenerator.TYPE:
       const resourceName = formatStringByNamingStrategy(
         a.resource.name,
-        a.fracture.namingStrategy.model.shapeName
+        a.fracture.namingStrategy.model.interfaceName
       );
       return `"${a.shortName}": "${resourceName}"`;
     case ResourceAttributeGenerator.VERSION:
-      return `"${a.shortName}": "${a.resource.versioningStrategy.currentVersion}}"`;
+      return `"${a.shortName}": "${a.resource.versionStrategy.currentVersion}}"`;
     default:
       throw new Error(`Unknown generator: ${g}`);
   }

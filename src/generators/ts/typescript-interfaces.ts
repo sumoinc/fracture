@@ -24,7 +24,7 @@ export class TypeScriptInterfaces extends TypeScriptSource {
     );
     this.resource = resource;
     this.resourceNameStrategy =
-      this.resource.fracture.namingStrategy.model.shapeName;
+      this.resource.fracture.namingStrategy.model.interfaceName;
     this.attributeNameStrategy =
       this.resource.fracture.namingStrategy.model.attributeName;
   }

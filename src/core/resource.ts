@@ -1,5 +1,6 @@
 import { join } from "path";
 import { paramCase, pascalCase } from "change-case";
+import { ValueOf } from "type-fest";
 import { AccessPattern } from "./access-pattern";
 import { AuditStrategy } from "./audit-strategy";
 import { FractureComponent } from "./component";
@@ -11,12 +12,13 @@ import { Operation, OPERATION_SUB_TYPE, OPERATION_TYPE } from "./operation";
 import { PartitionKeyStrategy } from "./partition-key-strategy";
 import {
   ResourceAttribute,
+  ResourceAttributeGenerator,
   ResourceAttributeOptions,
 } from "./resource-attribute";
 import { Service } from "./service";
 import { TypeStrategy } from "./type-strategy";
-import { VersioningStrategy } from "./versioning-strategy";
-import { TypeScriptLambdaCommands } from "../generators/ts/lambda-commands/lambda-commands";
+import { VersionStrategy } from "./version-strategy";
+import { BuildTypeScriptCommands } from "../generators/ts/commands/build-commands";
 import { TypeScriptInterfaces } from "../generators/ts/typescript-interfaces";
 
 export interface ResourceOptions {
@@ -50,7 +52,7 @@ export interface ResourceOptions {
   /**
    * The versioning strategy to use for generated code.
    */
-  versioningStrategy?: VersioningStrategy;
+  versionStrategy?: VersionStrategy;
   /**
    * The type strategy to use for generated code.
    */
@@ -70,7 +72,7 @@ export class Resource extends FractureComponent {
   public readonly persistant: boolean;
   public readonly partitionKeyStrategy: PartitionKeyStrategy;
   public readonly versioned: boolean;
-  public readonly versioningStrategy: VersioningStrategy;
+  public readonly versionStrategy: VersionStrategy;
   public readonly typeStrategy: TypeStrategy;
   public readonly auditStrategy: AuditStrategy;
   public attributes: ResourceAttribute[];
@@ -90,8 +92,7 @@ export class Resource extends FractureComponent {
     this.partitionKeyStrategy =
       options.partitionKeyStrategy ?? service.partitionKeyStrategy;
     this.versioned = options.versioned ?? service.versioned;
-    this.versioningStrategy =
-      options.versioningStrategy ?? service.versioningStrategy;
+    this.versionStrategy = options.versionStrategy ?? service.versionStrategy;
     this.typeStrategy = options.typeStrategy ?? service.typeStrategy;
     this.auditStrategy = options.auditStrategy ?? service.auditStrategy;
 
@@ -113,7 +114,7 @@ export class Resource extends FractureComponent {
      * Add the version attribute if versioned.
      */
     if (this.versioned && this.persistant) {
-      this.addResourceAttribute(this.versioningStrategy.attribute);
+      this.addResourceAttribute(this.versionStrategy.attribute);
     }
 
     /**
@@ -179,10 +180,14 @@ export class Resource extends FractureComponent {
     return this._comment;
   }
 
+  /**
+   * Generate a name for the resource formatted according to the naming
+   * strategy.
+   */
   public get interfaceName() {
     return formatStringByNamingStrategy(
       this.name,
-      NAMING_STRATEGY_TYPE.PASCAL_CASE
+      this.fracture.namingStrategy.model.interfaceName
     );
   }
 
@@ -240,13 +245,42 @@ export class Resource extends FractureComponent {
     return this.attributes.filter((a) => a.isDeleteGenerated);
   }
 
+  public hasCreateGenerator = (
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean => {
+    return this.createGeneratedAttributes.some(
+      (a) => a.createGenerator === generator
+    );
+  };
+  public hasReadGenerator = (
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean => {
+    return this.readGeneratedAttributes.some(
+      (a) => a.readGenerator === generator
+    );
+  };
+  public hasUpdateGenerator = (
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean => {
+    return this.updateGeneratedAttributes.some(
+      (a) => a.updateGenerator === generator
+    );
+  };
+  public hasDeleteGenerator = (
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean => {
+    return this.deleteGeneratedAttributes.some(
+      (a) => a.deleteGenerator === generator
+    );
+  };
+
   /**
    * Build default operations
    */
 
   preSynthesize() {
     new TypeScriptInterfaces(this);
-    new TypeScriptLambdaCommands(this);
+    new BuildTypeScriptCommands(this);
     super.preSynthesize();
   }
 }

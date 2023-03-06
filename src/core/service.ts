@@ -4,7 +4,7 @@ import { AuditStrategy } from "./audit-strategy";
 import { PartitionKeyStrategy } from "./partition-key-strategy";
 import { Resource, ResourceOptions } from "./resource";
 import { TypeStrategy } from "./type-strategy";
-import { VersioningStrategy } from "./versioning-strategy";
+import { VersionStrategy } from "./version-strategy";
 import { Table } from "../dynamodb/table";
 import { TypeScriptInterfaces } from "../generators/ts/typescript-interfaces";
 import { TypeScriptSource } from "../generators/ts/typescript-source";
@@ -23,7 +23,7 @@ export interface ServiceOptions {
   /**
    * The versioning strategy to use for generated code.
    */
-  versioningStrategy?: VersioningStrategy;
+  versionStrategy?: VersionStrategy;
   /**
    * The type strategy to use for generated code.
    */
@@ -39,7 +39,7 @@ export class Service extends FractureComponent {
   public readonly outdir: string;
   public readonly partitionKeyStrategy: PartitionKeyStrategy;
   public readonly versioned: boolean;
-  public readonly versioningStrategy: VersioningStrategy;
+  public readonly versionStrategy: VersionStrategy;
   public readonly typeStrategy: TypeStrategy;
   public readonly auditStrategy: AuditStrategy;
   public readonly dynamodb: Table;
@@ -52,25 +52,12 @@ export class Service extends FractureComponent {
     this.partitionKeyStrategy =
       options.partitionKeyStrategy ?? fracture.partitionKeyStrategy;
     this.versioned = options.versioned ?? fracture.versioned;
-    this.versioningStrategy =
-      options.versioningStrategy ?? fracture.versioningStrategy;
+    this.versionStrategy = options.versionStrategy ?? fracture.versionStrategy;
     this.typeStrategy = options.typeStrategy ?? fracture.typeStrategy;
     this.auditStrategy = options.auditStrategy ?? fracture.auditStrategy;
 
     // each service gets it's own dynamodb table
     this.dynamodb = new Table(this, { name: this.name });
-
-    /***************************************************************************
-     *
-     *  CODE GENERATION
-     *
-     *  Generate code for various services.
-     *
-     **************************************************************************/
-
-    //new TypeScriptModel(this);
-    //new AppSync(this);
-    //new ApiGateway(this);
   }
 
   public build() {

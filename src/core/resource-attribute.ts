@@ -166,22 +166,6 @@ export type ResourceAttributeOptions = {
    */
   type?: ValueOf<typeof ResourceAttributeType>;
   /**
-   * Is this attribute a key for the Resource?
-   * @default false
-   */
-  isKey?: boolean;
-  /**
-   * Is this attribute a key for data sources form a remote system?
-   * @default false
-   */
-  isRemoteKey?: boolean;
-  /**
-   * Is this attribute sourced from remote imported data only?
-   * If true, cannot be edited by local system.
-   * @default false
-   */
-  isRemoteField?: boolean;
-  /**
    * Is this attribute required for all mutations?
    * @default false
    */
@@ -207,6 +191,11 @@ export type ResourceAttributeOptions = {
    */
   deleteGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
   /**
+   * The generator to use for this attribute when importing external records.
+   * @default ResourceAttributeGenerator.NONE
+   */
+  importGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  /**
    * Validations to run when creating this attribute.
    * @default []
    */
@@ -226,6 +215,11 @@ export type ResourceAttributeOptions = {
    * @default []
    */
   deleteValidations?: ValueOf<typeof ValidationRule>[];
+  /**
+   * Validations to run when importing external records.
+   * @default []
+   */
+  importValidations?: ValueOf<typeof ValidationRule>[];
 };
 
 export class ResourceAttribute extends FractureComponent {
@@ -235,9 +229,6 @@ export class ResourceAttribute extends FractureComponent {
   private readonly _comment: string[];
   public readonly type: ValueOf<typeof ResourceAttributeType>;
 
-  public readonly isKey: boolean;
-  public readonly isRemoteKey: boolean;
-  public readonly isRemoteField: boolean;
   public readonly isRequired: boolean;
 
   public readonly dynamoDbType: ValueOf<typeof DynamoDbType>;
@@ -246,11 +237,13 @@ export class ResourceAttribute extends FractureComponent {
   public readonly readGenerator: ValueOf<typeof ResourceAttributeGenerator>;
   public readonly updateGenerator: ValueOf<typeof ResourceAttributeGenerator>;
   public readonly deleteGenerator: ValueOf<typeof ResourceAttributeGenerator>;
+  public readonly importGenerator: ValueOf<typeof ResourceAttributeGenerator>;
 
   public readonly createValidations: ValueOf<typeof ValidationRule>[];
   public readonly readValidations: ValueOf<typeof ValidationRule>[];
   public readonly updateValidations: ValueOf<typeof ValidationRule>[];
   public readonly deleteValidations: ValueOf<typeof ValidationRule>[];
+  public readonly importValidations: ValueOf<typeof ValidationRule>[];
 
   /**
    * This value is managed automatically and cannot be set using outside
@@ -268,12 +261,7 @@ export class ResourceAttribute extends FractureComponent {
       : pascalCase(options.name).toLowerCase();
     this._comment = options.comment ?? [`A ${this.name}.`];
     this.type = options.type ?? ResourceAttributeType.STRING;
-    this.isKey = options.isKey ?? false;
-    this.isRemoteKey = options.isRemoteKey ?? false;
-    this.isRemoteField =
-      (options.isRemoteField || options.isRemoteKey) ?? false;
-    this.isRequired =
-      (options.isRequired || options.isKey || options.isRemoteKey) ?? false;
+    this.isRequired = options.isRequired ?? false;
 
     // dynamo types
     switch (this.type) {
@@ -316,32 +304,40 @@ export class ResourceAttribute extends FractureComponent {
       options.updateGenerator ?? ResourceAttributeGenerator.NONE;
     this.deleteGenerator =
       options.deleteGenerator ?? ResourceAttributeGenerator.NONE;
+    this.importGenerator =
+      options.importGenerator ?? ResourceAttributeGenerator.NONE;
 
     // determine if this is a system managed attribute.
     this.isSystem =
       this.createGenerator !== ResourceAttributeGenerator.NONE ||
       this.readGenerator !== ResourceAttributeGenerator.NONE ||
       this.updateGenerator !== ResourceAttributeGenerator.NONE ||
-      this.deleteGenerator !== ResourceAttributeGenerator.NONE;
+      this.deleteGenerator !== ResourceAttributeGenerator.NONE ||
+      this.importGenerator !== ResourceAttributeGenerator.NONE;
 
     // setup validation rules
     this.createValidations = options.createValidations ?? [];
     this.readValidations = options.readValidations ?? [];
     this.updateValidations = options.updateValidations ?? [];
     this.deleteValidations = options.deleteValidations ?? [];
+    this.importValidations = options.importValidations ?? [];
 
     // validate type for all non-system managed values
     if (!this.isSystem) {
       this.createValidations.push(ValidationRule.TYPE);
+      this.readValidations.push(ValidationRule.TYPE);
       this.updateValidations.push(ValidationRule.TYPE);
       this.deleteValidations.push(ValidationRule.TYPE);
+      this.importValidations.push(ValidationRule.TYPE);
     }
 
     // add required validation if required field. make sure it's the first item in the array.
     if (this.isRequired) {
       this.createValidations.unshift(ValidationRule.REQUIRED);
+      this.readValidations.unshift(ValidationRule.REQUIRED);
       this.updateValidations.unshift(ValidationRule.REQUIRED);
       this.deleteValidations.unshift(ValidationRule.REQUIRED);
+      this.importValidations.unshift(ValidationRule.REQUIRED);
     }
   }
 
@@ -355,25 +351,33 @@ export class ResourceAttribute extends FractureComponent {
     return !this.isSystem;
   }
   public get isCreateInput(): boolean {
-    return !this.isSystem && !this.isKey && !this.isRemoteField;
+    return !this.isSystem;
   }
   public get isReadInput(): boolean {
-    return this.isKey;
+    return this.isRequired;
   }
   public get isUpdateInput(): boolean {
-    return !this.isSystem && !this.isRemoteField;
+    return !this.isSystem || this.isData;
   }
   public get isDeleteInput(): boolean {
-    return this.isKey;
+    return this.isRequired;
   }
   public get isListInput(): boolean {
     return false;
   }
   public get isImportInput(): boolean {
-    return !this.isSystem || this.isRemoteField;
+    return this.isRequired || this.isData;
   }
 
   // generated fields
+  public get isGenerated(): boolean {
+    return (
+      this.isCreateGenerated ||
+      this.isReadGenerated ||
+      this.isUpdateGenerated ||
+      this.isDeleteGenerated
+    );
+  }
   public get isCreateGenerated(): boolean {
     return this.createGenerator !== ResourceAttributeGenerator.NONE;
   }
@@ -385,6 +389,43 @@ export class ResourceAttribute extends FractureComponent {
   }
   public get isDeleteGenerated(): boolean {
     return this.deleteGenerator !== ResourceAttributeGenerator.NONE;
+  }
+
+  /**
+   *
+   * @param generator Does this attribute have a generator for this specific type?
+   * @returns
+   */
+  public hasGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return (
+      this.isGenerated &&
+      (this.hasCreateGenerator(generator) ||
+        this.hasReadGenerator(generator) ||
+        this.hasUpdateGenerator(generator) ||
+        this.hasDeleteGenerator(generator))
+    );
+  }
+  public hasCreateGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return this.isCreateGenerated && this.createGenerator === generator;
+  }
+  public hasReadGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return this.isReadGenerated && this.readGenerator === generator;
+  }
+  public hasUpdateGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return this.isUpdateGenerated && this.updateGenerator === generator;
+  }
+  public hasDeleteGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return this.isDeleteGenerated && this.deleteGenerator === generator;
   }
 
   /**
@@ -408,10 +449,13 @@ export class ResourceAttribute extends FractureComponent {
     return c;
   }
 
+  /**
+   * Get the formatted attrbute name used by TypeScript.
+   */
   public get attributeName() {
     return formatStringByNamingStrategy(
-      this.shortName,
-      this.resource.service.fracture.namingStrategy.model.attributeName
+      this.name,
+      this.fracture.namingStrategy.model.attributeName
     );
   }
 }
