@@ -1,4 +1,5 @@
-import { Component, Project } from "projen";
+import { Component } from "projen";
+import { JsiiProject } from "projen/lib/cdk";
 import { AuditStrategy, defaultAuditStrategy } from "./audit-strategy";
 import { FractureComponent } from "./component";
 import { defaultNamingStrategy, NamingStrategy } from "./naming-strategy";
@@ -53,7 +54,7 @@ export interface FractureOptions {
  * The root of the entire application.
  */
 export class Fracture extends Component {
-  public readonly project: Project;
+  public readonly project: JsiiProject;
   public readonly namespace: string;
   public readonly outdir: string;
   public readonly namingStrategy: NamingStrategy;
@@ -64,7 +65,7 @@ export class Fracture extends Component {
   public readonly auditStrategy: AuditStrategy;
 
   constructor(
-    project: Project,
+    project: JsiiProject,
     namespace: string = "fracture",
     options: FractureOptions = {}
   ) {

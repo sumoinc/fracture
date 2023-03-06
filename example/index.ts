@@ -1,7 +1,8 @@
-import { Component, Project } from "projen";
+import { Component } from "projen";
+import { JsiiProject } from "projen/lib/cdk";
 import { Fracture } from "../src";
 export class ExampleApp extends Component {
-  constructor(project: Project) {
+  constructor(project: JsiiProject) {
     super(project);
 
     /***************************************************************************

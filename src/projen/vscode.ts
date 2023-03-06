@@ -1,4 +1,5 @@
-import { Component, Project } from "projen";
+import { Component } from "projen";
+import { JsiiProject } from "projen/lib/cdk";
 import {
   VsCode,
   VsCodeRecommendedExtensions,
@@ -6,7 +7,7 @@ import {
 } from "projen/lib/vscode";
 
 export class VsCodeConfiguration extends Component {
-  constructor(project: Project) {
+  constructor(project: JsiiProject) {
     super(project);
 
     const vscode = new VsCode(project);
