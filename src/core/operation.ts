@@ -1,8 +1,9 @@
-import { paramCase } from "change-case";
+import { camelCase, paramCase } from "change-case";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Resource } from "./resource";
 import { Structure, STRUCTURE_TYPE } from "./structure";
+import { BaseCommand } from "../generators/ts/lambda-commands/base-command";
 
 /******************************************************************************
  * TYPES
@@ -137,5 +138,20 @@ export class Operation extends FractureComponent {
     this.outputStructure =
       options.outputStructure ||
       new Structure(this, { type: STRUCTURE_TYPE.OUTPUT });
+  }
+
+  public get commandName(): string {
+    return camelCase(this.name);
+  }
+
+  public get commandFile(): BaseCommand {
+    const isInterfaceFile = (c: BaseCommand): c is BaseCommand =>
+      c instanceof BaseCommand &&
+      c.operation.namespace === this.namespace &&
+      c.operation.commandName === this.commandName;
+    const interfaceFile = (this.project.components as BaseCommand[]).filter(
+      isInterfaceFile
+    );
+    return interfaceFile[0];
   }
 }

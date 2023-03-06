@@ -1,5 +1,8 @@
+import { join } from "path";
 import { camelCase } from "change-case";
 import { ValueOf } from "type-fest";
+import { BaseCommand } from "./base-command";
+import { LAMBDA_EVENT_SOURCE } from "./lambda-commands";
 import { Fracture } from "../../../core";
 import { AccessPattern } from "../../../core/access-pattern";
 import { Operation, OPERATION_SUB_TYPE } from "../../../core/operation";
@@ -12,14 +15,21 @@ import { Service } from "../../../core/service";
 import { Structure } from "../../../core/structure";
 import { Gsi } from "../../../dynamodb/gsi";
 import { TypeScriptInterfaces } from "../typescript-interfaces";
-import { TypeScriptSource } from "../typescript-source";
 
-export class BaseCommand extends TypeScriptSource {
-  public readonly operation: Operation;
+export interface BaseServiceCommandOptions {
+  eventSource: ValueOf<typeof LAMBDA_EVENT_SOURCE>;
+}
 
-  constructor(operation: Operation, commandPath: string) {
-    super(operation.resource.service, commandPath);
-    this.operation = operation;
+export class BaseServiceCommand extends BaseCommand {
+  public readonly eventSource: ValueOf<typeof LAMBDA_EVENT_SOURCE>;
+
+  constructor(
+    operation: Operation,
+    commandPath: string,
+    options: BaseServiceCommandOptions
+  ) {
+    super(operation, join(commandPath, `handler.ts`));
+    this.eventSource = options.eventSource;
   }
 
   /**
@@ -43,14 +53,6 @@ export class BaseCommand extends TypeScriptSource {
 
   public get pathToInterfaces(): string {
     return this.tsInterfaceFile.pathFrom(this);
-  }
-
-  public get commandName(): string {
-    return this.operation.commandName;
-  }
-
-  public get commandFile(): BaseCommand {
-    return this.operation.commandFile;
   }
 
   /**
@@ -191,6 +193,37 @@ export class BaseCommand extends TypeScriptSource {
     }
   };
 
+  writeLambdaEventImport = () => {
+    switch (this.eventSource) {
+      case LAMBDA_EVENT_SOURCE.API_GATEWAY:
+        this.line(`// import { ??? } from "aws-lambda";`);
+        break;
+      case LAMBDA_EVENT_SOURCE.APP_SYNC:
+        this.line(`import { AppSyncResolverEvent } from "aws-lambda";`);
+        break;
+      case LAMBDA_EVENT_SOURCE.DYNAMODB:
+        this.line(`// import { ??? } from "aws-lambda";`);
+        break;
+      case LAMBDA_EVENT_SOURCE.KAFKA:
+        this.line(`// import { ??? } from "aws-lambda";`);
+        break;
+      case LAMBDA_EVENT_SOURCE.KINESIS:
+        this.line(`// import { ??? } from "aws-lambda";`);
+        break;
+      case LAMBDA_EVENT_SOURCE.S3:
+        this.line(`// import { ??? } from "aws-lambda";`);
+        break;
+      case LAMBDA_EVENT_SOURCE.SNS:
+        this.line(`// import { ??? } from "aws-lambda";`);
+        break;
+      case LAMBDA_EVENT_SOURCE.SQS:
+        this.line(`// import { ??? } from "aws-lambda";`);
+        break;
+      default:
+        throw new Error(`Unknown event source: ${this.eventSource}`);
+    }
+  };
+
   writeInterfaceImport = () => {
     this.open(`import {`);
     this.line(`${this.resource.interfaceNameDynamo},`);
@@ -207,14 +240,41 @@ export class BaseCommand extends TypeScriptSource {
     this.line(`\n`);
   };
 
-  writeCommandOpen = () => {
-    this.open(`export const ${this.commandName} = async (`);
-    this.line(`input: ${this.inputInferface}`);
+  writeHandlerOpen = () => {
+    this.open("export const handler = async (");
+    switch (this.eventSource) {
+      case LAMBDA_EVENT_SOURCE.API_GATEWAY:
+        this.line(`event: any`);
+        break;
+      case LAMBDA_EVENT_SOURCE.APP_SYNC:
+        this.line(`event: AppSyncResolverEvent<${this.inputInferface}, any>`);
+        break;
+      case LAMBDA_EVENT_SOURCE.DYNAMODB:
+        this.line(`event: any`);
+        break;
+      case LAMBDA_EVENT_SOURCE.KAFKA:
+        this.line(`event: any`);
+        break;
+      case LAMBDA_EVENT_SOURCE.KINESIS:
+        this.line(`event: any`);
+        break;
+      case LAMBDA_EVENT_SOURCE.S3:
+        this.line(`event: any`);
+        break;
+      case LAMBDA_EVENT_SOURCE.SNS:
+        this.line(`event: any`);
+        break;
+      case LAMBDA_EVENT_SOURCE.SQS:
+        this.line(`event: any`);
+        break;
+      default:
+        throw new Error(`Unknown event source: ${this.eventSource}`);
+    }
     this.close(`): Promise<${this.outputInferface}> => {`);
     this.open("");
   };
 
-  writeCommandClose = () => {
+  writeHandlerClose = () => {
     this.close(`};`);
   };
 
@@ -257,7 +317,7 @@ export class BaseCommand extends TypeScriptSource {
     this.inputStructure.attributes.forEach((attribute) => {
       const { resourceAttribute } = attribute;
       this.line(
-        `${resourceAttribute.shortName}: input.${resourceAttribute.attributeName},`
+        `${resourceAttribute.shortName}: event.arguments.${resourceAttribute.attributeName},`
       );
     });
     this.close(`};`);

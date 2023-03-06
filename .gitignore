@@ -57,6 +57,7 @@ tsconfig.json
 !/.vscode/settings.json
 !/.vscode/extensions.json
 !/example/tenant/ts/tenant.ts
+!/example/tenant/lambda/commands/create-tenant.ts
 !/example/tenant/lambda/app-sync/create-tenant-handler/package.json
 !/example/tenant/lambda/app-sync/create-tenant-handler/handler.ts
 !/example/tenant/lambda/api-gateway/create-tenant-handler/package.json
@@ -73,6 +74,7 @@ tsconfig.json
 !/example/tenant/lambda/sqs/create-tenant-handler/handler.ts
 !/example/tenant/lambda/sns/create-tenant-handler/package.json
 !/example/tenant/lambda/sns/create-tenant-handler/handler.ts
+!/example/tenant/lambda/commands/read-tenant.ts
 !/example/tenant/lambda/app-sync/read-tenant-handler/package.json
 !/example/tenant/lambda/app-sync/read-tenant-handler/handler.ts
 !/example/tenant/lambda/api-gateway/read-tenant-handler/package.json
@@ -89,6 +91,7 @@ tsconfig.json
 !/example/tenant/lambda/sqs/read-tenant-handler/handler.ts
 !/example/tenant/lambda/sns/read-tenant-handler/package.json
 !/example/tenant/lambda/sns/read-tenant-handler/handler.ts
+!/example/tenant/lambda/commands/update-tenant.ts
 !/example/tenant/lambda/app-sync/update-tenant-handler/package.json
 !/example/tenant/lambda/app-sync/update-tenant-handler/handler.ts
 !/example/tenant/lambda/api-gateway/update-tenant-handler/package.json
@@ -105,6 +108,7 @@ tsconfig.json
 !/example/tenant/lambda/sqs/update-tenant-handler/handler.ts
 !/example/tenant/lambda/sns/update-tenant-handler/package.json
 !/example/tenant/lambda/sns/update-tenant-handler/handler.ts
+!/example/tenant/lambda/commands/delete-tenant.ts
 !/example/tenant/lambda/app-sync/delete-tenant-handler/package.json
 !/example/tenant/lambda/app-sync/delete-tenant-handler/handler.ts
 !/example/tenant/lambda/api-gateway/delete-tenant-handler/package.json
@@ -121,6 +125,7 @@ tsconfig.json
 !/example/tenant/lambda/sqs/delete-tenant-handler/handler.ts
 !/example/tenant/lambda/sns/delete-tenant-handler/package.json
 !/example/tenant/lambda/sns/delete-tenant-handler/handler.ts
+!/example/tenant/lambda/commands/import-tenant.ts
 !/example/tenant/lambda/app-sync/import-tenant-handler/package.json
 !/example/tenant/lambda/app-sync/import-tenant-handler/handler.ts
 !/example/tenant/lambda/api-gateway/import-tenant-handler/package.json

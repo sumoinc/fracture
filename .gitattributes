@@ -41,6 +41,11 @@
 /example/tenant/lambda/app-sync/read-tenant-handler/package.json linguist-generated
 /example/tenant/lambda/app-sync/update-tenant-handler/handler.ts linguist-generated
 /example/tenant/lambda/app-sync/update-tenant-handler/package.json linguist-generated
+/example/tenant/lambda/commands/create-tenant.ts linguist-generated
+/example/tenant/lambda/commands/delete-tenant.ts linguist-generated
+/example/tenant/lambda/commands/import-tenant.ts linguist-generated
+/example/tenant/lambda/commands/read-tenant.ts linguist-generated
+/example/tenant/lambda/commands/update-tenant.ts linguist-generated
 /example/tenant/lambda/dynamodb/create-tenant-handler/handler.ts linguist-generated
 /example/tenant/lambda/dynamodb/create-tenant-handler/package.json linguist-generated
 /example/tenant/lambda/dynamodb/delete-tenant-handler/handler.ts linguist-generated
