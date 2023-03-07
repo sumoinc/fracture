@@ -352,7 +352,6 @@ export class ResourceAttribute extends FractureComponent {
    * This attribute is not metadata, it's actual resource data
    */
   public get isData(): boolean {
-    console.log(this.name, this.isSystem);
     return !this.isSystem;
   }
   public get isCreateInput(): boolean {
@@ -480,6 +479,13 @@ export class ResourceAttribute extends FractureComponent {
   public get attributeName() {
     return formatStringByNamingStrategy(
       this.name,
+      this.fracture.namingStrategy.model.attributeName
+    );
+  }
+
+  public get attributeShortName() {
+    return formatStringByNamingStrategy(
+      this.shortName,
       this.fracture.namingStrategy.model.attributeName
     );
   }

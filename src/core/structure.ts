@@ -7,6 +7,7 @@ import {
 } from "./naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
+import { ResourceAttributeGenerator } from "./resource-attribute";
 import { Service } from "./service";
 import { StructureAttribute } from "./structure-attribute";
 
@@ -173,7 +174,7 @@ export class Structure extends FractureComponent {
     );
   }
 
-  public get attributes() {
+  public get publicAttributes() {
     switch (this.type) {
       case STRUCTURE_TYPE.INPUT:
         switch (this.operation.operationSubType) {
@@ -188,6 +189,9 @@ export class Structure extends FractureComponent {
             return this.dataAttributes;
           case OPERATION_SUB_TYPE.DELETE_ONE:
           case OPERATION_SUB_TYPE.DELETE_MANY:
+            return this.dataAttributes;
+          case OPERATION_SUB_TYPE.IMPORT_ONE:
+          case OPERATION_SUB_TYPE.IMPORT_MANY:
             return this.dataAttributes;
           default:
             throw new Error(
@@ -209,6 +213,9 @@ export class Structure extends FractureComponent {
           case OPERATION_SUB_TYPE.DELETE_ONE:
           case OPERATION_SUB_TYPE.DELETE_MANY:
             return this.allAttributes;
+          case OPERATION_SUB_TYPE.IMPORT_ONE:
+          case OPERATION_SUB_TYPE.IMPORT_MANY:
+            return this.allAttributes;
           default:
             throw new Error(
               `Unknown operation sub-type ${this.operation.operationSubType}`
@@ -218,6 +225,22 @@ export class Structure extends FractureComponent {
       default:
         throw new Error(`Unknown structure type ${this.type}`);
     }
+  }
+
+  /**
+   * includes all public attributes, plus generated attributes.
+   * This is a good list for dynamodb operations.
+   */
+  public get privateAttributes() {
+    return this.generatedAttributes.concat(this.publicAttributes);
+  }
+
+  public get generatedAttributes() {
+    return this.operation.generatedAttributes.map((attribute) => {
+      return new StructureAttribute(this, {
+        name: attribute.name,
+      });
+    });
   }
 
   public get partitionKeyAttributes() {
@@ -240,6 +263,17 @@ export class Structure extends FractureComponent {
       return new StructureAttribute(this, {
         name: attribute.name,
       });
+    });
+  }
+
+  public hasAttributeGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return this.generatedAttributes.some((attribute) => {
+      return (
+        attribute.resourceAttribute.generatorForOperation(this.operation) ===
+        generator
+      );
     });
   }
 }

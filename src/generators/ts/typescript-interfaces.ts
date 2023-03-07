@@ -122,7 +122,7 @@ export class TypeScriptInterfaces extends TypeScriptSource {
 
       //buildInterfaceComment(operation);
       this.open(`export interface ${operationInputName} {`);
-      inputStructure.attributes.forEach((structureAttribute) => {
+      inputStructure.publicAttributes.forEach((structureAttribute) => {
         buildAttribute(structureAttribute.resourceAttribute);
       });
       this.close(`}`);
@@ -143,7 +143,7 @@ export class TypeScriptInterfaces extends TypeScriptSource {
       }
 
       this.open(`export interface ${operationOutputName} {`);
-      outputStructure.attributes.forEach((structureAttribute) => {
+      outputStructure.publicAttributes.forEach((structureAttribute) => {
         buildAttribute(structureAttribute.resourceAttribute);
       });
       this.close(`}`);

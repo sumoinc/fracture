@@ -81,7 +81,7 @@ export interface DynamoTenant extends DynamoKey {
   /**
    * A name.
    */
-  name?: string;
+  n?: string;
 }
 
 /**
@@ -162,7 +162,7 @@ export interface DynamoActor extends DynamoKey {
   /**
    * A actor-name.
    */
-  actorname?: string;
+  an?: string;
 }
 
 export type AnyResource =

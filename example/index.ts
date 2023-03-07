@@ -35,11 +35,13 @@ export class ExampleApp extends Component {
     const tenantService = fracture.addService({ name: "tenant" });
     tenantService
       .addResource({ name: "tenant" })
-      .addResourceAttribute({ name: "name", isRequired: true });
+      .addResourceAttribute({ name: "name", shortName: "n", isRequired: true });
 
-    tenantService
-      .addResource({ name: "actor" })
-      .addResourceAttribute({ name: "actor-name", isRequired: true });
+    tenantService.addResource({ name: "actor" }).addResourceAttribute({
+      name: "actor-name",
+      shortName: "an",
+      isRequired: true,
+    });
 
     /*
     tenantService
