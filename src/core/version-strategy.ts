@@ -22,6 +22,7 @@ export const defaultVersionStrategy: VersionStrategy = {
     shortName: "v",
     comment: [`The version of this record`, `@default "LATEST"`],
     type: ResourceAttributeType.STRING,
+    isRequired: true,
     createGenerator: ResourceAttributeGenerator.VERSION,
     readGenerator: ResourceAttributeGenerator.VERSION,
     updateGenerator: ResourceAttributeGenerator.VERSION,

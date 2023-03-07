@@ -10,6 +10,7 @@ import {
 import { Service, ServiceOptions } from "./service";
 import { defaultTypeStrategy, TypeStrategy } from "./type-strategy";
 import { defaultVersionStrategy, VersionStrategy } from "./version-strategy";
+import { TypescriptService } from "../generators/ts/typescript-service";
 
 export interface FractureOptions {
   /**
@@ -90,7 +91,9 @@ export class Fracture extends Component {
    *  @returns void
    */
   public build() {
-    this.services.forEach((s) => s.build());
+    this.services.forEach((service) => {
+      new TypescriptService(service);
+    });
   }
 
   /*****************************************************************************

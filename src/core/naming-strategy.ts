@@ -30,7 +30,14 @@ export type NamingStrategy = {
     attributeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   };
   ts: {
-    file: ValueOf<typeof NAMING_STRATEGY_TYPE>;
+    attributeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
+    className: ValueOf<typeof NAMING_STRATEGY_TYPE>;
+    enumName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
+    fileName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
+    functionName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
+    functionParameterName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
+    interfaceName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
+    typeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   };
   appsync: {
     vtl: {
@@ -64,7 +71,14 @@ export const defaultNamingStrategy: NamingStrategy = {
     attributeName: NAMING_STRATEGY_TYPE.CAMEL_CASE,
   },
   ts: {
-    file: NAMING_STRATEGY_TYPE.PARAM_CASE,
+    attributeName: NAMING_STRATEGY_TYPE.CAMEL_CASE,
+    className: NAMING_STRATEGY_TYPE.PASCAL_CASE,
+    enumName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
+    fileName: NAMING_STRATEGY_TYPE.PARAM_CASE,
+    functionName: NAMING_STRATEGY_TYPE.CAMEL_CASE,
+    functionParameterName: NAMING_STRATEGY_TYPE.CAMEL_CASE,
+    interfaceName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
+    typeName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
   },
   appsync: {
     vtl: {

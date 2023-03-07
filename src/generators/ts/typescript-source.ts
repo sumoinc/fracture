@@ -1,15 +1,30 @@
 import { dirname, join, relative, sep } from "path";
 import { SourceCode } from "projen";
-import { Service } from "../../core/service";
+import { FractureComponent } from "../../core";
 
 /**
  * Build a TypeScript file and make sure it's marked as being managed by
  * projen.
  */
 export class TypeScriptSource extends SourceCode {
-  constructor(service: Service, public readonly filePath: string) {
-    super(service.project, filePath);
+  constructor(
+    fractureComponent: FractureComponent,
+    public readonly filePath: string
+  ) {
+    super(fractureComponent.project, filePath);
     return this;
+  }
+
+  public get fileName(): string {
+    return this.filePath.split(sep).pop() as string;
+  }
+
+  /**
+   * Add multiple l;ines to the file at one time.
+   * @param lines
+   */
+  public lines(lines: string[]): void {
+    lines.forEach((line) => this.line(line));
   }
 
   public pathFrom(fromFile: TypeScriptSource): string {
@@ -18,10 +33,6 @@ export class TypeScriptSource extends SourceCode {
       dirname(this.filePath)
     );
     return join(relativeDir, this.fileName.split(".")[0]);
-  }
-
-  public get fileName(): string {
-    return this.filePath.split(sep).pop() as string;
   }
 
   // mark as managed

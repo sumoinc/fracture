@@ -225,9 +225,6 @@ export class Resource extends FractureComponent {
     const isInterfaceFile = (
       c: TypeScriptSource
     ): c is TypeScriptInterfaces => {
-      if (c instanceof TypeScriptInterfaces) {
-        console.log(c.resource.name, this.name);
-      }
       return c instanceof TypeScriptInterfaces && c.resource.name === this.name;
     };
     const interfaceFile = (

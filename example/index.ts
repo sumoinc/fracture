@@ -11,8 +11,8 @@ export class ExampleApp extends Component {
 
     const fracture = new Fracture(project, "foo", { outdir: "example" });
 
-    const org = fracture.addOrganization({ orgId: "o-abcdef" });
-    const account = org.addAccount({ account: "0000000000" });
+    fracture.addOrganization({ orgId: "o-abcdef" });
+    //org.addAccount({ account: "0000000000" });
 
     /***************************************************************************
      *  User Service
@@ -36,6 +36,9 @@ export class ExampleApp extends Component {
     tenantService
       .addResource({ name: "tenant" })
       .addResourceAttribute({ name: "name", isRequired: true });
+    tenantService
+      .addResource({ name: "actor" })
+      .addResourceAttribute({ name: "actor-name", isRequired: true });
     /*
     tenantService
       .addResource({ name: "saas-identity", persistant: false })
