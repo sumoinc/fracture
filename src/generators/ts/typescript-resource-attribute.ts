@@ -24,6 +24,13 @@ export class TypescriptResourceAttribute extends FractureComponent {
     );
   }
 
+  public get attributeShortName() {
+    return formatStringByNamingStrategy(
+      this.resourceAttribute.shortName,
+      this.fracture.namingStrategy.ts.attributeName
+    );
+  }
+
   public get comment() {
     return [`/**`]
       .concat(this.resourceAttribute.comment.map((c) => ` * ${c}`))

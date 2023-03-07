@@ -1,4 +1,4 @@
-import { DynamoCommand } from "./dynamo-command";
+import { DynamoCommand } from "../../dynamodb/dynamo-command";
 import { Operation } from "../../../../core/operation";
 
 export class ReadCommand extends DynamoCommand {

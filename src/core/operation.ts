@@ -3,7 +3,6 @@ import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Resource } from "./resource";
 import { Structure, STRUCTURE_TYPE } from "./structure";
-import { BaseCommand } from "../generators/ts/commands/base-command";
 
 /******************************************************************************
  * TYPES
@@ -144,14 +143,14 @@ export class Operation extends FractureComponent {
     return camelCase(this.name);
   }
 
-  public get commandFile(): BaseCommand {
-    const isInterfaceFile = (c: BaseCommand): c is BaseCommand =>
-      c instanceof BaseCommand &&
-      c.operation.namespace === this.namespace &&
-      c.operation.commandName === this.commandName;
-    const interfaceFile = (this.project.components as BaseCommand[]).filter(
-      isInterfaceFile
-    );
-    return interfaceFile[0];
-  }
+  // public get commandFile(): BaseCommand {
+  //   const isInterfaceFile = (c: BaseCommand): c is BaseCommand =>
+  //     c instanceof BaseCommand &&
+  //     c.operation.namespace === this.namespace &&
+  //     c.operation.commandName === this.commandName;
+  //   const interfaceFile = (this.project.components as BaseCommand[]).filter(
+  //     isInterfaceFile
+  //   );
+  //   return interfaceFile[0];
+  // }
 }

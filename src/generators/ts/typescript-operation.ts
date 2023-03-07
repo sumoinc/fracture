@@ -1,14 +1,22 @@
+import { DynamoCommand } from "./dynamodb/dynamo-command";
+import { TypescriptResource } from "./typescript-resource";
+import { TypescriptService } from "./typescript-service";
 import { FractureComponent } from "../../core";
 import { Operation } from "../../core/operation";
 
 export class TypescriptOperation extends FractureComponent {
   public readonly operation: Operation;
-  //public readonly outdir: string;
+  public readonly tsResource: TypescriptResource;
+  public readonly tsService: TypescriptService;
 
-  constructor(operation: Operation) {
+  constructor(tsResource: TypescriptResource, operation: Operation) {
     super(operation.fracture);
 
     this.operation = operation;
-    // this.outdir = join(this.fracture.outdir, this.service.name);
+    this.tsResource = tsResource;
+    this.tsService = tsResource.tsService;
+
+    // create dynamo command
+    new DynamoCommand(this);
   }
 }

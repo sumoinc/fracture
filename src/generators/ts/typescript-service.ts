@@ -22,19 +22,12 @@ export class TypescriptService extends FractureComponent {
 
     this.typeFile = new TypeScriptSource(this, join(this.outdir, "types.ts"));
 
-    // some base types
-    this.typeFile.open(`export type Error = {`);
-    this.typeFile.line(`code: number;`);
-    this.typeFile.line(`source: string;`);
-    this.typeFile.line(`message: string;`);
-    this.typeFile.line(`detail: string;`);
-    this.typeFile.close(`}`);
-    this.typeFile.line("\n");
-
-    this.typeFile.open(`export type Response = {`);
-    this.typeFile.line(`data: any;`);
-    this.typeFile.line(`errors: Error[];`);
-    this.typeFile.line(`status: number;`);
+    /**
+     * Dynamo key shape
+     */
+    this.typeFile.open(`export interface ${this.dynamoKeyName} {`);
+    this.typeFile.line(`${this.service.dynamodb.keyGsi.pkName}: string;`);
+    this.typeFile.line(`${this.service.dynamodb.keyGsi.skName}: string;`);
     this.typeFile.close(`}`);
     this.typeFile.line("\n");
 
@@ -48,6 +41,22 @@ export class TypescriptService extends FractureComponent {
     this.service.resources.forEach((resource) =>
       this.typeFile.line(`| ${resource.interfaceName}`)
     );
+    this.typeFile.close("\n");
+
+    // some error and response types
+    this.typeFile.open(`export type Error = {`);
+    this.typeFile.line(`code: number;`);
+    this.typeFile.line(`source: string;`);
+    this.typeFile.line(`message: string;`);
+    this.typeFile.line(`detail: string;`);
+    this.typeFile.close(`}`);
+    this.typeFile.line("\n");
+
+    this.typeFile.open(`export type Response<T> = {`);
+    this.typeFile.line(`data: T | T[];`);
+    this.typeFile.line(`errors: Error[];`);
+    this.typeFile.line(`status: number;`);
+    this.typeFile.close(`}`);
     this.typeFile.line("\n");
   }
 
@@ -58,6 +67,13 @@ export class TypescriptService extends FractureComponent {
     return formatStringByNamingStrategy(
       "any-resource",
       this.fracture.namingStrategy.ts.typeName
+    );
+  }
+
+  public get dynamoKeyName() {
+    return formatStringByNamingStrategy(
+      "dynamo-key",
+      this.fracture.namingStrategy.ts.interfaceName
     );
   }
 }

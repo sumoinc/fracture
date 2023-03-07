@@ -1,7 +1,7 @@
-import { DynamoCommand } from "./dynamo-command";
 import { Operation } from "../../../../core/operation";
+import { DynamoCommand } from "../../dynamodb/dynamo-command";
 
-export class UpdateCommand extends DynamoCommand {
+export class CreateCommand extends DynamoCommand {
   constructor(operation: Operation, commandPath: string) {
     super(operation, commandPath);
   }
@@ -19,7 +19,6 @@ export class UpdateCommand extends DynamoCommand {
 
     // construct the needed shape
     this.writeItem();
-    this.writeKey();
 
     // the operation
     this.line(`/**`);

@@ -19,7 +19,6 @@ import { Service } from "./service";
 import { TypeStrategy } from "./type-strategy";
 import { VersionStrategy } from "./version-strategy";
 import { TypeScriptSource } from "../generators";
-import { BuildTypeScriptCommands } from "../generators/ts/commands/build-commands";
 import { TypeScriptInterfaces } from "../generators/ts/typescript-interfaces";
 
 export interface ResourceOptions {
@@ -76,7 +75,8 @@ export class Resource extends FractureComponent {
   public readonly versionStrategy: VersionStrategy;
   public readonly typeStrategy: TypeStrategy;
   public readonly auditStrategy: AuditStrategy;
-  public attributes: ResourceAttribute[];
+  public attributes: ResourceAttribute[] = [];
+  public operations: Operation[] = [];
   public keyPattern: AccessPattern;
 
   constructor(service: Service, options: ResourceOptions) {
@@ -96,8 +96,6 @@ export class Resource extends FractureComponent {
     this.versionStrategy = options.versionStrategy ?? service.versionStrategy;
     this.typeStrategy = options.typeStrategy ?? service.typeStrategy;
     this.auditStrategy = options.auditStrategy ?? service.auditStrategy;
-
-    this.attributes = [];
 
     /**
      * Add the partition key attribute.
@@ -152,30 +150,31 @@ export class Resource extends FractureComponent {
     /**
      * ADD CRUD OPERATIONS
      */
-    new Operation(this, {
+    const createOperation = new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
     });
-    new Operation(this, {
+    this.operations.push(createOperation);
+    const readOperation = new Operation(this, {
       operationType: OPERATION_TYPE.QUERY,
       operationSubType: OPERATION_SUB_TYPE.READ_ONE,
     });
-    new Operation(this, {
+    this.operations.push(readOperation);
+    const updateOperation = new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE,
     });
-    new Operation(this, {
+    this.operations.push(updateOperation);
+    const deleteOperation = new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.DELETE_ONE,
     });
-    new Operation(this, {
+    this.operations.push(deleteOperation);
+    const importOperation = new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.IMPORT_ONE,
     });
-
-    // add a bunch of files
-    new TypeScriptInterfaces(this);
-    new BuildTypeScriptCommands(this);
+    this.operations.push(importOperation);
   }
 
   /**
@@ -201,18 +200,6 @@ export class Resource extends FractureComponent {
       `dynamo-${this.name}`,
       NAMING_STRATEGY_TYPE.PASCAL_CASE
     );
-  }
-
-  /**
-   * Get all resources for this service.
-   */
-  public get operations(): Operation[] {
-    const isOperation = (c: FractureComponent): c is Operation =>
-      c instanceof Operation &&
-      c.namespace === this.namespace &&
-      c.resource.service.name === this.name &&
-      c.resource.name === this.name;
-    return (this.project.components as FractureComponent[]).filter(isOperation);
   }
 
   /**

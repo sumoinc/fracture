@@ -33,6 +33,7 @@ export interface ServiceOptions {
 }
 
 export class Service extends FractureComponent {
+  public readonly resources: Resource[] = [];
   public readonly name: string;
   public readonly outdir: string;
   public readonly partitionKeyStrategy: PartitionKeyStrategy;
@@ -71,23 +72,6 @@ export class Service extends FractureComponent {
 
   /*****************************************************************************
    *
-   *  Fracture Component Helpers
-   *
-   ****************************************************************************/
-
-  /**
-   * Get all resources for this service.
-   */
-  public get resources(): Resource[] {
-    const isResource = (c: FractureComponent): c is Resource =>
-      c instanceof Resource &&
-      c.namespace === this.namespace &&
-      c.service.name === this.name;
-    return (this.project.components as FractureComponent[]).filter(isResource);
-  }
-
-  /*****************************************************************************
-   *
    *  Configuration Helpers
    *
    ****************************************************************************/
@@ -99,6 +83,8 @@ export class Service extends FractureComponent {
    * @returns {Resource}
    */
   public addResource(options: ResourceOptions) {
-    return new Resource(this, options);
+    const resource = new Resource(this, options);
+    this.resources.push(resource);
+    return resource;
   }
 }

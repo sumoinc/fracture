@@ -7,43 +7,58 @@ import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Resource } from "../../core/resource";
 
 export class TypescriptResource extends FractureComponent {
-  public readonly typescriptService: TypescriptService;
   public readonly resource: Resource;
   public readonly outdir: string;
-  public readonly attributes: TypescriptResourceAttribute[] = [];
-  public readonly operations: TypescriptOperation[] = [];
+  public readonly tsService: TypescriptService;
+  public readonly tsAttributes: TypescriptResourceAttribute[] = [];
+  public readonly tsOperations: TypescriptOperation[] = [];
 
-  constructor(typescriptService: TypescriptService, resource: Resource) {
+  constructor(tsService: TypescriptService, resource: Resource) {
     super(resource.fracture);
 
-    this.typescriptService = typescriptService;
+    this.tsService = tsService;
     this.resource = resource;
-    this.outdir = join(this.fracture.outdir, this.resource.name);
+    this.outdir = join(this.tsService.outdir, this.resource.name);
 
     // add attributes
     this.resource.attributes.forEach((attribute) => {
-      this.attributes.push(new TypescriptResourceAttribute(attribute));
+      this.tsAttributes.push(new TypescriptResourceAttribute(attribute));
     });
 
     // add operations
     this.resource.operations.forEach((operation) => {
-      this.operations.push(new TypescriptOperation(operation));
+      this.tsOperations.push(new TypescriptOperation(this, operation));
     });
 
     /***************************************************************************
      * TYPES
      **************************************************************************/
-    const typeFile = this.typescriptService.typeFile;
+    const typeFile = this.tsService.typeFile;
 
     /**
      * Build this resource's interface.
      */
     typeFile.lines(this.comment);
     typeFile.open(`export interface ${this.interfaceName} {`);
-    this.attributes.forEach((attribute) => {
+    this.tsAttributes.forEach((attribute) => {
       typeFile.lines(attribute.comment);
       typeFile.line(
         `${attribute.attributeName}${attribute.required}: ${attribute.type};`
+      );
+    });
+    typeFile.close(`}`);
+    typeFile.line("\n");
+
+    /**
+     * Build dynamo specific interface.
+     */
+    typeFile.open(
+      `export interface ${this.resource.interfaceNameDynamo} extends ${this.tsService.dynamoKeyName} {`
+    );
+    this.tsAttributes.forEach((attribute) => {
+      typeFile.lines(attribute.comment);
+      typeFile.line(
+        `${attribute.attributeShortName}${attribute.required}: ${attribute.type};`
       );
     });
     typeFile.close(`}`);

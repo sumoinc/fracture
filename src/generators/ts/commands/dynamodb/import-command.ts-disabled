@@ -1,7 +1,7 @@
-import { DynamoCommand } from "./dynamo-command";
+import { DynamoCommand } from "../../dynamodb/dynamo-command";
 import { Operation } from "../../../../core/operation";
 
-export class CreateCommand extends DynamoCommand {
+export class ImportCommand extends DynamoCommand {
   constructor(operation: Operation, commandPath: string) {
     super(operation, commandPath);
   }

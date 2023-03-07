@@ -1,6 +1,5 @@
 import { Component, Project } from "projen";
 import { AuditStrategy, defaultAuditStrategy } from "./audit-strategy";
-import { FractureComponent } from "./component";
 import { defaultNamingStrategy, NamingStrategy } from "./naming-strategy";
 import { Organization, OrganizationOptions } from "./organization";
 import {
@@ -50,6 +49,8 @@ export interface FractureOptions {
  */
 export class Fracture extends Component {
   public readonly project: Project;
+  public readonly services: Service[] = [];
+  public readonly organizations: Organization[] = [];
   public readonly namespace: string;
   public readonly outdir: string;
   public readonly namingStrategy: NamingStrategy;
@@ -92,28 +93,9 @@ export class Fracture extends Component {
    */
   public build() {
     this.services.forEach((service) => {
+      service.build();
       new TypescriptService(service);
     });
-  }
-
-  /*****************************************************************************
-   *
-   *  Fracture Component Helpers
-   *
-   ****************************************************************************/
-
-  public get services(): Service[] {
-    const isService = (c: FractureComponent): c is Service =>
-      c instanceof Service && c.namespace === this.namespace;
-    return (this.project.components as FractureComponent[]).filter(isService);
-  }
-
-  public get organizations(): Organization[] {
-    const isOrganization = (c: FractureComponent): c is Organization =>
-      c instanceof Organization && c.namespace === this.namespace;
-    return (this.project.components as FractureComponent[]).filter(
-      isOrganization
-    );
   }
 
   /*****************************************************************************
@@ -128,7 +110,9 @@ export class Fracture extends Component {
    * @returns {Service}
    */
   public addService(options: ServiceOptions) {
-    return new Service(this, options);
+    const service = new Service(this, options);
+    this.services.push(service);
+    return service;
   }
 
   /**
@@ -137,6 +121,8 @@ export class Fracture extends Component {
    * @returns {Organization}
    */
   public addOrganization(options: OrganizationOptions) {
-    return new Organization(this, options);
+    const organization = new Organization(this, options);
+    this.organizations.push(organization);
+    return organization;
   }
 }
