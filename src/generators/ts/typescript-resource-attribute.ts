@@ -38,7 +38,8 @@ export class TypescriptResourceAttribute extends FractureComponent {
   }
 
   public get required() {
-    return this.resourceAttribute.isRequired ? "" : "?";
+    return "?";
+    //return this.resourceAttribute.isRequired ? "" : "";
   }
 
   /**

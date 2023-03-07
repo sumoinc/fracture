@@ -18,8 +18,6 @@ import {
 import { Service } from "./service";
 import { TypeStrategy } from "./type-strategy";
 import { VersionStrategy } from "./version-strategy";
-import { TypeScriptSource } from "../generators";
-import { TypeScriptInterfaces } from "../generators/ts/typescript-interfaces";
 
 export interface ResourceOptions {
   /**
@@ -77,7 +75,7 @@ export class Resource extends FractureComponent {
   public readonly auditStrategy: AuditStrategy;
   public attributes: ResourceAttribute[] = [];
   public operations: Operation[] = [];
-  public keyPattern: AccessPattern;
+  public keyAccessPattern: AccessPattern;
 
   constructor(service: Service, options: ResourceOptions) {
     super(service.fracture);
@@ -139,8 +137,7 @@ export class Resource extends FractureComponent {
     }
 
     // default access pattern for now
-
-    this.keyPattern = new AccessPattern(this, {
+    this.keyAccessPattern = new AccessPattern(this, {
       pk: ["id"],
       sk: ["type", "version"],
     });
@@ -203,24 +200,6 @@ export class Resource extends FractureComponent {
   }
 
   /**
-   * Return the interfadce file for this resource. The interface file contains
-   * the type definitions for all basic inputs and outputs for this resource
-   *
-   * @returns {TypeScriptInterfaces}
-   */
-  public get tsInterfaceFile(): TypeScriptInterfaces {
-    const isInterfaceFile = (
-      c: TypeScriptSource
-    ): c is TypeScriptInterfaces => {
-      return c instanceof TypeScriptInterfaces && c.resource.name === this.name;
-    };
-    const interfaceFile = (
-      this.project.components as TypeScriptSource[]
-    ).filter(isInterfaceFile);
-    return interfaceFile[0];
-  }
-
-  /**
    * Adds an attribute
    */
   public addResourceAttribute(options: ResourceAttributeOptions) {
@@ -253,6 +232,9 @@ export class Resource extends FractureComponent {
   }
   public get deleteGeneratedAttributes(): ResourceAttribute[] {
     return this.attributes.filter((a) => a.isDeleteGenerated);
+  }
+  public get importGeneratedAttributes(): ResourceAttribute[] {
+    return this.attributes.filter((a) => a.isImportGenerated);
   }
 
   public hasCreateGenerator = (

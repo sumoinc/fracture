@@ -2,6 +2,7 @@ import { camelCase, paramCase } from "change-case";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Resource } from "./resource";
+import { ResourceAttribute } from "./resource-attribute";
 import { Structure, STRUCTURE_TYPE } from "./structure";
 
 /******************************************************************************
@@ -143,14 +144,23 @@ export class Operation extends FractureComponent {
     return camelCase(this.name);
   }
 
-  // public get commandFile(): BaseCommand {
-  //   const isInterfaceFile = (c: BaseCommand): c is BaseCommand =>
-  //     c instanceof BaseCommand &&
-  //     c.operation.namespace === this.namespace &&
-  //     c.operation.commandName === this.commandName;
-  //   const interfaceFile = (this.project.components as BaseCommand[]).filter(
-  //     isInterfaceFile
-  //   );
-  //   return interfaceFile[0];
-  // }
+  /**
+   * return attributes generated for this particular operation type
+   */
+  public get generatedAttributes(): ResourceAttribute[] {
+    switch (this.operationSubType) {
+      case OPERATION_SUB_TYPE.CREATE_ONE:
+        return this.resource.createGeneratedAttributes;
+      case OPERATION_SUB_TYPE.READ_ONE:
+        return this.resource.readGeneratedAttributes;
+      case OPERATION_SUB_TYPE.UPDATE_ONE:
+        return this.resource.updateGeneratedAttributes;
+      case OPERATION_SUB_TYPE.DELETE_ONE:
+        return this.resource.deleteGeneratedAttributes;
+      case OPERATION_SUB_TYPE.IMPORT_ONE:
+        return this.resource.importGeneratedAttributes;
+      default:
+        throw new Error(`Unhandled operation type: ${this.operationSubType}`);
+    }
+  }
 }

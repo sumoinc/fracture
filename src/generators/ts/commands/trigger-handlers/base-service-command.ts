@@ -121,8 +121,8 @@ export class BaseServiceCommand extends BaseCommand {
     return this.service.dynamodb.name;
   }
 
-  public get keyPattern(): AccessPattern {
-    return this.operation.resource.keyPattern;
+  public get keyAccessPattern(): AccessPattern {
+    return this.operation.resource.keyAccessPattern;
   }
 
   public get keyGsi(): Gsi {
@@ -326,11 +326,11 @@ export class BaseServiceCommand extends BaseCommand {
     this.line(`/**`);
     this.line(` * Add key values to the shape.`);
     this.line(` */`);
-    const pk = this.keyPattern.pk
+    const pk = this.keyAccessPattern.pk
       .map((k) => this.itemVariable + "." + k.shortName)
       .join(' + "#" + ');
     this.line(`${this.itemVariable}.${this.keyGsi.pkName} = ${pk};`);
-    const sk = this.keyPattern.sk
+    const sk = this.keyAccessPattern.sk
       .map((k) => this.itemVariable + "." + k.shortName)
       .join(' + "#" + ');
     this.line(`${this.itemVariable}.${this.keyGsi.skName} = ${sk};`);

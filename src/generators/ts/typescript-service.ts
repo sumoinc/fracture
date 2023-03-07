@@ -26,8 +26,8 @@ export class TypescriptService extends FractureComponent {
      * Dynamo key shape
      */
     this.typeFile.open(`export interface ${this.dynamoKeyName} {`);
-    this.typeFile.line(`${this.service.dynamodb.keyGsi.pkName}: string;`);
-    this.typeFile.line(`${this.service.dynamodb.keyGsi.skName}: string;`);
+    this.typeFile.line(`${this.dynamoPkName}: string;`);
+    this.typeFile.line(`${this.dynamoSkName}: string;`);
     this.typeFile.close(`}`);
     this.typeFile.line("\n");
 
@@ -74,6 +74,20 @@ export class TypescriptService extends FractureComponent {
     return formatStringByNamingStrategy(
       "dynamo-key",
       this.fracture.namingStrategy.ts.interfaceName
+    );
+  }
+
+  public get dynamoPkName() {
+    return formatStringByNamingStrategy(
+      this.service.dynamodb.keyGsi.pkName,
+      this.fracture.namingStrategy.ts.attributeName
+    );
+  }
+
+  public get dynamoSkName() {
+    return formatStringByNamingStrategy(
+      this.service.dynamodb.keyGsi.skName,
+      this.fracture.namingStrategy.ts.attributeName
     );
   }
 }

@@ -2,6 +2,7 @@ import { paramCase, pascalCase } from "change-case";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { formatStringByNamingStrategy } from "./naming-strategy";
+import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 
 /**
@@ -390,6 +391,9 @@ export class ResourceAttribute extends FractureComponent {
   public get isDeleteGenerated(): boolean {
     return this.deleteGenerator !== ResourceAttributeGenerator.NONE;
   }
+  public get isImportGenerated(): boolean {
+    return this.importGenerator !== ResourceAttributeGenerator.NONE;
+  }
 
   /**
    *
@@ -426,6 +430,23 @@ export class ResourceAttribute extends FractureComponent {
     generator: ValueOf<typeof ResourceAttributeGenerator>
   ): boolean {
     return this.isDeleteGenerated && this.deleteGenerator === generator;
+  }
+
+  public generatorForOperation(operation: Operation) {
+    switch (operation.operationSubType) {
+      case OPERATION_SUB_TYPE.CREATE_ONE:
+        return this.createGenerator;
+      case OPERATION_SUB_TYPE.READ_ONE:
+        return this.readGenerator;
+      case OPERATION_SUB_TYPE.UPDATE_ONE:
+        return this.updateGenerator;
+      case OPERATION_SUB_TYPE.DELETE_ONE:
+        return this.deleteGenerator;
+      case OPERATION_SUB_TYPE.IMPORT_ONE:
+        return this.importGenerator;
+      default:
+        throw new Error(`Unknown sub-operation: ${operation}`);
+    }
   }
 
   /**

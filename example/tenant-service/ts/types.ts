@@ -12,28 +12,28 @@ export interface Tenant {
    * @type A GUID string.
    * @readonly This attribute is managed automatically by the system.
    */
-  id: string;
+  id?: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type: string;
+  type?: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version: string;
+  version?: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt: string;
+  createdAt?: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt: string;
+  updatedAt?: string;
   /**
    * The date and time this record was deleted.
    * @readonly This attribute is managed automatically by the system.
@@ -42,7 +42,7 @@ export interface Tenant {
   /**
    * A name.
    */
-  name: string;
+  name?: string;
 }
 
 export interface DynamoTenant extends DynamoKey {
@@ -51,28 +51,28 @@ export interface DynamoTenant extends DynamoKey {
    * @type A GUID string.
    * @readonly This attribute is managed automatically by the system.
    */
-  id: string;
+  id?: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  t: string;
+  t?: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  v: string;
+  v?: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  cd: string;
+  cd?: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  ud: string;
+  ud?: string;
   /**
    * The date and time this record was deleted.
    * @readonly This attribute is managed automatically by the system.
@@ -81,7 +81,7 @@ export interface DynamoTenant extends DynamoKey {
   /**
    * A name.
    */
-  name: string;
+  name?: string;
 }
 
 /**
@@ -93,28 +93,28 @@ export interface Actor {
    * @type A GUID string.
    * @readonly This attribute is managed automatically by the system.
    */
-  id: string;
+  id?: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type: string;
+  type?: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version: string;
+  version?: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt: string;
+  createdAt?: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt: string;
+  updatedAt?: string;
   /**
    * The date and time this record was deleted.
    * @readonly This attribute is managed automatically by the system.
@@ -123,7 +123,7 @@ export interface Actor {
   /**
    * A actor-name.
    */
-  actorName: string;
+  actorName?: string;
 }
 
 export interface DynamoActor extends DynamoKey {
@@ -132,28 +132,28 @@ export interface DynamoActor extends DynamoKey {
    * @type A GUID string.
    * @readonly This attribute is managed automatically by the system.
    */
-  id: string;
+  id?: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  t: string;
+  t?: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  v: string;
+  v?: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  cd: string;
+  cd?: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  ud: string;
+  ud?: string;
   /**
    * The date and time this record was deleted.
    * @readonly This attribute is managed automatically by the system.
@@ -162,7 +162,7 @@ export interface DynamoActor extends DynamoKey {
   /**
    * A actor-name.
    */
-  actorname: string;
+  actorname?: string;
 }
 
 export type AnyResource =

@@ -55,16 +55,18 @@ export const buildCreateRequest = (service: Service, e: Resource) => {
     });
 
   // assign keys
-  // const ap = e.keyPattern;
+  // const ap = e.keyAccessPattern;
   const gsi = service.dynamodb.keyGsi;
   resolver.line(`## KEYS`);
   resolver.line(
     `$util.quiet($${shapeName}.put("${
       gsi.pkName
-    }", "$${shapeName}.${e.keyPattern.pk.map((k) => k.shortName).join("#")}"))`
+    }", "$${shapeName}.${e.keyAccessPattern.pk
+      .map((k) => k.shortName)
+      .join("#")}"))`
   );
   resolver.line(
-    `$util.quiet($${shapeName}.put("${gsi.skName}", "${e.keyPattern.sk
+    `$util.quiet($${shapeName}.put("${gsi.skName}", "${e.keyAccessPattern.sk
       .map((k) => "$" + shapeName + "." + k.shortName)
       .join("#")}"))`
   );

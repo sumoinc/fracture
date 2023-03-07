@@ -111,8 +111,8 @@ export class BaseCommand extends TypeScriptSource {
     return this.service.dynamodb.name;
   }
 
-  public get keyPattern(): AccessPattern {
-    return this.operation.resource.keyPattern;
+  public get keyAccessPattern(): AccessPattern {
+    return this.operation.resource.keyAccessPattern;
   }
 
   public get keyGsi(): Gsi {
