@@ -23,7 +23,7 @@ export type AuditStrategy = {
 export const defaultAuditStrategy: AuditStrategy = {
   create: {
     dateAttribute: {
-      name: "createdAt",
+      name: "created-at",
       shortName: "cd",
       comment: [`The date and time this record was created.`],
       type: ResourceAttributeType.DATE_TIME,
@@ -33,7 +33,7 @@ export const defaultAuditStrategy: AuditStrategy = {
   },
   update: {
     dateAttribute: {
-      name: "updatedAt",
+      name: "updated-at",
       shortName: "ud",
       comment: [`The date and time this record was last updated.`],
       type: ResourceAttributeType.DATE_TIME,
@@ -43,7 +43,7 @@ export const defaultAuditStrategy: AuditStrategy = {
   },
   delete: {
     dateAttribute: {
-      name: "deletedAt",
+      name: "deleted-at",
       shortName: "dd",
       comment: [`The date and time this record was deleted.`],
       type: ResourceAttributeType.DATE_TIME,

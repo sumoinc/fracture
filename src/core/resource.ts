@@ -80,7 +80,10 @@ export class Resource extends FractureComponent {
   constructor(service: Service, options: ResourceOptions) {
     super(service.fracture);
 
+    // parent + inverse
     this.service = service;
+    this.service.resources.push(this);
+
     this.name = paramCase(options.name);
     this.shortName = options.shortName
       ? pascalCase(options.shortName).toLowerCase()
@@ -147,31 +150,26 @@ export class Resource extends FractureComponent {
     /**
      * ADD CRUD OPERATIONS
      */
-    const createOperation = new Operation(this, {
+    new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
     });
-    this.operations.push(createOperation);
-    const readOperation = new Operation(this, {
+    new Operation(this, {
       operationType: OPERATION_TYPE.QUERY,
       operationSubType: OPERATION_SUB_TYPE.READ_ONE,
     });
-    this.operations.push(readOperation);
-    const updateOperation = new Operation(this, {
+    new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE,
     });
-    this.operations.push(updateOperation);
-    const deleteOperation = new Operation(this, {
+    new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.DELETE_ONE,
     });
-    this.operations.push(deleteOperation);
-    const importOperation = new Operation(this, {
+    new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.IMPORT_ONE,
     });
-    this.operations.push(importOperation);
   }
 
   /**
@@ -203,9 +201,7 @@ export class Resource extends FractureComponent {
    * Adds an attribute
    */
   public addResourceAttribute(options: ResourceAttributeOptions) {
-    const a = new ResourceAttribute(this, options);
-    this.attributes.push(a);
-    return this;
+    return new ResourceAttribute(this, options);
   }
 
   /**

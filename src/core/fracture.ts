@@ -110,9 +110,7 @@ export class Fracture extends Component {
    * @returns {Service}
    */
   public addService(options: ServiceOptions) {
-    const service = new Service(this, options);
-    this.services.push(service);
-    return service;
+    return new Service(this, options);
   }
 
   /**
@@ -121,8 +119,6 @@ export class Fracture extends Component {
    * @returns {Organization}
    */
   public addOrganization(options: OrganizationOptions) {
-    const organization = new Organization(this, options);
-    this.organizations.push(organization);
-    return organization;
+    return new Organization(this, options);
   }
 }

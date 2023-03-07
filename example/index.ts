@@ -36,9 +36,11 @@ export class ExampleApp extends Component {
     tenantService
       .addResource({ name: "tenant" })
       .addResourceAttribute({ name: "name", isRequired: true });
+
     tenantService
       .addResource({ name: "actor" })
       .addResourceAttribute({ name: "actor-name", isRequired: true });
+
     /*
     tenantService
       .addResource({ name: "saas-identity", persistant: false })

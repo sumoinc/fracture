@@ -11,5 +11,6 @@ export class Organization extends FractureComponent {
     super(fracture);
 
     this.orgId = options.orgId;
+    this.fracture.organizations.push(this);
   }
 }

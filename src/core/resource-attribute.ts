@@ -255,7 +255,10 @@ export class ResourceAttribute extends FractureComponent {
   constructor(resource: Resource, options: ResourceAttributeOptions) {
     super(resource.fracture);
 
+    // parent + inverse connection
     this.resource = resource;
+    this.resource.attributes.push(this);
+
     this.name = paramCase(options.name);
     this.shortName = options.shortName
       ? pascalCase(options.shortName).toLowerCase()
@@ -349,6 +352,7 @@ export class ResourceAttribute extends FractureComponent {
    * This attribute is not metadata, it's actual resource data
    */
   public get isData(): boolean {
+    console.log(this.name, this.isSystem);
     return !this.isSystem;
   }
   public get isCreateInput(): boolean {

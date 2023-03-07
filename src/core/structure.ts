@@ -6,6 +6,8 @@ import {
   NAMING_STRATEGY_TYPE,
 } from "./naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
+import { Resource } from "./resource";
+import { Service } from "./service";
 import { StructureAttribute } from "./structure-attribute";
 
 /******************************************************************************
@@ -20,7 +22,7 @@ export type StructureOptions = {
   /**
    *  Values to be added to structure
    */
-  attributes?: StructureAttribute[];
+  // attributes?: StructureAttribute[];
   /**
    *  Type of structure
    */
@@ -50,6 +52,8 @@ export const STRUCTURE_TYPE = {
 
 export class Structure extends FractureComponent {
   public readonly operation: Operation;
+  public readonly resource: Resource;
+  public readonly service: Service;
   /**
    * Name for this structure
    */
@@ -57,7 +61,7 @@ export class Structure extends FractureComponent {
   /**
    *  Structure attributes
    */
-  public readonly attributes: StructureAttribute[];
+  // public readonly attributes: StructureAttribute[];
   /**
    *  Type of structure
    */
@@ -71,7 +75,9 @@ export class Structure extends FractureComponent {
     super(operation.fracture);
 
     this.operation = operation;
-    this.attributes = options.attributes || [];
+    this.resource = operation.resource;
+    this.service = operation.service;
+    //this.attributes = options.attributes || [];
     this.type = options.type || STRUCTURE_TYPE.DATA;
     this.suffix =
       this.type === STRUCTURE_TYPE.INPUT
@@ -86,6 +92,7 @@ export class Structure extends FractureComponent {
     /***************************************************************************
      * CREATE ONE
      **************************************************************************/
+    /*
     if (
       this.operation.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE ||
       this.operation.operationSubType === OPERATION_SUB_TYPE.CREATE_MANY
@@ -95,11 +102,12 @@ export class Structure extends FractureComponent {
       } else if (this.type === STRUCTURE_TYPE.OUTPUT) {
         this.addPartitionKeyAttributes();
       }
-    }
+    }*/
 
     /***************************************************************************
      * READ
      **************************************************************************/
+    /*
     if (
       this.operation.operationSubType === OPERATION_SUB_TYPE.READ_ONE ||
       this.operation.operationSubType === OPERATION_SUB_TYPE.READ_MANY
@@ -109,12 +117,12 @@ export class Structure extends FractureComponent {
       } else if (this.type === STRUCTURE_TYPE.OUTPUT) {
         this.addAllAttributes();
       }
-    }
+    }*/
 
     /***************************************************************************
      * UPDATE
      **************************************************************************/
-    if (
+    /*if (
       this.operation.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE ||
       this.operation.operationSubType === OPERATION_SUB_TYPE.UPDATE_MANY
     ) {
@@ -123,11 +131,12 @@ export class Structure extends FractureComponent {
       } else if (this.type === STRUCTURE_TYPE.OUTPUT) {
         this.addAllAttributes();
       }
-    }
+    }*/
 
     /***************************************************************************
      * DELETE
      **************************************************************************/
+    /*
     if (
       this.operation.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE ||
       this.operation.operationSubType === OPERATION_SUB_TYPE.DELETE_MANY
@@ -138,10 +147,12 @@ export class Structure extends FractureComponent {
         this.addAllAttributes();
       }
     }
+    */
 
     /***************************************************************************
      * IMPORT
      **************************************************************************/
+    /*
     if (
       this.operation.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE ||
       this.operation.operationSubType === OPERATION_SUB_TYPE.IMPORT_MANY
@@ -152,6 +163,7 @@ export class Structure extends FractureComponent {
         this.addAllAttributes();
       }
     }
+    */
   }
 
   public get interfaceName() {
@@ -161,33 +173,73 @@ export class Structure extends FractureComponent {
     );
   }
 
-  addPartitionKeyAttributes = () => {
-    this.operation.resource.partitionKeyAttributes.forEach((attribute) => {
-      this.attributes.push(
-        new StructureAttribute(this, {
-          name: attribute.name,
-        })
-      );
-    });
-  };
+  public get attributes() {
+    switch (this.type) {
+      case STRUCTURE_TYPE.INPUT:
+        switch (this.operation.operationSubType) {
+          case OPERATION_SUB_TYPE.CREATE_ONE:
+          case OPERATION_SUB_TYPE.CREATE_MANY:
+            return this.dataAttributes;
+          case OPERATION_SUB_TYPE.READ_ONE:
+          case OPERATION_SUB_TYPE.READ_MANY:
+            return this.dataAttributes;
+          case OPERATION_SUB_TYPE.UPDATE_ONE:
+          case OPERATION_SUB_TYPE.UPDATE_MANY:
+            return this.dataAttributes;
+          case OPERATION_SUB_TYPE.DELETE_ONE:
+          case OPERATION_SUB_TYPE.DELETE_MANY:
+            return this.dataAttributes;
+          default:
+            throw new Error(
+              `Unknown operation sub-type ${this.operation.operationSubType}`
+            );
+        }
 
-  addDataAttributes = () => {
-    this.operation.resource.dataAttributes.forEach((attribute) => {
-      this.attributes.push(
-        new StructureAttribute(this, {
-          name: attribute.name,
-        })
-      );
-    });
-  };
+      case STRUCTURE_TYPE.OUTPUT:
+        switch (this.operation.operationSubType) {
+          case OPERATION_SUB_TYPE.CREATE_ONE:
+          case OPERATION_SUB_TYPE.CREATE_MANY:
+            return this.allAttributes;
+          case OPERATION_SUB_TYPE.READ_ONE:
+          case OPERATION_SUB_TYPE.READ_MANY:
+            return this.allAttributes;
+          case OPERATION_SUB_TYPE.UPDATE_ONE:
+          case OPERATION_SUB_TYPE.UPDATE_MANY:
+            return this.allAttributes;
+          case OPERATION_SUB_TYPE.DELETE_ONE:
+          case OPERATION_SUB_TYPE.DELETE_MANY:
+            return this.allAttributes;
+          default:
+            throw new Error(
+              `Unknown operation sub-type ${this.operation.operationSubType}`
+            );
+        }
 
-  addAllAttributes = () => {
-    this.operation.resource.attributes.forEach((attribute) => {
-      this.attributes.push(
-        new StructureAttribute(this, {
-          name: attribute.name,
-        })
-      );
+      default:
+        throw new Error(`Unknown structure type ${this.type}`);
+    }
+  }
+
+  public get partitionKeyAttributes() {
+    return this.resource.partitionKeyAttributes.map((attribute) => {
+      return new StructureAttribute(this, {
+        name: attribute.name,
+      });
     });
-  };
+  }
+
+  public get dataAttributes() {
+    return this.resource.dataAttributes.map((attribute) => {
+      return new StructureAttribute(this, {
+        name: attribute.name,
+      });
+    });
+  }
+  public get allAttributes() {
+    return this.resource.attributes.map((attribute) => {
+      return new StructureAttribute(this, {
+        name: attribute.name,
+      });
+    });
+  }
 }

@@ -46,7 +46,10 @@ export class Service extends FractureComponent {
   constructor(fracture: Fracture, options: ServiceOptions) {
     super(fracture);
 
+    // parent + inverse
     this.name = options.name;
+    this.fracture.services.push(this);
+
     this.outdir = join(fracture.outdir, this.name);
     this.partitionKeyStrategy =
       options.partitionKeyStrategy ?? fracture.partitionKeyStrategy;
@@ -83,8 +86,6 @@ export class Service extends FractureComponent {
    * @returns {Resource}
    */
   public addResource(options: ResourceOptions) {
-    const resource = new Resource(this, options);
-    this.resources.push(resource);
-    return resource;
+    return new Resource(this, options);
   }
 }

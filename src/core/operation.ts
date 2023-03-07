@@ -3,6 +3,7 @@ import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Resource } from "./resource";
 import { ResourceAttribute } from "./resource-attribute";
+import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
 
 /******************************************************************************
@@ -55,6 +56,7 @@ export const OPERATION_SUB_TYPE = {
 
 export class Operation extends FractureComponent {
   public readonly resource: Resource;
+  public readonly service: Service;
   /**
    * Name for this operation
    */
@@ -90,8 +92,11 @@ export class Operation extends FractureComponent {
   constructor(resource: Resource, options: OperationOptions) {
     super(resource.fracture);
 
-    // set option values
+    // parent + inverse
     this.resource = resource;
+    this.resource.operations.push(this);
+
+    this.service = resource.service;
     this.operationType = options?.operationType
       ? options.operationType
       : OPERATION_TYPE.QUERY;
@@ -145,7 +150,7 @@ export class Operation extends FractureComponent {
   }
 
   /**
-   * return attributes generated for this particular operation type
+   * Return attributes generated for this particular operation type
    */
   public get generatedAttributes(): ResourceAttribute[] {
     switch (this.operationSubType) {
