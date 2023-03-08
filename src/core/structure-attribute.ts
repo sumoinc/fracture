@@ -20,7 +20,7 @@ export type StructureAttributeOptions = {
   /**
    * Replacement / override options for structure attribute
    */
-  structureAttributeOptions: ResourceAttributeOptions;
+  structureAttributeOptions?: Partial<ResourceAttributeOptions>;
 };
 
 /******************************************************************************
@@ -56,7 +56,15 @@ export class StructureAttribute extends FractureComponent {
     // all other options
     this.options = deepMerge([
       options.resourceAttribute.options,
-      options.structureAttributeOptions,
+      options.structureAttributeOptions ?? {},
     ]) as Required<ResourceAttributeOptions>;
+  }
+
+  public get name() {
+    return this.options.name;
+  }
+
+  public get shortName() {
+    return this.options.shortName;
   }
 }

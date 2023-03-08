@@ -125,6 +125,10 @@ export const ResourceAttributeGenerator = {
   TYPE: "Type",
   NONE: "None",
   VERSION: "Version",
+  /**
+   * Composed of other attributes
+   */
+  COMPOSITION: "Composition",
 } as const;
 
 export const ValidationRule = {
@@ -172,6 +176,11 @@ export type ResourceAttributeOptions = {
    * @default false
    */
   isRequired?: boolean;
+  /**
+   * Is this attribute publically accessible / visible?
+   * @default true
+   */
+  isPublic?: boolean;
   /**
    * The generator to use for this attribute when creating it.
    * @default ResourceAttributeGenerator.NONE
@@ -226,6 +235,7 @@ export type ResourceAttributeOptions = {
 
 export class ResourceAttribute extends FractureComponent {
   // member components
+  public readonly compositionSources: ResourceAttribute[];
   // parent
   public readonly resource: Resource;
   public readonly service: Service;
@@ -249,6 +259,7 @@ export class ResourceAttribute extends FractureComponent {
       comments: [`A ${options.name}.`],
       type: ResourceAttributeType.STRING,
       isRequired: false,
+      isPublic: true,
       createGenerator: ResourceAttributeGenerator.NONE,
       readGenerator: ResourceAttributeGenerator.NONE,
       updateGenerator: ResourceAttributeGenerator.NONE,
@@ -268,6 +279,7 @@ export class ResourceAttribute extends FractureComponent {
      **************************************************************************/
 
     // member components
+    this.compositionSources = [];
 
     // parent + inverse
     this.resource = resource;
@@ -321,10 +333,14 @@ export class ResourceAttribute extends FractureComponent {
   }
 
   public get isPartitionKey(): boolean {
-    return this.resource.keyAccessPattern.pkAttributes.some((a) => a === this);
+    return this.resource.keyAccessPattern.pkAttribute.compositionSources.some(
+      (a) => a === this
+    );
   }
   public get isSortKey(): boolean {
-    return this.resource.keyAccessPattern.skAttributes.some((a) => a === this);
+    return this.resource.keyAccessPattern.skAttribute.compositionSources.some(
+      (a) => a === this
+    );
   }
 
   public get isData(): boolean {

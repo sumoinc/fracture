@@ -62,8 +62,8 @@ export class Resource extends FractureComponent {
   // member components
   public attributes: ResourceAttribute[];
   public operations: Operation[];
-  public keyAccessPattern: AccessPattern;
   public accessPatterns: AccessPattern[];
+  public keyAccessPattern: AccessPattern;
   public structures: Structure[];
   // parent
   public readonly service: Service;
@@ -110,11 +110,11 @@ export class Resource extends FractureComponent {
     // member components
     this.attributes = [];
     this.operations = [];
+    this.accessPatterns = [];
     this.keyAccessPattern = new AccessPattern(this, {
       name: "key",
       gsi: service.options.dynamodb.keyGsi,
     });
-    this.accessPatterns = [];
     this.structures = [];
 
     // parent + inverse
@@ -262,6 +262,13 @@ export class Resource extends FractureComponent {
   }
   public get dataAttributes(): ResourceAttribute[] {
     return this.attributes.filter((a) => a.isData);
+  }
+
+  public get publicAttributes(): ResourceAttribute[] {
+    return this.attributes.filter((a) => a.options.isPublic);
+  }
+  public get privateAttributes(): ResourceAttribute[] {
+    return this.attributes.filter((a) => !a.options.isPublic);
   }
 
   // generated attrubutes

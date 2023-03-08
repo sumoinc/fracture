@@ -110,10 +110,10 @@ export class Fracture extends Component {
             [STRUCTURE_TYPE.TRANSIENT]: "",
           },
           suffixes: {
-            [STRUCTURE_TYPE.DATA]: "Input",
-            [STRUCTURE_TYPE.INPUT]: "Input",
-            [STRUCTURE_TYPE.OUTPUT]: "Input",
-            [STRUCTURE_TYPE.TRANSIENT]: "Input",
+            [STRUCTURE_TYPE.DATA]: "",
+            [STRUCTURE_TYPE.INPUT]: "input",
+            [STRUCTURE_TYPE.OUTPUT]: "output",
+            [STRUCTURE_TYPE.TRANSIENT]: "message",
           },
         },
         operations: {
@@ -196,7 +196,9 @@ export class Fracture extends Component {
             comments: [`The date and time this record was last updated.`],
             type: ResourceAttributeType.DATE_TIME,
             isRequired: true,
+            createGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
             updateGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
+            deleteGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
           },
         },
         delete: {

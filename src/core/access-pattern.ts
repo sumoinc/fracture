@@ -1,6 +1,9 @@
 import { paramCase } from "change-case";
 import { Resource } from "./resource";
-import { ResourceAttribute } from "./resource-attribute";
+import {
+  ResourceAttribute,
+  ResourceAttributeGenerator,
+} from "./resource-attribute";
 import { FractureComponent } from "../core/component";
 import { Gsi } from "../dynamodb/gsi";
 
@@ -11,8 +14,10 @@ export interface AccessPatternOptions {
 
 export class AccessPattern extends FractureComponent {
   // member components
-  public pkAttributes: ResourceAttribute[];
-  public skAttributes: ResourceAttribute[];
+  public pkAttribute: ResourceAttribute;
+  public skAttribute: ResourceAttribute;
+  //public pkAttributes: ResourceAttribute[];
+  //public skAttributes: ResourceAttribute[];
   // parent
   public readonly resource: Resource;
   // all other options
@@ -28,8 +33,24 @@ export class AccessPattern extends FractureComponent {
      **************************************************************************/
 
     // member components
-    this.pkAttributes = [];
-    this.skAttributes = [];
+    this.pkAttribute = new ResourceAttribute(resource, {
+      name: options.gsi.pkName,
+      isPublic: false,
+      createGenerator: ResourceAttributeGenerator.COMPOSITION,
+      readGenerator: ResourceAttributeGenerator.COMPOSITION,
+      updateGenerator: ResourceAttributeGenerator.COMPOSITION,
+      deleteGenerator: ResourceAttributeGenerator.COMPOSITION,
+      importGenerator: ResourceAttributeGenerator.COMPOSITION,
+    });
+    this.skAttribute = new ResourceAttribute(resource, {
+      name: options.gsi.skName,
+      isPublic: false,
+      createGenerator: ResourceAttributeGenerator.COMPOSITION,
+      readGenerator: ResourceAttributeGenerator.COMPOSITION,
+      updateGenerator: ResourceAttributeGenerator.COMPOSITION,
+      deleteGenerator: ResourceAttributeGenerator.COMPOSITION,
+      importGenerator: ResourceAttributeGenerator.COMPOSITION,
+    });
 
     // parent + inverse
     this.resource = resource;
@@ -39,18 +60,11 @@ export class AccessPattern extends FractureComponent {
     this.options = { name: paramCase(options.name), gsi: options.gsi };
   }
 
-  public get pkName() {
-    return this.options.gsi.pkName;
-  }
-  public get skName() {
-    return this.options.gsi.skName;
-  }
-
   addPkAttribute(attribute: ResourceAttribute) {
-    this.pkAttributes.push(attribute);
+    this.pkAttribute.compositionSources.push(attribute);
   }
 
   addSkAttribute(attribute: ResourceAttribute) {
-    this.skAttributes.push(attribute);
+    this.skAttribute.compositionSources.push(attribute);
   }
 }

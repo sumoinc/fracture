@@ -50,8 +50,8 @@ export class Operation extends FractureComponent {
   // all other options
   public readonly options: Required<OperationOptions>;
   // private cached properties
-  private _inputStructure: Structure;
-  private _outputStructure: Structure;
+  private _inputStructure?: Structure;
+  private _outputStructure?: Structure;
 
   constructor(resource: Resource, options: OperationOptions) {
     super(resource.fracture);
@@ -85,22 +85,11 @@ export class Operation extends FractureComponent {
       defaultOptions,
       options,
     ]) as Required<OperationOptions>;
-
-    this._inputStructure = new Structure(this.resource, {
-      type: STRUCTURE_TYPE.INPUT,
-      operation: this,
-    });
-
-    this._outputStructure = new Structure(this.resource, {
-      type: STRUCTURE_TYPE.OUTPUT,
-      operation: this,
-    });
-
     return this;
   }
 
   /**
-   * operatoion name, based on the naming strategy
+   * Operation name, based on the naming strategy
    */
   public get name() {
     const resourceName = this.resource.name;
@@ -113,7 +102,9 @@ export class Operation extends FractureComponent {
         this.options.operationSubType
       ];
 
-    return `${prefix}-${resourceName}-${suffix}`;
+    return [prefix, resourceName, suffix]
+      .filter((part) => part.length > 0)
+      .join("-");
   }
 
   public get isBatch(): boolean {
