@@ -25,10 +25,6 @@ export const NAMING_STRATEGY_TYPE = {
 } as const;
 
 export type NamingStrategy = {
-  model: {
-    interfaceName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-    attributeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  };
   ts: {
     attributeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
     className: ValueOf<typeof NAMING_STRATEGY_TYPE>;
@@ -63,47 +59,6 @@ export type NamingStrategy = {
       importName: string;
     };
   };
-};
-
-export const defaultNamingStrategy: NamingStrategy = {
-  model: {
-    interfaceName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
-    attributeName: NAMING_STRATEGY_TYPE.CAMEL_CASE,
-  },
-  ts: {
-    attributeName: NAMING_STRATEGY_TYPE.CAMEL_CASE,
-    className: NAMING_STRATEGY_TYPE.PASCAL_CASE,
-    enumName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
-    fileName: NAMING_STRATEGY_TYPE.PARAM_CASE,
-    functionName: NAMING_STRATEGY_TYPE.CAMEL_CASE,
-    functionParameterName: NAMING_STRATEGY_TYPE.CAMEL_CASE,
-    interfaceName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
-    typeName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
-  },
-  appsync: {
-    vtl: {
-      file: NAMING_STRATEGY_TYPE.PARAM_CASE,
-    },
-  },
-  operations: {
-    commandName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
-    commands: {
-      commandPrefix: "",
-      commandSuffix: "command",
-      inputPrefix: "",
-      inputSuffix: "input",
-      outputPrefix: "",
-      outputSuffix: "output",
-    },
-    crud: {
-      createName: "create",
-      readName: "read",
-      updateName: "update",
-      deleteName: "delete",
-      listName: "list",
-      importName: "import",
-    },
-  },
 };
 
 export const formatStringByNamingStrategy = (

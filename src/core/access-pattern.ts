@@ -1,34 +1,57 @@
+import { paramCase } from "change-case";
+import { deepMerge } from "projen/lib/util";
 import { Resource } from "./resource";
 import { ResourceAttribute } from "./resource-attribute";
 import { FractureComponent } from "../core/component";
+import { Gsi } from "../dynamodb/gsi";
 
 export interface AccessPatternOptions {
-  pk: string[];
-  sk: string[];
+  name: string;
+  gsi: Gsi;
 }
 
 export class AccessPattern extends FractureComponent {
+  // member components
+  public pkAttributes: ResourceAttribute[];
+  public skAttributes: ResourceAttribute[];
+  // parent
   public readonly resource: Resource;
-  private readonly _pk: string[];
-  private readonly _sk: string[];
+  // all other options
+  public readonly options: Required<AccessPatternOptions>;
 
   constructor(resource: Resource, options: AccessPatternOptions) {
     super(resource.fracture);
 
+    /***************************************************************************
+     *
+     * INIT ACCESS PATTERN
+     *
+     **************************************************************************/
+
+    // member components
+    this.pkAttributes = [];
+    this.skAttributes = [];
+
+    // parent + inverse
     this.resource = resource;
-    this._pk = options.pk;
-    this._sk = options.sk;
+    this.resource.accessPatterns.push(this);
+
+    // all other options
+    this.options = { name: paramCase(options.name), gsi: options.gsi };
   }
 
-  public get pk(): ResourceAttribute[] {
-    return this._pk.map(
-      (name) => this.resource.attributes.filter((a) => a.name === name)[0]
-    );
+  public get pkName() {
+    return this.options.gsi.pkName;
+  }
+  public get skName() {
+    return this.options.gsi.skName;
   }
 
-  public get sk(): ResourceAttribute[] {
-    return this._sk.map(
-      (name) => this.resource.attributes.filter((a) => a.name === name)[0]
-    );
+  addPkAttribute(attribute: ResourceAttribute) {
+    this.pkAttributes.push(attribute);
+  }
+
+  addSkAttribute(attribute: ResourceAttribute) {
+    this.skAttributes.push(attribute);
   }
 }

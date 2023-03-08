@@ -1,4 +1,6 @@
 import { join } from "path";
+import { paramCase } from "change-case";
+import { deepMerge } from "projen/lib/util";
 import { Fracture, FractureComponent } from ".";
 import { AuditStrategy } from "./audit-strategy";
 import { PartitionKeyStrategy } from "./partition-key-strategy";
@@ -9,15 +11,16 @@ import { Table } from "../dynamodb/table";
 
 export interface ServiceOptions {
   name: string;
-  /**
-   * The type strategy to use for the partition key.
-   */
-  partitionKeyStrategy?: PartitionKeyStrategy;
+  outdir?: string;
   /**
    * Versioned.
    * @default fracture default
    */
-  versioned?: boolean;
+  isVersioned?: boolean;
+  /**
+   * The type strategy to use for the partition key.
+   */
+  partitionKeyStrategy?: PartitionKeyStrategy;
   /**
    * The versioning strategy to use for generated code.
    */
@@ -30,36 +33,73 @@ export interface ServiceOptions {
    * The audit strategy to use for generated code.
    */
   auditStrategy?: AuditStrategy;
+  dynamodb?: Table;
 }
 
 export class Service extends FractureComponent {
-  public readonly resources: Resource[] = [];
-  public readonly name: string;
-  public readonly outdir: string;
-  public readonly partitionKeyStrategy: PartitionKeyStrategy;
-  public readonly versioned: boolean;
-  public readonly versionStrategy: VersionStrategy;
-  public readonly typeStrategy: TypeStrategy;
-  public readonly auditStrategy: AuditStrategy;
-  public readonly dynamodb: Table;
+  // member components
+  public readonly resources: Resource[];
+  // all other options
+  public readonly options: Required<ServiceOptions>;
 
   constructor(fracture: Fracture, options: ServiceOptions) {
     super(fracture);
 
-    // parent + inverse
-    this.name = options.name;
+    /***************************************************************************
+     *
+     * DEFAULT OPTIONS
+     *
+     * We'll glue the name or requested outdir to the primary fracture outdir
+     *
+     **************************************************************************/
+
+    const {
+      isVersioned,
+      partitionKeyStrategy,
+      versionStrategy,
+      typeStrategy,
+      auditStrategy,
+    } = fracture.options;
+
+    let defaultOptions: Partial<ServiceOptions> = {
+      outdir: join(fracture.options.outdir, options.outdir ?? options.name),
+      isVersioned,
+      partitionKeyStrategy,
+      versionStrategy,
+      typeStrategy,
+      auditStrategy,
+    };
+
+    // add dynamo table definition if not supplied in options
+    if (!options.dynamodb) {
+      options.dynamodb = new Table(this, { name: options.name });
+    }
+
+    /***************************************************************************
+     *
+     * INIT SERVICE
+     *
+     **************************************************************************/
+
+    // member components
+    this.resources = [];
+
+    // inverse
     this.fracture.services.push(this);
 
-    this.outdir = join(fracture.outdir, this.name);
-    this.partitionKeyStrategy =
-      options.partitionKeyStrategy ?? fracture.partitionKeyStrategy;
-    this.versioned = options.versioned ?? fracture.versioned;
-    this.versionStrategy = options.versionStrategy ?? fracture.versionStrategy;
-    this.typeStrategy = options.typeStrategy ?? fracture.typeStrategy;
-    this.auditStrategy = options.auditStrategy ?? fracture.auditStrategy;
+    // ensure name is param-cased
+    const forcedOptions: Partial<ServiceOptions> = {
+      name: paramCase(options.name),
+    };
 
-    // each service gets it's own dynamodb table
-    this.dynamodb = new Table(this, { name: this.name });
+    // all other options
+    this.options = deepMerge([
+      defaultOptions,
+      options,
+      forcedOptions,
+    ]) as Required<ServiceOptions>;
+
+    return this;
   }
 
   /**
@@ -70,7 +110,7 @@ export class Service extends FractureComponent {
    * @returns void
    */
   public build() {
-    this.resources.forEach((r) => r.build());
+    // this.resources.forEach((r) => r.build());
   }
 
   /*****************************************************************************

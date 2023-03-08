@@ -1,9 +1,11 @@
 import { paramCase, pascalCase } from "change-case";
+import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { formatStringByNamingStrategy } from "./naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
+import { Service } from "./service";
 
 /**
  * Each ResourceAttribute has a type that is used to determine how we will construct other generated code.
@@ -160,7 +162,7 @@ export type ResourceAttributeOptions = {
    * Comment lines to add to the Resource.
    * @default []
    */
-  comment?: string[];
+  comments?: string[];
   /**
    * The type for this attribute.
    * @default ResourceAttributeType.STRING
@@ -224,153 +226,110 @@ export type ResourceAttributeOptions = {
 };
 
 export class ResourceAttribute extends FractureComponent {
+  // member components
+  // parent
   public readonly resource: Resource;
-  public readonly name: string;
-  public readonly shortName: string;
-  private readonly _comment: string[];
-  public readonly type: ValueOf<typeof ResourceAttributeType>;
-
-  public readonly isRequired: boolean;
-
-  public readonly dynamoDbType: ValueOf<typeof DynamoDbType>;
-  public readonly typeScriptType: string;
-  public readonly createGenerator: ValueOf<typeof ResourceAttributeGenerator>;
-  public readonly readGenerator: ValueOf<typeof ResourceAttributeGenerator>;
-  public readonly updateGenerator: ValueOf<typeof ResourceAttributeGenerator>;
-  public readonly deleteGenerator: ValueOf<typeof ResourceAttributeGenerator>;
-  public readonly importGenerator: ValueOf<typeof ResourceAttributeGenerator>;
-
-  public readonly createValidations: ValueOf<typeof ValidationRule>[];
-  public readonly readValidations: ValueOf<typeof ValidationRule>[];
-  public readonly updateValidations: ValueOf<typeof ValidationRule>[];
-  public readonly deleteValidations: ValueOf<typeof ValidationRule>[];
-  public readonly importValidations: ValueOf<typeof ValidationRule>[];
-
-  /**
-   * This value is managed automatically and cannot be set using outside
-   * interfaces. This is useful for fields which are automatically generated.
-   */
-  public readonly isSystem: boolean;
+  public readonly service: Service;
+  // all other options
+  public readonly options: Required<ResourceAttributeOptions>;
 
   constructor(resource: Resource, options: ResourceAttributeOptions) {
     super(resource.fracture);
 
-    // parent + inverse connection
+    /***************************************************************************
+     *
+     * DEFAULT OPTIONS
+     *
+     * Pull our service defaults, add a default comment if none are otherwise
+     * given, and establish a default keyAccessPattern for storing data in
+     * DynamoDB.
+     *
+     **************************************************************************/
+
+    const defaultOptions: Partial<ResourceAttributeOptions> = {
+      comments: [`A ${options.name}.`],
+      type: ResourceAttributeType.STRING,
+      isRequired: false,
+      createGenerator: ResourceAttributeGenerator.NONE,
+      readGenerator: ResourceAttributeGenerator.NONE,
+      updateGenerator: ResourceAttributeGenerator.NONE,
+      deleteGenerator: ResourceAttributeGenerator.NONE,
+      importGenerator: ResourceAttributeGenerator.NONE,
+      createValidations: [],
+      readValidations: [],
+      updateValidations: [],
+      deleteValidations: [],
+      importValidations: [],
+    };
+
+    /***************************************************************************
+     *
+     * INIT RESOURCE
+     *
+     **************************************************************************/
+
+    // member components
+
+    // parent + inverse
     this.resource = resource;
+    this.service = resource.service;
     this.resource.attributes.push(this);
 
-    this.name = paramCase(options.name);
-    this.shortName = options.shortName
-      ? pascalCase(options.shortName).toLowerCase()
-      : pascalCase(options.name).toLowerCase();
-    this._comment = options.comment ?? [`A ${this.name}.`];
-    this.type = options.type ?? ResourceAttributeType.STRING;
-    this.isRequired = options.isRequired ?? false;
+    // ensure names are param-cased
+    const forcedOptions: Partial<ResourceAttributeOptions> = {
+      name: paramCase(options.name),
+      shortName: options.shortName
+        ? paramCase(options.shortName)
+        : paramCase(options.name),
+    };
 
-    // dynamo types
-    switch (this.type) {
-      case ResourceAttributeType.GUID:
-      case ResourceAttributeType.STRING:
-      case ResourceAttributeType.EMAIL:
-      case ResourceAttributeType.PHONE:
-      case ResourceAttributeType.URL:
-      case ResourceAttributeType.DATE:
-      case ResourceAttributeType.TIME:
-      case ResourceAttributeType.DATE_TIME:
-      case ResourceAttributeType.JSON:
-      case ResourceAttributeType.IPADDRESS:
-        this.dynamoDbType = DynamoDbType.STRING;
-        this.typeScriptType = "string";
-        break;
-      case ResourceAttributeType.INT:
-      case ResourceAttributeType.FLOAT:
-      case ResourceAttributeType.TIMESTAMP:
-      case ResourceAttributeType.COUNT:
-      case ResourceAttributeType.AVERAGE:
-      case ResourceAttributeType.SUM:
-        this.dynamoDbType = DynamoDbType.NUMBER;
-        this.typeScriptType = "number";
-        break;
-      case ResourceAttributeType.BOOLEAN:
-        this.dynamoDbType = DynamoDbType.BOOLEAN;
-        this.typeScriptType = "boolean";
-        break;
-      default:
-        throw new Error(`Unknown attribute type: ${this.type}`);
+    // all other options
+    this.options = deepMerge([
+      defaultOptions,
+      options,
+      forcedOptions,
+    ]) as Required<ResourceAttributeOptions>;
+
+    // if it's not generated, we need to validate type
+    if (!this.isGenerated) {
+      this.options.createValidations.push(ValidationRule.TYPE);
+      this.options.readValidations.push(ValidationRule.TYPE);
+      this.options.updateValidations.push(ValidationRule.TYPE);
+      this.options.deleteValidations.push(ValidationRule.TYPE);
+      this.options.importValidations.push(ValidationRule.TYPE);
     }
 
-    // deterine generators
-    this.createGenerator =
-      options.createGenerator ?? ResourceAttributeGenerator.NONE;
-    this.readGenerator =
-      options.readGenerator ?? ResourceAttributeGenerator.NONE;
-    this.updateGenerator =
-      options.updateGenerator ?? ResourceAttributeGenerator.NONE;
-    this.deleteGenerator =
-      options.deleteGenerator ?? ResourceAttributeGenerator.NONE;
-    this.importGenerator =
-      options.importGenerator ?? ResourceAttributeGenerator.NONE;
-
-    // determine if this is a system managed attribute.
-    this.isSystem =
-      this.createGenerator !== ResourceAttributeGenerator.NONE ||
-      this.readGenerator !== ResourceAttributeGenerator.NONE ||
-      this.updateGenerator !== ResourceAttributeGenerator.NONE ||
-      this.deleteGenerator !== ResourceAttributeGenerator.NONE ||
-      this.importGenerator !== ResourceAttributeGenerator.NONE;
-
-    // setup validation rules
-    this.createValidations = options.createValidations ?? [];
-    this.readValidations = options.readValidations ?? [];
-    this.updateValidations = options.updateValidations ?? [];
-    this.deleteValidations = options.deleteValidations ?? [];
-    this.importValidations = options.importValidations ?? [];
-
-    // validate type for all non-system managed values
-    if (!this.isSystem) {
-      this.createValidations.push(ValidationRule.TYPE);
-      this.readValidations.push(ValidationRule.TYPE);
-      this.updateValidations.push(ValidationRule.TYPE);
-      this.deleteValidations.push(ValidationRule.TYPE);
-      this.importValidations.push(ValidationRule.TYPE);
+    // if it's required, we need to validate as resuired
+    if (this.options.isRequired) {
+      this.options.createValidations.unshift(ValidationRule.REQUIRED);
+      this.options.readValidations.unshift(ValidationRule.REQUIRED);
+      this.options.updateValidations.unshift(ValidationRule.REQUIRED);
+      this.options.deleteValidations.unshift(ValidationRule.REQUIRED);
+      this.options.importValidations.unshift(ValidationRule.REQUIRED);
     }
 
-    // add required validation if required field. make sure it's the first item in the array.
-    if (this.isRequired) {
-      this.createValidations.unshift(ValidationRule.REQUIRED);
-      this.readValidations.unshift(ValidationRule.REQUIRED);
-      this.updateValidations.unshift(ValidationRule.REQUIRED);
-      this.deleteValidations.unshift(ValidationRule.REQUIRED);
-      this.importValidations.unshift(ValidationRule.REQUIRED);
+    // decorate comments as needed type
+    if (this.options.type === ResourceAttributeType.GUID) {
+      this.options.comments.push(`@type A GUID string.`);
+    }
+
+    // it's generated
+    if (this.isGenerated) {
+      this.options.comments.push(
+        `@readonly This attribute is managed automatically by the system.`
+      );
     }
   }
 
   public get isPartitionKey(): boolean {
-    return this.name === this.resource.partitionKeyStrategy.name;
+    return this.resource.keyAccessPattern.pkAttributes.some((a) => a === this);
   }
-  /**
-   * This attribute is not metadata, it's actual resource data
-   */
+  public get isSortKey(): boolean {
+    return this.resource.keyAccessPattern.skAttributes.some((a) => a === this);
+  }
+
   public get isData(): boolean {
-    return !this.isSystem;
-  }
-  public get isCreateInput(): boolean {
-    return !this.isSystem;
-  }
-  public get isReadInput(): boolean {
-    return this.isRequired;
-  }
-  public get isUpdateInput(): boolean {
-    return !this.isSystem || this.isData;
-  }
-  public get isDeleteInput(): boolean {
-    return this.isRequired;
-  }
-  public get isListInput(): boolean {
-    return false;
-  }
-  public get isImportInput(): boolean {
-    return this.isRequired || this.isData;
+    return !this.isGenerated;
   }
 
   // generated fields
@@ -383,19 +342,19 @@ export class ResourceAttribute extends FractureComponent {
     );
   }
   public get isCreateGenerated(): boolean {
-    return this.createGenerator !== ResourceAttributeGenerator.NONE;
+    return this.options.createGenerator !== ResourceAttributeGenerator.NONE;
   }
   public get isReadGenerated(): boolean {
-    return this.readGenerator !== ResourceAttributeGenerator.NONE;
+    return this.options.readGenerator !== ResourceAttributeGenerator.NONE;
   }
   public get isUpdateGenerated(): boolean {
-    return this.updateGenerator !== ResourceAttributeGenerator.NONE;
+    return this.options.updateGenerator !== ResourceAttributeGenerator.NONE;
   }
   public get isDeleteGenerated(): boolean {
-    return this.deleteGenerator !== ResourceAttributeGenerator.NONE;
+    return this.options.deleteGenerator !== ResourceAttributeGenerator.NONE;
   }
   public get isImportGenerated(): boolean {
-    return this.importGenerator !== ResourceAttributeGenerator.NONE;
+    return this.options.importGenerator !== ResourceAttributeGenerator.NONE;
   }
 
   /**
@@ -417,76 +376,38 @@ export class ResourceAttribute extends FractureComponent {
   public hasCreateGenerator(
     generator: ValueOf<typeof ResourceAttributeGenerator>
   ): boolean {
-    return this.isCreateGenerated && this.createGenerator === generator;
+    return this.isCreateGenerated && this.options.createGenerator === generator;
   }
   public hasReadGenerator(
     generator: ValueOf<typeof ResourceAttributeGenerator>
   ): boolean {
-    return this.isReadGenerated && this.readGenerator === generator;
+    return this.isReadGenerated && this.options.readGenerator === generator;
   }
   public hasUpdateGenerator(
     generator: ValueOf<typeof ResourceAttributeGenerator>
   ): boolean {
-    return this.isUpdateGenerated && this.updateGenerator === generator;
+    return this.isUpdateGenerated && this.options.updateGenerator === generator;
   }
   public hasDeleteGenerator(
     generator: ValueOf<typeof ResourceAttributeGenerator>
   ): boolean {
-    return this.isDeleteGenerated && this.deleteGenerator === generator;
+    return this.isDeleteGenerated && this.options.deleteGenerator === generator;
   }
 
   public generatorForOperation(operation: Operation) {
-    switch (operation.operationSubType) {
+    switch (operation.options.operationSubType) {
       case OPERATION_SUB_TYPE.CREATE_ONE:
-        return this.createGenerator;
+        return this.options.createGenerator;
       case OPERATION_SUB_TYPE.READ_ONE:
-        return this.readGenerator;
+        return this.options.readGenerator;
       case OPERATION_SUB_TYPE.UPDATE_ONE:
-        return this.updateGenerator;
+        return this.options.updateGenerator;
       case OPERATION_SUB_TYPE.DELETE_ONE:
-        return this.deleteGenerator;
+        return this.options.deleteGenerator;
       case OPERATION_SUB_TYPE.IMPORT_ONE:
-        return this.importGenerator;
+        return this.options.importGenerator;
       default:
         throw new Error(`Unknown sub-operation: ${operation}`);
     }
-  }
-
-  /**
-   * Get comment lines.
-   */
-  public get comment(): string[] {
-    const c = [...this._comment];
-
-    // attribute type
-    if (this.type === ResourceAttributeType.GUID) {
-      c.push(`@type A GUID string.`);
-    }
-
-    // it's sytem managed
-    if (this.isSystem) {
-      c.push(
-        `@readonly This attribute is managed automatically by the system.`
-      );
-    }
-
-    return c;
-  }
-
-  /**
-   * Get the formatted attrbute name used by TypeScript.
-   */
-  public get attributeName() {
-    return formatStringByNamingStrategy(
-      this.name,
-      this.fracture.namingStrategy.model.attributeName
-    );
-  }
-
-  public get attributeShortName() {
-    return formatStringByNamingStrategy(
-      this.shortName,
-      this.fracture.namingStrategy.model.attributeName
-    );
   }
 }

@@ -1,4 +1,4 @@
-import { camelCase, paramCase } from "change-case";
+import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Resource } from "./resource";
@@ -11,18 +11,6 @@ import { Structure, STRUCTURE_TYPE } from "./structure";
  *****************************************************************************/
 
 export type OperationOptions = {
-  /**
-   * Name for this operation
-   */
-  name?: string;
-  /**
-   *  What input shape should we expect to see?
-   */
-  inputStructure?: Structure;
-  /**
-   *  What output shape do we expect to see here?
-   */
-  outputStructure?: Structure;
   /**
    * What (generic) type of operation is this?
    * Default: query
@@ -55,117 +43,97 @@ export const OPERATION_SUB_TYPE = {
 } as const;
 
 export class Operation extends FractureComponent {
+  // member components
+  // parents
   public readonly resource: Resource;
   public readonly service: Service;
-  /**
-   * Name for this operation
-   */
-  public readonly name: string;
-  /**
-   *  What input shape should we expect to see?
-   */
-  public readonly inputStructure: Structure;
-  /**
-   *  What output shape do we expect to see here?
-   */
-  public readonly outputStructure: Structure;
-  /**
-   * What (generic) type of operation is this?
-   * Default: QUERY
-   */
-  public readonly operationType: ValueOf<typeof OPERATION_TYPE>;
-  /**
-   * What (more specific) specific type of operation is this?
-   * Default: GET_MANY
-   */
-  public readonly operationSubType: ValueOf<typeof OPERATION_SUB_TYPE>;
-  /**
-   * Is this a batch operation?
-   */
-  public readonly isBatch: boolean;
-  /**
-   *  What is the verb used to describe this operation?
-   *  (get, update, delete)
-   */
-  public readonly operationVerb: string;
+  // all other options
+  public readonly options: Required<OperationOptions>;
+  // private cached properties
+  private _inputStructure: Structure;
+  private _outputStructure: Structure;
 
   constructor(resource: Resource, options: OperationOptions) {
     super(resource.fracture);
 
-    // parent + inverse
+    /***************************************************************************
+     *
+     * DEFAULT OPTIONS
+     *
+     **************************************************************************/
+
+    const defaultOptions: Partial<OperationOptions> = {
+      operationType: OPERATION_TYPE.QUERY,
+      operationSubType: OPERATION_SUB_TYPE.READ_MANY,
+    };
+
+    /***************************************************************************
+     *
+     * INIT OPERATION
+     *
+     **************************************************************************/
+
+    // member components
+
+    // parents + inverse
     this.resource = resource;
+    this.service = resource.service;
     this.resource.operations.push(this);
 
-    this.service = resource.service;
-    this.operationType = options?.operationType
-      ? options.operationType
-      : OPERATION_TYPE.QUERY;
-    this.operationSubType = options?.operationSubType
-      ? options.operationSubType
-      : OPERATION_SUB_TYPE.READ_MANY;
-    this.isBatch =
-      this.operationSubType === OPERATION_SUB_TYPE.IMPORT_MANY ||
-      this.operationSubType === OPERATION_SUB_TYPE.CREATE_MANY ||
-      this.operationSubType === OPERATION_SUB_TYPE.READ_MANY ||
-      this.operationSubType === OPERATION_SUB_TYPE.UPDATE_MANY ||
-      this.operationSubType === OPERATION_SUB_TYPE.DELETE_MANY;
-
-    this.operationVerb =
-      this.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE ||
-      this.operationSubType === OPERATION_SUB_TYPE.IMPORT_MANY
-        ? "import"
-        : this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE ||
-          this.operationSubType === OPERATION_SUB_TYPE.CREATE_MANY
-        ? "create"
-        : this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE ||
-          this.operationSubType === OPERATION_SUB_TYPE.UPDATE_MANY
-        ? "update"
-        : this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE ||
-          this.operationSubType === OPERATION_SUB_TYPE.DELETE_MANY
-        ? "delete"
-        : "read";
-
-    /**
-     * Create name for this operation, if not provided
-     */
-    this.name = options.name
-      ? paramCase(options.name)
-      : paramCase(
-          `${this.operationVerb}-${this.isBatch ? "batch" : ""}-${
-            this.resource.name
-          }`
-        );
-
-    this.inputStructure =
-      options.inputStructure ||
-      new Structure(this, { type: STRUCTURE_TYPE.INPUT });
-
-    this.outputStructure =
-      options.outputStructure ||
-      new Structure(this, { type: STRUCTURE_TYPE.OUTPUT });
+    // all other options
+    this.options = deepMerge([
+      defaultOptions,
+      options,
+    ]) as Required<OperationOptions>;
   }
 
-  public get commandName(): string {
-    return camelCase(this.name);
+  public get isBatch(): boolean {
+    return (
+      this.options.operationSubType === OPERATION_SUB_TYPE.IMPORT_MANY ||
+      this.options.operationSubType === OPERATION_SUB_TYPE.CREATE_MANY ||
+      this.options.operationSubType === OPERATION_SUB_TYPE.READ_MANY ||
+      this.options.operationSubType === OPERATION_SUB_TYPE.UPDATE_MANY ||
+      this.options.operationSubType === OPERATION_SUB_TYPE.DELETE_MANY
+    );
+  }
+
+  /***************************************************************************
+   *
+   * INPUT / OUTPUT STRUCTURES
+   *
+   * We lazy load these since all the attributes may not exist on the resource
+   * when this component is initially created.
+   *
+   **************************************************************************/
+
+  public get inputStructure(): Structure {
+    if (!this._inputStructure) {
+      this._inputStructure = new Structure(this.resource, {
+        type: STRUCTURE_TYPE.INPUT,
+        operation: this,
+      });
+    }
+    return this._inputStructure;
+  }
+
+  public get outputStructure(): Structure {
+    if (!this._outputStructure) {
+      this._outputStructure = new Structure(this.resource, {
+        type: STRUCTURE_TYPE.INPUT,
+        operation: this,
+      });
+    }
+    return this._outputStructure;
   }
 
   /**
-   * Return attributes generated for this particular operation type
+   * Return attributes to be generated for this particular operation type
    */
   public get generatedAttributes(): ResourceAttribute[] {
-    switch (this.operationSubType) {
-      case OPERATION_SUB_TYPE.CREATE_ONE:
-        return this.resource.createGeneratedAttributes;
-      case OPERATION_SUB_TYPE.READ_ONE:
-        return this.resource.readGeneratedAttributes;
-      case OPERATION_SUB_TYPE.UPDATE_ONE:
-        return this.resource.updateGeneratedAttributes;
-      case OPERATION_SUB_TYPE.DELETE_ONE:
-        return this.resource.deleteGeneratedAttributes;
-      case OPERATION_SUB_TYPE.IMPORT_ONE:
-        return this.resource.importGeneratedAttributes;
-      default:
-        throw new Error(`Unhandled operation type: ${this.operationSubType}`);
-    }
+    return this.resource.generatedAttributesForOperation(this);
+  }
+
+  public get dataAttributes(): ResourceAttribute[] {
+    return this.resource.dataAttributes;
   }
 }

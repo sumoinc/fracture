@@ -1,13 +1,9 @@
-import { join } from "path";
-import { paramCase, pascalCase } from "change-case";
+import { paramCase } from "change-case";
+import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { AccessPattern } from "./access-pattern";
 import { AuditStrategy } from "./audit-strategy";
 import { FractureComponent } from "./component";
-import {
-  formatStringByNamingStrategy,
-  NAMING_STRATEGY_TYPE,
-} from "./naming-strategy";
 import { Operation, OPERATION_SUB_TYPE, OPERATION_TYPE } from "./operation";
 import { PartitionKeyStrategy } from "./partition-key-strategy";
 import {
@@ -16,6 +12,7 @@ import {
   ResourceAttributeOptions,
 } from "./resource-attribute";
 import { Service } from "./service";
+import { Structure } from "./structure";
 import { TypeStrategy } from "./type-strategy";
 import { VersionStrategy } from "./version-strategy";
 
@@ -32,21 +29,21 @@ export interface ResourceOptions {
    * Comment lines to add to the Resource.
    * @default []
    */
-  comment?: string[];
+  comments?: string[];
   /**
    * Should this resource be persisted to a database?
    * @default true
    */
-  persistant?: boolean;
-  /**
-   * The type strategy to use for the partition key.
-   */
-  partitionKeyStrategy?: PartitionKeyStrategy;
+  isPersistant?: boolean;
   /**
    * Versioned.
    * @default service's default
    */
-  versioned?: boolean;
+  isVersioned?: boolean;
+  /**
+   * The type strategy to use for the partition key.
+   */
+  partitionKeyStrategy?: PartitionKeyStrategy;
   /**
    * The versioning strategy to use for generated code.
    */
@@ -62,94 +59,162 @@ export interface ResourceOptions {
 }
 
 export class Resource extends FractureComponent {
-  public readonly service: Service;
-  public readonly name: string;
-  public readonly shortName: string;
-  public readonly outdir: string;
-  private readonly _comment: string[];
-  public readonly persistant: boolean;
-  public readonly partitionKeyStrategy: PartitionKeyStrategy;
-  public readonly versioned: boolean;
-  public readonly versionStrategy: VersionStrategy;
-  public readonly typeStrategy: TypeStrategy;
-  public readonly auditStrategy: AuditStrategy;
-  public attributes: ResourceAttribute[] = [];
-  public operations: Operation[] = [];
+  // member components
+  public attributes: ResourceAttribute[];
+  public operations: Operation[];
   public keyAccessPattern: AccessPattern;
+  public accessPatterns: AccessPattern[];
+  public structures: Structure[];
+  // parent
+  public readonly service: Service;
+  // all other options
+  public readonly options: Required<ResourceOptions>;
 
   constructor(service: Service, options: ResourceOptions) {
     super(service.fracture);
+
+    /***************************************************************************
+     *
+     * DEFAULT OPTIONS
+     *
+     * Pull our service defaults, add a default comment if none are otherwise
+     * given, and establish a default keyAccessPattern for storing data in
+     * DynamoDB.
+     *
+     **************************************************************************/
+
+    const {
+      isVersioned,
+      partitionKeyStrategy,
+      versionStrategy,
+      typeStrategy,
+      auditStrategy,
+    } = service.options;
+
+    const defaultOptions: Partial<ResourceOptions> = {
+      comments: [`A ${options.name}.`],
+      isPersistant: true,
+      isVersioned,
+      partitionKeyStrategy,
+      versionStrategy,
+      typeStrategy,
+      auditStrategy,
+    };
+
+    /***************************************************************************
+     *
+     * INIT RESOURCE
+     *
+     **************************************************************************/
+
+    // member components
+    this.attributes = [];
+    this.operations = [];
+    this.keyAccessPattern = new AccessPattern(this, {
+      name: "key",
+      gsi: service.options.dynamodb.keyGsi,
+    });
+    this.accessPatterns = [];
+    this.structures = [];
 
     // parent + inverse
     this.service = service;
     this.service.resources.push(this);
 
-    this.name = paramCase(options.name);
-    this.shortName = options.shortName
-      ? pascalCase(options.shortName).toLowerCase()
-      : pascalCase(options.name).toLowerCase();
-    this.outdir = join(service.outdir, this.name);
-    this._comment = options.comment ?? [`A ${this.name}.`];
-    this.persistant = options.persistant ?? true;
-    this.partitionKeyStrategy =
-      options.partitionKeyStrategy ?? service.partitionKeyStrategy;
-    this.versioned = options.versioned ?? service.versioned;
-    this.versionStrategy = options.versionStrategy ?? service.versionStrategy;
-    this.typeStrategy = options.typeStrategy ?? service.typeStrategy;
-    this.auditStrategy = options.auditStrategy ?? service.auditStrategy;
+    // ensure names are param-cased
+    const forcedOptions: Partial<ResourceOptions> = {
+      name: paramCase(options.name),
+      shortName: options.shortName
+        ? paramCase(options.shortName)
+        : paramCase(options.name),
+    };
+
+    // all other options
+    this.options = deepMerge([
+      defaultOptions,
+      options,
+      forcedOptions,
+    ]) as Required<ResourceOptions>;
+
+    /***************************************************************************
+     *
+     * RESOURCE ATTRIBUTES
+     *
+     * Add some default attributes based on the resource's options.
+     *
+     **************************************************************************/
 
     /**
      * Add the partition key attribute.
      */
-    if (this.persistant) {
-      this.addResourceAttribute(this.partitionKeyStrategy);
+    if (this.options.isPersistant) {
+      const pkAttribute = this.addResourceAttribute(
+        this.options.partitionKeyStrategy
+      );
+      this.keyAccessPattern.addPkAttribute(pkAttribute);
     }
 
     /**
      * Add type attribute.
      */
-    this.addResourceAttribute(this.typeStrategy);
+    const typeAttribute = this.addResourceAttribute(this.options.typeStrategy);
+    if (this.options.isPersistant) {
+      this.keyAccessPattern.addSkAttribute(typeAttribute);
+    }
 
     /**
      * Add the version attribute if versioned.
      */
-    if (this.versioned && this.persistant) {
-      this.addResourceAttribute(this.versionStrategy.attribute);
+    if (this.options.isVersioned && this.options.isPersistant) {
+      const versionAttribute = this.addResourceAttribute(
+        this.options.versionStrategy.attribute
+      );
+      this.keyAccessPattern.addSkAttribute(versionAttribute);
     }
 
     /**
      * Add an (optional) Audit Strategies
      */
-    if (this.auditStrategy.create.dateAttribute && this.persistant) {
-      this.addResourceAttribute(this.auditStrategy.create.dateAttribute);
-    }
-    if (this.auditStrategy.create.userAttribute && this.persistant) {
-      this.addResourceAttribute(this.auditStrategy.create.userAttribute);
-    }
-    if (this.auditStrategy.update.dateAttribute && this.persistant) {
-      this.addResourceAttribute(this.auditStrategy.update.dateAttribute);
-    }
-    if (this.auditStrategy.update.userAttribute && this.persistant) {
-      this.addResourceAttribute(this.auditStrategy.update.userAttribute);
-    }
-    if (this.auditStrategy.delete.dateAttribute && this.persistant) {
-      this.addResourceAttribute(this.auditStrategy.delete.dateAttribute);
-    }
-    if (this.auditStrategy.delete.userAttribute && this.persistant) {
-      this.addResourceAttribute(this.auditStrategy.delete.userAttribute);
+    if (this.options.isPersistant) {
+      if (this.options.auditStrategy.create.dateAttribute) {
+        this.addResourceAttribute(
+          this.options.auditStrategy.create.dateAttribute
+        );
+      }
+      if (this.options.auditStrategy.create.userAttribute) {
+        this.addResourceAttribute(
+          this.options.auditStrategy.create.userAttribute
+        );
+      }
+      if (this.options.auditStrategy.update.dateAttribute) {
+        this.addResourceAttribute(
+          this.options.auditStrategy.update.dateAttribute
+        );
+      }
+      if (this.options.auditStrategy.update.userAttribute) {
+        this.addResourceAttribute(
+          this.options.auditStrategy.update.userAttribute
+        );
+      }
+      if (this.options.auditStrategy.delete.dateAttribute) {
+        this.addResourceAttribute(
+          this.options.auditStrategy.delete.dateAttribute
+        );
+      }
+      if (this.options.auditStrategy.delete.userAttribute) {
+        this.addResourceAttribute(
+          this.options.auditStrategy.delete.userAttribute
+        );
+      }
     }
 
-    // default access pattern for now
-    this.keyAccessPattern = new AccessPattern(this, {
-      pk: ["id"],
-      sk: ["type", "version"],
-    });
-  }
-
-  public build() {
-    /**
-     * ADD CRUD OPERATIONS
-     */
+    /***************************************************************************
+     *
+     * CRUD OPERATIONS
+     *
+     * This needs to be done here since we won't know all of the components
+     *
+     **************************************************************************/
     new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
@@ -170,31 +235,10 @@ export class Resource extends FractureComponent {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.IMPORT_ONE,
     });
-  }
-
-  /**
-   * Get comment lines.
-   */
-  public get comment(): string[] {
-    return this._comment;
-  }
-
-  /**
-   * Generate a name for the resource formatted according to the naming
-   * strategy.
-   */
-  public get interfaceName() {
-    return formatStringByNamingStrategy(
-      this.name,
-      this.fracture.namingStrategy.model.interfaceName
-    );
-  }
-
-  public get interfaceNameDynamo() {
-    return formatStringByNamingStrategy(
-      `dynamo-${this.name}`,
-      NAMING_STRATEGY_TYPE.PASCAL_CASE
-    );
+    new Operation(this, {
+      operationType: OPERATION_TYPE.QUERY,
+      operationSubType: OPERATION_SUB_TYPE.READ_MANY,
+    });
   }
 
   /**
@@ -213,9 +257,7 @@ export class Resource extends FractureComponent {
   public get dataAttributes(): ResourceAttribute[] {
     return this.attributes.filter((a) => a.isData);
   }
-  public get listAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => a.isListInput);
-  }
+
   // generated attrubutes
   public get createGeneratedAttributes(): ResourceAttribute[] {
     return this.attributes.filter((a) => a.isCreateGenerated);
@@ -233,32 +275,63 @@ export class Resource extends FractureComponent {
     return this.attributes.filter((a) => a.isImportGenerated);
   }
 
+  /**
+   * Returns an array of generated attributes for a given operation.
+   * @param operation
+   * @returns
+   */
+  public generatedAttributesForOperation(
+    operation: Operation
+  ): ResourceAttribute[] {
+    switch (operation.options.operationSubType) {
+      case OPERATION_SUB_TYPE.CREATE_ONE:
+      case OPERATION_SUB_TYPE.CREATE_MANY:
+        return this.createGeneratedAttributes;
+      case OPERATION_SUB_TYPE.READ_ONE:
+      case OPERATION_SUB_TYPE.READ_MANY:
+        return this.readGeneratedAttributes;
+      case OPERATION_SUB_TYPE.UPDATE_ONE:
+      case OPERATION_SUB_TYPE.UPDATE_MANY:
+        return this.updateGeneratedAttributes;
+      case OPERATION_SUB_TYPE.DELETE_ONE:
+      case OPERATION_SUB_TYPE.DELETE_MANY:
+        return this.deleteGeneratedAttributes;
+      case OPERATION_SUB_TYPE.IMPORT_ONE:
+      case OPERATION_SUB_TYPE.IMPORT_MANY:
+        return this.importGeneratedAttributes;
+      default:
+        throw new Error(
+          `Unhandled operation type: ${operation.options.operationSubType}`
+        );
+    }
+  }
+
   public hasCreateGenerator = (
     generator: ValueOf<typeof ResourceAttributeGenerator>
   ): boolean => {
     return this.createGeneratedAttributes.some(
-      (a) => a.createGenerator === generator
+      (a) => a.options.createGenerator === generator
     );
   };
   public hasReadGenerator = (
     generator: ValueOf<typeof ResourceAttributeGenerator>
   ): boolean => {
     return this.readGeneratedAttributes.some(
-      (a) => a.readGenerator === generator
+      (a) => a.options.readGenerator === generator
     );
   };
   public hasUpdateGenerator = (
     generator: ValueOf<typeof ResourceAttributeGenerator>
   ): boolean => {
     return this.updateGeneratedAttributes.some(
-      (a) => a.updateGenerator === generator
+      (a) => a.options.updateGenerator === generator
     );
   };
   public hasDeleteGenerator = (
     generator: ValueOf<typeof ResourceAttributeGenerator>
   ): boolean => {
     return this.deleteGeneratedAttributes.some(
-      (a) => a.deleteGenerator === generator
+      (a) => a.options.deleteGenerator === generator
     );
   };
 

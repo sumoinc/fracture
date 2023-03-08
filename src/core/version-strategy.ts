@@ -15,20 +15,3 @@ export type VersionStrategy = {
   currentVersion: string;
   deletedVersion: string;
 };
-
-export const defaultVersionStrategy: VersionStrategy = {
-  attribute: {
-    name: "version",
-    shortName: "v",
-    comment: [`The version of this record`, `@default "LATEST"`],
-    type: ResourceAttributeType.STRING,
-    isRequired: true,
-    createGenerator: ResourceAttributeGenerator.VERSION,
-    readGenerator: ResourceAttributeGenerator.VERSION,
-    updateGenerator: ResourceAttributeGenerator.VERSION,
-    deleteGenerator: ResourceAttributeGenerator.VERSION,
-  },
-  type: VERSION_TYPE.DATE_TIME_STAMP,
-  currentVersion: "LATEST",
-  deletedVersion: "DELETED",
-};
