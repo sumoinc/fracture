@@ -206,6 +206,8 @@ export class Resource extends FractureComponent {
           this.options.auditStrategy.delete.userAttribute
         );
       }
+
+      return this;
     }
 
     /***************************************************************************
