@@ -17,17 +17,17 @@ specifiers:
   jest-junit: ^13
   jsii: ^1.77.0
   jsii-diff: ^1.77.0
-  jsii-docgen: ^7.1.17
+  jsii-docgen: ^7.1.18
   jsii-pacmak: ^1.77.0
   npm-check-updates: ^16
-  projen: ^0.67.74
+  projen: ^0.67.75
   standard-version: ^9
   ts-jest: ^27
   ts-node: ^10.9.1
   typescript: ^4.9.5
 
 dependencies:
-  projen: 0.67.74
+  projen: 0.67.75
 
 devDependencies:
   '@types/jest': 27.5.2
@@ -42,7 +42,7 @@ devDependencies:
   jest-junit: 13.2.0
   jsii: 1.77.0
   jsii-diff: 1.77.0
-  jsii-docgen: 7.1.17
+  jsii-docgen: 7.1.18
   jsii-pacmak: 1.77.0
   npm-check-updates: 16.7.10
   standard-version: 9.5.0
@@ -1538,8 +1538,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001460
-      electron-to-chromium: 1.4.321
+      caniuse-lite: 1.0.30001462
+      electron-to-chromium: 1.4.323
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10_browserslist@4.21.5
     dev: true
@@ -1668,8 +1668,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /caniuse-lite/1.0.30001460:
-    resolution: {integrity: sha512-Bud7abqjvEjipUkpLs4D7gR0l8hBYBHoa+tGtKJHvT2AYzLp1z7EmVkUT4ERpVUfca8S2HGIVs883D8pUH1ZzQ==}
+  /caniuse-lite/1.0.30001462:
+    resolution: {integrity: sha512-PDd20WuOBPiasZ7KbFnmQRyuLE7cFXW2PVd7dmALzbkUXEP46upAuCDm9eY9vho8fgNMGmbAX92QBZHzcnWIqw==}
     dev: true
 
   /case/1.6.3:
@@ -2282,8 +2282,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /electron-to-chromium/1.4.321:
-    resolution: {integrity: sha512-ERuAqNq7YknVY3+47VbB+Q92kWH7O7sX3mkZINqZtsGJMQFb0dj71d5U3PRTihX03qt2NWIfZic2CCcGXOHJ7A==}
+  /electron-to-chromium/1.4.323:
+    resolution: {integrity: sha512-+a0hMEQxE8u1F1vOHcE0M18kQ2+4AwOXdRrU4avZ1LeR/sa9WAallYE3uES/PNcEGt/wCFcOgWcArSLx5C+WNQ==}
     dev: true
 
   /emittery/0.8.1:
@@ -4224,14 +4224,14 @@ packages:
       '@jsii/spec': 1.77.0
       fs-extra: 10.1.0
       jsii-reflect: 1.77.0
-      log4js: 6.8.0
+      log4js: 6.9.0
       yargs: 16.2.0
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /jsii-docgen/7.1.17:
-    resolution: {integrity: sha512-eRCvsNvqpZOBcYYO0O1VWzRKyAgkilaSwdl66ncL45Rg6vmkg92fDMglwxjIbnfRCt2KjehenlNY+lfD1XMTiw==}
+  /jsii-docgen/7.1.18:
+    resolution: {integrity: sha512-FKpgG+rwXocFOJL6VkWBspReSNZNu/7A1z8IWr1+MtthDuwP9EV/D0e+xUFqzeJojBi1G78BtQvcLeXGnW1FSg==}
     engines: {node: '>= 14.17.0'}
     hasBin: true
     dependencies:
@@ -4314,7 +4314,7 @@ packages:
       chalk: 4.1.2
       fast-deep-equal: 3.1.3
       fs-extra: 10.1.0
-      log4js: 6.8.0
+      log4js: 6.9.0
       semver: 7.3.8
       semver-intersect: 1.4.0
       sort-json: 2.0.1
@@ -4508,8 +4508,8 @@ packages:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
     dev: true
 
-  /log4js/6.8.0:
-    resolution: {integrity: sha512-g+V8gZyurIexrOvWQ+AcZsIvuK/lBnx2argejZxL4gVZ4Hq02kUYH6WZOnqxgBml+zzQZYdaEoTN84B6Hzm8Fg==}
+  /log4js/6.9.0:
+    resolution: {integrity: sha512-sAGxJKqxXFlK+05OlMH6SIDAdvgQHj95EfSDOfkHW6BQUlkz+fZw8PWhydfRHq+0UuWYWR55mVnR+KTnWE2JDA==}
     engines: {node: '>=8.0'}
     dependencies:
       date-format: 4.0.14
@@ -5365,8 +5365,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen/0.67.74:
-    resolution: {integrity: sha512-4ov6Y1p9+OdJau9aHXFHaEpNza+Au7/fvsDmI1uM/yHio77mNLiHel8Js67sL1HjT9h0EySNuvxA0i5Wk1Lr9A==}
+  /projen/0.67.75:
+    resolution: {integrity: sha512-cdCRjhyIumTPOlKIaNSl4FtJUV5QC6C11FqbdEXhOBsnLleppo62NoS/renS4IGkruyHyqliX0bXakBCskYiaQ==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
@@ -5912,8 +5912,8 @@ packages:
       cross-spawn: 7.0.3
     dev: true
 
-  /spdx-correct/3.1.1:
-    resolution: {integrity: sha512-cOYcUWwhCuHCXi49RhFRCyJEK3iPj1Ziz9DpViV3tbZOwXD49QzIN3MpOLJNxh2qwq2lJJZaKMVw9qNi4jTC0w==}
+  /spdx-correct/3.2.0:
+    resolution: {integrity: sha512-kN9dJbvnySHULIluDHy32WHRUu3Og7B9sbY7tsFLctQkIqnMh3hErYgdMjTYuqmcXX+lK5T1lnUt3G7zNswmZA==}
     dependencies:
       spdx-expression-parse: 3.0.1
       spdx-license-ids: 3.0.12
@@ -6599,7 +6599,7 @@ packages:
   /validate-npm-package-license/3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
     dependencies:
-      spdx-correct: 3.1.1
+      spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
     dev: true
 
