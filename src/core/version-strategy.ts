@@ -1,9 +1,5 @@
 import { ValueOf } from "type-fest";
-import {
-  ResourceAttributeGenerator,
-  ResourceAttributeOptions,
-  ResourceAttributeType,
-} from "./resource-attribute";
+import { ResourceAttributeOptions } from "./resource-attribute";
 
 export const VERSION_TYPE = {
   DATE_TIME_STAMP: "datetimestamp",

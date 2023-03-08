@@ -1,5 +1,4 @@
 import { paramCase } from "change-case";
-import { deepMerge } from "projen/lib/util";
 import { Resource } from "./resource";
 import { ResourceAttribute } from "./resource-attribute";
 import { FractureComponent } from "../core/component";

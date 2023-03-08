@@ -241,6 +241,10 @@ export class Resource extends FractureComponent {
     });
   }
 
+  public get name(): string {
+    return this.options.name;
+  }
+
   /**
    * Adds an attribute
    */

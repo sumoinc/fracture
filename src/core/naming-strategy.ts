@@ -1,5 +1,7 @@
 import { camelCase, paramCase, pascalCase } from "change-case";
 import { ValueOf } from "type-fest";
+import { OPERATION_SUB_TYPE } from "./operation";
+import { STRUCTURE_TYPE } from "./structure";
 
 export const NAMING_STRATEGY_TYPE = {
   /**
@@ -40,23 +42,20 @@ export type NamingStrategy = {
       file: ValueOf<typeof NAMING_STRATEGY_TYPE>;
     };
   };
-  operations: {
-    commandName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-    commands: {
-      commandPrefix: string;
-      commandSuffix: string;
-      inputPrefix: string;
-      inputSuffix: string;
-      outputPrefix: string;
-      outputSuffix: string;
+  structures: {
+    prefixes: {
+      [key in ValueOf<typeof STRUCTURE_TYPE>]: string;
     };
-    crud: {
-      createName: string;
-      readName: string;
-      updateName: string;
-      deleteName: string;
-      listName: string;
-      importName: string;
+    suffixes: {
+      [key in ValueOf<typeof STRUCTURE_TYPE>]: string;
+    };
+  };
+  operations: {
+    prefixes: {
+      [key in ValueOf<typeof OPERATION_SUB_TYPE>]: string;
+    };
+    suffixes: {
+      [key in ValueOf<typeof OPERATION_SUB_TYPE>]: string;
     };
   };
 };

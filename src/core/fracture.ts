@@ -2,6 +2,7 @@ import { Component, Project } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { AuditStrategy } from "./audit-strategy";
 import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
+import { OPERATION_SUB_TYPE } from "./operation";
 import { Organization, OrganizationOptions } from "./organization";
 import { PartitionKeyStrategy } from "./partition-key-strategy";
 import {
@@ -9,6 +10,7 @@ import {
   ResourceAttributeType,
 } from "./resource-attribute";
 import { Service, ServiceOptions } from "./service";
+import { STRUCTURE_TYPE } from "./structure";
 import { TypeStrategy } from "./type-strategy";
 import { VersionStrategy, VERSION_TYPE } from "./version-strategy";
 import { TypescriptService } from "../generators/ts/typescript-service";
@@ -101,23 +103,44 @@ export class Fracture extends Component {
             file: NAMING_STRATEGY_TYPE.PARAM_CASE,
           },
         },
-        operations: {
-          commandName: NAMING_STRATEGY_TYPE.PASCAL_CASE,
-          commands: {
-            commandPrefix: "",
-            commandSuffix: "command",
-            inputPrefix: "",
-            inputSuffix: "input",
-            outputPrefix: "",
-            outputSuffix: "output",
+        structures: {
+          prefixes: {
+            [STRUCTURE_TYPE.DATA]: "",
+            [STRUCTURE_TYPE.INPUT]: "",
+            [STRUCTURE_TYPE.OUTPUT]: "",
+            [STRUCTURE_TYPE.TRANSIENT]: "",
           },
-          crud: {
-            createName: "create",
-            readName: "read",
-            updateName: "update",
-            deleteName: "delete",
-            listName: "list",
-            importName: "import",
+          suffixes: {
+            [STRUCTURE_TYPE.DATA]: "Input",
+            [STRUCTURE_TYPE.INPUT]: "Input",
+            [STRUCTURE_TYPE.OUTPUT]: "Input",
+            [STRUCTURE_TYPE.TRANSIENT]: "Input",
+          },
+        },
+        operations: {
+          prefixes: {
+            [OPERATION_SUB_TYPE.CREATE_ONE]: "create",
+            [OPERATION_SUB_TYPE.CREATE_MANY]: "create",
+            [OPERATION_SUB_TYPE.READ_ONE]: "get",
+            [OPERATION_SUB_TYPE.READ_MANY]: "get",
+            [OPERATION_SUB_TYPE.UPDATE_ONE]: "update",
+            [OPERATION_SUB_TYPE.UPDATE_MANY]: "update",
+            [OPERATION_SUB_TYPE.DELETE_ONE]: "delete",
+            [OPERATION_SUB_TYPE.DELETE_MANY]: "delete",
+            [OPERATION_SUB_TYPE.IMPORT_ONE]: "import",
+            [OPERATION_SUB_TYPE.IMPORT_MANY]: "import",
+          },
+          suffixes: {
+            [OPERATION_SUB_TYPE.CREATE_ONE]: "",
+            [OPERATION_SUB_TYPE.CREATE_MANY]: "",
+            [OPERATION_SUB_TYPE.READ_ONE]: "",
+            [OPERATION_SUB_TYPE.READ_MANY]: "",
+            [OPERATION_SUB_TYPE.UPDATE_ONE]: "",
+            [OPERATION_SUB_TYPE.UPDATE_MANY]: "",
+            [OPERATION_SUB_TYPE.DELETE_ONE]: "",
+            [OPERATION_SUB_TYPE.DELETE_MANY]: "",
+            [OPERATION_SUB_TYPE.IMPORT_ONE]: "",
+            [OPERATION_SUB_TYPE.IMPORT_MANY]: "",
           },
         },
       },

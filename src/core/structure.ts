@@ -1,14 +1,8 @@
-import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { SetRequired, ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
-import {
-  formatStringByNamingStrategy,
-  NAMING_STRATEGY_TYPE,
-} from "./naming-strategy";
-import { Operation, OPERATION_SUB_TYPE } from "./operation";
+import { Operation } from "./operation";
 import { Resource } from "./resource";
-import { ResourceAttributeGenerator } from "./resource-attribute";
 import { Service } from "./service";
 import { StructureAttribute } from "./structure-attribute";
 

@@ -1,8 +1,7 @@
-import { paramCase, pascalCase } from "change-case";
+import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
-import { formatStringByNamingStrategy } from "./naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import { Service } from "./service";

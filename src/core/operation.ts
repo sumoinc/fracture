@@ -85,6 +85,33 @@ export class Operation extends FractureComponent {
       defaultOptions,
       options,
     ]) as Required<OperationOptions>;
+
+    this._inputStructure = new Structure(this.resource, {
+      type: STRUCTURE_TYPE.INPUT,
+      operation: this,
+    });
+
+    this._outputStructure = new Structure(this.resource, {
+      type: STRUCTURE_TYPE.OUTPUT,
+      operation: this,
+    });
+  }
+
+  /**
+   * operatoion name, based on the naming strategy
+   */
+  public get name() {
+    const resourceName = this.resource.name;
+    const prefix =
+      this.fracture.options.namingStrategy.operations.prefixes[
+        this.options.operationSubType
+      ];
+    const suffix =
+      this.fracture.options.namingStrategy.operations.suffixes[
+        this.options.operationSubType
+      ];
+
+    return `${prefix}-${resourceName}-${suffix}`;
   }
 
   public get isBatch(): boolean {
