@@ -95,6 +95,8 @@ export class Operation extends FractureComponent {
       type: STRUCTURE_TYPE.OUTPUT,
       operation: this,
     });
+
+    return this;
   }
 
   /**
