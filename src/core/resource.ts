@@ -2,10 +2,8 @@ import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { AccessPattern } from "./access-pattern";
-import { AuditStrategy } from "./audit-strategy";
 import { FractureComponent } from "./component";
 import { Operation, OPERATION_SUB_TYPE, OPERATION_TYPE } from "./operation";
-import { PartitionKeyStrategy } from "./partition-key-strategy";
 import {
   ResourceAttribute,
   ResourceAttributeGenerator,
@@ -13,8 +11,6 @@ import {
 } from "./resource-attribute";
 import { Service } from "./service";
 import { Structure } from "./structure";
-import { TypeStrategy } from "./type-strategy";
-import { VersionStrategy } from "./version-strategy";
 
 export interface ResourceOptions {
   /**
@@ -35,27 +31,6 @@ export interface ResourceOptions {
    * @default true
    */
   isPersistant?: boolean;
-  /**
-   * Versioned.
-   * @default service's default
-   */
-  isVersioned?: boolean;
-  /**
-   * The type strategy to use for the partition key.
-   */
-  partitionKeyStrategy?: PartitionKeyStrategy;
-  /**
-   * The versioning strategy to use for generated code.
-   */
-  versionStrategy?: VersionStrategy;
-  /**
-   * The type strategy to use for generated code.
-   */
-  typeStrategy?: TypeStrategy;
-  /**
-   * The audit strategy to use for generated code.
-   */
-  auditStrategy?: AuditStrategy;
 }
 
 export class Resource extends FractureComponent {
@@ -77,28 +52,10 @@ export class Resource extends FractureComponent {
      *
      * DEFAULT OPTIONS
      *
-     * Pull our service defaults, add a default comment if none are otherwise
-     * given, and establish a default keyAccessPattern for storing data in
-     * DynamoDB.
-     *
      **************************************************************************/
-
-    const {
-      isVersioned,
-      partitionKeyStrategy,
-      versionStrategy,
-      typeStrategy,
-      auditStrategy,
-    } = service.options;
-
     const defaultOptions: Partial<ResourceOptions> = {
       comments: [`A ${options.name}.`],
       isPersistant: true,
-      isVersioned,
-      partitionKeyStrategy,
-      versionStrategy,
-      typeStrategy,
-      auditStrategy,
     };
 
     /***************************************************************************
@@ -149,7 +106,7 @@ export class Resource extends FractureComponent {
      */
     if (this.options.isPersistant) {
       const pkAttribute = this.addResourceAttribute(
-        this.options.partitionKeyStrategy
+        this.service.options.partitionKeyStrategy
       );
       this.keyAccessPattern.addPkAttribute(pkAttribute);
     }
@@ -157,7 +114,9 @@ export class Resource extends FractureComponent {
     /**
      * Add type attribute.
      */
-    const typeAttribute = this.addResourceAttribute(this.options.typeStrategy);
+    const typeAttribute = this.addResourceAttribute(
+      this.service.options.typeStrategy
+    );
     if (this.options.isPersistant) {
       this.keyAccessPattern.addSkAttribute(typeAttribute);
     }
@@ -165,9 +124,9 @@ export class Resource extends FractureComponent {
     /**
      * Add the version attribute if versioned.
      */
-    if (this.options.isVersioned && this.options.isPersistant) {
+    if (this.service.options.isVersioned && this.options.isPersistant) {
       const versionAttribute = this.addResourceAttribute(
-        this.options.versionStrategy.attribute
+        this.service.options.versionStrategy.attribute
       );
       this.keyAccessPattern.addSkAttribute(versionAttribute);
     }
@@ -176,34 +135,34 @@ export class Resource extends FractureComponent {
      * Add an (optional) Audit Strategies
      */
     if (this.options.isPersistant) {
-      if (this.options.auditStrategy.create.dateAttribute) {
+      if (this.service.options.auditStrategy.create.dateAttribute) {
         this.addResourceAttribute(
-          this.options.auditStrategy.create.dateAttribute
+          this.service.options.auditStrategy.create.dateAttribute
         );
       }
-      if (this.options.auditStrategy.create.userAttribute) {
+      if (this.service.options.auditStrategy.create.userAttribute) {
         this.addResourceAttribute(
-          this.options.auditStrategy.create.userAttribute
+          this.service.options.auditStrategy.create.userAttribute
         );
       }
-      if (this.options.auditStrategy.update.dateAttribute) {
+      if (this.service.options.auditStrategy.update.dateAttribute) {
         this.addResourceAttribute(
-          this.options.auditStrategy.update.dateAttribute
+          this.service.options.auditStrategy.update.dateAttribute
         );
       }
-      if (this.options.auditStrategy.update.userAttribute) {
+      if (this.service.options.auditStrategy.update.userAttribute) {
         this.addResourceAttribute(
-          this.options.auditStrategy.update.userAttribute
+          this.service.options.auditStrategy.update.userAttribute
         );
       }
-      if (this.options.auditStrategy.delete.dateAttribute) {
+      if (this.service.options.auditStrategy.delete.dateAttribute) {
         this.addResourceAttribute(
-          this.options.auditStrategy.delete.dateAttribute
+          this.service.options.auditStrategy.delete.dateAttribute
         );
       }
-      if (this.options.auditStrategy.delete.userAttribute) {
+      if (this.service.options.auditStrategy.delete.userAttribute) {
         this.addResourceAttribute(
-          this.options.auditStrategy.delete.userAttribute
+          this.service.options.auditStrategy.delete.userAttribute
         );
       }
 
