@@ -118,7 +118,7 @@ export class Operation extends FractureComponent {
   }
 
   public get isWrite(): boolean {
-    return this.isCreate || this.isUpdate;
+    return this.isCreate || this.isUpdate || this.isImport;
   }
 
   public get isCreate(): boolean {

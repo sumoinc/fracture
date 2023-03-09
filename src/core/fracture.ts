@@ -1,6 +1,7 @@
 import { Component, Project } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { AuditStrategy } from "./audit-strategy";
+import { LookupKeyStrategy } from "./lookup-key-strategy";
 import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
 import { OPERATION_SUB_TYPE } from "./operation";
 import { Organization, OrganizationOptions } from "./organization";
@@ -40,6 +41,10 @@ export interface FractureOptions {
    * The type strategy to use for the partition key.
    */
   partitionKeyStrategy?: PartitionKeyStrategy;
+  /**
+   * The type to use when looking up a resource by a string.
+   */
+  lookupKeyStrategy?: LookupKeyStrategy;
   /**
    * The versioning strategy to use for generated code.
    */
@@ -150,6 +155,17 @@ export class Fracture extends Component {
         createGenerator: ResourceAttributeGenerator.GUID,
         isRequired: true,
       },
+      lookupKeyStrategy: {
+        name: "idx",
+        comments: [`A value that can be searched on.`],
+        type: ResourceAttributeType.STRING,
+        createGenerator: ResourceAttributeGenerator.COMPOSITION,
+        readGenerator: ResourceAttributeGenerator.COMPOSITION,
+        updateGenerator: ResourceAttributeGenerator.COMPOSITION,
+        deleteGenerator: ResourceAttributeGenerator.COMPOSITION,
+        importGenerator: ResourceAttributeGenerator.COMPOSITION,
+        isRequired: true,
+      },
       versionStrategy: {
         attribute: {
           name: "version",
@@ -161,6 +177,7 @@ export class Fracture extends Component {
           readGenerator: ResourceAttributeGenerator.VERSION,
           updateGenerator: ResourceAttributeGenerator.VERSION,
           deleteGenerator: ResourceAttributeGenerator.VERSION,
+          importGenerator: ResourceAttributeGenerator.VERSION,
         },
         type: VERSION_TYPE.DATE_TIME_STAMP,
         currentVersion: "LATEST",
@@ -187,6 +204,7 @@ export class Fracture extends Component {
             type: ResourceAttributeType.DATE_TIME,
             isRequired: true,
             createGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
+            importGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
           },
         },
         update: {
@@ -199,6 +217,7 @@ export class Fracture extends Component {
             createGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
             updateGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
             deleteGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
+            importGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
           },
         },
         delete: {

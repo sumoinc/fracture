@@ -305,15 +305,6 @@ export class Resource extends FractureComponent {
     return returnAttributes;
   }
 
-  /**
-   * ResourceAttributes used in crud operations and commands
-   */
-  /*
-  public get partitionKeyAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => a.isPartitionKey);
-  }
-  */
-
   public get dataAttributes(): ResourceAttribute[] {
     return this.attributes.filter((a) => a.isData);
   }

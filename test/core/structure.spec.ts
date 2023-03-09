@@ -457,6 +457,25 @@ describe("operation.IMPORT", () => {
       const structure = myImportInput();
       expect(structure.name).toBe("import-person-input");
     });
+
+    test("attributes:PRIVATE", () => {
+      const structure = myImportInput();
+      expect(structure.privateAttributeNames).toEqual([
+        "id",
+        "t",
+        "v",
+        "cd",
+        "ud",
+        "mn",
+        "pk",
+        "sk",
+      ]);
+    });
+
+    test("attributes.PUBLIC", () => {
+      const structure = myImportInput();
+      expect(structure.publicAttributeNames).toEqual(["id", "my-name"]);
+    });
   });
 
   describe("structure.OUTPUT", () => {
@@ -470,6 +489,34 @@ describe("operation.IMPORT", () => {
     test("correct default name", () => {
       const structure = myImportOutput();
       expect(structure.name).toBe("import-person-output");
+    });
+
+    test("attributes:PRIVATE", () => {
+      const structure = myImportOutput();
+      expect(structure.privateAttributeNames).toEqual([
+        "id",
+        "t",
+        "v",
+        "cd",
+        "ud",
+        "dd",
+        "mn",
+        "pk",
+        "sk",
+      ]);
+    });
+
+    test("attributes.PUBLIC", () => {
+      const structure = myImportOutput();
+      expect(structure.publicAttributeNames).toEqual([
+        "id",
+        "type",
+        "version",
+        "created-at",
+        "updated-at",
+        "deleted-at",
+        "my-name",
+      ]);
     });
   });
 });

@@ -204,17 +204,7 @@ export class Structure extends FractureComponent {
         }
 
         if (this.options.type === STRUCTURE_TYPE.OUTPUT) {
-          useAttributes = [
-            ...useAttributes,
-            /*
-            ...this.resource.generatedAttributesForOperation(
-              this.options.operation,
-              true
-            ),
-            */
-            ...this.resource.publicAttributes,
-            //...this.resource.dataAttributes,
-          ];
+          useAttributes = [...useAttributes, ...this.resource.publicAttributes];
         }
       }
 
