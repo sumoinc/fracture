@@ -39,6 +39,7 @@ export class Resource extends FractureComponent {
   public operations: Operation[];
   public accessPatterns: AccessPattern[];
   public keyAccessPattern: AccessPattern;
+  public lookupAccessPattern: AccessPattern;
   public structures: Structure[];
   // parent
   public readonly service: Service;
@@ -53,6 +54,7 @@ export class Resource extends FractureComponent {
      * DEFAULT OPTIONS
      *
      **************************************************************************/
+
     const defaultOptions: Partial<ResourceOptions> = {
       comments: [`A ${options.name}.`],
       isPersistant: true,
@@ -71,6 +73,10 @@ export class Resource extends FractureComponent {
     this.keyAccessPattern = new AccessPattern(this, {
       name: "key",
       gsi: service.options.dynamodb.keyGsi,
+    });
+    this.lookupAccessPattern = new AccessPattern(this, {
+      name: "lookup",
+      gsi: service.options.dynamodb.lookupGsi,
     });
     this.structures = [];
 
@@ -213,6 +219,10 @@ export class Resource extends FractureComponent {
     return new ResourceAttribute(this, options);
   }
 
+  public getAttributeByName(name: string): ResourceAttribute | undefined {
+    return this.attributes.find((attribute) => attribute.name === name);
+  }
+
   /*****************************************************************************
    *
    * PK and SK HELPERS
@@ -227,39 +237,20 @@ export class Resource extends FractureComponent {
     return this.keyAccessPattern.skAttribute;
   }
 
-  public get partitionKeyCompositionSources(): ResourceAttribute[] {
-    return this.partitionKey.compositionSources;
-  }
-
-  public get sortKeyCompositionSources(): ResourceAttribute[] {
-    return this.sortKey.compositionSources;
-  }
-
-  public get gsiKeys(): ResourceAttribute[] {
-    const returnAttributes: ResourceAttribute[] = [];
-    this.accessPatterns.forEach((accessPattern) => {
-      returnAttributes.push(accessPattern.pkAttribute);
-      returnAttributes.push(accessPattern.skAttribute);
+  public get composableAttributes(): ResourceAttribute[] {
+    return this.attributes.filter((resourceAttribute) => {
+      return resourceAttribute.hasGenerator(
+        ResourceAttributeGenerator.COMPOSITION
+      );
     });
-    return returnAttributes;
   }
 
-  /**
-   * All sources required to fully form a valid pk and sk and all GSI keys
-   */
-  public get keyCompositionSources(): ResourceAttribute[] {
+  public get composableAttributeSources(): ResourceAttribute[] {
     const returnAttributes: ResourceAttribute[] = [];
-    this.accessPatterns.forEach((accessPattern) => {
-      accessPattern.pkAttribute.compositionSources.forEach(
-        (resourceAttribute) => {
-          returnAttributes.push(resourceAttribute);
-        }
-      );
-      accessPattern.skAttribute.compositionSources.forEach(
-        (resourceAttribute) => {
-          returnAttributes.push(resourceAttribute);
-        }
-      );
+    this.composableAttributes.forEach((resourceAttribute) => {
+      resourceAttribute.compositionSources.forEach((sourceAttribute) => {
+        returnAttributes.push(sourceAttribute);
+      });
     });
     return returnAttributes;
   }
@@ -355,7 +346,7 @@ export class Resource extends FractureComponent {
       isPublic
     );
 
-    return this.keyCompositionSources.filter(
+    return this.composableAttributeSources.filter(
       (keyAttribute) =>
         !generatedAttributes.some(
           (generatedAttribute) => keyAttribute === generatedAttribute

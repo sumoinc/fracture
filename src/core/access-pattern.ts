@@ -16,8 +16,6 @@ export class AccessPattern extends FractureComponent {
   // member components
   public pkAttribute: ResourceAttribute;
   public skAttribute: ResourceAttribute;
-  //public pkAttributes: ResourceAttribute[];
-  //public skAttributes: ResourceAttribute[];
   // parent
   public readonly resource: Resource;
   // all other options
@@ -32,25 +30,32 @@ export class AccessPattern extends FractureComponent {
      *
      **************************************************************************/
 
+    const pkAttribute = resource.getAttributeByName(options.gsi.pkName);
+    const skAttribute = resource.getAttributeByName(options.gsi.skName);
+
     // member components
-    this.pkAttribute = new ResourceAttribute(resource, {
-      name: options.gsi.pkName,
-      isPublic: false,
-      createGenerator: ResourceAttributeGenerator.COMPOSITION,
-      readGenerator: ResourceAttributeGenerator.COMPOSITION,
-      updateGenerator: ResourceAttributeGenerator.COMPOSITION,
-      deleteGenerator: ResourceAttributeGenerator.COMPOSITION,
-      importGenerator: ResourceAttributeGenerator.COMPOSITION,
-    });
-    this.skAttribute = new ResourceAttribute(resource, {
-      name: options.gsi.skName,
-      isPublic: false,
-      createGenerator: ResourceAttributeGenerator.COMPOSITION,
-      readGenerator: ResourceAttributeGenerator.COMPOSITION,
-      updateGenerator: ResourceAttributeGenerator.COMPOSITION,
-      deleteGenerator: ResourceAttributeGenerator.COMPOSITION,
-      importGenerator: ResourceAttributeGenerator.COMPOSITION,
-    });
+    this.pkAttribute = pkAttribute
+      ? pkAttribute
+      : new ResourceAttribute(resource, {
+          name: options.gsi.pkName,
+          isPublic: false,
+          createGenerator: ResourceAttributeGenerator.COMPOSITION,
+          readGenerator: ResourceAttributeGenerator.COMPOSITION,
+          updateGenerator: ResourceAttributeGenerator.COMPOSITION,
+          deleteGenerator: ResourceAttributeGenerator.COMPOSITION,
+          importGenerator: ResourceAttributeGenerator.COMPOSITION,
+        });
+    this.skAttribute = skAttribute
+      ? skAttribute
+      : new ResourceAttribute(resource, {
+          name: options.gsi.skName,
+          isPublic: false,
+          createGenerator: ResourceAttributeGenerator.COMPOSITION,
+          readGenerator: ResourceAttributeGenerator.COMPOSITION,
+          updateGenerator: ResourceAttributeGenerator.COMPOSITION,
+          deleteGenerator: ResourceAttributeGenerator.COMPOSITION,
+          importGenerator: ResourceAttributeGenerator.COMPOSITION,
+        });
 
     // parent + inverse
     this.resource = resource;

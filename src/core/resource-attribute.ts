@@ -182,6 +182,11 @@ export type ResourceAttributeOptions = {
    */
   isPublic?: boolean;
   /**
+   * Is this a value we should be able to do lookups on?
+   * @default false
+   */
+  isLookup?: boolean;
+  /**
    * The generator to use for this attribute when creating it.
    * @default ResourceAttributeGenerator.NONE
    */
@@ -235,6 +240,11 @@ export type ResourceAttributeOptions = {
    * Position this attribute should occupy when sorted.
    */
   sortPosition?: number;
+  /**
+   * The separator to use when composing this attribute from other attributes.
+   * @default: '#'
+   */
+  compositionSeperator?: string;
 };
 
 export class ResourceAttribute extends FractureComponent {
@@ -264,6 +274,7 @@ export class ResourceAttribute extends FractureComponent {
       type: ResourceAttributeType.STRING,
       isRequired: false,
       isPublic: true,
+      isLookup: false,
       createGenerator: ResourceAttributeGenerator.NONE,
       readGenerator: ResourceAttributeGenerator.NONE,
       updateGenerator: ResourceAttributeGenerator.NONE,
@@ -275,6 +286,7 @@ export class ResourceAttribute extends FractureComponent {
       deleteValidations: [],
       importValidations: [],
       sortPosition: resource.attributes.length,
+      compositionSeperator: "#",
     };
 
     /***************************************************************************
@@ -333,6 +345,14 @@ export class ResourceAttribute extends FractureComponent {
     if (this.isGenerated) {
       this.options.comments.push(
         `@readonly This attribute is managed automatically by the system.`
+      );
+    }
+
+    // it's a lookup source
+    if (this.options.isLookup) {
+      this.resource.lookupAccessPattern.addSkAttribute(this);
+      this.options.comments.push(
+        `This attribute can be used to lookup this record.`
       );
     }
   }

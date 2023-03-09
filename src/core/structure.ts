@@ -147,7 +147,10 @@ export class Structure extends FractureComponent {
         }
 
         if (this.options.type === STRUCTURE_TYPE.OUTPUT) {
-          useAttributes = [...useAttributes, ...this.resource.gsiKeys];
+          useAttributes = [
+            ...useAttributes,
+            ...this.resource.composableAttributes,
+          ];
         }
       }
 

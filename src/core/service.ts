@@ -3,6 +3,7 @@ import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { Fracture, FractureComponent } from ".";
 import { AuditStrategy } from "./audit-strategy";
+import { LookupKeyStrategy } from "./lookup-key-strategy";
 import { PartitionKeyStrategy } from "./partition-key-strategy";
 import { Resource, ResourceOptions } from "./resource";
 import { TypeStrategy } from "./type-strategy";
@@ -21,6 +22,10 @@ export interface ServiceOptions {
    * The type strategy to use for the partition key.
    */
   partitionKeyStrategy?: PartitionKeyStrategy;
+  /**
+   * The type to use when looking up a resource by a string.
+   */
+  lookupKeyStrategy?: LookupKeyStrategy;
   /**
    * The versioning strategy to use for generated code.
    */
@@ -56,6 +61,7 @@ export class Service extends FractureComponent {
     const {
       isVersioned,
       partitionKeyStrategy,
+      lookupKeyStrategy,
       versionStrategy,
       typeStrategy,
       auditStrategy,
@@ -65,6 +71,7 @@ export class Service extends FractureComponent {
       outdir: join(fracture.options.outdir, options.outdir ?? options.name),
       isVersioned,
       partitionKeyStrategy,
+      lookupKeyStrategy,
       versionStrategy,
       typeStrategy,
       auditStrategy,

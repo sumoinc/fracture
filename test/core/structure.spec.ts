@@ -54,6 +54,7 @@ describe("Data Structure", () => {
       "mn",
       "pk",
       "sk",
+      "idx",
     ]);
   });
 
@@ -118,6 +119,7 @@ describe("operation.CREATE", () => {
         "mn",
         "pk",
         "sk",
+        "idx",
       ]);
     });
 
@@ -156,6 +158,7 @@ describe("operation.CREATE", () => {
         "mn",
         "pk",
         "sk",
+        "idx",
       ]);
     });
 
@@ -207,6 +210,7 @@ describe("operation.READ", () => {
         "v",
         "pk",
         "sk",
+        "idx",
       ]);
     });
 
@@ -241,6 +245,7 @@ describe("operation.READ", () => {
         "mn",
         "pk",
         "sk",
+        "idx",
       ]);
     });
 
@@ -294,6 +299,7 @@ describe("operation.UPDATE", () => {
         "mn",
         "pk",
         "sk",
+        "idx",
       ]);
     });
 
@@ -328,6 +334,7 @@ describe("operation.UPDATE", () => {
         "mn",
         "pk",
         "sk",
+        "idx",
       ]);
     });
 
@@ -381,6 +388,7 @@ describe("operation.DELETE", () => {
         "dd",
         "pk",
         "sk",
+        "idx",
       ]);
     });
 
@@ -415,6 +423,7 @@ describe("operation.DELETE", () => {
         "mn",
         "pk",
         "sk",
+        "idx",
       ]);
     });
 
@@ -469,6 +478,7 @@ describe("operation.IMPORT", () => {
         "mn",
         "pk",
         "sk",
+        "idx",
       ]);
     });
 
@@ -503,6 +513,7 @@ describe("operation.IMPORT", () => {
         "mn",
         "pk",
         "sk",
+        "idx",
       ]);
     });
 
