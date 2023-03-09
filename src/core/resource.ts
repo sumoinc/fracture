@@ -294,28 +294,41 @@ export class Resource extends FractureComponent {
    * @returns
    */
   public generatedAttributesForOperation(
-    operation: Operation
+    operation: Operation,
+    isPublic?: boolean
   ): ResourceAttribute[] {
+    let returnAttributes: ResourceAttribute[];
     switch (operation.options.operationSubType) {
       case OPERATION_SUB_TYPE.CREATE_ONE:
       case OPERATION_SUB_TYPE.CREATE_MANY:
-        return this.createGeneratedAttributes;
+        returnAttributes = this.createGeneratedAttributes;
+        break;
       case OPERATION_SUB_TYPE.READ_ONE:
       case OPERATION_SUB_TYPE.READ_MANY:
-        return this.readGeneratedAttributes;
+        returnAttributes = this.readGeneratedAttributes;
+        break;
       case OPERATION_SUB_TYPE.UPDATE_ONE:
       case OPERATION_SUB_TYPE.UPDATE_MANY:
-        return this.updateGeneratedAttributes;
+        returnAttributes = this.updateGeneratedAttributes;
+        break;
       case OPERATION_SUB_TYPE.DELETE_ONE:
       case OPERATION_SUB_TYPE.DELETE_MANY:
-        return this.deleteGeneratedAttributes;
+        returnAttributes = this.deleteGeneratedAttributes;
+        break;
       case OPERATION_SUB_TYPE.IMPORT_ONE:
       case OPERATION_SUB_TYPE.IMPORT_MANY:
-        return this.importGeneratedAttributes;
+        returnAttributes = this.importGeneratedAttributes;
+        break;
       default:
         throw new Error(
           `Unhandled operation type: ${operation.options.operationSubType}`
         );
+    }
+    // optionally filter by public marker
+    if (isPublic == undefined) {
+      return returnAttributes;
+    } else {
+      return returnAttributes.filter((a) => a.options.isPublic === isPublic);
     }
   }
 

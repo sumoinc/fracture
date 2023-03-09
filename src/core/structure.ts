@@ -130,8 +130,7 @@ export class Structure extends FractureComponent {
 
       if (
         this.options.type === STRUCTURE_TYPE.DATA ||
-        this.options.type === STRUCTURE_TYPE.TRANSIENT ||
-        this.options.type === STRUCTURE_TYPE.OUTPUT
+        this.options.type === STRUCTURE_TYPE.TRANSIENT
       ) {
         usaAttributes = [
           ...this.resource.privateAttributes,
@@ -140,6 +139,15 @@ export class Structure extends FractureComponent {
       }
 
       if (this.options.type === STRUCTURE_TYPE.INPUT) {
+        usaAttributes = [
+          ...this.resource.generatedAttributesForOperation(
+            this.options.operation!
+          ),
+          ...this.resource.dataAttributes,
+        ];
+      }
+
+      if (this.options.type === STRUCTURE_TYPE.OUTPUT) {
         usaAttributes = [
           ...this.resource.generatedAttributesForOperation(
             this.options.operation!
@@ -172,6 +180,16 @@ export class Structure extends FractureComponent {
 
       if (this.options.type === STRUCTURE_TYPE.INPUT) {
         usaAttributes = [...this.resource.dataAttributes];
+      }
+
+      if (this.options.type === STRUCTURE_TYPE.OUTPUT) {
+        usaAttributes = [
+          ...this.resource.generatedAttributesForOperation(
+            this.options.operation!,
+            true
+          ),
+          ...this.resource.dataAttributes,
+        ];
       }
 
       usaAttributes.forEach((resourceAttribute) => {

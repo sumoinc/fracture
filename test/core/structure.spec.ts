@@ -86,6 +86,10 @@ describe("Create Structures", () => {
     });
   };
 
+  /*****************************************************************************
+   * INPUT
+   ****************************************************************************/
+
   describe("Input Structure", () => {
     const myCreateInput = () => {
       return new Structure(myResource(), {
@@ -119,6 +123,10 @@ describe("Create Structures", () => {
     });
   });
 
+  /*****************************************************************************
+   * OUTPUT
+   ****************************************************************************/
+
   describe("Output Structure", () => {
     const myCreateOutput = () => {
       return new Structure(myResource(), {
@@ -130,6 +138,32 @@ describe("Create Structures", () => {
     test("correct default name", () => {
       const structure = myCreateOutput();
       expect(structure.name).toBe("create-person-output");
+    });
+
+    test("contains the correct private attributes", () => {
+      const structure = myCreateOutput();
+      expect(structure.privateAttributeNames).toEqual([
+        "pk",
+        "sk",
+        "id",
+        "t",
+        "v",
+        "cd",
+        "ud",
+        "mn",
+      ]);
+    });
+
+    test("contains the correct public attributes", () => {
+      const structure = myCreateOutput();
+      expect(structure.publicAttributeNames).toEqual([
+        "id",
+        "type",
+        "version",
+        "created-at",
+        "updated-at",
+        "my-name",
+      ]);
     });
   });
 });
