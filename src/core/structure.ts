@@ -20,6 +20,11 @@ export type StructureOptions = {
    * Required if type is input or output
    */
   operation?: Operation;
+  /**
+   * Comment lines to add to the Structure.
+   * @default []
+   */
+  comments?: string[];
 };
 
 export const STRUCTURE_TYPE = {
@@ -41,12 +46,11 @@ export const STRUCTURE_TYPE = {
 
 export class Structure extends FractureComponent {
   // member components
-  public readonly attributes: StructureAttribute[];
   // parents
   public readonly resource: Resource;
   public readonly service: Service;
   // all other options
-  public readonly options: SetRequired<StructureOptions, "type">;
+  public readonly options: SetRequired<StructureOptions, "type" | "comments">;
   // private cached properties
   private _privateAttributes: StructureAttribute[];
   private _publicAttributes: StructureAttribute[];
@@ -62,6 +66,7 @@ export class Structure extends FractureComponent {
 
     const defaultOptions: Partial<StructureOptions> = {
       type: STRUCTURE_TYPE.DATA,
+      comments: ["A gereric type"],
     };
 
     /***************************************************************************
@@ -71,7 +76,6 @@ export class Structure extends FractureComponent {
      **************************************************************************/
 
     // member components
-    this.attributes = [];
 
     // parents + inverse
     this.resource = resource;
@@ -81,7 +85,7 @@ export class Structure extends FractureComponent {
     // all other options
     this.options = deepMerge([defaultOptions, options]) as SetRequired<
       StructureOptions,
-      "type"
+      "type" | "comments"
     >;
 
     //
@@ -98,6 +102,8 @@ export class Structure extends FractureComponent {
     this._privateAttributes = [];
     this._publicAttributes = [];
   }
+
+  public build() {}
 
   /**
    * Structure name, based on the naming strategy

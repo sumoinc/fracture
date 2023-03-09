@@ -314,7 +314,7 @@ export class ResourceAttribute extends FractureComponent {
     // all other options
     this.options = deepMerge([
       defaultOptions,
-      options,
+      JSON.parse(JSON.stringify(options)),
       forcedOptions,
     ]) as Required<ResourceAttributeOptions>;
 
@@ -355,6 +355,8 @@ export class ResourceAttribute extends FractureComponent {
         `This attribute can be used to lookup this record.`
       );
     }
+
+    return this;
   }
 
   public get name(): string {

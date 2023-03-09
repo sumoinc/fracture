@@ -21,6 +21,17 @@
 /.vscode/extensions.json linguist-generated
 /.vscode/settings.json linguist-generated
 /API.md linguist-generated
+/example/tenant-service/ts/dynamodb/commands/create-actor.ts linguist-generated
+/example/tenant-service/ts/dynamodb/commands/create-tenant.ts linguist-generated
+/example/tenant-service/ts/dynamodb/commands/delete-actor.ts linguist-generated
+/example/tenant-service/ts/dynamodb/commands/delete-tenant.ts linguist-generated
+/example/tenant-service/ts/dynamodb/commands/get-actor.ts linguist-generated
+/example/tenant-service/ts/dynamodb/commands/get-tenant.ts linguist-generated
+/example/tenant-service/ts/dynamodb/commands/import-actor.ts linguist-generated
+/example/tenant-service/ts/dynamodb/commands/import-tenant.ts linguist-generated
+/example/tenant-service/ts/dynamodb/commands/update-actor.ts linguist-generated
+/example/tenant-service/ts/dynamodb/commands/update-tenant.ts linguist-generated
+/example/tenant-service/ts/types.ts linguist-generated
 /LICENSE linguist-generated
 /package.json linguist-generated
 /pnpm-lock.yaml linguist-generated

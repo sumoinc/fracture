@@ -116,15 +116,14 @@ export class Service extends FractureComponent {
     return this;
   }
 
-  /**
-   * Build the project.
-   *
-   * Call this when you've configured everything, prior to preSynthesize
-   * Called by Fracture.build()
-   * @returns void
-   */
   public build() {
-    // this.resources.forEach((r) => r.build());
+    this.resources.forEach((resource) => {
+      resource.build();
+    });
+  }
+
+  public get name(): string {
+    return this.options.name;
   }
 
   /*****************************************************************************

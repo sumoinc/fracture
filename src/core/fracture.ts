@@ -14,6 +14,7 @@ import { Service, ServiceOptions } from "./service";
 import { STRUCTURE_TYPE } from "./structure";
 import { TypeStrategy } from "./type-strategy";
 import { VersionStrategy, VERSION_TYPE } from "./version-strategy";
+import { TypescriptService } from "../generators/ts/typescript-service";
 
 /**
  *
@@ -268,7 +269,7 @@ export class Fracture extends Component {
   public build() {
     this.services.forEach((service) => {
       service.build();
-      //new TypescriptService(service);
+      new TypescriptService(service);
     });
   }
 

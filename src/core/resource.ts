@@ -10,7 +10,7 @@ import {
   ResourceAttributeOptions,
 } from "./resource-attribute";
 import { Service } from "./service";
-import { Structure } from "./structure";
+import { Structure, STRUCTURE_TYPE } from "./structure";
 
 export interface ResourceOptions {
   /**
@@ -46,6 +46,7 @@ export class Resource extends FractureComponent {
   public keyAccessPattern: AccessPattern;
   public lookupAccessPattern: AccessPattern;
   public structures: Structure[];
+  public dataStructure: Structure;
   // parent
   public readonly service: Service;
   // all other options
@@ -185,15 +186,19 @@ export class Resource extends FractureComponent {
           this.service.options.auditStrategy.delete.userAttribute
         );
       }
-
-      return this;
     }
 
     /***************************************************************************
      *
-     * CRUD OPERATIONS
+     * BASE DATA STRUCTURE
      *
-     * This needs to be done here since we won't know all of the components
+     **************************************************************************/
+
+    this.dataStructure = new Structure(this, { type: STRUCTURE_TYPE.DATA });
+
+    /***************************************************************************
+     *
+     * CRUD OPERATIONS
      *
      **************************************************************************/
     new Operation(this, {
@@ -216,9 +221,20 @@ export class Resource extends FractureComponent {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.IMPORT_ONE,
     });
+    /*
     new Operation(this, {
       operationType: OPERATION_TYPE.QUERY,
       operationSubType: OPERATION_SUB_TYPE.READ_MANY,
+    });
+    */
+
+    return this;
+  }
+
+  public build() {
+    this.dataStructure.build();
+    this.operations.forEach((operation) => {
+      operation.build();
     });
   }
 

@@ -2,7 +2,6 @@ import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Resource } from "./resource";
-import { ResourceAttribute } from "./resource-attribute";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
 
@@ -86,6 +85,11 @@ export class Operation extends FractureComponent {
       options,
     ]) as Required<OperationOptions>;
     return this;
+  }
+
+  public build() {
+    this.inputStructure.build();
+    this.outputStructure.build();
   }
 
   /**
@@ -178,7 +182,7 @@ export class Operation extends FractureComponent {
   public get outputStructure(): Structure {
     if (!this._outputStructure) {
       this._outputStructure = new Structure(this.resource, {
-        type: STRUCTURE_TYPE.INPUT,
+        type: STRUCTURE_TYPE.OUTPUT,
         operation: this,
       });
     }
@@ -188,6 +192,7 @@ export class Operation extends FractureComponent {
   /**
    * Return attributes to be generated for this particular operation type
    */
+  /*
   public get generatedAttributes(): ResourceAttribute[] {
     return this.resource.generatedAttributesForOperation(this);
   }
@@ -195,4 +200,5 @@ export class Operation extends FractureComponent {
   public get dataAttributes(): ResourceAttribute[] {
     return this.resource.dataAttributes;
   }
+  */
 }

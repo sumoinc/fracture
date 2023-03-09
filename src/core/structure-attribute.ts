@@ -1,6 +1,7 @@
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
+import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
   ResourceAttribute,
@@ -31,6 +32,7 @@ export type StructureAttributeOptions = {
 
 export class StructureAttribute extends FractureComponent {
   // member components
+  public readonly compositionSources: StructureAttribute[];
   // parent
   public readonly structure: Structure;
   public readonly resource: Resource;
@@ -48,16 +50,22 @@ export class StructureAttribute extends FractureComponent {
      **************************************************************************/
 
     // member components
+    this.compositionSources = options.resourceAttribute.compositionSources.map(
+      (source) => {
+        return new StructureAttribute(structure, {
+          resourceAttribute: source,
+        });
+      }
+    );
 
     // parents + inverse
     this.structure = structure;
     this.resource = structure.resource;
     this.service = structure.resource.service;
-    this.structure.attributes.push(this);
 
     // all other options
     this.options = deepMerge([
-      options.resourceAttribute.options,
+      JSON.parse(JSON.stringify(options.resourceAttribute.options)),
       options.structureAttributeOptions ?? {},
     ]) as Required<ResourceAttributeOptions>;
   }
@@ -152,5 +160,22 @@ export class StructureAttribute extends FractureComponent {
     generator: ValueOf<typeof ResourceAttributeGenerator>
   ): boolean {
     return this.isImportGenerated && this.options.importGenerator === generator;
+  }
+
+  public generatorForOperation(operation: Operation) {
+    switch (operation.options.operationSubType) {
+      case OPERATION_SUB_TYPE.CREATE_ONE:
+        return this.options.createGenerator;
+      case OPERATION_SUB_TYPE.READ_ONE:
+        return this.options.readGenerator;
+      case OPERATION_SUB_TYPE.UPDATE_ONE:
+        return this.options.updateGenerator;
+      case OPERATION_SUB_TYPE.DELETE_ONE:
+        return this.options.deleteGenerator;
+      case OPERATION_SUB_TYPE.IMPORT_ONE:
+        return this.options.importGenerator;
+      default:
+        throw new Error(`Unknown sub-operation: ${operation}`);
+    }
   }
 }

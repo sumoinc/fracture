@@ -1,8 +1,8 @@
 import { join } from "path";
 import { TypescriptResource } from "./typescript-resource";
 import { TypeScriptSource } from "./typescript-source";
+import { TypescriptStructure } from "./typescript-structure";
 import { FractureComponent } from "../../core";
-import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Service } from "../../core/service";
 
 export class TypescriptService extends FractureComponent {
@@ -15,7 +15,7 @@ export class TypescriptService extends FractureComponent {
 
     this.service = service;
     this.outdir = join(
-      this.fracture.outdir,
+      this.fracture.options.outdir,
       this.service.name + "-service",
       "ts"
     );
@@ -23,25 +23,12 @@ export class TypescriptService extends FractureComponent {
     this.typeFile = new TypeScriptSource(this, join(this.outdir, "types.ts"));
 
     /**
-     * Dynamo key shape
+     * Public types
      */
-    this.typeFile.open(`export interface ${this.dynamoKeyName} {`);
-    this.typeFile.line(`${this.dynamoPkName}: string;`);
-    this.typeFile.line(`${this.dynamoSkName}: string;`);
-    this.typeFile.close(`}`);
-    this.typeFile.line("\n");
-
-    // build each resource
     this.service.resources.forEach((resource) => {
-      new TypescriptResource(this, resource);
+      const tsDataStructure = new TypescriptStructure(resource.dataStructure);
+      tsDataStructure.writePublicInterface(this.typeFile);
     });
-
-    // build any resource type
-    this.typeFile.open(`export type ${this.anyResourceName} =`);
-    this.service.resources.forEach((resource) =>
-      this.typeFile.line(`| ${resource.interfaceName}`)
-    );
-    this.typeFile.close("\n");
 
     // some error and response types
     this.typeFile.open(`export type Error = {`);
@@ -58,36 +45,12 @@ export class TypescriptService extends FractureComponent {
     this.typeFile.line(`status: number;`);
     this.typeFile.close(`}`);
     this.typeFile.line("\n");
-  }
 
-  /**
-   * Gets formatted interface name for this resource
-   */
-  public get anyResourceName() {
-    return formatStringByNamingStrategy(
-      "any-resource",
-      this.fracture.namingStrategy.ts.typeName
-    );
-  }
-
-  public get dynamoKeyName() {
-    return formatStringByNamingStrategy(
-      "dynamo-key",
-      this.fracture.namingStrategy.ts.interfaceName
-    );
-  }
-
-  public get dynamoPkName() {
-    return formatStringByNamingStrategy(
-      this.service.dynamodb.keyGsi.pkName,
-      this.fracture.namingStrategy.ts.attributeName
-    );
-  }
-
-  public get dynamoSkName() {
-    return formatStringByNamingStrategy(
-      this.service.dynamodb.keyGsi.skName,
-      this.fracture.namingStrategy.ts.attributeName
-    );
+    /**
+     * Build operations
+     */
+    this.service.resources.forEach((resource) => {
+      new TypescriptResource(this, resource);
+    });
   }
 }

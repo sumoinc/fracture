@@ -53,6 +53,17 @@ junit.xml
 .jsii
 tsconfig.json
 !/API.md
+!/example/tenant-service/ts/types.ts
+!/example/tenant-service/ts/dynamodb/commands/create-tenant.ts
+!/example/tenant-service/ts/dynamodb/commands/get-tenant.ts
+!/example/tenant-service/ts/dynamodb/commands/update-tenant.ts
+!/example/tenant-service/ts/dynamodb/commands/delete-tenant.ts
+!/example/tenant-service/ts/dynamodb/commands/import-tenant.ts
+!/example/tenant-service/ts/dynamodb/commands/create-actor.ts
+!/example/tenant-service/ts/dynamodb/commands/get-actor.ts
+!/example/tenant-service/ts/dynamodb/commands/update-actor.ts
+!/example/tenant-service/ts/dynamodb/commands/delete-actor.ts
+!/example/tenant-service/ts/dynamodb/commands/import-actor.ts
 !/example/
 !/.vscode/settings.json
 !/.vscode/extensions.json
