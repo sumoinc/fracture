@@ -31,6 +31,11 @@ export interface ResourceOptions {
    * @default true
    */
   isPersistant?: boolean;
+  /**
+   * The separator to use when composing this attribute from other attributes.
+   * @default: uses service level default
+   */
+  compositionSeperator?: string;
 }
 
 export class Resource extends FractureComponent {
@@ -58,6 +63,8 @@ export class Resource extends FractureComponent {
     const defaultOptions: Partial<ResourceOptions> = {
       comments: [`A ${options.name}.`],
       isPersistant: true,
+      compositionSeperator:
+        service.options.namingStrategy.attributes.compositionSeperator,
     };
 
     /***************************************************************************
@@ -70,14 +77,6 @@ export class Resource extends FractureComponent {
     this.attributes = [];
     this.operations = [];
     this.accessPatterns = [];
-    this.keyAccessPattern = new AccessPattern(this, {
-      name: "key",
-      gsi: service.options.dynamodb.keyGsi,
-    });
-    this.lookupAccessPattern = new AccessPattern(this, {
-      name: "lookup",
-      gsi: service.options.dynamodb.lookupGsi,
-    });
     this.structures = [];
 
     // parent + inverse
@@ -98,6 +97,21 @@ export class Resource extends FractureComponent {
       options,
       forcedOptions,
     ]) as Required<ResourceOptions>;
+
+    /***************************************************************************
+     *
+     * ACCESS PATTERNS
+     *
+     **************************************************************************/
+
+    this.keyAccessPattern = new AccessPattern(this, {
+      name: "key",
+      gsi: service.options.dynamodb.keyGsi,
+    });
+    this.lookupAccessPattern = new AccessPattern(this, {
+      name: "lookup",
+      gsi: service.options.dynamodb.lookupGsi,
+    });
 
     /***************************************************************************
      *

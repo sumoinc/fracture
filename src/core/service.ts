@@ -4,6 +4,7 @@ import { deepMerge } from "projen/lib/util";
 import { Fracture, FractureComponent } from ".";
 import { AuditStrategy } from "./audit-strategy";
 import { LookupKeyStrategy } from "./lookup-key-strategy";
+import { NamingStrategy } from "./naming-strategy";
 import { PartitionKeyStrategy } from "./partition-key-strategy";
 import { Resource, ResourceOptions } from "./resource";
 import { TypeStrategy } from "./type-strategy";
@@ -18,6 +19,10 @@ export interface ServiceOptions {
    * @default fracture default
    */
   isVersioned?: boolean;
+  /**
+   * The naming strategy to use for generated code.
+   */
+  namingStrategy?: NamingStrategy;
   /**
    * The type strategy to use for the partition key.
    */
@@ -60,6 +65,7 @@ export class Service extends FractureComponent {
 
     const {
       isVersioned,
+      namingStrategy,
       partitionKeyStrategy,
       lookupKeyStrategy,
       versionStrategy,
@@ -70,6 +76,7 @@ export class Service extends FractureComponent {
     let defaultOptions: Partial<ServiceOptions> = {
       outdir: join(fracture.options.outdir, options.outdir ?? options.name),
       isVersioned,
+      namingStrategy,
       partitionKeyStrategy,
       lookupKeyStrategy,
       versionStrategy,

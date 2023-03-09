@@ -34,7 +34,6 @@ export interface FractureOptions {
   isVersioned?: boolean;
   /**
    * The naming strategy to use for generated code.
-   * @default defaultNamingStrategyConfig
    */
   namingStrategy?: NamingStrategy;
   /**
@@ -106,6 +105,9 @@ export class Fracture extends Component {
           vtl: {
             file: NAMING_STRATEGY_TYPE.PARAM_CASE,
           },
+        },
+        attributes: {
+          compositionSeperator: "#",
         },
         structures: {
           prefixes: {

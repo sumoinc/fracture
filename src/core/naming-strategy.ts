@@ -42,6 +42,9 @@ export type NamingStrategy = {
       file: ValueOf<typeof NAMING_STRATEGY_TYPE>;
     };
   };
+  attributes: {
+    compositionSeperator: string;
+  };
   structures: {
     prefixes: {
       [key in ValueOf<typeof STRUCTURE_TYPE>]: string;

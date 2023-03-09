@@ -286,7 +286,7 @@ export class ResourceAttribute extends FractureComponent {
       deleteValidations: [],
       importValidations: [],
       sortPosition: resource.attributes.length,
-      compositionSeperator: "#",
+      compositionSeperator: resource.options.compositionSeperator,
     };
 
     /***************************************************************************
