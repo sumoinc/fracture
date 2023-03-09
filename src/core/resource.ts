@@ -254,12 +254,66 @@ export class Resource extends FractureComponent {
     return new ResourceAttribute(this, options);
   }
 
+  /*****************************************************************************
+   *
+   * PK and SK HELPERS
+   *
+   ****************************************************************************/
+
+  public get partitionKey(): ResourceAttribute {
+    return this.keyAccessPattern.pkAttribute;
+  }
+
+  public get sortKey(): ResourceAttribute {
+    return this.keyAccessPattern.skAttribute;
+  }
+
+  public get partitionKeyCompositionSources(): ResourceAttribute[] {
+    return this.partitionKey.compositionSources;
+  }
+
+  public get sortKeyCompositionSources(): ResourceAttribute[] {
+    return this.sortKey.compositionSources;
+  }
+
+  public get gsiKeys(): ResourceAttribute[] {
+    const returnAttributes: ResourceAttribute[] = [];
+    this.accessPatterns.forEach((accessPattern) => {
+      returnAttributes.push(accessPattern.pkAttribute);
+      returnAttributes.push(accessPattern.skAttribute);
+    });
+    return returnAttributes;
+  }
+
+  /**
+   * All sources required to fully form a valid pk and sk and all GSI keys
+   */
+  public get keyCompositionSources(): ResourceAttribute[] {
+    const returnAttributes: ResourceAttribute[] = [];
+    this.accessPatterns.forEach((accessPattern) => {
+      accessPattern.pkAttribute.compositionSources.forEach(
+        (resourceAttribute) => {
+          returnAttributes.push(resourceAttribute);
+        }
+      );
+      accessPattern.skAttribute.compositionSources.forEach(
+        (resourceAttribute) => {
+          returnAttributes.push(resourceAttribute);
+        }
+      );
+    });
+    return returnAttributes;
+  }
+
   /**
    * ResourceAttributes used in crud operations and commands
    */
+  /*
   public get partitionKeyAttributes(): ResourceAttribute[] {
     return this.attributes.filter((a) => a.isPartitionKey);
   }
+  */
+
   public get dataAttributes(): ResourceAttribute[] {
     return this.attributes.filter((a) => a.isData);
   }
@@ -289,7 +343,9 @@ export class Resource extends FractureComponent {
   }
 
   /**
+   *
    * Returns an array of generated attributes for a given operation.
+   *
    * @param operation
    * @returns
    */
@@ -330,6 +386,31 @@ export class Resource extends FractureComponent {
     } else {
       return returnAttributes.filter((a) => a.options.isPublic === isPublic);
     }
+  }
+
+  /**
+   *
+   * Returns an of non-generated attributes we need in order to fully form the
+   * pk and sk
+   *
+   * @param operation
+   * @returns
+   */
+  public externalKeyAttributesForOperation(
+    operation: Operation,
+    isPublic?: boolean
+  ): ResourceAttribute[] {
+    const generatedAttributes = this.generatedAttributesForOperation(
+      operation,
+      isPublic
+    );
+
+    return this.keyCompositionSources.filter(
+      (keyAttribute) =>
+        !generatedAttributes.some(
+          (generatedAttribute) => keyAttribute === generatedAttribute
+        )
+    );
   }
 
   public hasCreateGenerator = (

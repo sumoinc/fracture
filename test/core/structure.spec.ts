@@ -32,17 +32,19 @@ test("Smoke test", () => {
   expect(structure).toBeTruthy();
 });
 
+/*******************************************************************************
+ * DATA STRUCTURE
+ ******************************************************************************/
+
 describe("Data Structure", () => {
   test("correct default name", () => {
     const structure = myDataStructure();
     expect(structure.name).toBe("person");
   });
 
-  test("contains the correct private attributes", () => {
+  test("attributes:PRIVATE", () => {
     const structure = myDataStructure();
     expect(structure.privateAttributeNames).toEqual([
-      "pk",
-      "sk",
       "id",
       "t",
       "v",
@@ -50,10 +52,12 @@ describe("Data Structure", () => {
       "ud",
       "dd",
       "mn",
+      "pk",
+      "sk",
     ]);
   });
 
-  test("contains the correct public attributes", () => {
+  test("attributes.PUBLIC", () => {
     const structure = myDataStructure();
     expect(structure.publicAttributeNames).toEqual([
       "id",
@@ -78,7 +82,7 @@ describe("Transient Structure", () => {
  * CREATE
  ******************************************************************************/
 
-describe("Create Structures", () => {
+describe("operation.CREATE", () => {
   const myCreateOperation = () => {
     return new Operation(myResource(), {
       operationType: OPERATION_TYPE.MUTATION,
@@ -90,7 +94,7 @@ describe("Create Structures", () => {
    * INPUT
    ****************************************************************************/
 
-  describe("Input Structure", () => {
+  describe("structure.INPUT", () => {
     const myCreateInput = () => {
       return new Structure(myResource(), {
         type: STRUCTURE_TYPE.INPUT,
@@ -103,21 +107,21 @@ describe("Create Structures", () => {
       expect(structure.name).toBe("create-person-input");
     });
 
-    test("contains the correct private attributes", () => {
+    test("attributes:PRIVATE", () => {
       const structure = myCreateInput();
       expect(structure.privateAttributeNames).toEqual([
-        "pk",
-        "sk",
         "id",
         "t",
         "v",
         "cd",
         "ud",
         "mn",
+        "pk",
+        "sk",
       ]);
     });
 
-    test("contains the correct public attributes", () => {
+    test("attributes.PUBLIC", () => {
       const structure = myCreateInput();
       expect(structure.publicAttributeNames).toEqual(["my-name"]);
     });
@@ -127,7 +131,7 @@ describe("Create Structures", () => {
    * OUTPUT
    ****************************************************************************/
 
-  describe("Output Structure", () => {
+  describe("structure.OUTPUT", () => {
     const myCreateOutput = () => {
       return new Structure(myResource(), {
         type: STRUCTURE_TYPE.OUTPUT,
@@ -140,21 +144,22 @@ describe("Create Structures", () => {
       expect(structure.name).toBe("create-person-output");
     });
 
-    test("contains the correct private attributes", () => {
+    test("attributes:PRIVATE", () => {
       const structure = myCreateOutput();
       expect(structure.privateAttributeNames).toEqual([
-        "pk",
-        "sk",
         "id",
         "t",
         "v",
         "cd",
         "ud",
+        "dd",
         "mn",
+        "pk",
+        "sk",
       ]);
     });
 
-    test("contains the correct public attributes", () => {
+    test("attributes.PUBLIC", () => {
       const structure = myCreateOutput();
       expect(structure.publicAttributeNames).toEqual([
         "id",
@@ -162,6 +167,7 @@ describe("Create Structures", () => {
         "version",
         "created-at",
         "updated-at",
+        "deleted-at",
         "my-name",
       ]);
     });
@@ -172,7 +178,7 @@ describe("Create Structures", () => {
  * READ
  ******************************************************************************/
 
-describe("Read Structures", () => {
+describe("operation.READ", () => {
   const myReadOperation = () => {
     return new Operation(myResource(), {
       operationType: OPERATION_TYPE.MUTATION,
@@ -180,7 +186,7 @@ describe("Read Structures", () => {
     });
   };
 
-  describe("Input Structure", () => {
+  describe("structure.INPUT", () => {
     const myReadInput = () => {
       return new Structure(myResource(), {
         type: STRUCTURE_TYPE.INPUT,
@@ -192,9 +198,25 @@ describe("Read Structures", () => {
       const structure = myReadInput();
       expect(structure.name).toBe("get-person-input");
     });
+
+    test("attributes:PRIVATE", () => {
+      const structure = myReadInput();
+      expect(structure.privateAttributeNames).toEqual([
+        "id",
+        "t",
+        "v",
+        "pk",
+        "sk",
+      ]);
+    });
+
+    test("attributes.PUBLIC", () => {
+      const structure = myReadInput();
+      expect(structure.publicAttributeNames).toEqual(["id"]);
+    });
   });
 
-  describe("Output Structure", () => {
+  describe("structure.OUTPUT", () => {
     const myReadOutput = () => {
       return new Structure(myResource(), {
         type: STRUCTURE_TYPE.OUTPUT,
@@ -206,6 +228,34 @@ describe("Read Structures", () => {
       const structure = myReadOutput();
       expect(structure.name).toBe("get-person-output");
     });
+
+    test("attributes:PRIVATE", () => {
+      const structure = myReadOutput();
+      expect(structure.privateAttributeNames).toEqual([
+        "id",
+        "t",
+        "v",
+        "cd",
+        "ud",
+        "dd",
+        "mn",
+        "pk",
+        "sk",
+      ]);
+    });
+
+    test("attributes.PUBLIC", () => {
+      const structure = myReadOutput();
+      expect(structure.publicAttributeNames).toEqual([
+        "id",
+        "type",
+        "version",
+        "created-at",
+        "updated-at",
+        "deleted-at",
+        "my-name",
+      ]);
+    });
   });
 });
 
@@ -213,7 +263,7 @@ describe("Read Structures", () => {
  * UPDATE
  ******************************************************************************/
 
-describe("Update Structures", () => {
+describe("operation.UPDATE", () => {
   const myUpdateOperation = () => {
     return new Operation(myResource(), {
       operationType: OPERATION_TYPE.MUTATION,
@@ -221,7 +271,7 @@ describe("Update Structures", () => {
     });
   };
 
-  describe("Input Structure", () => {
+  describe("structure.INPUT", () => {
     const myUpdateInput = () => {
       return new Structure(myResource(), {
         type: STRUCTURE_TYPE.INPUT,
@@ -233,9 +283,27 @@ describe("Update Structures", () => {
       const structure = myUpdateInput();
       expect(structure.name).toBe("update-person-input");
     });
+
+    test("attributes:PRIVATE", () => {
+      const structure = myUpdateInput();
+      expect(structure.privateAttributeNames).toEqual([
+        "id",
+        "t",
+        "v",
+        "ud",
+        "mn",
+        "pk",
+        "sk",
+      ]);
+    });
+
+    test("attributes.PUBLIC", () => {
+      const structure = myUpdateInput();
+      expect(structure.publicAttributeNames).toEqual(["id", "my-name"]);
+    });
   });
 
-  describe("Output Structure", () => {
+  describe("structure.OUTPUT", () => {
     const myUpdateOutput = () => {
       return new Structure(myResource(), {
         type: STRUCTURE_TYPE.OUTPUT,
@@ -247,6 +315,34 @@ describe("Update Structures", () => {
       const structure = myUpdateOutput();
       expect(structure.name).toBe("update-person-output");
     });
+
+    test("attributes:PRIVATE", () => {
+      const structure = myUpdateOutput();
+      expect(structure.privateAttributeNames).toEqual([
+        "id",
+        "t",
+        "v",
+        "cd",
+        "ud",
+        "dd",
+        "mn",
+        "pk",
+        "sk",
+      ]);
+    });
+
+    test("attributes.PUBLIC", () => {
+      const structure = myUpdateOutput();
+      expect(structure.publicAttributeNames).toEqual([
+        "id",
+        "type",
+        "version",
+        "created-at",
+        "updated-at",
+        "deleted-at",
+        "my-name",
+      ]);
+    });
   });
 });
 
@@ -254,7 +350,7 @@ describe("Update Structures", () => {
  * DELETE
  ******************************************************************************/
 
-describe("Delete Structures", () => {
+describe("operation.DELETE", () => {
   const myDeleteOperation = () => {
     return new Operation(myResource(), {
       operationType: OPERATION_TYPE.MUTATION,
@@ -262,7 +358,7 @@ describe("Delete Structures", () => {
     });
   };
 
-  describe("Input Structure", () => {
+  describe("structure.INPUT", () => {
     const myDeleteInput = () => {
       return new Structure(myResource(), {
         type: STRUCTURE_TYPE.INPUT,
@@ -274,9 +370,27 @@ describe("Delete Structures", () => {
       const structure = myDeleteInput();
       expect(structure.name).toBe("delete-person-input");
     });
+
+    test("attributes:PRIVATE", () => {
+      const structure = myDeleteInput();
+      expect(structure.privateAttributeNames).toEqual([
+        "id",
+        "t",
+        "v",
+        "ud",
+        "dd",
+        "pk",
+        "sk",
+      ]);
+    });
+
+    test("attributes.PUBLIC", () => {
+      const structure = myDeleteInput();
+      expect(structure.publicAttributeNames).toEqual(["id"]);
+    });
   });
 
-  describe("Output Structure", () => {
+  describe("structure.OUTPUT", () => {
     const myDeleteOutput = () => {
       return new Structure(myResource(), {
         type: STRUCTURE_TYPE.OUTPUT,
@@ -288,6 +402,34 @@ describe("Delete Structures", () => {
       const structure = myDeleteOutput();
       expect(structure.name).toBe("delete-person-output");
     });
+
+    test("attributes:PRIVATE", () => {
+      const structure = myDeleteOutput();
+      expect(structure.privateAttributeNames).toEqual([
+        "id",
+        "t",
+        "v",
+        "cd",
+        "ud",
+        "dd",
+        "mn",
+        "pk",
+        "sk",
+      ]);
+    });
+
+    test("attributes.PUBLIC", () => {
+      const structure = myDeleteOutput();
+      expect(structure.publicAttributeNames).toEqual([
+        "id",
+        "type",
+        "version",
+        "created-at",
+        "updated-at",
+        "deleted-at",
+        "my-name",
+      ]);
+    });
   });
 });
 
@@ -295,7 +437,7 @@ describe("Delete Structures", () => {
  * IMPORT
  ******************************************************************************/
 
-describe("Import Structures", () => {
+describe("operation.IMPORT", () => {
   const myImportOperation = () => {
     return new Operation(myResource(), {
       operationType: OPERATION_TYPE.MUTATION,
@@ -303,7 +445,7 @@ describe("Import Structures", () => {
     });
   };
 
-  describe("Input Structure", () => {
+  describe("structure.INPUT", () => {
     const myImportInput = () => {
       return new Structure(myResource(), {
         type: STRUCTURE_TYPE.INPUT,
@@ -317,7 +459,7 @@ describe("Import Structures", () => {
     });
   });
 
-  describe("Output Structure", () => {
+  describe("structure.OUTPUT", () => {
     const myImportOutput = () => {
       return new Structure(myResource(), {
         type: STRUCTURE_TYPE.OUTPUT,

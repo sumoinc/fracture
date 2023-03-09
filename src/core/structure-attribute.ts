@@ -1,8 +1,10 @@
 import { deepMerge } from "projen/lib/util";
+import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Resource } from "./resource";
 import {
   ResourceAttribute,
+  ResourceAttributeGenerator,
   ResourceAttributeOptions,
 } from "./resource-attribute";
 import { Service } from "./service";
@@ -60,11 +62,95 @@ export class StructureAttribute extends FractureComponent {
     ]) as Required<ResourceAttributeOptions>;
   }
 
-  public get name() {
+  public get name(): string {
     return this.options.name;
   }
 
-  public get shortName() {
+  public get shortName(): string {
     return this.options.shortName;
+  }
+
+  /**
+   * Boost composed attributes to the end of the list. Doing this
+   * ensures helpsmake sure that we have all the other attributes we need prior
+   * to building them.
+   *
+   */
+  public get sortPosition(): number {
+    const compositionBoost = this.isComposed ? 1000 : 0;
+    return this.options.sortPosition + compositionBoost;
+  }
+
+  public get isComposed(): boolean {
+    return this.hasGenerator(ResourceAttributeGenerator.COMPOSITION);
+  }
+
+  /**
+   *
+   * @param generator Does this attribute have a generator for this specific type?
+   * @returns
+   */
+  public hasGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return (
+      this.isGenerated &&
+      (this.hasCreateGenerator(generator) ||
+        this.hasReadGenerator(generator) ||
+        this.hasUpdateGenerator(generator) ||
+        this.hasDeleteGenerator(generator) ||
+        this.hasImportGenerator(generator))
+    );
+  }
+
+  // generated fields
+  public get isGenerated(): boolean {
+    return (
+      this.isCreateGenerated ||
+      this.isReadGenerated ||
+      this.isUpdateGenerated ||
+      this.isDeleteGenerated
+    );
+  }
+  public get isCreateGenerated(): boolean {
+    return this.options.createGenerator !== ResourceAttributeGenerator.NONE;
+  }
+  public get isReadGenerated(): boolean {
+    return this.options.readGenerator !== ResourceAttributeGenerator.NONE;
+  }
+  public get isUpdateGenerated(): boolean {
+    return this.options.updateGenerator !== ResourceAttributeGenerator.NONE;
+  }
+  public get isDeleteGenerated(): boolean {
+    return this.options.deleteGenerator !== ResourceAttributeGenerator.NONE;
+  }
+  public get isImportGenerated(): boolean {
+    return this.options.importGenerator !== ResourceAttributeGenerator.NONE;
+  }
+
+  public hasCreateGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return this.isCreateGenerated && this.options.createGenerator === generator;
+  }
+  public hasReadGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return this.isReadGenerated && this.options.readGenerator === generator;
+  }
+  public hasUpdateGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return this.isUpdateGenerated && this.options.updateGenerator === generator;
+  }
+  public hasDeleteGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return this.isDeleteGenerated && this.options.deleteGenerator === generator;
+  }
+  public hasImportGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return this.isImportGenerated && this.options.importGenerator === generator;
   }
 }

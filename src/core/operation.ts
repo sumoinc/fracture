@@ -117,6 +117,45 @@ export class Operation extends FractureComponent {
     );
   }
 
+  public get isWrite(): boolean {
+    return this.isCreate || this.isUpdate;
+  }
+
+  public get isCreate(): boolean {
+    return (
+      this.options.operationSubType === OPERATION_SUB_TYPE.CREATE_MANY ||
+      this.options.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE
+    );
+  }
+
+  public get isRead(): boolean {
+    return (
+      this.options.operationSubType === OPERATION_SUB_TYPE.READ_MANY ||
+      this.options.operationSubType === OPERATION_SUB_TYPE.READ_ONE
+    );
+  }
+
+  public get isUpdate(): boolean {
+    return (
+      this.options.operationSubType === OPERATION_SUB_TYPE.UPDATE_MANY ||
+      this.options.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
+    );
+  }
+
+  public get isDelete(): boolean {
+    return (
+      this.options.operationSubType === OPERATION_SUB_TYPE.DELETE_MANY ||
+      this.options.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE
+    );
+  }
+
+  public get isImport(): boolean {
+    return (
+      this.options.operationSubType === OPERATION_SUB_TYPE.IMPORT_MANY ||
+      this.options.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE
+    );
+  }
+
   /***************************************************************************
    *
    * INPUT / OUTPUT STRUCTURES

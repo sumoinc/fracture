@@ -126,44 +126,51 @@ export class Structure extends FractureComponent {
    */
   public get privateAttributes() {
     if (this._privateAttributes.length === 0) {
-      let usaAttributes: ResourceAttribute[] = [];
+      let useAttributes: ResourceAttribute[] = [];
 
       if (
         this.options.type === STRUCTURE_TYPE.DATA ||
         this.options.type === STRUCTURE_TYPE.TRANSIENT
       ) {
-        usaAttributes = [
-          ...this.resource.privateAttributes,
-          ...this.resource.publicAttributes,
-        ];
+        useAttributes = [...useAttributes, ...this.resource.privateAttributes];
       }
 
-      if (this.options.type === STRUCTURE_TYPE.INPUT) {
-        usaAttributes = [
-          ...this.resource.generatedAttributesForOperation(
-            this.options.operation!
-          ),
-          ...this.resource.dataAttributes,
-        ];
+      if (this.options.operation) {
+        if (this.options.type === STRUCTURE_TYPE.INPUT) {
+          // add in all geneated attributes next
+          useAttributes = [
+            ...useAttributes,
+            ...this.resource.generatedAttributesForOperation(
+              this.options.operation
+            ),
+          ];
+        }
+
+        if (this.options.type === STRUCTURE_TYPE.OUTPUT) {
+          useAttributes = [...useAttributes, ...this.resource.gsiKeys];
+        }
       }
 
-      if (this.options.type === STRUCTURE_TYPE.OUTPUT) {
-        usaAttributes = [
-          ...this.resource.generatedAttributesForOperation(
-            this.options.operation!
-          ),
-          ...this.resource.dataAttributes,
-        ];
-      }
-
-      usaAttributes.forEach((resourceAttribute) => {
-        this._privateAttributes?.push(
+      useAttributes.forEach((resourceAttribute) => {
+        this._privateAttributes.push(
           new StructureAttribute(this, { resourceAttribute })
         );
       });
+
+      // any in all external attributes
+      this.publicAttributes.forEach((a) => {
+        this._privateAttributes.push(a);
+      });
     }
 
-    return this._privateAttributes;
+    // sort and return all attributes
+    return this._privateAttributes.sort((a, b) => {
+      return a.sortPosition > b.sortPosition
+        ? 1
+        : a.sortPosition < b.sortPosition
+        ? -1
+        : 0;
+    });
   }
 
   /**
@@ -172,34 +179,60 @@ export class Structure extends FractureComponent {
    */
   public get publicAttributes() {
     if (this._publicAttributes.length === 0) {
-      let usaAttributes: ResourceAttribute[] = [];
+      let useAttributes: ResourceAttribute[] = [];
 
       if (this.options.type === STRUCTURE_TYPE.DATA) {
-        usaAttributes = [...this.resource.publicAttributes];
+        useAttributes = [...this.resource.publicAttributes];
       }
 
-      if (this.options.type === STRUCTURE_TYPE.INPUT) {
-        usaAttributes = [...this.resource.dataAttributes];
+      if (this.options.operation) {
+        if (this.options.type === STRUCTURE_TYPE.INPUT) {
+          // For everything except create, we'll need non-generated parts of all keys
+          if (!this.options.operation.isCreate) {
+            useAttributes = [
+              ...useAttributes,
+              ...this.resource.externalKeyAttributesForOperation(
+                this.options.operation
+              ),
+            ];
+          }
+
+          // last, any write operations need to include data attributes
+          if (this.options.operation.isWrite) {
+            useAttributes = [...useAttributes, ...this.resource.dataAttributes];
+          }
+        }
+
+        if (this.options.type === STRUCTURE_TYPE.OUTPUT) {
+          useAttributes = [
+            ...useAttributes,
+            /*
+            ...this.resource.generatedAttributesForOperation(
+              this.options.operation,
+              true
+            ),
+            */
+            ...this.resource.publicAttributes,
+            //...this.resource.dataAttributes,
+          ];
+        }
       }
 
-      if (this.options.type === STRUCTURE_TYPE.OUTPUT) {
-        usaAttributes = [
-          ...this.resource.generatedAttributesForOperation(
-            this.options.operation!,
-            true
-          ),
-          ...this.resource.dataAttributes,
-        ];
-      }
-
-      usaAttributes.forEach((resourceAttribute) => {
+      useAttributes.forEach((resourceAttribute) => {
         this._publicAttributes?.push(
           new StructureAttribute(this, { resourceAttribute })
         );
       });
     }
 
-    return this._publicAttributes;
+    // sort and return all attributes
+    return this._publicAttributes.sort((a, b) => {
+      return a.sortPosition > b.sortPosition
+        ? 1
+        : a.sortPosition < b.sortPosition
+        ? -1
+        : 0;
+    });
   }
 
   public get privateAttributeNames() {

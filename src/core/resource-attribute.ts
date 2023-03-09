@@ -231,6 +231,10 @@ export type ResourceAttributeOptions = {
    * @default []
    */
   importValidations?: ValueOf<typeof ValidationRule>[];
+  /**
+   * Position this attribute should occupy when sorted.
+   */
+  sortPosition?: number;
 };
 
 export class ResourceAttribute extends FractureComponent {
@@ -270,6 +274,7 @@ export class ResourceAttribute extends FractureComponent {
       updateValidations: [],
       deleteValidations: [],
       importValidations: [],
+      sortPosition: resource.attributes.length,
     };
 
     /***************************************************************************
@@ -332,16 +337,31 @@ export class ResourceAttribute extends FractureComponent {
     }
   }
 
+  public get name(): string {
+    return this.options.name;
+  }
+
+  public get sortPosition(): number {
+    return this.options.sortPosition;
+  }
+
+  /*****************************************************************************
+   *
+   * PK and SK HELPERS
+   *
+   ****************************************************************************/
+
   public get isPartitionKey(): boolean {
-    return this.resource.keyAccessPattern.pkAttribute.compositionSources.some(
-      (a) => a === this
-    );
+    return this.resource.partitionKey === this;
   }
   public get isSortKey(): boolean {
-    return this.resource.keyAccessPattern.skAttribute.compositionSources.some(
-      (a) => a === this
-    );
+    return this.resource.sortKey === this;
   }
+
+  /*****************************************************************************
+   *
+   *
+   ****************************************************************************/
 
   public get isData(): boolean {
     return !this.isGenerated;
@@ -385,7 +405,8 @@ export class ResourceAttribute extends FractureComponent {
       (this.hasCreateGenerator(generator) ||
         this.hasReadGenerator(generator) ||
         this.hasUpdateGenerator(generator) ||
-        this.hasDeleteGenerator(generator))
+        this.hasDeleteGenerator(generator) ||
+        this.hasImportGenerator(generator))
     );
   }
   public hasCreateGenerator(
@@ -407,6 +428,11 @@ export class ResourceAttribute extends FractureComponent {
     generator: ValueOf<typeof ResourceAttributeGenerator>
   ): boolean {
     return this.isDeleteGenerated && this.options.deleteGenerator === generator;
+  }
+  public hasImportGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    return this.isImportGenerated && this.options.importGenerator === generator;
   }
 
   public generatorForOperation(operation: Operation) {
