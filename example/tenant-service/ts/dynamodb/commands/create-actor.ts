@@ -114,7 +114,7 @@ export const createActor = async (
   const ln = lastName;
   const pk = id;
   const sk = t + "#" + v;
-  const idx = fn + "#" + ln;
+  const idx = fn + "" + ln;
 
   const item: CreateActorInputDynamo = {
     id,

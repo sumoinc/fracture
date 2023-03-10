@@ -14,7 +14,7 @@ const myService = () => {
 
 const myResource = () => {
   const resource = new Resource(myService(), { name: "person" });
-  new ResourceAttribute(resource, { name: "my-name" });
+  new ResourceAttribute(resource, { name: "my-name", isLookup: true });
   return resource;
 };
 

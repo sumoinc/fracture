@@ -165,7 +165,7 @@ export class Fracture extends Component {
         createGenerator: ResourceAttributeGenerator.COMPOSITION,
         readGenerator: ResourceAttributeGenerator.COMPOSITION,
         updateGenerator: ResourceAttributeGenerator.COMPOSITION,
-        deleteGenerator: ResourceAttributeGenerator.COMPOSITION,
+        deleteGenerator: ResourceAttributeGenerator.NONE,
         importGenerator: ResourceAttributeGenerator.COMPOSITION,
         isRequired: true,
         compositionSeperator: "", // no seperator

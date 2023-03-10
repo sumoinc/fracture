@@ -21,16 +21,6 @@ export interface UpdateActorInput {
    */
   firstName?: string;
   /**
-   * A first-name.
-   * This attribute can be used to lookup this record.
-   */
-  firstName?: string;
-  /**
-   * A last-name.
-   * This attribute can be used to lookup this record.
-   */
-  lastName?: string;
-  /**
    * A last-name.
    * This attribute can be used to lookup this record.
    */
@@ -91,8 +81,6 @@ interface UpdateActorInputDynamo {
   v?: string;
   ud?: string;
   fn?: string;
-  fn?: string;
-  ln?: string;
   ln?: string;
   pk?: string;
   sk?: string;
@@ -120,8 +108,6 @@ export const updateActor = async (
   const {
     id,
     firstName,
-    firstName,
-    lastName,
     lastName,
   } = input;
 
@@ -130,12 +116,10 @@ export const updateActor = async (
   const v = "LATEST";
   const ud = new Date().toISOString();
   const fn = firstName;
-  const fn = firstName;
-  const ln = lastName;
   const ln = lastName;
   const pk = id;
   const sk = t + "#" + v;
-  const idx = fn + "#" + ln;
+  const idx = fn + "" + ln;
 
   const item: UpdateActorInputDynamo = {
     id,
@@ -143,8 +127,6 @@ export const updateActor = async (
     v,
     ud,
     fn,
-    fn,
-    ln,
     ln,
     pk,
     sk,

@@ -7,6 +7,7 @@ import { Resource } from "../../src/core/resource";
 import { ResourceAttribute } from "../../src/core/resource-attribute";
 import { Service } from "../../src/core/service";
 import { Structure, STRUCTURE_TYPE } from "../../src/core/structure";
+import { STRUCTURE_ATTRIBUTE_TYPE } from "../../src/core/structure-attribute";
 import { TestFracture } from "../util";
 
 const myService = () => {
@@ -15,7 +16,22 @@ const myService = () => {
 
 const myResource = () => {
   const resource = new Resource(myService(), { name: "person" });
-  new ResourceAttribute(resource, { name: "my-name", shortName: "mn" });
+  new ResourceAttribute(resource, {
+    name: "my-name",
+    shortName: "mn",
+    isRequired: true,
+  });
+  new ResourceAttribute(resource, {
+    name: "first-name",
+    shortName: "fn",
+    isRequired: true,
+    isLookup: true,
+  });
+  new ResourceAttribute(resource, {
+    name: "last-name",
+    shortName: "ln",
+    isLookup: true,
+  });
   return resource;
 };
 
@@ -52,6 +68,8 @@ describe("Data Structure", () => {
       "ud",
       "dd",
       "mn",
+      "fn",
+      "ln",
       "pk",
       "sk",
       "idx",
@@ -68,6 +86,8 @@ describe("Data Structure", () => {
       "updated-at",
       "deleted-at",
       "my-name",
+      "first-name",
+      "last-name",
     ]);
   });
 });
@@ -83,451 +103,419 @@ describe("Transient Structure", () => {
  * CREATE
  ******************************************************************************/
 
-describe("operation.CREATE", () => {
-  const myCreateOperation = () => {
-    return new Operation(myResource(), {
-      operationType: OPERATION_TYPE.MUTATION,
-      operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
-    });
-  };
-
-  /*****************************************************************************
-   * INPUT
-   ****************************************************************************/
-
-  describe("structure.INPUT", () => {
-    const myCreateInput = () => {
-      return new Structure(myResource(), {
+// expected return values in tests
+// operation.input-vs-output.private-vs-public
+const operationTests = [
+  {
+    operationType: OPERATION_TYPE.MUTATION,
+    operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
+    structures: [
+      {
         type: STRUCTURE_TYPE.INPUT,
-        operation: myCreateOperation(),
-      });
-    };
-
-    test("correct default name", () => {
-      const structure = myCreateInput();
-      expect(structure.name).toBe("create-person-input");
-    });
-
-    test("attributes:PRIVATE", () => {
-      const structure = myCreateInput();
-      expect(structure.privateAttributeNames).toEqual([
-        "id",
-        "t",
-        "v",
-        "cd",
-        "ud",
-        "mn",
-        "pk",
-        "sk",
-        "idx",
-      ]);
-    });
-
-    test("attributes.PUBLIC", () => {
-      const structure = myCreateInput();
-      expect(structure.publicAttributeNames).toEqual(["my-name"]);
-    });
-  });
-
-  /*****************************************************************************
-   * OUTPUT
-   ****************************************************************************/
-
-  describe("structure.OUTPUT", () => {
-    const myCreateOutput = () => {
-      return new Structure(myResource(), {
+        expectedName: "create-person-input",
+        attributes: [
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
+            values: [
+              { id: true },
+              { t: true },
+              { v: true },
+              { cd: true },
+              { ud: true },
+              { mn: true },
+              { fn: true },
+              { ln: false },
+              { pk: true },
+              { sk: true },
+              { idx: true },
+            ],
+          },
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+            values: [
+              { "my-name": true },
+              { "first-name": true },
+              { "last-name": false },
+            ],
+          },
+        ],
+      },
+      {
         type: STRUCTURE_TYPE.OUTPUT,
-        operation: myCreateOperation(),
-      });
-    };
-
-    test("correct default name", () => {
-      const structure = myCreateOutput();
-      expect(structure.name).toBe("create-person-output");
-    });
-
-    test("attributes:PRIVATE", () => {
-      const structure = myCreateOutput();
-      expect(structure.privateAttributeNames).toEqual([
-        "id",
-        "t",
-        "v",
-        "cd",
-        "ud",
-        "dd",
-        "mn",
-        "pk",
-        "sk",
-        "idx",
-      ]);
-    });
-
-    test("attributes.PUBLIC", () => {
-      const structure = myCreateOutput();
-      expect(structure.publicAttributeNames).toEqual([
-        "id",
-        "type",
-        "version",
-        "created-at",
-        "updated-at",
-        "deleted-at",
-        "my-name",
-      ]);
-    });
-  });
-});
-
-/*******************************************************************************
- * READ
- ******************************************************************************/
-
-describe("operation.READ", () => {
-  const myReadOperation = () => {
-    return new Operation(myResource(), {
-      operationType: OPERATION_TYPE.MUTATION,
-      operationSubType: OPERATION_SUB_TYPE.READ_ONE,
-    });
-  };
-
-  describe("structure.INPUT", () => {
-    const myReadInput = () => {
-      return new Structure(myResource(), {
+        expectedName: "create-person-output",
+        attributes: [
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
+            values: [
+              { id: true },
+              { t: true },
+              { v: true },
+              { cd: true },
+              { ud: true },
+              { dd: false },
+              { mn: true },
+              { fn: true },
+              { ln: false },
+              { pk: true },
+              { sk: true },
+              { idx: true },
+            ],
+          },
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+            values: [
+              { id: true },
+              { type: true },
+              { version: true },
+              { "created-at": true },
+              { "updated-at": true },
+              { "deleted-at": false },
+              { "my-name": true },
+              { "first-name": true },
+              { "last-name": false },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    operationType: OPERATION_TYPE.QUERY,
+    operationSubType: OPERATION_SUB_TYPE.READ_ONE,
+    structures: [
+      {
         type: STRUCTURE_TYPE.INPUT,
-        operation: myReadOperation(),
-      });
-    };
-
-    test("correct default name", () => {
-      const structure = myReadInput();
-      expect(structure.name).toBe("get-person-input");
-    });
-
-    test("attributes:PRIVATE", () => {
-      const structure = myReadInput();
-      expect(structure.privateAttributeNames).toEqual([
-        "id",
-        "t",
-        "v",
-        "pk",
-        "sk",
-        "idx",
-      ]);
-    });
-
-    test("attributes.PUBLIC", () => {
-      const structure = myReadInput();
-      expect(structure.publicAttributeNames).toEqual(["id"]);
-    });
-  });
-
-  describe("structure.OUTPUT", () => {
-    const myReadOutput = () => {
-      return new Structure(myResource(), {
+        expectedName: "get-person-input",
+        attributes: [
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
+            values: [
+              { id: true },
+              { t: true },
+              { v: true },
+              { pk: true },
+              { sk: true },
+              { idx: true },
+            ],
+          },
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+            values: [{ id: true }],
+          },
+        ],
+      },
+      {
         type: STRUCTURE_TYPE.OUTPUT,
-        operation: myReadOperation(),
-      });
-    };
-
-    test("correct default name", () => {
-      const structure = myReadOutput();
-      expect(structure.name).toBe("get-person-output");
-    });
-
-    test("attributes:PRIVATE", () => {
-      const structure = myReadOutput();
-      expect(structure.privateAttributeNames).toEqual([
-        "id",
-        "t",
-        "v",
-        "cd",
-        "ud",
-        "dd",
-        "mn",
-        "pk",
-        "sk",
-        "idx",
-      ]);
-    });
-
-    test("attributes.PUBLIC", () => {
-      const structure = myReadOutput();
-      expect(structure.publicAttributeNames).toEqual([
-        "id",
-        "type",
-        "version",
-        "created-at",
-        "updated-at",
-        "deleted-at",
-        "my-name",
-      ]);
-    });
-  });
-});
-
-/*******************************************************************************
- * UPDATE
- ******************************************************************************/
-
-describe("operation.UPDATE", () => {
-  const myUpdateOperation = () => {
-    return new Operation(myResource(), {
-      operationType: OPERATION_TYPE.MUTATION,
-      operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE,
-    });
-  };
-
-  describe("structure.INPUT", () => {
-    const myUpdateInput = () => {
-      return new Structure(myResource(), {
+        expectedName: "get-person-output",
+        attributes: [
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
+            values: [
+              { id: true },
+              { t: true },
+              { v: true },
+              { cd: true },
+              { ud: true },
+              { dd: false },
+              { mn: true },
+              { fn: true },
+              { ln: false },
+              { pk: true },
+              { sk: true },
+              { idx: true },
+            ],
+          },
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+            values: [
+              { id: true },
+              { type: true },
+              { version: true },
+              { "created-at": true },
+              { "updated-at": true },
+              { "deleted-at": false },
+              { "my-name": true },
+              { "first-name": true },
+              { "last-name": false },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    operationType: OPERATION_TYPE.MUTATION,
+    operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE,
+    structures: [
+      {
         type: STRUCTURE_TYPE.INPUT,
-        operation: myUpdateOperation(),
-      });
-    };
-
-    test("correct default name", () => {
-      const structure = myUpdateInput();
-      expect(structure.name).toBe("update-person-input");
-    });
-
-    test("attributes:PRIVATE", () => {
-      const structure = myUpdateInput();
-      expect(structure.privateAttributeNames).toEqual([
-        "id",
-        "t",
-        "v",
-        "ud",
-        "mn",
-        "pk",
-        "sk",
-        "idx",
-      ]);
-    });
-
-    test("attributes.PUBLIC", () => {
-      const structure = myUpdateInput();
-      expect(structure.publicAttributeNames).toEqual(["id", "my-name"]);
-    });
-  });
-
-  describe("structure.OUTPUT", () => {
-    const myUpdateOutput = () => {
-      return new Structure(myResource(), {
+        expectedName: "update-person-input",
+        attributes: [
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
+            values: [
+              { id: true },
+              { t: true },
+              { v: true },
+              { ud: true },
+              { mn: true },
+              { fn: true },
+              { ln: false },
+              { pk: true },
+              { sk: true },
+              { idx: true },
+            ],
+          },
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+            values: [
+              { id: true },
+              { "my-name": true },
+              { "first-name": true },
+              { "last-name": false },
+            ],
+          },
+        ],
+      },
+      {
         type: STRUCTURE_TYPE.OUTPUT,
-        operation: myUpdateOperation(),
-      });
-    };
-
-    test("correct default name", () => {
-      const structure = myUpdateOutput();
-      expect(structure.name).toBe("update-person-output");
-    });
-
-    test("attributes:PRIVATE", () => {
-      const structure = myUpdateOutput();
-      expect(structure.privateAttributeNames).toEqual([
-        "id",
-        "t",
-        "v",
-        "cd",
-        "ud",
-        "dd",
-        "mn",
-        "pk",
-        "sk",
-        "idx",
-      ]);
-    });
-
-    test("attributes.PUBLIC", () => {
-      const structure = myUpdateOutput();
-      expect(structure.publicAttributeNames).toEqual([
-        "id",
-        "type",
-        "version",
-        "created-at",
-        "updated-at",
-        "deleted-at",
-        "my-name",
-      ]);
-    });
-  });
-});
-
-/*******************************************************************************
- * DELETE
- ******************************************************************************/
-
-describe("operation.DELETE", () => {
-  const myDeleteOperation = () => {
-    return new Operation(myResource(), {
-      operationType: OPERATION_TYPE.MUTATION,
-      operationSubType: OPERATION_SUB_TYPE.DELETE_ONE,
-    });
-  };
-
-  describe("structure.INPUT", () => {
-    const myDeleteInput = () => {
-      return new Structure(myResource(), {
+        expectedName: "update-person-output",
+        attributes: [
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
+            values: [
+              { id: true },
+              { t: true },
+              { v: true },
+              { cd: true },
+              { ud: true },
+              { dd: false },
+              { mn: true },
+              { fn: true },
+              { ln: false },
+              { pk: true },
+              { sk: true },
+              { idx: true },
+            ],
+          },
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+            values: [
+              { id: true },
+              { type: true },
+              { version: true },
+              { "created-at": true },
+              { "updated-at": true },
+              { "deleted-at": false },
+              { "my-name": true },
+              { "first-name": true },
+              { "last-name": false },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    operationType: OPERATION_TYPE.MUTATION,
+    operationSubType: OPERATION_SUB_TYPE.DELETE_ONE,
+    structures: [
+      {
         type: STRUCTURE_TYPE.INPUT,
-        operation: myDeleteOperation(),
-      });
-    };
-
-    test("correct default name", () => {
-      const structure = myDeleteInput();
-      expect(structure.name).toBe("delete-person-input");
-    });
-
-    test("attributes:PRIVATE", () => {
-      const structure = myDeleteInput();
-      expect(structure.privateAttributeNames).toEqual([
-        "id",
-        "t",
-        "v",
-        "ud",
-        "dd",
-        "pk",
-        "sk",
-        "idx",
-      ]);
-    });
-
-    test("attributes.PUBLIC", () => {
-      const structure = myDeleteInput();
-      expect(structure.publicAttributeNames).toEqual(["id"]);
-    });
-  });
-
-  describe("structure.OUTPUT", () => {
-    const myDeleteOutput = () => {
-      return new Structure(myResource(), {
+        expectedName: "delete-person-input",
+        attributes: [
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
+            values: [
+              { id: true },
+              { t: true },
+              { v: true },
+              { ud: true },
+              { dd: false },
+              { pk: true },
+              { sk: true },
+            ],
+          },
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+            values: [{ id: true }],
+          },
+        ],
+      },
+      {
         type: STRUCTURE_TYPE.OUTPUT,
-        operation: myDeleteOperation(),
-      });
-    };
-
-    test("correct default name", () => {
-      const structure = myDeleteOutput();
-      expect(structure.name).toBe("delete-person-output");
-    });
-
-    test("attributes:PRIVATE", () => {
-      const structure = myDeleteOutput();
-      expect(structure.privateAttributeNames).toEqual([
-        "id",
-        "t",
-        "v",
-        "cd",
-        "ud",
-        "dd",
-        "mn",
-        "pk",
-        "sk",
-        "idx",
-      ]);
-    });
-
-    test("attributes.PUBLIC", () => {
-      const structure = myDeleteOutput();
-      expect(structure.publicAttributeNames).toEqual([
-        "id",
-        "type",
-        "version",
-        "created-at",
-        "updated-at",
-        "deleted-at",
-        "my-name",
-      ]);
-    });
-  });
-});
-
-/*******************************************************************************
- * IMPORT
- ******************************************************************************/
-
-describe("operation.IMPORT", () => {
-  const myImportOperation = () => {
-    return new Operation(myResource(), {
-      operationType: OPERATION_TYPE.MUTATION,
-      operationSubType: OPERATION_SUB_TYPE.IMPORT_ONE,
-    });
-  };
-
-  describe("structure.INPUT", () => {
-    const myImportInput = () => {
-      return new Structure(myResource(), {
+        expectedName: "delete-person-output",
+        attributes: [
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
+            values: [
+              { id: true },
+              { t: true },
+              { v: true },
+              { cd: true },
+              { ud: true },
+              { dd: false },
+              { mn: true },
+              { fn: true },
+              { ln: false },
+              { pk: true },
+              { sk: true },
+              { idx: true },
+            ],
+          },
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+            values: [
+              { id: true },
+              { type: true },
+              { version: true },
+              { "created-at": true },
+              { "updated-at": true },
+              { "deleted-at": false },
+              { "my-name": true },
+              { "first-name": true },
+              { "last-name": false },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    operationType: OPERATION_TYPE.MUTATION,
+    operationSubType: OPERATION_SUB_TYPE.IMPORT_ONE,
+    structures: [
+      {
         type: STRUCTURE_TYPE.INPUT,
-        operation: myImportOperation(),
-      });
-    };
-
-    test("correct default name", () => {
-      const structure = myImportInput();
-      expect(structure.name).toBe("import-person-input");
-    });
-
-    test("attributes:PRIVATE", () => {
-      const structure = myImportInput();
-      expect(structure.privateAttributeNames).toEqual([
-        "id",
-        "t",
-        "v",
-        "cd",
-        "ud",
-        "mn",
-        "pk",
-        "sk",
-        "idx",
-      ]);
-    });
-
-    test("attributes.PUBLIC", () => {
-      const structure = myImportInput();
-      expect(structure.publicAttributeNames).toEqual(["id", "my-name"]);
-    });
-  });
-
-  describe("structure.OUTPUT", () => {
-    const myImportOutput = () => {
-      return new Structure(myResource(), {
+        expectedName: "import-person-input",
+        attributes: [
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
+            values: [
+              { id: true },
+              { t: true },
+              { v: true },
+              { cd: true },
+              { ud: true },
+              { mn: true },
+              { fn: true },
+              { ln: false },
+              { pk: true },
+              { sk: true },
+              { idx: true },
+            ],
+          },
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+            values: [
+              { id: true },
+              { "my-name": true },
+              { "first-name": true },
+              { "last-name": false },
+            ],
+          },
+        ],
+      },
+      {
         type: STRUCTURE_TYPE.OUTPUT,
-        operation: myImportOperation(),
+        expectedName: "import-person-output",
+        attributes: [
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
+            values: [
+              { id: true },
+              { t: true },
+              { v: true },
+              { cd: true },
+              { ud: true },
+              { dd: false },
+              { mn: true },
+              { fn: true },
+              { ln: false },
+              { pk: true },
+              { sk: true },
+              { idx: true },
+            ],
+          },
+          {
+            type: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+            values: [
+              { id: true },
+              { type: true },
+              { version: true },
+              { "created-at": true },
+              { "updated-at": true },
+              { "deleted-at": false },
+              { "my-name": true },
+              { "first-name": true },
+              { "last-name": false },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+/**
+ * We do some crazy looping here but it'sd an easier way then hand crafting each test.
+ */
+
+operationTests.forEach((operation) => {
+  // OPERATION
+  describe(`${operation.operationType}.${operation.operationSubType}`, () => {
+    const myOperation = () => {
+      return new Operation(myResource(), {
+        operationType: operation.operationType,
+        operationSubType: operation.operationSubType,
       });
     };
 
-    test("correct default name", () => {
-      const structure = myImportOutput();
-      expect(structure.name).toBe("import-person-output");
-    });
+    // STRUCTURES
+    operation.structures.forEach((structure) => {
+      describe(`${structure.type}`, () => {
+        const myInputOrOutput = () => {
+          return new Structure(myResource(), {
+            type: structure.type,
+            operation: myOperation(),
+          });
+        };
 
-    test("attributes:PRIVATE", () => {
-      const structure = myImportOutput();
-      expect(structure.privateAttributeNames).toEqual([
-        "id",
-        "t",
-        "v",
-        "cd",
-        "ud",
-        "dd",
-        "mn",
-        "pk",
-        "sk",
-        "idx",
-      ]);
-    });
+        test("correct default structure name", () => {
+          expect(myInputOrOutput().name).toBe(structure.expectedName);
+        });
 
-    test("attributes.PUBLIC", () => {
-      const structure = myImportOutput();
-      expect(structure.publicAttributeNames).toEqual([
-        "id",
-        "type",
-        "version",
-        "created-at",
-        "updated-at",
-        "deleted-at",
-        "my-name",
-      ]);
+        // ATTRIBUTES
+        structure.attributes.forEach((attribute) => {
+          // which attributes should we expect to see here?
+          const expectedResult = attribute.values.map((e) => {
+            return Object.keys(e)[0];
+          });
+          const testStructure = myInputOrOutput();
+
+          test(`${attribute.type} attribute names`, () => {
+            // private or public
+            const testAttributes =
+              attribute.type === STRUCTURE_ATTRIBUTE_TYPE.PRIVATE
+                ? testStructure.privateAttributeNames
+                : testStructure.publicAttributeNames;
+
+            expect(testAttributes).toEqual(expectedResult);
+          });
+
+          // REQUIRED TESTS
+          attribute.values.forEach((item) => {
+            const [key, value] = Object.entries(item)[0];
+            test(`"${key}.isRequired" should be "${value}"`, () => {
+              const testAttribute =
+                attribute.type === STRUCTURE_ATTRIBUTE_TYPE.PRIVATE
+                  ? testStructure.getPrivateAttributeByName(key)
+                  : testStructure.getPublicAttributeByName(key);
+              expect(testAttribute?.isRequired).toBe(value);
+            });
+          });
+        });
+      });
     });
   });
 });

@@ -112,6 +112,7 @@ export class Resource extends FractureComponent {
     this.lookupAccessPattern = new AccessPattern(this, {
       name: "lookup",
       gsi: service.options.dynamodb.lookupGsi,
+      skAttributeOptions: service.options.lookupKeyStrategy,
     });
 
     /***************************************************************************
@@ -362,7 +363,9 @@ export class Resource extends FractureComponent {
   /**
    *
    * Returns an of non-generated attributes we need in order to fully form the
-   * pk and sk
+   * pk and sk.
+   *
+   * Don't include data elements sinc they come in already fromt he outside.
    *
    * @param operation
    * @returns
@@ -378,6 +381,7 @@ export class Resource extends FractureComponent {
 
     return this.composableAttributeSources.filter(
       (keyAttribute) =>
+        !keyAttribute.isData &&
         !generatedAttributes.some(
           (generatedAttribute) => keyAttribute === generatedAttribute
         )

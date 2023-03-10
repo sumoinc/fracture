@@ -252,7 +252,6 @@ export class ResourceAttribute extends FractureComponent {
   public readonly compositionSources: ResourceAttribute[];
   // parent
   public readonly resource: Resource;
-  public readonly service: Service;
   // all other options
   public readonly options: Required<ResourceAttributeOptions>;
 
@@ -300,7 +299,6 @@ export class ResourceAttribute extends FractureComponent {
 
     // parent + inverse
     this.resource = resource;
-    this.service = resource.service;
     this.resource.attributes.push(this);
 
     // ensure names are param-cased
@@ -389,13 +387,21 @@ export class ResourceAttribute extends FractureComponent {
     return !this.isGenerated;
   }
 
+  public get isComposable(): boolean {
+    return (
+      this.isGenerated &&
+      this.hasGenerator(ResourceAttributeGenerator.COMPOSITION)
+    );
+  }
+
   // generated fields
   public get isGenerated(): boolean {
     return (
       this.isCreateGenerated ||
       this.isReadGenerated ||
       this.isUpdateGenerated ||
-      this.isDeleteGenerated
+      this.isDeleteGenerated ||
+      this.isImportGenerated
     );
   }
   public get isCreateGenerated(): boolean {
@@ -472,5 +478,9 @@ export class ResourceAttribute extends FractureComponent {
       default:
         throw new Error(`Unknown sub-operation: ${operation}`);
     }
+  }
+
+  public get service(): Service {
+    return this.resource.service;
   }
 }

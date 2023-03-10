@@ -67,7 +67,6 @@ interface DeleteTenantInputDynamo {
   dd?: string;
   pk?: string;
   sk?: string;
-  idx?: string;
 }
 
 interface DeleteTenantOutputDynamo {
@@ -98,7 +97,6 @@ export const deleteTenant = async (
   const dd = new Date().toISOString();
   const pk = id;
   const sk = t + "#" + v;
-  // const idx = undefined;
 
   const item: DeleteTenantInputDynamo = {
     id,
@@ -108,7 +106,6 @@ export const deleteTenant = async (
     dd,
     pk,
     sk,
-    // idx,
   };
 
 };

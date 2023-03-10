@@ -15,6 +15,11 @@ import { Structure } from "./structure";
  * TYPES
  *****************************************************************************/
 
+export const STRUCTURE_ATTRIBUTE_TYPE = {
+  PUBLIC: "public",
+  PRIVATE: "private",
+} as const;
+
 export type StructureAttributeOptions = {
   /**
    * What resource attribute is this structure attribute based on?
@@ -24,6 +29,10 @@ export type StructureAttributeOptions = {
    * Replacement / override options for structure attribute
    */
   structureAttributeOptions?: Partial<ResourceAttributeOptions>;
+  /**
+   * Is this a public or private attribute?
+   */
+  structureAttributeType: ValueOf<typeof STRUCTURE_ATTRIBUTE_TYPE>;
 };
 
 /******************************************************************************
@@ -33,10 +42,12 @@ export type StructureAttributeOptions = {
 export class StructureAttribute extends FractureComponent {
   // member components
   public readonly compositionSources: StructureAttribute[];
+  public readonly structureAttributeType: ValueOf<
+    typeof STRUCTURE_ATTRIBUTE_TYPE
+  >;
   // parent
   public readonly structure: Structure;
-  public readonly resource: Resource;
-  public readonly service: Service;
+
   // all other options
   public readonly options: Required<ResourceAttributeOptions>;
 
@@ -54,14 +65,14 @@ export class StructureAttribute extends FractureComponent {
       (source) => {
         return new StructureAttribute(structure, {
           resourceAttribute: source,
+          structureAttributeType: options.structureAttributeType,
         });
       }
     );
+    this.structureAttributeType = options.structureAttributeType;
 
     // parents + inverse
     this.structure = structure;
-    this.resource = structure.resource;
-    this.service = structure.resource.service;
 
     // all other options
     this.options = deepMerge([
@@ -93,6 +104,16 @@ export class StructureAttribute extends FractureComponent {
     return this.hasGenerator(ResourceAttributeGenerator.COMPOSITION);
   }
 
+  public get isRequired() {
+    // if the required optioun is set, require it here too
+    if (this.options.isRequired) {
+      return true;
+    }
+
+    // otherwise, false
+    return false;
+  }
+
   /**
    *
    * @param generator Does this attribute have a generator for this specific type?
@@ -117,7 +138,8 @@ export class StructureAttribute extends FractureComponent {
       this.isCreateGenerated ||
       this.isReadGenerated ||
       this.isUpdateGenerated ||
-      this.isDeleteGenerated
+      this.isDeleteGenerated ||
+      this.isImportGenerated
     );
   }
   public get isCreateGenerated(): boolean {
@@ -177,5 +199,13 @@ export class StructureAttribute extends FractureComponent {
       default:
         throw new Error(`Unknown sub-operation: ${operation}`);
     }
+  }
+
+  public get service(): Service {
+    return this.resource.service;
+  }
+
+  public get resource(): Resource {
+    return this.structure.resource;
   }
 }

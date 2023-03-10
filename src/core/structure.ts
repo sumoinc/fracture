@@ -5,7 +5,10 @@ import { Operation } from "./operation";
 import { Resource } from "./resource";
 import { ResourceAttribute } from "./resource-attribute";
 import { Service } from "./service";
-import { StructureAttribute } from "./structure-attribute";
+import {
+  StructureAttribute,
+  STRUCTURE_ATTRIBUTE_TYPE,
+} from "./structure-attribute";
 
 /******************************************************************************
  * TYPES
@@ -46,9 +49,8 @@ export const STRUCTURE_TYPE = {
 
 export class Structure extends FractureComponent {
   // member components
-  // parents
+  // parent
   public readonly resource: Resource;
-  public readonly service: Service;
   // all other options
   public readonly options: SetRequired<StructureOptions, "type" | "comments">;
   // private cached properties
@@ -79,7 +81,6 @@ export class Structure extends FractureComponent {
 
     // parents + inverse
     this.resource = resource;
-    this.service = resource.service;
     this.resource.structures.push(this);
 
     // all other options
@@ -126,6 +127,14 @@ export class Structure extends FractureComponent {
       .join("-");
   }
 
+  public getPrivateAttributeByName(shortName: string) {
+    return this.privateAttributes.find((a) => a.shortName === shortName);
+  }
+
+  public getPublicAttributeByName(name: string) {
+    return this.publicAttributes.find((a) => a.name === name);
+  }
+
   /**
    * Includes all public attributes, plus generated attributes and GSI
    * attributes. This is a good list to use for dynamodb operations.
@@ -143,7 +152,7 @@ export class Structure extends FractureComponent {
 
       if (this.options.operation) {
         if (this.options.type === STRUCTURE_TYPE.INPUT) {
-          // add in all geneated attributes next
+          // add in all geneated attributes for inputs
           useAttributes = [
             ...useAttributes,
             ...this.resource.generatedAttributesForOperation(
@@ -162,7 +171,10 @@ export class Structure extends FractureComponent {
 
       useAttributes.forEach((resourceAttribute) => {
         this._privateAttributes.push(
-          new StructureAttribute(this, { resourceAttribute })
+          new StructureAttribute(this, {
+            resourceAttribute,
+            structureAttributeType: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
+          })
         );
       });
 
@@ -219,7 +231,10 @@ export class Structure extends FractureComponent {
 
       useAttributes.forEach((resourceAttribute) => {
         this._publicAttributes?.push(
-          new StructureAttribute(this, { resourceAttribute })
+          new StructureAttribute(this, {
+            resourceAttribute,
+            structureAttributeType: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+          })
         );
       });
     }
@@ -239,5 +254,9 @@ export class Structure extends FractureComponent {
   }
   public get publicAttributeNames() {
     return this.publicAttributes.map((attribute) => attribute.name);
+  }
+
+  public get service(): Service {
+    return this.resource.service;
   }
 }
