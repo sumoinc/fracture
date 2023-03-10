@@ -1,8 +1,8 @@
 import { join } from "path";
 import { TypescriptResource } from "./typescript-resource";
 import { TypeScriptSource } from "./typescript-source";
-import { TypescriptStructure } from "./typescript-structure";
 import { FractureComponent } from "../../core";
+import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Service } from "../../core/service";
 
 export class TypescriptService extends FractureComponent {
@@ -25,10 +25,12 @@ export class TypescriptService extends FractureComponent {
     /**
      * Public types
      */
+    /*
     this.service.resources.forEach((resource) => {
       const tsDataStructure = new TypescriptStructure(resource.dataStructure);
       tsDataStructure.writePublicInterface(this.typeFile);
     });
+    */
 
     // some error and response types
     this.typeFile.open(`export type Error = {`);
@@ -39,7 +41,7 @@ export class TypescriptService extends FractureComponent {
     this.typeFile.close(`}`);
     this.typeFile.line("\n");
 
-    this.typeFile.open(`export type Response<T> = {`);
+    this.typeFile.open(`export type ${this.responseTypeName}<T> = {`);
     this.typeFile.line(`data: T | T[];`);
     this.typeFile.line(`errors: Error[];`);
     this.typeFile.line(`status: number;`);
@@ -52,5 +54,12 @@ export class TypescriptService extends FractureComponent {
     this.service.resources.forEach((resource) => {
       new TypescriptResource(this, resource);
     });
+  }
+
+  public get responseTypeName() {
+    return formatStringByNamingStrategy(
+      "Response",
+      this.fracture.options.namingStrategy.ts.typeName
+    );
   }
 }

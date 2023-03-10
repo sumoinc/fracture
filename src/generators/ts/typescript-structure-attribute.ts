@@ -13,10 +13,7 @@ import { StructureAttribute } from "../../core/structure-attribute";
 
 export class TypescriptStructureAttribute extends FractureComponent {
   public readonly structureAttribute: StructureAttribute;
-  public readonly structure: Structure;
-  public readonly resource: Resource;
-  public readonly service: Service;
-  public readonly operation?: Operation;
+
   public readonly tsStructure: TypescriptStructure;
 
   constructor(
@@ -26,11 +23,11 @@ export class TypescriptStructureAttribute extends FractureComponent {
     super(structureAttribute.fracture);
 
     this.structureAttribute = structureAttribute;
-    this.structure = structureAttribute.structure;
-    this.resource = structureAttribute.resource;
-    this.service = structureAttribute.service;
-    this.operation = this.structure.options.operation;
     this.tsStructure = tsStructure;
+  }
+
+  public get isRequired() {
+    return this.structureAttribute.isRequired;
   }
 
   public get attributeName() {
@@ -58,10 +55,10 @@ export class TypescriptStructureAttribute extends FractureComponent {
     if (!this.operation) {
       throw new Error("Operation is not defined");
     }
-    const generator = this.structureAttribute.generatorForOperation(
-      this.operation
-    );
+    const generator = this.structureAttribute.generator;
     switch (generator) {
+      case ResourceAttributeGenerator.NONE:
+        throw new Error("No generator! Did you call isGenerated first?");
       case ResourceAttributeGenerator.GUID:
         return "uuidv4()";
       case ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP:
@@ -75,17 +72,14 @@ export class TypescriptStructureAttribute extends FractureComponent {
           ? undefined
           : this.structureAttribute.compositionSources
               .map((s) => {
-                return s.shortName;
+                return `${s.shortName}.toLowerCase()`;
               })
               .join(
                 ` + "${this.structureAttribute.options.compositionSeperator}" + `
               );
-
-      //default:
-      // throw new Error(`Unknown generator: ${generator}`);
+      default:
+        throw new Error(`Unknown generator: ${generator}`);
     }
-
-    return "generated";
   }
 
   public get comments() {
@@ -124,5 +118,18 @@ export class TypescriptStructureAttribute extends FractureComponent {
           `Unknown attribute type: ${this.structureAttribute.options.type}`
         );
     }
+  }
+
+  public get structure(): Structure {
+    return this.structureAttribute.structure;
+  }
+  public get resource(): Resource {
+    return this.structure.resource;
+  }
+  public get service(): Service {
+    return this.resource.service;
+  }
+  public get operation(): Operation | undefined {
+    return this.structure.operation;
   }
 }

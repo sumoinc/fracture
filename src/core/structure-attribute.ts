@@ -132,16 +132,6 @@ export class StructureAttribute extends FractureComponent {
     );
   }
 
-  // generated fields
-  public get isGenerated(): boolean {
-    return (
-      this.isCreateGenerated ||
-      this.isReadGenerated ||
-      this.isUpdateGenerated ||
-      this.isDeleteGenerated ||
-      this.isImportGenerated
-    );
-  }
   public get isCreateGenerated(): boolean {
     return this.options.createGenerator !== ResourceAttributeGenerator.NONE;
   }
@@ -184,7 +174,11 @@ export class StructureAttribute extends FractureComponent {
     return this.isImportGenerated && this.options.importGenerator === generator;
   }
 
-  public generatorForOperation(operation: Operation) {
+  public get generator(): ValueOf<typeof ResourceAttributeGenerator> {
+    if (!this.structure.operation) {
+      return ResourceAttributeGenerator.NONE;
+    }
+    const operation: Operation = this.structure.operation;
     switch (operation.options.operationSubType) {
       case OPERATION_SUB_TYPE.CREATE_ONE:
         return this.options.createGenerator;
@@ -199,6 +193,10 @@ export class StructureAttribute extends FractureComponent {
       default:
         throw new Error(`Unknown sub-operation: ${operation}`);
     }
+  }
+
+  public get isGenerated() {
+    return this.generator !== ResourceAttributeGenerator.NONE;
   }
 
   public get service(): Service {

@@ -259,4 +259,8 @@ export class Structure extends FractureComponent {
   public get service(): Service {
     return this.resource.service;
   }
+
+  public get operation(): Operation | undefined {
+    return this.options.operation;
+  }
 }

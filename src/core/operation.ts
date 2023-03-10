@@ -2,6 +2,7 @@ import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Resource } from "./resource";
+import { ResourceAttributeGenerator } from "./resource-attribute";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
 
@@ -45,7 +46,6 @@ export class Operation extends FractureComponent {
   // member components
   // parents
   public readonly resource: Resource;
-  public readonly service: Service;
   // all other options
   public readonly options: Required<OperationOptions>;
   // private cached properties
@@ -76,7 +76,6 @@ export class Operation extends FractureComponent {
 
     // parents + inverse
     this.resource = resource;
-    this.service = resource.service;
     this.resource.operations.push(this);
 
     // all other options
@@ -160,6 +159,12 @@ export class Operation extends FractureComponent {
     );
   }
 
+  public get isGuidGenerator(): boolean {
+    return this.inputStructure.privateAttributes.some(
+      (attribute) => attribute.generator === ResourceAttributeGenerator.GUID
+    );
+  }
+
   /***************************************************************************
    *
    * INPUT / OUTPUT STRUCTURES
@@ -189,16 +194,7 @@ export class Operation extends FractureComponent {
     return this._outputStructure;
   }
 
-  /**
-   * Return attributes to be generated for this particular operation type
-   */
-  /*
-  public get generatedAttributes(): ResourceAttribute[] {
-    return this.resource.generatedAttributesForOperation(this);
+  public get service(): Service {
+    return this.resource.service;
   }
-
-  public get dataAttributes(): ResourceAttribute[] {
-    return this.resource.dataAttributes;
-  }
-  */
 }

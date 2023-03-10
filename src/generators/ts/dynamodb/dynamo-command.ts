@@ -1,4 +1,5 @@
 import { join } from "path";
+import { ValueOf } from "type-fest";
 import { FractureComponent } from "../../../core";
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "../../../core/operation";
@@ -11,29 +12,21 @@ import { TypeScriptSource } from "../typescript-source";
 import { TypescriptStructure } from "../typescript-structure";
 
 export class DynamoCommand extends FractureComponent {
-  public readonly operation: Operation;
-  public readonly resource: Resource;
-  public readonly service: Service;
   public readonly tsOperation: TypescriptOperation;
-  public readonly tsResource: TypescriptResource;
-  public readonly tsService: TypescriptService;
   public readonly tsFile: TypeScriptSource;
 
   constructor(tsOperation: TypescriptOperation) {
     super(tsOperation.fracture);
 
-    this.operation = tsOperation.operation;
-    this.resource = tsOperation.resource;
-    this.service = tsOperation.service;
     this.tsOperation = tsOperation;
-    this.tsResource = tsOperation.tsResource;
-    this.tsService = tsOperation.tsService;
 
+    /*
     console.log(
       this.service.name,
       this.resource.name,
       `${this.operation.name}.ts`
     );
+    */
 
     this.tsFile = new TypeScriptSource(
       this,
@@ -56,21 +49,21 @@ export class DynamoCommand extends FractureComponent {
     this.tsFile.lines([
       `import { DynamoDBClient } from "@aws-sdk/client-dynamodb";`,
       `import { DynamoDBDocumentClient, ${this.dynamoCommandName} } from "@aws-sdk/lib-dynamodb";`,
-      `import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";`,
+      //`import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";`,
     ]);
-    /*
-    if (inputStructure.hasAttributeGenerator(ResourceAttributeGenerator.GUID)) {
+
+    if (this.operation.isGuidGenerator) {
       this.tsFile.line(`import { v4 as uuidv4 } from "uuid";`);
     }
-    */
 
-    // this.tsFile.open(`import {`);
-    // this.tsFile.line(this.tsResource.interfaceNameForDynamo + ",");
-    // this.tsFile.line(this.tsService.dynamoKeyName + ",");
-    // this.tsFile.line(this.tsResource.interfaceName);
-    // this.tsFile.close(
-    //   `} from "${this.tsService.typeFile.pathFrom(this.tsFile)}";`
-    // );
+    this.tsFile.open(`import {`);
+    this.tsFile.line(this.tsInputStructure.publicInterfaceName + ",");
+    this.tsFile.line(this.tsOutputStructure.publicInterfaceName + ",");
+    this.tsFile.line(this.tsService.responseTypeName + ",");
+    this.tsFile.line(this.tsInputStructure.privateInterfaceName + ",");
+    this.tsFile.close(
+      `} from "${this.tsService.typeFile.pathFrom(this.tsFile)}";`
+    );
     this.tsFile.line("");
 
     /***************************************************************************
@@ -84,30 +77,15 @@ export class DynamoCommand extends FractureComponent {
     ]);
 
     /***************************************************************************
-     *  INPUT / OUTPUT TYPES
-     **************************************************************************/
-
-    const tsInputStructure = new TypescriptStructure(
-      this.operation.inputStructure
-    );
-    const tsOutputStructure = new TypescriptStructure(
-      this.operation.outputStructure
-    );
-    tsInputStructure.writePublicInterface(this.tsFile);
-    tsOutputStructure.writePublicInterface(this.tsFile);
-    tsInputStructure.writePrivateInterface(this.tsFile);
-    tsOutputStructure.writePrivateInterface(this.tsFile);
-
-    /***************************************************************************
      *  OPEN FUNCTION
      **************************************************************************/
 
     this.tsFile.open(`export const ${this.functionName} = async (`);
     this.tsFile.line(
-      `${this.inputName}: Required<${tsInputStructure.publicInterfaceName}>`
+      `${this.inputName}: Required<${this.tsInputStructure.publicInterfaceName}>`
     );
     this.tsFile.close(
-      `): Promise<${tsOutputStructure.publicInterfaceName}> => {`
+      `): Promise<${this.tsService.responseTypeName}<${this.tsOutputStructure.publicInterfaceName}>> => {`
     );
     this.tsFile.open("");
     this.tsFile.line("");
@@ -117,7 +95,7 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     this.tsFile.open(`const {`);
-    tsInputStructure.publicAttributes.forEach((a) => {
+    this.tsInputStructure.publicAttributes.forEach((a) => {
       this.tsFile.line(`${a.attributeName},`);
     });
     this.tsFile.close(`} = ${this.inputName};`);
@@ -128,113 +106,77 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     // line up values
-    tsInputStructure.privateAttributes.forEach((attribute) => {
-      const p = attribute.attributeSource ? "" : "// ";
-      this.tsFile.line(
-        `${p}const ${attribute.attributeShortName} = ${attribute.attributeSource};`
-      );
-    });
+    this.tsInputStructure.privateAttributes
+      // skip items with the same public and private names
+      .filter((attribute) => {
+        return attribute.attributeShortName !== attribute.attributeSource;
+      })
+      .forEach((attribute) => {
+        const p = attribute.attributeSource ? "" : "// ";
+        this.tsFile.line(
+          `${p}const ${attribute.attributeShortName} = ${attribute.attributeSource};`
+        );
+      });
     this.tsFile.line("");
 
-    // this.tsFile.line(`/**`);
-    // this.tsFile.line(
-    //   ` * Initialize the shape dynamo expects. This may differ from the externally`
-    // );
-    // this.tsFile.line(` * exposed shape.`);
-    // this.tsFile.line(` */`);
-    this.tsFile.open(
-      `const item: ${tsInputStructure.privateInterfaceName} = {`
-    );
+    this.tsFile.open(`const result = await dynamo.send(`);
+    this.tsFile.open(`new ${this.dynamoCommandName}({`);
+    this.tsFile.line(`TableName: "${this.service.options.dynamodb.name}",`);
 
-    tsInputStructure.privateAttributes.forEach((attribute) => {
-      const p = attribute.attributeSource ? "" : "// ";
-      this.tsFile.line(`${p}${attribute.attributeShortName},`);
-    });
-    // generatedAttributes.forEach((attribute) => {
-    //   const { resourceAttribute } = attribute;
-    //   const generator = resourceAttribute.generatorForOperation(this.operation);
-    //   switch (generator) {
-    //     case ResourceAttributeGenerator.GUID:
-    //       this.tsFile.line(`${resourceAttribute.shortName}: uuidv4(),`);
-    //       break;
-    //     case ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP:
-    //       this.tsFile.line(
-    //         `${resourceAttribute.shortName}: new Date().toISOString(),`
-    //       );
-    //       break;
-    //     case ResourceAttributeGenerator.TYPE:
-    //       this.tsFile.line(
-    //         `${resourceAttribute.shortName}: "${this.resource.interfaceName}",`
-    //       );
-    //       break;
-    //     case ResourceAttributeGenerator.VERSION:
-    //       this.tsFile.line(
-    //         `${resourceAttribute.shortName}: "${this.resource.versionStrategy.currentVersion}",`
-    //       );
-    //       break;
-    //     default:
-    //       throw new Error(`Unknown generator: ${generator}`);
-    //   }
-    // });
-    // publicAttributes.forEach((attribute) => {
-    //   const { resourceAttribute } = attribute;
-    //   this.tsFile.line(
-    //     `${resourceAttribute.shortName}: input.${resourceAttribute.attributeName},`
-    //   );
-    // });
-    this.tsFile.close(`};`);
-    this.tsFile.line(`\n`);
+    // PUT NEW ITEM
+    if (
+      this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE ||
+      this.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE
+    ) {
+      this.tsFile.open(`Item: {`);
+      this.tsInputStructure.privateAttributes.forEach((attribute) => {
+        this.tsFile.line(`${attribute.attributeShortName},`);
+      });
+      this.tsFile.close(`} as ${this.tsInputStructure.privateInterfaceName},`);
+    }
 
-    // /**
-    //  * If we need to add key values to the shape, do it here.
-    //  */
-    // const pk = this.resource.keyAccessPattern.pk
-    //   .map((k) => "item." + k.shortName)
-    //   .join(' + "#" + ');
-    // const sk = this.resource.keyAccessPattern.sk
-    //   .map((k) => "item." + k.shortName)
-    //   .join(' + "#" + ');
-    // this.tsFile.line(`/**`);
-    // this.tsFile.line(` * Add key values to the shape.`);
-    // this.tsFile.line(` */`);
-    // this.tsFile.open(`const key: ${this.tsService.dynamoKeyName} = {`);
-    // this.tsFile.line(`${this.tsService.dynamoPkName}: ${pk},`);
-    // this.tsFile.line(`${this.tsService.dynamoSkName}: ${sk},`);
-    // this.tsFile.close(`};`);
-    // this.tsFile.line("");
+    // UPDATE OPERATIONS
+    if (
+      this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE ||
+      this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
+    ) {
+      const updateExpression = this.tsInputStructure.privateAttributes
+        .map((attribute) => {
+          return `#${attribute.attributeShortName} = :${attribute.attributeShortName}`;
+        })
+        .join(", ");
+      this.tsFile.line(`UpdateExpression: "set ${updateExpression}",`);
+      this.tsFile.open(`ExpressionAttributeValues: {`);
+      this.tsInputStructure.privateAttributes.forEach((attribute) => {
+        this.tsFile.line(
+          `":${attribute.attributeShortName}": ${attribute.attributeShortName},`
+        );
+      });
+      this.tsFile.close(`},`);
+      this.tsFile.open(`ExpressionAttributeNames: {`);
+      this.tsInputStructure.privateAttributes.forEach((attribute) => {
+        this.tsFile.line(
+          `"#${attribute.attributeShortName}": "${attribute.attributeShortName}",`
+        );
+      });
+      this.tsFile.close(`},`);
+    }
 
-    // this.tsFile.open(`const result = await dynamo.send(`);
-    // this.tsFile.open(`new ${this.dynamoCommandName}({`);
-    // this.tsFile.line(`TableName: "${this.service.dynamodb.name}",`);
+    // OPERATIONS REQUIRING A KEY
+    if (
+      this.operationSubType === OPERATION_SUB_TYPE.READ_ONE ||
+      this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE ||
+      this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
+    ) {
+      this.tsFile.open(`Key: {`);
+      this.tsFile.line(`${this.dynamoPkName},`);
+      this.tsFile.line(`${this.dynamoSkName},`);
+      this.tsFile.close(`},`);
+    }
 
-    // switch (this.operation.operationSubType) {
-    //   case OPERATION_SUB_TYPE.CREATE_ONE:
-    //     this.tsFile.line(`Item: marshall({ ...item, ...key }),`);
-    //     break;
-    //   case OPERATION_SUB_TYPE.READ_ONE:
-    //     this.tsFile.line(`Key: marshall(key),`);
-    //     break;
-    //   case OPERATION_SUB_TYPE.UPDATE_ONE:
-    //     this.tsFile.line(`UpdateExpression: marshall(item),`);
-    //     this.tsFile.line(`ExpressionAttributeNames: marshall(item),`);
-    //     this.tsFile.line(`ExpressionAttributeValues: marshall(item),`);
-    //     this.tsFile.line(`Key: marshall(key),`);
-    //     break;
-    //   case OPERATION_SUB_TYPE.DELETE_ONE:
-    //     this.tsFile.line(`Key: marshall(key),`);
-    //     break;
-    //   case OPERATION_SUB_TYPE.IMPORT_ONE:
-    //     this.tsFile.line(`Item: marshall({ ...item, ...key }),`);
-    //     break;
-    //   default:
-    //     throw new Error(
-    //       `Unsupported operation type: ${this.operation.operationSubType}`
-    //     );
-    // }
-
-    // this.tsFile.close(`})`);
-    // this.tsFile.close(`);`);
-    // this.tsFile.line("");
+    this.tsFile.close(`})`);
+    this.tsFile.close(`);`);
+    this.tsFile.line("");
 
     /***************************************************************************
      *  CLOSE FUNCTION
@@ -256,7 +198,7 @@ export class DynamoCommand extends FractureComponent {
       case OPERATION_SUB_TYPE.UPDATE_ONE:
         return "UpdateCommand";
       case OPERATION_SUB_TYPE.DELETE_ONE:
-        return "PUTCommand";
+        return "UpdateCommand";
       case OPERATION_SUB_TYPE.IMPORT_ONE:
         return "PutCommand";
       default:
@@ -264,6 +206,19 @@ export class DynamoCommand extends FractureComponent {
           `Unsupported operation type: ${this.operation.options.operationSubType}`
         );
     }
+  }
+  public get dynamoPkName(): string {
+    return formatStringByNamingStrategy(
+      this.resource.keyAccessPattern.pkAttribute.options.shortName,
+      this.fracture.options.namingStrategy.ts.attributeName
+    );
+  }
+
+  public get dynamoSkName(): string {
+    return formatStringByNamingStrategy(
+      this.resource.keyAccessPattern.skAttribute.options.shortName,
+      this.fracture.options.namingStrategy.ts.attributeName
+    );
   }
 
   /**
@@ -281,5 +236,36 @@ export class DynamoCommand extends FractureComponent {
       "input",
       this.fracture.options.namingStrategy.ts.functionParameterName
     );
+  }
+
+  public get operation(): Operation {
+    return this.tsOperation.operation;
+  }
+
+  public get operationSubType(): ValueOf<typeof OPERATION_SUB_TYPE> {
+    return this.operation.options.operationSubType;
+  }
+
+  public get resource(): Resource {
+    return this.operation.resource;
+  }
+
+  public get service(): Service {
+    return this.resource.service;
+  }
+
+  public get tsInputStructure(): TypescriptStructure {
+    return this.tsOperation.tsInputStructure;
+  }
+  public get tsOutputStructure(): TypescriptStructure {
+    return this.tsOperation.tsOutputStructure;
+  }
+
+  public get tsResource(): TypescriptResource {
+    return this.tsOperation.tsResource;
+  }
+
+  public get tsService(): TypescriptService {
+    return this.tsResource.tsService;
   }
 }
