@@ -15,6 +15,16 @@ export interface DeleteActorInput {
    * @readonly This attribute is managed automatically by the system.
    */
   id?: string;
+  /**
+   * A first-name.
+   * This attribute can be used to lookup this record.
+   */
+  firstName?: string;
+  /**
+   * A last-name.
+   * This attribute can be used to lookup this record.
+   */
+  lastName?: string;
 }
 
 /**
@@ -54,9 +64,15 @@ export interface DeleteActorOutput {
    */
   deletedAt?: string;
   /**
-   * A actor-name.
+   * A first-name.
+   * This attribute can be used to lookup this record.
    */
-  actorName?: string;
+  firstName?: string;
+  /**
+   * A last-name.
+   * This attribute can be used to lookup this record.
+   */
+  lastName?: string;
 }
 
 interface DeleteActorInputDynamo {
@@ -65,6 +81,8 @@ interface DeleteActorInputDynamo {
   v?: string;
   ud?: string;
   dd?: string;
+  fn?: string;
+  ln?: string;
   pk?: string;
   sk?: string;
   idx?: string;
@@ -77,7 +95,8 @@ interface DeleteActorOutputDynamo {
   cd?: string;
   ud?: string;
   dd?: string;
-  an?: string;
+  fn?: string;
+  ln?: string;
   pk?: string;
   sk?: string;
   idx?: string;
@@ -88,7 +107,9 @@ export const deleteActor = async (
 ): Promise<DeleteActorOutput> => {
 
   const {
-    id
+    id,
+    firstName,
+    lastName,
   } = input;
 
   const id = generated;
@@ -96,9 +117,11 @@ export const deleteActor = async (
   const v = "LATEST";
   const ud = new Date().toISOString();
   const dd = new Date().toISOString();
+  const fn = firstName;
+  const ln = lastName;
   const pk = id;
   const sk = t + "#" + v;
-  // const idx = undefined;
+  const idx = fn + "#" + ln;
 
   const item: DeleteActorInputDynamo = {
     id,
@@ -106,9 +129,11 @@ export const deleteActor = async (
     v,
     ud,
     dd,
+    fn,
+    ln,
     pk,
     sk,
-    // idx,
+    idx,
   };
 
 };

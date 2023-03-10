@@ -86,7 +86,7 @@ export const getTenant = async (
 ): Promise<GetTenantOutput> => {
 
   const {
-    id
+    id,
   } = input;
 
   const id = generated;

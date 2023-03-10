@@ -92,8 +92,8 @@ export const updateTenant = async (
 ): Promise<UpdateTenantOutput> => {
 
   const {
-    id
-    name
+    id,
+    name,
   } = input;
 
   const id = generated;

@@ -37,10 +37,19 @@ export class ExampleApp extends Component {
       .addResource({ name: "tenant" })
       .addResourceAttribute({ name: "name", shortName: "n", isRequired: true });
 
-    tenantService.addResource({ name: "actor" }).addResourceAttribute({
-      name: "actor-name",
-      shortName: "an",
+    const actor = tenantService.addResource({ name: "actor" });
+
+    actor.addResourceAttribute({
+      name: "first-name",
+      shortName: "fn",
       isRequired: true,
+      isLookup: true,
+    });
+    actor.addResourceAttribute({
+      name: "last-name",
+      shortName: "ln",
+      isRequired: true,
+      isLookup: true,
     });
 
     /*

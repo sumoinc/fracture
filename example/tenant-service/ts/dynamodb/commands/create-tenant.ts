@@ -87,7 +87,7 @@ export const createTenant = async (
 ): Promise<CreateTenantOutput> => {
 
   const {
-    name
+    name,
   } = input;
 
   const id = uuidv4();

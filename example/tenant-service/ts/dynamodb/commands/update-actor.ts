@@ -16,9 +16,25 @@ export interface UpdateActorInput {
    */
   id?: string;
   /**
-   * A actor-name.
+   * A first-name.
+   * This attribute can be used to lookup this record.
    */
-  actorName?: string;
+  firstName?: string;
+  /**
+   * A first-name.
+   * This attribute can be used to lookup this record.
+   */
+  firstName?: string;
+  /**
+   * A last-name.
+   * This attribute can be used to lookup this record.
+   */
+  lastName?: string;
+  /**
+   * A last-name.
+   * This attribute can be used to lookup this record.
+   */
+  lastName?: string;
 }
 
 /**
@@ -58,9 +74,15 @@ export interface UpdateActorOutput {
    */
   deletedAt?: string;
   /**
-   * A actor-name.
+   * A first-name.
+   * This attribute can be used to lookup this record.
    */
-  actorName?: string;
+  firstName?: string;
+  /**
+   * A last-name.
+   * This attribute can be used to lookup this record.
+   */
+  lastName?: string;
 }
 
 interface UpdateActorInputDynamo {
@@ -68,7 +90,10 @@ interface UpdateActorInputDynamo {
   t?: string;
   v?: string;
   ud?: string;
-  an?: string;
+  fn?: string;
+  fn?: string;
+  ln?: string;
+  ln?: string;
   pk?: string;
   sk?: string;
   idx?: string;
@@ -81,7 +106,8 @@ interface UpdateActorOutputDynamo {
   cd?: string;
   ud?: string;
   dd?: string;
-  an?: string;
+  fn?: string;
+  ln?: string;
   pk?: string;
   sk?: string;
   idx?: string;
@@ -92,28 +118,37 @@ export const updateActor = async (
 ): Promise<UpdateActorOutput> => {
 
   const {
-    id
-    actorName
+    id,
+    firstName,
+    firstName,
+    lastName,
+    lastName,
   } = input;
 
   const id = generated;
   const t = "actor";
   const v = "LATEST";
   const ud = new Date().toISOString();
-  const an = actorName;
+  const fn = firstName;
+  const fn = firstName;
+  const ln = lastName;
+  const ln = lastName;
   const pk = id;
   const sk = t + "#" + v;
-  // const idx = undefined;
+  const idx = fn + "#" + ln;
 
   const item: UpdateActorInputDynamo = {
     id,
     t,
     v,
     ud,
-    an,
+    fn,
+    fn,
+    ln,
+    ln,
     pk,
     sk,
-    // idx,
+    idx,
   };
 
 };

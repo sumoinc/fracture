@@ -77,9 +77,15 @@ export interface Actor {
    */
   deletedAt?: string;
   /**
-   * A actor-name.
+   * A first-name.
+   * This attribute can be used to lookup this record.
    */
-  actorName?: string;
+  firstName?: string;
+  /**
+   * A last-name.
+   * This attribute can be used to lookup this record.
+   */
+  lastName?: string;
 }
 
 export type Error = {

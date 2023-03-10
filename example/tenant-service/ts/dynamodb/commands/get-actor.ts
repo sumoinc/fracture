@@ -15,6 +15,16 @@ export interface GetActorInput {
    * @readonly This attribute is managed automatically by the system.
    */
   id?: string;
+  /**
+   * A first-name.
+   * This attribute can be used to lookup this record.
+   */
+  firstName?: string;
+  /**
+   * A last-name.
+   * This attribute can be used to lookup this record.
+   */
+  lastName?: string;
 }
 
 /**
@@ -54,15 +64,23 @@ export interface GetActorOutput {
    */
   deletedAt?: string;
   /**
-   * A actor-name.
+   * A first-name.
+   * This attribute can be used to lookup this record.
    */
-  actorName?: string;
+  firstName?: string;
+  /**
+   * A last-name.
+   * This attribute can be used to lookup this record.
+   */
+  lastName?: string;
 }
 
 interface GetActorInputDynamo {
   id?: string;
   t?: string;
   v?: string;
+  fn?: string;
+  ln?: string;
   pk?: string;
   sk?: string;
   idx?: string;
@@ -75,7 +93,8 @@ interface GetActorOutputDynamo {
   cd?: string;
   ud?: string;
   dd?: string;
-  an?: string;
+  fn?: string;
+  ln?: string;
   pk?: string;
   sk?: string;
   idx?: string;
@@ -86,23 +105,29 @@ export const getActor = async (
 ): Promise<GetActorOutput> => {
 
   const {
-    id
+    id,
+    firstName,
+    lastName,
   } = input;
 
   const id = generated;
   const t = "actor";
   const v = "LATEST";
+  const fn = firstName;
+  const ln = lastName;
   const pk = id;
   const sk = t + "#" + v;
-  // const idx = undefined;
+  const idx = fn + "#" + ln;
 
   const item: GetActorInputDynamo = {
     id,
     t,
     v,
+    fn,
+    ln,
     pk,
     sk,
-    // idx,
+    idx,
   };
 
 };

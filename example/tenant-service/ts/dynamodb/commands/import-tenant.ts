@@ -93,8 +93,8 @@ export const importTenant = async (
 ): Promise<ImportTenantOutput> => {
 
   const {
-    id
-    name
+    id,
+    name,
   } = input;
 
   const id = generated;

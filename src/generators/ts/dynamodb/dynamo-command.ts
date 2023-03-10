@@ -118,7 +118,7 @@ export class DynamoCommand extends FractureComponent {
 
     this.tsFile.open(`const {`);
     tsInputStructure.publicAttributes.forEach((a) => {
-      this.tsFile.line(`${a.attributeName}`);
+      this.tsFile.line(`${a.attributeName},`);
     });
     this.tsFile.close(`} = ${this.inputName};`);
     this.tsFile.line("");

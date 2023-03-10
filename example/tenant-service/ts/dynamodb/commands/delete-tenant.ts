@@ -88,7 +88,7 @@ export const deleteTenant = async (
 ): Promise<DeleteTenantOutput> => {
 
   const {
-    id
+    id,
   } = input;
 
   const id = generated;
