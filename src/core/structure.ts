@@ -155,9 +155,11 @@ export class Structure extends FractureComponent {
           // add in all geneated attributes for inputs
           useAttributes = [
             ...useAttributes,
+            /*
             ...this.resource.generatedAttributesForOperation(
               this.options.operation
             ),
+            */
           ];
         }
 
@@ -171,8 +173,7 @@ export class Structure extends FractureComponent {
 
       useAttributes.forEach((resourceAttribute) => {
         this._privateAttributes.push(
-          new StructureAttribute(this, {
-            resourceAttribute,
+          new StructureAttribute(this, resourceAttribute, {
             structureAttributeType: STRUCTURE_ATTRIBUTE_TYPE.PRIVATE,
           })
         );
@@ -212,9 +213,11 @@ export class Structure extends FractureComponent {
           if (!this.options.operation.isCreate) {
             useAttributes = [
               ...useAttributes,
+              /*
               ...this.resource.externalKeyAttributesForOperation(
                 this.options.operation
               ),
+              */
             ];
           }
 
@@ -231,8 +234,7 @@ export class Structure extends FractureComponent {
 
       useAttributes.forEach((resourceAttribute) => {
         this._publicAttributes?.push(
-          new StructureAttribute(this, {
-            resourceAttribute,
+          new StructureAttribute(this, resourceAttribute, {
             structureAttributeType: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
           })
         );

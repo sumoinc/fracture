@@ -15,14 +15,8 @@ export const getTenant = async (
 ): Promise<Response<GetTenantOutput>> => {
 
   const {
-    id,
   } = input;
 
-  const t = "tenant";
-  const v = "LATEST";
-  const pk = id.toLowerCase();
-  const sk = t.toLowerCase() + "#" + v.toLowerCase();
-  // const idx = undefined;
 
   const result = await dynamo.send(
     new GetCommand({

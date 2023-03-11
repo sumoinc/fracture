@@ -1,4 +1,3 @@
-import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { Resource } from "./resource";
 import {
@@ -7,11 +6,10 @@ import {
   ResourceAttributeOptions,
 } from "./resource-attribute";
 import { FractureComponent } from "../core/component";
-import { Gsi } from "../dynamodb/gsi";
+import { DynamoGsi } from "../dynamodb/dynamo-gsi";
 
 export interface AccessPatternOptions {
-  name: string;
-  gsi: Gsi;
+  dynamoGsi?: DynamoGsi;
   pkAttributeOptions?: ResourceAttributeOptions;
   skAttributeOptions?: ResourceAttributeOptions;
 }
@@ -34,26 +32,26 @@ export class AccessPattern extends FractureComponent {
      *
      **************************************************************************/
 
-    const defaultOptions: Partial<AccessPatternOptions> = {
+    // make a new gsi is one wasn't passed into the Access Pattern
+    const dynamoGsi = options.dynamoGsi
+      ? options.dynamoGsi
+      : new DynamoGsi(resource.dynamoTable);
+
+    const defaultOptions: Required<AccessPatternOptions> = {
+      dynamoGsi,
       pkAttributeOptions: {
-        name: options.gsi.pkName,
+        name: dynamoGsi.pkName,
         isPublic: false,
-        isRequired: true,
-        createGenerator: ResourceAttributeGenerator.COMPOSITION,
-        readGenerator: ResourceAttributeGenerator.COMPOSITION,
-        updateGenerator: ResourceAttributeGenerator.COMPOSITION,
-        deleteGenerator: ResourceAttributeGenerator.COMPOSITION,
-        importGenerator: ResourceAttributeGenerator.COMPOSITION,
+        generator: ResourceAttributeGenerator.COMPOSITION,
+        isGeneratedOnCreate: true,
       },
       skAttributeOptions: {
-        name: options.gsi.skName,
+        name: dynamoGsi.skName,
         isPublic: false,
-        isRequired: true,
-        createGenerator: ResourceAttributeGenerator.COMPOSITION,
-        readGenerator: ResourceAttributeGenerator.COMPOSITION,
-        updateGenerator: ResourceAttributeGenerator.COMPOSITION,
-        deleteGenerator: ResourceAttributeGenerator.COMPOSITION,
-        importGenerator: ResourceAttributeGenerator.COMPOSITION,
+        generator: ResourceAttributeGenerator.COMPOSITION,
+        isGeneratedOnCreate: true,
+        isGeneratedOnUpate: true,
+        isGeneratedOnDelete: true,
       },
     };
 
@@ -63,21 +61,15 @@ export class AccessPattern extends FractureComponent {
      *
      **************************************************************************/
 
-    // ensure names are param-cased
-    const forcedOptions: Partial<AccessPatternOptions> = {
-      name: paramCase(options.name),
-    };
-
     // all other options
     this.options = deepMerge([
       defaultOptions,
       options,
-      forcedOptions,
     ]) as Required<AccessPatternOptions>;
 
     // the attribute might already be defined.
-    const pkAttribute = resource.getAttributeByName(options.gsi.pkName);
-    const skAttribute = resource.getAttributeByName(options.gsi.skName);
+    const pkAttribute = resource.getAttributeByName(dynamoGsi.pkName);
+    const skAttribute = resource.getAttributeByName(dynamoGsi.skName);
 
     // member components
     this.pkAttribute = pkAttribute
@@ -92,11 +84,15 @@ export class AccessPattern extends FractureComponent {
     this.resource.accessPatterns.push(this);
   }
 
-  addPkAttribute(attribute: ResourceAttribute) {
-    this.pkAttribute.compositionSources.push(attribute);
+  addPkAttributeSource(sourceAttribute: ResourceAttribute) {
+    this.pkAttribute.compositionSources.push(sourceAttribute);
   }
 
-  addSkAttribute(attribute: ResourceAttribute) {
-    this.skAttribute.compositionSources.push(attribute);
+  addSkAttributeSource(sourceAttribute: ResourceAttribute) {
+    this.skAttribute.compositionSources.push(sourceAttribute);
+  }
+
+  get dynamoGsi(): DynamoGsi {
+    return this.options.dynamoGsi;
   }
 }

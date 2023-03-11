@@ -25,12 +25,12 @@ const myResource = () => {
     name: "first-name",
     shortName: "fn",
     isRequired: true,
-    isLookup: true,
+    isLookupComponent: true,
   });
   new ResourceAttribute(resource, {
     name: "last-name",
     shortName: "ln",
-    isLookup: true,
+    isLookupComponent: true,
   });
   return resource;
 };
@@ -506,7 +506,7 @@ operationTests.forEach((operation) => {
           // REQUIRED TESTS
           attribute.values.forEach((item) => {
             const [key, value] = Object.entries(item)[0];
-            test(`"${key}.isRequired" should be "${value}"`, () => {
+            test(`.${attribute.type}.${key}.isRequired" should be "${value}"`, () => {
               const testAttribute =
                 attribute.type === STRUCTURE_ATTRIBUTE_TYPE.PRIVATE
                   ? testStructure.getPrivateAttributeByName(key)

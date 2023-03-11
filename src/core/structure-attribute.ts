@@ -1,7 +1,6 @@
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
-import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
   ResourceAttribute,
@@ -20,20 +19,12 @@ export const STRUCTURE_ATTRIBUTE_TYPE = {
   PRIVATE: "private",
 } as const;
 
-export type StructureAttributeOptions = {
-  /**
-   * What resource attribute is this structure attribute based on?
-   */
-  resourceAttribute: ResourceAttribute;
-  /**
-   * Replacement / override options for structure attribute
-   */
-  structureAttributeOptions?: Partial<ResourceAttributeOptions>;
+export interface StructureAttributeOptions extends ResourceAttributeOptions {
   /**
    * Is this a public or private attribute?
    */
   structureAttributeType: ValueOf<typeof STRUCTURE_ATTRIBUTE_TYPE>;
-};
+}
 
 /******************************************************************************
  * CLASS
@@ -42,43 +33,50 @@ export type StructureAttributeOptions = {
 export class StructureAttribute extends FractureComponent {
   // member components
   public readonly compositionSources: StructureAttribute[];
-  public readonly structureAttributeType: ValueOf<
-    typeof STRUCTURE_ATTRIBUTE_TYPE
-  >;
   // parent
   public readonly structure: Structure;
 
   // all other options
-  public readonly options: Required<ResourceAttributeOptions>;
+  public readonly options: Required<StructureAttributeOptions>;
 
-  constructor(structure: Structure, options: StructureAttributeOptions) {
+  constructor(
+    structure: Structure,
+    resourceAttribute: ResourceAttribute,
+    options: Partial<StructureAttributeOptions>
+  ) {
     super(structure.fracture);
+
+    /***************************************************************************
+     *
+     * DEFAULT OPTIONS
+     *
+     **************************************************************************/
+
+    const defaultOptions: Partial<StructureAttributeOptions> = {
+      ...JSON.parse(JSON.stringify(resourceAttribute.options)),
+      structureAttributeType: STRUCTURE_ATTRIBUTE_TYPE.PUBLIC,
+    };
 
     /***************************************************************************
      *
      * INIT OPERATION
      *
      **************************************************************************/
+    // all other options
+    this.options = deepMerge([
+      defaultOptions,
+      JSON.parse(JSON.stringify(options)),
+    ]) as Required<StructureAttributeOptions>;
 
     // member components
-    this.compositionSources = options.resourceAttribute.compositionSources.map(
-      (source) => {
-        return new StructureAttribute(structure, {
-          resourceAttribute: source,
-          structureAttributeType: options.structureAttributeType,
-        });
+    this.compositionSources = resourceAttribute.compositionSources.map(
+      (sourceAttribute) => {
+        return new StructureAttribute(structure, sourceAttribute, options);
       }
     );
-    this.structureAttributeType = options.structureAttributeType;
 
     // parents + inverse
     this.structure = structure;
-
-    // all other options
-    this.options = deepMerge([
-      JSON.parse(JSON.stringify(options.resourceAttribute.options)),
-      options.structureAttributeOptions ?? {},
-    ]) as Required<ResourceAttributeOptions>;
   }
 
   public get name(): string {
@@ -101,7 +99,7 @@ export class StructureAttribute extends FractureComponent {
   }
 
   public get isComposed(): boolean {
-    return this.hasGenerator(ResourceAttributeGenerator.COMPOSITION);
+    return this.generator === ResourceAttributeGenerator.COMPOSITION;
   }
 
   public get isRequired() {
@@ -114,85 +112,8 @@ export class StructureAttribute extends FractureComponent {
     return false;
   }
 
-  /**
-   *
-   * @param generator Does this attribute have a generator for this specific type?
-   * @returns
-   */
-  public hasGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return (
-      this.isGenerated &&
-      (this.hasCreateGenerator(generator) ||
-        this.hasReadGenerator(generator) ||
-        this.hasUpdateGenerator(generator) ||
-        this.hasDeleteGenerator(generator) ||
-        this.hasImportGenerator(generator))
-    );
-  }
-
-  public get isCreateGenerated(): boolean {
-    return this.options.createGenerator !== ResourceAttributeGenerator.NONE;
-  }
-  public get isReadGenerated(): boolean {
-    return this.options.readGenerator !== ResourceAttributeGenerator.NONE;
-  }
-  public get isUpdateGenerated(): boolean {
-    return this.options.updateGenerator !== ResourceAttributeGenerator.NONE;
-  }
-  public get isDeleteGenerated(): boolean {
-    return this.options.deleteGenerator !== ResourceAttributeGenerator.NONE;
-  }
-  public get isImportGenerated(): boolean {
-    return this.options.importGenerator !== ResourceAttributeGenerator.NONE;
-  }
-
-  public hasCreateGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return this.isCreateGenerated && this.options.createGenerator === generator;
-  }
-  public hasReadGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return this.isReadGenerated && this.options.readGenerator === generator;
-  }
-  public hasUpdateGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return this.isUpdateGenerated && this.options.updateGenerator === generator;
-  }
-  public hasDeleteGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return this.isDeleteGenerated && this.options.deleteGenerator === generator;
-  }
-  public hasImportGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return this.isImportGenerated && this.options.importGenerator === generator;
-  }
-
   public get generator(): ValueOf<typeof ResourceAttributeGenerator> {
-    if (!this.structure.operation) {
-      return ResourceAttributeGenerator.NONE;
-    }
-    const operation: Operation = this.structure.operation;
-    switch (operation.options.operationSubType) {
-      case OPERATION_SUB_TYPE.CREATE_ONE:
-        return this.options.createGenerator;
-      case OPERATION_SUB_TYPE.READ_ONE:
-        return this.options.readGenerator;
-      case OPERATION_SUB_TYPE.UPDATE_ONE:
-        return this.options.updateGenerator;
-      case OPERATION_SUB_TYPE.DELETE_ONE:
-        return this.options.deleteGenerator;
-      case OPERATION_SUB_TYPE.IMPORT_ONE:
-        return this.options.importGenerator;
-      default:
-        throw new Error(`Unknown sub-operation: ${operation}`);
-    }
+    return this.options.generator;
   }
 
   public get isGenerated() {

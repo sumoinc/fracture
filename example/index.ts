@@ -43,13 +43,13 @@ export class ExampleApp extends Component {
       name: "first-name",
       shortName: "fn",
       isRequired: true,
-      isLookup: true,
+      isLookupComponent: true,
     });
     actor.addResourceAttribute({
       name: "last-name",
       shortName: "ln",
       isRequired: true,
-      isLookup: true,
+      isLookupComponent: true,
     });
 
     /*

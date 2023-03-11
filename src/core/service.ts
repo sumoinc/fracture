@@ -3,13 +3,12 @@ import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { Fracture, FractureComponent } from ".";
 import { AuditStrategy } from "./audit-strategy";
-import { LookupKeyStrategy } from "./lookup-key-strategy";
 import { NamingStrategy } from "./naming-strategy";
-import { PartitionKeyStrategy } from "./partition-key-strategy";
 import { Resource, ResourceOptions } from "./resource";
 import { TypeStrategy } from "./type-strategy";
 import { VersionStrategy } from "./version-strategy";
-import { Table } from "../dynamodb/table";
+import { DynamoGsi } from "../dynamodb/dynamo-gsi";
+import { DynamoTable } from "../dynamodb/dynamo-table";
 
 export interface ServiceOptions {
   name: string;
@@ -24,14 +23,6 @@ export interface ServiceOptions {
    */
   namingStrategy?: NamingStrategy;
   /**
-   * The type strategy to use for the partition key.
-   */
-  partitionKeyStrategy?: PartitionKeyStrategy;
-  /**
-   * The type to use when looking up a resource by a string.
-   */
-  lookupKeyStrategy?: LookupKeyStrategy;
-  /**
    * The versioning strategy to use for generated code.
    */
   versionStrategy?: VersionStrategy;
@@ -43,7 +34,7 @@ export interface ServiceOptions {
    * The audit strategy to use for generated code.
    */
   auditStrategy?: AuditStrategy;
-  dynamodb?: Table;
+  dynamoTable?: DynamoTable;
 }
 
 export class Service extends FractureComponent {
@@ -66,8 +57,6 @@ export class Service extends FractureComponent {
     const {
       isVersioned,
       namingStrategy,
-      partitionKeyStrategy,
-      lookupKeyStrategy,
       versionStrategy,
       typeStrategy,
       auditStrategy,
@@ -77,16 +66,14 @@ export class Service extends FractureComponent {
       outdir: join(fracture.options.outdir, options.outdir ?? options.name),
       isVersioned,
       namingStrategy,
-      partitionKeyStrategy,
-      lookupKeyStrategy,
       versionStrategy,
       typeStrategy,
       auditStrategy,
     };
 
     // add dynamo table definition if not supplied in options
-    if (!options.dynamodb) {
-      options.dynamodb = new Table(this, { name: options.name });
+    if (!options.dynamoTable) {
+      options.dynamoTable = new DynamoTable(this, { name: options.name });
     }
 
     /***************************************************************************
@@ -140,5 +127,17 @@ export class Service extends FractureComponent {
    */
   public addResource(options: ResourceOptions) {
     return new Resource(this, options);
+  }
+
+  public get dynamoTable(): DynamoTable {
+    return this.options.dynamoTable;
+  }
+
+  public get keyDynamoGsi(): DynamoGsi {
+    return this.dynamoTable.keyDynamoGsi;
+  }
+
+  public get lookupDynamoGsi(): DynamoGsi {
+    return this.dynamoTable.lookupDynamoGsi;
   }
 }

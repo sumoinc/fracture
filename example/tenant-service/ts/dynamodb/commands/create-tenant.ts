@@ -1,6 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { v4 as uuidv4 } from "uuid";
 import {
   CreateTenantInput,
   CreateTenantOutput,
@@ -19,29 +18,13 @@ export const createTenant = async (
     name,
   } = input;
 
-  const id = uuidv4();
-  const t = "tenant";
-  const v = "LATEST";
-  const cd = new Date().toISOString();
-  const ud = new Date().toISOString();
   const n = name;
-  const pk = id.toLowerCase();
-  const sk = t.toLowerCase() + "#" + v.toLowerCase();
-  // const idx = undefined;
 
   const result = await dynamo.send(
     new PutCommand({
       TableName: "tenant",
       Item: {
-        id,
-        t,
-        v,
-        cd,
-        ud,
         n,
-        pk,
-        sk,
-        idx,
       } as CreateTenantInputDynamo,
     })
   );

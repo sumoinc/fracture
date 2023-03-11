@@ -1,6 +1,5 @@
 import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
-import { ValueOf } from "type-fest";
 import { AccessPattern } from "./access-pattern";
 import { FractureComponent } from "./component";
 import { Operation, OPERATION_SUB_TYPE, OPERATION_TYPE } from "./operation";
@@ -8,9 +7,11 @@ import {
   ResourceAttribute,
   ResourceAttributeGenerator,
   ResourceAttributeOptions,
+  ResourceAttributeType,
 } from "./resource-attribute";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
+import { DynamoTable } from "../dynamodb/dynamo-table";
 
 export interface ResourceOptions {
   /**
@@ -106,16 +107,13 @@ export class Resource extends FractureComponent {
      **************************************************************************/
 
     this.keyAccessPattern = new AccessPattern(this, {
-      name: "key",
-      gsi: service.options.dynamodb.keyGsi,
+      dynamoGsi: service.keyDynamoGsi,
     });
     this.lookupAccessPattern = new AccessPattern(this, {
-      name: "lookup",
-      gsi: service.options.dynamodb.lookupGsi,
-      skAttributeOptions: service.options.lookupKeyStrategy,
+      dynamoGsi: service.lookupDynamoGsi,
     });
 
-    /***************************************************************************
+    /***************************************************************************1`
      *
      * RESOURCE ATTRIBUTES
      *
@@ -124,33 +122,28 @@ export class Resource extends FractureComponent {
      **************************************************************************/
 
     /**
-     * Add the partition key attribute.
+     * Add a Resource Attribute.
      */
-    if (this.options.isPersistant) {
-      const pkAttribute = this.addResourceAttribute(
-        this.service.options.partitionKeyStrategy
-      );
-      this.keyAccessPattern.addPkAttribute(pkAttribute);
-    }
+    this.addResourceAttribute({
+      name: "id",
+      comments: ["The id for the record."],
+      type: ResourceAttributeType.STRING,
+      isRequired: true,
+      isPkComponent: true,
+      generator: ResourceAttributeGenerator.GUID,
+      isGeneratedOnCreate: true,
+    });
 
     /**
      * Add type attribute.
      */
-    const typeAttribute = this.addResourceAttribute(
-      this.service.options.typeStrategy
-    );
-    if (this.options.isPersistant) {
-      this.keyAccessPattern.addSkAttribute(typeAttribute);
-    }
+    this.addResourceAttribute(this.service.options.typeStrategy);
 
     /**
      * Add the version attribute if versioned.
      */
     if (this.service.options.isVersioned && this.options.isPersistant) {
-      const versionAttribute = this.addResourceAttribute(
-        this.service.options.versionStrategy.attribute
-      );
-      this.keyAccessPattern.addSkAttribute(versionAttribute);
+      this.addResourceAttribute(this.service.options.versionStrategy.attribute);
     }
 
     /**
@@ -222,12 +215,6 @@ export class Resource extends FractureComponent {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.IMPORT_ONE,
     });
-    /*
-    new Operation(this, {
-      operationType: OPERATION_TYPE.QUERY,
-      operationSubType: OPERATION_SUB_TYPE.READ_MANY,
-    });
-    */
 
     return this;
   }
@@ -268,11 +255,21 @@ export class Resource extends FractureComponent {
     return this.keyAccessPattern.skAttribute;
   }
 
+  public get partitionKeySources(): ResourceAttribute[] {
+    return this.partitionKey.compositionSources.filter((resourceAttribute) => {
+      return resourceAttribute;
+    });
+  }
+
+  public get sortKeySources(): ResourceAttribute[] {
+    return this.sortKey.compositionSources.filter((resourceAttribute) => {
+      return resourceAttribute;
+    });
+  }
+
   public get composableAttributes(): ResourceAttribute[] {
     return this.attributes.filter((resourceAttribute) => {
-      return resourceAttribute.hasGenerator(
-        ResourceAttributeGenerator.COMPOSITION
-      );
+      return resourceAttribute.isComposableGenerator;
     });
   }
 
@@ -291,27 +288,23 @@ export class Resource extends FractureComponent {
   }
 
   public get publicAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => a.options.isPublic);
+    return this.attributes.filter((a) => a.isPublic);
   }
   public get privateAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => !a.options.isPublic);
+    return this.attributes.filter((a) => a.isPrivate);
   }
 
   // generated attrubutes
   public get createGeneratedAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => a.isCreateGenerated);
+    return this.attributes.filter((a) => a.isGeneratedOnCreate);
   }
-  public get readGeneratedAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => a.isReadGenerated);
-  }
+
   public get updateGeneratedAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => a.isUpdateGenerated);
+    return this.attributes.filter((a) => a.isGeneratedOnUpdate);
   }
+
   public get deleteGeneratedAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => a.isDeleteGenerated);
-  }
-  public get importGeneratedAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => a.isImportGenerated);
+    return this.attributes.filter((a) => a.isGeneratedOnDelete);
   }
 
   /**
@@ -331,10 +324,6 @@ export class Resource extends FractureComponent {
       case OPERATION_SUB_TYPE.CREATE_MANY:
         returnAttributes = this.createGeneratedAttributes;
         break;
-      case OPERATION_SUB_TYPE.READ_ONE:
-      case OPERATION_SUB_TYPE.READ_MANY:
-        returnAttributes = this.readGeneratedAttributes;
-        break;
       case OPERATION_SUB_TYPE.UPDATE_ONE:
       case OPERATION_SUB_TYPE.UPDATE_MANY:
         returnAttributes = this.updateGeneratedAttributes;
@@ -342,10 +331,6 @@ export class Resource extends FractureComponent {
       case OPERATION_SUB_TYPE.DELETE_ONE:
       case OPERATION_SUB_TYPE.DELETE_MANY:
         returnAttributes = this.deleteGeneratedAttributes;
-        break;
-      case OPERATION_SUB_TYPE.IMPORT_ONE:
-      case OPERATION_SUB_TYPE.IMPORT_MANY:
-        returnAttributes = this.importGeneratedAttributes;
         break;
       default:
         throw new Error(
@@ -388,40 +373,7 @@ export class Resource extends FractureComponent {
     );
   }
 
-  public hasCreateGenerator = (
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean => {
-    return this.createGeneratedAttributes.some(
-      (a) => a.options.createGenerator === generator
-    );
-  };
-  public hasReadGenerator = (
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean => {
-    return this.readGeneratedAttributes.some(
-      (a) => a.options.readGenerator === generator
-    );
-  };
-  public hasUpdateGenerator = (
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean => {
-    return this.updateGeneratedAttributes.some(
-      (a) => a.options.updateGenerator === generator
-    );
-  };
-  public hasDeleteGenerator = (
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean => {
-    return this.deleteGeneratedAttributes.some(
-      (a) => a.options.deleteGenerator === generator
-    );
-  };
-
-  /**
-   * Build default operations
-   */
-
-  preSynthesize() {
-    super.preSynthesize();
+  public get dynamoTable(): DynamoTable {
+    return this.service.dynamoTable;
   }
 }

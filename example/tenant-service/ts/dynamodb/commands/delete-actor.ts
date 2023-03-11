@@ -15,37 +15,16 @@ export const deleteActor = async (
 ): Promise<Response<DeleteActorOutput>> => {
 
   const {
-    id,
   } = input;
 
-  const t = "actor";
-  const v = "LATEST";
-  const ud = new Date().toISOString();
-  const dd = new Date().toISOString();
-  const pk = id.toLowerCase();
-  const sk = t.toLowerCase() + "#" + v.toLowerCase();
 
   const result = await dynamo.send(
     new UpdateCommand({
       TableName: "tenant",
-      UpdateExpression: "set #id = :id, #t = :t, #v = :v, #ud = :ud, #dd = :dd, #pk = :pk, #sk = :sk",
+      UpdateExpression: "set ",
       ExpressionAttributeValues: {
-        ":id": id,
-        ":t": t,
-        ":v": v,
-        ":ud": ud,
-        ":dd": dd,
-        ":pk": pk,
-        ":sk": sk,
       },
       ExpressionAttributeNames: {
-        "#id": "id",
-        "#t": "t",
-        "#v": "v",
-        "#ud": "ud",
-        "#dd": "dd",
-        "#pk": "pk",
-        "#sk": "sk",
       },
       Key: {
         pk,

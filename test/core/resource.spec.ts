@@ -1,8 +1,3 @@
-import {
-  Operation,
-  OPERATION_SUB_TYPE,
-  OPERATION_TYPE,
-} from "../../src/core/operation";
 import { Resource } from "../../src/core/resource";
 import { ResourceAttribute } from "../../src/core/resource-attribute";
 import { Service } from "../../src/core/service";
@@ -14,7 +9,7 @@ const myService = () => {
 
 const myResource = () => {
   const resource = new Resource(myService(), { name: "person" });
-  new ResourceAttribute(resource, { name: "my-name", isLookup: true });
+  new ResourceAttribute(resource, { name: "my-name", isLookupComponent: true });
   return resource;
 };
 
@@ -23,14 +18,22 @@ test("Smoke test", () => {
   expect(resource).toBeTruthy();
 });
 
-test("Geneates external keys", () => {
+test("Knows it's pk source components", () => {
   const resource = myResource();
-  const readOperation = new Operation(myResource(), {
-    operationType: OPERATION_TYPE.MUTATION,
-    operationSubType: OPERATION_SUB_TYPE.READ_ONE,
+
+  const pkNames = resource.partitionKeySources.map((a) => {
+    return a.name;
   });
-  const externalKeys =
-    resource.externalKeyAttributesForOperation(readOperation);
-  const externalKeyNames = externalKeys.map((a) => a.name);
-  expect(externalKeyNames).toEqual(["id"]);
+
+  expect(pkNames).toEqual(["id"]);
+});
+
+test("Knows it's sk source components", () => {
+  const resource = myResource();
+
+  const pkNames = resource.sortKeySources.map((a) => {
+    return a.name;
+  });
+
+  expect(pkNames).toEqual(["type", "version"]);
 });

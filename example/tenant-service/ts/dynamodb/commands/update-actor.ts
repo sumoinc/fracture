@@ -15,45 +15,24 @@ export const updateActor = async (
 ): Promise<Response<UpdateActorOutput>> => {
 
   const {
-    id,
     firstName,
     lastName,
   } = input;
 
-  const t = "actor";
-  const v = "LATEST";
-  const ud = new Date().toISOString();
   const fn = firstName;
   const ln = lastName;
-  const pk = id.toLowerCase();
-  const sk = t.toLowerCase() + "#" + v.toLowerCase();
-  const idx = fn.toLowerCase() + "" + ln.toLowerCase();
 
   const result = await dynamo.send(
     new UpdateCommand({
       TableName: "tenant",
-      UpdateExpression: "set #id = :id, #t = :t, #v = :v, #ud = :ud, #fn = :fn, #ln = :ln, #pk = :pk, #sk = :sk, #idx = :idx",
+      UpdateExpression: "set #fn = :fn, #ln = :ln",
       ExpressionAttributeValues: {
-        ":id": id,
-        ":t": t,
-        ":v": v,
-        ":ud": ud,
         ":fn": fn,
         ":ln": ln,
-        ":pk": pk,
-        ":sk": sk,
-        ":idx": idx,
       },
       ExpressionAttributeNames: {
-        "#id": "id",
-        "#t": "t",
-        "#v": "v",
-        "#ud": "ud",
         "#fn": "fn",
         "#ln": "ln",
-        "#pk": "pk",
-        "#sk": "sk",
-        "#idx": "idx",
       },
       Key: {
         pk,

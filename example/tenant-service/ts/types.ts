@@ -16,8 +16,7 @@ export type Response<T> = {
  */
 export interface Tenant {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -54,9 +53,6 @@ export interface Tenant {
 }
 
 export interface TenantDynamo {
-  pk?: string;
-  sk?: string;
-  idx?: string;
   id?: string;
   t?: string;
   v?: string;
@@ -64,6 +60,9 @@ export interface TenantDynamo {
   ud?: string;
   dd?: string;
   n?: string;
+  pk?: string;
+  sk?: string;
+  idx?: string;
 }
 
 /**
@@ -77,15 +76,7 @@ export interface CreateTenantInput {
 }
 
 export interface CreateTenantInputDynamo {
-  id?: string;
-  t?: string;
-  v?: string;
-  cd?: string;
-  ud?: string;
   n?: string;
-  pk?: string;
-  sk?: string;
-  idx?: string;
 }
 
 /**
@@ -93,8 +84,7 @@ export interface CreateTenantInputDynamo {
  */
 export interface CreateTenantOutput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -147,21 +137,9 @@ export interface CreateTenantOutputDynamo {
  * A gereric type
  */
 export interface GetTenantInput {
-  /**
-   * The unique identifier for this record.
-   * @type A GUID string.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id: string;
 }
 
 export interface GetTenantInputDynamo {
-  id?: string;
-  t?: string;
-  v?: string;
-  pk?: string;
-  sk?: string;
-  idx?: string;
 }
 
 /**
@@ -169,8 +147,7 @@ export interface GetTenantInputDynamo {
  */
 export interface GetTenantOutput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -224,26 +201,13 @@ export interface GetTenantOutputDynamo {
  */
 export interface UpdateTenantInput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id: string;
-  /**
    * A name.
    */
   name: string;
 }
 
 export interface UpdateTenantInputDynamo {
-  id?: string;
-  t?: string;
-  v?: string;
-  ud?: string;
   n?: string;
-  pk?: string;
-  sk?: string;
-  idx?: string;
 }
 
 /**
@@ -251,8 +215,7 @@ export interface UpdateTenantInputDynamo {
  */
 export interface UpdateTenantOutput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -305,22 +268,9 @@ export interface UpdateTenantOutputDynamo {
  * A gereric type
  */
 export interface DeleteTenantInput {
-  /**
-   * The unique identifier for this record.
-   * @type A GUID string.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id: string;
 }
 
 export interface DeleteTenantInputDynamo {
-  id?: string;
-  t?: string;
-  v?: string;
-  ud?: string;
-  dd?: string;
-  pk?: string;
-  sk?: string;
 }
 
 /**
@@ -328,8 +278,7 @@ export interface DeleteTenantInputDynamo {
  */
 export interface DeleteTenantOutput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -366,7 +315,6 @@ export interface DeleteTenantOutput {
 }
 
 export interface DeleteTenantOutputDynamo {
-  idx?: string;
   id?: string;
   t?: string;
   v?: string;
@@ -376,6 +324,7 @@ export interface DeleteTenantOutputDynamo {
   n?: string;
   pk?: string;
   sk?: string;
+  idx?: string;
 }
 
 /**
@@ -383,27 +332,13 @@ export interface DeleteTenantOutputDynamo {
  */
 export interface ImportTenantInput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id: string;
-  /**
    * A name.
    */
   name: string;
 }
 
 export interface ImportTenantInputDynamo {
-  id?: string;
-  t?: string;
-  v?: string;
-  cd?: string;
-  ud?: string;
   n?: string;
-  pk?: string;
-  sk?: string;
-  idx?: string;
 }
 
 /**
@@ -411,8 +346,7 @@ export interface ImportTenantInputDynamo {
  */
 export interface ImportTenantOutput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -466,8 +400,7 @@ export interface ImportTenantOutputDynamo {
  */
 export interface Actor {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -499,20 +432,17 @@ export interface Actor {
   deletedAt?: string;
   /**
    * A first-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   firstName: string;
   /**
    * A last-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   lastName: string;
 }
 
 export interface ActorDynamo {
-  pk?: string;
-  sk?: string;
-  idx?: string;
   id?: string;
   t?: string;
   v?: string;
@@ -521,32 +451,6 @@ export interface ActorDynamo {
   dd?: string;
   fn?: string;
   ln?: string;
-}
-
-/**
- * A gereric type
- */
-export interface CreateActorInput {
-  /**
-   * A first-name.
-   * This attribute can be used to lookup this record.
-   */
-  firstName: string;
-  /**
-   * A last-name.
-   * This attribute can be used to lookup this record.
-   */
-  lastName: string;
-}
-
-export interface CreateActorInputDynamo {
-  id?: string;
-  t?: string;
-  v?: string;
-  cd?: string;
-  ud?: string;
-  fn?: string;
-  ln?: string;
   pk?: string;
   sk?: string;
   idx?: string;
@@ -555,10 +459,30 @@ export interface CreateActorInputDynamo {
 /**
  * A gereric type
  */
+export interface CreateActorInput {
+  /**
+   * A first-name.
+   * This attribute can be used as part of a lookup for this record.
+   */
+  firstName: string;
+  /**
+   * A last-name.
+   * This attribute can be used as part of a lookup for this record.
+   */
+  lastName: string;
+}
+
+export interface CreateActorInputDynamo {
+  fn?: string;
+  ln?: string;
+}
+
+/**
+ * A gereric type
+ */
 export interface CreateActorOutput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -590,12 +514,12 @@ export interface CreateActorOutput {
   deletedAt?: string;
   /**
    * A first-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   firstName: string;
   /**
    * A last-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   lastName: string;
 }
@@ -618,21 +542,9 @@ export interface CreateActorOutputDynamo {
  * A gereric type
  */
 export interface GetActorInput {
-  /**
-   * The unique identifier for this record.
-   * @type A GUID string.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id: string;
 }
 
 export interface GetActorInputDynamo {
-  id?: string;
-  t?: string;
-  v?: string;
-  pk?: string;
-  sk?: string;
-  idx?: string;
 }
 
 /**
@@ -640,8 +552,7 @@ export interface GetActorInputDynamo {
  */
 export interface GetActorOutput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -673,12 +584,12 @@ export interface GetActorOutput {
   deletedAt?: string;
   /**
    * A first-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   firstName: string;
   /**
    * A last-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   lastName: string;
 }
@@ -702,33 +613,20 @@ export interface GetActorOutputDynamo {
  */
 export interface UpdateActorInput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id: string;
-  /**
    * A first-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   firstName: string;
   /**
    * A last-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   lastName: string;
 }
 
 export interface UpdateActorInputDynamo {
-  id?: string;
-  t?: string;
-  v?: string;
-  ud?: string;
   fn?: string;
   ln?: string;
-  pk?: string;
-  sk?: string;
-  idx?: string;
 }
 
 /**
@@ -736,8 +634,7 @@ export interface UpdateActorInputDynamo {
  */
 export interface UpdateActorOutput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -769,12 +666,12 @@ export interface UpdateActorOutput {
   deletedAt?: string;
   /**
    * A first-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   firstName: string;
   /**
    * A last-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   lastName: string;
 }
@@ -797,22 +694,9 @@ export interface UpdateActorOutputDynamo {
  * A gereric type
  */
 export interface DeleteActorInput {
-  /**
-   * The unique identifier for this record.
-   * @type A GUID string.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id: string;
 }
 
 export interface DeleteActorInputDynamo {
-  id?: string;
-  t?: string;
-  v?: string;
-  ud?: string;
-  dd?: string;
-  pk?: string;
-  sk?: string;
 }
 
 /**
@@ -820,8 +704,7 @@ export interface DeleteActorInputDynamo {
  */
 export interface DeleteActorOutput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -853,18 +736,17 @@ export interface DeleteActorOutput {
   deletedAt?: string;
   /**
    * A first-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   firstName: string;
   /**
    * A last-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   lastName: string;
 }
 
 export interface DeleteActorOutputDynamo {
-  idx?: string;
   id?: string;
   t?: string;
   v?: string;
@@ -875,6 +757,7 @@ export interface DeleteActorOutputDynamo {
   ln?: string;
   pk?: string;
   sk?: string;
+  idx?: string;
 }
 
 /**
@@ -882,34 +765,20 @@ export interface DeleteActorOutputDynamo {
  */
 export interface ImportActorInput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id: string;
-  /**
    * A first-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   firstName: string;
   /**
    * A last-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   lastName: string;
 }
 
 export interface ImportActorInputDynamo {
-  id?: string;
-  t?: string;
-  v?: string;
-  cd?: string;
-  ud?: string;
   fn?: string;
   ln?: string;
-  pk?: string;
-  sk?: string;
-  idx?: string;
 }
 
 /**
@@ -917,8 +786,7 @@ export interface ImportActorInputDynamo {
  */
 export interface ImportActorOutput {
   /**
-   * The unique identifier for this record.
-   * @type A GUID string.
+   * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
@@ -950,12 +818,12 @@ export interface ImportActorOutput {
   deletedAt?: string;
   /**
    * A first-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   firstName: string;
   /**
    * A last-name.
-   * This attribute can be used to lookup this record.
+   * This attribute can be used as part of a lookup for this record.
    */
   lastName: string;
 }

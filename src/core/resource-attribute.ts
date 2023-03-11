@@ -1,8 +1,8 @@
 import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
+import { AccessPattern } from "./access-pattern";
 import { FractureComponent } from "./component";
-import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import { Service } from "./service";
 
@@ -182,35 +182,40 @@ export type ResourceAttributeOptions = {
    */
   isPublic?: boolean;
   /**
-   * Is this a value we should be able to do lookups on?
+   * Is this attribute used when building the PK?
    * @default false
    */
-  isLookup?: boolean;
+  isPkComponent?: boolean;
   /**
-   * The generator to use for this attribute when creating it.
+   * Is this attribute used when building the SK?
+   * @default false
+   */
+  isSkComponent?: boolean;
+  /**
+   * Is this attribute used when lookuing up records?
+   * @default false
+   */
+  isLookupComponent?: boolean;
+  /**
+   * The generator to use to build this attribute.
    * @default ResourceAttributeGenerator.NONE
    */
-  createGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  generator?: ValueOf<typeof ResourceAttributeGenerator>;
   /**
-   * The generator to use for this attribute when reading it.
-   * @default ResourceAttributeGenerator.NONE
+   * Is this a attribute generated on create operations?
+   * @default false
    */
-  readGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  isGeneratedOnCreate?: boolean;
   /**
-   * The generator to use for this attribute when updating it.
-   * @default ResourceAttributeGenerator.NONE
+   * Is this a attribute generated on update operations?
+   * @default false
    */
-  updateGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  isGeneratedOnUpate?: boolean;
   /**
-   * The generator to use for this attribute when deleting it.
-   * @default ResourceAttributeGenerator.NONE
+   * Is this a attribute generated on delete operations?
+   * @default false
    */
-  deleteGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
-  /**
-   * The generator to use for this attribute when importing external records.
-   * @default ResourceAttributeGenerator.NONE
-   */
-  importGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  isGeneratedOnDelete?: boolean;
   /**
    * Validations to run when creating this attribute.
    * @default []
@@ -273,12 +278,13 @@ export class ResourceAttribute extends FractureComponent {
       type: ResourceAttributeType.STRING,
       isRequired: false,
       isPublic: true,
-      isLookup: false,
-      createGenerator: ResourceAttributeGenerator.NONE,
-      readGenerator: ResourceAttributeGenerator.NONE,
-      updateGenerator: ResourceAttributeGenerator.NONE,
-      deleteGenerator: ResourceAttributeGenerator.NONE,
-      importGenerator: ResourceAttributeGenerator.NONE,
+      isPkComponent: false,
+      isSkComponent: false,
+      isLookupComponent: false,
+      generator: ResourceAttributeGenerator.NONE,
+      isGeneratedOnCreate: false,
+      isGeneratedOnUpate: false,
+      isGeneratedOnDelete: false,
       createValidations: [],
       readValidations: [],
       updateValidations: [],
@@ -316,6 +322,20 @@ export class ResourceAttribute extends FractureComponent {
       forcedOptions,
     ]) as Required<ResourceAttributeOptions>;
 
+    // is this attribute part of the pk or sk?
+    if (this.isPkComponent) {
+      this.resource.keyAccessPattern.addPkAttributeSource(this);
+    }
+
+    if (this.isSkComponent) {
+      this.resource.keyAccessPattern.addSkAttributeSource(this);
+    }
+
+    // if this attribute is a lookup, add it to the lookup list
+    if (this.isLookupComponent) {
+      this.resource.lookupAccessPattern.addSkAttributeSource(this);
+    }
+
     // if it's not generated, we need to validate type
     if (!this.isGenerated) {
       this.options.createValidations.push(ValidationRule.TYPE);
@@ -347,10 +367,9 @@ export class ResourceAttribute extends FractureComponent {
     }
 
     // it's a lookup source
-    if (this.options.isLookup) {
-      this.resource.lookupAccessPattern.addSkAttribute(this);
+    if (this.options.isLookupComponent) {
       this.options.comments.push(
-        `This attribute can be used to lookup this record.`
+        `This attribute can be used as part of a lookup for this record.`
       );
     }
 
@@ -380,105 +399,118 @@ export class ResourceAttribute extends FractureComponent {
 
   /*****************************************************************************
    *
+   *  PUBLIC vs PRIVATE
    *
    ****************************************************************************/
+
+  public get isPublic(): boolean {
+    return this.options.isPublic;
+  }
+
+  public get isPrivate(): boolean {
+    return !this.isPublic;
+  }
+
+  /*****************************************************************************
+   *
+   *  ACCESS PATTERN HELPERS
+   *
+   ****************************************************************************/
+
+  public get isPkComponent(): boolean {
+    return this.options.isPkComponent;
+  }
+
+  public get isSkComponent(): boolean {
+    return this.options.isSkComponent;
+  }
+
+  public get isLookupComponent(): boolean {
+    return this.options.isLookupComponent;
+  }
+
+  public get keyAccessPattern(): AccessPattern {
+    return this.resource.keyAccessPattern;
+  }
+
+  public get lookupAccessPattern(): AccessPattern {
+    return this.resource.lookupAccessPattern;
+  }
+
+  /*****************************************************************************
+   *
+   *  GENERATOR HELPERS
+   *
+   ****************************************************************************/
+
+  public get isGenerated(): boolean {
+    return this.options.generator !== ResourceAttributeGenerator.NONE;
+  }
+
+  public get generator(): ValueOf<typeof ResourceAttributeGenerator> {
+    return this.options.generator;
+  }
+
+  public get isGeneratedOnCreate(): boolean {
+    return this.options.isGeneratedOnCreate;
+  }
+
+  public get isGeneratedOnUpdate(): boolean {
+    return this.options.isGeneratedOnUpate;
+  }
+
+  public get isGeneratedOnDelete(): boolean {
+    return this.options.isGeneratedOnDelete;
+  }
 
   public get isData(): boolean {
     return !this.isGenerated;
   }
 
-  public get isComposable(): boolean {
+  public get isAutoIncrementGenerator(): boolean {
     return (
       this.isGenerated &&
-      this.hasGenerator(ResourceAttributeGenerator.COMPOSITION)
+      this.generator === ResourceAttributeGenerator.AUTO_INCREMENT
     );
   }
 
-  // generated fields
-  public get isGenerated(): boolean {
+  public get isGuidGenerator(): boolean {
     return (
-      this.isCreateGenerated ||
-      this.isReadGenerated ||
-      this.isUpdateGenerated ||
-      this.isDeleteGenerated ||
-      this.isImportGenerated
+      this.isGenerated && this.generator === ResourceAttributeGenerator.GUID
     );
   }
-  public get isCreateGenerated(): boolean {
-    return this.options.createGenerator !== ResourceAttributeGenerator.NONE;
-  }
-  public get isReadGenerated(): boolean {
-    return this.options.readGenerator !== ResourceAttributeGenerator.NONE;
-  }
-  public get isUpdateGenerated(): boolean {
-    return this.options.updateGenerator !== ResourceAttributeGenerator.NONE;
-  }
-  public get isDeleteGenerated(): boolean {
-    return this.options.deleteGenerator !== ResourceAttributeGenerator.NONE;
-  }
-  public get isImportGenerated(): boolean {
-    return this.options.importGenerator !== ResourceAttributeGenerator.NONE;
+
+  public get isDateTimeGenerator(): boolean {
+    return (
+      this.isGenerated &&
+      this.generator === ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP
+    );
   }
 
-  /**
+  public get isTypeGenerator(): boolean {
+    return (
+      this.isGenerated && this.generator === ResourceAttributeGenerator.TYPE
+    );
+  }
+
+  public get isVersionGenerator(): boolean {
+    return (
+      this.isGenerated && this.generator === ResourceAttributeGenerator.VERSION
+    );
+  }
+
+  public get isComposableGenerator(): boolean {
+    return (
+      this.isGenerated &&
+      this.generator === ResourceAttributeGenerator.COMPOSITION
+    );
+  }
+
+  /*****************************************************************************
    *
-   * @param generator Does this attribute have a generator for this specific type?
-   * @returns
-   */
-  public hasGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return (
-      this.isGenerated &&
-      (this.hasCreateGenerator(generator) ||
-        this.hasReadGenerator(generator) ||
-        this.hasUpdateGenerator(generator) ||
-        this.hasDeleteGenerator(generator) ||
-        this.hasImportGenerator(generator))
-    );
-  }
-  public hasCreateGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return this.isCreateGenerated && this.options.createGenerator === generator;
-  }
-  public hasReadGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return this.isReadGenerated && this.options.readGenerator === generator;
-  }
-  public hasUpdateGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return this.isUpdateGenerated && this.options.updateGenerator === generator;
-  }
-  public hasDeleteGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return this.isDeleteGenerated && this.options.deleteGenerator === generator;
-  }
-  public hasImportGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    return this.isImportGenerated && this.options.importGenerator === generator;
-  }
-
-  public generatorForOperation(operation: Operation) {
-    switch (operation.options.operationSubType) {
-      case OPERATION_SUB_TYPE.CREATE_ONE:
-        return this.options.createGenerator;
-      case OPERATION_SUB_TYPE.READ_ONE:
-        return this.options.readGenerator;
-      case OPERATION_SUB_TYPE.UPDATE_ONE:
-        return this.options.updateGenerator;
-      case OPERATION_SUB_TYPE.DELETE_ONE:
-        return this.options.deleteGenerator;
-      case OPERATION_SUB_TYPE.IMPORT_ONE:
-        return this.options.importGenerator;
-      default:
-        throw new Error(`Unknown sub-operation: ${operation}`);
-    }
-  }
+   *  UPSTREAM HELPERS
+   *
+   ****************************************************************************/
 
   public get service(): Service {
     return this.resource.service;

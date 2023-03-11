@@ -15,32 +15,16 @@ export const importTenant = async (
 ): Promise<Response<ImportTenantOutput>> => {
 
   const {
-    id,
     name,
   } = input;
 
-  const t = "tenant";
-  const v = "LATEST";
-  const cd = new Date().toISOString();
-  const ud = new Date().toISOString();
   const n = name;
-  const pk = id.toLowerCase();
-  const sk = t.toLowerCase() + "#" + v.toLowerCase();
-  // const idx = undefined;
 
   const result = await dynamo.send(
     new PutCommand({
       TableName: "tenant",
       Item: {
-        id,
-        t,
-        v,
-        cd,
-        ud,
         n,
-        pk,
-        sk,
-        idx,
       } as ImportTenantInputDynamo,
     })
   );

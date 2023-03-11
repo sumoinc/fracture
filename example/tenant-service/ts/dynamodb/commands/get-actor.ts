@@ -15,14 +15,8 @@ export const getActor = async (
 ): Promise<Response<GetActorOutput>> => {
 
   const {
-    id,
   } = input;
 
-  const t = "actor";
-  const v = "LATEST";
-  const pk = id.toLowerCase();
-  const sk = t.toLowerCase() + "#" + v.toLowerCase();
-  const idx = fn.toLowerCase() + "" + ln.toLowerCase();
 
   const result = await dynamo.send(
     new GetCommand({

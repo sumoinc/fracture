@@ -15,41 +15,20 @@ export const updateTenant = async (
 ): Promise<Response<UpdateTenantOutput>> => {
 
   const {
-    id,
     name,
   } = input;
 
-  const t = "tenant";
-  const v = "LATEST";
-  const ud = new Date().toISOString();
   const n = name;
-  const pk = id.toLowerCase();
-  const sk = t.toLowerCase() + "#" + v.toLowerCase();
-  // const idx = undefined;
 
   const result = await dynamo.send(
     new UpdateCommand({
       TableName: "tenant",
-      UpdateExpression: "set #id = :id, #t = :t, #v = :v, #ud = :ud, #n = :n, #pk = :pk, #sk = :sk, #idx = :idx",
+      UpdateExpression: "set #n = :n",
       ExpressionAttributeValues: {
-        ":id": id,
-        ":t": t,
-        ":v": v,
-        ":ud": ud,
         ":n": n,
-        ":pk": pk,
-        ":sk": sk,
-        ":idx": idx,
       },
       ExpressionAttributeNames: {
-        "#id": "id",
-        "#t": "t",
-        "#v": "v",
-        "#ud": "ud",
         "#n": "n",
-        "#pk": "pk",
-        "#sk": "sk",
-        "#idx": "idx",
       },
       Key: {
         pk,

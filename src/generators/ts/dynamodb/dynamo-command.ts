@@ -121,7 +121,7 @@ export class DynamoCommand extends FractureComponent {
 
     this.tsFile.open(`const result = await dynamo.send(`);
     this.tsFile.open(`new ${this.dynamoCommandName}({`);
-    this.tsFile.line(`TableName: "${this.service.options.dynamodb.name}",`);
+    this.tsFile.line(`TableName: "${this.service.options.dynamoTable.name}",`);
 
     // PUT NEW ITEM
     if (
