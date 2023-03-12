@@ -17,17 +17,17 @@ specifiers:
   jest-junit: ^13
   jsii: ^1.77.0
   jsii-diff: ^1.77.0
-  jsii-docgen: ^7.1.21
+  jsii-docgen: ^7.1.22
   jsii-pacmak: ^1.77.0
   npm-check-updates: ^16
-  projen: ^0.67.80
+  projen: ^0.67.82
   standard-version: ^9
   ts-jest: ^27
   ts-node: ^10.9.1
   typescript: ^4.9.5
 
 dependencies:
-  projen: 0.67.80
+  projen: 0.67.82
 
 devDependencies:
   '@types/jest': 27.5.2
@@ -42,7 +42,7 @@ devDependencies:
   jest-junit: 13.2.0
   jsii: 1.77.0
   jsii-diff: 1.77.0
-  jsii-docgen: 7.1.21
+  jsii-docgen: 7.1.22
   jsii-pacmak: 1.77.0
   npm-check-updates: 16.7.12
   standard-version: 9.5.0
@@ -1616,7 +1616,7 @@ packages:
       fs-minipass: 3.0.1
       glob: 8.1.0
       lru-cache: 7.18.3
-      minipass: 4.2.4
+      minipass: 4.2.5
       minipass-collect: 1.0.2
       minipass-flush: 1.0.5
       minipass-pipeline: 1.2.4
@@ -2869,7 +2869,7 @@ packages:
     resolution: {integrity: sha512-MhaJDcFRTuLidHrIttu0RDGyyXs/IYHVmlcxfLAEFIWjc1vdLAkdwT7Ace2u7DbitWC0toKMl5eJZRYNVreIMw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minipass: 4.2.4
+      minipass: 4.2.5
     dev: true
 
   /fs.realpath/1.0.0:
@@ -3054,7 +3054,7 @@ packages:
     dependencies:
       fs.realpath: 1.0.0
       minimatch: 7.4.2
-      minipass: 4.2.4
+      minipass: 4.2.5
       path-scurry: 1.6.1
     dev: true
 
@@ -4245,8 +4245,8 @@ packages:
       - supports-color
     dev: true
 
-  /jsii-docgen/7.1.21:
-    resolution: {integrity: sha512-ENmLNcGTGBgLOCMkh3LYneRRMJ2N5kQOO9r4lVY94Zz0jd9a5uTEBd6Quf7/mBoElBpQEOMhYceyNaI18VSnqw==}
+  /jsii-docgen/7.1.22:
+    resolution: {integrity: sha512-YlcwalUBCbwmOx4bopDnJxuXekT+LTiOwdjsro7707oKe9EpvxLrnQyDIqVIm55aHoR5zMnZ4wUBS3U6l1xUlA==}
     engines: {node: '>= 14.17.0'}
     hasBin: true
     dependencies:
@@ -4605,7 +4605,7 @@ packages:
       https-proxy-agent: 5.0.1
       is-lambda: 1.0.1
       lru-cache: 7.18.3
-      minipass: 4.2.4
+      minipass: 4.2.5
       minipass-fetch: 3.0.1
       minipass-flush: 1.0.5
       minipass-pipeline: 1.2.4
@@ -4763,7 +4763,7 @@ packages:
     resolution: {integrity: sha512-t9/wowtf7DYkwz8cfMSt0rMwiyNIBXf5CKZ3S5ZMqRqMYT0oLTp0x1WorMI9WTwvaPg21r1JbFxJMum8JrLGfw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minipass: 4.2.4
+      minipass: 4.2.5
       minipass-sized: 1.0.3
       minizlib: 2.1.2
     optionalDependencies:
@@ -4805,8 +4805,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /minipass/4.2.4:
-    resolution: {integrity: sha512-lwycX3cBMTvcejsHITUgYj6Gy6A7Nh4Q6h9NP4sTHY1ccJlC7yKzDmiShEHsJ16Jf1nKGDEaiHxiltsJEvk0nQ==}
+  /minipass/4.2.5:
+    resolution: {integrity: sha512-+yQl7SX3bIT83Lhb4BVorMAHVuqsskxRdlmO9kTpyukp8vsm2Sn/fUOV9xlnG8/a5JsypJzap21lz/y3FBMJ8Q==}
     engines: {node: '>=8'}
     dev: true
 
@@ -5020,7 +5020,7 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       make-fetch-happen: 11.0.3
-      minipass: 4.2.4
+      minipass: 4.2.5
       minipass-fetch: 3.0.1
       minipass-json-stream: 1.0.1
       minizlib: 2.1.2
@@ -5222,7 +5222,7 @@ packages:
       '@npmcli/run-script': 6.0.0
       cacache: 17.0.4
       fs-minipass: 3.0.1
-      minipass: 4.2.4
+      minipass: 4.2.5
       npm-package-arg: 10.1.0
       npm-packlist: 7.0.4
       npm-pick-manifest: 8.0.1
@@ -5301,7 +5301,7 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       lru-cache: 7.18.3
-      minipass: 4.2.4
+      minipass: 4.2.5
     dev: true
 
   /path-type/3.0.0:
@@ -5380,8 +5380,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen/0.67.80:
-    resolution: {integrity: sha512-7J2p3KbTKvkCk5NO9mH0pgx4M8SM1kbyRBloZbdZheBrKd/uhgC5meX/KDgS8WsmJwcvKrdPu5vLUo83nSxU1Q==}
+  /projen/0.67.82:
+    resolution: {integrity: sha512-+MHgf1PZpQ/2Gffgy8QAI5gAXtJ1CYaFi1ord7vISQDUlyiXjQjKh6b7x98oXgrotXchmS5NOHQGqwuIvijAdQ==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
@@ -5973,7 +5973,7 @@ packages:
     resolution: {integrity: sha512-WVy6di9DlPOeBWEjMScpNipeSX2jIZBGEn5Uuo8Q7aIuFEuDX0pw8RxcOjlD1TWP4obi24ki7m/13+nFpcbXrw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minipass: 4.2.4
+      minipass: 4.2.5
     dev: true
 
   /ssri/9.0.1:
@@ -6189,7 +6189,7 @@ packages:
     dependencies:
       chownr: 2.0.0
       fs-minipass: 2.1.0
-      minipass: 4.2.4
+      minipass: 4.2.5
       minizlib: 2.1.2
       mkdirp: 1.0.4
       yallist: 4.0.0
