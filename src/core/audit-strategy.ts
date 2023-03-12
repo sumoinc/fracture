@@ -1,21 +1,17 @@
-import {
-  ResourceAttributeGenerator,
-  ResourceAttributeOptions,
-  ResourceAttributeType,
-} from "./resource-attribute";
+import { AttributeOptions } from "./attribute";
 
 export type AuditStrategy = {
   create: {
-    dateAttribute?: ResourceAttributeOptions;
-    userAttribute?: ResourceAttributeOptions;
+    dateAttribute?: AttributeOptions;
+    userAttribute?: AttributeOptions;
   };
   update: {
-    dateAttribute?: ResourceAttributeOptions;
-    userAttribute?: ResourceAttributeOptions;
+    dateAttribute?: AttributeOptions;
+    userAttribute?: AttributeOptions;
   };
   // turning this on activates soft deletes
   delete: {
-    dateAttribute?: ResourceAttributeOptions;
-    userAttribute?: ResourceAttributeOptions;
+    dateAttribute?: AttributeOptions;
+    userAttribute?: AttributeOptions;
   };
 };

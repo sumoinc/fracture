@@ -2,7 +2,6 @@ import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Resource } from "./resource";
-import { ResourceAttributeGenerator } from "./resource-attribute";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
 
@@ -156,12 +155,6 @@ export class Operation extends FractureComponent {
     return (
       this.options.operationSubType === OPERATION_SUB_TYPE.IMPORT_MANY ||
       this.options.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE
-    );
-  }
-
-  public get isGuidGenerator(): boolean {
-    return this.inputStructure.privateAttributes.some(
-      (attribute) => attribute.generator === ResourceAttributeGenerator.GUID
     );
   }
 

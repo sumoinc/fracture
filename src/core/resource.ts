@@ -1,13 +1,12 @@
 import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { AccessPattern } from "./access-pattern";
+import { AttributeGenerator, AttributeType } from "./attribute";
 import { FractureComponent } from "./component";
 import { Operation, OPERATION_SUB_TYPE, OPERATION_TYPE } from "./operation";
 import {
   ResourceAttribute,
-  ResourceAttributeGenerator,
   ResourceAttributeOptions,
-  ResourceAttributeType,
 } from "./resource-attribute";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
@@ -127,10 +126,10 @@ export class Resource extends FractureComponent {
     this.addResourceAttribute({
       name: "id",
       comments: ["The id for the record."],
-      type: ResourceAttributeType.STRING,
+      type: AttributeType.STRING,
       isRequired: true,
       isPkComponent: true,
-      generator: ResourceAttributeGenerator.GUID,
+      generator: AttributeGenerator.GUID,
       isGeneratedOnCreate: true,
     });
 
