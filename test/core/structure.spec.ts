@@ -1,20 +1,14 @@
-import {
-  Operation,
-  OPERATION_SUB_TYPE,
-  OPERATION_TYPE,
-} from "../../src/core/operation";
+import { OPERATION_SUB_TYPE, OPERATION_TYPE } from "../../src/core/operation";
 import { Resource } from "../../src/core/resource";
 import { ResourceAttribute } from "../../src/core/resource-attribute";
 import { Service } from "../../src/core/service";
-import { Structure, STRUCTURE_TYPE } from "../../src/core/structure";
+import { STRUCTURE_TYPE } from "../../src/core/structure";
 import { TestFracture } from "../util";
 
-const myService = () => {
-  return new Service(new TestFracture(), { name: "tenant" });
-};
-
-const myResource = () => {
-  const resource = new Resource(myService(), { name: "person" });
+const makeFixture = () => {
+  const fracture = new TestFracture();
+  const service = new Service(fracture, { name: "tenant" });
+  const resource = new Resource(service, { name: "person" });
   new ResourceAttribute(resource, {
     name: "my-name",
     shortName: "mn",
@@ -31,116 +25,299 @@ const myResource = () => {
     shortName: "ln",
     isLookupComponent: true,
   });
-  return resource;
+  fracture.build();
+  return fracture;
 };
 
-const myDataStructure = () => {
-  return new Structure(myResource(), { type: STRUCTURE_TYPE.DATA });
-};
+const fixture = makeFixture();
 
-const myTransientStructure = () => {
-  return new Structure(myResource(), { type: STRUCTURE_TYPE.TRANSIENT });
-};
+/*****************************************************************************
+ * Expected results for all structure types
+ ****************************************************************************/
 
-test("Smoke test", () => {
-  const structure = myDataStructure();
-  expect(structure).toBeTruthy();
-});
-
-/*******************************************************************************
- * DATA STRUCTURE
- ******************************************************************************/
-
-describe("Data Structure", () => {
-  test("correct default name", () => {
-    const structure = myDataStructure();
-    expect(structure.name).toBe("person");
-  });
-
-  test("attributes:PRIVATE", () => {
-    const structure = myDataStructure();
-    expect(structure.attributes).toEqual([
-      "id",
-      "t",
-      "v",
-      "cd",
-      "ud",
-      "dd",
-      "mn",
-      "fn",
-      "ln",
-      "pk",
-      "sk",
-      "idx",
-    ]);
-  });
-
-  test("attributes.PUBLIC", () => {
-    const structure = myDataStructure();
-    expect(structure.attributes).toEqual([
-      "id",
-      "type",
-      "version",
-      "created-at",
-      "updated-at",
-      "deleted-at",
-      "my-name",
-      "first-name",
-      "last-name",
-    ]);
-  });
-});
-
-describe("Transient Structure", () => {
-  test("correct default name", () => {
-    const structure = myTransientStructure();
-    expect(structure.name).toBe("person-message");
-  });
-});
-
-/*******************************************************************************
- * CREATE
- ******************************************************************************/
-
-// expected return values in tests
-// operation.input-vs-output.private-vs-public
-const operationTests = [
+const structureTests = [
   {
-    operationType: OPERATION_TYPE.MUTATION,
-    operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
-    structures: [
+    type: STRUCTURE_TYPE.DATA,
+    expectedName: "person",
+    operationSubType: "",
+    attributeTypes: [
       {
-        type: STRUCTURE_TYPE.INPUT,
-        expectedName: "create-person-input",
-        attributes: [
-          {
-            values: [
-              { id: true },
-              { t: true },
-              { v: true },
-              { cd: true },
-              { ud: true },
-              { mn: true },
-              { fn: true },
-              { ln: false },
-              { pk: true },
-              { sk: true },
-              { idx: true },
-            ],
-          },
-          {
-            values: [
-              { "my-name": true },
-              { "first-name": true },
-              { "last-name": false },
-            ],
-          },
+        publicAttributes: [
+          { id: true },
+          { type: true },
+          { version: true },
+          { "created-at": true },
+          { "updated-at": true },
+          { "deleted-at": false },
+          { "my-name": true },
+          { "first-name": true },
+          { "last-name": false },
+        ],
+      },
+      { itemAttributes: [] },
+      { keyAttributes: [] },
+      { generatedAttributes: [] },
+    ],
+  },
+  {
+    type: STRUCTURE_TYPE.TRANSIENT,
+    expectedName: "person-message",
+    operationSubType: "",
+    attributeTypes: [
+      {
+        publicAttributes: [
+          { id: true },
+          { type: true },
+          { version: true },
+          { "created-at": true },
+          { "updated-at": true },
+          { "deleted-at": false },
+          { "my-name": true },
+          { "first-name": true },
+          { "last-name": false },
+        ],
+      },
+      { itemAttributes: [] },
+      { keyAttributes: [] },
+      { generatedAttributes: [] },
+    ],
+  },
+  /*****************************************************************************
+   * CREATE INPUT
+   ****************************************************************************/
+  {
+    type: STRUCTURE_TYPE.INPUT,
+    operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
+    expectedName: "create-person-input",
+    attributeTypes: [
+      {
+        publicAttributes: [
+          { "my-name": true },
+          { "first-name": true },
+          { "last-name": false },
         ],
       },
       {
+        itemAttributes: [
+          { id: true },
+          { type: true },
+          { version: true },
+          { "created-at": true },
+          { "updated-at": true },
+          { "deleted-at": false },
+          { "my-name": true },
+          { "first-name": true },
+          { "last-name": false },
+          { pk: true },
+          { sk: true },
+          { idx: true },
+        ],
+      },
+      { keyAttributes: [] },
+      {
+        generatedAttributes: [
+          { id: true },
+          { type: true },
+          { version: true },
+          { "created-at": true },
+          { "updated-at": true },
+          { pk: true },
+          { sk: true },
+          { idx: true },
+        ],
+      },
+    ],
+  },
+  /*****************************************************************************
+   * CREATE OUTPUT
+   ****************************************************************************/
+  {
+    type: STRUCTURE_TYPE.OUTPUT,
+    operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
+    expectedName: "create-person-output",
+    attributeTypes: [
+      {
+        publicAttributes: [
+          { id: true },
+          { type: true },
+          { version: true },
+          { "created-at": true },
+          { "updated-at": true },
+          { "deleted-at": false },
+          { "my-name": true },
+          { "first-name": true },
+          { "last-name": false },
+        ],
+      },
+      {
+        itemAttributes: [],
+      },
+      { keyAttributes: [] },
+      {
+        generatedAttributes: [],
+      },
+    ],
+  },
+  /*****************************************************************************
+   * READ INPUT
+   ****************************************************************************/
+  {
+    type: STRUCTURE_TYPE.INPUT,
+    operationSubType: OPERATION_SUB_TYPE.READ_ONE,
+    expectedName: "get-person-input",
+    attributeTypes: [
+      {
+        publicAttributes: [{ id: true }],
+      },
+      {
+        itemAttributes: [],
+      },
+      { keyAttributes: [{ pk: true }, { sk: true }] },
+      {
+        generatedAttributes: [
+          { type: true },
+          { version: true },
+          { pk: true },
+          { sk: true },
+          { idx: true },
+        ],
+      },
+    ],
+  },
+];
+
+describe("Parent", () => {
+  test("Smoke test", () => {
+    expect(fixture).toBeTruthy();
+  });
+
+  /*****************************************************************************
+   * RESOURCE LEVEL
+   ****************************************************************************/
+
+  describe("Resource", () => {
+    // only one service, one resource
+    const resourceFixture = fixture.services[0].resources[0];
+
+    /***************************************************************************
+     * STRUCTURE LEVEL
+     **************************************************************************/
+
+    structureTests.forEach((expectedStructure) => {
+      const structureFixture = resourceFixture.structures.find(
+        (s) =>
+          s.type === expectedStructure.type &&
+          (expectedStructure.operationSubType.length === 0 ||
+            s.operation?.operationSubType ===
+              expectedStructure.operationSubType)
+      );
+
+      if (!structureFixture) {
+        throw new Error(
+          `Cannot test structure type "${expectedStructure.type}". No fixture exists`
+        );
+      }
+
+      describe(`${expectedStructure.operationSubType} ${expectedStructure.type} Structure`, () => {
+        test("Correct default name", () => {
+          expect(structureFixture.name).toBe(expectedStructure.expectedName);
+        });
+
+        /***********************************************************************
+         * ATTRIBUTE TYPES
+         **********************************************************************/
+
+        expectedStructure.attributeTypes.forEach((attributeType) => {
+          const [expectedAttributeType, expectedAttributes] = Object.entries(
+            attributeType
+          )[0] as [string, { [key: string]: boolean }[]];
+
+          const fixtureAtributes =
+            expectedAttributeType === "publicAttributes"
+              ? structureFixture.publicAttributes
+              : expectedAttributeType === "itemAttributes"
+              ? structureFixture.itemAttributes
+              : expectedAttributeType === "keyAttributes"
+              ? structureFixture.keyAttributes
+              : structureFixture.generatedAttributes;
+
+          describe(`${expectedAttributeType}`, () => {
+            test(`Correct attributes`, () => {
+              const actualNames = fixtureAtributes.map((a) => a.name);
+              const expectedNames = expectedAttributes.map(
+                (a) => Object.keys(a)[0]
+              );
+              expect(actualNames).toEqual(expectedNames);
+            });
+
+            /*
+            expectedAttributes.forEach(
+              (expectedAttribute) => {
+                const [expectedKey, expectedValue] =
+                  Object.entries(expectedAttribute)[0];
+                test(`${expectedStructure.expectedName}.${expectedKey}.isRequired" should be "${expectedValue}"`, () => {
+                  const testAttribute = structureFixture.publicAttributes.find(
+                    (a) => a.name === expectedKey
+                  );
+                  expect(testAttribute?.isRequired).toBe(expectedValue);
+                });
+              }
+            );*/
+          });
+        });
+      });
+    });
+  });
+
+  /*
+  describe("Transient Structure", () => {
+    test("correct default name", () => {
+      const structure = myTransientStructure();
+      expect(structure.name).toBe("person-message");
+    });
+  });
+  */
+
+  /*******************************************************************************
+   * CREATE
+   ******************************************************************************/
+
+  // expected return values in tests
+  // operation.input-vs-output.private-vs-public
+  const operationTests = [
+    {
+      operationType: OPERATION_TYPE.MUTATION,
+      operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
+      structures: [
+        {
+          type: STRUCTURE_TYPE.INPUT,
+          expectedName: "create-person-input",
+          publicAttributes: [
+            { "my-name": true },
+            { "first-name": true },
+            { "last-name": false },
+          ],
+          itemAttributes: [],
+          keyAttributes: [],
+          generatedAttributes: [
+            { id: true },
+            { t: true },
+            { v: true },
+            { cd: true },
+            { ud: true },
+            { mn: true },
+            { fn: true },
+            { ln: false },
+            { pk: true },
+            { sk: true },
+            { idx: true },
+          ],
+        },
+        /*
+      {
         type: STRUCTURE_TYPE.OUTPUT,
         expectedName: "create-person-output",
-        attributes: [
+        publicAttributes: [
           {
             values: [
               { id: true },
@@ -172,8 +349,10 @@ const operationTests = [
           },
         ],
       },
-    ],
-  },
+      */
+      ],
+    },
+    /*
   {
     operationType: OPERATION_TYPE.QUERY,
     operationSubType: OPERATION_SUB_TYPE.READ_ONE,
@@ -181,7 +360,7 @@ const operationTests = [
       {
         type: STRUCTURE_TYPE.INPUT,
         expectedName: "get-person-input",
-        attributes: [
+        publicAttributes: [
           {
             values: [
               { id: true },
@@ -200,7 +379,7 @@ const operationTests = [
       {
         type: STRUCTURE_TYPE.OUTPUT,
         expectedName: "get-person-output",
-        attributes: [
+        publicAttributes: [
           {
             values: [
               { id: true },
@@ -241,7 +420,7 @@ const operationTests = [
       {
         type: STRUCTURE_TYPE.INPUT,
         expectedName: "update-person-input",
-        attributes: [
+        publicAttributes: [
           {
             values: [
               { id: true },
@@ -269,7 +448,7 @@ const operationTests = [
       {
         type: STRUCTURE_TYPE.OUTPUT,
         expectedName: "update-person-output",
-        attributes: [
+        publicAttributes: [
           {
             values: [
               { id: true },
@@ -310,7 +489,7 @@ const operationTests = [
       {
         type: STRUCTURE_TYPE.INPUT,
         expectedName: "delete-person-input",
-        attributes: [
+        publicAttributes: [
           {
             values: [
               { id: true },
@@ -330,7 +509,7 @@ const operationTests = [
       {
         type: STRUCTURE_TYPE.OUTPUT,
         expectedName: "delete-person-output",
-        attributes: [
+        publicAttributes: [
           {
             values: [
               { id: true },
@@ -371,7 +550,7 @@ const operationTests = [
       {
         type: STRUCTURE_TYPE.INPUT,
         expectedName: "import-person-input",
-        attributes: [
+        publicAttributes: [
           {
             values: [
               { id: true },
@@ -400,7 +579,7 @@ const operationTests = [
       {
         type: STRUCTURE_TYPE.OUTPUT,
         expectedName: "import-person-output",
-        attributes: [
+        publicAttributes: [
           {
             values: [
               { id: true },
@@ -434,68 +613,71 @@ const operationTests = [
       },
     ],
   },
-];
+  */
+  ];
 
-/**
- * We do some crazy looping here but it'sd an easier way then hand crafting each test.
- */
+  /**
+   * We do some crazy looping here but it'sd an easier way then hand crafting each test.
+   */
 
-operationTests.forEach((operation) => {
-  // OPERATION
-  describe(`${operation.operationType}.${operation.operationSubType}`, () => {
-    const myOperation = () => {
-      return new Operation(myResource(), {
-        operationType: operation.operationType,
-        operationSubType: operation.operationSubType,
-      });
-    };
-
-    // STRUCTURES
-    operation.structures.forEach((structure) => {
-      describe(`${structure.type}`, () => {
-        const myInputOrOutput = () => {
-          return new Structure(myResource(), {
-            type: structure.type,
-            operation: myOperation(),
-          });
-        };
-
-        test("correct default structure name", () => {
-          expect(myInputOrOutput().name).toBe(structure.expectedName);
+  operationTests.forEach((operation) => {
+    // OPERATION
+    describe(`${operation.operationType}.${operation.operationSubType}`, () => {
+      /*
+      const myOperation = () => {
+        return new Operation(myResource(), {
+          operationType: operation.operationType,
+          operationSubType: operation.operationSubType,
         });
+      };
+      */
 
-        // ATTRIBUTES
-        /*
-        structure.attributes.forEach((attribute) => {
-          // which attributes should we expect to see here?
-          const expectedResult = attribute.values.map((e) => {
-            return Object.keys(e)[0];
-          });
-          const testStructure = myInputOrOutput();
-
-          test(`${attribute.type} attribute names`, () => {
-            // private or public
-            const testAttributes =
-              attribute.type === STRUCTURE_ATTRIBUTE_TYPE.PRIVATE
-                ? testStructure.attributes
-                : testStructure.publicAttributeNames;
-
-            expect(testAttributes).toEqual(expectedResult);
-          });
-
-          // REQUIRED TESTS
-          attribute.values.forEach((item) => {
-            const [key, value] = Object.entries(item)[0];
-            test(`.${attribute.type}.${key}.isRequired" should be "${value}"`, () => {
-              const testAttribute =
-                attribute.type === STRUCTURE_ATTRIBUTE_TYPE.PRIVATE
-                  ? testStructure.getPrivateAttributeByName(key)
-                  : testStructure.getPublicAttributeByName(key);
-              expect(testAttribute?.isRequired).toBe(value);
+      // STRUCTURES
+      operation.structures.forEach((structure) => {
+        describe(`${structure.type}`, () => {
+          /*
+          const myInputOrOutput = () => {
+            return new Structure(myResource(), {
+              type: structure.type,
+              operation: myOperation(),
             });
+          };
+
+          test("correct default structure name", () => {
+            expect(myInputOrOutput().name).toBe(structure.expectedName);
+          });*/
+          // ATTRIBUTES
+          /*
+        const expectedResult = structure.publicAttributes.map((e) => {
+          return Object.keys(e)[0];
+        });*/
+          //const testStructure = myInputOrOutput();
+          /*
+        const testAttributes = testStructure.publicAttributes.map((e) => {
+          return e.name;
+        });
+        */
+          /*
+        console.log(expectedResult);*/
+          /*
+        test(`attribute names`, () => {
+          expect(testAttributes).toEqual(expectedResult);
+        });
+        */
+          // REQUIRED TESTS
+          /*
+        attribute.values.forEach((item) => {
+          const [key, value] = Object.entries(item)[0];
+          test(`.${attribute.type}.${key}.isRequired" should be "${value}"`, () => {
+            const testAttribute =
+              attribute.type === STRUCTURE_ATTRIBUTE_TYPE.PRIVATE
+                ? testStructure.getPrivateAttributeByName(key)
+                : testStructure.getPublicAttributeByName(key);
+            expect(testAttribute?.isRequired).toBe(value);
           });
         });
         */
+        });
       });
     });
   });

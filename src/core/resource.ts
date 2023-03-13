@@ -3,7 +3,7 @@ import { deepMerge } from "projen/lib/util";
 import { AccessPattern } from "./access-pattern";
 import { AttributeGenerator, AttributeType } from "./attribute";
 import { FractureComponent } from "./component";
-import { Operation, OPERATION_SUB_TYPE, OPERATION_TYPE } from "./operation";
+import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import {
   ResourceAttribute,
   ResourceAttributeOptions,
@@ -47,6 +47,7 @@ export class Resource extends FractureComponent {
   public lookupAccessPattern: AccessPattern;
   public structures: Structure[];
   public dataStructure: Structure;
+  public transientStructure: Structure;
   // parent
   public readonly service: Service;
   // all other options
@@ -183,45 +184,22 @@ export class Resource extends FractureComponent {
 
     /***************************************************************************
      *
-     * BASE DATA STRUCTURE
+     * DATA STRUCTURES
      *
      **************************************************************************/
 
     this.dataStructure = new Structure(this, { type: STRUCTURE_TYPE.DATA });
-
-    /***************************************************************************
-     *
-     * CRUD OPERATIONS
-     *
-     **************************************************************************/
-    new Operation(this, {
-      operationType: OPERATION_TYPE.MUTATION,
-      operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
+    this.transientStructure = new Structure(this, {
+      type: STRUCTURE_TYPE.TRANSIENT,
     });
-    new Operation(this, {
-      operationType: OPERATION_TYPE.QUERY,
-      operationSubType: OPERATION_SUB_TYPE.READ_ONE,
-    });
-    new Operation(this, {
-      operationType: OPERATION_TYPE.MUTATION,
-      operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE,
-    });
-    new Operation(this, {
-      operationType: OPERATION_TYPE.MUTATION,
-      operationSubType: OPERATION_SUB_TYPE.DELETE_ONE,
-    });
-    new Operation(this, {
-      operationType: OPERATION_TYPE.MUTATION,
-      operationSubType: OPERATION_SUB_TYPE.IMPORT_ONE,
-    });
-
     return this;
   }
 
   public build() {
     this.dataStructure.build();
-    this.operations.forEach((operation) => {
-      operation.build();
+    this.transientStructure.build();
+    this.accessPatterns.forEach((accessPattern) => {
+      accessPattern.build();
     });
   }
 
@@ -320,15 +298,12 @@ export class Resource extends FractureComponent {
     let returnAttributes: ResourceAttribute[];
     switch (operation.options.operationSubType) {
       case OPERATION_SUB_TYPE.CREATE_ONE:
-      case OPERATION_SUB_TYPE.CREATE_MANY:
         returnAttributes = this.createGeneratedAttributes;
         break;
       case OPERATION_SUB_TYPE.UPDATE_ONE:
-      case OPERATION_SUB_TYPE.UPDATE_MANY:
         returnAttributes = this.updateGeneratedAttributes;
         break;
       case OPERATION_SUB_TYPE.DELETE_ONE:
-      case OPERATION_SUB_TYPE.DELETE_MANY:
         returnAttributes = this.deleteGeneratedAttributes;
         break;
       default:

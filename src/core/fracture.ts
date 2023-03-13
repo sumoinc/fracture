@@ -5,7 +5,6 @@ import { AuditStrategy } from "./audit-strategy";
 import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
 import { OPERATION_SUB_TYPE } from "./operation";
 import { Organization, OrganizationOptions } from "./organization";
-
 import { Service, ServiceOptions } from "./service";
 import { STRUCTURE_TYPE } from "./structure";
 import { TypeStrategy } from "./type-strategy";
@@ -115,27 +114,19 @@ export class Fracture extends Component {
         operations: {
           prefixes: {
             [OPERATION_SUB_TYPE.CREATE_ONE]: "create",
-            [OPERATION_SUB_TYPE.CREATE_MANY]: "create",
             [OPERATION_SUB_TYPE.READ_ONE]: "get",
-            [OPERATION_SUB_TYPE.READ_MANY]: "get",
             [OPERATION_SUB_TYPE.UPDATE_ONE]: "update",
-            [OPERATION_SUB_TYPE.UPDATE_MANY]: "update",
             [OPERATION_SUB_TYPE.DELETE_ONE]: "delete",
-            [OPERATION_SUB_TYPE.DELETE_MANY]: "delete",
             [OPERATION_SUB_TYPE.IMPORT_ONE]: "import",
-            [OPERATION_SUB_TYPE.IMPORT_MANY]: "import",
+            [OPERATION_SUB_TYPE.LIST]: "list",
           },
           suffixes: {
             [OPERATION_SUB_TYPE.CREATE_ONE]: "",
-            [OPERATION_SUB_TYPE.CREATE_MANY]: "",
             [OPERATION_SUB_TYPE.READ_ONE]: "",
-            [OPERATION_SUB_TYPE.READ_MANY]: "",
             [OPERATION_SUB_TYPE.UPDATE_ONE]: "",
-            [OPERATION_SUB_TYPE.UPDATE_MANY]: "",
             [OPERATION_SUB_TYPE.DELETE_ONE]: "",
-            [OPERATION_SUB_TYPE.DELETE_MANY]: "",
             [OPERATION_SUB_TYPE.IMPORT_ONE]: "",
-            [OPERATION_SUB_TYPE.IMPORT_MANY]: "",
+            [OPERATION_SUB_TYPE.LIST]: "",
           },
         },
       },
@@ -149,7 +140,8 @@ export class Fracture extends Component {
           isSkComponent: true,
           generator: AttributeGenerator.VERSION,
           isGeneratedOnCreate: true,
-          isGeneratedOnUpate: true,
+          isGeneratedOnRead: true,
+          isGeneratedOnUpdate: true,
           isGeneratedOnDelete: true,
         },
         type: VERSION_TYPE.DATE_TIME_STAMP,
@@ -165,7 +157,8 @@ export class Fracture extends Component {
         isSkComponent: true,
         generator: AttributeGenerator.TYPE,
         isGeneratedOnCreate: true,
-        isGeneratedOnUpate: true,
+        isGeneratedOnRead: true,
+        isGeneratedOnUpdate: true,
         isGeneratedOnDelete: true,
       },
       auditStrategy: {
@@ -189,7 +182,7 @@ export class Fracture extends Component {
             isRequired: true,
             generator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
             isGeneratedOnCreate: true,
-            isGeneratedOnUpate: true,
+            isGeneratedOnUpdate: true,
             isGeneratedOnDelete: true,
           },
         },

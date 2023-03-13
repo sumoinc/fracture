@@ -192,10 +192,15 @@ export type AttributeOptions = {
    */
   isGeneratedOnCreate?: boolean;
   /**
+   * Is this a attribute generated on read operations?
+   * @default false
+   */
+  isGeneratedOnRead?: boolean;
+  /**
    * Is this a attribute generated on update operations?
    * @default false
    */
-  isGeneratedOnUpate?: boolean;
+  isGeneratedOnUpdate?: boolean;
   /**
    * Is this a attribute generated on delete operations?
    * @default false
@@ -271,7 +276,8 @@ export class Attribute extends FractureComponent {
   }
 
   public get sortPosition(): number {
-    return this.options.sortPosition;
+    const boost = this.isAccessPatternKey ? 1000 : 0;
+    return this.options.sortPosition + boost;
   }
 
   /*****************************************************************************
@@ -292,11 +298,12 @@ export class Attribute extends FractureComponent {
    * Is this key park of an access pattern?
    */
   public get isAccessPatternKey(): boolean {
-    return this.resource.accessPatterns.some(
-      (accessPattern) =>
+    return this.resource.accessPatterns.some((accessPattern) => {
+      return (
         accessPattern.pkAttribute.name === this.name ||
         accessPattern.skAttribute.name === this.name
-    );
+      );
+    });
   }
 
   /**
@@ -373,8 +380,12 @@ export class Attribute extends FractureComponent {
     return this.options.isGeneratedOnCreate;
   }
 
+  public get isGeneratedOnRead(): boolean {
+    return this.options.isGeneratedOnRead;
+  }
+
   public get isGeneratedOnUpdate(): boolean {
-    return this.options.isGeneratedOnUpate;
+    return this.options.isGeneratedOnUpdate;
   }
 
   public get isGeneratedOnDelete(): boolean {
@@ -382,7 +393,7 @@ export class Attribute extends FractureComponent {
   }
 
   public get isData(): boolean {
-    return !this.isGenerated;
+    return this.options.generator === AttributeGenerator.NONE;
   }
 
   public get isAutoIncrementGenerator(): boolean {

@@ -1,5 +1,6 @@
 import { deepMerge } from "projen/lib/util";
 import { AttributeGenerator } from "./attribute";
+import { Operation, OPERATION_SUB_TYPE, OPERATION_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
   ResourceAttribute,
@@ -7,6 +8,7 @@ import {
 } from "./resource-attribute";
 import { FractureComponent } from "../core/component";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";
+import { DynamoTable } from "../dynamodb/dynamo-table";
 
 export interface AccessPatternOptions {
   dynamoGsi?: DynamoGsi;
@@ -44,13 +46,15 @@ export class AccessPattern extends FractureComponent {
         isPublic: false,
         generator: AttributeGenerator.COMPOSITION,
         isGeneratedOnCreate: true,
+        isGeneratedOnUpdate: true,
+        isGeneratedOnDelete: true,
       },
       skAttributeOptions: {
         name: dynamoGsi.skName,
         isPublic: false,
         generator: AttributeGenerator.COMPOSITION,
         isGeneratedOnCreate: true,
-        isGeneratedOnUpate: true,
+        isGeneratedOnUpdate: true,
         isGeneratedOnDelete: true,
       },
     };
@@ -84,12 +88,57 @@ export class AccessPattern extends FractureComponent {
     this.resource.accessPatterns.push(this);
   }
 
+  public build() {
+    /***************************************************************************
+     *
+     * CRUD OPERATIONS
+     *
+     **************************************************************************/
+
+    // mutations only happen on keyPattern
+    if (this.isKeyAccessPattern) {
+      new Operation(this, {
+        operationType: OPERATION_TYPE.MUTATION,
+        operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
+      });
+      new Operation(this, {
+        operationType: OPERATION_TYPE.QUERY,
+        operationSubType: OPERATION_SUB_TYPE.READ_ONE,
+      });
+      new Operation(this, {
+        operationType: OPERATION_TYPE.MUTATION,
+        operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE,
+      });
+      new Operation(this, {
+        operationType: OPERATION_TYPE.MUTATION,
+        operationSubType: OPERATION_SUB_TYPE.DELETE_ONE,
+      });
+    }
+
+    new Operation(this, {
+      operationType: OPERATION_TYPE.MUTATION,
+      operationSubType: OPERATION_SUB_TYPE.LIST,
+    });
+  }
+
   addPkAttributeSource(sourceAttribute: ResourceAttribute) {
     this.pkAttribute.compositionSources.push(sourceAttribute);
   }
 
   addSkAttributeSource(sourceAttribute: ResourceAttribute) {
     this.skAttribute.compositionSources.push(sourceAttribute);
+  }
+
+  get isKeyAccessPattern(): boolean {
+    return this.dynamoTable.keyDynamoGsi === this.dynamoGsi;
+  }
+
+  get isLookupAccessPattern(): boolean {
+    return this.dynamoTable.lookupDynamoGsi === this.dynamoGsi;
+  }
+
+  get dynamoTable(): DynamoTable {
+    return this.dynamoGsi.dynamoTable;
   }
 
   get dynamoGsi(): DynamoGsi {

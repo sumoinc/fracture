@@ -202,6 +202,8 @@ export class DynamoCommand extends FractureComponent {
         return "UpdateCommand";
       case OPERATION_SUB_TYPE.IMPORT_ONE:
         return "PutCommand";
+      case OPERATION_SUB_TYPE.LIST:
+        return "Query";
       default:
         throw new Error(
           `Unsupported operation type: ${this.operation.options.operationSubType}`

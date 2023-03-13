@@ -38,7 +38,7 @@ export class ResourceAttribute extends Attribute {
       isLookupComponent: false,
       generator: AttributeGenerator.NONE,
       isGeneratedOnCreate: false,
-      isGeneratedOnUpate: false,
+      isGeneratedOnUpdate: false,
       isGeneratedOnDelete: false,
       createValidations: [],
       readValidations: [],

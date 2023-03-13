@@ -1,7 +1,7 @@
 import { deepMerge } from "projen/lib/util";
 import { SetRequired, ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
-import { Operation } from "./operation";
+import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import { Service } from "./service";
 import { StructureAttribute } from "./structure-attribute";
@@ -98,7 +98,10 @@ export class Structure extends FractureComponent {
     this._attributes = [];
   }
 
-  public build() {}
+  // calling this  forces gneration of attributes
+  public build() {
+    this.attributes;
+  }
 
   /**
    * Structure name, based on the naming strategy
@@ -135,22 +138,9 @@ export class Structure extends FractureComponent {
    */
   public get attributes() {
     if (this._attributes.length === 0) {
-      this._attributes = this.resource.attributes
-        .filter((resourceAttribute) => {
-          switch (this.type) {
-            case STRUCTURE_TYPE.DATA:
-              return !resourceAttribute.isAccessPatternKey;
-            case STRUCTURE_TYPE.INPUT:
-              return true;
-            case STRUCTURE_TYPE.OUTPUT:
-              return !resourceAttribute.isAccessPatternKey;
-            case STRUCTURE_TYPE.TRANSIENT:
-              return !resourceAttribute.isAccessPatternKey;
-          }
-        })
-        .map((resourceAttribute) => {
-          return new StructureAttribute(this, resourceAttribute.options);
-        });
+      this._attributes = this.resource.attributes.map((resourceAttribute) => {
+        return new StructureAttribute(this, resourceAttribute.options);
+      });
     }
 
     // sort and return all attributes
@@ -164,16 +154,89 @@ export class Structure extends FractureComponent {
   }
 
   /**
-   * Attributes that should be exposed to the public. Generally this is
-   * everything excluding Access Pattern keys.
+   * Attributes that should be exposed to the public. Inputs, outputs, etc
    */
-  public get publicAttributes() {
-    return this.attributes
-      .filter((attribute) => !attribute.isAccessPatternKey)
-      .filter(
-        (attribute) =>
-          this.type === STRUCTURE_TYPE.INPUT && !attribute.isTypeGenerator
-      );
+  public get publicAttributes(): StructureAttribute[] {
+    switch (this.type) {
+      case STRUCTURE_TYPE.DATA:
+        return this.attributes.filter((attribute: StructureAttribute) => {
+          return !attribute.isAccessPatternKey;
+        });
+
+      // INPUTS
+      case STRUCTURE_TYPE.INPUT:
+        switch (this.operation!.operationSubType) {
+          case OPERATION_SUB_TYPE.CREATE_ONE:
+            return this.attributes.filter((attribute: StructureAttribute) => {
+              return attribute.isData;
+            });
+          case OPERATION_SUB_TYPE.READ_ONE:
+            console.log(
+              this.operation!.operationSubType,
+              this.keyAttributeSources
+            );
+            return this.keyAttributeSources.filter((a) => {
+              console.log(a.name, a.isGenerated);
+              return !a.isGenerated;
+            });
+
+          default:
+            return [];
+        }
+
+      case STRUCTURE_TYPE.OUTPUT:
+        return this.attributes.filter((attribute: StructureAttribute) => {
+          return !attribute.isAccessPatternKey;
+        });
+      case STRUCTURE_TYPE.TRANSIENT:
+        return this.attributes.filter((attribute: StructureAttribute) => {
+          return !attribute.isAccessPatternKey;
+        });
+    }
+  }
+
+  public get itemAttributes(): StructureAttribute[] {
+    // only applies to inputs
+    if (this.type !== STRUCTURE_TYPE.INPUT) {
+      return [];
+    }
+    // on create, put in everything
+    if (this.operation?.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
+      return this.attributes;
+    }
+
+    // on read we need all the parts of the pk and sk that are not generated on read
+    if (this.operation?.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
+      return this.keyAttributeSources.filter((a) => !a.isGenerated);
+    }
+
+    return [];
+  }
+
+  public get keyAttributes(): StructureAttribute[] {
+    // only applies to inputs
+    if (this.type !== STRUCTURE_TYPE.INPUT) {
+      return [];
+    }
+    return this.attributes.filter((a) => a.isPartitionKey || a.isSortKey);
+  }
+
+  public get keyAttributeSources(): StructureAttribute[] {
+    let returnAttributes = [] as StructureAttribute[];
+    this.keyAttributes.forEach((keyAttribute) => {
+      keyAttribute.compositionSources.forEach((sourceAttribute) => {
+        returnAttributes.push(sourceAttribute as StructureAttribute);
+      });
+    });
+    return returnAttributes;
+  }
+
+  public get generatedAttributes(): StructureAttribute[] {
+    // only applies to inputs
+    if (this.type !== STRUCTURE_TYPE.INPUT) {
+      return [];
+    }
+    return this.attributes.filter((a) => a.isGenerated);
   }
 
   public get attributeNames() {

@@ -12,13 +12,13 @@ export interface GsiOptions {
 
 export class DynamoGsi extends FractureComponent {
   // parent
-  public readonly table: DynamoTable;
+  public readonly dynamoTable: DynamoTable;
   // member components
   // all other options
   public readonly options: Required<GsiOptions>;
 
-  constructor(table: DynamoTable, options: GsiOptions = {}) {
-    super(table.fracture);
+  constructor(dynamoTable: DynamoTable, options: GsiOptions = {}) {
+    super(dynamoTable.fracture);
 
     /***************************************************************************
      *
@@ -27,9 +27,9 @@ export class DynamoGsi extends FractureComponent {
      **************************************************************************/
 
     let defaultOptions: Required<GsiOptions> = {
-      name: `gsi${table.dynamoGsi.length}`,
-      pkName: `pk${table.dynamoGsi.length}`,
-      skName: `sk${table.dynamoGsi.length}`,
+      name: `gsi${dynamoTable.dynamoGsi.length}`,
+      pkName: `pk${dynamoTable.dynamoGsi.length}`,
+      skName: `sk${dynamoTable.dynamoGsi.length}`,
     };
 
     /***************************************************************************
@@ -53,8 +53,8 @@ export class DynamoGsi extends FractureComponent {
     ]) as Required<GsiOptions>;
 
     // parent
-    this.table = table;
-    this.table.dynamoGsi.push(this);
+    this.dynamoTable = dynamoTable;
+    this.dynamoTable.dynamoGsi.push(this);
   }
 
   public get name(): string {
@@ -70,6 +70,6 @@ export class DynamoGsi extends FractureComponent {
   }
 
   public get service(): Service {
-    return this.table.service;
+    return this.dynamoTable.service;
   }
 }

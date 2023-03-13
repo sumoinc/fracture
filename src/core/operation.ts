@@ -1,5 +1,6 @@
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
+import { AccessPattern } from "./access-pattern";
 import { FractureComponent } from "./component";
 import { Resource } from "./resource";
 import { Service } from "./service";
@@ -29,30 +30,26 @@ export const OPERATION_TYPE = {
 } as const;
 
 export const OPERATION_SUB_TYPE = {
-  IMPORT_ONE: "ImportOne",
-  IMPORT_MANY: "ImportMany",
   CREATE_ONE: "CreateOne",
-  CREATE_MANY: "CreateMany",
   READ_ONE: "ReadOne",
-  READ_MANY: "ReadMany", // aka: list
   UPDATE_ONE: "UpdateOne",
-  UPDATE_MANY: "UpdateMany",
   DELETE_ONE: "DeleteOne",
-  DELETE_MANY: "DeleteMany",
+  IMPORT_ONE: "ImportOne",
+  LIST: "LIST",
 } as const;
 
 export class Operation extends FractureComponent {
   // member components
   // parents
-  public readonly resource: Resource;
+  public readonly accessPattern: AccessPattern;
   // all other options
   public readonly options: Required<OperationOptions>;
   // private cached properties
   private _inputStructure?: Structure;
   private _outputStructure?: Structure;
 
-  constructor(resource: Resource, options: OperationOptions) {
-    super(resource.fracture);
+  constructor(accessPattern: AccessPattern, options: OperationOptions) {
+    super(accessPattern.fracture);
 
     /***************************************************************************
      *
@@ -62,7 +59,6 @@ export class Operation extends FractureComponent {
 
     const defaultOptions: Partial<OperationOptions> = {
       operationType: OPERATION_TYPE.QUERY,
-      operationSubType: OPERATION_SUB_TYPE.READ_MANY,
     };
 
     /***************************************************************************
@@ -74,7 +70,7 @@ export class Operation extends FractureComponent {
     // member components
 
     // parents + inverse
-    this.resource = resource;
+    this.accessPattern = accessPattern;
     this.resource.operations.push(this);
 
     // all other options
@@ -109,14 +105,12 @@ export class Operation extends FractureComponent {
       .join("-");
   }
 
-  public get isBatch(): boolean {
-    return (
-      this.options.operationSubType === OPERATION_SUB_TYPE.IMPORT_MANY ||
-      this.options.operationSubType === OPERATION_SUB_TYPE.CREATE_MANY ||
-      this.options.operationSubType === OPERATION_SUB_TYPE.READ_MANY ||
-      this.options.operationSubType === OPERATION_SUB_TYPE.UPDATE_MANY ||
-      this.options.operationSubType === OPERATION_SUB_TYPE.DELETE_MANY
-    );
+  public get operationType() {
+    return this.options.operationType;
+  }
+
+  public get operationSubType() {
+    return this.options.operationSubType;
   }
 
   public get isWrite(): boolean {
@@ -124,38 +118,23 @@ export class Operation extends FractureComponent {
   }
 
   public get isCreate(): boolean {
-    return (
-      this.options.operationSubType === OPERATION_SUB_TYPE.CREATE_MANY ||
-      this.options.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE
-    );
+    return this.options.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE;
   }
 
   public get isRead(): boolean {
-    return (
-      this.options.operationSubType === OPERATION_SUB_TYPE.READ_MANY ||
-      this.options.operationSubType === OPERATION_SUB_TYPE.READ_ONE
-    );
+    return this.options.operationSubType === OPERATION_SUB_TYPE.READ_ONE;
   }
 
   public get isUpdate(): boolean {
-    return (
-      this.options.operationSubType === OPERATION_SUB_TYPE.UPDATE_MANY ||
-      this.options.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
-    );
+    return this.options.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE;
   }
 
   public get isDelete(): boolean {
-    return (
-      this.options.operationSubType === OPERATION_SUB_TYPE.DELETE_MANY ||
-      this.options.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE
-    );
+    return this.options.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE;
   }
 
   public get isImport(): boolean {
-    return (
-      this.options.operationSubType === OPERATION_SUB_TYPE.IMPORT_MANY ||
-      this.options.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE
-    );
+    return this.options.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE;
   }
 
   /***************************************************************************
@@ -185,6 +164,10 @@ export class Operation extends FractureComponent {
       });
     }
     return this._outputStructure;
+  }
+
+  public get resource(): Resource {
+    return this.accessPattern.resource;
   }
 
   public get service(): Service {
