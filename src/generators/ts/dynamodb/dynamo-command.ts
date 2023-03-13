@@ -39,7 +39,7 @@ export class DynamoCommand extends FractureComponent {
     );
 
     //const { inputStructure } = this.operation;
-    // const { privateAttributes, generatedAttributes, publicAttributes } =
+    // const { attributes, generatedAttributes, publicAttributes } =
     //   inputStructure;
 
     /***************************************************************************
@@ -52,15 +52,16 @@ export class DynamoCommand extends FractureComponent {
       //`import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";`,
     ]);
 
-    if (this.operation.isGuidGenerator) {
+    /*
+    if (this.operation.hasGuidGenerator) {
       this.tsFile.line(`import { v4 as uuidv4 } from "uuid";`);
     }
+    */
 
     this.tsFile.open(`import {`);
     this.tsFile.line(this.tsInputStructure.publicInterfaceName + ",");
     this.tsFile.line(this.tsOutputStructure.publicInterfaceName + ",");
     this.tsFile.line(this.tsService.responseTypeName + ",");
-    this.tsFile.line(this.tsInputStructure.privateInterfaceName + ",");
     this.tsFile.close(
       `} from "${this.tsService.typeFile.pathFrom(this.tsFile)}";`
     );
@@ -95,7 +96,7 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     this.tsFile.open(`const {`);
-    this.tsInputStructure.publicAttributes.forEach((a) => {
+    this.tsInputStructure.attributes.forEach((a) => {
       this.tsFile.line(`${a.attributeName},`);
     });
     this.tsFile.close(`} = ${this.inputName};`);
@@ -106,7 +107,7 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     // line up values
-    this.tsInputStructure.privateAttributes
+    this.tsInputStructure.attributes
       // skip items with the same public and private names
       .filter((attribute) => {
         return attribute.attributeShortName !== attribute.attributeSource;
@@ -129,10 +130,10 @@ export class DynamoCommand extends FractureComponent {
       this.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE
     ) {
       this.tsFile.open(`Item: {`);
-      this.tsInputStructure.privateAttributes.forEach((attribute) => {
+      this.tsInputStructure.attributes.forEach((attribute) => {
         this.tsFile.line(`${attribute.attributeShortName},`);
       });
-      this.tsFile.close(`} as ${this.tsInputStructure.privateInterfaceName},`);
+      this.tsFile.close(`},`);
     }
 
     // UPDATE OPERATIONS
@@ -140,21 +141,21 @@ export class DynamoCommand extends FractureComponent {
       this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE ||
       this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
     ) {
-      const updateExpression = this.tsInputStructure.privateAttributes
+      const updateExpression = this.tsInputStructure.attributes
         .map((attribute) => {
           return `#${attribute.attributeShortName} = :${attribute.attributeShortName}`;
         })
         .join(", ");
       this.tsFile.line(`UpdateExpression: "set ${updateExpression}",`);
       this.tsFile.open(`ExpressionAttributeValues: {`);
-      this.tsInputStructure.privateAttributes.forEach((attribute) => {
+      this.tsInputStructure.attributes.forEach((attribute) => {
         this.tsFile.line(
           `":${attribute.attributeShortName}": ${attribute.attributeShortName},`
         );
       });
       this.tsFile.close(`},`);
       this.tsFile.open(`ExpressionAttributeNames: {`);
-      this.tsInputStructure.privateAttributes.forEach((attribute) => {
+      this.tsInputStructure.attributes.forEach((attribute) => {
         this.tsFile.line(
           `"#${attribute.attributeShortName}": "${attribute.attributeShortName}",`
         );

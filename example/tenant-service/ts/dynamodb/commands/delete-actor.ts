@@ -4,7 +4,6 @@ import {
   DeleteActorInput,
   DeleteActorOutput,
   Response,
-  DeleteActorInputDynamo,
 } from "../../types";
 
 const client = new DynamoDBClient({});
@@ -15,16 +14,60 @@ export const deleteActor = async (
 ): Promise<Response<DeleteActorOutput>> => {
 
   const {
+    pk,
+    sk,
+    idx,
+    id,
+    type,
+    version,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    firstName,
+    lastName,
   } = input;
 
+  // const pk = undefined;
+  // const sk = undefined;
+  // const idx = undefined;
+  const id = uuidv4();
+  const t = "actor";
+  const v = "LATEST";
+  const cd = new Date().toISOString();
+  const ud = new Date().toISOString();
+  const dd = new Date().toISOString();
+  const fn = firstName;
+  const ln = lastName;
 
   const result = await dynamo.send(
     new UpdateCommand({
       TableName: "tenant",
-      UpdateExpression: "set ",
+      UpdateExpression: "set #pk = :pk, #sk = :sk, #idx = :idx, #id = :id, #t = :t, #v = :v, #cd = :cd, #ud = :ud, #dd = :dd, #fn = :fn, #ln = :ln",
       ExpressionAttributeValues: {
+        ":pk": pk,
+        ":sk": sk,
+        ":idx": idx,
+        ":id": id,
+        ":t": t,
+        ":v": v,
+        ":cd": cd,
+        ":ud": ud,
+        ":dd": dd,
+        ":fn": fn,
+        ":ln": ln,
       },
       ExpressionAttributeNames: {
+        "#pk": "pk",
+        "#sk": "sk",
+        "#idx": "idx",
+        "#id": "id",
+        "#t": "t",
+        "#v": "v",
+        "#cd": "cd",
+        "#ud": "ud",
+        "#dd": "dd",
+        "#fn": "fn",
+        "#ln": "ln",
       },
       Key: {
         pk,

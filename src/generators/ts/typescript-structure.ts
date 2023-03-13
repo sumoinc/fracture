@@ -19,20 +19,12 @@ export class TypescriptStructure extends FractureComponent {
     this.tsResource = tsResource;
 
     this.writePublicInterface(this.tsService.typeFile);
-    this.writePrivateInterface(this.tsService.typeFile);
   }
 
   public get comments() {
     return [`/**`]
       .concat(this.structure.options.comments.map((c) => ` * ${c}`))
       .concat([` */`]);
-  }
-
-  public get privateInterfaceName() {
-    return formatStringByNamingStrategy(
-      this.structure.name + "-dynamo",
-      this.fracture.options.namingStrategy.ts.interfaceName
-    );
   }
 
   public get publicInterfaceName() {
@@ -42,15 +34,15 @@ export class TypescriptStructure extends FractureComponent {
     );
   }
 
-  public get privateAttributes() {
-    return this.structure.privateAttributes.map((attribute) => {
+  public get attributes() {
+    return this.structure.attributes.map((attribute) => {
       return new TypescriptStructureAttribute(this, attribute);
     });
   }
 
   public get publicAttributes() {
-    return this.structure.publicAttributes.map((attribute) => {
-      return new TypescriptStructureAttribute(this, attribute);
+    return this.attributes.filter((attribute) => {
+      return !attribute.structureAttribute.isAccessPatternKey;
     });
   }
 
@@ -58,18 +50,8 @@ export class TypescriptStructure extends FractureComponent {
     file.lines(this.comments);
     file.open(`export interface ${this.publicInterfaceName} {`);
     this.publicAttributes.forEach((a) => {
-      const r = a.isRequired ? "" : "?";
       file.lines(a.comments);
-      file.line(`${a.attributeName}${r}: ${a.typescriptType};`);
-    });
-    file.close(`}`);
-    file.line("\n");
-  }
-
-  writePrivateInterface(file: TypeScriptSource) {
-    file.open(`export interface ${this.privateInterfaceName} {`);
-    this.privateAttributes.forEach((a) => {
-      file.line(`${a.attributeShortName}?: ${a.typescriptType};`);
+      file.line(`${a.attributeName}?: ${a.typescriptType};`);
     });
     file.close(`}`);
     file.line("\n");

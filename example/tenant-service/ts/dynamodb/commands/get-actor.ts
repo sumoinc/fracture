@@ -4,7 +4,6 @@ import {
   GetActorInput,
   GetActorOutput,
   Response,
-  GetActorInputDynamo,
 } from "../../types";
 
 const client = new DynamoDBClient({});
@@ -15,8 +14,30 @@ export const getActor = async (
 ): Promise<Response<GetActorOutput>> => {
 
   const {
+    pk,
+    sk,
+    idx,
+    id,
+    type,
+    version,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    firstName,
+    lastName,
   } = input;
 
+  // const pk = undefined;
+  // const sk = undefined;
+  // const idx = undefined;
+  const id = uuidv4();
+  const t = "actor";
+  const v = "LATEST";
+  const cd = new Date().toISOString();
+  const ud = new Date().toISOString();
+  const dd = new Date().toISOString();
+  const fn = firstName;
+  const ln = lastName;
 
   const result = await dynamo.send(
     new GetCommand({

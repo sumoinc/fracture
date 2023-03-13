@@ -3,6 +3,7 @@ import { SetRequired, ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Operation } from "./operation";
 import { Resource } from "./resource";
+import { Service } from "./service";
 import { StructureAttribute } from "./structure-attribute";
 
 /******************************************************************************
@@ -120,6 +121,10 @@ export class Structure extends FractureComponent {
       .join("-");
   }
 
+  public get type() {
+    return this.options.type;
+  }
+
   public getStructureAttributeByName(name: string) {
     return this.attributes.find((a) => a.name === name);
   }
@@ -130,11 +135,22 @@ export class Structure extends FractureComponent {
    */
   public get attributes() {
     if (this._attributes.length === 0) {
-      this.resource.attributes.forEach((resourceAttribute) => {
-        this._attributes.push(
-          new StructureAttribute(this, resourceAttribute.options)
-        );
-      });
+      this._attributes = this.resource.attributes
+        .filter((resourceAttribute) => {
+          switch (this.type) {
+            case STRUCTURE_TYPE.DATA:
+              return !resourceAttribute.isAccessPatternKey;
+            case STRUCTURE_TYPE.INPUT:
+              return true;
+            case STRUCTURE_TYPE.OUTPUT:
+              return !resourceAttribute.isAccessPatternKey;
+            case STRUCTURE_TYPE.TRANSIENT:
+              return !resourceAttribute.isAccessPatternKey;
+          }
+        })
+        .map((resourceAttribute) => {
+          return new StructureAttribute(this, resourceAttribute.options);
+        });
     }
 
     // sort and return all attributes
@@ -147,11 +163,28 @@ export class Structure extends FractureComponent {
     });
   }
 
+  /**
+   * Attributes that should be exposed to the public. Generally this is
+   * everything excluding Access Pattern keys.
+   */
+  public get publicAttributes() {
+    return this.attributes
+      .filter((attribute) => !attribute.isAccessPatternKey)
+      .filter(
+        (attribute) =>
+          this.type === STRUCTURE_TYPE.INPUT && !attribute.isTypeGenerator
+      );
+  }
+
   public get attributeNames() {
     return this.attributes.map((attribute) => attribute.name);
   }
 
   public get operation(): Operation | undefined {
     return this.options.operation;
+  }
+
+  public get service(): Service {
+    return this.resource.service;
   }
 }

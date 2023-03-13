@@ -75,6 +75,8 @@ export class ResourceAttribute extends Attribute {
     ]) as Required<ResourceAttributeOptions>;
 
     super(resource, mergedOptions);
+    this.options = mergedOptions;
+    this.resource = resource;
     resource.attributes.push(this);
 
     // is this attribute part of the pk or sk?

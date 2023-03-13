@@ -1,8 +1,8 @@
 import { deepMerge } from "projen/lib/util";
+import { AttributeGenerator } from "./attribute";
 import { Resource } from "./resource";
 import {
   ResourceAttribute,
-  ResourceAttributeGenerator,
   ResourceAttributeOptions,
 } from "./resource-attribute";
 import { FractureComponent } from "../core/component";
@@ -42,13 +42,13 @@ export class AccessPattern extends FractureComponent {
       pkAttributeOptions: {
         name: dynamoGsi.pkName,
         isPublic: false,
-        generator: ResourceAttributeGenerator.COMPOSITION,
+        generator: AttributeGenerator.COMPOSITION,
         isGeneratedOnCreate: true,
       },
       skAttributeOptions: {
         name: dynamoGsi.skName,
         isPublic: false,
-        generator: ResourceAttributeGenerator.COMPOSITION,
+        generator: AttributeGenerator.COMPOSITION,
         isGeneratedOnCreate: true,
         isGeneratedOnUpate: true,
         isGeneratedOnDelete: true,

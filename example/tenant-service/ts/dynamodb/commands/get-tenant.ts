@@ -4,7 +4,6 @@ import {
   GetTenantInput,
   GetTenantOutput,
   Response,
-  GetTenantInputDynamo,
 } from "../../types";
 
 const client = new DynamoDBClient({});
@@ -15,8 +14,28 @@ export const getTenant = async (
 ): Promise<Response<GetTenantOutput>> => {
 
   const {
+    pk,
+    sk,
+    idx,
+    id,
+    type,
+    version,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    name,
   } = input;
 
+  // const pk = undefined;
+  // const sk = undefined;
+  // const idx = undefined;
+  const id = uuidv4();
+  const t = "tenant";
+  const v = "LATEST";
+  const cd = new Date().toISOString();
+  const ud = new Date().toISOString();
+  const dd = new Date().toISOString();
+  const n = name;
 
   const result = await dynamo.send(
     new GetCommand({

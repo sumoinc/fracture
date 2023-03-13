@@ -1,12 +1,9 @@
 import { TypescriptStructure } from "./typescript-structure";
 import { FractureComponent } from "../../core";
+import { AttributeGenerator, AttributeType } from "../../core/attribute";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Operation } from "../../core/operation";
 import { Resource } from "../../core/resource";
-import {
-  ResourceAttributeGenerator,
-  ResourceAttributeType,
-} from "../../core/resource-attribute";
 import { Service } from "../../core/service";
 import { Structure } from "../../core/structure";
 import { StructureAttribute } from "../../core/structure-attribute";
@@ -57,17 +54,17 @@ export class TypescriptStructureAttribute extends FractureComponent {
     }
     const generator = this.structureAttribute.generator;
     switch (generator) {
-      case ResourceAttributeGenerator.NONE:
+      case AttributeGenerator.NONE:
         throw new Error("No generator! Did you call isGenerated first?");
-      case ResourceAttributeGenerator.GUID:
+      case AttributeGenerator.GUID:
         return "uuidv4()";
-      case ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP:
+      case AttributeGenerator.CURRENT_DATE_TIME_STAMP:
         return "new Date().toISOString()";
-      case ResourceAttributeGenerator.TYPE:
+      case AttributeGenerator.TYPE:
         return `"${this.resource.name}"`;
-      case ResourceAttributeGenerator.VERSION:
+      case AttributeGenerator.VERSION:
         return `"${this.service.options.versionStrategy.currentVersion}"`;
-      case ResourceAttributeGenerator.COMPOSITION:
+      case AttributeGenerator.COMPOSITION:
         return this.structureAttribute.compositionSources.length === 0
           ? undefined
           : this.structureAttribute.compositionSources
@@ -93,25 +90,25 @@ export class TypescriptStructureAttribute extends FractureComponent {
    */
   public get typescriptType() {
     switch (this.structureAttribute.options.type) {
-      case ResourceAttributeType.GUID:
-      case ResourceAttributeType.STRING:
-      case ResourceAttributeType.EMAIL:
-      case ResourceAttributeType.PHONE:
-      case ResourceAttributeType.URL:
-      case ResourceAttributeType.DATE:
-      case ResourceAttributeType.TIME:
-      case ResourceAttributeType.DATE_TIME:
-      case ResourceAttributeType.JSON:
-      case ResourceAttributeType.IPADDRESS:
+      case AttributeType.GUID:
+      case AttributeType.STRING:
+      case AttributeType.EMAIL:
+      case AttributeType.PHONE:
+      case AttributeType.URL:
+      case AttributeType.DATE:
+      case AttributeType.TIME:
+      case AttributeType.DATE_TIME:
+      case AttributeType.JSON:
+      case AttributeType.IPADDRESS:
         return "string";
-      case ResourceAttributeType.INT:
-      case ResourceAttributeType.FLOAT:
-      case ResourceAttributeType.TIMESTAMP:
-      case ResourceAttributeType.COUNT:
-      case ResourceAttributeType.AVERAGE:
-      case ResourceAttributeType.SUM:
+      case AttributeType.INT:
+      case AttributeType.FLOAT:
+      case AttributeType.TIMESTAMP:
+      case AttributeType.COUNT:
+      case AttributeType.AVERAGE:
+      case AttributeType.SUM:
         return "number";
-      case ResourceAttributeType.BOOLEAN:
+      case AttributeType.BOOLEAN:
         return "boolean";
       default:
         throw new Error(

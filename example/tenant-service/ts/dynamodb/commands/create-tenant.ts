@@ -4,7 +4,6 @@ import {
   CreateTenantInput,
   CreateTenantOutput,
   Response,
-  CreateTenantInputDynamo,
 } from "../../types";
 
 const client = new DynamoDBClient({});
@@ -15,17 +14,44 @@ export const createTenant = async (
 ): Promise<Response<CreateTenantOutput>> => {
 
   const {
+    pk,
+    sk,
+    idx,
+    id,
+    type,
+    version,
+    createdAt,
+    updatedAt,
+    deletedAt,
     name,
   } = input;
 
+  // const pk = undefined;
+  // const sk = undefined;
+  // const idx = undefined;
+  const id = uuidv4();
+  const t = "tenant";
+  const v = "LATEST";
+  const cd = new Date().toISOString();
+  const ud = new Date().toISOString();
+  const dd = new Date().toISOString();
   const n = name;
 
   const result = await dynamo.send(
     new PutCommand({
       TableName: "tenant",
       Item: {
+        pk,
+        sk,
+        idx,
+        id,
+        t,
+        v,
+        cd,
+        ud,
+        dd,
         n,
-      } as CreateTenantInputDynamo,
+      },
     })
   );
 

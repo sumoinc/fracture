@@ -1,4 +1,5 @@
 import { Attribute, AttributeOptions } from "./attribute";
+import { Operation } from "./operation";
 import { Structure } from "./structure";
 
 /******************************************************************************
@@ -25,5 +26,17 @@ export class StructureAttribute extends Attribute {
 
     // parents + inverse
     this.structure = structure;
+
+    return this;
+  }
+
+  /*****************************************************************************
+   *
+   *  UPSTREAM HELPERS
+   *
+   ****************************************************************************/
+
+  public get operation(): Operation | undefined {
+    return this.structure.operation;
   }
 }

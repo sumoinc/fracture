@@ -252,8 +252,22 @@ export class Attribute extends FractureComponent {
     return this;
   }
 
+  /*****************************************************************************
+   *
+   * ACCESSORS
+   *
+   ****************************************************************************/
+
+  public get isRequired(): boolean {
+    return this.options.isRequired;
+  }
+
   public get name(): string {
     return this.options.name;
+  }
+
+  public get shortName(): string {
+    return this.options.shortName;
   }
 
   public get sortPosition(): number {
@@ -269,8 +283,36 @@ export class Attribute extends FractureComponent {
   public get isPartitionKey(): boolean {
     return this.resource.partitionKey === this;
   }
+
   public get isSortKey(): boolean {
     return this.resource.sortKey === this;
+  }
+
+  /**
+   * Is this key park of an access pattern?
+   */
+  public get isAccessPatternKey(): boolean {
+    return this.resource.accessPatterns.some(
+      (accessPattern) =>
+        accessPattern.pkAttribute.name === this.name ||
+        accessPattern.skAttribute.name === this.name
+    );
+  }
+
+  /**
+   * Is this attribute a pk or sk? If so, it's required in all operations
+   */
+  public get isRequiredAccessPatternKey(): boolean {
+    return this.isPartitionKey || this.isSortKey;
+  }
+
+  /**
+   * All other access pattern keys that are not the pk or sk are optional.
+   * Is Access Pattern Key
+   * Is not the SK or SK
+   */
+  public get isOptionalAccessPatternKey(): boolean {
+    return !this.isRequiredAccessPatternKey;
   }
 
   /*****************************************************************************

@@ -4,7 +4,6 @@ import {
   UpdateTenantInput,
   UpdateTenantOutput,
   Response,
-  UpdateTenantInputDynamo,
 } from "../../types";
 
 const client = new DynamoDBClient({});
@@ -15,19 +14,55 @@ export const updateTenant = async (
 ): Promise<Response<UpdateTenantOutput>> => {
 
   const {
+    pk,
+    sk,
+    idx,
+    id,
+    type,
+    version,
+    createdAt,
+    updatedAt,
+    deletedAt,
     name,
   } = input;
 
+  // const pk = undefined;
+  // const sk = undefined;
+  // const idx = undefined;
+  const id = uuidv4();
+  const t = "tenant";
+  const v = "LATEST";
+  const cd = new Date().toISOString();
+  const ud = new Date().toISOString();
+  const dd = new Date().toISOString();
   const n = name;
 
   const result = await dynamo.send(
     new UpdateCommand({
       TableName: "tenant",
-      UpdateExpression: "set #n = :n",
+      UpdateExpression: "set #pk = :pk, #sk = :sk, #idx = :idx, #id = :id, #t = :t, #v = :v, #cd = :cd, #ud = :ud, #dd = :dd, #n = :n",
       ExpressionAttributeValues: {
+        ":pk": pk,
+        ":sk": sk,
+        ":idx": idx,
+        ":id": id,
+        ":t": t,
+        ":v": v,
+        ":cd": cd,
+        ":ud": ud,
+        ":dd": dd,
         ":n": n,
       },
       ExpressionAttributeNames: {
+        "#pk": "pk",
+        "#sk": "sk",
+        "#idx": "idx",
+        "#id": "id",
+        "#t": "t",
+        "#v": "v",
+        "#cd": "cd",
+        "#ud": "ud",
+        "#dd": "dd",
         "#n": "n",
       },
       Key: {

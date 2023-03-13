@@ -4,7 +4,6 @@ import {
   ImportActorInput,
   ImportActorOutput,
   Response,
-  ImportActorInputDynamo,
 } from "../../types";
 
 const client = new DynamoDBClient({});
@@ -15,10 +14,28 @@ export const importActor = async (
 ): Promise<Response<ImportActorOutput>> => {
 
   const {
+    pk,
+    sk,
+    idx,
+    id,
+    type,
+    version,
+    createdAt,
+    updatedAt,
+    deletedAt,
     firstName,
     lastName,
   } = input;
 
+  // const pk = undefined;
+  // const sk = undefined;
+  // const idx = undefined;
+  const id = uuidv4();
+  const t = "actor";
+  const v = "LATEST";
+  const cd = new Date().toISOString();
+  const ud = new Date().toISOString();
+  const dd = new Date().toISOString();
   const fn = firstName;
   const ln = lastName;
 
@@ -26,9 +43,18 @@ export const importActor = async (
     new PutCommand({
       TableName: "tenant",
       Item: {
+        pk,
+        sk,
+        idx,
+        id,
+        t,
+        v,
+        cd,
+        ud,
+        dd,
         fn,
         ln,
-      } as ImportActorInputDynamo,
+      },
     })
   );
 
