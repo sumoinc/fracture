@@ -383,7 +383,7 @@ export interface DeleteTenantOutput {
 /**
  * A gereric type
  */
-export interface ImportTenantInput {
+export interface ListTenantInput {
   /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
@@ -424,7 +424,89 @@ export interface ImportTenantInput {
 /**
  * A gereric type
  */
-export interface ImportTenantOutput {
+export interface ListTenantOutput {
+  /**
+   * The id for the record.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  id?: string;
+  /**
+   * The type for this record.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  type?: string;
+  /**
+   * The version of this record
+   * @default "LATEST"
+   * @readonly This attribute is managed automatically by the system.
+   */
+  version?: string;
+  /**
+   * The date and time this record was created.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  createdAt?: string;
+  /**
+   * The date and time this record was last updated.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  updatedAt?: string;
+  /**
+   * The date and time this record was deleted.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  deletedAt?: string;
+  /**
+   * A name.
+   */
+  name?: string;
+}
+
+/**
+ * A gereric type
+ */
+export interface ListTenantInput {
+  /**
+   * The id for the record.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  id?: string;
+  /**
+   * The type for this record.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  type?: string;
+  /**
+   * The version of this record
+   * @default "LATEST"
+   * @readonly This attribute is managed automatically by the system.
+   */
+  version?: string;
+  /**
+   * The date and time this record was created.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  createdAt?: string;
+  /**
+   * The date and time this record was last updated.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  updatedAt?: string;
+  /**
+   * The date and time this record was deleted.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  deletedAt?: string;
+  /**
+   * A name.
+   */
+  name?: string;
+}
+
+/**
+ * A gereric type
+ */
+export interface ListTenantOutput {
   /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
@@ -888,7 +970,7 @@ export interface DeleteActorOutput {
 /**
  * A gereric type
  */
-export interface ImportActorInput {
+export interface ListActorInput {
   /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
@@ -935,7 +1017,101 @@ export interface ImportActorInput {
 /**
  * A gereric type
  */
-export interface ImportActorOutput {
+export interface ListActorOutput {
+  /**
+   * The id for the record.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  id?: string;
+  /**
+   * The type for this record.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  type?: string;
+  /**
+   * The version of this record
+   * @default "LATEST"
+   * @readonly This attribute is managed automatically by the system.
+   */
+  version?: string;
+  /**
+   * The date and time this record was created.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  createdAt?: string;
+  /**
+   * The date and time this record was last updated.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  updatedAt?: string;
+  /**
+   * The date and time this record was deleted.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  deletedAt?: string;
+  /**
+   * A first-name.
+   * This attribute can be used as part of a lookup for this record.
+   */
+  firstName?: string;
+  /**
+   * A last-name.
+   * This attribute can be used as part of a lookup for this record.
+   */
+  lastName?: string;
+}
+
+/**
+ * A gereric type
+ */
+export interface ListActorInput {
+  /**
+   * The id for the record.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  id?: string;
+  /**
+   * The type for this record.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  type?: string;
+  /**
+   * The version of this record
+   * @default "LATEST"
+   * @readonly This attribute is managed automatically by the system.
+   */
+  version?: string;
+  /**
+   * The date and time this record was created.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  createdAt?: string;
+  /**
+   * The date and time this record was last updated.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  updatedAt?: string;
+  /**
+   * The date and time this record was deleted.
+   * @readonly This attribute is managed automatically by the system.
+   */
+  deletedAt?: string;
+  /**
+   * A first-name.
+   * This attribute can be used as part of a lookup for this record.
+   */
+  firstName?: string;
+  /**
+   * A last-name.
+   * This attribute can be used as part of a lookup for this record.
+   */
+  lastName?: string;
+}
+
+/**
+ * A gereric type
+ */
+export interface ListActorOutput {
   /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.

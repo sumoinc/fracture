@@ -1,22 +1,29 @@
 import { paramCase } from "change-case";
-import { deepMerge } from "projen/lib/util";
-import { DynamoGsi } from "./dynamo-gsi";
+import { DynamoGsi, DYNAMO_GSI_TYPE } from "./dynamo-gsi";
 import { FractureComponent } from "../core/component";
 import { Service } from "../core/service";
 
-export interface TableOptions {
+export interface DynamoTableOptions {
   /**
-   *  Name for the Resource.
+   * Name for the Resource.
+   * @default: uses service name
    */
-  name: string;
-  keyDynamoGsi?: DynamoGsi;
-  lookupDynamoGsi?: DynamoGsi;
+  name?: string;
   /**
-   * Global Secondary Indexes
-   *
-   * Also includes the KeyDynamoGsi and LookupGsi
+   * Name to use for PK attribute.
+   * @default: "pk"
    */
-  dynamoGsi?: DynamoGsi[];
+  pkName?: string;
+  /**
+   * Name to use for SK attribute.
+   * @default: "sk"
+   */
+  skName?: string;
+  /**
+   * Name to use for Lookup attribute.
+   * @default: "idx"
+   */
+  lookupName?: string;
 }
 
 export class DynamoTable extends FractureComponent {
@@ -25,28 +32,24 @@ export class DynamoTable extends FractureComponent {
   // member components
   public dynamoGsi: DynamoGsi[] = [];
   // all other options
-  public readonly options: Required<TableOptions>;
+  public readonly options: Required<DynamoTableOptions>;
 
-  constructor(service: Service, options: TableOptions) {
+  constructor(service: Service, options: DynamoTableOptions = {}) {
     super(service.fracture);
 
     /***************************************************************************
      *
      * DEFAULT OPTIONS
      *
+     * We'll glue the name or requested outdir to the primary fracture outdir
+     *
      **************************************************************************/
 
-    let defaultOptions: Partial<TableOptions> = {
-      keyDynamoGsi: new DynamoGsi(this, {
-        name: "primary",
-        pkName: "pk",
-        skName: "sk",
-      }),
-      lookupDynamoGsi: new DynamoGsi(this, {
-        name: "gsi0",
-        pkName: "sk",
-        skName: "idx",
-      }),
+    let defaultOptions: Required<DynamoTableOptions> = {
+      name: paramCase(service.name),
+      pkName: "pk",
+      skName: "sk",
+      lookupName: "idx",
     };
 
     /***************************************************************************
@@ -56,21 +59,19 @@ export class DynamoTable extends FractureComponent {
      **************************************************************************/
 
     // ensure name is param-cased
-    const forcedOptions: Partial<TableOptions> = {
-      name: paramCase(options.name),
+    const forcedOptions: Partial<DynamoTableOptions> = {
+      name: options.name ? paramCase(options.name) : paramCase(service.name),
     };
-
-    // all other options
-    this.options = deepMerge([
-      defaultOptions,
-      options,
-      forcedOptions,
-    ]) as Required<TableOptions>;
 
     // parent
     this.service = service;
 
-    // members
+    // compine options
+    this.options = {
+      ...defaultOptions,
+      ...options,
+      ...forcedOptions,
+    };
 
     return this;
   }
@@ -79,11 +80,46 @@ export class DynamoTable extends FractureComponent {
     return this.options.name;
   }
 
+  public get pkName(): string {
+    return this.options.pkName;
+  }
+
+  public get skName(): string {
+    return this.options.skName;
+  }
+
+  public get lookupName(): string {
+    return this.options.lookupName;
+  }
+
   public get keyDynamoGsi(): DynamoGsi {
-    return this.options.keyDynamoGsi;
+    let dynamoGsi = this.dynamoGsi.find((g) => g.isKeyGsi);
+
+    // create the key GSI
+    if (!dynamoGsi) {
+      dynamoGsi = new DynamoGsi(this, {
+        pkName: this.pkName,
+        skName: this.skName,
+        type: DYNAMO_GSI_TYPE.KEY,
+      });
+    }
+
+    return dynamoGsi;
   }
 
   public get lookupDynamoGsi(): DynamoGsi {
-    return this.options.lookupDynamoGsi;
+    let dynamoGsi = this.dynamoGsi.find((g) => g.isLookupGsi);
+
+    // create the key GSI
+    if (!dynamoGsi) {
+      dynamoGsi = new DynamoGsi(this, {
+        name: "lookup",
+        pkName: "sk",
+        skName: "idx",
+        type: DYNAMO_GSI_TYPE.LOOKUP,
+      });
+    }
+
+    return dynamoGsi;
   }
 }

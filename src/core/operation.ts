@@ -81,10 +81,7 @@ export class Operation extends FractureComponent {
     return this;
   }
 
-  public build() {
-    this.inputStructure.build();
-    this.outputStructure.build();
-  }
+  public build() {}
 
   /**
    * Operation name, based on the naming strategy
@@ -158,10 +155,8 @@ export class Operation extends FractureComponent {
 
   public get outputStructure(): Structure {
     if (!this._outputStructure) {
-      this._outputStructure = new Structure(this.resource, {
-        type: STRUCTURE_TYPE.OUTPUT,
-        operation: this,
-      });
+      // output the resource's data structure
+      this._outputStructure = this.resource.dataStructure;
     }
     return this._outputStructure;
   }

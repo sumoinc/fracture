@@ -1,14 +1,15 @@
 import { Component, Project } from "projen";
 import { deepMerge } from "projen/lib/util";
-import { AttributeGenerator, AttributeType } from "./attribute";
 import { AuditStrategy } from "./audit-strategy";
 import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
 import { OPERATION_SUB_TYPE } from "./operation";
 import { Organization, OrganizationOptions } from "./organization";
+import {
+  ResourceAttributeGenerator,
+  ResourceAttributeType,
+} from "./resource-attribute";
 import { Service, ServiceOptions } from "./service";
 import { STRUCTURE_TYPE } from "./structure";
-import { TypeStrategy } from "./type-strategy";
-import { VersionStrategy, VERSION_TYPE } from "./version-strategy";
 import { TypescriptService } from "../generators/ts/typescript-service";
 
 /**
@@ -32,14 +33,6 @@ export interface FractureOptions {
    * The naming strategy to use for generated code.
    */
   namingStrategy?: NamingStrategy;
-  /**
-   * The versioning strategy to use for generated code.
-   */
-  versionStrategy?: VersionStrategy;
-  /**
-   * The type strategy to use for generated code.
-   */
-  typeStrategy?: TypeStrategy;
   /**
    * The audit strategy to use for generated code.
    */
@@ -130,46 +123,15 @@ export class Fracture extends Component {
           },
         },
       },
-      versionStrategy: {
-        attribute: {
-          name: "version",
-          shortName: "v",
-          comments: [`The version of this record`, `@default "LATEST"`],
-          type: AttributeType.STRING,
-          isRequired: true,
-          isSkComponent: true,
-          generator: AttributeGenerator.VERSION,
-          isGeneratedOnCreate: true,
-          isGeneratedOnRead: true,
-          isGeneratedOnUpdate: true,
-          isGeneratedOnDelete: true,
-        },
-        type: VERSION_TYPE.DATE_TIME_STAMP,
-        currentVersion: "LATEST",
-        deletedVersion: "DELETED",
-      },
-      typeStrategy: {
-        name: "type",
-        shortName: "t",
-        comments: ["The type for this record."],
-        type: AttributeType.STRING,
-        isRequired: true,
-        isSkComponent: true,
-        generator: AttributeGenerator.TYPE,
-        isGeneratedOnCreate: true,
-        isGeneratedOnRead: true,
-        isGeneratedOnUpdate: true,
-        isGeneratedOnDelete: true,
-      },
       auditStrategy: {
         create: {
           dateAttribute: {
             name: "created-at",
             shortName: "cd",
             comments: [`The date and time this record was created.`],
-            type: AttributeType.DATE_TIME,
+            type: ResourceAttributeType.DATE_TIME,
             isRequired: true,
-            generator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
+            generator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
             isGeneratedOnCreate: true,
           },
         },
@@ -178,9 +140,9 @@ export class Fracture extends Component {
             name: "updated-at",
             shortName: "ud",
             comments: [`The date and time this record was last updated.`],
-            type: AttributeType.DATE_TIME,
+            type: ResourceAttributeType.DATE_TIME,
             isRequired: true,
-            generator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
+            generator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
             isGeneratedOnCreate: true,
             isGeneratedOnUpdate: true,
             isGeneratedOnDelete: true,
@@ -191,8 +153,8 @@ export class Fracture extends Component {
             name: "deleted-at",
             shortName: "dd",
             comments: [`The date and time this record was deleted.`],
-            type: AttributeType.DATE_TIME,
-            generator: AttributeGenerator.CURRENT_DATE_TIME_STAMP,
+            type: ResourceAttributeType.DATE_TIME,
+            generator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
             isGeneratedOnDelete: true,
           },
         },

@@ -5,8 +5,6 @@ import { Fracture, FractureComponent } from ".";
 import { AuditStrategy } from "./audit-strategy";
 import { NamingStrategy } from "./naming-strategy";
 import { Resource, ResourceOptions } from "./resource";
-import { TypeStrategy } from "./type-strategy";
-import { VersionStrategy } from "./version-strategy";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";
 import { DynamoTable } from "../dynamodb/dynamo-table";
 
@@ -23,23 +21,15 @@ export interface ServiceOptions {
    */
   namingStrategy?: NamingStrategy;
   /**
-   * The versioning strategy to use for generated code.
-   */
-  versionStrategy?: VersionStrategy;
-  /**
-   * The type strategy to use for generated code.
-   */
-  typeStrategy?: TypeStrategy;
-  /**
    * The audit strategy to use for generated code.
    */
   auditStrategy?: AuditStrategy;
-  dynamoTable?: DynamoTable;
 }
 
 export class Service extends FractureComponent {
   // member components
   public readonly resources: Resource[];
+  public readonly dynamoTable: DynamoTable;
   // all other options
   public readonly options: Required<ServiceOptions>;
 
@@ -54,27 +44,14 @@ export class Service extends FractureComponent {
      *
      **************************************************************************/
 
-    const {
-      isVersioned,
-      namingStrategy,
-      versionStrategy,
-      typeStrategy,
-      auditStrategy,
-    } = fracture.options;
+    const { isVersioned, namingStrategy, auditStrategy } = fracture.options;
 
     let defaultOptions: Partial<ServiceOptions> = {
       outdir: join(fracture.options.outdir, options.outdir ?? options.name),
       isVersioned,
       namingStrategy,
-      versionStrategy,
-      typeStrategy,
       auditStrategy,
     };
-
-    // add dynamo table definition if not supplied in options
-    if (!options.dynamoTable) {
-      options.dynamoTable = new DynamoTable(this, { name: options.name });
-    }
 
     /***************************************************************************
      *
@@ -100,6 +77,16 @@ export class Service extends FractureComponent {
       forcedOptions,
     ]) as Required<ServiceOptions>;
 
+    /***************************************************************************
+     *
+     * DYNAMO TABLE
+     *
+     * Add dynamo table per options defined in service definition
+     *
+     **************************************************************************/
+
+    this.dynamoTable = new DynamoTable(this);
+
     return this;
   }
 
@@ -111,6 +98,10 @@ export class Service extends FractureComponent {
 
   public get name(): string {
     return this.options.name;
+  }
+
+  public get isVersioned(): boolean {
+    return this.options.isVersioned;
   }
 
   /*****************************************************************************
@@ -127,10 +118,6 @@ export class Service extends FractureComponent {
    */
   public addResource(options: ResourceOptions) {
     return new Resource(this, options);
-  }
-
-  public get dynamoTable(): DynamoTable {
-    return this.options.dynamoTable;
   }
 
   public get keyDynamoGsi(): DynamoGsi {

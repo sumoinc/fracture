@@ -1,19 +1,35 @@
 import { deepMerge } from "projen/lib/util";
-import { AttributeGenerator } from "./attribute";
-import { Operation, OPERATION_SUB_TYPE, OPERATION_TYPE } from "./operation";
+import { ValueOf } from "type-fest";
 import { Resource } from "./resource";
 import {
   ResourceAttribute,
+  ResourceAttributeGenerator,
   ResourceAttributeOptions,
 } from "./resource-attribute";
 import { FractureComponent } from "../core/component";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";
 import { DynamoTable } from "../dynamodb/dynamo-table";
 
+export const ACCESS_PATTERN_TYPE = {
+  /**
+   * Main PK and PK pattern used to identify this record.
+   */
+  IDENTIFIER: "Identifier",
+  /**
+   * Lookup pattern for quick begins_with() searching and such.
+   */
+  LOOKUP: "lookup",
+  /**
+   * Any other AP
+   */
+  OTHER: "other",
+} as const;
+
 export interface AccessPatternOptions {
   dynamoGsi?: DynamoGsi;
   pkAttributeOptions?: ResourceAttributeOptions;
   skAttributeOptions?: ResourceAttributeOptions;
+  type?: ValueOf<typeof ACCESS_PATTERN_TYPE>;
 }
 
 export class AccessPattern extends FractureComponent {
@@ -44,19 +60,22 @@ export class AccessPattern extends FractureComponent {
       pkAttributeOptions: {
         name: dynamoGsi.pkName,
         isPublic: false,
-        generator: AttributeGenerator.COMPOSITION,
+        generator: ResourceAttributeGenerator.COMPOSITION,
         isGeneratedOnCreate: true,
+        isGeneratedOnRead: true,
         isGeneratedOnUpdate: true,
         isGeneratedOnDelete: true,
       },
       skAttributeOptions: {
         name: dynamoGsi.skName,
         isPublic: false,
-        generator: AttributeGenerator.COMPOSITION,
+        generator: ResourceAttributeGenerator.COMPOSITION,
         isGeneratedOnCreate: true,
+        isGeneratedOnRead: true,
         isGeneratedOnUpdate: true,
         isGeneratedOnDelete: true,
       },
+      type: ACCESS_PATTERN_TYPE.OTHER,
     };
 
     /***************************************************************************
@@ -93,32 +112,15 @@ export class AccessPattern extends FractureComponent {
      *
      * CRUD OPERATIONS
      *
+     * TODO
+     *
      **************************************************************************/
-
-    // mutations only happen on keyPattern
-    if (this.isKeyAccessPattern) {
-      new Operation(this, {
-        operationType: OPERATION_TYPE.MUTATION,
-        operationSubType: OPERATION_SUB_TYPE.CREATE_ONE,
-      });
-      new Operation(this, {
-        operationType: OPERATION_TYPE.QUERY,
-        operationSubType: OPERATION_SUB_TYPE.READ_ONE,
-      });
-      new Operation(this, {
-        operationType: OPERATION_TYPE.MUTATION,
-        operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE,
-      });
-      new Operation(this, {
-        operationType: OPERATION_TYPE.MUTATION,
-        operationSubType: OPERATION_SUB_TYPE.DELETE_ONE,
-      });
-    }
-
+    /*
     new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.LIST,
     });
+    */
   }
 
   addPkAttributeSource(sourceAttribute: ResourceAttribute) {

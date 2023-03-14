@@ -25,6 +25,8 @@ test("Knows it's pk source components", () => {
     return a.name;
   });
 
+  console.log(JSON.stringify(pkNames));
+
   expect(pkNames).toEqual(["id"]);
 });
 

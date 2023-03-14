@@ -1,12 +1,10 @@
 import { TypescriptStructure } from "./typescript-structure";
 import { FractureComponent } from "../../core";
-import { AttributeGenerator, AttributeType } from "../../core/attribute";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Operation } from "../../core/operation";
 import { Resource } from "../../core/resource";
 import { Service } from "../../core/service";
 import { Structure } from "../../core/structure";
-import { StructureAttribute } from "../../core/structure-attribute";
 
 export class TypescriptStructureAttribute extends FractureComponent {
   public readonly structureAttribute: StructureAttribute;
@@ -62,8 +60,8 @@ export class TypescriptStructureAttribute extends FractureComponent {
         return "new Date().toISOString()";
       case AttributeGenerator.TYPE:
         return `"${this.resource.name}"`;
-      case AttributeGenerator.VERSION:
-        return `"${this.service.options.versionStrategy.currentVersion}"`;
+      case AttributeGenerator.VERSION_DATE_TIME_STAMP:
+        return `"TODO"`;
       case AttributeGenerator.COMPOSITION:
         return this.structureAttribute.compositionSources.length === 0
           ? undefined

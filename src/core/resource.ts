@@ -1,7 +1,6 @@
 import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { AccessPattern } from "./access-pattern";
-import { AttributeGenerator, AttributeType } from "./attribute";
 import { FractureComponent } from "./component";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import {
@@ -11,6 +10,9 @@ import {
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
 import { DynamoTable } from "../dynamodb/dynamo-table";
+import { IdentifierFactory } from "../factories/access-patterns/identifier-factory";
+import { LookupFactory } from "../factories/access-patterns/lookup-factory";
+import { VersionedIdentifierFactory } from "../factories/access-patterns/versioned-identifier-factory";
 
 export interface ResourceOptions {
   /**
@@ -27,10 +29,10 @@ export interface ResourceOptions {
    */
   comments?: string[];
   /**
-   * Should this resource be persisted to a database?
-   * @default true
+   * Versioned.
+   * @default sevrice default
    */
-  isPersistant?: boolean;
+  isVersioned?: boolean;
   /**
    * The separator to use when composing this attribute from other attributes.
    * @default: uses service level default
@@ -40,12 +42,10 @@ export interface ResourceOptions {
 
 export class Resource extends FractureComponent {
   // member components
-  public attributes: ResourceAttribute[];
-  public operations: Operation[];
-  public accessPatterns: AccessPattern[];
-  public keyAccessPattern: AccessPattern;
-  public lookupAccessPattern: AccessPattern;
-  public structures: Structure[];
+  public attributes: ResourceAttribute[] = [];
+  public operations: Operation[] = [];
+  public accessPatterns: AccessPattern[] = [];
+  public structures: Structure[] = [];
   public dataStructure: Structure;
   public transientStructure: Structure;
   // parent
@@ -64,7 +64,7 @@ export class Resource extends FractureComponent {
 
     const defaultOptions: Partial<ResourceOptions> = {
       comments: [`A ${options.name}.`],
-      isPersistant: true,
+      isVersioned: service.isVersioned,
       compositionSeperator:
         service.options.namingStrategy.attributes.compositionSeperator,
     };
@@ -76,10 +76,6 @@ export class Resource extends FractureComponent {
      **************************************************************************/
 
     // member components
-    this.attributes = [];
-    this.operations = [];
-    this.accessPatterns = [];
-    this.structures = [];
 
     // parent + inverse
     this.service = service;
@@ -104,14 +100,15 @@ export class Resource extends FractureComponent {
      *
      * ACCESS PATTERNS
      *
+     * Add verioned or non-versioned identifier
+     *
      **************************************************************************/
 
-    this.keyAccessPattern = new AccessPattern(this, {
-      dynamoGsi: service.keyDynamoGsi,
-    });
-    this.lookupAccessPattern = new AccessPattern(this, {
-      dynamoGsi: service.lookupDynamoGsi,
-    });
+    if (this.isVersioned) {
+      new VersionedIdentifierFactory(this);
+    } else {
+      new IdentifierFactory(this);
+    }
 
     /***************************************************************************1`
      *
@@ -122,64 +119,38 @@ export class Resource extends FractureComponent {
      **************************************************************************/
 
     /**
-     * Add a Resource Attribute.
-     */
-    this.addResourceAttribute({
-      name: "id",
-      comments: ["The id for the record."],
-      type: AttributeType.STRING,
-      isRequired: true,
-      isPkComponent: true,
-      generator: AttributeGenerator.GUID,
-      isGeneratedOnCreate: true,
-    });
-
-    /**
-     * Add type attribute.
-     */
-    this.addResourceAttribute(this.service.options.typeStrategy);
-
-    /**
-     * Add the version attribute if versioned.
-     */
-    if (this.service.options.isVersioned && this.options.isPersistant) {
-      this.addResourceAttribute(this.service.options.versionStrategy.attribute);
-    }
-
-    /**
      * Add an (optional) Audit Strategies
      */
-    if (this.options.isPersistant) {
-      if (this.service.options.auditStrategy.create.dateAttribute) {
-        this.addResourceAttribute(
-          this.service.options.auditStrategy.create.dateAttribute
-        );
-      }
-      if (this.service.options.auditStrategy.create.userAttribute) {
-        this.addResourceAttribute(
-          this.service.options.auditStrategy.create.userAttribute
-        );
-      }
-      if (this.service.options.auditStrategy.update.dateAttribute) {
-        this.addResourceAttribute(
-          this.service.options.auditStrategy.update.dateAttribute
-        );
-      }
-      if (this.service.options.auditStrategy.update.userAttribute) {
-        this.addResourceAttribute(
-          this.service.options.auditStrategy.update.userAttribute
-        );
-      }
-      if (this.service.options.auditStrategy.delete.dateAttribute) {
-        this.addResourceAttribute(
-          this.service.options.auditStrategy.delete.dateAttribute
-        );
-      }
-      if (this.service.options.auditStrategy.delete.userAttribute) {
-        this.addResourceAttribute(
-          this.service.options.auditStrategy.delete.userAttribute
-        );
-      }
+
+    if (this.service.options.auditStrategy.create.dateAttribute) {
+      this.addResourceAttribute(
+        this.service.options.auditStrategy.create.dateAttribute
+      );
+    }
+    if (this.service.options.auditStrategy.create.userAttribute) {
+      this.addResourceAttribute(
+        this.service.options.auditStrategy.create.userAttribute
+      );
+    }
+    if (this.service.options.auditStrategy.update.dateAttribute) {
+      this.addResourceAttribute(
+        this.service.options.auditStrategy.update.dateAttribute
+      );
+    }
+    if (this.service.options.auditStrategy.update.userAttribute) {
+      this.addResourceAttribute(
+        this.service.options.auditStrategy.update.userAttribute
+      );
+    }
+    if (this.service.options.auditStrategy.delete.dateAttribute) {
+      this.addResourceAttribute(
+        this.service.options.auditStrategy.delete.dateAttribute
+      );
+    }
+    if (this.service.options.auditStrategy.delete.userAttribute) {
+      this.addResourceAttribute(
+        this.service.options.auditStrategy.delete.userAttribute
+      );
     }
 
     /***************************************************************************
@@ -207,6 +178,10 @@ export class Resource extends FractureComponent {
     return this.options.name;
   }
 
+  public get isVersioned(): boolean {
+    return this.options.isVersioned;
+  }
+
   /**
    * Adds an attribute
    */
@@ -220,9 +195,28 @@ export class Resource extends FractureComponent {
 
   /*****************************************************************************
    *
-   * PK and SK HELPERS
+   * ACCESS PATTERN / PK and SK HELPERS
    *
    ****************************************************************************/
+
+  public get keyAccessPattern(): AccessPattern {
+    return this.accessPatterns.find(
+      (accessPattern) => accessPattern.isKeyAccessPattern
+    )!;
+  }
+
+  public get lookupAccessPattern(): AccessPattern {
+    let accessPattern = this.accessPatterns.find(
+      (ap) => ap.isLookupAccessPattern
+    )!;
+
+    // create it as needed
+    if (!accessPattern) {
+      accessPattern = new LookupFactory(this).accessPattern;
+    }
+
+    return accessPattern;
+  }
 
   public get partitionKey(): ResourceAttribute {
     return this.keyAccessPattern.pkAttribute;

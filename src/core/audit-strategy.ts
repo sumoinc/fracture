@@ -1,4 +1,4 @@
-import { AttributeOptions } from "./attribute";
+import { AttributeOptions } from "./attribute.ts-delete";
 
 export type AuditStrategy = {
   create: {
