@@ -9,7 +9,8 @@ const myService = () => {
 
 const myResource = () => {
   const resource = new Resource(myService(), { name: "person" });
-  new ResourceAttribute(resource, { name: "my-name", isLookupComponent: true });
+  const name = new ResourceAttribute(resource, { name: "my-name" });
+  resource.addLookupSource(name);
   return resource;
 };
 
@@ -24,8 +25,6 @@ test("Knows it's pk source components", () => {
   const pkNames = resource.partitionKeySources.map((a) => {
     return a.name;
   });
-
-  console.log(JSON.stringify(pkNames));
 
   expect(pkNames).toEqual(["id"]);
 });

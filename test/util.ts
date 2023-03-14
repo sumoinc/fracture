@@ -3,7 +3,7 @@ import { Fracture, FractureOptions } from "../src";
 
 export class TestFracture extends Fracture {
   constructor(options: FractureOptions = {}) {
-    super(new TestProject(), "my-fracture", {
+    super(new TestProject({ logging: options.logging }), "my-fracture", {
       ...options,
     });
   }

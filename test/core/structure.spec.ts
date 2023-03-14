@@ -1,3 +1,4 @@
+import { LoggerOptions, LogLevel } from "projen";
 import { OPERATION_SUB_TYPE, OPERATION_TYPE } from "../../src/core/operation";
 import { Resource } from "../../src/core/resource";
 import { ResourceAttribute } from "../../src/core/resource-attribute";
@@ -6,7 +7,10 @@ import { STRUCTURE_TYPE } from "../../src/core/structure";
 import { TestFracture } from "../util";
 
 const makeFixture = () => {
-  const fracture = new TestFracture();
+  const logging: LoggerOptions = {
+    level: LogLevel.WARN,
+  };
+  const fracture = new TestFracture({ logging });
   const service = new Service(fracture, { name: "tenant" });
   const resource = new Resource(service, { name: "person" });
   new ResourceAttribute(resource, {
@@ -14,17 +18,17 @@ const makeFixture = () => {
     shortName: "mn",
     isRequired: true,
   });
-  new ResourceAttribute(resource, {
+  const fn = new ResourceAttribute(resource, {
     name: "first-name",
     shortName: "fn",
     isRequired: true,
-    isLookupComponent: true,
   });
-  new ResourceAttribute(resource, {
+  const ln = new ResourceAttribute(resource, {
     name: "last-name",
     shortName: "ln",
-    isLookupComponent: true,
   });
+  resource.addLookupSource(fn);
+  resource.addLookupSource(ln);
   fracture.build();
   return fracture;
 };
@@ -35,7 +39,7 @@ const fixture = makeFixture();
  * Expected results for all structure types
  ****************************************************************************/
 
-const structureTests = [
+const expectedStructures = [
   {
     type: STRUCTURE_TYPE.DATA,
     expectedName: "person",
@@ -113,7 +117,7 @@ const structureTests = [
           { idx: true },
         ],
       },
-      { keyAttributes: [] },
+      { keyAttributes: [{ pk: true }, { sk: true }] },
       {
         generatedAttributes: [
           { id: true },
@@ -143,7 +147,6 @@ const structureTests = [
           { version: true },
           { "created-at": true },
           { "updated-at": true },
-          { "deleted-at": false },
           { "my-name": true },
           { "first-name": true },
           { "last-name": false },
@@ -184,6 +187,100 @@ const structureTests = [
       },
     ],
   },
+  /*****************************************************************************
+   * READ OUTPUT
+   ****************************************************************************/
+  {
+    type: STRUCTURE_TYPE.OUTPUT,
+    operationSubType: OPERATION_SUB_TYPE.READ_ONE,
+    expectedName: "get-person-output",
+    attributeTypes: [
+      {
+        publicAttributes: [
+          { id: true },
+          { type: true },
+          { version: true },
+          { "created-at": true },
+          { "updated-at": true },
+          { "my-name": true },
+          { "first-name": true },
+          { "last-name": false },
+        ],
+      },
+      {
+        itemAttributes: [],
+      },
+      { keyAttributes: [] },
+      {
+        generatedAttributes: [],
+      },
+    ],
+  },
+  /*****************************************************************************
+   * UPDATE INPUT
+   ****************************************************************************/
+  /*****************************************************************************
+   * UPDATE OUTPUT
+   ****************************************************************************/
+  {
+    type: STRUCTURE_TYPE.OUTPUT,
+    operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE,
+    expectedName: "update-person-output",
+    attributeTypes: [
+      {
+        publicAttributes: [
+          { id: true },
+          { type: true },
+          { version: true },
+          { "created-at": true },
+          { "updated-at": true },
+          { "my-name": true },
+          { "first-name": true },
+          { "last-name": false },
+        ],
+      },
+      {
+        itemAttributes: [],
+      },
+      { keyAttributes: [] },
+      {
+        generatedAttributes: [],
+      },
+    ],
+  },
+  /*****************************************************************************
+   * DELETE INPUT
+   ****************************************************************************/
+  /*****************************************************************************
+   * DELETE OUTPUT
+   ****************************************************************************/
+  {
+    type: STRUCTURE_TYPE.OUTPUT,
+    operationSubType: OPERATION_SUB_TYPE.DELETE_ONE,
+    expectedName: "delete-person-output",
+    attributeTypes: [
+      {
+        publicAttributes: [
+          { id: true },
+          { type: true },
+          { version: true },
+          { "created-at": true },
+          { "updated-at": true },
+          { "deleted-at": false },
+          { "my-name": true },
+          { "first-name": true },
+          { "last-name": false },
+        ],
+      },
+      {
+        itemAttributes: [],
+      },
+      { keyAttributes: [] },
+      {
+        generatedAttributes: [],
+      },
+    ],
+  },
 ];
 
 describe("Parent", () => {
@@ -203,18 +300,19 @@ describe("Parent", () => {
      * STRUCTURE LEVEL
      **************************************************************************/
 
-    structureTests.forEach((expectedStructure) => {
-      const structureFixture = resourceFixture.structures.find(
-        (s) =>
+    expectedStructures.forEach((expectedStructure) => {
+      const structureFixture = resourceFixture.structures.find((s) => {
+        return (
           s.type === expectedStructure.type &&
           (expectedStructure.operationSubType.length === 0 ||
             s.operation?.operationSubType ===
               expectedStructure.operationSubType)
-      );
+        );
+      });
 
       if (!structureFixture) {
         throw new Error(
-          `Cannot test structure type "${expectedStructure.type}". No fixture exists`
+          `Cannot test structure type "${expectedStructure.operationSubType}.${expectedStructure.type}". No fixture exists`
         );
       }
 

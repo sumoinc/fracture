@@ -38,16 +38,18 @@ export class IdentifierFactory extends FractureComponent {
         name: dynamoGsi.pkName,
         isPublic: false,
         generator: ResourceAttributeGenerator.COMPOSITION,
-        isGeneratedOnCreate: true,
+        generateOn: [OPERATION_SUB_TYPE.CREATE_ONE],
       },
       skAttributeOptions: {
         name: dynamoGsi.skName,
         isPublic: false,
         generator: ResourceAttributeGenerator.COMPOSITION,
-        isGeneratedOnCreate: true,
-        isGeneratedOnUpdate: true,
-        isGeneratedOnDelete: true,
-        isGeneratedOnRead: true,
+        generateOn: [
+          OPERATION_SUB_TYPE.CREATE_ONE,
+          OPERATION_SUB_TYPE.READ_ONE,
+          OPERATION_SUB_TYPE.UPDATE_ONE,
+          OPERATION_SUB_TYPE.DELETE_ONE,
+        ],
       },
       type: ACCESS_PATTERN_TYPE.IDENTIFIER,
     };
@@ -68,9 +70,8 @@ export class IdentifierFactory extends FractureComponent {
       comments: ["The id for the record."],
       type: ResourceAttributeType.STRING,
       isRequired: true,
-      isPkComponent: true,
       generator: ResourceAttributeGenerator.GUID,
-      isGeneratedOnCreate: true,
+      generateOn: [OPERATION_SUB_TYPE.CREATE_ONE],
     });
     this.accessPattern.addPkAttributeSource(idAttribute);
 
@@ -80,12 +81,13 @@ export class IdentifierFactory extends FractureComponent {
       comments: ["The type for this record."],
       type: ResourceAttributeType.STRING,
       isRequired: true,
-      isSkComponent: true,
       generator: ResourceAttributeGenerator.TYPE,
-      isGeneratedOnCreate: true,
-      isGeneratedOnRead: true,
-      isGeneratedOnUpdate: true,
-      isGeneratedOnDelete: true,
+      generateOn: [
+        OPERATION_SUB_TYPE.CREATE_ONE,
+        OPERATION_SUB_TYPE.READ_ONE,
+        OPERATION_SUB_TYPE.UPDATE_ONE,
+        OPERATION_SUB_TYPE.DELETE_ONE,
+      ],
     });
     this.accessPattern.addSkAttributeSource(typeAttribute);
 

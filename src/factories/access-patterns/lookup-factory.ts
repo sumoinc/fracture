@@ -4,6 +4,7 @@ import {
   AccessPatternOptions,
   ACCESS_PATTERN_TYPE,
 } from "../../core/access-pattern";
+import { OPERATION_SUB_TYPE } from "../../core/operation";
 import { Resource } from "../../core/resource";
 import { ResourceAttributeGenerator } from "../../core/resource-attribute";
 
@@ -35,10 +36,12 @@ export class LookupFactory extends FractureComponent {
         name: dynamoGsi.skName,
         isPublic: false,
         generator: ResourceAttributeGenerator.COMPOSITION,
-        isGeneratedOnCreate: true,
-        isGeneratedOnUpdate: true,
-        isGeneratedOnDelete: true,
-        isGeneratedOnRead: true,
+        generateOn: [
+          OPERATION_SUB_TYPE.CREATE_ONE,
+          OPERATION_SUB_TYPE.READ_ONE,
+          OPERATION_SUB_TYPE.UPDATE_ONE,
+          OPERATION_SUB_TYPE.DELETE_ONE,
+        ],
       },
       type: ACCESS_PATTERN_TYPE.LOOKUP,
     };

@@ -1,4 +1,4 @@
-import { Component, Project } from "projen";
+import { Component, LoggerOptions, Project, LogLevel } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { AuditStrategy } from "./audit-strategy";
 import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
@@ -24,6 +24,11 @@ export interface FractureOptions {
    * @default project.outdir + "/" + namespace
    */
   outdir?: string;
+  /**
+   * Logging options
+   * @default LogLevel.INFO
+   */
+  logging?: LoggerOptions;
   /**
    * Versioned.
    * @default true
@@ -70,6 +75,9 @@ export class Fracture extends Component {
 
     const defaultOptions: Required<FractureOptions> = {
       outdir: namespace,
+      logging: {
+        level: LogLevel.INFO,
+      },
       isVersioned: true,
       namingStrategy: {
         ts: {
@@ -132,7 +140,7 @@ export class Fracture extends Component {
             type: ResourceAttributeType.DATE_TIME,
             isRequired: true,
             generator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
-            isGeneratedOnCreate: true,
+            generateOn: [OPERATION_SUB_TYPE.CREATE_ONE],
           },
         },
         update: {
@@ -143,9 +151,11 @@ export class Fracture extends Component {
             type: ResourceAttributeType.DATE_TIME,
             isRequired: true,
             generator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
-            isGeneratedOnCreate: true,
-            isGeneratedOnUpdate: true,
-            isGeneratedOnDelete: true,
+            generateOn: [
+              OPERATION_SUB_TYPE.CREATE_ONE,
+              OPERATION_SUB_TYPE.UPDATE_ONE,
+              OPERATION_SUB_TYPE.DELETE_ONE,
+            ],
           },
         },
         delete: {
@@ -155,7 +165,8 @@ export class Fracture extends Component {
             comments: [`The date and time this record was deleted.`],
             type: ResourceAttributeType.DATE_TIME,
             generator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
-            isGeneratedOnDelete: true,
+            generateOn: [OPERATION_SUB_TYPE.DELETE_ONE],
+            outputOn: [OPERATION_SUB_TYPE.DELETE_ONE],
           },
         },
       },

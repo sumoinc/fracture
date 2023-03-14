@@ -28,14 +28,13 @@ export interface ServiceOptions {
 
 export class Service extends FractureComponent {
   // member components
-  public readonly resources: Resource[];
+  public readonly resources: Resource[] = [];
   public readonly dynamoTable: DynamoTable;
   // all other options
   public readonly options: Required<ServiceOptions>;
 
   constructor(fracture: Fracture, options: ServiceOptions) {
     super(fracture);
-
     /***************************************************************************
      *
      * DEFAULT OPTIONS
@@ -59,9 +58,6 @@ export class Service extends FractureComponent {
      *
      **************************************************************************/
 
-    // member components
-    this.resources = [];
-
     // inverse
     this.fracture.services.push(this);
 
@@ -77,6 +73,8 @@ export class Service extends FractureComponent {
       forcedOptions,
     ]) as Required<ServiceOptions>;
 
+    this.project.logger.info(`Service: "${this.name}" initialized.`);
+
     /***************************************************************************
      *
      * DYNAMO TABLE
@@ -91,6 +89,7 @@ export class Service extends FractureComponent {
   }
 
   public build() {
+    this.project.logger.debug(`BUILD Service: "${this.name}" called.`);
     this.resources.forEach((resource) => {
       resource.build();
     });
@@ -102,6 +101,10 @@ export class Service extends FractureComponent {
 
   public get isVersioned(): boolean {
     return this.options.isVersioned;
+  }
+
+  public get namingStrategy(): NamingStrategy {
+    return this.options.namingStrategy;
   }
 
   /*****************************************************************************

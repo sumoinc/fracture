@@ -1,16 +1,26 @@
+import { TypescriptResource } from "./typescript-resource";
 import { FractureComponent } from "../../core";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
+import { Resource } from "../../core/resource";
 import {
   ResourceAttribute,
   ResourceAttributeType,
 } from "../../core/resource-attribute";
+import { Service } from "../../core/service";
 
 export class TypescriptResourceAttribute extends FractureComponent {
+  // parent
+  public readonly tsResource: TypescriptResource;
+  // source
   public readonly resourceAttribute: ResourceAttribute;
 
-  constructor(resourceAttribute: ResourceAttribute) {
-    super(resourceAttribute.fracture);
+  constructor(
+    tsResource: TypescriptResource,
+    resourceAttribute: ResourceAttribute
+  ) {
+    super(tsResource.fracture);
 
+    this.tsResource = tsResource;
     this.resourceAttribute = resourceAttribute;
   }
 
@@ -20,20 +30,20 @@ export class TypescriptResourceAttribute extends FractureComponent {
   public get attributeName() {
     return formatStringByNamingStrategy(
       this.resourceAttribute.name,
-      this.fracture.namingStrategy.ts.attributeName
+      this.service.namingStrategy.ts.attributeName
     );
   }
 
   public get attributeShortName() {
     return formatStringByNamingStrategy(
       this.resourceAttribute.shortName,
-      this.fracture.namingStrategy.ts.attributeName
+      this.service.namingStrategy.ts.attributeName
     );
   }
 
-  public get comment() {
+  public get comments() {
     return [`/**`]
-      .concat(this.resourceAttribute.comment.map((c) => ` * ${c}`))
+      .concat(this.resourceAttribute.comments.map((c) => ` * ${c}`))
       .concat([` */`]);
   }
 
@@ -72,5 +82,13 @@ export class TypescriptResourceAttribute extends FractureComponent {
           `Unknown attribute type: ${this.resourceAttribute.type}`
         );
     }
+  }
+
+  public get resource(): Resource {
+    return this.tsResource.resource;
+  }
+
+  public get service(): Service {
+    return this.resource.service;
   }
 }

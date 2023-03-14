@@ -20,14 +20,6 @@ export class DynamoCommand extends FractureComponent {
 
     this.tsOperation = tsOperation;
 
-    /*
-    console.log(
-      this.service.name,
-      this.resource.name,
-      `${this.operation.name}.ts`
-    );
-    */
-
     this.tsFile = new TypeScriptSource(
       this,
       join(

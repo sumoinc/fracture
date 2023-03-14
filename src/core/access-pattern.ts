@@ -1,5 +1,6 @@
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
+import { OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
   ResourceAttribute,
@@ -61,19 +62,23 @@ export class AccessPattern extends FractureComponent {
         name: dynamoGsi.pkName,
         isPublic: false,
         generator: ResourceAttributeGenerator.COMPOSITION,
-        isGeneratedOnCreate: true,
-        isGeneratedOnRead: true,
-        isGeneratedOnUpdate: true,
-        isGeneratedOnDelete: true,
+        generateOn: [
+          OPERATION_SUB_TYPE.CREATE_ONE,
+          OPERATION_SUB_TYPE.READ_ONE,
+          OPERATION_SUB_TYPE.UPDATE_ONE,
+          OPERATION_SUB_TYPE.DELETE_ONE,
+        ],
       },
       skAttributeOptions: {
         name: dynamoGsi.skName,
         isPublic: false,
         generator: ResourceAttributeGenerator.COMPOSITION,
-        isGeneratedOnCreate: true,
-        isGeneratedOnRead: true,
-        isGeneratedOnUpdate: true,
-        isGeneratedOnDelete: true,
+        generateOn: [
+          OPERATION_SUB_TYPE.CREATE_ONE,
+          OPERATION_SUB_TYPE.READ_ONE,
+          OPERATION_SUB_TYPE.UPDATE_ONE,
+          OPERATION_SUB_TYPE.DELETE_ONE,
+        ],
       },
       type: ACCESS_PATTERN_TYPE.OTHER,
     };
@@ -89,7 +94,6 @@ export class AccessPattern extends FractureComponent {
       defaultOptions,
       options,
     ]) as Required<AccessPatternOptions>;
-
     // the attribute might already be defined.
     const pkAttribute = resource.getAttributeByName(dynamoGsi.pkName);
     const skAttribute = resource.getAttributeByName(dynamoGsi.skName);
@@ -105,9 +109,18 @@ export class AccessPattern extends FractureComponent {
     // parent + inverse
     this.resource = resource;
     this.resource.accessPatterns.push(this);
+
+    this.project.logger.info(
+      `Access Pattern for: "${this.pkAttribute.name}:${this.skAttribute.name}" initialized.`
+    );
+
+    return this;
   }
 
   public build() {
+    this.project.logger.debug(
+      `BUILD Access Pattern: "${this.pkAttribute.name}:${this.skAttribute.name}" called.`
+    );
     /***************************************************************************
      *
      * CRUD OPERATIONS

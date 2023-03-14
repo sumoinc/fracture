@@ -1,4 +1,5 @@
 import { IdentifierFactory } from "./identifier-factory";
+import { OPERATION_SUB_TYPE } from "../../core/operation";
 import { Resource } from "../../core/resource";
 import {
   ResourceAttributeGenerator,
@@ -23,15 +24,18 @@ export class VersionedIdentifierFactory extends IdentifierFactory {
       comments: [`The version of this record`, `@default "LATEST"`],
       type: ResourceAttributeType.STRING,
       isRequired: true,
-      isSkComponent: true,
       generator: ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP,
-      isGeneratedOnCreate: true,
-      isGeneratedOnRead: true,
-      isGeneratedOnUpdate: true,
-      isGeneratedOnDelete: true,
-      createDefault: "LATEST",
-      updateDefault: "LATEST",
-      deleteDefault: "DELETED",
+      generateOn: [
+        OPERATION_SUB_TYPE.CREATE_ONE,
+        OPERATION_SUB_TYPE.READ_ONE,
+        OPERATION_SUB_TYPE.UPDATE_ONE,
+        OPERATION_SUB_TYPE.DELETE_ONE,
+      ],
+      defaultOn: [
+        { operationSubType: OPERATION_SUB_TYPE.CREATE_ONE, default: "LATEST" },
+        { operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE, default: "LATEST" },
+        { operationSubType: OPERATION_SUB_TYPE.DELETE_ONE, default: "DELETED" },
+      ],
     });
     this.accessPattern.addSkAttributeSource(versionAttribute);
 

@@ -1,6 +1,6 @@
 import { Component, Project } from "projen";
-
 import { Fracture } from "../src";
+
 export class ExampleApp extends Component {
   constructor(project: Project) {
     super(project);
@@ -38,19 +38,18 @@ export class ExampleApp extends Component {
       .addResourceAttribute({ name: "name", shortName: "n", isRequired: true });
 
     const actor = tenantService.addResource({ name: "actor" });
-
-    actor.addResourceAttribute({
+    const firstName = actor.addResourceAttribute({
       name: "first-name",
       shortName: "fn",
       isRequired: true,
-      isLookupComponent: true,
     });
-    actor.addResourceAttribute({
+    const lastName = actor.addResourceAttribute({
       name: "last-name",
       shortName: "ln",
       isRequired: true,
-      isLookupComponent: true,
     });
+    actor.addLookupSource(firstName);
+    actor.addLookupSource(lastName);
 
     /*
     tenantService

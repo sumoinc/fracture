@@ -3,6 +3,7 @@ import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from ".";
 import { AccessPattern } from "./access-pattern";
+import { Operation, OPERATION_SUB_TYPE } from "./operation";
 
 import { Resource } from "./resource";
 
@@ -169,45 +170,28 @@ export type ResourceAttributeOptions = {
    */
   isPublic?: boolean;
   /**
-   * Is this attribute used when building the PK?
-   * @default false
-   */
-  isPkComponent?: boolean;
-  /**
-   * Is this attribute used when building the SK?
-   * @default false
-   */
-  isSkComponent?: boolean;
-  /**
-   * Is this attribute used when lookuing up records?
-   * @default false
-   */
-  isLookupComponent?: boolean;
-  /**
    * The generator to use to build this attribute.
    * @default ResourceAttributeGenerator.NONE
    */
   generator?: ValueOf<typeof ResourceAttributeGenerator>;
   /**
-   * Is this a attribute generated on create operations?
+   * What operations do we generate this attribute on?
    * @default false
    */
-  isGeneratedOnCreate?: boolean;
+  generateOn?: ValueOf<typeof OPERATION_SUB_TYPE>[];
   /**
-   * Is this a attribute generated on read operations?
+   * What operations do we generate this attribute on?
    * @default false
    */
-  isGeneratedOnRead?: boolean;
+  defaultOn?: {
+    operationSubType: ValueOf<typeof OPERATION_SUB_TYPE>;
+    default: any;
+  }[];
   /**
-   * Is this a attribute generated on update operations?
+   * What operations do we output this attribute on?
    * @default false
    */
-  isGeneratedOnUpdate?: boolean;
-  /**
-   * Is this a attribute generated on delete operations?
-   * @default false
-   */
-  isGeneratedOnDelete?: boolean;
+  outputOn?: ValueOf<typeof OPERATION_SUB_TYPE>[];
   /**
    * Validations to run when creating this attribute.
    * @default []
@@ -233,26 +217,6 @@ export type ResourceAttributeOptions = {
    * @default []
    */
   importValidations?: ValueOf<typeof ValidationRule>[];
-  /**
-   * Default when creating this attribute.
-   * @default undefined
-   */
-  createDefault?: any;
-  /**
-   * Default when reading data
-   * @default undefined
-   */
-  readDefault?: any;
-  /**
-   * Default when updating this attribute.
-   * @default undefined
-   */
-  updateDefault?: any;
-  /**
-   * Default when deleting this attribute.
-   * @default undefined
-   */
-  deleteDefault?: any;
   /**
    * Position this attribute should occupy when sorted.
    */
@@ -290,13 +254,15 @@ export class ResourceAttribute extends FractureComponent {
       type: ResourceAttributeType.STRING,
       isRequired: false,
       isPublic: true,
-      isPkComponent: false,
-      isSkComponent: false,
-      isLookupComponent: false,
       generator: ResourceAttributeGenerator.NONE,
-      isGeneratedOnCreate: false,
-      isGeneratedOnUpdate: false,
-      isGeneratedOnDelete: false,
+      generateOn: [],
+      defaultOn: [],
+      outputOn: [
+        OPERATION_SUB_TYPE.CREATE_ONE,
+        OPERATION_SUB_TYPE.READ_ONE,
+        OPERATION_SUB_TYPE.UPDATE_ONE,
+        OPERATION_SUB_TYPE.DELETE_ONE,
+      ],
       createValidations: [],
       readValidations: [],
       updateValidations: [],
@@ -333,19 +299,7 @@ export class ResourceAttribute extends FractureComponent {
       forcedOptions,
     ]) as Required<ResourceAttributeOptions>;
 
-    // is this attribute part of the pk or sk?
-    if (this.isPkComponent) {
-      this.resource.keyAccessPattern.addPkAttributeSource(this);
-    }
-
-    if (this.isSkComponent) {
-      this.resource.keyAccessPattern.addSkAttributeSource(this);
-    }
-
-    // if this attribute is a lookup, add it to the lookup list
-    if (this.isLookupComponent) {
-      this.resource.lookupAccessPattern.addSkAttributeSource(this);
-    }
+    this.project.logger.info(`Attribute: "${this.name}" initialized.`);
 
     // if it's not generated, we need to validate type
     if (!this.isGenerated) {
@@ -377,12 +331,6 @@ export class ResourceAttribute extends FractureComponent {
       );
     }
 
-    // it's a lookup source
-    if (this.options.isLookupComponent) {
-      this.options.comments.push(
-        `This attribute can be used as part of a lookup for this record.`
-      );
-    }
     return this;
   }
 
@@ -404,9 +352,25 @@ export class ResourceAttribute extends FractureComponent {
     return this.options.shortName;
   }
 
+  public get comments(): string[] {
+    return this.options.comments;
+  }
+
+  public get type(): ValueOf<typeof ResourceAttributeType> {
+    return this.options.type;
+  }
+
   public get sortPosition(): number {
     const boost = this.isAccessPatternKey ? 1000 : 0;
     return this.options.sortPosition + boost;
+  }
+
+  public get generateOn(): ValueOf<typeof OPERATION_SUB_TYPE>[] {
+    return this.options.generateOn;
+  }
+
+  public get outputOn(): ValueOf<typeof OPERATION_SUB_TYPE>[] {
+    return this.options.outputOn;
   }
 
   /*****************************************************************************
@@ -471,16 +435,20 @@ export class ResourceAttribute extends FractureComponent {
    *
    ****************************************************************************/
 
-  public get isPkComponent(): boolean {
-    return this.options.isPkComponent;
+  public get isPkSource(): boolean {
+    return this.keyAccessPattern.pkAttribute.compositionSources.some(
+      (source) => {
+        return source.name === this.name;
+      }
+    );
   }
 
-  public get isSkComponent(): boolean {
-    return this.options.isSkComponent;
-  }
-
-  public get isLookupComponent(): boolean {
-    return this.options.isLookupComponent;
+  public get isSkSource(): boolean {
+    return this.keyAccessPattern.skAttribute.compositionSources.some(
+      (source) => {
+        return source.name === this.name;
+      }
+    );
   }
 
   public get keyAccessPattern(): AccessPattern {
@@ -505,20 +473,19 @@ export class ResourceAttribute extends FractureComponent {
     return this.options.generator;
   }
 
-  public get isGeneratedOnCreate(): boolean {
-    return this.options.isGeneratedOnCreate;
+  public isGeneratedOn(operation?: Operation): boolean {
+    if (!operation) {
+      return false;
+    }
+
+    return this.generateOn.some((g) => g === operation.operationSubType);
   }
 
-  public get isGeneratedOnRead(): boolean {
-    return this.options.isGeneratedOnRead;
-  }
-
-  public get isGeneratedOnUpdate(): boolean {
-    return this.options.isGeneratedOnUpdate;
-  }
-
-  public get isGeneratedOnDelete(): boolean {
-    return this.options.isGeneratedOnDelete;
+  public isOutputOn(operation?: Operation): boolean {
+    if (this.outputOn.length === 0 || !operation) {
+      return true;
+    }
+    return this.outputOn.some((g) => g === operation.operationSubType);
   }
 
   public get isData(): boolean {

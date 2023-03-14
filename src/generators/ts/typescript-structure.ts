@@ -1,7 +1,7 @@
 import { TypescriptResource } from "./typescript-resource";
+import { TypescriptResourceAttribute } from "./typescript-resource-attribute";
 import { TypescriptService } from "./typescript-service";
 import { TypeScriptSource } from "./typescript-source";
-import { TypescriptStructureAttribute } from "./typescript-structure-attribute";
 import { FractureComponent } from "../../core";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Resource } from "../../core/resource";
@@ -9,14 +9,16 @@ import { Service } from "../../core/service";
 import { Structure } from "../../core/structure";
 
 export class TypescriptStructure extends FractureComponent {
-  public readonly structure: Structure;
+  // parent
   public readonly tsResource: TypescriptResource;
+  // source
+  public readonly structure: Structure;
 
   constructor(tsResource: TypescriptResource, structure: Structure) {
-    super(structure.fracture);
+    super(tsResource.fracture);
 
-    this.structure = structure;
     this.tsResource = tsResource;
+    this.structure = structure;
 
     this.writePublicInterface(this.tsService.typeFile);
   }
@@ -34,24 +36,22 @@ export class TypescriptStructure extends FractureComponent {
     );
   }
 
-  public get attributes() {
-    return this.structure.attributes.map((attribute) => {
-      return new TypescriptStructureAttribute(this, attribute);
+  public get tsAttributes(): TypescriptResourceAttribute[] {
+    return this.resource.attributes.map((attribute) => {
+      return new TypescriptResourceAttribute(this.tsResource, attribute);
     });
   }
 
-  public get publicAttributes() {
-    return this.attributes.filter((attribute) => {
-      return !attribute.structureAttribute.isAccessPatternKey;
-    });
+  public get tsPublicAttributes() {
+    return this.tsAttributes;
   }
 
   writePublicInterface(file: TypeScriptSource) {
     file.lines(this.comments);
     file.open(`export interface ${this.publicInterfaceName} {`);
-    this.publicAttributes.forEach((a) => {
+    this.tsPublicAttributes.forEach((a) => {
       file.lines(a.comments);
-      file.line(`${a.attributeName}?: ${a.typescriptType};`);
+      file.line(`${a.attributeName}?: ${a.type};`);
     });
     file.close(`}`);
     file.line("\n");

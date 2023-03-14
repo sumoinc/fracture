@@ -20,17 +20,8 @@ export class TypescriptService extends FractureComponent {
       "ts"
     );
 
+    // typefile we'll decorate with more types in some other places
     this.typeFile = new TypeScriptSource(this, join(this.outdir, "types.ts"));
-
-    /**
-     * Public types
-     */
-    /*
-    this.service.resources.forEach((resource) => {
-      const tsDataStructure = new TypescriptStructure(resource.dataStructure);
-      tsDataStructure.writePublicInterface(this.typeFile);
-    });
-    */
 
     // some error and response types
     this.typeFile.open(`export type Error = {`);

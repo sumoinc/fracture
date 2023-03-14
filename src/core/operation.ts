@@ -78,10 +78,17 @@ export class Operation extends FractureComponent {
       defaultOptions,
       options,
     ]) as Required<OperationOptions>;
+
+    this.project.logger.info(`Operation: "${this.name}" initialized.`);
+
     return this;
   }
 
-  public build() {}
+  public build() {
+    this.project.logger.debug(`BUILD Operation: "${this.name}" called.`);
+    this.inputStructure.build();
+    this.outputStructure.build();
+  }
 
   /**
    * Operation name, based on the naming strategy
@@ -155,8 +162,10 @@ export class Operation extends FractureComponent {
 
   public get outputStructure(): Structure {
     if (!this._outputStructure) {
-      // output the resource's data structure
-      this._outputStructure = this.resource.dataStructure;
+      this._outputStructure = new Structure(this.resource, {
+        type: STRUCTURE_TYPE.OUTPUT,
+        operation: this,
+      });
     }
     return this._outputStructure;
   }

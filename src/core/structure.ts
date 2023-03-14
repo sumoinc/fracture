@@ -10,11 +10,6 @@ import { Service } from "./service";
  * TYPES
  *****************************************************************************/
 
-export type StructureAttribute = {
-  attribute: ResourceAttribute;
-  isRequired: boolean;
-};
-
 export type StructureOptions = {
   /**
    *  Type of structure
@@ -87,6 +82,8 @@ export class Structure extends FractureComponent {
       "type" | "comments"
     >;
 
+    this.project.logger.info(`Structure: "${this.name}" initialized.`);
+
     //
     if (
       (this.options.type === STRUCTURE_TYPE.INPUT ||
@@ -99,8 +96,10 @@ export class Structure extends FractureComponent {
     }
   }
 
-  // calling this  forces gneration of attributes
-  public build() {}
+  // not used here (yet)
+  public build() {
+    this.project.logger.debug(`BUILD Structure: "${this.name}" called.`);
+  }
 
   /**
    * Structure name, based on the naming strategy
@@ -136,7 +135,15 @@ export class Structure extends FractureComponent {
    * attributes. This is a good list to use for dynamodb operations.
    */
   public get attributes() {
-    return this.resource.attributes;
+    return this.resource.attributes.sort((a, b) => {
+      if (a.sortPosition < b.sortPosition) {
+        return -1;
+      } else if (a.sortPosition > b.sortPosition) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
   }
 
   /**
@@ -156,14 +163,10 @@ export class Structure extends FractureComponent {
             return this.attributes.filter((attribute: ResourceAttribute) => {
               return attribute.isData;
             });
+
           case OPERATION_SUB_TYPE.READ_ONE:
-            console.log(
-              this.operation!.operationSubType,
-              this.keyAttributeSources
-            );
             return this.keyAttributeSources.filter((a) => {
-              console.log(a.name, a.isGenerated);
-              return !a.isGenerated;
+              return !a.isGeneratedOn(this.operation);
             });
 
           default:
@@ -172,8 +175,12 @@ export class Structure extends FractureComponent {
 
       case STRUCTURE_TYPE.OUTPUT:
         return this.attributes.filter((attribute: ResourceAttribute) => {
-          return !attribute.isAccessPatternKey;
+          return (
+            !attribute.isAccessPatternKey &&
+            attribute.isOutputOn(this.operation)
+          );
         });
+
       case STRUCTURE_TYPE.TRANSIENT:
         return this.attributes.filter((attribute: ResourceAttribute) => {
           return !attribute.isAccessPatternKey;
@@ -201,10 +208,10 @@ export class Structure extends FractureComponent {
 
   public get keyAttributes(): ResourceAttribute[] {
     // only applies to inputs
-    if (this.type !== STRUCTURE_TYPE.INPUT) {
-      return [];
+    if (this.type === STRUCTURE_TYPE.INPUT) {
+      return this.attributes.filter((a) => a.isPartitionKey || a.isSortKey);
     }
-    return this.attributes.filter((a) => a.isPartitionKey || a.isSortKey);
+    return [];
   }
 
   public get keyAttributeSources(): ResourceAttribute[] {
@@ -219,10 +226,10 @@ export class Structure extends FractureComponent {
 
   public get generatedAttributes(): ResourceAttribute[] {
     // only applies to inputs
-    if (this.type !== STRUCTURE_TYPE.INPUT) {
-      return [];
+    if (this.type === STRUCTURE_TYPE.INPUT) {
+      return this.attributes.filter((a) => a.isGeneratedOn(this.operation));
     }
-    return this.attributes.filter((a) => a.isGenerated);
+    return [];
   }
 
   public get attributeNames() {

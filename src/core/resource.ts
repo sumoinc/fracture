@@ -2,7 +2,7 @@ import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { AccessPattern } from "./access-pattern";
 import { FractureComponent } from "./component";
-import { Operation, OPERATION_SUB_TYPE } from "./operation";
+import { Operation } from "./operation";
 import {
   ResourceAttribute,
   ResourceAttributeOptions,
@@ -96,6 +96,8 @@ export class Resource extends FractureComponent {
       forcedOptions,
     ]) as Required<ResourceOptions>;
 
+    this.project.logger.info(`Resource: "${this.name}" initialized.`);
+
     /***************************************************************************
      *
      * ACCESS PATTERNS
@@ -167,8 +169,12 @@ export class Resource extends FractureComponent {
   }
 
   public build() {
+    this.project.logger.debug(`BUILD Resource: "${this.name}" called.`);
     this.dataStructure.build();
     this.transientStructure.build();
+    this.operations.forEach((operation) => {
+      operation.build();
+    });
     this.accessPatterns.forEach((accessPattern) => {
       accessPattern.build();
     });
@@ -191,6 +197,10 @@ export class Resource extends FractureComponent {
 
   public getAttributeByName(name: string): ResourceAttribute | undefined {
     return this.attributes.find((attribute) => attribute.name === name);
+  }
+
+  public addLookupSource(attribute: ResourceAttribute) {
+    this.lookupAccessPattern.addSkAttributeSource(attribute);
   }
 
   /*****************************************************************************
@@ -265,19 +275,6 @@ export class Resource extends FractureComponent {
     return this.attributes.filter((a) => a.isPrivate);
   }
 
-  // generated attrubutes
-  public get createGeneratedAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => a.isGeneratedOnCreate);
-  }
-
-  public get updateGeneratedAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => a.isGeneratedOnUpdate);
-  }
-
-  public get deleteGeneratedAttributes(): ResourceAttribute[] {
-    return this.attributes.filter((a) => a.isGeneratedOnDelete);
-  }
-
   /**
    *
    * Returns an array of generated attributes for a given operation.
@@ -289,22 +286,10 @@ export class Resource extends FractureComponent {
     operation: Operation,
     isPublic?: boolean
   ): ResourceAttribute[] {
-    let returnAttributes: ResourceAttribute[];
-    switch (operation.options.operationSubType) {
-      case OPERATION_SUB_TYPE.CREATE_ONE:
-        returnAttributes = this.createGeneratedAttributes;
-        break;
-      case OPERATION_SUB_TYPE.UPDATE_ONE:
-        returnAttributes = this.updateGeneratedAttributes;
-        break;
-      case OPERATION_SUB_TYPE.DELETE_ONE:
-        returnAttributes = this.deleteGeneratedAttributes;
-        break;
-      default:
-        throw new Error(
-          `Unhandled operation type: ${operation.options.operationSubType}`
-        );
-    }
+    const returnAttributes = this.attributes.filter((a) =>
+      a.isGeneratedOn(operation)
+    );
+
     // optionally filter by public marker
     if (isPublic == undefined) {
       return returnAttributes;

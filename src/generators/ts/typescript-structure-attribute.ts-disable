@@ -1,46 +1,47 @@
-import { TypescriptStructure } from "./typescript-structure";
+import { TypescriptStructure } from "./typescript-structure.ts";
 import { FractureComponent } from "../../core";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Operation } from "../../core/operation";
 import { Resource } from "../../core/resource";
+import {
+  ResourceAttribute,
+  ResourceAttributeGenerator,
+  ResourceAttributeType,
+} from "../../core/resource-attribute";
 import { Service } from "../../core/service";
 import { Structure } from "../../core/structure";
 
 export class TypescriptStructureAttribute extends FractureComponent {
-  public readonly structureAttribute: StructureAttribute;
-
+  public readonly attribute: ResourceAttribute;
   public readonly tsStructure: TypescriptStructure;
 
-  constructor(
-    tsStructure: TypescriptStructure,
-    structureAttribute: StructureAttribute
-  ) {
-    super(structureAttribute.fracture);
+  constructor(tsStructure: TypescriptStructure, attribute: ResourceAttribute) {
+    super(attribute.fracture);
 
-    this.structureAttribute = structureAttribute;
+    this.attribute = attribute;
     this.tsStructure = tsStructure;
   }
 
   public get isRequired() {
-    return this.structureAttribute.isRequired;
+    return this.attribute.isRequired;
   }
 
   public get attributeName() {
     return formatStringByNamingStrategy(
-      this.structureAttribute.name,
+      this.attribute.name,
       this.fracture.options.namingStrategy.ts.attributeName
     );
   }
 
   public get attributeShortName() {
     return formatStringByNamingStrategy(
-      this.structureAttribute.shortName,
+      this.attribute.shortName,
       this.fracture.options.namingStrategy.ts.attributeName
     );
   }
 
   public get attributeSource() {
-    if (this.structureAttribute.isGenerated) {
+    if (this.attribute.isGenerated) {
       return this.generatedSource;
     }
     return this.attributeName;
@@ -50,28 +51,26 @@ export class TypescriptStructureAttribute extends FractureComponent {
     if (!this.operation) {
       throw new Error("Operation is not defined");
     }
-    const generator = this.structureAttribute.generator;
+    const generator = this.attribute.generator;
     switch (generator) {
-      case AttributeGenerator.NONE:
+      case ResourceAttributeGenerator.NONE:
         throw new Error("No generator! Did you call isGenerated first?");
-      case AttributeGenerator.GUID:
+      case ResourceAttributeGenerator.GUID:
         return "uuidv4()";
-      case AttributeGenerator.CURRENT_DATE_TIME_STAMP:
+      case ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP:
         return "new Date().toISOString()";
-      case AttributeGenerator.TYPE:
+      case ResourceAttributeGenerator.TYPE:
         return `"${this.resource.name}"`;
-      case AttributeGenerator.VERSION_DATE_TIME_STAMP:
+      case ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP:
         return `"TODO"`;
-      case AttributeGenerator.COMPOSITION:
-        return this.structureAttribute.compositionSources.length === 0
+      case ResourceAttributeGenerator.COMPOSITION:
+        return this.attribute.compositionSources.length === 0
           ? undefined
-          : this.structureAttribute.compositionSources
+          : this.attribute.compositionSources
               .map((s) => {
                 return `${s.shortName}.toLowerCase()`;
               })
-              .join(
-                ` + "${this.structureAttribute.options.compositionSeperator}" + `
-              );
+              .join(` + "${this.attribute.options.compositionSeperator}" + `);
       default:
         throw new Error(`Unknown generator: ${generator}`);
     }
@@ -79,7 +78,7 @@ export class TypescriptStructureAttribute extends FractureComponent {
 
   public get comments() {
     return [`/**`]
-      .concat(this.structureAttribute.options.comments.map((c) => ` * ${c}`))
+      .concat(this.attribute.options.comments.map((c) => ` * ${c}`))
       .concat([` */`]);
   }
 
@@ -87,37 +86,34 @@ export class TypescriptStructureAttribute extends FractureComponent {
    * The typescript type for this attribute.
    */
   public get typescriptType() {
-    switch (this.structureAttribute.options.type) {
-      case AttributeType.GUID:
-      case AttributeType.STRING:
-      case AttributeType.EMAIL:
-      case AttributeType.PHONE:
-      case AttributeType.URL:
-      case AttributeType.DATE:
-      case AttributeType.TIME:
-      case AttributeType.DATE_TIME:
-      case AttributeType.JSON:
-      case AttributeType.IPADDRESS:
+    switch (this.attribute.options.type) {
+      case ResourceAttributeType.GUID:
+      case ResourceAttributeType.STRING:
+      case ResourceAttributeType.EMAIL:
+      case ResourceAttributeType.PHONE:
+      case ResourceAttributeType.URL:
+      case ResourceAttributeType.DATE:
+      case ResourceAttributeType.TIME:
+      case ResourceAttributeType.DATE_TIME:
+      case ResourceAttributeType.JSON:
+      case ResourceAttributeType.IPADDRESS:
         return "string";
-      case AttributeType.INT:
-      case AttributeType.FLOAT:
-      case AttributeType.TIMESTAMP:
-      case AttributeType.COUNT:
-      case AttributeType.AVERAGE:
-      case AttributeType.SUM:
+      case ResourceAttributeType.INT:
+      case ResourceAttributeType.FLOAT:
+      case ResourceAttributeType.TIMESTAMP:
+      case ResourceAttributeType.COUNT:
+      case ResourceAttributeType.AVERAGE:
+      case ResourceAttributeType.SUM:
         return "number";
-      case AttributeType.BOOLEAN:
+      case ResourceAttributeType.BOOLEAN:
         return "boolean";
       default:
         throw new Error(
-          `Unknown attribute type: ${this.structureAttribute.options.type}`
+          `Unknown attribute type: ${this.attribute.options.type}`
         );
     }
   }
 
-  public get structure(): Structure {
-    return this.structureAttribute.structure;
-  }
   public get resource(): Resource {
     return this.structure.resource;
   }
@@ -126,5 +122,9 @@ export class TypescriptStructureAttribute extends FractureComponent {
   }
   public get operation(): Operation | undefined {
     return this.structure.operation;
+  }
+
+  public get structure(): Structure {
+    return this.tsStructure.structure;
   }
 }
