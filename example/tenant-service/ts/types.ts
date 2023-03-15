@@ -167,7 +167,7 @@ export interface CreateTenantInput {
 /**
  * A gereric type
  */
-export interface Tenant {
+export interface CreateTenantOutput {
   /**
    * A pk.
    * @readonly This attribute is managed automatically by the system.
@@ -269,7 +269,7 @@ export interface GetTenantInput {
 /**
  * A gereric type
  */
-export interface Tenant {
+export interface GetTenantOutput {
   /**
    * A pk.
    * @readonly This attribute is managed automatically by the system.
@@ -371,7 +371,7 @@ export interface UpdateTenantInput {
 /**
  * A gereric type
  */
-export interface Tenant {
+export interface UpdateTenantOutput {
   /**
    * A pk.
    * @readonly This attribute is managed automatically by the system.
@@ -473,7 +473,7 @@ export interface DeleteTenantInput {
 /**
  * A gereric type
  */
-export interface Tenant {
+export interface DeleteTenantOutput {
   /**
    * A pk.
    * @readonly This attribute is managed automatically by the system.
@@ -704,7 +704,7 @@ export interface CreateActorInput {
 /**
  * A gereric type
  */
-export interface Actor {
+export interface CreateActorOutput {
   /**
    * A pk.
    * @readonly This attribute is managed automatically by the system.
@@ -824,7 +824,7 @@ export interface GetActorInput {
 /**
  * A gereric type
  */
-export interface Actor {
+export interface GetActorOutput {
   /**
    * A pk.
    * @readonly This attribute is managed automatically by the system.
@@ -944,7 +944,7 @@ export interface UpdateActorInput {
 /**
  * A gereric type
  */
-export interface Actor {
+export interface UpdateActorOutput {
   /**
    * A pk.
    * @readonly This attribute is managed automatically by the system.
@@ -1064,7 +1064,7 @@ export interface DeleteActorInput {
 /**
  * A gereric type
  */
-export interface Actor {
+export interface DeleteActorOutput {
   /**
    * A pk.
    * @readonly This attribute is managed automatically by the system.

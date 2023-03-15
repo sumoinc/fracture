@@ -152,21 +152,29 @@ export class Structure extends FractureComponent {
   public get publicAttributes(): ResourceAttribute[] {
     switch (this.type) {
       case STRUCTURE_TYPE.DATA:
-        return this.attributes.filter((attribute: ResourceAttribute) => {
-          return !attribute.isAccessPatternKey;
+        return this.attributes.filter((a: ResourceAttribute) => {
+          return !a.isAccessPatternKey;
         });
 
       // INPUTS
       case STRUCTURE_TYPE.INPUT:
         switch (this.operation!.operationSubType) {
           case OPERATION_SUB_TYPE.CREATE_ONE:
-            return this.attributes.filter((attribute: ResourceAttribute) => {
-              return attribute.isData;
+            return this.attributes.filter((a: ResourceAttribute) => {
+              return a.isData;
             });
 
           case OPERATION_SUB_TYPE.READ_ONE:
+          case OPERATION_SUB_TYPE.DELETE_ONE:
             return this.keyAttributeSources.filter((a) => {
               return !a.isGeneratedOn(this.operation);
+            });
+
+          case OPERATION_SUB_TYPE.UPDATE_ONE:
+            return this.attributes.filter((a: ResourceAttribute) => {
+              return (
+                !a.isSystem && (a.isData || !a.isGeneratedOn(this.operation))
+              );
             });
 
           default:
@@ -174,16 +182,13 @@ export class Structure extends FractureComponent {
         }
 
       case STRUCTURE_TYPE.OUTPUT:
-        return this.attributes.filter((attribute: ResourceAttribute) => {
-          return (
-            !attribute.isAccessPatternKey &&
-            attribute.isOutputOn(this.operation)
-          );
+        return this.attributes.filter((a: ResourceAttribute) => {
+          return !a.isAccessPatternKey && a.isOutputOn(this.operation);
         });
 
       case STRUCTURE_TYPE.TRANSIENT:
-        return this.attributes.filter((attribute: ResourceAttribute) => {
-          return !attribute.isAccessPatternKey;
+        return this.attributes.filter((a: ResourceAttribute) => {
+          return !a.isAccessPatternKey;
         });
     }
   }

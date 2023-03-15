@@ -38,7 +38,12 @@ export class IdentifierFactory extends FractureComponent {
         name: dynamoGsi.pkName,
         isPublic: false,
         generator: ResourceAttributeGenerator.COMPOSITION,
-        generateOn: [OPERATION_SUB_TYPE.CREATE_ONE],
+        generateOn: [
+          OPERATION_SUB_TYPE.CREATE_ONE,
+          OPERATION_SUB_TYPE.READ_ONE,
+          OPERATION_SUB_TYPE.UPDATE_ONE,
+          OPERATION_SUB_TYPE.DELETE_ONE,
+        ],
       },
       skAttributeOptions: {
         name: dynamoGsi.skName,

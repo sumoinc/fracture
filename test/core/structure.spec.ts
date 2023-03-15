@@ -33,7 +33,7 @@ const makeFixture = () => {
   return fracture;
 };
 
-const fixture = makeFixture();
+const fixture = makeFixture(); //
 
 /*****************************************************************************
  * Expected results for all structure types
@@ -182,7 +182,6 @@ const expectedStructures = [
           { version: true },
           { pk: true },
           { sk: true },
-          { idx: true },
         ],
       },
     ],
@@ -219,6 +218,35 @@ const expectedStructures = [
   /*****************************************************************************
    * UPDATE INPUT
    ****************************************************************************/
+  {
+    type: STRUCTURE_TYPE.INPUT,
+    operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE,
+    expectedName: "update-person-input",
+    attributeTypes: [
+      {
+        publicAttributes: [
+          { id: true },
+          { "my-name": true },
+          { "first-name": true },
+          { "last-name": false },
+        ],
+      },
+      {
+        itemAttributes: [],
+      },
+      { keyAttributes: [{ pk: true }, { sk: true }] },
+      {
+        generatedAttributes: [
+          { type: true },
+          { version: true },
+          { "updated-at": true },
+          { pk: true },
+          { sk: true },
+          { idx: true },
+        ],
+      },
+    ],
+  },
   /*****************************************************************************
    * UPDATE OUTPUT
    ****************************************************************************/
@@ -251,6 +279,28 @@ const expectedStructures = [
   /*****************************************************************************
    * DELETE INPUT
    ****************************************************************************/
+  {
+    type: STRUCTURE_TYPE.INPUT,
+    operationSubType: OPERATION_SUB_TYPE.DELETE_ONE,
+    expectedName: "delete-person-input",
+    attributeTypes: [
+      {
+        publicAttributes: [{ id: true }],
+      },
+      {
+        itemAttributes: [],
+      },
+      { keyAttributes: [{ pk: true }, { sk: true }] },
+      {
+        generatedAttributes: [
+          { type: true },
+          { version: true },
+          { pk: true },
+          { sk: true },
+        ],
+      },
+    ],
+  },
   /*****************************************************************************
    * DELETE OUTPUT
    ****************************************************************************/

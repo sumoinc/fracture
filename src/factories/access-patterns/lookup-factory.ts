@@ -38,9 +38,7 @@ export class LookupFactory extends FractureComponent {
         generator: ResourceAttributeGenerator.COMPOSITION,
         generateOn: [
           OPERATION_SUB_TYPE.CREATE_ONE,
-          OPERATION_SUB_TYPE.READ_ONE,
           OPERATION_SUB_TYPE.UPDATE_ONE,
-          OPERATION_SUB_TYPE.DELETE_ONE,
         ],
       },
       type: ACCESS_PATTERN_TYPE.LOOKUP,

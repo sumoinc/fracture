@@ -170,6 +170,13 @@ export type ResourceAttributeOptions = {
    */
   isPublic?: boolean;
   /**
+   * Is this attribute expected to be managed exclusively by the system?
+   * AKA: no outside inputs?
+   *
+   * @default false
+   */
+  isSystem?: boolean;
+  /**
    * The generator to use to build this attribute.
    * @default ResourceAttributeGenerator.NONE
    */
@@ -254,6 +261,7 @@ export class ResourceAttribute extends FractureComponent {
       type: ResourceAttributeType.STRING,
       isRequired: false,
       isPublic: true,
+      isSystem: false,
       generator: ResourceAttributeGenerator.NONE,
       generateOn: [],
       defaultOn: [],
@@ -358,6 +366,10 @@ export class ResourceAttribute extends FractureComponent {
 
   public get type(): ValueOf<typeof ResourceAttributeType> {
     return this.options.type;
+  }
+
+  public get isSystem(): boolean {
+    return this.options.isSystem;
   }
 
   public get sortPosition(): number {
