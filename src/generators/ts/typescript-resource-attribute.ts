@@ -1,9 +1,11 @@
 import { TypescriptResource } from "./typescript-resource";
 import { FractureComponent } from "../../core";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
+import { Operation } from "../../core/operation";
 import { Resource } from "../../core/resource";
 import {
   ResourceAttribute,
+  ResourceAttributeGenerator,
   ResourceAttributeType,
 } from "../../core/resource-attribute";
 import { Service } from "../../core/service";
@@ -52,8 +54,7 @@ export class TypescriptResourceAttribute extends FractureComponent {
   }
 
   public get required() {
-    return "?";
-    //return this.resourceAttribute.isRequired ? "" : "";
+    return this.resourceAttribute.isRequired ? "" : "?";
   }
 
   /**
@@ -85,6 +86,38 @@ export class TypescriptResourceAttribute extends FractureComponent {
         throw new Error(
           `Unknown attribute type: ${this.resourceAttribute.type}`
         );
+    }
+  }
+
+  public generationSource(operation: Operation) {
+    const generator = this.resourceAttribute.generator;
+    switch (generator) {
+      case ResourceAttributeGenerator.NONE:
+        throw new Error("No generator! Did you call isGenerated first?");
+      case ResourceAttributeGenerator.GUID:
+        return "uuidv4()";
+      case ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP:
+        return "new Date().toISOString()";
+      case ResourceAttributeGenerator.TYPE:
+        return `"${this.resource.name}"`;
+      case ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP:
+        if (this.resourceAttribute.hasDefaultFor(operation)) {
+          return `"${this.resourceAttribute.defaultFor(operation)}"`;
+        } else {
+          return "new Date().toISOString()";
+        }
+      case ResourceAttributeGenerator.COMPOSITION:
+        return this.resourceAttribute.compositionSources.length === 0
+          ? undefined
+          : this.resourceAttribute.compositionSources
+              .map((s) => {
+                return `${s.shortName}.toLowerCase()`;
+              })
+              .join(
+                ` + "${this.resourceAttribute.options.compositionSeperator}" + `
+              );
+      default:
+        throw new Error(`Unknown generator: ${generator}`);
     }
   }
 

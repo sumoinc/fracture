@@ -3,7 +3,7 @@ import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { FractureComponent } from ".";
 import { AccessPattern } from "./access-pattern";
-import { Operation, OPERATION_SUB_TYPE } from "./operation";
+import { Operation, OperationDefault, OPERATION_SUB_TYPE } from "./operation";
 
 import { Resource } from "./resource";
 
@@ -190,10 +190,7 @@ export type ResourceAttributeOptions = {
    * What operations do we generate this attribute on?
    * @default false
    */
-  defaultOn?: {
-    operationSubType: ValueOf<typeof OPERATION_SUB_TYPE>;
-    default: any;
-  }[];
+  defaultOn?: OperationDefault[];
   /**
    * What operations do we output this attribute on?
    * @default false
@@ -381,6 +378,10 @@ export class ResourceAttribute extends FractureComponent {
     return this.options.generateOn;
   }
 
+  public get defaultOn(): OperationDefault[] {
+    return this.options.defaultOn;
+  }
+
   public get outputOn(): ValueOf<typeof OPERATION_SUB_TYPE>[] {
     return this.options.outputOn;
   }
@@ -492,6 +493,39 @@ export class ResourceAttribute extends FractureComponent {
 
     return this.generateOn.some((g) => g === operation.operationSubType);
   }
+
+  /*****************************************************************************
+   *
+   *  DEFAULT HELPERS
+   *
+   ****************************************************************************/
+
+  public hasDefaultFor(operation?: Operation): boolean {
+    if (!operation) {
+      return false;
+    }
+    return this.defaultOn.some(
+      (d) => d.operationSubType === operation.operationSubType
+    );
+  }
+
+  public defaultFor(operation?: Operation): string {
+    if (!operation || !this.hasDefaultFor(operation)) {
+      return "";
+    }
+
+    const foundDefault = this.defaultOn.find(
+      (g) => g.operationSubType === operation.operationSubType
+    );
+
+    return foundDefault ? foundDefault.default : "";
+  }
+
+  /*****************************************************************************
+   *
+   *  OUTPUT HELPERS
+   *
+   ****************************************************************************/
 
   public isOutputOn(operation?: Operation): boolean {
     if (this.outputOn.length === 0 || !operation) {

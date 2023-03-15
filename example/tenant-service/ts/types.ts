@@ -16,50 +16,44 @@ export type Response<T> = {
  */
 export interface Tenant {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
+  updatedAt: string;
   /**
    * The date and time this record was deleted.
    * @readonly This attribute is managed automatically by the system.
    */
-  deletedAt?: string;
+  deletedAt: string;
   /**
    * A name.
    */
-  name?: string;
+  name: string;
+  /**
+   * A nickname.
+   */
+  nickname?: string;
 }
 
 /**
@@ -67,50 +61,44 @@ export interface Tenant {
  */
 export interface TenantMessage {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
+  updatedAt: string;
   /**
    * The date and time this record was deleted.
    * @readonly This attribute is managed automatically by the system.
    */
-  deletedAt?: string;
+  deletedAt: string;
   /**
    * A name.
    */
-  name?: string;
+  name: string;
+  /**
+   * A nickname.
+   */
+  nickname?: string;
 }
 
 /**
@@ -118,50 +106,13 @@ export interface TenantMessage {
  */
 export interface CreateTenantInput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
-   * The id for the record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id?: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type?: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version?: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt?: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
-  /**
    * A name.
    */
-  name?: string;
+  name: string;
+  /**
+   * A nickname.
+   */
+  nickname?: string;
 }
 
 /**
@@ -169,50 +120,39 @@ export interface CreateTenantInput {
  */
 export interface CreateTenantOutput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
+  updatedAt: string;
   /**
    * A name.
    */
-  name?: string;
+  name: string;
+  /**
+   * A nickname.
+   */
+  nickname?: string;
 }
 
 /**
@@ -220,50 +160,10 @@ export interface CreateTenantOutput {
  */
 export interface GetTenantInput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type?: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version?: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt?: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
-  /**
-   * A name.
-   */
-  name?: string;
+  id: string;
 }
 
 /**
@@ -271,50 +171,39 @@ export interface GetTenantInput {
  */
 export interface GetTenantOutput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
+  updatedAt: string;
   /**
    * A name.
    */
-  name?: string;
+  name: string;
+  /**
+   * A nickname.
+   */
+  nickname?: string;
 }
 
 /**
@@ -322,50 +211,18 @@ export interface GetTenantOutput {
  */
 export interface UpdateTenantInput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type?: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version?: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt?: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
+  id: string;
   /**
    * A name.
    */
-  name?: string;
+  name: string;
+  /**
+   * A nickname.
+   */
+  nickname?: string;
 }
 
 /**
@@ -373,50 +230,39 @@ export interface UpdateTenantInput {
  */
 export interface UpdateTenantOutput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
+  updatedAt: string;
   /**
    * A name.
    */
-  name?: string;
+  name: string;
+  /**
+   * A nickname.
+   */
+  nickname?: string;
 }
 
 /**
@@ -424,50 +270,10 @@ export interface UpdateTenantOutput {
  */
 export interface DeleteTenantInput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type?: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version?: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt?: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
-  /**
-   * A name.
-   */
-  name?: string;
+  id: string;
 }
 
 /**
@@ -475,50 +281,44 @@ export interface DeleteTenantInput {
  */
 export interface DeleteTenantOutput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
+  updatedAt: string;
   /**
    * The date and time this record was deleted.
    * @readonly This attribute is managed automatically by the system.
    */
-  deletedAt?: string;
+  deletedAt: string;
   /**
    * A name.
    */
-  name?: string;
+  name: string;
+  /**
+   * A nickname.
+   */
+  nickname?: string;
 }
 
 /**
@@ -526,59 +326,44 @@ export interface DeleteTenantOutput {
  */
 export interface Actor {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
+  updatedAt: string;
   /**
    * The date and time this record was deleted.
    * @readonly This attribute is managed automatically by the system.
    */
-  deletedAt?: string;
+  deletedAt: string;
   /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
-  lastName?: string;
-  /**
-   * A idx.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  idx?: string;
+  lastName: string;
 }
 
 /**
@@ -586,59 +371,44 @@ export interface Actor {
  */
 export interface ActorMessage {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
+  updatedAt: string;
   /**
    * The date and time this record was deleted.
    * @readonly This attribute is managed automatically by the system.
    */
-  deletedAt?: string;
+  deletedAt: string;
   /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
-  lastName?: string;
-  /**
-   * A idx.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  idx?: string;
+  lastName: string;
 }
 
 /**
@@ -646,59 +416,13 @@ export interface ActorMessage {
  */
 export interface CreateActorInput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
-   * The id for the record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id?: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type?: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version?: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt?: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
-  /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
-  lastName?: string;
-  /**
-   * A idx.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  idx?: string;
+  lastName: string;
 }
 
 /**
@@ -706,59 +430,39 @@ export interface CreateActorInput {
  */
 export interface CreateActorOutput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
+  updatedAt: string;
   /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
-  lastName?: string;
-  /**
-   * A idx.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  idx?: string;
+  lastName: string;
 }
 
 /**
@@ -766,59 +470,10 @@ export interface CreateActorOutput {
  */
 export interface GetActorInput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type?: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version?: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt?: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
-  /**
-   * A first-name.
-   */
-  firstName?: string;
-  /**
-   * A last-name.
-   */
-  lastName?: string;
-  /**
-   * A idx.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  idx?: string;
+  id: string;
 }
 
 /**
@@ -826,59 +481,39 @@ export interface GetActorInput {
  */
 export interface GetActorOutput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
+  updatedAt: string;
   /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
-  lastName?: string;
-  /**
-   * A idx.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  idx?: string;
+  lastName: string;
 }
 
 /**
@@ -886,59 +521,18 @@ export interface GetActorOutput {
  */
 export interface UpdateActorInput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type?: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version?: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt?: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
+  id: string;
   /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
-  lastName?: string;
-  /**
-   * A idx.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  idx?: string;
+  lastName: string;
 }
 
 /**
@@ -946,59 +540,39 @@ export interface UpdateActorInput {
  */
 export interface UpdateActorOutput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
+  updatedAt: string;
   /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
-  lastName?: string;
-  /**
-   * A idx.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  idx?: string;
+  lastName: string;
 }
 
 /**
@@ -1006,59 +580,10 @@ export interface UpdateActorOutput {
  */
 export interface DeleteActorInput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type?: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version?: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt?: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt?: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt?: string;
-  /**
-   * A first-name.
-   */
-  firstName?: string;
-  /**
-   * A last-name.
-   */
-  lastName?: string;
-  /**
-   * A idx.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  idx?: string;
+  id: string;
 }
 
 /**
@@ -1066,59 +591,44 @@ export interface DeleteActorInput {
  */
 export interface DeleteActorOutput {
   /**
-   * A pk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  pk?: string;
-  /**
-   * A sk.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  sk?: string;
-  /**
    * The id for the record.
    * @readonly This attribute is managed automatically by the system.
    */
-  id?: string;
+  id: string;
   /**
    * The type for this record.
    * @readonly This attribute is managed automatically by the system.
    */
-  type?: string;
+  type: string;
   /**
    * The version of this record
    * @default "LATEST"
    * @readonly This attribute is managed automatically by the system.
    */
-  version?: string;
+  version: string;
   /**
    * The date and time this record was created.
    * @readonly This attribute is managed automatically by the system.
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * The date and time this record was last updated.
    * @readonly This attribute is managed automatically by the system.
    */
-  updatedAt?: string;
+  updatedAt: string;
   /**
    * The date and time this record was deleted.
    * @readonly This attribute is managed automatically by the system.
    */
-  deletedAt?: string;
+  deletedAt: string;
   /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
-  lastName?: string;
-  /**
-   * A idx.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  idx?: string;
+  lastName: string;
 }
 
 // ~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".

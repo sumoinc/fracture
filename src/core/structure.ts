@@ -3,7 +3,10 @@ import { SetRequired, ValueOf } from "type-fest";
 import { FractureComponent } from "./component";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
-import { ResourceAttribute } from "./resource-attribute";
+import {
+  ResourceAttribute,
+  ResourceAttributeGenerator,
+} from "./resource-attribute";
 import { Service } from "./service";
 
 /******************************************************************************
@@ -130,12 +133,10 @@ export class Structure extends FractureComponent {
     return this.attributes.find((a) => a.name === name);
   }
 
-  /**
-   * Includes all public attributes, plus generated attributes and GSI
-   * attributes. This is a good list to use for dynamodb operations.
-   */
-  public get attributes() {
-    return this.resource.attributes.sort((a, b) => {
+  private sortAttributes(
+    resourceAttributes: ResourceAttribute[]
+  ): ResourceAttribute[] {
+    return resourceAttributes.sort((a, b) => {
       if (a.sortPosition < b.sortPosition) {
         return -1;
       } else if (a.sortPosition > b.sortPosition) {
@@ -144,6 +145,14 @@ export class Structure extends FractureComponent {
         return 0;
       }
     });
+  }
+
+  /**
+   * Includes all public attributes, plus generated attributes and GSI
+   * attributes. This is a good list to use for dynamodb operations.
+   */
+  public get attributes(): ResourceAttribute[] {
+    return this.sortAttributes(this.resource.attributes);
   }
 
   /**
@@ -200,7 +209,9 @@ export class Structure extends FractureComponent {
     }
     // on create, put in everything
     if (this.operation?.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
-      return this.attributes;
+      return this.sortAttributes(
+        this.publicAttributes.concat(this.generatedAttributes)
+      );
     }
 
     // on read we need all the parts of the pk and sk that are not generated on read
@@ -235,6 +246,18 @@ export class Structure extends FractureComponent {
       return this.attributes.filter((a) => a.isGeneratedOn(this.operation));
     }
     return [];
+  }
+
+  public hasGenerator(
+    generator: ValueOf<typeof ResourceAttributeGenerator>
+  ): boolean {
+    // generator only apply to operations
+    if (!this.operation) {
+      return false;
+    }
+    return this.attributes.some(
+      (a) => a.isGeneratedOn(this.operation) && a.generator === generator
+    );
   }
 
   public get attributeNames() {

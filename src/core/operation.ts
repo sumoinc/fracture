@@ -23,6 +23,11 @@ export type OperationOptions = {
   operationSubType?: ValueOf<typeof OPERATION_SUB_TYPE>;
 };
 
+export type OperationDefault = {
+  operationSubType: ValueOf<typeof OPERATION_SUB_TYPE>;
+  default: string;
+};
+
 export const OPERATION_TYPE = {
   QUERY: "Query",
   MUTATION: "Mutation",

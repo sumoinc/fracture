@@ -33,9 +33,17 @@ export class ExampleApp extends Component {
      **************************************************************************/
 
     const tenantService = fracture.addService({ name: "tenant" });
-    tenantService
-      .addResource({ name: "tenant" })
-      .addResourceAttribute({ name: "name", shortName: "n", isRequired: true });
+    const tenant = tenantService.addResource({ name: "tenant" });
+    const name = tenant.addResourceAttribute({
+      name: "name",
+      shortName: "n",
+      isRequired: true,
+    });
+    tenant.addResourceAttribute({
+      name: "nickname",
+      shortName: "nn",
+    });
+    tenant.addLookupSource(name);
 
     const actor = tenantService.addResource({ name: "actor" });
     const firstName = actor.addResourceAttribute({

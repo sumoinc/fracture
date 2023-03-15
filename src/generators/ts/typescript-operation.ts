@@ -1,3 +1,4 @@
+import { DynamoCommand } from "./dynamodb/dynamo-command";
 import { TypescriptResource } from "./typescript-resource";
 import { TypescriptService } from "./typescript-service";
 import { TypescriptStructure } from "./typescript-structure";
@@ -30,7 +31,7 @@ export class TypescriptOperation extends FractureComponent {
     );
 
     // create dynamo command
-    //new DynamoCommand(this);
+    new DynamoCommand(this);
   }
 
   public get tsService(): TypescriptService {

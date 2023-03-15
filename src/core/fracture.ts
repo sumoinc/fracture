@@ -165,6 +165,7 @@ export class Fracture extends Component {
             shortName: "dd",
             comments: [`The date and time this record was deleted.`],
             type: ResourceAttributeType.DATE_TIME,
+            isRequired: true,
             isSystem: true,
             generator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
             generateOn: [],

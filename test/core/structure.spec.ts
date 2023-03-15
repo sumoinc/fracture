@@ -108,7 +108,6 @@ const expectedStructures = [
           { version: true },
           { "created-at": true },
           { "updated-at": true },
-          { "deleted-at": false },
           { "my-name": true },
           { "first-name": true },
           { "last-name": false },

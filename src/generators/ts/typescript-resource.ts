@@ -1,5 +1,4 @@
 import { TypescriptOperation } from "./typescript-operation";
-import { TypescriptResourceAttribute } from "./typescript-resource-attribute";
 import { TypescriptService } from "./typescript-service";
 import { TypescriptStructure } from "./typescript-structure";
 import { FractureComponent } from "../../core";
@@ -24,12 +23,6 @@ export class TypescriptResource extends FractureComponent {
     // add operations
     this.resource.operations.forEach((operation) => {
       new TypescriptOperation(this, operation);
-    });
-  }
-
-  public get tsAttributes(): TypescriptResourceAttribute[] {
-    return this.resource.attributes.map((attribute) => {
-      return new TypescriptResourceAttribute(this, attribute);
     });
   }
 

@@ -38,14 +38,28 @@ export class TypescriptStructure extends FractureComponent {
     );
   }
 
-  public get tsAttributes(): TypescriptResourceAttribute[] {
-    return this.resource.attributes.map((attribute) => {
-      return new TypescriptResourceAttribute(this.tsResource, attribute);
+  public get tsPublicAttributes() {
+    return this.structure.publicAttributes.map((a) => {
+      return new TypescriptResourceAttribute(this.tsResource, a);
     });
   }
 
-  public get tsPublicAttributes() {
-    return this.tsAttributes;
+  public get tsItemAttributes() {
+    return this.structure.itemAttributes.map((a) => {
+      return new TypescriptResourceAttribute(this.tsResource, a);
+    });
+  }
+
+  public get tsKeyAttributes() {
+    return this.structure.keyAttributeSources.map((a) => {
+      return new TypescriptResourceAttribute(this.tsResource, a);
+    });
+  }
+
+  public get tsGeneratedAttributes() {
+    return this.structure.generatedAttributes.map((a) => {
+      return new TypescriptResourceAttribute(this.tsResource, a);
+    });
   }
 
   writePublicInterface(file: TypeScriptSource) {
@@ -53,7 +67,7 @@ export class TypescriptStructure extends FractureComponent {
     file.open(`export interface ${this.publicInterfaceName} {`);
     this.tsPublicAttributes.forEach((a) => {
       file.lines(a.comments);
-      file.line(`${a.attributeName}?: ${a.type};`);
+      file.line(`${a.attributeName}${a.required}: ${a.type};`);
     });
     file.close(`}`);
     file.line("\n");
