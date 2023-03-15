@@ -194,6 +194,9 @@ export class Fracture extends Component {
       options,
     ]) as Required<FractureOptions>;
 
+    this.project.logger.info("=".repeat(80));
+    this.project.logger.info(`INIT Fracture: "${this.project.name}"`);
+
     return this;
   }
 
@@ -205,6 +208,7 @@ export class Fracture extends Component {
    * @returns void
    */
   public build() {
+    this.project.logger.info(`BUILD Fracture: "${this.project.name}"`);
     this.services.forEach((service) => {
       service.build();
       new TypescriptService(service);

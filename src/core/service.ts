@@ -73,7 +73,7 @@ export class Service extends FractureComponent {
       forcedOptions,
     ]) as Required<ServiceOptions>;
 
-    this.project.logger.info(`Service: "${this.name}" initialized.`);
+    this.project.logger.info(`INIT Service: "${this.name}"`);
 
     /***************************************************************************
      *
@@ -89,7 +89,7 @@ export class Service extends FractureComponent {
   }
 
   public build() {
-    this.project.logger.debug(`BUILD Service: "${this.name}" called.`);
+    this.project.logger.info(`BUILD Service: "${this.name}"`);
     this.resources.forEach((resource) => {
       resource.build();
     });

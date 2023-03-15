@@ -20,6 +20,9 @@ export class TypescriptService extends FractureComponent {
       "ts"
     );
 
+    this.project.logger.info("-".repeat(80));
+    this.project.logger.info(`TS:INIT Service: "${this.service.name}"`);
+
     // typefile we'll decorate with more types in some other places
     this.typeFile = new TypeScriptSource(this, join(this.outdir, "types.ts"));
 

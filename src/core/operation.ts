@@ -79,13 +79,13 @@ export class Operation extends FractureComponent {
       options,
     ]) as Required<OperationOptions>;
 
-    this.project.logger.info(`Operation: "${this.name}" initialized.`);
+    this.project.logger.info(`INFO Operation: "${this.name}"`);
 
     return this;
   }
 
   public build() {
-    this.project.logger.debug(`BUILD Operation: "${this.name}" called.`);
+    this.project.logger.info(`BUILD Operation: "${this.name}"`);
     this.inputStructure.build();
     this.outputStructure.build();
   }

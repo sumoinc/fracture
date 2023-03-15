@@ -29,5 +29,7 @@ export class Account extends FractureComponent {
 
     // all other options
     this.options = options;
+
+    this.project.logger.info(`INIT Account: "${this.options.accountNo}"`);
   }
 }

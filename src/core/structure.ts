@@ -82,7 +82,7 @@ export class Structure extends FractureComponent {
       "type" | "comments"
     >;
 
-    this.project.logger.info(`Structure: "${this.name}" initialized.`);
+    this.project.logger.info(`INIT Structure: "${this.name}"`);
 
     //
     if (
@@ -98,7 +98,7 @@ export class Structure extends FractureComponent {
 
   // not used here (yet)
   public build() {
-    this.project.logger.debug(`BUILD Structure: "${this.name}" called.`);
+    this.project.logger.info(`BUILD Structure: "${this.name}"`);
   }
 
   /**

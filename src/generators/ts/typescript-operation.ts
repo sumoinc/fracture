@@ -17,6 +17,9 @@ export class TypescriptOperation extends FractureComponent {
 
     this.operation = operation;
     this.tsResource = tsResource;
+
+    this.project.logger.info(`TS:INIT Operation: "${this.operation.name}"`);
+
     this.tsInputStructure = new TypescriptStructure(
       tsResource,
       this.operation.inputStructure

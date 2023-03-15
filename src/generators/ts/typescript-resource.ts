@@ -16,6 +16,8 @@ export class TypescriptResource extends FractureComponent {
     this.resource = resource;
     this.tsService = tsService;
 
+    this.project.logger.info(`TS:INIT Resource: "${this.resource.name}"`);
+
     new TypescriptStructure(this, this.resource.dataStructure);
     new TypescriptStructure(this, this.resource.transientStructure);
 

@@ -96,7 +96,7 @@ export class Resource extends FractureComponent {
       forcedOptions,
     ]) as Required<ResourceOptions>;
 
-    this.project.logger.info(`Resource: "${this.name}" initialized.`);
+    this.project.logger.info(`INIT Resource: "${this.name}"`);
 
     /***************************************************************************
      *
@@ -169,7 +169,7 @@ export class Resource extends FractureComponent {
   }
 
   public build() {
-    this.project.logger.debug(`BUILD Resource: "${this.name}" called.`);
+    this.project.logger.info(`BUILD Resource: "${this.name}"`);
     this.dataStructure.build();
     this.transientStructure.build();
     this.operations.forEach((operation) => {

@@ -20,6 +20,8 @@ export class TypescriptStructure extends FractureComponent {
     this.tsResource = tsResource;
     this.structure = structure;
 
+    this.project.logger.info(`TS:INIT Structure: "${this.structure.name}"`);
+
     this.writePublicInterface(this.tsService.typeFile);
   }
 

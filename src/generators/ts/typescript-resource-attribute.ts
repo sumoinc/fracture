@@ -22,6 +22,10 @@ export class TypescriptResourceAttribute extends FractureComponent {
 
     this.tsResource = tsResource;
     this.resourceAttribute = resourceAttribute;
+
+    this.project.logger.info(
+      `TS:INIT Attribute: "${this.resourceAttribute.name}"`
+    );
   }
 
   /**

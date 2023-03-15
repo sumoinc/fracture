@@ -12,6 +12,9 @@ export class TypeScriptSource extends SourceCode {
     public readonly filePath: string
   ) {
     super(fractureComponent.project, filePath);
+
+    this.project.logger.info(`TS:INIT Source File: "${this.fileName}"`);
+
     return this;
   }
 
