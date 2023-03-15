@@ -78,8 +78,19 @@ export class DynamoCommand extends FractureComponent {
      *  CLIENT
      **************************************************************************/
 
+    this.tsFile.line(
+      `const region = process.env.AWS_REGION || "invalid-region";`
+    );
+    this.tsFile.open(`const config = {`);
+    this.tsFile.open(`...(process.env.MOCK_DYNAMODB_ENDPOINT && {`);
+    this.tsFile.line(`endpoint: process.env.MOCK_DYNAMODB_ENDPOINT,`);
+    this.tsFile.line(`sslEnabled: false,`);
+    this.tsFile.line(`region: 'local',`);
+    this.tsFile.close(`}),`);
+    this.tsFile.close(`}`);
+
     this.tsFile.lines([
-      `const client = new DynamoDBClient({});`,
+      `const client = new DynamoDBClient(config);`,
       `const dynamo = DynamoDBDocumentClient.from(client);`,
       ``,
     ]);

@@ -6,7 +6,15 @@ import {
   Response,
 } from "../../types";
 
-const client = new DynamoDBClient({});
+const region = process.env.AWS_REGION || "invalid-region";
+const config = {
+  ...(process.env.MOCK_DYNAMODB_ENDPOINT && {
+    endpoint: process.env.MOCK_DYNAMODB_ENDPOINT,
+    sslEnabled: false,
+    region: 'local',
+  }),
+}
+const client = new DynamoDBClient(config);
 const dynamo = DynamoDBDocumentClient.from(client);
 
 export const deleteUser = async (

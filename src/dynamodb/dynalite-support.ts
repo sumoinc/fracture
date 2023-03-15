@@ -58,8 +58,13 @@ export class DynaliteSupport extends FractureComponent {
                 },
               };
             }),
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          },
         };
       }),
+      basePort: 8000,
     };
 
     this.dynaliteConfig.line(
