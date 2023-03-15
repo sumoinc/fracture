@@ -304,7 +304,7 @@ export class ResourceAttribute extends FractureComponent {
       forcedOptions,
     ]) as Required<ResourceAttributeOptions>;
 
-    this.project.logger.info(`INIT Attribute: "${this.name}"`);
+    this.project.logger.debug(`INIT Attribute: "${this.name}"`);
 
     // if it's not generated, we need to validate type
     if (!this.isGenerated) {

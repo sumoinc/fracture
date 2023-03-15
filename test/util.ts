@@ -1,4 +1,8 @@
-import { Project, ProjectOptions, Task } from "projen";
+import { Task } from "projen";
+import {
+  TypeScriptProject,
+  TypeScriptProjectOptions,
+} from "projen/lib/typescript";
 import { Fracture, FractureOptions } from "../src";
 
 export class TestFracture extends Fracture {
@@ -9,10 +13,16 @@ export class TestFracture extends Fracture {
   }
 }
 
-export class TestProject extends Project {
-  constructor(options: Omit<ProjectOptions, "name"> = {}) {
+export class TestProject extends TypeScriptProject {
+  constructor(
+    options: Omit<
+      TypeScriptProjectOptions,
+      "name" | "defaultReleaseBranch"
+    > = {}
+  ) {
     super({
       name: "test-project",
+      defaultReleaseBranch: "main",
       ...options,
     });
   }

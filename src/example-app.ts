@@ -1,8 +1,9 @@
-import { Component, Project } from "projen";
+import { Component } from "projen";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { Fracture } from "./core";
 
 export class ExampleApp extends Component {
-  constructor(project: Project) {
+  constructor(project: TypeScriptProject) {
     super(project);
 
     /***************************************************************************

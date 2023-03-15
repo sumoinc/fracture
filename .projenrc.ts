@@ -48,11 +48,6 @@ const project = new JsiiProject({
 // add example app
 new ExampleApp(project);
 
-// // make example visible to typescript
-// project.tsconfigDev.addInclude("example/**/*.ts");
-// project.gitignore.include("/example/");
-// project.npmignore?.exclude("/example/");
-
 new VsCodeConfiguration(project);
 
 // generate

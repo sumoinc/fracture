@@ -1,4 +1,5 @@
-import { Component, LoggerOptions, Project, LogLevel } from "projen";
+import { Component, LoggerOptions, LogLevel } from "projen";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
 import { AuditStrategy } from "./audit-strategy";
 import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
@@ -52,13 +53,13 @@ export class Fracture extends Component {
   public readonly services: Service[] = [];
   public readonly organizations: Organization[] = [];
   // project and namespace
-  public readonly project: Project;
+  public readonly project: TypeScriptProject;
   public readonly namespace: string;
   // all other options
   public readonly options: Required<FractureOptions>;
 
   constructor(
-    project: Project,
+    project: TypeScriptProject,
     namespace: string = "fracture",
     options: FractureOptions = {}
   ) {
@@ -177,7 +178,7 @@ export class Fracture extends Component {
 
     /***************************************************************************
      *
-     * INIT FRACTURE PROJECT
+     * INIT FRACTURE
      *
      **************************************************************************/
 
@@ -196,6 +197,19 @@ export class Fracture extends Component {
     this.project.logger.info("=".repeat(80));
     this.project.logger.info(`INIT Fracture: "${this.project.name}"`);
     this.project.logger.info(`               outdir: "${this.outdir}`);
+
+    /***************************************************************************
+     *
+     * CONFIGURE PROJEN
+     *
+     * We''l be making some adjustments to projen's default configuration so it
+     * plays nice with fracture.
+     *
+     **************************************************************************/
+
+    this.project.jest!.addTestMatch(
+      "<rootDir>/(test|src)/**/*.(spec|test).ts?(x)"
+    );
 
     return this;
   }
