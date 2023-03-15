@@ -1,5 +1,5 @@
 import { Component, Project } from "projen";
-import { Fracture } from "../src";
+import { Fracture } from "./core";
 
 export class ExampleApp extends Component {
   constructor(project: Project) {
@@ -9,7 +9,9 @@ export class ExampleApp extends Component {
      *  Setup and configure Fracture
      **************************************************************************/
 
-    const fracture = new Fracture(project, "foo", { outdir: "example" });
+    const fracture = new Fracture(project, "example", {
+      outdir: "src/example-app",
+    });
 
     fracture.addOrganization({ orgId: "o-abcdef" });
     //org.addAccount({ account: "0000000000" });
@@ -17,6 +19,7 @@ export class ExampleApp extends Component {
     /***************************************************************************
      *  User Service
      **************************************************************************/
+
     /*
     const userService = fracture.addService({ name: "user" });
     userService
@@ -27,7 +30,8 @@ export class ExampleApp extends Component {
     userService
       .addResource({ name: "group" })
       .addResourceAttribute({ name: "name", isRequired: true });
-*/
+    */
+
     /***************************************************************************
      *  Tenant Service
      **************************************************************************/
@@ -65,7 +69,8 @@ export class ExampleApp extends Component {
       .addResourceAttribute({ name: "actor-type" })
       .addResourceAttribute({ name: "actor" })
       .addResourceAttribute({ name: "scope" });
-*/
+    */
+
     // build out defaults
     fracture.build();
   }

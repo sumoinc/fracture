@@ -49,8 +49,8 @@ export interface FractureOptions {
  */
 export class Fracture extends Component {
   // member components
-  public readonly services: Service[];
-  public readonly organizations: Organization[];
+  public readonly services: Service[] = [];
+  public readonly organizations: Organization[] = [];
   // project and namespace
   public readonly project: Project;
   public readonly namespace: string;
@@ -182,8 +182,6 @@ export class Fracture extends Component {
      **************************************************************************/
 
     // member components
-    this.services = [];
-    this.organizations = [];
 
     // project and namespace
     this.project = project;
@@ -197,6 +195,7 @@ export class Fracture extends Component {
 
     this.project.logger.info("=".repeat(80));
     this.project.logger.info(`INIT Fracture: "${this.project.name}"`);
+    this.project.logger.info(`               outdir: "${this.outdir}`);
 
     return this;
   }
@@ -214,6 +213,10 @@ export class Fracture extends Component {
       service.build();
       new TypescriptService(service);
     });
+  }
+
+  public get outdir() {
+    return this.options.outdir;
   }
 
   /*****************************************************************************

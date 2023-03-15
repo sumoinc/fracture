@@ -1,6 +1,6 @@
 import { JsiiProject } from "projen/lib/cdk";
 import { NodePackageManager } from "projen/lib/javascript";
-import { ExampleApp } from "./example";
+import { ExampleApp } from "./src/example-app";
 import { VsCodeConfiguration } from "./src/projen/vscode";
 
 const authorName = "Cameron Childress";
@@ -48,10 +48,10 @@ const project = new JsiiProject({
 // add example app
 new ExampleApp(project);
 
-// make example visible to typescript
-project.tsconfigDev.addInclude("example/**/*.ts");
-project.gitignore.include("/example/");
-project.npmignore?.exclude("/example/");
+// // make example visible to typescript
+// project.tsconfigDev.addInclude("example/**/*.ts");
+// project.gitignore.include("/example/");
+// project.npmignore?.exclude("/example/");
 
 new VsCodeConfiguration(project);
 

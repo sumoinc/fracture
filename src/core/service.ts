@@ -46,7 +46,7 @@ export class Service extends FractureComponent {
     const { isVersioned, namingStrategy, auditStrategy } = fracture.options;
 
     let defaultOptions: Partial<ServiceOptions> = {
-      outdir: join(fracture.options.outdir, options.outdir ?? options.name),
+      outdir: join(fracture.outdir, options.outdir ?? options.name),
       isVersioned,
       namingStrategy,
       auditStrategy,
