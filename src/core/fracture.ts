@@ -11,6 +11,7 @@ import {
 } from "./resource-attribute";
 import { Service, ServiceOptions } from "./service";
 import { STRUCTURE_TYPE } from "./structure";
+import { DynaliteSupport } from "../dynamodb/dynalite-support";
 import { TypescriptService } from "../generators/ts/typescript-service";
 
 /**
@@ -224,6 +225,9 @@ export class Fracture extends Component {
     );
     this.project.addDevDeps("@types/uuid");
     this.project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
+
+    // add Dynalite support for Jest
+    new DynaliteSupport(this);
 
     return this;
   }

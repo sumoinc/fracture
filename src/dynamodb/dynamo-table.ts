@@ -92,6 +92,18 @@ export class DynamoTable extends FractureComponent {
     return this.options.lookupName;
   }
 
+  public get attrributeNames(): string[] {
+    return this.dynamoGsi.reduce((acc, gsi) => {
+      if (acc.indexOf(gsi.pkName) === -1) {
+        acc.push(gsi.pkName);
+      }
+      if (acc.indexOf(gsi.skName) === -1) {
+        acc.push(gsi.skName);
+      }
+      return acc;
+    }, [] as string[]);
+  }
+
   public get keyDynamoGsi(): DynamoGsi {
     let dynamoGsi = this.dynamoGsi.find((g) => g.isKeyGsi);
 

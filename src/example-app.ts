@@ -21,17 +21,14 @@ export class ExampleApp extends Component {
      *  User Service
      **************************************************************************/
 
-    /*
     const userService = fracture.addService({ name: "user" });
-    userService
-      .addResource({ name: "user" })
-      .addResourceAttribute({ name: "first-name", shortName: "fn" })
-      .addResourceAttribute({ name: "last-name", shortName: "ln" });
 
-    userService
-      .addResource({ name: "group" })
-      .addResourceAttribute({ name: "name", isRequired: true });
-    */
+    const user = userService.addResource({ name: "user" });
+    user.addResourceAttribute({ name: "first-name", shortName: "fn" });
+    user.addResourceAttribute({ name: "last-name", shortName: "ln" });
+
+    const group = userService.addResource({ name: "group" });
+    group.addResourceAttribute({ name: "name", isRequired: true });
 
     /***************************************************************************
      *  Tenant Service
