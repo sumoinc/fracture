@@ -22,6 +22,7 @@ const project = new JsiiProject({
   authorEmail: authorAddress,
   releaseToNpm: true,
   devDeps: [],
+  /*
   deps: [
     "@aws-sdk/client-dynamodb",
     "@aws-sdk/lib-dynamodb",
@@ -33,6 +34,7 @@ const project = new JsiiProject({
     "uuid",
   ],
   peerDeps: ["@aws-sdk/smithy-client", "@aws-sdk/types"],
+  */
   projenrcTs: true,
   packageManager: NodePackageManager.PNPM,
   prettier: true,

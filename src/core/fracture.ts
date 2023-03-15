@@ -211,6 +211,20 @@ export class Fracture extends Component {
       "<rootDir>/(test|src)/**/*.(spec|test).ts?(x)"
     );
 
+    // dependancies fracture needs
+    this.project.addDeps(
+      "@aws-sdk/client-dynamodb",
+      "@aws-sdk/lib-dynamodb",
+      "@aws-sdk/util-dynamodb",
+      "@types/aws-lambda",
+      "change-case",
+      "projen",
+      "type-fest",
+      "uuid"
+    );
+    this.project.addDevDeps("@types/uuid");
+    this.project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
+
     return this;
   }
 

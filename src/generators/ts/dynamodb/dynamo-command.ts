@@ -208,7 +208,17 @@ if (
      *  CLOSE FUNCTION
      **************************************************************************/
 
-    // this.tsFile.line(`return item as ${this.tsResource.interfaceName};`);
+    this.tsFile.line(`console.log(result);`);
+
+    this.tsFile.open(`return {`);
+    this.tsFile.open(`data: {`);
+    this.tsOutputStructure.tsPublicAttributes.forEach((a) => {
+      this.tsFile.line(`${a.attributeName}: ${a.attributeShortName},`);
+    });
+    this.tsFile.close(`},`);
+    this.tsFile.line(`errors: [],`);
+    this.tsFile.line(`status: 200,`);
+    this.tsFile.close(`};`);
     this.tsFile.close(`};`);
   };
 
