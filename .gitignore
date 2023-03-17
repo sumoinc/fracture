@@ -54,6 +54,7 @@ junit.xml
 tsconfig.json
 !/API.md
 !/jest-dynalite-config.js
+!/setupBeforeEnv.ts
 !/src/example-app/user-service/ts/types.ts
 !/src/example-app/user-service/ts/dynamodb/commands/create-user.ts
 !/src/example-app/user-service/ts/dynamodb/commands/create-user.spec.ts

@@ -19,6 +19,7 @@
     ".vscode/settings.json",
     "jest-dynalite-config.js",
     "LICENSE",
+    "setupBeforeEnv.ts",
     "src/example-app/tenant-service/ts/dynamodb/commands/create-actor.spec.ts",
     "src/example-app/tenant-service/ts/dynamodb/commands/create-actor.ts",
     "src/example-app/tenant-service/ts/dynamodb/commands/create-tenant.spec.ts",
