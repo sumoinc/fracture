@@ -19,7 +19,6 @@ const config = {
     region: 'local',
   }),
 }
-console.log(config, process.env.MOCK_DYNAMODB_ENDPOINT)
 const client = new DynamoDBClient(config);
 const dynamo = DynamoDBDocumentClient.from(client);
 
@@ -44,20 +43,13 @@ export const deleteGroup = async (
         pk,
         sk,
       },
+      ReturnConsumedCapacity: "INDEXES",
+      ReturnItemCollectionMetrics: "SIZE",
     })
   );
 
   console.log(result);
   return {
-    data: {
-      id: id,
-      type: t,
-      version: v,
-      createdAt: cd,
-      updatedAt: ud,
-      deletedAt: dd,
-      name: name,
-    },
     errors: [],
     status: 200,
   };

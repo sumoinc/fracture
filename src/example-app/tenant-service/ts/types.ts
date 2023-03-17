@@ -6,7 +6,13 @@ export type Error = {
 }
 
 export type Response<T> = {
-  data: T | T[];
+  data: T;
+  errors: Error[];
+  status: number;
+}
+
+export type ListResponse<T> = {
+  data:T[];
   errors: Error[];
   status: number;
 }

@@ -22,22 +22,19 @@ const project = new JsiiProject({
   authorEmail: authorAddress,
   releaseToNpm: true,
   devDeps: [],
-  /*
-  deps: [
-    "@aws-sdk/client-dynamodb",
-    "@aws-sdk/lib-dynamodb",
-    "@aws-sdk/util-dynamodb",
-    "@types/aws-lambda",
-    "change-case",
-    "projen",
-    "type-fest",
-    "uuid",
-  ],
-  peerDeps: ["@aws-sdk/smithy-client", "@aws-sdk/types"],
-  */
+  deps: [],
+  peerDeps: [],
   projenrcTs: true,
   packageManager: NodePackageManager.PNPM,
   prettier: true,
+
+  // jest config
+  // TODO: Move to fracture once new projen version releases.
+  jestOptions: {
+    jestConfig: {
+      setupFiles: ["./setupBeforeEnv.ts"],
+    },
+  },
 
   // send code coverage to codecov
   codeCov: true,

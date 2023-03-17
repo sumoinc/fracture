@@ -19,7 +19,6 @@ const config = {
     region: 'local',
   }),
 }
-console.log(config, process.env.MOCK_DYNAMODB_ENDPOINT)
 const client = new DynamoDBClient(config);
 const dynamo = DynamoDBDocumentClient.from(client);
 
@@ -44,19 +43,14 @@ export const getActor = async (
         pk,
         sk,
       },
+      ReturnConsumedCapacity: "INDEXES",
     })
   );
 
   console.log(result);
   return {
+    // @ts-ignore
     data: {
-      id: id,
-      type: t,
-      version: v,
-      createdAt: cd,
-      updatedAt: ud,
-      firstName: fn,
-      lastName: ln,
     },
     errors: [],
     status: 200,

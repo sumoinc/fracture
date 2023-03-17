@@ -6,6 +6,7 @@ import { Operation, OPERATION_SUB_TYPE } from "../../../core/operation";
 import { Resource } from "../../../core/resource";
 import { ResourceAttributeGenerator } from "../../../core/resource-attribute";
 import { Service } from "../../../core/service";
+import { DynaliteSupport } from "../../../dynamodb/dynalite-support";
 import { TypescriptOperation } from "../typescript-operation";
 import { TypescriptResource } from "../typescript-resource";
 import { TypescriptService } from "../typescript-service";
@@ -75,30 +76,15 @@ export class DynamoCommand extends FractureComponent {
     this.tsFile.line("");
 
     /***************************************************************************
-     *  CLIENT
+     *
+     * CLIENT
+     *
+     * Use the dynalite support to create the client. This builds a testable
+     * client required when building Jest unit tests.
+     *
      **************************************************************************/
 
-    this.tsFile.comments([
-      "Generate a DynamoDB client, configure it to use a local endpoint when needed",
-      "to support unit testing with dynalite.",
-      "",
-      "https://www.npmjs.com/package/jest-dynalite",
-    ]);
-    this.tsFile.open(`const config = {`);
-    this.tsFile.open(`...(process.env.MOCK_DYNAMODB_ENDPOINT && {`);
-    this.tsFile.line(`endpoint: process.env.MOCK_DYNAMODB_ENDPOINT,`);
-    this.tsFile.line(`sslEnabled: false,`);
-    this.tsFile.line(`region: 'local',`);
-    this.tsFile.close(`}),`);
-    this.tsFile.close(`}`);
-
-    this.tsFile.line("console.log(config, process.env.MOCK_DYNAMODB_ENDPOINT)");
-
-    this.tsFile.lines([
-      `const client = new DynamoDBClient(config);`,
-      `const dynamo = DynamoDBDocumentClient.from(client);`,
-      ``,
-    ]);
+    DynaliteSupport.writeDynamoClient(this.tsFile);
 
     /***************************************************************************
      *  OPEN FUNCTION
@@ -165,10 +151,7 @@ export class DynamoCommand extends FractureComponent {
     this.tsFile.line(`TableName: "${this.service.dynamoTable.name}",`);
 
     // PUT NEW ITEM
-    if (
-      this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE ||
-      this.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE
-    ) {
+    if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
       this.tsFile.open(`Item: {`);
       this.tsInputStructure.tsItemAttributes.forEach((a) => {
         this.tsFile.line(`${a.attributeShortName},`);
@@ -216,6 +199,12 @@ if (
       this.tsFile.close(`},`);
     }
 
+    // return some statistics (might remove this later)
+    this.tsFile.line(`ReturnConsumedCapacity: "INDEXES",`);
+    if (this.operationSubType !== OPERATION_SUB_TYPE.READ_ONE) {
+      this.tsFile.line(`ReturnItemCollectionMetrics: "SIZE",`);
+    }
+
     this.tsFile.close(`})`);
     this.tsFile.close(`);`);
     this.tsFile.line("");
@@ -227,11 +216,34 @@ if (
     this.tsFile.line(`console.log(result);`);
 
     this.tsFile.open(`return {`);
-    this.tsFile.open(`data: {`);
-    this.tsOutputStructure.tsPublicAttributes.forEach((a) => {
-      this.tsFile.line(`${a.attributeName}: ${a.attributeShortName},`);
-    });
-    this.tsFile.close(`},`);
+
+    /***************************************************************************
+     *  CLOSE FUNCTION - create
+     **************************************************************************/
+
+    if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
+      this.tsFile.open(`data: {`);
+      this.tsOutputStructure.tsPublicAttributes.forEach((a) => {
+        this.tsFile.line(`${a.attributeName}: ${a.attributeShortName},`);
+      });
+      this.tsFile.close(`},`);
+    }
+
+    /***************************************************************************
+     *  CLOSE FUNCTION - read
+     **************************************************************************/
+
+    if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
+      this.tsFile.line(`// @ts-ignore`);
+      this.tsFile.open(`data: {`);
+      /*
+      this.tsOutputStructure.tsPublicAttributes.forEach((a) => {
+        this.tsFile.line(`${a.attributeName}: ${a.attributeShortName},`);
+      });
+      */
+      this.tsFile.close(`},`);
+    }
+
     this.tsFile.line(`errors: [],`);
     this.tsFile.line(`status: 200,`);
     this.tsFile.close(`};`);
@@ -242,11 +254,7 @@ if (
     /***************************************************************************
      *  IMPORTS
      **************************************************************************/
-    this.tsTest.line(
-      `import { setup, startDb, stopDb, createTables, deleteTables } from "jest-dynalite";`
-    );
-    this.tsTest.line(`import { resolve } from "path";`);
-    this.tsTest.line(`import "jest-dynalite/withDb";`);
+    DynaliteSupport.writeJestImports(this.tsTest);
     this.tsTest.line(
       `import { ${this.functionName} } from "./${
         this.tsFile.fileName.split(".")[0]
@@ -263,35 +271,56 @@ if (
      *  CONFIGURE TESTS
      **************************************************************************/
 
-    this.tsTest.comments([
-      "Sometimes dynalite tests can require a little additional",
-      "time when you are running a lot of them in parallel.",
-    ]);
-    this.tsTest.line("jest.setTimeout(10000);");
-    this.tsTest.line("");
-
-    this.tsTest.line(`setup(resolve("./"));`);
-
-    this.tsTest.line("beforeAll(startDb);");
-    this.tsTest.line("beforeEach(createTables);");
-    this.tsTest.line("afterEach(deleteTables);");
-    this.tsTest.line("afterAll(stopDb);");
-    this.tsTest.line("");
+    DynaliteSupport.writeJestConfig(this.tsTest);
+    this.tsTest.open(`test("Smoke test", async () => {`);
 
     /***************************************************************************
-     *  SMOKE TEST
+     *  CREATE TEST
      **************************************************************************/
 
-    this.tsTest.open(`test("Smoke test", async () => {`);
-    this.tsTest.open(
-      `const fixture : ${this.tsInputStructure.publicInterfaceName} = {`
-    );
-    this.tsInputStructure.tsPublicAttributes.forEach((a) => {
-      this.tsTest.line(`${a.attributeName}: 'foo',`);
-    });
-    this.tsTest.close(`};`);
-    this.tsTest.line(`const result = await ${this.functionName}(fixture);`);
-    this.tsTest.line(`expect(result).toBeTruthy();`);
+    if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
+      this.tsTest.open(
+        `const fixture : ${this.tsInputStructure.publicInterfaceName} = {`
+      );
+      this.tsInputStructure.tsPublicAttributes.forEach((a) => {
+        this.tsTest.line(`${a.attributeName}: "foo",`);
+      });
+      this.tsTest.close(`};`);
+      this.tsTest.line(`const result = await ${this.functionName}(fixture);`);
+      this.tsTest.line(`const { data, errors, status } = result;`);
+
+      this.tsTest.line(
+        `console.log("${this.functionName}() Result:", JSON.stringify(result, null, 2));`
+      );
+      this.tsTest.line(`expect(data).toBeTruthy();`);
+      this.tsTest.line(`expect(errors.length).toBe(0);`);
+      this.tsTest.line(`expect(status).toBe(200);`);
+      this.tsTest.line(`expect(data.name).toBe("foo");`);
+    }
+    /***************************************************************************
+     *  READ TEST
+     **************************************************************************/
+
+    if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
+      this.tsTest.open(
+        `const fixture : ${this.tsInputStructure.publicInterfaceName} = {`
+      );
+      this.tsInputStructure.tsPublicAttributes.forEach((a) => {
+        this.tsTest.line(`${a.attributeName}: "foo",`);
+      });
+      this.tsTest.close(`};`);
+      this.tsTest.line(`const result = await ${this.functionName}(fixture);`);
+      this.tsTest.line(`const { data, errors, status } = result;`);
+
+      this.tsTest.line(
+        `console.log("${this.functionName}() Result:", JSON.stringify(result, null, 2));`
+      );
+      this.tsTest.line(`expect(data).toBeTruthy();`);
+      this.tsTest.line(`expect(errors.length).toBe(0);`);
+      this.tsTest.line(`expect(status).toBe(200);`);
+      //this.tsTest.line(`expect(data.name).toBe("foo");`);
+    }
+
     this.tsTest.close(`})`);
     this.tsFile.line("");
   };

@@ -36,7 +36,14 @@ export class TypescriptService extends FractureComponent {
     this.typeFile.line("\n");
 
     this.typeFile.open(`export type ${this.responseTypeName}<T> = {`);
-    this.typeFile.line(`data: T | T[];`);
+    this.typeFile.line(`data: T;`);
+    this.typeFile.line(`errors: Error[];`);
+    this.typeFile.line(`status: number;`);
+    this.typeFile.close(`}`);
+    this.typeFile.line("\n");
+
+    this.typeFile.open(`export type ${this.listResponseTypeName}<T> = {`);
+    this.typeFile.line(`data:T[];`);
     this.typeFile.line(`errors: Error[];`);
     this.typeFile.line(`status: number;`);
     this.typeFile.close(`}`);
@@ -52,7 +59,14 @@ export class TypescriptService extends FractureComponent {
 
   public get responseTypeName() {
     return formatStringByNamingStrategy(
-      "Response",
+      "response",
+      this.fracture.options.namingStrategy.ts.typeName
+    );
+  }
+
+  public get listResponseTypeName() {
+    return formatStringByNamingStrategy(
+      "list-response",
       this.fracture.options.namingStrategy.ts.typeName
     );
   }

@@ -20,7 +20,6 @@ const config = {
     region: 'local',
   }),
 }
-console.log(config, process.env.MOCK_DYNAMODB_ENDPOINT)
 const client = new DynamoDBClient(config);
 const dynamo = DynamoDBDocumentClient.from(client);
 
@@ -54,6 +53,8 @@ export const createGroup = async (
         pk,
         sk,
       },
+      ReturnConsumedCapacity: "INDEXES",
+      ReturnItemCollectionMetrics: "SIZE",
     })
   );
 
