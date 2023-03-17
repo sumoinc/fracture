@@ -231,7 +231,13 @@ const expectedStructures = [
         ],
       },
       {
-        itemAttributes: [],
+        itemAttributes: [
+          { "updated-at": true },
+          { "my-name": true },
+          { "first-name": true },
+          { "last-name": false },
+          { idx: true },
+        ],
       },
       { keyAttributes: [{ pk: true }, { sk: true }] },
       {
@@ -394,6 +400,15 @@ describe("Parent", () => {
               const expectedNames = expectedAttributes.map(
                 (a) => Object.keys(a)[0]
               );
+              /*
+              console.log(
+                expectedStructure.operationSubType,
+                expectedStructure.type,
+                expectedAttributeType,
+                actualNames,
+                expectedNames
+              );*/
+
               expect(actualNames).toEqual(expectedNames);
             });
 

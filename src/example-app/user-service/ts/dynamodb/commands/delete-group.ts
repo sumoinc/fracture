@@ -50,6 +50,9 @@ export const deleteGroup = async (
 
   console.log(result);
   return {
+    // @ts-ignore
+    data: {
+    },
     errors: [],
     status: 200,
   };

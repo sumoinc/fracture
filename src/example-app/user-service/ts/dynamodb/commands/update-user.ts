@@ -44,6 +44,17 @@ export const updateUser = async (
   const result = await dynamo.send(
     new UpdateCommand({
       TableName: "user",
+      UpdateExpression: "set #ud = :ud, #fn = :fn, #ln = :ln",
+      ExpressionAttributeValues: {
+        ":ud": ud,
+        ":fn": fn,
+        ":ln": ln,
+      },
+      ExpressionAttributeNames: {
+        "#ud": "ud",
+        "#fn": "fn",
+        "#ln": "ln",
+      },
       Key: {
         pk,
         sk,
@@ -55,6 +66,9 @@ export const updateUser = async (
 
   console.log(result);
   return {
+    // @ts-ignore
+    data: {
+    },
     errors: [],
     status: 200,
   };

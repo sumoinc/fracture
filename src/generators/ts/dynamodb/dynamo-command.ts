@@ -159,33 +159,29 @@ export class DynamoCommand extends FractureComponent {
       this.tsFile.close(`},`);
     }
 
-    // UPDATE OPERATIONS
-    /*
-if (
-  this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE ||
-  this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
-) {
-  const updateExpression = this.tsInputStructure.attributes
-    .map((attribute) => {
-      return `#${attribute.attributeShortName} = :${attribute.attributeShortName}`;
-    })
-    .join(", ");
-  this.tsFile.line(`UpdateExpression: "set ${updateExpression}",`);
-  this.tsFile.open(`ExpressionAttributeValues: {`);
-  this.tsInputStructure.attributes.forEach((attribute) => {
-    this.tsFile.line(
-      `":${attribute.attributeShortName}": ${attribute.attributeShortName},`
-    );
-  });
-  this.tsFile.close(`},`);
-  this.tsFile.open(`ExpressionAttributeNames: {`);
-  this.tsInputStructure.attributes.forEach((attribute) => {
-    this.tsFile.line(
-      `"#${attribute.attributeShortName}": "${attribute.attributeShortName}",`
-    );
-  });
-  this.tsFile.close(`},`);
-}*/
+    // UPDATE
+    if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
+      const updateExpression = this.tsInputStructure.tsItemAttributes
+        .map((attribute) => {
+          return `#${attribute.attributeShortName} = :${attribute.attributeShortName}`;
+        })
+        .join(", ");
+      this.tsFile.line(`UpdateExpression: "set ${updateExpression}",`);
+      this.tsFile.open(`ExpressionAttributeValues: {`);
+      this.tsInputStructure.tsItemAttributes.forEach((attribute) => {
+        this.tsFile.line(
+          `":${attribute.attributeShortName}": ${attribute.attributeShortName},`
+        );
+      });
+      this.tsFile.close(`},`);
+      this.tsFile.open(`ExpressionAttributeNames: {`);
+      this.tsInputStructure.tsItemAttributes.forEach((attribute) => {
+        this.tsFile.line(
+          `"#${attribute.attributeShortName}": "${attribute.attributeShortName}",`
+        );
+      });
+      this.tsFile.close(`},`);
+    }
 
     // OPERATIONS REQUIRING A KEY
     if (
@@ -234,6 +230,36 @@ if (
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
+      this.tsFile.line(`// @ts-ignore`);
+      this.tsFile.open(`data: {`);
+      /*
+      this.tsOutputStructure.tsPublicAttributes.forEach((a) => {
+        this.tsFile.line(`${a.attributeName}: ${a.attributeShortName},`);
+      });
+      */
+      this.tsFile.close(`},`);
+    }
+
+    /***************************************************************************
+     *  CLOSE FUNCTION - update
+     **************************************************************************/
+
+    if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
+      this.tsFile.line(`// @ts-ignore`);
+      this.tsFile.open(`data: {`);
+      /*
+      this.tsOutputStructure.tsPublicAttributes.forEach((a) => {
+        this.tsFile.line(`${a.attributeName}: ${a.attributeShortName},`);
+      });
+      */
+      this.tsFile.close(`},`);
+    }
+
+    /***************************************************************************
+     *  CLOSE FUNCTION - delete
+     **************************************************************************/
+
+    if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
       this.tsFile.line(`// @ts-ignore`);
       this.tsFile.open(`data: {`);
       /*
@@ -318,7 +344,52 @@ if (
       this.tsTest.line(`expect(data).toBeTruthy();`);
       this.tsTest.line(`expect(errors.length).toBe(0);`);
       this.tsTest.line(`expect(status).toBe(200);`);
-      //this.tsTest.line(`expect(data.name).toBe("foo");`);
+    }
+
+    /***************************************************************************
+     *  UPDATE TEST
+     **************************************************************************/
+
+    if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
+      this.tsTest.open(
+        `const fixture : ${this.tsInputStructure.publicInterfaceName} = {`
+      );
+      this.tsInputStructure.tsPublicAttributes.forEach((a) => {
+        this.tsTest.line(`${a.attributeName}: "foo",`);
+      });
+      this.tsTest.close(`};`);
+      this.tsTest.line(`const result = await ${this.functionName}(fixture);`);
+      this.tsTest.line(`const { data, errors, status } = result;`);
+
+      this.tsTest.line(
+        `console.log("${this.functionName}() Result:", JSON.stringify(result, null, 2));`
+      );
+      this.tsTest.line(`expect(data).toBeTruthy();`);
+      this.tsTest.line(`expect(errors.length).toBe(0);`);
+      this.tsTest.line(`expect(status).toBe(200);`);
+    }
+
+    /***************************************************************************
+     *  DELETE TEST
+     **************************************************************************/
+
+    if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
+      this.tsTest.open(
+        `const fixture : ${this.tsInputStructure.publicInterfaceName} = {`
+      );
+      this.tsInputStructure.tsPublicAttributes.forEach((a) => {
+        this.tsTest.line(`${a.attributeName}: "foo",`);
+      });
+      this.tsTest.close(`};`);
+      this.tsTest.line(`const result = await ${this.functionName}(fixture);`);
+      this.tsTest.line(`const { data, errors, status } = result;`);
+
+      this.tsTest.line(
+        `console.log("${this.functionName}() Result:", JSON.stringify(result, null, 2));`
+      );
+      this.tsTest.line(`expect(data).toBeTruthy();`);
+      this.tsTest.line(`expect(errors.length).toBe(0);`);
+      this.tsTest.line(`expect(status).toBe(200);`);
     }
 
     this.tsTest.close(`})`);

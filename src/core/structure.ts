@@ -219,6 +219,14 @@ export class Structure extends FractureComponent {
       return this.keyAttributeSources.filter((a) => !a.isGenerated);
     }
 
+    if (this.operation?.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
+      return this.sortAttributes(
+        this.publicAttributes.concat(this.generatedAttributes).filter((a) => {
+          return !a.isKeyPart;
+        })
+      );
+    }
+
     return [];
   }
 

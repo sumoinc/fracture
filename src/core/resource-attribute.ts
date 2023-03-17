@@ -392,6 +392,18 @@ export class ResourceAttribute extends FractureComponent {
    *
    ****************************************************************************/
 
+  /**
+   * Is involved in PK or SK in any way
+   */
+  public get isKeyPart(): boolean {
+    return (
+      this.isPartitionKey ||
+      this.isSortKey ||
+      this.isPartitionKeySource ||
+      this.isSortKeySource
+    );
+  }
+
   public get isPartitionKey(): boolean {
     return this.resource.partitionKey === this;
   }
@@ -448,7 +460,7 @@ export class ResourceAttribute extends FractureComponent {
    *
    ****************************************************************************/
 
-  public get isPkSource(): boolean {
+  public get isPartitionKeySource(): boolean {
     return this.keyAccessPattern.pkAttribute.compositionSources.some(
       (source) => {
         return source.name === this.name;
@@ -456,7 +468,7 @@ export class ResourceAttribute extends FractureComponent {
     );
   }
 
-  public get isSkSource(): boolean {
+  public get isSortKeySource(): boolean {
     return this.keyAccessPattern.skAttribute.compositionSources.some(
       (source) => {
         return source.name === this.name;
