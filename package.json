@@ -83,9 +83,6 @@
   "license": "MIT",
   "version": "0.0.0",
   "jest": {
-    "setupFiles": [
-      "./setupBeforeEnv.ts"
-    ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",
       "<rootDir>/(test|src)/**/*(*.)@(spec|test).ts?(x)",
@@ -124,7 +121,10 @@
       "ts-jest": {
         "tsconfig": "tsconfig.dev.json"
       }
-    }
+    },
+    "setupFiles": [
+      "./setupBeforeEnv.ts"
+    ]
   },
   "types": "lib/index.d.ts",
   "stability": "stable",

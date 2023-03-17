@@ -28,14 +28,6 @@ const project = new JsiiProject({
   packageManager: NodePackageManager.PNPM,
   prettier: true,
 
-  // jest config
-  // TODO: Move to fracture once new projen version releases.
-  jestOptions: {
-    jestConfig: {
-      setupFiles: ["./setupBeforeEnv.ts"],
-    },
-  },
-
   // send code coverage to codecov
   codeCov: true,
 

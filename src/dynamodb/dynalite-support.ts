@@ -91,6 +91,9 @@ export class DynaliteSupport extends FractureComponent {
     setupBeforeEnv.line(`setup(__dirname);`);
     setupBeforeEnv.line("");
 
+    // add setup to the jest config
+    project.jest!.addSetupFile("./setupBeforeEnv.ts");
+
     return this;
   }
 
