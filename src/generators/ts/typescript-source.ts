@@ -26,6 +26,16 @@ export class TypeScriptSource extends SourceCode {
    * Add multiple l;ines to the file at one time.
    * @param lines
    */
+  public comments(lines: string[]): void {
+    this.line("/**");
+    lines.forEach((line) => this.line(` * ${line}`));
+    this.line(" */");
+  }
+
+  /**
+   * Add multiple l;ines to the file at one time.
+   * @param lines
+   */
   public lines(lines: string[]): void {
     lines.forEach((line) => this.line(line));
   }

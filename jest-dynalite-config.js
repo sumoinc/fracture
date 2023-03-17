@@ -22,7 +22,6 @@ module.exports = {
           "AttributeType": "S"
         }
       ],
-      "GlobalSecondaryIndexes": [],
       "ProvisionedThroughput": {
         "ReadCapacityUnits": 1,
         "WriteCapacityUnits": 1

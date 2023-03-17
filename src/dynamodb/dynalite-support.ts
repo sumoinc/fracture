@@ -10,7 +10,9 @@ export class DynaliteSupport extends FractureComponent {
     const { project } = this.fracture;
 
     // add dynalite
-    project.addDevDeps("jest-dynalite");
+    project.addDeps("jest-dynalite");
+    // dynalite wants this peer fopr marshalling
+    project.addPeerDeps("aws-sdk@^2.1336.0");
 
     this.dynaliteConfig = new TypeScriptSource(this, "jest-dynalite-config.js");
     return this;
@@ -20,6 +22,9 @@ export class DynaliteSupport extends FractureComponent {
   preSynthesize() {
     const config = {
       tables: this.fracture.services.map((service) => {
+        const allGsi = service.dynamoTable.dynamoGsi.filter(
+          (gsi) => gsi !== service.dynamoTable.keyDynamoGsi
+        );
         return {
           TableName: service.dynamoTable.name,
           KeySchema: [
@@ -38,26 +43,27 @@ export class DynaliteSupport extends FractureComponent {
               AttributeType: "S",
             };
           }),
-          GlobalSecondaryIndexes: service.dynamoTable.dynamoGsi
-            .filter((gsi) => gsi !== service.dynamoTable.keyDynamoGsi)
-            .map((gsi) => {
-              return {
-                IndexName: gsi.name,
-                KeySchema: [
-                  {
-                    AttributeName: gsi.pkName,
-                    KeyType: "HASH",
-                  },
-                  {
-                    AttributeName: gsi.skName,
-                    KeyType: "RANGE",
-                  },
-                ],
-                Projection: {
-                  ProjectionType: "ALL",
-                },
-              };
-            }),
+          GlobalSecondaryIndexes:
+            allGsi.length > 0
+              ? allGsi.map((gsi) => {
+                  return {
+                    IndexName: gsi.name,
+                    KeySchema: [
+                      {
+                        AttributeName: gsi.pkName,
+                        KeyType: "HASH",
+                      },
+                      {
+                        AttributeName: gsi.skName,
+                        KeyType: "RANGE",
+                      },
+                    ],
+                    Projection: {
+                      ProjectionType: "ALL",
+                    },
+                  };
+                })
+              : undefined,
           ProvisionedThroughput: {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,

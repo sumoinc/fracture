@@ -78,9 +78,12 @@ export class DynamoCommand extends FractureComponent {
      *  CLIENT
      **************************************************************************/
 
-    this.tsFile.line(
-      `const region = process.env.AWS_REGION || "invalid-region";`
-    );
+    this.tsFile.comments([
+      "Generate a DynamoDB client, configure it to use a local endpoint when needed",
+      "to support unit testing with dynalite.",
+      "",
+      "https://www.npmjs.com/package/jest-dynalite",
+    ]);
     this.tsFile.open(`const config = {`);
     this.tsFile.open(`...(process.env.MOCK_DYNAMODB_ENDPOINT && {`);
     this.tsFile.line(`endpoint: process.env.MOCK_DYNAMODB_ENDPOINT,`);
@@ -88,6 +91,8 @@ export class DynamoCommand extends FractureComponent {
     this.tsFile.line(`region: 'local',`);
     this.tsFile.close(`}),`);
     this.tsFile.close(`}`);
+
+    this.tsFile.line("console.log(config, process.env.MOCK_DYNAMODB_ENDPOINT)");
 
     this.tsFile.lines([
       `const client = new DynamoDBClient(config);`,
@@ -238,6 +243,11 @@ if (
      *  IMPORTS
      **************************************************************************/
     this.tsTest.line(
+      `import { setup, startDb, stopDb, createTables, deleteTables } from "jest-dynalite";`
+    );
+    this.tsTest.line(`import { resolve } from "path";`);
+    this.tsTest.line(`import "jest-dynalite/withDb";`);
+    this.tsTest.line(
       `import { ${this.functionName} } from "./${
         this.tsFile.fileName.split(".")[0]
       }";`
@@ -247,6 +257,25 @@ if (
     this.tsTest.close(
       `} from "${this.tsService.typeFile.pathFrom(this.tsTest)}";`
     );
+    this.tsTest.line("");
+
+    /***************************************************************************
+     *  CONFIGURE TESTS
+     **************************************************************************/
+
+    this.tsTest.comments([
+      "Sometimes dynalite tests can require a little additional",
+      "time when you are running a lot of them in parallel.",
+    ]);
+    this.tsTest.line("jest.setTimeout(10000);");
+    this.tsTest.line("");
+
+    this.tsTest.line(`setup(resolve("./"));`);
+
+    this.tsTest.line("beforeAll(startDb);");
+    this.tsTest.line("beforeEach(createTables);");
+    this.tsTest.line("afterEach(deleteTables);");
+    this.tsTest.line("afterAll(stopDb);");
     this.tsTest.line("");
 
     /***************************************************************************
