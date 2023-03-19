@@ -8,6 +8,7 @@ import {
   ResourceAttributeGenerator,
 } from "./resource-attribute";
 import { Service } from "./service";
+import { TypescriptStructure } from "../generators/ts/typescript-structure";
 
 /******************************************************************************
  * TYPES
@@ -52,6 +53,8 @@ export class Structure extends FractureComponent {
   public readonly resource: Resource;
   // all other options
   public readonly options: SetRequired<StructureOptions, "type" | "comments">;
+  // generators
+  public readonly ts: TypescriptStructure;
 
   constructor(resource: Resource, options: StructureOptions) {
     super(resource.fracture);
@@ -97,11 +100,23 @@ export class Structure extends FractureComponent {
         `Operation option is required for Input and Output Structires`
       );
     }
+
+    /***************************************************************************
+     *
+     * GENERATORS
+     *
+     **************************************************************************/
+
+    this.ts = new TypescriptStructure(this);
+
+    return this;
   }
 
-  // not used here (yet)
+  // build structures
   public build() {
     this.project.logger.info(`BUILD Structure: "${this.name}"`);
+    // build generators
+    this.ts.build();
   }
 
   /**
@@ -127,6 +142,14 @@ export class Structure extends FractureComponent {
 
   public get type() {
     return this.options.type;
+  }
+
+  public get operation(): Operation | undefined {
+    return this.options.operation;
+  }
+
+  public get comments(): string[] {
+    return this.options.comments;
   }
 
   public getResourceAttributeByName(name: string) {
@@ -270,10 +293,6 @@ export class Structure extends FractureComponent {
 
   public get attributeNames() {
     return this.attributes.map((attribute) => attribute.name);
-  }
-
-  public get operation(): Operation | undefined {
-    return this.options.operation;
   }
 
   public get service(): Service {

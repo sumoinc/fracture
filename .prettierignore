@@ -2,6 +2,7 @@
 jest-dynalite-config.js
 setupBeforeEnv.ts
 src/example-app/user-service/ts/types.ts
+src/example-app/tenant-service/ts/types.ts
 src/example-app/user-service/ts/dynamodb/commands/create-user.ts
 src/example-app/user-service/ts/dynamodb/commands/create-user.spec.ts
 src/example-app/user-service/ts/dynamodb/commands/get-user.ts
@@ -18,7 +19,6 @@ src/example-app/user-service/ts/dynamodb/commands/update-group.ts
 src/example-app/user-service/ts/dynamodb/commands/update-group.spec.ts
 src/example-app/user-service/ts/dynamodb/commands/delete-group.ts
 src/example-app/user-service/ts/dynamodb/commands/delete-group.spec.ts
-src/example-app/tenant-service/ts/types.ts
 src/example-app/tenant-service/ts/dynamodb/commands/create-tenant.ts
 src/example-app/tenant-service/ts/dynamodb/commands/create-tenant.spec.ts
 src/example-app/tenant-service/ts/dynamodb/commands/get-tenant.ts

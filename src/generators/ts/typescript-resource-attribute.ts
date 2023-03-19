@@ -1,4 +1,3 @@
-import { TypescriptResource } from "./typescript-resource";
 import { FractureComponent } from "../../core";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Operation } from "../../core/operation";
@@ -12,17 +11,14 @@ import { Service } from "../../core/service";
 
 export class TypescriptResourceAttribute extends FractureComponent {
   // parent
-  public readonly tsResource: TypescriptResource;
+  //public readonly tsResource: TypescriptResource;
   // source
   public readonly resourceAttribute: ResourceAttribute;
 
-  constructor(
-    tsResource: TypescriptResource,
-    resourceAttribute: ResourceAttribute
-  ) {
-    super(tsResource.fracture);
+  constructor(resourceAttribute: ResourceAttribute) {
+    super(resourceAttribute.fracture);
 
-    this.tsResource = tsResource;
+    //this.tsResource = tsResource;
     this.resourceAttribute = resourceAttribute;
 
     this.project.logger.debug(
@@ -45,12 +41,6 @@ export class TypescriptResourceAttribute extends FractureComponent {
       this.resourceAttribute.shortName,
       this.service.namingStrategy.ts.attributeName
     );
-  }
-
-  public get comments() {
-    return [`/**`]
-      .concat(this.resourceAttribute.comments.map((c) => ` * ${c}`))
-      .concat([` */`]);
   }
 
   public get required() {
@@ -122,7 +112,7 @@ export class TypescriptResourceAttribute extends FractureComponent {
   }
 
   public get resource(): Resource {
-    return this.tsResource.resource;
+    return this.resourceAttribute.resource;
   }
 
   public get service(): Service {

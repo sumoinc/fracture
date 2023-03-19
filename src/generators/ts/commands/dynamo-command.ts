@@ -6,27 +6,29 @@ import { Operation, OPERATION_SUB_TYPE } from "../../../core/operation";
 import { Resource } from "../../../core/resource";
 import { ResourceAttributeGenerator } from "../../../core/resource-attribute";
 import { Service } from "../../../core/service";
+import { Structure } from "../../../core/structure";
 import { DynaliteSupport } from "../../../dynamodb/dynalite-support";
-import { TypescriptOperation } from "../typescript-operation";
-import { TypescriptResource } from "../typescript-resource";
-import { TypescriptService } from "../typescript-service";
 import { TypeScriptSource } from "../typescript-source";
-import { TypescriptStructure } from "../typescript-structure";
 
 export class DynamoCommand extends FractureComponent {
-  public readonly tsOperation: TypescriptOperation;
+  public readonly operation: Operation;
 
-  constructor(tsOperation: TypescriptOperation) {
-    super(tsOperation.fracture);
+  constructor(operation: Operation) {
+    super(operation.fracture);
 
-    this.tsOperation = tsOperation;
+    this.operation = operation;
+  }
+
+  public build() {
+    this.writeCommand();
+    this.writeTest();
   }
 
   public writeCommand = () => {
     const tsFile = new TypeScriptSource(
       this,
       join(
-        this.tsService.outdir,
+        this.service.ts.outdir,
         "dynamodb",
         "commands",
         `${this.operation.name}.ts`
@@ -42,19 +44,15 @@ export class DynamoCommand extends FractureComponent {
       `import { DynamoDBDocumentClient, ${this.dynamoCommandName} } from "@aws-sdk/lib-dynamodb";`,
     ]);
 
-    if (
-      this.tsInputStructure.structure.hasGenerator(
-        ResourceAttributeGenerator.GUID
-      )
-    ) {
+    if (this.inputStructure.hasGenerator(ResourceAttributeGenerator.GUID)) {
       tsFile.line(`import { v4 as uuidv4 } from "uuid";`);
     }
 
     tsFile.open(`import {`);
-    tsFile.line(this.tsInputStructure.publicInterfaceName + ",");
-    tsFile.line(this.tsOutputStructure.publicInterfaceName + ",");
-    tsFile.line(this.tsService.responseTypeName + ",");
-    tsFile.close(`} from "${this.tsService.typeFile.pathFrom(tsFile)}";`);
+    tsFile.line(this.inputStructure.ts.publicInterfaceName + ",");
+    tsFile.line(this.outputStructure.ts.publicInterfaceName + ",");
+    tsFile.line(this.service.ts.responseTypeName + ",");
+    tsFile.close(`} from "${this.service.ts.typeFile.pathFrom(tsFile)}";`);
     tsFile.line("");
 
     /***************************************************************************
@@ -74,10 +72,10 @@ export class DynamoCommand extends FractureComponent {
 
     tsFile.open(`export const ${this.functionName} = async (`);
     tsFile.line(
-      `${this.inputName}: Required<${this.tsInputStructure.publicInterfaceName}>`
+      `${this.inputName}: Required<${this.inputStructure.ts.publicInterfaceName}>`
     );
     tsFile.close(
-      `): Promise<${this.tsService.responseTypeName}<${this.tsOutputStructure.publicInterfaceName}>> => {`
+      `): Promise<${this.service.ts.responseTypeName}<${this.outputStructure.ts.publicInterfaceName}>> => {`
     );
     tsFile.open("");
     tsFile.line("");
@@ -92,19 +90,21 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     tsFile.open(`const {`);
-    this.tsInputStructure.tsPublicAttributes.forEach((a) => {
-      tsFile.line(`${a.attributeName},`);
+    this.inputStructure.publicAttributes.forEach((a) => {
+      tsFile.line(`${a.ts.attributeName},`);
     });
     tsFile.close(`} = ${this.inputName};`);
     tsFile.line("");
 
-    this.tsInputStructure.tsPublicAttributes
+    this.inputStructure.publicAttributes
       // skip items with the same public and private names
       .filter((a) => {
-        return a.attributeShortName !== a.attributeName;
+        return a.ts.attributeShortName !== a.ts.attributeName;
       })
       .forEach((a) => {
-        tsFile.line(`const ${a.attributeShortName} = ${a.attributeName};`);
+        tsFile.line(
+          `const ${a.ts.attributeShortName} = ${a.ts.attributeName};`
+        );
       });
     tsFile.line("");
 
@@ -117,9 +117,11 @@ export class DynamoCommand extends FractureComponent {
      *
      **************************************************************************/
 
-    this.tsInputStructure.tsGeneratedAttributes.forEach((a) => {
+    this.inputStructure.generatedAttributes.forEach((a) => {
       tsFile.line(
-        `const ${a.attributeShortName} = ${a.generationSource(this.operation)};`
+        `const ${a.ts.attributeShortName} = ${a.ts.generationSource(
+          this.operation
+        )};`
       );
     });
     tsFile.line("");
@@ -135,31 +137,31 @@ export class DynamoCommand extends FractureComponent {
     // PUT NEW ITEM
     if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
       tsFile.open(`Item: {`);
-      this.tsInputStructure.tsItemAttributes.forEach((a) => {
-        tsFile.line(`${a.attributeShortName},`);
+      this.inputStructure.itemAttributes.forEach((a) => {
+        tsFile.line(`${a.ts.attributeShortName},`);
       });
       tsFile.close(`},`);
     }
 
     // UPDATE
     if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
-      const updateExpression = this.tsInputStructure.tsItemAttributes
+      const updateExpression = this.inputStructure.itemAttributes
         .map((attribute) => {
-          return `#${attribute.attributeShortName} = :${attribute.attributeShortName}`;
+          return `#${attribute.ts.attributeShortName} = :${attribute.ts.attributeShortName}`;
         })
         .join(", ");
       tsFile.line(`UpdateExpression: "set ${updateExpression}",`);
       tsFile.open(`ExpressionAttributeValues: {`);
-      this.tsInputStructure.tsItemAttributes.forEach((attribute) => {
+      this.inputStructure.itemAttributes.forEach((attribute) => {
         tsFile.line(
-          `":${attribute.attributeShortName}": ${attribute.attributeShortName},`
+          `":${attribute.ts.attributeShortName}": ${attribute.ts.attributeShortName},`
         );
       });
       tsFile.close(`},`);
       tsFile.open(`ExpressionAttributeNames: {`);
-      this.tsInputStructure.tsItemAttributes.forEach((attribute) => {
+      this.inputStructure.itemAttributes.forEach((attribute) => {
         tsFile.line(
-          `"#${attribute.attributeShortName}": "${attribute.attributeShortName}",`
+          `"#${attribute.ts.attributeShortName}": "${attribute.ts.attributeShortName}",`
         );
       });
       tsFile.close(`},`);
@@ -201,8 +203,8 @@ export class DynamoCommand extends FractureComponent {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
       tsFile.open(`data: {`);
-      this.tsOutputStructure.tsPublicAttributes.forEach((a) => {
-        tsFile.line(`${a.attributeName}: ${a.attributeShortName},`);
+      this.outputStructure.publicAttributes.forEach((a) => {
+        tsFile.line(`${a.ts.attributeName}: ${a.ts.attributeShortName},`);
       });
       tsFile.close(`},`);
     }
@@ -215,7 +217,7 @@ export class DynamoCommand extends FractureComponent {
       tsFile.line(`// @ts-ignore`);
       tsFile.open(`data: {`);
       /*
-      this.tsOutputStructure.tsPublicAttributes.forEach((a) => {
+      this.outputStructure.publicAttributes.forEach((a) => {
         tsFile.line(`${a.attributeName}: ${a.attributeShortName},`);
       });
       */
@@ -230,7 +232,7 @@ export class DynamoCommand extends FractureComponent {
       tsFile.line(`// @ts-ignore`);
       tsFile.open(`data: {`);
       /*
-      this.tsOutputStructure.tsPublicAttributes.forEach((a) => {
+      this.outputStructure.publicAttributes.forEach((a) => {
         tsFile.line(`${a.attributeName}: ${a.attributeShortName},`);
       });
       */
@@ -245,7 +247,7 @@ export class DynamoCommand extends FractureComponent {
       tsFile.line(`// @ts-ignore`);
       tsFile.open(`data: {`);
       /*
-      this.tsOutputStructure.tsPublicAttributes.forEach((a) => {
+      this.outputStructure.publicAttributes.forEach((a) => {
         tsFile.line(`${a.attributeName}: ${a.attributeShortName},`);
       });
       */
@@ -262,7 +264,7 @@ export class DynamoCommand extends FractureComponent {
     const tsTest = new TypeScriptSource(
       this,
       join(
-        this.tsService.outdir,
+        this.service.ts.outdir,
         "dynamodb",
         "commands",
         `${this.operation.name}.spec.ts`
@@ -276,8 +278,8 @@ export class DynamoCommand extends FractureComponent {
       `import { ${this.functionName} } from "./${this.operation.name}.ts";`
     );
     tsTest.open(`import {`);
-    tsTest.line(this.tsInputStructure.publicInterfaceName + ",");
-    tsTest.close(`} from "${this.tsService.typeFile.pathFrom(tsTest)}";`);
+    tsTest.line(this.inputStructure.ts.publicInterfaceName + ",");
+    tsTest.close(`} from "${this.service.ts.typeFile.pathFrom(tsTest)}";`);
     tsTest.line("");
 
     /***************************************************************************
@@ -293,10 +295,10 @@ export class DynamoCommand extends FractureComponent {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
       tsTest.open(
-        `const fixture : ${this.tsInputStructure.publicInterfaceName} = {`
+        `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
       );
-      this.tsInputStructure.tsPublicAttributes.forEach((a) => {
-        tsTest.line(`${a.attributeName}: "foo",`);
+      this.inputStructure.publicAttributes.forEach((a) => {
+        tsTest.line(`${a.ts.attributeName}: "foo",`);
       });
       tsTest.close(`};`);
       tsTest.line(`const result = await ${this.functionName}(fixture);`);
@@ -317,10 +319,10 @@ export class DynamoCommand extends FractureComponent {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
       tsTest.open(
-        `const fixture : ${this.tsInputStructure.publicInterfaceName} = {`
+        `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
       );
-      this.tsInputStructure.tsPublicAttributes.forEach((a) => {
-        tsTest.line(`${a.attributeName}: "foo",`);
+      this.inputStructure.publicAttributes.forEach((a) => {
+        tsTest.line(`${a.ts.attributeName}: "foo",`);
       });
       tsTest.close(`};`);
       tsTest.line(`const result = await ${this.functionName}(fixture);`);
@@ -340,10 +342,10 @@ export class DynamoCommand extends FractureComponent {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
       tsTest.open(
-        `const fixture : ${this.tsInputStructure.publicInterfaceName} = {`
+        `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
       );
-      this.tsInputStructure.tsPublicAttributes.forEach((a) => {
-        tsTest.line(`${a.attributeName}: "foo",`);
+      this.inputStructure.publicAttributes.forEach((a) => {
+        tsTest.line(`${a.ts.attributeName}: "foo",`);
       });
       tsTest.close(`};`);
       tsTest.line(`const result = await ${this.functionName}(fixture);`);
@@ -363,10 +365,10 @@ export class DynamoCommand extends FractureComponent {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
       tsTest.open(
-        `const fixture : ${this.tsInputStructure.publicInterfaceName} = {`
+        `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
       );
-      this.tsInputStructure.tsPublicAttributes.forEach((a) => {
-        tsTest.line(`${a.attributeName}: "foo",`);
+      this.inputStructure.publicAttributes.forEach((a) => {
+        tsTest.line(`${a.ts.attributeName}: "foo",`);
       });
       tsTest.close(`};`);
       tsTest.line(`const result = await ${this.functionName}(fixture);`);
@@ -438,10 +440,6 @@ export class DynamoCommand extends FractureComponent {
     );
   }
 
-  public get operation(): Operation {
-    return this.tsOperation.operation;
-  }
-
   public get operationSubType(): ValueOf<typeof OPERATION_SUB_TYPE> {
     return this.operation.options.operationSubType;
   }
@@ -454,18 +452,26 @@ export class DynamoCommand extends FractureComponent {
     return this.resource.service;
   }
 
-  public get tsInputStructure(): TypescriptStructure {
-    return this.tsOperation.tsInputStructure;
-  }
-  public get tsOutputStructure(): TypescriptStructure {
-    return this.tsOperation.tsOutputStructure;
+  public get inputStructure(): Structure {
+    return this.operation.inputStructure;
   }
 
-  public get tsResource(): TypescriptResource {
-    return this.tsOperation.tsResource;
+  public get outputStructure(): Structure {
+    return this.operation.outputStructure;
   }
 
-  public get tsService(): TypescriptService {
-    return this.tsResource.tsService;
-  }
+  // public get tsInputStructure(): TypescriptStructure {
+  //   return this.tsOperation.tsInputStructure;
+  // }
+  // public get tsOutputStructure(): TypescriptStructure {
+  //   return this.tsOperation.tsOutputStructure;
+  // }
+
+  // public get tsResource(): TypescriptResource {
+  //   return this.tsOperation.tsResource;
+  // }
+
+  // public get tsService(): TypescriptService {
+  //   return this.tsResource.tsService;
+  // }
 }

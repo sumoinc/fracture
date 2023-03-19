@@ -12,7 +12,6 @@ import {
 import { Service, ServiceOptions } from "./service";
 import { STRUCTURE_TYPE } from "./structure";
 import { DynaliteSupport } from "../dynamodb/dynalite-support";
-import { TypescriptService } from "../generators/ts/typescript-service";
 
 /**
  *
@@ -244,9 +243,6 @@ export class Fracture extends Component {
     this.project.logger.info(`BUILD Fracture: "${this.project.name}"`);
     this.services.forEach((service) => {
       service.build();
-      // build ts code
-      const tsService = new TypescriptService(service);
-      tsService.build();
     });
   }
 

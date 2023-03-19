@@ -2,7 +2,7 @@ import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { AccessPattern } from "./access-pattern";
 import { FractureComponent } from "./component";
-import { Operation, OPERATION_SUB_TYPE } from "./operation";
+import { Operation } from "./operation";
 import {
   ResourceAttribute,
   ResourceAttributeOptions,
@@ -13,6 +13,7 @@ import { DynamoTable } from "../dynamodb/dynamo-table";
 import { IdentifierFactory } from "../factories/access-patterns/identifier-factory";
 import { LookupFactory } from "../factories/access-patterns/lookup-factory";
 import { VersionedIdentifierFactory } from "../factories/access-patterns/versioned-identifier-factory";
+import { TypescriptResource } from "../generators/ts/typescript-resource";
 
 export interface ResourceOptions {
   /**
@@ -52,6 +53,8 @@ export class Resource extends FractureComponent {
   public readonly service: Service;
   // all other options
   public readonly options: Required<ResourceOptions>;
+  // generators
+  public readonly ts: TypescriptResource;
 
   constructor(service: Service, options: ResourceOptions) {
     super(service.fracture);
@@ -165,6 +168,15 @@ export class Resource extends FractureComponent {
     this.transientStructure = new Structure(this, {
       type: STRUCTURE_TYPE.TRANSIENT,
     });
+
+    /***************************************************************************
+     *
+     * GENERATORS
+     *
+     **************************************************************************/
+
+    this.ts = new TypescriptResource(this);
+
     return this;
   }
 
@@ -178,6 +190,8 @@ export class Resource extends FractureComponent {
     this.accessPatterns.forEach((accessPattern) => {
       accessPattern.build();
     });
+    // build generators
+    this.ts.build();
   }
 
   public get name(): string {

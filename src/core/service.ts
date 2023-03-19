@@ -7,6 +7,7 @@ import { NamingStrategy } from "./naming-strategy";
 import { Resource, ResourceOptions } from "./resource";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";
 import { DynamoTable } from "../dynamodb/dynamo-table";
+import { TypescriptService } from "../generators/ts/typescript-service";
 
 export interface ServiceOptions {
   name: string;
@@ -32,6 +33,8 @@ export class Service extends FractureComponent {
   public readonly dynamoTable: DynamoTable;
   // all other options
   public readonly options: Required<ServiceOptions>;
+  // generators
+  public readonly ts: TypescriptService;
 
   constructor(fracture: Fracture, options: ServiceOptions) {
     super(fracture);
@@ -85,6 +88,14 @@ export class Service extends FractureComponent {
 
     this.dynamoTable = new DynamoTable(this);
 
+    /***************************************************************************
+     *
+     * GENERATORS
+     *
+     **************************************************************************/
+
+    this.ts = new TypescriptService(this);
+
     return this;
   }
 
@@ -93,6 +104,8 @@ export class Service extends FractureComponent {
     this.resources.forEach((resource) => {
       resource.build();
     });
+    // build generators
+    this.ts.build();
   }
 
   public get name(): string {

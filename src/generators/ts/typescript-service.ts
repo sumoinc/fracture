@@ -1,5 +1,4 @@
 import { join } from "path";
-import { TypescriptResource } from "./typescript-resource";
 import { TypeScriptSource } from "./typescript-source";
 import { FractureComponent } from "../../core";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
@@ -9,7 +8,6 @@ export class TypescriptService extends FractureComponent {
   public readonly service: Service;
   public readonly outdir: string;
   public readonly typeFile: TypeScriptSource;
-  public readonly tsResources: TypescriptResource[] = [];
 
   constructor(service: Service) {
     super(service.fracture);
@@ -49,20 +47,9 @@ export class TypescriptService extends FractureComponent {
     this.typeFile.line(`status: number;`);
     this.typeFile.close(`}`);
     this.typeFile.line("\n");
-
-    /**
-     * Build operations
-     */
-    this.service.resources.forEach((resource) => {
-      new TypescriptResource(this, resource);
-    });
   }
 
-  public build() {
-    this.tsResources.forEach((tsResource) => {
-      tsResource.build();
-    });
-  }
+  public build() {}
 
   public get responseTypeName() {
     return formatStringByNamingStrategy(

@@ -5,6 +5,7 @@ import { FractureComponent } from ".";
 import { AccessPattern } from "./access-pattern";
 import { Operation, OperationDefault, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
+import { TypescriptResourceAttribute } from "../generators/ts/typescript-resource-attribute";
 
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
@@ -238,6 +239,8 @@ export class ResourceAttribute extends FractureComponent {
   public readonly resource: Resource;
   // all other options
   public readonly options: Required<ResourceAttributeOptions>;
+  // generators
+  public readonly ts: TypescriptResourceAttribute;
 
   constructor(resource: Resource, options: ResourceAttributeOptions) {
     super(resource.fracture);
@@ -334,6 +337,14 @@ export class ResourceAttribute extends FractureComponent {
         `@readonly This attribute is managed automatically by the system.`
       );
     }
+
+    /***************************************************************************
+     *
+     * GENERATORS
+     *
+     **************************************************************************/
+
+    this.ts = new TypescriptResourceAttribute(this);
 
     return this;
   }

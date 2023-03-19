@@ -5,6 +5,7 @@ import { FractureComponent } from "./component";
 import { Resource } from "./resource";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
+import { DynamoCommand, TypescriptOperation } from "../generators";
 
 /******************************************************************************
  * TYPES
@@ -52,6 +53,9 @@ export class Operation extends FractureComponent {
   // private cached properties
   private _inputStructure?: Structure;
   private _outputStructure?: Structure;
+  // generators
+  public readonly ts: TypescriptOperation;
+  public readonly tsDynamoCommand: DynamoCommand;
 
   constructor(accessPattern: AccessPattern, options: OperationOptions) {
     super(accessPattern.fracture);
@@ -86,6 +90,15 @@ export class Operation extends FractureComponent {
 
     this.project.logger.info(`INFO Operation: "${this.name}"`);
 
+    /***************************************************************************
+     *
+     * GENERATORS
+     *
+     **************************************************************************/
+
+    this.ts = new TypescriptOperation(this);
+    this.tsDynamoCommand = new DynamoCommand(this);
+
     return this;
   }
 
@@ -93,6 +106,9 @@ export class Operation extends FractureComponent {
     this.project.logger.info(`BUILD Operation: "${this.name}"`);
     this.inputStructure.build();
     this.outputStructure.build();
+    // build generators
+    this.ts.build();
+    this.tsDynamoCommand.build();
   }
 
   /**
