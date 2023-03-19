@@ -4,7 +4,6 @@ import { ValueOf } from "type-fest";
 import { FractureComponent } from ".";
 import { AccessPattern } from "./access-pattern";
 import { Operation, OperationDefault, OPERATION_SUB_TYPE } from "./operation";
-
 import { Resource } from "./resource";
 
 /**

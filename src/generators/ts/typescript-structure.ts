@@ -21,7 +21,9 @@ export class TypescriptStructure extends FractureComponent {
     this.structure = structure;
 
     this.project.logger.info(`TS:INIT Structure: "${this.structure.name}"`);
+  }
 
+  public build() {
     this.writePublicInterface(this.tsService.typeFile);
   }
 

@@ -9,6 +9,7 @@ export class TypescriptService extends FractureComponent {
   public readonly service: Service;
   public readonly outdir: string;
   public readonly typeFile: TypeScriptSource;
+  public readonly tsResources: TypescriptResource[] = [];
 
   constructor(service: Service) {
     super(service.fracture);
@@ -54,6 +55,12 @@ export class TypescriptService extends FractureComponent {
      */
     this.service.resources.forEach((resource) => {
       new TypescriptResource(this, resource);
+    });
+  }
+
+  public build() {
+    this.tsResources.forEach((tsResource) => {
+      tsResource.build();
     });
   }
 

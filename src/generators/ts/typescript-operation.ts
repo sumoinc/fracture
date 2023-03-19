@@ -12,12 +12,14 @@ export class TypescriptOperation extends FractureComponent {
   public readonly tsResource: TypescriptResource;
   public readonly tsInputStructure: TypescriptStructure;
   public readonly tsOutputStructure: TypescriptStructure;
+  public readonly tsDynamoCommand: DynamoCommand;
 
   constructor(tsResource: TypescriptResource, operation: Operation) {
     super(operation.fracture);
 
     this.operation = operation;
     this.tsResource = tsResource;
+    tsResource.tsOperations.push(this);
 
     this.project.logger.info(`TS:INIT Operation: "${this.operation.name}"`);
 
@@ -31,7 +33,12 @@ export class TypescriptOperation extends FractureComponent {
     );
 
     // create dynamo command
-    new DynamoCommand(this);
+    this.tsDynamoCommand = new DynamoCommand(this);
+  }
+
+  public build() {
+    this.tsDynamoCommand.writeCommand();
+    this.tsDynamoCommand.writeTest();
   }
 
   public get tsService(): TypescriptService {

@@ -2,7 +2,7 @@ import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { AccessPattern } from "./access-pattern";
 import { FractureComponent } from "./component";
-import { Operation } from "./operation";
+import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import {
   ResourceAttribute,
   ResourceAttributeOptions,

@@ -217,6 +217,7 @@ export class Fracture extends Component {
       "@aws-sdk/client-dynamodb",
       "@aws-sdk/lib-dynamodb",
       "@aws-sdk/util-dynamodb",
+      "@faker-js/faker",
       "@types/aws-lambda",
       "change-case",
       "projen",
@@ -226,7 +227,7 @@ export class Fracture extends Component {
     this.project.addDevDeps("@types/uuid");
     this.project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 
-    // add Dynalite support for Jest
+    // add Dynalite support for Jest tests
     new DynaliteSupport(this);
 
     return this;
@@ -243,7 +244,9 @@ export class Fracture extends Component {
     this.project.logger.info(`BUILD Fracture: "${this.project.name}"`);
     this.services.forEach((service) => {
       service.build();
-      new TypescriptService(service);
+      // build ts code
+      const tsService = new TypescriptService(service);
+      tsService.build();
     });
   }
 
