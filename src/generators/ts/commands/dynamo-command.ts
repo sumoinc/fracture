@@ -148,6 +148,8 @@ export class DynamoCommand extends FractureComponent {
     tsFile.open(`new ${this.dynamoCommandName}({`);
     tsFile.line(`TableName: "${this.service.dynamoTable.name}",`);
 
+    this.writeDynamoCommand(tsFile);
+
     // PUT NEW ITEM
     if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
       tsFile.open(`Item: {`);
@@ -188,10 +190,7 @@ export class DynamoCommand extends FractureComponent {
       this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE ||
       this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
     ) {
-      tsFile.open(`Key: {`);
-      tsFile.line(`${this.dynamoPkName},`);
-      tsFile.line(`${this.dynamoSkName},`);
-      tsFile.close(`},`);
+      this.generateKey(tsFile);
     }
 
     // DELETE operation
@@ -322,6 +321,14 @@ export class DynamoCommand extends FractureComponent {
     tsFile.close(`};`);
     tsFile.close(`};`);
     tsFile.line("");
+  };
+
+  public writeDynamoCommand = (tsFile: TypeScriptSource): void => {
+    throw new Error(`Method not implemented for ${tsFile.fileName}.`);
+  };
+
+  public writeReturnData = (tsFile: TypeScriptSource): void => {
+    throw new Error(`Method not implemented for ${tsFile.fileName}.`);
   };
 
   public writeTest = () => {
@@ -508,6 +515,13 @@ export class DynamoCommand extends FractureComponent {
       "input",
       this.service.namingStrategy.ts.functionParameterName
     );
+  }
+
+  public generateKey(file: TypeScriptSource) {
+    file.open(`Key: {`);
+    file.line(`${this.dynamoPkName},`);
+    file.line(`${this.dynamoSkName},`);
+    file.close(`},`);
   }
 
   public generateSeedData(file: TypeScriptSource) {
