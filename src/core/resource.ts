@@ -127,35 +127,23 @@ export class Resource extends FractureComponent {
      * Add an (optional) Audit Strategies
      */
 
-    if (this.service.options.auditStrategy.create.dateAttribute) {
-      this.addResourceAttribute(
-        this.service.options.auditStrategy.create.dateAttribute
-      );
+    if (this.auditStrategy.create.dateAttribute) {
+      this.addResourceAttribute(this.auditStrategy.create.dateAttribute);
     }
-    if (this.service.options.auditStrategy.create.userAttribute) {
-      this.addResourceAttribute(
-        this.service.options.auditStrategy.create.userAttribute
-      );
+    if (this.auditStrategy.create.userAttribute) {
+      this.addResourceAttribute(this.auditStrategy.create.userAttribute);
     }
-    if (this.service.options.auditStrategy.update.dateAttribute) {
-      this.addResourceAttribute(
-        this.service.options.auditStrategy.update.dateAttribute
-      );
+    if (this.auditStrategy.update.dateAttribute) {
+      this.addResourceAttribute(this.auditStrategy.update.dateAttribute);
     }
-    if (this.service.options.auditStrategy.update.userAttribute) {
-      this.addResourceAttribute(
-        this.service.options.auditStrategy.update.userAttribute
-      );
+    if (this.auditStrategy.update.userAttribute) {
+      this.addResourceAttribute(this.auditStrategy.update.userAttribute);
     }
-    if (this.service.options.auditStrategy.delete.dateAttribute) {
-      this.addResourceAttribute(
-        this.service.options.auditStrategy.delete.dateAttribute
-      );
+    if (this.auditStrategy.delete.dateAttribute) {
+      this.addResourceAttribute(this.auditStrategy.delete.dateAttribute);
     }
-    if (this.service.options.auditStrategy.delete.userAttribute) {
-      this.addResourceAttribute(
-        this.service.options.auditStrategy.delete.userAttribute
-      );
+    if (this.auditStrategy.delete.userAttribute) {
+      this.addResourceAttribute(this.auditStrategy.delete.userAttribute);
     }
 
     /***************************************************************************
@@ -201,7 +189,6 @@ export class Resource extends FractureComponent {
   public get isVersioned(): boolean {
     return this.options.isVersioned;
   }
-
   /**
    * Adds an attribute
    */
@@ -313,7 +300,7 @@ export class Resource extends FractureComponent {
     if (isPublic == undefined) {
       return returnAttributes;
     } else {
-      return returnAttributes.filter((a) => a.options.isPublic === isPublic);
+      return returnAttributes.filter((a) => a.isPublic === isPublic);
     }
   }
 
@@ -347,5 +334,13 @@ export class Resource extends FractureComponent {
 
   public get dynamoTable(): DynamoTable {
     return this.service.dynamoTable;
+  }
+
+  public get namingStrategy() {
+    return this.service.namingStrategy;
+  }
+
+  public get auditStrategy() {
+    return this.service.auditStrategy;
   }
 }

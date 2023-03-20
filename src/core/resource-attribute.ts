@@ -396,6 +396,10 @@ export class ResourceAttribute extends FractureComponent {
     return this.options.outputOn;
   }
 
+  public get compositionSeperator() {
+    return this.options.compositionSeperator;
+  }
+
   /*****************************************************************************
    *
    * PK and SK HELPERS
@@ -501,7 +505,7 @@ export class ResourceAttribute extends FractureComponent {
    ****************************************************************************/
 
   public get isGenerated(): boolean {
-    return this.options.generator !== ResourceAttributeGenerator.NONE;
+    return this.generator !== ResourceAttributeGenerator.NONE;
   }
 
   public get generator(): ValueOf<typeof ResourceAttributeGenerator> {
@@ -557,7 +561,7 @@ export class ResourceAttribute extends FractureComponent {
   }
 
   public get isData(): boolean {
-    return this.options.generator === ResourceAttributeGenerator.NONE;
+    return this.generator === ResourceAttributeGenerator.NONE;
   }
 
   public get isAutoIncrementGenerator(): boolean {

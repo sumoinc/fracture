@@ -459,7 +459,7 @@ export class DynamoCommand extends FractureComponent {
    * determine which dynamo command we will need for this operation.
    */
   public get dynamoCommandName(): string {
-    switch (this.operation.options.operationSubType) {
+    switch (this.operation.operationSubType) {
       case OPERATION_SUB_TYPE.CREATE_ONE:
         return "PutCommand";
       case OPERATION_SUB_TYPE.READ_ONE:
@@ -474,21 +474,21 @@ export class DynamoCommand extends FractureComponent {
         return "Query";
       default:
         throw new Error(
-          `Unsupported operation type: ${this.operation.options.operationSubType}`
+          `Unsupported operation type: ${this.operation.operationSubType}`
         );
     }
   }
   public get dynamoPkName(): string {
     return formatStringByNamingStrategy(
-      this.resource.keyAccessPattern.pkAttribute.options.shortName,
-      this.fracture.options.namingStrategy.ts.attributeName
+      this.resource.keyAccessPattern.pkAttribute.shortName,
+      this.service.namingStrategy.ts.attributeName
     );
   }
 
   public get dynamoSkName(): string {
     return formatStringByNamingStrategy(
-      this.resource.keyAccessPattern.skAttribute.options.shortName,
-      this.fracture.options.namingStrategy.ts.attributeName
+      this.resource.keyAccessPattern.skAttribute.shortName,
+      this.service.namingStrategy.ts.attributeName
     );
   }
 
@@ -498,14 +498,14 @@ export class DynamoCommand extends FractureComponent {
   public get functionName() {
     return formatStringByNamingStrategy(
       this.operation.name,
-      this.fracture.options.namingStrategy.ts.functionName
+      this.service.namingStrategy.ts.functionName
     );
   }
 
   public get inputName() {
     return formatStringByNamingStrategy(
       "input",
-      this.fracture.options.namingStrategy.ts.functionParameterName
+      this.service.namingStrategy.ts.functionParameterName
     );
   }
 
@@ -526,7 +526,7 @@ export class DynamoCommand extends FractureComponent {
   }
 
   public get operationSubType(): ValueOf<typeof OPERATION_SUB_TYPE> {
-    return this.operation.options.operationSubType;
+    return this.operation.operationSubType;
   }
 
   public get resource(): Resource {

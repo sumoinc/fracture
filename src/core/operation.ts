@@ -118,11 +118,11 @@ export class Operation extends FractureComponent {
   public get name() {
     const resourceName = this.resource.name;
     const prefix =
-      this.fracture.options.namingStrategy.operations.prefixes[
+      this.fracture.namingStrategy.operations.prefixes[
         this.options.operationSubType
       ];
     const suffix =
-      this.fracture.options.namingStrategy.operations.suffixes[
+      this.fracture.namingStrategy.operations.suffixes[
         this.options.operationSubType
       ];
 
@@ -144,23 +144,23 @@ export class Operation extends FractureComponent {
   }
 
   public get isCreate(): boolean {
-    return this.options.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE;
+    return this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE;
   }
 
   public get isRead(): boolean {
-    return this.options.operationSubType === OPERATION_SUB_TYPE.READ_ONE;
+    return this.operationSubType === OPERATION_SUB_TYPE.READ_ONE;
   }
 
   public get isUpdate(): boolean {
-    return this.options.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE;
+    return this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE;
   }
 
   public get isDelete(): boolean {
-    return this.options.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE;
+    return this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE;
   }
 
   public get isImport(): boolean {
-    return this.options.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE;
+    return this.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE;
   }
 
   /***************************************************************************

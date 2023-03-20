@@ -23,7 +23,7 @@ export class TypescriptStructure extends FractureComponent {
   public get publicInterfaceName() {
     return formatStringByNamingStrategy(
       this.structure.name,
-      this.fracture.options.namingStrategy.ts.interfaceName
+      this.service.namingStrategy.ts.interfaceName
     );
   }
 

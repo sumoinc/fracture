@@ -120,6 +120,10 @@ export class Service extends FractureComponent {
     return this.options.namingStrategy;
   }
 
+  public get auditStrategy() {
+    return this.options.auditStrategy;
+  }
+
   /*****************************************************************************
    *
    *  Configuration Helpers

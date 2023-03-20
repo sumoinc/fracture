@@ -250,6 +250,18 @@ export class Fracture extends Component {
     return this.options.outdir;
   }
 
+  public get isVersioned() {
+    return this.options.isVersioned;
+  }
+
+  public get namingStrategy() {
+    return this.options.namingStrategy;
+  }
+
+  public get auditStrategy() {
+    return this.options.auditStrategy;
+  }
+
   /*****************************************************************************
    *
    *  Configuration Helpers

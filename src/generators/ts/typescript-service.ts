@@ -14,7 +14,7 @@ export class TypescriptService extends FractureComponent {
 
     this.service = service;
     this.outdir = join(
-      this.fracture.options.outdir,
+      this.fracture.outdir,
       this.service.name + "-service",
       "ts"
     );
@@ -54,14 +54,14 @@ export class TypescriptService extends FractureComponent {
   public get responseTypeName() {
     return formatStringByNamingStrategy(
       "response",
-      this.fracture.options.namingStrategy.ts.typeName
+      this.service.namingStrategy.ts.typeName
     );
   }
 
   public get listResponseTypeName() {
     return formatStringByNamingStrategy(
       "list-response",
-      this.fracture.options.namingStrategy.ts.typeName
+      this.service.namingStrategy.ts.typeName
     );
   }
 }

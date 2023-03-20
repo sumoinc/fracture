@@ -30,6 +30,10 @@ export class Organization extends FractureComponent {
     // all other options
     this.options = options;
 
-    this.project.logger.info(`INIT Organization: "${this.options.orgId}"`);
+    this.project.logger.info(`INIT Organization: "${this.orgId}"`);
+  }
+
+  public get orgId() {
+    return this.options.orgId;
   }
 }

@@ -105,9 +105,7 @@ export class TypescriptResourceAttribute extends FractureComponent {
               .map((s) => {
                 return `${s.shortName}.toLowerCase()`;
               })
-              .join(
-                ` + "${this.resourceAttribute.options.compositionSeperator}" + `
-              );
+              .join(` + "${this.resourceAttribute.compositionSeperator}" + `);
       default:
         throw new Error(`Unknown generator: ${generator}`);
     }

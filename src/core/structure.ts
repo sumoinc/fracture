@@ -92,9 +92,9 @@ export class Structure extends FractureComponent {
 
     //
     if (
-      (this.options.type === STRUCTURE_TYPE.INPUT ||
-        this.options.type === STRUCTURE_TYPE.OUTPUT) &&
-      !this.options.operation
+      (this.type === STRUCTURE_TYPE.INPUT ||
+        this.type === STRUCTURE_TYPE.OUTPUT) &&
+      !this.operation
     ) {
       throw new Error(
         `Operation option is required for Input and Output Structires`
@@ -123,17 +123,11 @@ export class Structure extends FractureComponent {
    * Structure name, based on the naming strategy
    */
   public get name() {
-    const resourceName = this.options.operation
-      ? this.options.operation.name
+    const resourceName = this.operation
+      ? this.operation.name
       : this.resource.name;
-    const prefix =
-      this.fracture.options.namingStrategy.structures.prefixes[
-        this.options.type
-      ];
-    const suffix =
-      this.fracture.options.namingStrategy.structures.suffixes[
-        this.options.type
-      ];
+    const prefix = this.namingStrategy.structures.prefixes[this.type];
+    const suffix = this.fracture.namingStrategy.structures.suffixes[this.type];
 
     return [prefix, resourceName, suffix]
       .filter((part) => part.length > 0)
@@ -297,5 +291,13 @@ export class Structure extends FractureComponent {
 
   public get service(): Service {
     return this.resource.service;
+  }
+
+  public get namingStrategy() {
+    return this.service.namingStrategy;
+  }
+
+  public get auditStrategy() {
+    return this.service.auditStrategy;
   }
 }
