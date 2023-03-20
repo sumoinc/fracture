@@ -17,17 +17,17 @@ specifiers:
   jest-junit: ^13
   jsii: ^1.78.1
   jsii-diff: ^1.78.1
-  jsii-docgen: ^7.1.29
+  jsii-docgen: ^7.1.30
   jsii-pacmak: ^1.78.1
   npm-check-updates: ^16
-  projen: ^0.68.12
+  projen: ^0.68.13
   standard-version: ^9
   ts-jest: ^27
   ts-node: ^10.9.1
   typescript: ^4.9.5
 
 dependencies:
-  projen: 0.68.12
+  projen: 0.68.13
 
 devDependencies:
   '@types/jest': 27.5.2
@@ -42,9 +42,9 @@ devDependencies:
   jest-junit: 13.2.0
   jsii: 1.78.1
   jsii-diff: 1.78.1
-  jsii-docgen: 7.1.29
+  jsii-docgen: 7.1.30
   jsii-pacmak: 1.78.1
-  npm-check-updates: 16.7.12
+  npm-check-updates: 16.7.13
   standard-version: 9.5.0
   ts-jest: 27.1.5_n4jzo3ixy42kfaqevs43wjx5ui
   ts-node: 10.9.1_kgu2r2x7tb2u27tq6ztvb54vzu
@@ -382,6 +382,13 @@ packages:
   /@bcoe/v8-coverage/0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
+
+  /@colors/colors/1.5.0:
+    resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
+    engines: {node: '>=0.1.90'}
+    requiresBuild: true
+    dev: true
+    optional: true
 
   /@cspotcode/source-map-support/0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1565,7 +1572,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001467
+      caniuse-lite: 1.0.30001468
       electron-to-chromium: 1.4.333
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10_browserslist@4.21.5
@@ -1695,8 +1702,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /caniuse-lite/1.0.30001467:
-    resolution: {integrity: sha512-cEdN/5e+RPikvl9AHm4uuLXxeCNq8rFsQ+lPHTfe/OtypP3WwnVVbjn+6uBV7PaFL6xUFzTh+sSCOz1rKhcO+Q==}
+  /caniuse-lite/1.0.30001468:
+    resolution: {integrity: sha512-zgAo8D5kbOyUcRAgSmgyuvBkjrGk5CGYG5TYgFdpQv+ywcyEpo1LOWoG8YmoflGnh+V+UsNuKYedsoYs0hzV5A==}
     dev: true
 
   /case/1.6.3:
@@ -1753,11 +1760,13 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /cli-table/0.3.11:
-    resolution: {integrity: sha512-IqLQi4lO0nIB4tcdTpN4LCB9FI3uqrJZK7RC515EnhZ6qBaglkIgICb1wjeAqpdoOabm1+SuQtkXIPdYC93jhQ==}
-    engines: {node: '>= 0.2.0'}
+  /cli-table3/0.6.3:
+    resolution: {integrity: sha512-w5Jac5SykAeZJKntOxJCrm63Eg5/4dhMWIcuTbo9rpE+brgaSZo0RuNJZeOyMgsUdhDeojvgyQLmjI+K50ZGyg==}
+    engines: {node: 10.* || >= 12.*}
     dependencies:
-      colors: 1.0.3
+      string-width: 4.2.3
+    optionalDependencies:
+      '@colors/colors': 1.5.0
     dev: true
 
   /cliui/7.0.4:
@@ -1812,11 +1821,6 @@ packages:
   /color-support/1.1.3:
     resolution: {integrity: sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==}
     hasBin: true
-    dev: true
-
-  /colors/1.0.3:
-    resolution: {integrity: sha512-pFGrxThWcWQ2MsAz6RtgeWe4NK2kUE1WfsrvvlctdII745EW9I0yflqhe7++M5LEc7bV2c/9/5zc8sFcpL0Drw==}
-    engines: {node: '>=0.1.90'}
     dev: true
 
   /combined-stream/1.0.8:
@@ -4247,8 +4251,8 @@ packages:
       - supports-color
     dev: true
 
-  /jsii-docgen/7.1.29:
-    resolution: {integrity: sha512-arPBruP+LbLfyBCwHItanOtefko1/IazgmHA2Q8P6AEp3jMJvbVtE+Y5LiA4zcZDshCAAThOKmZgqn1axiLdyQ==}
+  /jsii-docgen/7.1.30:
+    resolution: {integrity: sha512-jpGNOIRikEsTrhTKuer0n/ZBOM6DGlX5Tq/SK8bq7Xho2nmLKGruTgo7LObdGvYARhIpxGnwt7qi+yBH3TvoZg==}
     engines: {node: '>= 14.17.0'}
     hasBin: true
     dependencies:
@@ -4938,13 +4942,13 @@ packages:
       npm-normalize-package-bin: 3.0.0
     dev: true
 
-  /npm-check-updates/16.7.12:
-    resolution: {integrity: sha512-ejYl/BiWhkUxDs1ISQd/6blgTIfHabSdsfR5JWoA7PK+cGn8hCqVKO5p+nNI2PqX+0F21ExGqkt8b7cg2yxuYg==}
+  /npm-check-updates/16.7.13:
+    resolution: {integrity: sha512-D+wxsd58eTmkEXiJQcRNKUFNpQ4TAaQnK2QcZ861gSitUI3fgPOFFqe+AJcqZ8yeAUnmwcW547jpN1KKvJ9g2A==}
     engines: {node: '>=14.14'}
     hasBin: true
     dependencies:
       chalk: 5.2.0
-      cli-table: 0.3.11
+      cli-table3: 0.6.3
       commander: 10.0.0
       fast-memoize: 2.5.2
       find-up: 5.0.0
@@ -5382,8 +5386,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen/0.68.12:
-    resolution: {integrity: sha512-p9OBtH8x/PtoGZ+vthB8ZeMw4s2LJrzbsQPrYwTWPIoPvvoTMALWGwxrUtI7eE9HMNPJyReXmxHrEuC231plow==}
+  /projen/0.68.13:
+    resolution: {integrity: sha512-0k1/9YE58cPzA65CSV5bhJggS8vO8yDa6/WI/Dy77hoiIyLNP+gxM8HcBDP+066pYiRIHY2vbMuLE5IJSW0xYA==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
