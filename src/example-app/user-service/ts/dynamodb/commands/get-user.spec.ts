@@ -23,6 +23,10 @@ afterEach(deleteTables);
 afterAll(stopDb);
 
 test("Smoke test", async () => {
+  await createUser({
+    firstName: "foo",
+    lastName: "foo",
+  });
   const fixture : GetUserInput = {
     id: "foo",
   };

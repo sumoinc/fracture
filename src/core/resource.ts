@@ -1,8 +1,9 @@
 import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
+import { ValueOf } from "type-fest";
 import { AccessPattern } from "./access-pattern";
 import { FractureComponent } from "./component";
-import { Operation } from "./operation";
+import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import {
   ResourceAttribute,
   ResourceAttributeOptions,
@@ -287,6 +288,39 @@ export class Resource extends FractureComponent {
   }
   public get privateAttributes(): ResourceAttribute[] {
     return this.attributes.filter((a) => a.isPrivate);
+  }
+
+  /**
+   * Returns operation for given sub-type
+   */
+  public getOperation(
+    operationSubType: ValueOf<typeof OPERATION_SUB_TYPE>
+  ): Operation {
+    const returnOperation = this.operations.find(
+      (o) => o.operationSubType === operationSubType
+    );
+
+    if (!returnOperation) {
+      throw new Error(`Operation not found for sub-type: ${operationSubType}`);
+    }
+
+    return returnOperation;
+  }
+
+  public get createOperation(): Operation {
+    return this.getOperation(OPERATION_SUB_TYPE.CREATE_ONE);
+  }
+
+  public get readOperation(): Operation {
+    return this.getOperation(OPERATION_SUB_TYPE.READ_ONE);
+  }
+
+  public get updateOperation(): Operation {
+    return this.getOperation(OPERATION_SUB_TYPE.UPDATE_ONE);
+  }
+
+  public get deleteOperation(): Operation {
+    return this.getOperation(OPERATION_SUB_TYPE.DELETE_ONE);
   }
 
   /**

@@ -23,6 +23,9 @@ afterEach(deleteTables);
 afterAll(stopDb);
 
 test("Smoke test", async () => {
+  await createGroup({
+    name: "foo",
+  });
   const fixture : GetGroupInput = {
     id: "foo",
   };

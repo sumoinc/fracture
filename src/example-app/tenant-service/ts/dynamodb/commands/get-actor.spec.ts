@@ -23,6 +23,10 @@ afterEach(deleteTables);
 afterAll(stopDb);
 
 test("Smoke test", async () => {
+  await createActor({
+    firstName: "foo",
+    lastName: "foo",
+  });
   const fixture : GetActorInput = {
     id: "foo",
   };

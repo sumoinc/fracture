@@ -23,6 +23,10 @@ afterEach(deleteTables);
 afterAll(stopDb);
 
 test("Smoke test", async () => {
+  await createTenant({
+    name: "foo",
+    nickname: "foo",
+  });
   const fixture : GetTenantInput = {
     id: "foo",
   };

@@ -318,6 +318,18 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
+      // create some test data
+      tsTest.open(
+        `await ${this.resource.createOperation.tsDynamoCommand.functionName}({`
+      );
+      this.resource.createOperation.inputStructure.publicAttributes.forEach(
+        (a) => {
+          tsTest.line(`${a.ts.attributeName}: "foo",`);
+        }
+      );
+      tsTest.close(`});`);
+
+      // run test
       tsTest.open(
         `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
       );
