@@ -141,7 +141,7 @@ export class DynamoCommand extends FractureComponent {
     tsFile.line("");
 
     /***************************************************************************
-     *  DYNAMO INPUT
+     *  DYNAMO COMMAND
      **************************************************************************/
 
     tsFile.open(`const result = await dynamo.send(`);
@@ -461,15 +461,16 @@ export class DynamoCommand extends FractureComponent {
   public get dynamoCommandName(): string {
     switch (this.operation.operationSubType) {
       case OPERATION_SUB_TYPE.CREATE_ONE:
+      case OPERATION_SUB_TYPE.IMPORT_ONE:
+      case OPERATION_SUB_TYPE.CREATE_VERSION:
         return "PutCommand";
       case OPERATION_SUB_TYPE.READ_ONE:
+      case OPERATION_SUB_TYPE.READ_VERSION:
         return "GetCommand";
       case OPERATION_SUB_TYPE.UPDATE_ONE:
         return "UpdateCommand";
       case OPERATION_SUB_TYPE.DELETE_ONE:
         return "DeleteCommand";
-      case OPERATION_SUB_TYPE.IMPORT_ONE:
-        return "PutCommand";
       case OPERATION_SUB_TYPE.LIST:
         return "Query";
       default:

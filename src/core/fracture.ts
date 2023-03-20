@@ -121,6 +121,8 @@ export class Fracture extends Component {
             [OPERATION_SUB_TYPE.DELETE_ONE]: "delete",
             [OPERATION_SUB_TYPE.IMPORT_ONE]: "import",
             [OPERATION_SUB_TYPE.LIST]: "list",
+            [OPERATION_SUB_TYPE.CREATE_VERSION]: "create",
+            [OPERATION_SUB_TYPE.READ_VERSION]: "get",
           },
           suffixes: {
             [OPERATION_SUB_TYPE.CREATE_ONE]: "",
@@ -129,6 +131,8 @@ export class Fracture extends Component {
             [OPERATION_SUB_TYPE.DELETE_ONE]: "",
             [OPERATION_SUB_TYPE.IMPORT_ONE]: "",
             [OPERATION_SUB_TYPE.LIST]: "",
+            [OPERATION_SUB_TYPE.CREATE_VERSION]: "version",
+            [OPERATION_SUB_TYPE.READ_VERSION]: "version",
           },
         },
       },

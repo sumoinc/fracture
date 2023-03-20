@@ -11,6 +11,10 @@ src/example-app/user-service/ts/dynamodb/commands/update-user.ts
 src/example-app/user-service/ts/dynamodb/commands/update-user.spec.ts
 src/example-app/user-service/ts/dynamodb/commands/delete-user.ts
 src/example-app/user-service/ts/dynamodb/commands/delete-user.spec.ts
+src/example-app/user-service/ts/dynamodb/commands/create-user-version.ts
+src/example-app/user-service/ts/dynamodb/commands/create-user-version.spec.ts
+src/example-app/user-service/ts/dynamodb/commands/get-user-version.ts
+src/example-app/user-service/ts/dynamodb/commands/get-user-version.spec.ts
 src/example-app/user-service/ts/dynamodb/commands/create-group.ts
 src/example-app/user-service/ts/dynamodb/commands/create-group.spec.ts
 src/example-app/user-service/ts/dynamodb/commands/get-group.ts
@@ -19,6 +23,10 @@ src/example-app/user-service/ts/dynamodb/commands/update-group.ts
 src/example-app/user-service/ts/dynamodb/commands/update-group.spec.ts
 src/example-app/user-service/ts/dynamodb/commands/delete-group.ts
 src/example-app/user-service/ts/dynamodb/commands/delete-group.spec.ts
+src/example-app/user-service/ts/dynamodb/commands/create-group-version.ts
+src/example-app/user-service/ts/dynamodb/commands/create-group-version.spec.ts
+src/example-app/user-service/ts/dynamodb/commands/get-group-version.ts
+src/example-app/user-service/ts/dynamodb/commands/get-group-version.spec.ts
 src/example-app/tenant-service/ts/dynamodb/commands/create-tenant.ts
 src/example-app/tenant-service/ts/dynamodb/commands/create-tenant.spec.ts
 src/example-app/tenant-service/ts/dynamodb/commands/get-tenant.ts
@@ -27,6 +35,12 @@ src/example-app/tenant-service/ts/dynamodb/commands/update-tenant.ts
 src/example-app/tenant-service/ts/dynamodb/commands/update-tenant.spec.ts
 src/example-app/tenant-service/ts/dynamodb/commands/delete-tenant.ts
 src/example-app/tenant-service/ts/dynamodb/commands/delete-tenant.spec.ts
+src/example-app/tenant-service/ts/dynamodb/commands/create-tenant-version.ts
+src/example-app/tenant-service/ts/dynamodb/commands/create-tenant-version.spec.ts
+src/example-app/tenant-service/ts/dynamodb/commands/get-tenant-version.ts
+src/example-app/tenant-service/ts/dynamodb/commands/get-tenant-version.spec.ts
+src/example-app/tenant-service/ts/dynamodb/commands/list-tenant.ts
+src/example-app/tenant-service/ts/dynamodb/commands/list-tenant.spec.ts
 src/example-app/tenant-service/ts/dynamodb/commands/create-actor.ts
 src/example-app/tenant-service/ts/dynamodb/commands/create-actor.spec.ts
 src/example-app/tenant-service/ts/dynamodb/commands/get-actor.ts
@@ -35,3 +49,9 @@ src/example-app/tenant-service/ts/dynamodb/commands/update-actor.ts
 src/example-app/tenant-service/ts/dynamodb/commands/update-actor.spec.ts
 src/example-app/tenant-service/ts/dynamodb/commands/delete-actor.ts
 src/example-app/tenant-service/ts/dynamodb/commands/delete-actor.spec.ts
+src/example-app/tenant-service/ts/dynamodb/commands/create-actor-version.ts
+src/example-app/tenant-service/ts/dynamodb/commands/create-actor-version.spec.ts
+src/example-app/tenant-service/ts/dynamodb/commands/get-actor-version.ts
+src/example-app/tenant-service/ts/dynamodb/commands/get-actor-version.spec.ts
+src/example-app/tenant-service/ts/dynamodb/commands/list-actor.ts
+src/example-app/tenant-service/ts/dynamodb/commands/list-actor.spec.ts

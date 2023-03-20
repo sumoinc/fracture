@@ -42,6 +42,8 @@ export const OPERATION_SUB_TYPE = {
   DELETE_ONE: "DeleteOne",
   IMPORT_ONE: "ImportOne",
   LIST: "LIST",
+  CREATE_VERSION: "CreateVersion",
+  READ_VERSION: "ReadVersion",
 } as const;
 
 export class Operation extends FractureComponent {
