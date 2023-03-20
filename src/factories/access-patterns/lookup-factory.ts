@@ -4,11 +4,7 @@ import {
   AccessPatternOptions,
   ACCESS_PATTERN_TYPE,
 } from "../../core/access-pattern";
-import {
-  Operation,
-  OPERATION_SUB_TYPE,
-  OPERATION_TYPE,
-} from "../../core/operation";
+import { OPERATION_SUB_TYPE } from "../../core/operation";
 import { Resource } from "../../core/resource";
 import { ResourceAttributeGenerator } from "../../core/resource-attribute";
 
@@ -60,10 +56,12 @@ export class LookupFactory extends FractureComponent {
      *
      **************************************************************************/
 
+    /*
     new Operation(this.accessPattern, {
       operationType: OPERATION_TYPE.QUERY,
       operationSubType: OPERATION_SUB_TYPE.LIST,
     });
+    */
 
     return this;
   }

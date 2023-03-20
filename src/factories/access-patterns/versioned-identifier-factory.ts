@@ -1,9 +1,5 @@
 import { IdentifierFactory } from "./identifier-factory";
-import {
-  Operation,
-  OPERATION_SUB_TYPE,
-  OPERATION_TYPE,
-} from "../../core/operation";
+import { OPERATION_SUB_TYPE } from "../../core/operation";
 import { Resource } from "../../core/resource";
 import {
   ResourceAttributeGenerator,
@@ -52,6 +48,7 @@ export class VersionedIdentifierFactory extends IdentifierFactory {
      *
      **************************************************************************/
 
+    /*
     new Operation(this.accessPattern, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.CREATE_VERSION,
@@ -60,6 +57,7 @@ export class VersionedIdentifierFactory extends IdentifierFactory {
       operationType: OPERATION_TYPE.QUERY,
       operationSubType: OPERATION_SUB_TYPE.READ_VERSION,
     });
+    */
 
     return this;
   }
