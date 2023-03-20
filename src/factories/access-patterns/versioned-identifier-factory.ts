@@ -33,8 +33,9 @@ export class VersionedIdentifierFactory extends IdentifierFactory {
       ],
       defaultOn: [
         { operationSubType: OPERATION_SUB_TYPE.CREATE_ONE, default: "LATEST" },
+        { operationSubType: OPERATION_SUB_TYPE.READ_ONE, default: "LATEST" },
         { operationSubType: OPERATION_SUB_TYPE.UPDATE_ONE, default: "LATEST" },
-        { operationSubType: OPERATION_SUB_TYPE.DELETE_ONE, default: "DELETED" },
+        { operationSubType: OPERATION_SUB_TYPE.DELETE_ONE, default: "LATEST" },
       ],
     });
     this.accessPattern.addSkAttributeSource(versionAttribute);

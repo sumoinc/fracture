@@ -1,5 +1,6 @@
 import { createTables, deleteTables, startDb, stopDb, } from "jest-dynalite";
-import { updateGroup } from "./update-group.ts";
+import { createGroup } from "./create-group";
+import { updateGroup } from "./update-group";
 import {
   UpdateGroupInput,
 } from "../../types";
@@ -23,13 +24,19 @@ afterEach(deleteTables);
 afterAll(stopDb);
 
 test("Smoke test", async () => {
-  const fixture : UpdateGroupInput = {
-    id: "foo",
+  const seedData = await createGroup({
     name: "foo",
+  });
+
+  if (!seedData.data) {
+    throw new Error("Error creating seed data.");
   };
-  const result = await updateGroup(fixture);
-  const { data, errors, status } = result;
-  console.log("updateGroup() Result:", JSON.stringify(result, null, 2));
+
+  const fixture : UpdateGroupInput = {
+    id: seedData.data.id,
+    name: "bar",
+  };
+  const { data, errors, status } = await updateGroup(fixture);
   expect(data).toBeTruthy();
   expect(errors.length).toBe(0);
   expect(status).toBe(200);

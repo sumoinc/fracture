@@ -80,6 +80,7 @@ export class Operation extends FractureComponent {
 
     // parents + inverse
     this.accessPattern = accessPattern;
+    this.accessPattern.operations.push(this);
     this.resource.operations.push(this);
 
     // all other options

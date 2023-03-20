@@ -24,7 +24,11 @@ export class ExampleApp extends Component {
     const userService = fracture.addService({ name: "user" });
 
     const user = userService.addResource({ name: "user" });
-    user.addResourceAttribute({ name: "first-name", shortName: "fn" });
+    user.addResourceAttribute({
+      name: "first-name",
+      shortName: "fn",
+      isRequired: true,
+    });
     user.addResourceAttribute({ name: "last-name", shortName: "ln" });
 
     const group = userService.addResource({ name: "group" });

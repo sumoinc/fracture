@@ -92,7 +92,9 @@ export class TypescriptResourceAttribute extends FractureComponent {
         return `"${this.resource.name}"`;
       case ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP:
         if (this.resourceAttribute.hasDefaultFor(operation)) {
-          return `"${this.resourceAttribute.defaultFor(operation)}"`;
+          return `"${this.resourceAttribute
+            .defaultFor(operation)
+            .toLowerCase()}"`;
         } else {
           return "new Date().toISOString()";
         }

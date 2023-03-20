@@ -6,13 +6,13 @@ export type Error = {
 }
 
 export type Response<T> = {
-  data: T;
+  data?: T;
   errors: Error[];
   status: number;
 }
 
 export type ListResponse<T> = {
-  data:T[];
+  data?: T[];
   errors: Error[];
   status: number;
 }
@@ -55,7 +55,7 @@ export interface User {
   /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
@@ -100,7 +100,7 @@ export interface UserMessage {
   /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
@@ -112,40 +112,9 @@ export interface UserMessage {
  */
 export interface CreateUserInput {
   /**
-   * The id for the record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
@@ -183,14 +152,9 @@ export interface CreateUserOutput {
    */
   updatedAt: string;
   /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
@@ -206,40 +170,6 @@ export interface GetUserInput {
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
-   * A first-name.
-   */
-  firstName?: string;
-  /**
-   * A last-name.
-   */
-  lastName?: string;
 }
 
 /**
@@ -273,14 +203,9 @@ export interface GetUserOutput {
    */
   updatedAt: string;
   /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
@@ -297,35 +222,9 @@ export interface UpdateUserInput {
    */
   id: string;
   /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
@@ -363,14 +262,9 @@ export interface UpdateUserOutput {
    */
   updatedAt: string;
   /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
@@ -386,40 +280,6 @@ export interface DeleteUserInput {
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
-   * A first-name.
-   */
-  firstName?: string;
-  /**
-   * A last-name.
-   */
-  lastName?: string;
 }
 
 /**
@@ -460,7 +320,7 @@ export interface DeleteUserOutput {
   /**
    * A first-name.
    */
-  firstName?: string;
+  firstName: string;
   /**
    * A last-name.
    */
@@ -554,37 +414,6 @@ export interface GroupMessage {
  */
 export interface CreateGroupInput {
   /**
-   * The id for the record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  id: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
    * A name.
    */
   name: string;
@@ -621,11 +450,6 @@ export interface CreateGroupOutput {
    */
   updatedAt: string;
   /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
    * A name.
    */
   name: string;
@@ -640,36 +464,6 @@ export interface GetGroupInput {
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
-   * A name.
-   */
-  name: string;
 }
 
 /**
@@ -703,11 +497,6 @@ export interface GetGroupOutput {
    */
   updatedAt: string;
   /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
    * A name.
    */
   name: string;
@@ -722,32 +511,6 @@ export interface UpdateGroupInput {
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
   /**
    * A name.
    */
@@ -785,11 +548,6 @@ export interface UpdateGroupOutput {
    */
   updatedAt: string;
   /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
    * A name.
    */
   name: string;
@@ -804,36 +562,6 @@ export interface DeleteGroupInput {
    * @readonly This attribute is managed automatically by the system.
    */
   id: string;
-  /**
-   * The type for this record.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  type: string;
-  /**
-   * The version of this record
-   * @default "LATEST"
-   * @readonly This attribute is managed automatically by the system.
-   */
-  version: string;
-  /**
-   * The date and time this record was created.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  createdAt: string;
-  /**
-   * The date and time this record was last updated.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  updatedAt: string;
-  /**
-   * The date and time this record was deleted.
-   * @readonly This attribute is managed automatically by the system.
-   */
-  deletedAt: string;
-  /**
-   * A name.
-   */
-  name: string;
 }
 
 /**

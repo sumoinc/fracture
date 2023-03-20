@@ -1,5 +1,6 @@
 import { createTables, deleteTables, startDb, stopDb, } from "jest-dynalite";
-import { deleteTenant } from "./delete-tenant.ts";
+import { createTenant } from "./create-tenant";
+import { deleteTenant } from "./delete-tenant";
 import {
   DeleteTenantInput,
 } from "../../types";
@@ -23,12 +24,19 @@ afterEach(deleteTables);
 afterAll(stopDb);
 
 test("Smoke test", async () => {
-  const fixture : DeleteTenantInput = {
-    id: "foo",
+  const seedData = await createTenant({
+    name: "foo",
+    nickname: "foo",
+  });
+
+  if (!seedData.data) {
+    throw new Error("Error creating seed data.");
   };
-  const result = await deleteTenant(fixture);
-  const { data, errors, status } = result;
-  console.log("deleteTenant() Result:", JSON.stringify(result, null, 2));
+
+  const fixture : DeleteTenantInput = {
+    id: seedData.data.id,
+  };
+  const { data, errors, status } = await deleteTenant(fixture);
   expect(data).toBeTruthy();
   expect(errors.length).toBe(0);
   expect(status).toBe(200);

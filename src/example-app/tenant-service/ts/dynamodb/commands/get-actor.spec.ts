@@ -1,5 +1,6 @@
 import { createTables, deleteTables, startDb, stopDb, } from "jest-dynalite";
-import { getActor } from "./get-actor.ts";
+import { createActor } from "./create-actor";
+import { getActor } from "./get-actor";
 import {
   GetActorInput,
 } from "../../types";
@@ -23,16 +24,19 @@ afterEach(deleteTables);
 afterAll(stopDb);
 
 test("Smoke test", async () => {
-  await createActor({
+  const seedData = await createActor({
     firstName: "foo",
     lastName: "foo",
   });
-  const fixture : GetActorInput = {
-    id: "foo",
+
+  if (!seedData.data) {
+    throw new Error("Error creating seed data.");
   };
-  const result = await getActor(fixture);
-  const { data, errors, status } = result;
-  console.log("getActor() Result:", JSON.stringify(result, null, 2));
+
+  const fixture : GetActorInput = {
+    id: seedData.data.id,
+  };
+  const { data, errors, status } = await getActor(fixture);
   expect(data).toBeTruthy();
   expect(errors.length).toBe(0);
   expect(status).toBe(200);

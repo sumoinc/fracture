@@ -1,6 +1,6 @@
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { OPERATION_SUB_TYPE } from "./operation";
+import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
   ResourceAttribute,
@@ -37,6 +37,7 @@ export class AccessPattern extends FractureComponent {
   // member components
   public pkAttribute: ResourceAttribute;
   public skAttribute: ResourceAttribute;
+  public operations: Operation[] = [];
   // parent
   public readonly resource: Resource;
   // all other options
@@ -144,19 +145,52 @@ export class AccessPattern extends FractureComponent {
     this.skAttribute.compositionSources.push(sourceAttribute);
   }
 
-  get isKeyAccessPattern(): boolean {
+  /**
+   * Returns operation for given sub-type
+   */
+  public getOperation(
+    operationSubType: ValueOf<typeof OPERATION_SUB_TYPE>
+  ): Operation {
+    const returnOperation = this.operations.find(
+      (o) => o.operationSubType === operationSubType
+    );
+
+    if (!returnOperation) {
+      throw new Error(`Operation not found for sub-type: ${operationSubType}`);
+    }
+
+    return returnOperation;
+  }
+
+  public get createOperation(): Operation {
+    return this.getOperation(OPERATION_SUB_TYPE.CREATE_ONE);
+  }
+
+  public get readOperation(): Operation {
+    return this.getOperation(OPERATION_SUB_TYPE.READ_ONE);
+  }
+
+  public get updateOperation(): Operation {
+    return this.getOperation(OPERATION_SUB_TYPE.UPDATE_ONE);
+  }
+
+  public get deleteOperation(): Operation {
+    return this.getOperation(OPERATION_SUB_TYPE.DELETE_ONE);
+  }
+
+  public get isKeyAccessPattern(): boolean {
     return this.dynamoTable.keyDynamoGsi === this.dynamoGsi;
   }
 
-  get isLookupAccessPattern(): boolean {
+  public get isLookupAccessPattern(): boolean {
     return this.dynamoTable.lookupDynamoGsi === this.dynamoGsi;
   }
 
-  get dynamoTable(): DynamoTable {
+  public get dynamoTable(): DynamoTable {
     return this.dynamoGsi.dynamoTable;
   }
 
-  get dynamoGsi(): DynamoGsi {
+  public get dynamoGsi(): DynamoGsi {
     return this.options.dynamoGsi;
   }
 }

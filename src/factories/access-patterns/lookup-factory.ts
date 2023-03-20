@@ -40,6 +40,7 @@ export class LookupFactory extends FractureComponent {
           OPERATION_SUB_TYPE.CREATE_ONE,
           OPERATION_SUB_TYPE.UPDATE_ONE,
         ],
+        compositionSeperator: " ",
       },
       type: ACCESS_PATTERN_TYPE.LOOKUP,
     };
