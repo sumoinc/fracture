@@ -6,7 +6,6 @@ import { Resource } from "./resource";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
 import { DynamoCommand, TypescriptOperation } from "../generators";
-import { DynamoReadOneCommand } from "../generators/ts/commands/dynamo-read-one-command";
 
 /******************************************************************************
  * TYPES
@@ -101,15 +100,7 @@ export class Operation extends FractureComponent {
      **************************************************************************/
 
     this.ts = new TypescriptOperation(this);
-
-    switch (this.operationSubType) {
-      case OPERATION_SUB_TYPE.READ_ONE:
-        this.tsDynamoCommand = new DynamoReadOneCommand(this);
-        break;
-      default:
-        this.tsDynamoCommand = new DynamoCommand(this);
-        break;
-    }
+    this.tsDynamoCommand = new DynamoCommand(this);
 
     return this;
   }

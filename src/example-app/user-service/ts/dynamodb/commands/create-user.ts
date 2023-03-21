@@ -60,7 +60,7 @@ export const createUser = async (
   const pk = id.toLowerCase();
   const sk = t.toLowerCase() + "#" + v.toLowerCase();
 
-  const result = await dynamo.send(
+  await dynamo.send(
     new PutCommand({
       TableName: "user",
       Item: {

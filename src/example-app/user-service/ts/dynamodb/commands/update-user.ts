@@ -72,11 +72,11 @@ export const updateUser = async (
         "#fn": "fn",
         "#ln": "ln",
       },
-      ReturnValues: "ALL_NEW",
       Key: {
         pk,
         sk,
       },
+      ReturnValues: "ALL_NEW",
       ReturnConsumedCapacity: "INDEXES",
       ReturnItemCollectionMetrics: "SIZE",
     })

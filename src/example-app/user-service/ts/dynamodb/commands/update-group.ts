@@ -67,11 +67,11 @@ export const updateGroup = async (
         "#ud": "ud",
         "#name": "name",
       },
-      ReturnValues: "ALL_NEW",
       Key: {
         pk,
         sk,
       },
+      ReturnValues: "ALL_NEW",
       ReturnConsumedCapacity: "INDEXES",
       ReturnItemCollectionMetrics: "SIZE",
     })

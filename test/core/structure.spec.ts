@@ -26,6 +26,7 @@ const makeFixture = () => {
   const ln = new ResourceAttribute(resource, {
     name: "last-name",
     shortName: "ln",
+    isRequired: true,
   });
   resource.addLookupSource(fn);
   resource.addLookupSource(ln);

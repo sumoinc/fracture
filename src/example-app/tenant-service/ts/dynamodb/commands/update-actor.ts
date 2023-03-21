@@ -75,11 +75,11 @@ export const updateActor = async (
         "#ln": "ln",
         "#idx": "idx",
       },
-      ReturnValues: "ALL_NEW",
       Key: {
         pk,
         sk,
       },
+      ReturnValues: "ALL_NEW",
       ReturnConsumedCapacity: "INDEXES",
       ReturnItemCollectionMetrics: "SIZE",
     })

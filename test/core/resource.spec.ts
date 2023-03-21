@@ -9,7 +9,10 @@ const myService = () => {
 
 const myResource = () => {
   const resource = new Resource(myService(), { name: "person" });
-  const name = new ResourceAttribute(resource, { name: "my-name" });
+  const name = new ResourceAttribute(resource, {
+    name: "my-name",
+    isRequired: true,
+  });
   resource.addLookupSource(name);
   return resource;
 };

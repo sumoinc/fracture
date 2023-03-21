@@ -141,16 +141,32 @@ export class DynamoCommand extends FractureComponent {
     tsFile.line("");
 
     /***************************************************************************
-     *  DYNAMO COMMAND
+     *
+     * DYNAMO COMMAND - OPEN
+     *
+     * Open the command and aupply common information like the table name.
+     * We don't use the result for create statesments since we already have all
+     * the values. We just made them!
+     *
      **************************************************************************/
 
-    tsFile.open(`const result = await dynamo.send(`);
+    if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
+      tsFile.open(`await dynamo.send(`);
+    } else {
+      tsFile.open(`const result = await dynamo.send(`);
+    }
     tsFile.open(`new ${this.dynamoCommandName}({`);
     tsFile.line(`TableName: "${this.service.dynamoTable.name}",`);
 
-    this.writeDynamoCommand(tsFile);
+    /***************************************************************************
+     *
+     * Create new item
+     *
+     * When creating a new item, we need to feed the entire item into the
+     * dynamodb PutItem command.
+     *
+     **************************************************************************/
 
-    // PUT NEW ITEM
     if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
       tsFile.open(`Item: {`);
       this.inputStructure.itemAttributes.forEach((a) => {
@@ -159,7 +175,15 @@ export class DynamoCommand extends FractureComponent {
       tsFile.close(`},`);
     }
 
-    // UPDATE
+    /***************************************************************************
+     *
+     * Update Existing item
+     *
+     * When updating an item, we need to alias all names and values and use an
+     * expression for the update.
+     *
+     **************************************************************************/
+
     if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
       const updateExpression = this.inputStructure.itemAttributes
         .map((attribute) => {
@@ -181,28 +205,67 @@ export class DynamoCommand extends FractureComponent {
         );
       });
       tsFile.close(`},`);
-      tsFile.line(`ReturnValues: "ALL_NEW",`);
     }
 
-    // OPERATIONS REQUIRING A KEY
+    /***************************************************************************
+     *
+     * Write Key - Certain operations require the pk and sk.
+     *
+     **************************************************************************/
+
     if (
       this.operationSubType === OPERATION_SUB_TYPE.READ_ONE ||
       this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE ||
       this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
     ) {
-      this.generateKey(tsFile);
+      tsFile.open(`Key: {`);
+      tsFile.line(`${this.dynamoPkName},`);
+      tsFile.line(`${this.dynamoSkName},`);
+      tsFile.close(`},`);
     }
 
-    // DELETE operation
+    /***************************************************************************
+     *
+     * Return Values
+     *
+     * When deleting and item we want to old values (before delete).
+     * When Updating an item, we want the new values.
+     *
+     **************************************************************************/
+
     if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
       tsFile.line(`ReturnValues: "ALL_OLD",`);
     }
 
+    if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
+      tsFile.line(`ReturnValues: "ALL_NEW",`);
+    }
+    /***************************************************************************
+     *
+     * Metrics
+     *
+     * We always want capacity metrics.
+     * Item colelction metrics only matter on mutations.
+     *
+     **************************************************************************/
+
     // return some statistics (might remove this later)
     tsFile.line(`ReturnConsumedCapacity: "INDEXES",`);
-    if (this.operationSubType !== OPERATION_SUB_TYPE.READ_ONE) {
+    if (
+      this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE ||
+      this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE ||
+      this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE
+    ) {
       tsFile.line(`ReturnItemCollectionMetrics: "SIZE",`);
     }
+
+    /***************************************************************************
+     *
+     * DYNAMO COMMAND - CLOSE
+     *
+     * Close the args, then the send command
+     *
+     **************************************************************************/
 
     tsFile.close(`})`);
     tsFile.close(`);`);
@@ -323,14 +386,6 @@ export class DynamoCommand extends FractureComponent {
     tsFile.line("");
   };
 
-  public writeDynamoCommand = (tsFile: TypeScriptSource): void => {
-    throw new Error(`Method not implemented for ${tsFile.fileName}.`);
-  };
-
-  public writeReturnData = (tsFile: TypeScriptSource): void => {
-    throw new Error(`Method not implemented for ${tsFile.fileName}.`);
-  };
-
   public writeTest = () => {
     const tsTest = new TypeScriptSource(
       this,
@@ -393,7 +448,7 @@ export class DynamoCommand extends FractureComponent {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
       // create some test data
-      this.generateSeedData(tsTest);
+      this.writeSeedData(tsTest);
       // run test
       tsTest.open(
         `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
@@ -419,7 +474,7 @@ export class DynamoCommand extends FractureComponent {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
       // create some test data
-      this.generateSeedData(tsTest);
+      this.writeSeedData(tsTest);
       tsTest.open(
         `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
       );
@@ -444,7 +499,7 @@ export class DynamoCommand extends FractureComponent {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
       // create some test data
-      this.generateSeedData(tsTest);
+      this.writeSeedData(tsTest);
       tsTest.open(
         `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
       );
@@ -517,14 +572,7 @@ export class DynamoCommand extends FractureComponent {
     );
   }
 
-  public generateKey(file: TypeScriptSource) {
-    file.open(`Key: {`);
-    file.line(`${this.dynamoPkName},`);
-    file.line(`${this.dynamoSkName},`);
-    file.close(`},`);
-  }
-
-  public generateSeedData(file: TypeScriptSource) {
+  public writeSeedData(file: TypeScriptSource) {
     file.open(
       `const seedData = await ${this.createOperation.tsDynamoCommand.functionName}({`
     );

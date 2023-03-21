@@ -61,7 +61,7 @@ export const createTenant = async (
   const sk = t.toLowerCase() + "#" + v.toLowerCase();
   const idx = n.toLowerCase();
 
-  const result = await dynamo.send(
+  await dynamo.send(
     new PutCommand({
       TableName: "tenant",
       Item: {

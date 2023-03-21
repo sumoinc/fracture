@@ -61,7 +61,7 @@ export const createActor = async (
   const sk = t.toLowerCase() + "#" + v.toLowerCase();
   const idx = fn.toLowerCase() + " " + ln.toLowerCase();
 
-  const result = await dynamo.send(
+  await dynamo.send(
     new PutCommand({
       TableName: "tenant",
       Item: {
