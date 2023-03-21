@@ -118,15 +118,14 @@ export class Operation extends FractureComponent {
    * Operation name, based on the naming strategy
    */
   public get name() {
-    const resourceName = this.resource.name;
+    const resourceName =
+      this.operationSubType === OPERATION_SUB_TYPE.LIST
+        ? this.resource.pluralName
+        : this.resource.name;
     const prefix =
-      this.fracture.namingStrategy.operations.prefixes[
-        this.options.operationSubType
-      ];
+      this.fracture.namingStrategy.operations.prefixes[this.operationSubType];
     const suffix =
-      this.fracture.namingStrategy.operations.suffixes[
-        this.options.operationSubType
-      ];
+      this.fracture.namingStrategy.operations.suffixes[this.operationSubType];
 
     return [prefix, resourceName, suffix]
       .filter((part) => part.length > 0)

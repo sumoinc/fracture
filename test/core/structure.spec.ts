@@ -12,11 +12,14 @@ const makeFixture = () => {
   };
   const fracture = new TestFracture({ logging });
   const service = new Service(fracture, { name: "tenant" });
-  const resource = new Resource(service, { name: "person" });
+  const resource = new Resource(service, {
+    name: "person",
+    pluralName: "people",
+  });
   new ResourceAttribute(resource, {
     name: "my-name",
     shortName: "mn",
-    isRequired: true,
+    //isRequired: true,
   });
   const fn = new ResourceAttribute(resource, {
     name: "first-name",
@@ -314,6 +317,61 @@ const expectedStructures = [
     type: STRUCTURE_TYPE.OUTPUT,
     operationSubType: OPERATION_SUB_TYPE.DELETE_ONE,
     expectedName: "delete-person-output",
+    attributeTypes: [
+      {
+        publicAttributes: [
+          { id: true },
+          { type: true },
+          { version: true },
+          { "created-at": true },
+          { "updated-at": true },
+          { "deleted-at": false },
+          { "my-name": true },
+          { "first-name": true },
+          { "last-name": false },
+        ],
+      },
+      {
+        itemAttributes: [],
+      },
+      { keyAttributes: [] },
+      {
+        generatedAttributes: [],
+      },
+    ],
+  },
+  /*****************************************************************************
+   * LIST INPUT
+   ****************************************************************************/
+  {
+    type: STRUCTURE_TYPE.INPUT,
+    operationSubType: OPERATION_SUB_TYPE.LIST,
+    expectedName: "list-people-input",
+    attributeTypes: [
+      {
+        publicAttributes: [{ id: true }],
+      },
+      {
+        itemAttributes: [],
+      },
+      { keyAttributes: [{ pk: true }, { sk: true }] },
+      {
+        generatedAttributes: [
+          { type: true },
+          { version: true },
+          { pk: true },
+          { sk: true },
+        ],
+      },
+    ],
+  },
+  /*****************************************************************************
+   * LIST OUTPUT
+   ****************************************************************************/
+  {
+    type: STRUCTURE_TYPE.OUTPUT,
+    operationSubType: OPERATION_SUB_TYPE.LIST,
+    expectedName: "list-people-output",
     attributeTypes: [
       {
         publicAttributes: [

@@ -25,6 +25,10 @@ export interface ResourceOptions {
    */
   shortName?: string;
   /**
+   * Plural name for the Resource.
+   */
+  pluralName?: string;
+  /**
    * Comment lines to add to the Resource.
    * @default []
    */
@@ -90,6 +94,9 @@ export class Resource extends FractureComponent {
       shortName: options.shortName
         ? paramCase(options.shortName)
         : paramCase(options.name),
+      pluralName: options.pluralName
+        ? paramCase(options.pluralName)
+        : paramCase(options.name) + "s",
     };
 
     // all other options
@@ -184,6 +191,14 @@ export class Resource extends FractureComponent {
 
   public get name(): string {
     return this.options.name;
+  }
+
+  public get shortName(): string {
+    return this.options.shortName;
+  }
+
+  public get pluralName(): string {
+    return this.options.pluralName;
   }
 
   public get isVersioned(): boolean {

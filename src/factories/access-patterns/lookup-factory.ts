@@ -4,7 +4,11 @@ import {
   AccessPatternOptions,
   ACCESS_PATTERN_TYPE,
 } from "../../core/access-pattern";
-import { OPERATION_SUB_TYPE } from "../../core/operation";
+import {
+  Operation,
+  OPERATION_SUB_TYPE,
+  OPERATION_TYPE,
+} from "../../core/operation";
 import { Resource } from "../../core/resource";
 import { ResourceAttributeGenerator } from "../../core/resource-attribute";
 
@@ -32,14 +36,17 @@ export class LookupFactory extends FractureComponent {
       pkAttributeOptions: {
         name: dynamoGsi.pkName,
       },
+      // we allow this to be searched on publically
       skAttributeOptions: {
-        name: dynamoGsi.skName,
+        name: "lookup-text",
+        shortName: dynamoGsi.skName,
         isPublic: false,
         generator: ResourceAttributeGenerator.COMPOSITION,
         generateOn: [
           OPERATION_SUB_TYPE.CREATE_ONE,
           OPERATION_SUB_TYPE.UPDATE_ONE,
         ],
+        outputOn: [OPERATION_SUB_TYPE.LIST],
         compositionSeperator: " ",
       },
       type: ACCESS_PATTERN_TYPE.LOOKUP,
@@ -56,12 +63,10 @@ export class LookupFactory extends FractureComponent {
      *
      **************************************************************************/
 
-    /*
     new Operation(this.accessPattern, {
       operationType: OPERATION_TYPE.QUERY,
       operationSubType: OPERATION_SUB_TYPE.LIST,
     });
-    */
 
     return this;
   }

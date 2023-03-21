@@ -27,6 +27,8 @@ src/example-app/tenant-service/ts/dynamodb/commands/update-tenant.ts
 src/example-app/tenant-service/ts/dynamodb/commands/update-tenant.spec.ts
 src/example-app/tenant-service/ts/dynamodb/commands/delete-tenant.ts
 src/example-app/tenant-service/ts/dynamodb/commands/delete-tenant.spec.ts
+src/example-app/tenant-service/ts/dynamodb/commands/list-tenant.ts
+src/example-app/tenant-service/ts/dynamodb/commands/list-tenant.spec.ts
 src/example-app/tenant-service/ts/dynamodb/commands/create-actor.ts
 src/example-app/tenant-service/ts/dynamodb/commands/create-actor.spec.ts
 src/example-app/tenant-service/ts/dynamodb/commands/get-actor.ts
@@ -35,3 +37,5 @@ src/example-app/tenant-service/ts/dynamodb/commands/update-actor.ts
 src/example-app/tenant-service/ts/dynamodb/commands/update-actor.spec.ts
 src/example-app/tenant-service/ts/dynamodb/commands/delete-actor.ts
 src/example-app/tenant-service/ts/dynamodb/commands/delete-actor.spec.ts
+src/example-app/tenant-service/ts/dynamodb/commands/list-actor.ts
+src/example-app/tenant-service/ts/dynamodb/commands/list-actor.spec.ts
