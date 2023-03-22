@@ -36,6 +36,11 @@ export class DynamoCommand extends FractureComponent {
       )
     );
 
+    const responseType =
+      this.operation.operationSubType === OPERATION_SUB_TYPE.LIST
+        ? this.service.ts.listResponseTypeName
+        : this.service.ts.responseTypeName;
+
     /***************************************************************************
      *  IMPORTS
      **************************************************************************/
@@ -53,7 +58,7 @@ export class DynamoCommand extends FractureComponent {
     tsFile.line("Error,");
     tsFile.line(this.inputStructure.ts.publicInterfaceName + ",");
     tsFile.line(this.outputStructure.ts.publicInterfaceName + ",");
-    tsFile.line(this.service.ts.responseTypeName + ",");
+    tsFile.line(responseType + ",");
     tsFile.close(`} from "${this.service.ts.typeFile.pathFrom(tsFile)}";`);
     tsFile.line("");
 
@@ -77,7 +82,7 @@ export class DynamoCommand extends FractureComponent {
       `${this.inputName}: ${this.inputStructure.ts.publicInterfaceName}`
     );
     tsFile.close(
-      `): Promise<${this.service.ts.responseTypeName}<${this.outputStructure.ts.publicInterfaceName}>> => {`
+      `): Promise<${responseType}<${this.outputStructure.ts.publicInterfaceName}>> => {`
     );
     tsFile.open("");
     tsFile.line("");
@@ -204,6 +209,35 @@ export class DynamoCommand extends FractureComponent {
           `"#${attribute.ts.attributeShortName}": "${attribute.ts.attributeShortName}",`
         );
       });
+      tsFile.close(`},`);
+    }
+
+    /***************************************************************************
+     *
+     * List Items
+     *
+     **************************************************************************/
+
+    if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
+      // KeyConditionExpression: "Season = :s and Episode > :e",
+      tsFile.line(
+        `KeyConditionExpression: "#${this.lookupAccessPattern.pkAttribute.ts.attributeShortName} = :${this.lookupAccessPattern.pkAttribute.ts.attributeShortName} and begins_with(#${this.lookupAccessPattern.skAttribute.ts.attributeShortName}, :${this.lookupAccessPattern.skAttribute.ts.attributeShortName})",`
+      );
+      tsFile.open(`ExpressionAttributeValues: {`);
+      tsFile.line(
+        `":${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}": ${this.lookupAccessPattern.pkAttribute.ts.attributeShortName},`
+      );
+      tsFile.line(
+        `":${this.lookupAccessPattern.skAttribute.ts.attributeShortName}": ${this.lookupAccessPattern.skAttribute.ts.attributeShortName},`
+      );
+      tsFile.close(`},`);
+      tsFile.open(`ExpressionAttributeNames: {`);
+      tsFile.line(
+        `"#${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}": "${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}",`
+      );
+      tsFile.line(
+        `"#${this.lookupAccessPattern.skAttribute.ts.attributeShortName}": "${this.lookupAccessPattern.skAttribute.ts.attributeShortName}",`
+      );
       tsFile.close(`},`);
     }
 
@@ -352,7 +386,7 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
-      tsFile.open(`const data = (result.Attributes)`);
+      tsFile.open(`const data = result.Attributes`);
       tsFile.open(`? {`);
       this.outputStructure.publicAttributes.forEach((a) => {
         tsFile.line(
@@ -373,6 +407,25 @@ export class DynamoCommand extends FractureComponent {
       tsFile.line(`detail: "TODO",`);
       tsFile.close(`})`);
       tsFile.close(`}`);
+      tsFile.line("");
+    }
+
+    /***************************************************************************
+     *  CLOSE FUNCTION - list
+     **************************************************************************/
+
+    if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
+      tsFile.open(`const data = result.Items`);
+      tsFile.open(`? result.Items.map((item) => {`);
+      tsFile.open("");
+      tsFile.open("return {");
+      this.outputStructure.publicAttributes.forEach((a) => {
+        tsFile.line(`${a.ts.attributeName}: item.${a.ts.attributeShortName},`);
+      });
+      tsFile.close("};");
+      tsFile.close(`}) : [];`);
+      tsFile.close("");
+      tsFile.close("");
       tsFile.line("");
     }
 
@@ -534,7 +587,7 @@ export class DynamoCommand extends FractureComponent {
       case OPERATION_SUB_TYPE.DELETE_ONE:
         return "DeleteCommand";
       case OPERATION_SUB_TYPE.LIST:
-        return "Query";
+        return "QueryCommand";
       default:
         throw new Error(
           `Unsupported operation type: ${this.operation.operationSubType}`
@@ -610,6 +663,10 @@ export class DynamoCommand extends FractureComponent {
 
   public get keyAccessPattern(): AccessPattern {
     return this.resource.keyAccessPattern;
+  }
+
+  public get lookupAccessPattern(): AccessPattern {
+    return this.resource.lookupAccessPattern;
   }
 
   public get createOperation(): Operation {

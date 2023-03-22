@@ -66,7 +66,7 @@ export const deleteTenant = async (
     })
   );
 
-  const data = (result.Attributes)
+  const data = result.Attributes
     ? {
       id: result.Attributes.id,
       type: result.Attributes.t,

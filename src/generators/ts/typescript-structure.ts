@@ -1,5 +1,6 @@
 import { FractureComponent } from "../../core";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
+import { Resource } from "../../core/resource";
 import { Service } from "../../core/service";
 import { Structure } from "../../core/structure";
 
@@ -39,10 +40,15 @@ export class TypescriptStructure extends FractureComponent {
       );
     });
     this.service.ts.typeFile.close(`}`);
-    this.service.ts.typeFile.line("\n");
+
+    this.service.ts.typeFile.line("");
   }
 
   public get service(): Service {
     return this.structure.service;
+  }
+
+  public get resource(): Resource {
+    return this.structure.resource;
   }
 }

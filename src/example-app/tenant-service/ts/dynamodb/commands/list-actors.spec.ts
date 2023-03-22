@@ -1,8 +1,8 @@
 import { createTables, deleteTables, startDb, stopDb, } from "jest-dynalite";
-import { createTenant } from "./create-tenant";
-import { listTenant } from "./list-tenant";
+import { createActor } from "./create-actor";
+import { listActors } from "./list-actors";
 import {
-  ListTenantInput,
+  ListActorsInput,
 } from "../../types";
 
 /**

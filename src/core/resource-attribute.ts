@@ -264,12 +264,7 @@ export class ResourceAttribute extends FractureComponent {
       generator: ResourceAttributeGenerator.NONE,
       generateOn: [],
       defaultOn: [],
-      outputOn: [
-        OPERATION_SUB_TYPE.CREATE_ONE,
-        OPERATION_SUB_TYPE.READ_ONE,
-        OPERATION_SUB_TYPE.UPDATE_ONE,
-        OPERATION_SUB_TYPE.DELETE_ONE,
-      ],
+      outputOn: [],
       createValidations: [],
       readValidations: [],
       updateValidations: [],

@@ -38,10 +38,10 @@
 /src/example-app/tenant-service/ts/dynamodb/commands/get-actor.ts linguist-generated
 /src/example-app/tenant-service/ts/dynamodb/commands/get-tenant.spec.ts linguist-generated
 /src/example-app/tenant-service/ts/dynamodb/commands/get-tenant.ts linguist-generated
-/src/example-app/tenant-service/ts/dynamodb/commands/list-actor.spec.ts linguist-generated
-/src/example-app/tenant-service/ts/dynamodb/commands/list-actor.ts linguist-generated
-/src/example-app/tenant-service/ts/dynamodb/commands/list-tenant.spec.ts linguist-generated
-/src/example-app/tenant-service/ts/dynamodb/commands/list-tenant.ts linguist-generated
+/src/example-app/tenant-service/ts/dynamodb/commands/list-actors.spec.ts linguist-generated
+/src/example-app/tenant-service/ts/dynamodb/commands/list-actors.ts linguist-generated
+/src/example-app/tenant-service/ts/dynamodb/commands/list-tenants.spec.ts linguist-generated
+/src/example-app/tenant-service/ts/dynamodb/commands/list-tenants.ts linguist-generated
 /src/example-app/tenant-service/ts/dynamodb/commands/update-actor.spec.ts linguist-generated
 /src/example-app/tenant-service/ts/dynamodb/commands/update-actor.ts linguist-generated
 /src/example-app/tenant-service/ts/dynamodb/commands/update-tenant.spec.ts linguist-generated

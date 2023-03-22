@@ -54,6 +54,7 @@ export class IdentifierFactory extends FractureComponent {
           OPERATION_SUB_TYPE.READ_ONE,
           OPERATION_SUB_TYPE.UPDATE_ONE,
           OPERATION_SUB_TYPE.DELETE_ONE,
+          OPERATION_SUB_TYPE.LIST,
         ],
       },
       type: ACCESS_PATTERN_TYPE.IDENTIFIER,
@@ -92,6 +93,7 @@ export class IdentifierFactory extends FractureComponent {
         OPERATION_SUB_TYPE.READ_ONE,
         OPERATION_SUB_TYPE.UPDATE_ONE,
         OPERATION_SUB_TYPE.DELETE_ONE,
+        OPERATION_SUB_TYPE.LIST,
       ],
     });
     this.accessPattern.addSkAttributeSource(typeAttribute);

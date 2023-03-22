@@ -203,6 +203,9 @@ export class Structure extends FractureComponent {
               );
             });
 
+          case OPERATION_SUB_TYPE.LIST:
+            return [this.resource.lookupAccessPattern.skAttribute];
+
           default:
             return [];
         }

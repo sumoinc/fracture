@@ -1,10 +1,10 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, Query } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import {
   Error,
-  ListTenantInput,
-  ListTenantOutput,
-  Response,
+  ListTenantsInput,
+  ListTenantsOutput,
+  ListResponse,
 } from "../../types";
 
 /**
@@ -23,9 +23,9 @@ const config = {
 const client = new DynamoDBClient(config);
 const dynamo = DynamoDBDocumentClient.from(client);
 
-export const listTenant = async (
-  input: ListTenantInput
-): Promise<Response<ListTenantOutput>> => {
+export const listTenants = async (
+  input: ListTenantsInput
+): Promise<ListResponse<ListTenantsOutput>> => {
 
   /**
    * An error container in case we encounter problems along the way.
@@ -41,19 +41,46 @@ export const listTenant = async (
    * Unwrap external inputs.
    */
   const {
+    lookupText,
   } = input;
 
+  const idx = lookupText;
 
   /**
    * Generate needed values.
    */
+  const t = "tenant";
+  const v = "latest";
+  const sk = t.toLowerCase() + "#" + v.toLowerCase();
 
   const result = await dynamo.send(
-    new Query({
+    new QueryCommand({
       TableName: "tenant",
+      KeyConditionExpression: "#sk = :sk and begins_with(#idx, :idx)",
+      ExpressionAttributeValues: {
+        ":sk": sk,
+        ":idx": idx,
+      },
+      ExpressionAttributeNames: {
+        "#sk": "sk",
+        "#idx": "idx",
+      },
       ReturnConsumedCapacity: "INDEXES",
     })
   );
+
+  const data = result.Items
+    ? result.Items.map((item) => {
+        return {
+          id: item.id,
+          type: item.t,
+          version: item.v,
+          createdAt: item.cd,
+          updatedAt: item.ud,
+          name: item.n,
+          nickname: item.nn,
+        };
+      }) : [];
 
   /**
    * Return result.

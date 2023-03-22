@@ -117,7 +117,7 @@ const expectedStructures = [
           { "last-name": false },
           { pk: true },
           { sk: true },
-          { idx: true },
+          { "lookup-text": true },
         ],
       },
       { keyAttributes: [{ pk: true }, { sk: true }] },
@@ -130,7 +130,7 @@ const expectedStructures = [
           { "updated-at": true },
           { pk: true },
           { sk: true },
-          { idx: true },
+          { "lookup-text": true },
         ],
       },
     ],
@@ -240,7 +240,7 @@ const expectedStructures = [
           { "my-name": true },
           { "first-name": true },
           { "last-name": false },
-          { idx: true },
+          { "lookup-text": true },
         ],
       },
       { keyAttributes: [{ pk: true }, { sk: true }] },
@@ -251,7 +251,7 @@ const expectedStructures = [
           { "updated-at": true },
           { pk: true },
           { sk: true },
-          { idx: true },
+          { "lookup-text": true },
         ],
       },
     ],
@@ -349,7 +349,7 @@ const expectedStructures = [
     expectedName: "list-people-input",
     attributeTypes: [
       {
-        publicAttributes: [{ id: true }],
+        publicAttributes: [{ "lookup-text": true }],
       },
       {
         itemAttributes: [],
@@ -531,7 +531,7 @@ describe("Parent", () => {
             { ln: false },
             { pk: true },
             { sk: true },
-            { idx: true },
+            { "lookup-text": true },
           ],
         },
         /*
@@ -552,7 +552,7 @@ describe("Parent", () => {
               { ln: false },
               { pk: true },
               { sk: true },
-              { idx: true },
+              { "lookup-text": true },
             ],
           },
           {
@@ -589,7 +589,7 @@ describe("Parent", () => {
               { v: true },
               { pk: true },
               { sk: true },
-              { idx: true },
+              { "lookup-text": true },
             ],
           },
           {
@@ -614,7 +614,7 @@ describe("Parent", () => {
               { ln: false },
               { pk: true },
               { sk: true },
-              { idx: true },
+              { "lookup-text": true },
             ],
           },
           {
@@ -653,7 +653,7 @@ describe("Parent", () => {
               { ln: false },
               { pk: true },
               { sk: true },
-              { idx: true },
+              { "lookup-text": true },
             ],
           },
           {
@@ -683,7 +683,7 @@ describe("Parent", () => {
               { ln: false },
               { pk: true },
               { sk: true },
-              { idx: true },
+              { "lookup-text": true },
             ],
           },
           {
@@ -744,7 +744,7 @@ describe("Parent", () => {
               { ln: false },
               { pk: true },
               { sk: true },
-              { idx: true },
+              { "lookup-text": true },
             ],
           },
           {
@@ -784,7 +784,7 @@ describe("Parent", () => {
               { ln: false },
               { pk: true },
               { sk: true },
-              { idx: true },
+              { "lookup-text": true },
             ],
           },
           {
@@ -814,7 +814,7 @@ describe("Parent", () => {
               { ln: false },
               { pk: true },
               { sk: true },
-              { idx: true },
+              { "lookup-text": true },
             ],
           },
           {
