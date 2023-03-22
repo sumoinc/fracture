@@ -56,6 +56,7 @@ export const listTenants = async (
   const result = await dynamo.send(
     new QueryCommand({
       TableName: "tenant",
+      IndexName: "lookup",
       KeyConditionExpression: "#sk = :sk and begins_with(#idx, :idx)",
       ExpressionAttributeValues: {
         ":sk": sk,

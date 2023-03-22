@@ -356,12 +356,7 @@ const expectedStructures = [
       },
       { keyAttributes: [{ pk: true }, { sk: true }] },
       {
-        generatedAttributes: [
-          { type: true },
-          { version: true },
-          { pk: true },
-          { sk: true },
-        ],
+        generatedAttributes: [{ type: true }, { version: true }, { sk: true }],
       },
     ],
   },
@@ -380,7 +375,6 @@ const expectedStructures = [
           { version: true },
           { "created-at": true },
           { "updated-at": true },
-          { "deleted-at": false },
           { "my-name": true },
           { "first-name": true },
           { "last-name": false },

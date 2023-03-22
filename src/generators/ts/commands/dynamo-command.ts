@@ -219,6 +219,7 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
+      tsFile.line(`IndexName: "${this.lookupAccessPattern.dynamoGsi.name}",`);
       // KeyConditionExpression: "Season = :s and Episode > :e",
       tsFile.line(
         `KeyConditionExpression: "#${this.lookupAccessPattern.pkAttribute.ts.attributeShortName} = :${this.lookupAccessPattern.pkAttribute.ts.attributeShortName} and begins_with(#${this.lookupAccessPattern.skAttribute.ts.attributeShortName}, :${this.lookupAccessPattern.skAttribute.ts.attributeShortName})",`
@@ -565,6 +566,31 @@ export class DynamoCommand extends FractureComponent {
       tsTest.line(`expect(errors.length).toBe(0);`);
       tsTest.line(`expect(status).toBe(200);`);
     }
+
+    /***************************************************************************
+     *  LIST TEST
+     **************************************************************************/
+
+    if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
+      // create some test data
+      this.writeSeedData(tsTest);
+      tsTest.open(
+        `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
+      );
+      tsTest.line(`lookupText: 'f',`);
+      tsTest.close(`};`);
+      tsTest.line(
+        `const { data, errors, status } = await ${this.functionName}(fixture);`
+      );
+      tsTest.line(`console.log(data);`);
+      tsTest.line(`expect(data).toBeTruthy();`);
+      tsTest.line(`expect(errors.length).toBe(0);`);
+      tsTest.line(`expect(status).toBe(200);`);
+    }
+
+    /***************************************************************************
+     *  CLOSE TEST
+     **************************************************************************/
 
     tsTest.close(`})`);
     tsTest.line("");
