@@ -20,7 +20,6 @@
 /.projen/tasks.json linguist-generated
 /.vscode/extensions.json linguist-generated
 /.vscode/settings.json linguist-generated
-/API.md linguist-generated
 /jest-dynalite-config.js linguist-generated
 /LICENSE linguist-generated
 /package.json linguist-generated
@@ -65,3 +64,4 @@
 /src/example-app/user-service/ts/dynamodb/commands/update-user.ts linguist-generated
 /src/example-app/user-service/ts/types.ts linguist-generated
 /tsconfig.dev.json linguist-generated
+/tsconfig.json linguist-generated

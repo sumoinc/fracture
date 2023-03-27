@@ -10,7 +10,6 @@
     },
     {
       "name": "@types/jest",
-      "version": "^27",
       "type": "build"
     },
     {
@@ -63,29 +62,12 @@
       "type": "build"
     },
     {
+      "name": "jest",
+      "type": "build"
+    },
+    {
       "name": "jest-junit",
       "version": "^13",
-      "type": "build"
-    },
-    {
-      "name": "jest",
-      "version": "^27",
-      "type": "build"
-    },
-    {
-      "name": "jsii",
-      "type": "build"
-    },
-    {
-      "name": "jsii-diff",
-      "type": "build"
-    },
-    {
-      "name": "jsii-docgen",
-      "type": "build"
-    },
-    {
-      "name": "jsii-pacmak",
       "type": "build"
     },
     {
@@ -108,7 +90,6 @@
     },
     {
       "name": "ts-jest",
-      "version": "^27",
       "type": "build"
     },
     {
@@ -118,16 +99,6 @@
     {
       "name": "typescript",
       "type": "build"
-    },
-    {
-      "name": "@types/babel__traverse",
-      "version": "7.18.2",
-      "type": "override"
-    },
-    {
-      "name": "@types/prettier",
-      "version": "2.6.0",
-      "type": "override"
     },
     {
       "name": "@aws-sdk/smithy-client",
