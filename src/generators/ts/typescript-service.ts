@@ -7,6 +7,7 @@ import { Service } from "../../core/service";
 export class TypescriptService extends FractureComponent {
   public readonly service: Service;
   public readonly outdir: string;
+  public readonly typedir: string;
   public readonly typeFile: TypeScriptSource;
 
   constructor(service: Service) {
@@ -15,15 +16,20 @@ export class TypescriptService extends FractureComponent {
     this.service = service;
     this.outdir = join(
       this.fracture.outdir,
-      this.service.name + "-service",
+      "services",
+      this.service.name,
       "ts"
     );
+    this.typedir = join(this.fracture.outdir, "types");
 
     this.project.logger.info("-".repeat(80));
     this.project.logger.info(`TS:INIT Service: "${this.service.name}"`);
 
     // typefile we'll decorate with more types in some other places
-    this.typeFile = new TypeScriptSource(this, join(this.outdir, "types.ts"));
+    this.typeFile = new TypeScriptSource(
+      this,
+      join(this.typedir, this.service.name + "-service.ts")
+    );
 
     // some error and response types
     this.typeFile.open(`export type Error = {`);
