@@ -62,9 +62,8 @@ export class TypescriptService extends FractureComponent {
         private: true,
         dependencies: {},
       },
-      readonly: false, // we want "yarn add" to work and we have anti-tamper
-      newline: true, // all package managers prefer a newline, see https://github.com/projen/projen/issues/2076
-      committed: true, // needs to be committed so users can install the dependencies
+      newline: true,
+      committed: true,
     });
   }
 
