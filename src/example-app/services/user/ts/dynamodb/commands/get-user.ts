@@ -5,7 +5,7 @@ import {
   GetUserInput,
   GetUserOutput,
   Response,
-} from "../../../../../types/user-service";
+} from "../../../../../types/user";
 
 /**
  * Generate a DynamoDB client, configure it to use a local endpoint when needed

@@ -53,8 +53,10 @@ junit.xml
 !/.eslintrc.json
 !/jest-dynalite-config.js
 !/setupBeforeEnv.ts
-!/src/example-app/types/user-service.ts
-!/src/example-app/types/tenant-service.ts
+!/src/example-app/types/user.ts
+!/src/example-app/services/user/ts/dynamodb/commands/package.json
+!/src/example-app/types/tenant.ts
+!/src/example-app/services/tenant/ts/dynamodb/commands/package.json
 !/src/example-app/services/user/ts/dynamodb/commands/create-user.ts
 !/src/example-app/services/user/ts/dynamodb/commands/create-user.spec.ts
 !/src/example-app/services/user/ts/dynamodb/commands/get-user.ts

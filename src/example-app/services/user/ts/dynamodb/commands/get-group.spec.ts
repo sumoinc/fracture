@@ -3,7 +3,7 @@ import { createGroup } from "./create-group";
 import { getGroup } from "./get-group";
 import {
   GetGroupInput,
-} from "../../../../../types/user-service";
+} from "../../../../../types/user";
 
 /**
  * Sometimes dynalite tests can require a little additional

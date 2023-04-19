@@ -41,6 +41,7 @@
 /src/example-app/services/tenant/ts/dynamodb/commands/list-actors.ts linguist-generated
 /src/example-app/services/tenant/ts/dynamodb/commands/list-tenants.spec.ts linguist-generated
 /src/example-app/services/tenant/ts/dynamodb/commands/list-tenants.ts linguist-generated
+/src/example-app/services/tenant/ts/dynamodb/commands/package.json linguist-generated
 /src/example-app/services/tenant/ts/dynamodb/commands/update-actor.spec.ts linguist-generated
 /src/example-app/services/tenant/ts/dynamodb/commands/update-actor.ts linguist-generated
 /src/example-app/services/tenant/ts/dynamodb/commands/update-tenant.spec.ts linguist-generated
@@ -57,11 +58,12 @@
 /src/example-app/services/user/ts/dynamodb/commands/get-group.ts linguist-generated
 /src/example-app/services/user/ts/dynamodb/commands/get-user.spec.ts linguist-generated
 /src/example-app/services/user/ts/dynamodb/commands/get-user.ts linguist-generated
+/src/example-app/services/user/ts/dynamodb/commands/package.json linguist-generated
 /src/example-app/services/user/ts/dynamodb/commands/update-group.spec.ts linguist-generated
 /src/example-app/services/user/ts/dynamodb/commands/update-group.ts linguist-generated
 /src/example-app/services/user/ts/dynamodb/commands/update-user.spec.ts linguist-generated
 /src/example-app/services/user/ts/dynamodb/commands/update-user.ts linguist-generated
-/src/example-app/types/tenant-service.ts linguist-generated
-/src/example-app/types/user-service.ts linguist-generated
+/src/example-app/types/tenant.ts linguist-generated
+/src/example-app/types/user.ts linguist-generated
 /tsconfig.dev.json linguist-generated
 /tsconfig.json linguist-generated

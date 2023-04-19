@@ -3,7 +3,7 @@ import { createActor } from "./create-actor";
 import { getActor } from "./get-actor";
 import {
   GetActorInput,
-} from "../../../../../types/tenant-service";
+} from "../../../../../types/tenant";
 
 /**
  * Sometimes dynalite tests can require a little additional

@@ -3,7 +3,7 @@ import { createUser } from "./create-user";
 import { deleteUser } from "./delete-user";
 import {
   DeleteUserInput,
-} from "../../../../../types/user-service";
+} from "../../../../../types/user";
 
 /**
  * Sometimes dynalite tests can require a little additional

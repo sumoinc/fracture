@@ -2,7 +2,7 @@ import { createTables, deleteTables, startDb, stopDb, } from "jest-dynalite";
 import { createActor } from "./create-actor";
 import {
   CreateActorInput,
-} from "../../../../../types/tenant-service";
+} from "../../../../../types/tenant";
 
 /**
  * Sometimes dynalite tests can require a little additional

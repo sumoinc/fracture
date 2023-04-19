@@ -3,7 +3,7 @@ import { createTenant } from "./create-tenant";
 import { deleteTenant } from "./delete-tenant";
 import {
   DeleteTenantInput,
-} from "../../../../../types/tenant-service";
+} from "../../../../../types/tenant";
 
 /**
  * Sometimes dynalite tests can require a little additional

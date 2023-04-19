@@ -28,12 +28,7 @@ export class DynamoCommand extends FractureComponent {
   public writeCommand = () => {
     const tsFile = new TypeScriptSource(
       this,
-      join(
-        this.service.ts.outdir,
-        "dynamodb",
-        "commands",
-        `${this.operation.name}.ts`
-      )
+      join(this.service.ts.dynamoCommandDir, `${this.operation.name}.ts`)
     );
 
     const responseType =

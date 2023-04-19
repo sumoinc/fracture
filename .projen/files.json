@@ -57,8 +57,8 @@
     "src/example-app/services/user/ts/dynamodb/commands/update-group.ts",
     "src/example-app/services/user/ts/dynamodb/commands/update-user.spec.ts",
     "src/example-app/services/user/ts/dynamodb/commands/update-user.ts",
-    "src/example-app/types/tenant-service.ts",
-    "src/example-app/types/user-service.ts",
+    "src/example-app/types/tenant.ts",
+    "src/example-app/types/user.ts",
     "tsconfig.dev.json",
     "tsconfig.json"
   ],

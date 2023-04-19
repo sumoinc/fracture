@@ -5,7 +5,7 @@ import {
   UpdateActorInput,
   UpdateActorOutput,
   Response,
-} from "../../../../../types/tenant-service";
+} from "../../../../../types/tenant";
 
 /**
  * Generate a DynamoDB client, configure it to use a local endpoint when needed

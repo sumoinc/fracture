@@ -2,7 +2,7 @@ import { createTables, deleteTables, startDb, stopDb, } from "jest-dynalite";
 import { createGroup } from "./create-group";
 import {
   CreateGroupInput,
-} from "../../../../../types/user-service";
+} from "../../../../../types/user";
 
 /**
  * Sometimes dynalite tests can require a little additional
