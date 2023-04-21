@@ -26,55 +26,6 @@ module.exports = {
         "ReadCapacityUnits": 1,
         "WriteCapacityUnits": 1
       }
-    },
-    {
-      "TableName": "tenant",
-      "KeySchema": [
-        {
-          "AttributeName": "pk",
-          "KeyType": "HASH"
-        },
-        {
-          "AttributeName": "sk",
-          "KeyType": "RANGE"
-        }
-      ],
-      "AttributeDefinitions": [
-        {
-          "AttributeName": "pk",
-          "AttributeType": "S"
-        },
-        {
-          "AttributeName": "sk",
-          "AttributeType": "S"
-        },
-        {
-          "AttributeName": "idx",
-          "AttributeType": "S"
-        }
-      ],
-      "GlobalSecondaryIndexes": [
-        {
-          "IndexName": "lookup",
-          "KeySchema": [
-            {
-              "AttributeName": "sk",
-              "KeyType": "HASH"
-            },
-            {
-              "AttributeName": "idx",
-              "KeyType": "RANGE"
-            }
-          ],
-          "Projection": {
-            "ProjectionType": "ALL"
-          }
-        }
-      ],
-      "ProvisionedThroughput": {
-        "ReadCapacityUnits": 1,
-        "WriteCapacityUnits": 1
-      }
     }
   ],
   "basePort": 8000

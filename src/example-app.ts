@@ -29,15 +29,17 @@ export class ExampleApp extends Component {
       shortName: "fn",
       isRequired: true,
     });
-    user.addResourceAttribute({ name: "last-name", shortName: "ln" });
-
-    const group = userService.addResource({ name: "group" });
-    group.addResourceAttribute({ name: "name", isRequired: true });
+    user.addResourceAttribute({
+      name: "last-name",
+      shortName: "ln",
+      isRequired: true,
+    });
 
     /***************************************************************************
      *  Tenant Service
      **************************************************************************/
 
+    /*
     const tenantService = fracture.addService({ name: "tenant" });
     const tenant = tenantService.addResource({ name: "tenant" });
     const name = tenant.addResourceAttribute({
@@ -64,6 +66,7 @@ export class ExampleApp extends Component {
     });
     actor.addLookupSource(firstName);
     actor.addLookupSource(lastName);
+    */
 
     /*
     tenantService
