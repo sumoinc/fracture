@@ -1,9 +1,9 @@
 import { createTables, deleteTables, startDb, stopDb, } from "jest-dynalite";
 import { createUser } from "./create-user";
-import { deleteUser } from "./delete-user";
+import { updateUser } from "./update-user";
 import {
-  DeleteUserInput,
-} from "../../types";
+  UpdateUserInput,
+} from "../../../../../types/user";
 
 /**
  * Sometimes dynalite tests can require a little additional
@@ -33,10 +33,12 @@ test("Smoke test", async () => {
     throw new Error("Error creating seed data.");
   };
 
-  const fixture : DeleteUserInput = {
+  const fixture : UpdateUserInput = {
     id: seedData.data.id,
+    firstName: "bar",
+    lastName: "bar",
   };
-  const { data, errors, status } = await deleteUser(fixture);
+  const { data, errors, status } = await updateUser(fixture);
   expect(data).toBeTruthy();
   expect(errors.length).toBe(0);
   expect(status).toBe(200);

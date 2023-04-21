@@ -1,11 +1,12 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, DeleteCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import { v4 as uuidv4 } from "uuid";
 import {
   Error,
-  DeleteUserInput,
-  DeleteUserOutput,
+  CreateUserInput,
+  CreateUserOutput,
   Response,
-} from "../../types";
+} from "../../../../../types/user";
 
 /**
  * Generate a DynamoDB client, configure it to use a local endpoint when needed
@@ -23,9 +24,9 @@ const config = {
 const client = new DynamoDBClient(config);
 const dynamo = DynamoDBDocumentClient.from(client);
 
-export const deleteUser = async (
-  input: DeleteUserInput
-): Promise<Response<DeleteUserOutput>> => {
+export const createUser = async (
+  input: CreateUserInput
+): Promise<Response<CreateUserOutput>> => {
 
   /**
    * An error container in case we encounter problems along the way.
@@ -41,55 +42,55 @@ export const deleteUser = async (
    * Unwrap external inputs.
    */
   const {
-    id,
+    firstName,
+    lastName,
   } = input;
 
+  const fn = firstName;
+  const ln = lastName;
 
   /**
    * Generate needed values.
    */
+  const id = uuidv4();
   const t = "user";
   const v = "latest";
+  const cd = new Date().toISOString();
+  const ud = new Date().toISOString();
   const pk = id.toLowerCase();
   const sk = t.toLowerCase() + "#" + v.toLowerCase();
 
-  const result = await dynamo.send(
-    new DeleteCommand({
+  await dynamo.send(
+    new PutCommand({
       TableName: "user",
-      Key: {
+      Item: {
+        id,
+        t,
+        v,
+        cd,
+        ud,
+        fn,
+        ln,
         pk,
         sk,
       },
-      ReturnValues: "ALL_OLD",
       ReturnConsumedCapacity: "INDEXES",
       ReturnItemCollectionMetrics: "SIZE",
     })
   );
 
-  const data = result.Attributes
-    ? {
-      id: result.Attributes.id,
-      type: result.Attributes.t,
-      version: result.Attributes.v,
-      createdAt: result.Attributes.cd,
-      updatedAt: result.Attributes.ud,
-      deletedAt: result.Attributes.dd,
-      firstName: result.Attributes.fn,
-      lastName: result.Attributes.ln,
-    } : undefined;
-
   /**
-   * Log error if no records found.
+   * Expand/comnvert data to output format.
    */
-  if (!result.Attributes) {
-    status = 404;
-    errors.push({
-      code: 12345,
-      source: "TODO",
-      message: "TODO - Attributes not found based on inputs.",
-      detail: "TODO",
-    })
-  }
+  const data = {
+    id: id,
+    type: t,
+    version: v,
+    createdAt: cd,
+    updatedAt: ud,
+    firstName: fn,
+    lastName: ln,
+  };
 
   /**
    * Return result.

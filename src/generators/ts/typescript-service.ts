@@ -1,4 +1,5 @@
 import { join } from "path";
+import { JsonFile } from "projen";
 import { TypeScriptSource } from "./typescript-source";
 import { FractureComponent } from "../../core";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
@@ -6,24 +7,21 @@ import { Service } from "../../core/service";
 
 export class TypescriptService extends FractureComponent {
   public readonly service: Service;
-  public readonly outdir: string;
   public readonly typeFile: TypeScriptSource;
 
   constructor(service: Service) {
     super(service.fracture);
 
     this.service = service;
-    this.outdir = join(
-      this.fracture.outdir,
-      this.service.name + "-service",
-      "ts"
-    );
 
     this.project.logger.info("-".repeat(80));
     this.project.logger.info(`TS:INIT Service: "${this.service.name}"`);
 
     // typefile we'll decorate with more types in some other places
-    this.typeFile = new TypeScriptSource(this, join(this.outdir, "types.ts"));
+    this.typeFile = new TypeScriptSource(
+      this,
+      join(this.typedir, this.service.name + ".ts")
+    );
 
     // some error and response types
     this.typeFile.open(`export type Error = {`);
@@ -47,6 +45,26 @@ export class TypescriptService extends FractureComponent {
     this.typeFile.line(`status: number;`);
     this.typeFile.close(`}`);
     this.typeFile.line("\n");
+
+    /***************************************************************************
+     *
+     * DYNAMODB COMMANDS PACKAGE FILE
+     *
+     * We create this package.json file to make sure cruft and extra packages
+     * from lower package files aren't packaged up with the commands.
+     *
+     **************************************************************************/
+
+    new JsonFile(this.project, join(this.dynamoCommandDir, "package.json"), {
+      obj: {
+        name: `${this.service.name}-service-dynamodb-commands`,
+        version: "0.0.1",
+        private: true,
+        dependencies: {},
+      },
+      newline: true,
+      committed: true,
+    });
   }
 
   public build() {}
@@ -63,5 +81,21 @@ export class TypescriptService extends FractureComponent {
       "list-response",
       this.service.namingStrategy.ts.typeName
     );
+  }
+
+  /*****************************************************************************
+   *  OUT DIR LOCATIOMS
+   ****************************************************************************/
+
+  public get outdir() {
+    return join(this.fracture.outdir, "services", this.service.name, "ts");
+  }
+
+  public get typedir() {
+    return join(this.fracture.outdir, "types");
+  }
+
+  public get dynamoCommandDir() {
+    return join(this.outdir, "dynamodb", "commands");
   }
 }

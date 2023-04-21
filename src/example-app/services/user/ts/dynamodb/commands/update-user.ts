@@ -1,11 +1,11 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import {
   Error,
-  GetUserInput,
-  GetUserOutput,
+  UpdateUserInput,
+  UpdateUserOutput,
   Response,
-} from "../../types";
+} from "../../../../../types/user";
 
 /**
  * Generate a DynamoDB client, configure it to use a local endpoint when needed
@@ -23,9 +23,9 @@ const config = {
 const client = new DynamoDBClient(config);
 const dynamo = DynamoDBDocumentClient.from(client);
 
-export const getUser = async (
-  input: GetUserInput
-): Promise<Response<GetUserOutput>> => {
+export const updateUser = async (
+  input: UpdateUserInput
+): Promise<Response<UpdateUserOutput>> => {
 
   /**
    * An error container in case we encounter problems along the way.
@@ -42,51 +42,69 @@ export const getUser = async (
    */
   const {
     id,
+    firstName,
+    lastName,
   } = input;
 
+  const fn = firstName;
+  const ln = lastName;
 
   /**
    * Generate needed values.
    */
   const t = "user";
   const v = "latest";
+  const ud = new Date().toISOString();
   const pk = id.toLowerCase();
   const sk = t.toLowerCase() + "#" + v.toLowerCase();
 
   const result = await dynamo.send(
-    new GetCommand({
+    new UpdateCommand({
       TableName: "user",
+      UpdateExpression: "set #ud = :ud, #fn = :fn, #ln = :ln",
+      ExpressionAttributeValues: {
+        ":ud": ud,
+        ":fn": fn,
+        ":ln": ln,
+      },
+      ExpressionAttributeNames: {
+        "#ud": "ud",
+        "#fn": "fn",
+        "#ln": "ln",
+      },
       Key: {
         pk,
         sk,
       },
+      ReturnValues: "ALL_NEW",
       ReturnConsumedCapacity: "INDEXES",
+      ReturnItemCollectionMetrics: "SIZE",
     })
   );
 
   /**
    * Expand/comnvert data to output format.
    */
-  const data = (result.Item)
+  const data = (result.Attributes)
     ? {
-      id: result.Item.id,
-      type: result.Item.t,
-      version: result.Item.v,
-      createdAt: result.Item.cd,
-      updatedAt: result.Item.ud,
-      firstName: result.Item.fn,
-      lastName: result.Item.ln,
+      id: result.Attributes.id,
+      type: result.Attributes.t,
+      version: result.Attributes.v,
+      createdAt: result.Attributes.cd,
+      updatedAt: result.Attributes.ud,
+      firstName: result.Attributes.fn,
+      lastName: result.Attributes.ln,
     } : undefined;
 
   /**
    * Log error if no records found.
    */
-  if (!result.Item) {
+  if (!result.Attributes) {
     status = 404;
     errors.push({
       code: 12345,
       source: "TODO",
-      message: "TODO - Item not found based on inputs.",
+      message: "TODO - Attributes not found based on inputs.",
       detail: "TODO",
     })
   }
