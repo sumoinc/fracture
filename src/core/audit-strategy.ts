@@ -1,17 +1,17 @@
-import { AttributeOptions } from "./attribute.ts-delete";
+import { ResourceAttributeOptions } from "./resource-attribute";
 
 export type AuditStrategy = {
   create: {
-    dateAttribute?: AttributeOptions;
-    userAttribute?: AttributeOptions;
+    dateAttribute?: ResourceAttributeOptions;
+    userAttribute?: ResourceAttributeOptions;
   };
   update: {
-    dateAttribute?: AttributeOptions;
-    userAttribute?: AttributeOptions;
+    dateAttribute?: ResourceAttributeOptions;
+    userAttribute?: ResourceAttributeOptions;
   };
   // turning this on activates soft deletes
   delete: {
-    dateAttribute?: AttributeOptions;
-    userAttribute?: AttributeOptions;
+    dateAttribute?: ResourceAttributeOptions;
+    userAttribute?: ResourceAttributeOptions;
   };
 };

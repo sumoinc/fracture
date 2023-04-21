@@ -1,5 +1,4 @@
 import { join } from "path";
-import { JsonFile } from "projen";
 import { TypeScriptSource } from "./typescript-source";
 import { FractureComponent } from "../../core";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
@@ -55,6 +54,7 @@ export class TypescriptService extends FractureComponent {
      *
      **************************************************************************/
 
+    /* comment out for now, some dependancies need to be managed here.
     new JsonFile(this.project, join(this.dynamoCommandDir, "package.json"), {
       obj: {
         name: `${this.service.name}-service-dynamodb-commands`,
@@ -65,6 +65,7 @@ export class TypescriptService extends FractureComponent {
       newline: true,
       committed: true,
     });
+    */
   }
 
   public build() {}
