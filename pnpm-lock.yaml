@@ -23,8 +23,8 @@ dependencies:
     specifier: ^3.6.1
     version: 3.6.1(@aws-sdk/client-dynamodb@3.316.0)(aws-sdk@2.1336.0)(jest@27.5.1)
   projen:
-    specifier: ^0.71.20
-    version: 0.71.20
+    specifier: ^0.71.21
+    version: 0.71.21
   type-fest:
     specifier: ^2.19.0
     version: 2.19.0
@@ -6127,8 +6127,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen@0.71.20:
-    resolution: {integrity: sha512-xAgR73KgbPs/ox3nKIv7KuyQEeNFb9CN4xP7w7DU8M0ZqpKFLRnrG/0BKNmpaH7Ct4kMC1RXNoIHYff3g8+cjA==}
+  /projen@0.71.21:
+    resolution: {integrity: sha512-tmVZT2iOix1p5e83dR0jzHUyR5BvUBkmJ9ys1ujJ6RTcuTIuofYr5bIdYDOgIeTfRolLg36gce0d4CEw91XjJg==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
