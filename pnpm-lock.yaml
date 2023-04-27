@@ -23,8 +23,8 @@ dependencies:
     specifier: ^3.6.1
     version: 3.6.1(@aws-sdk/client-dynamodb@3.319.0)(aws-sdk@2.1336.0)(jest@27.5.1)
   projen:
-    specifier: ^0.71.25
-    version: 0.71.25
+    specifier: ^0.71.27
+    version: 0.71.27
   type-fest:
     specifier: ^2.19.0
     version: 2.19.0
@@ -1712,7 +1712,7 @@ packages:
       '@babel/types': 7.21.4
       '@types/babel__generator': 7.6.4
       '@types/babel__template': 7.4.1
-      '@types/babel__traverse': 7.18.4
+      '@types/babel__traverse': 7.18.5
 
   /@types/babel__generator@7.6.4:
     resolution: {integrity: sha512-tFkciB9j2K755yrTALxD44McOrk+gfpIpvC3sxHjRawj6PfnQxrse4Clq5y/Rq+G3mrBurMax/lG8Qn2t9mSsg==}
@@ -1725,8 +1725,8 @@ packages:
       '@babel/parser': 7.21.4
       '@babel/types': 7.21.4
 
-  /@types/babel__traverse@7.18.4:
-    resolution: {integrity: sha512-TLG7CsGZZmX9aDF78UuJxnNTfQyRUFU0OYIVyIblr0/wd/HvsIo8wmuB90CszeD2MtLLAE9Tt4cWvk+KVkyGIw==}
+  /@types/babel__traverse@7.18.5:
+    resolution: {integrity: sha512-enCvTL8m/EHS/zIvJno9nE+ndYPh1/oNFzRYRmtUqJICG2VnCSBzMLW5VN2KCQU91f23tsNKR8v7VJJQMatl7Q==}
     dependencies:
       '@babel/types': 7.21.4
 
@@ -2233,7 +2233,7 @@ packages:
       '@babel/template': 7.20.7
       '@babel/types': 7.21.4
       '@types/babel__core': 7.20.0
-      '@types/babel__traverse': 7.18.4
+      '@types/babel__traverse': 7.18.5
 
   /babel-preset-current-node-syntax@1.0.1(@babel/core@7.21.4):
     resolution: {integrity: sha512-M7LQ0bxarkxQoN+vz5aJPsLBn77n8QgTFmo8WK0/44auK2xlCXrYcUxHFxgU7qW5Yzw/CjmLRK2uJzaCd7LvqQ==}
@@ -2318,7 +2318,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001481
-      electron-to-chromium: 1.4.372
+      electron-to-chromium: 1.4.374
       node-releases: 2.0.10
       update-browserslist-db: 1.0.11(browserslist@4.21.5)
 
@@ -2392,7 +2392,7 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       '@npmcli/fs': 3.1.0
-      fs-minipass: 3.0.1
+      fs-minipass: 3.0.2
       glob: 9.3.5
       lru-cache: 7.18.3
       minipass: 4.2.8
@@ -2401,7 +2401,7 @@ packages:
       minipass-pipeline: 1.2.4
       p-map: 4.0.0
       promise-inflight: 1.0.1
-      ssri: 10.0.3
+      ssri: 10.0.4
       tar: 6.1.13
       unique-filename: 3.0.0
     transitivePeerDependencies:
@@ -3076,8 +3076,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /electron-to-chromium@1.4.372:
-    resolution: {integrity: sha512-MrlFq/j+TYHOjeWsWGYfzevc25HNeJdsF6qaLFrqBTRWZQtWkb1myq/Q2veLWezVaa5OcSZ99CFwTT4aF4Mung==}
+  /electron-to-chromium@1.4.374:
+    resolution: {integrity: sha512-dNP9tQNTrjgVlSXMqGaj0BdrCS+9pcUvy5/emB6x8kh0YwCoDZ0Z4ce1+7aod+KhybHUd5o5LgKrc5al4kVmzQ==}
 
   /emittery@0.8.1:
     resolution: {integrity: sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==}
@@ -3642,11 +3642,11 @@ packages:
       minipass: 3.3.6
     dev: true
 
-  /fs-minipass@3.0.1:
-    resolution: {integrity: sha512-MhaJDcFRTuLidHrIttu0RDGyyXs/IYHVmlcxfLAEFIWjc1vdLAkdwT7Ace2u7DbitWC0toKMl5eJZRYNVreIMw==}
+  /fs-minipass@3.0.2:
+    resolution: {integrity: sha512-2GAfyfoaCDRrM6jaOS3UsBts8yJ55VioXdWcOL7dK9zdAuKT71+WBA4ifnNYqVjYv+4SsPxjK0JT4yIIn4cA/g==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minipass: 4.2.8
+      minipass: 5.0.0
     dev: true
 
   /fs.realpath@1.0.0:
@@ -4098,11 +4098,11 @@ packages:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
     dev: false
 
-  /ignore-walk@6.0.2:
-    resolution: {integrity: sha512-ezmQ1Dg2b3jVZh2Dh+ar6Eu2MqNSTkyb32HU2MAQQQX9tKM3q/UQ/9lf03lQ5hW+fOeoMnwxwkleZ0xcNp0/qg==}
+  /ignore-walk@6.0.3:
+    resolution: {integrity: sha512-C7FfFoTA+bI10qfeydT8aZbvr91vAEU+2W5BZUlzPec47oNb07SsOfwYrtxuvOYdUApPP/Qlh4DtAO51Ekk2QA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minimatch: 7.4.6
+      minimatch: 9.0.0
     dev: true
 
   /ignore@5.2.4:
@@ -4836,7 +4836,7 @@ packages:
       '@babel/types': 7.21.4
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
-      '@types/babel__traverse': 7.18.4
+      '@types/babel__traverse': 7.18.5
       '@types/prettier': 2.7.2
       babel-preset-current-node-syntax: 1.0.1(@babel/core@7.21.4)
       chalk: 4.1.2
@@ -5311,13 +5311,13 @@ packages:
       is-lambda: 1.0.1
       lru-cache: 7.18.3
       minipass: 4.2.8
-      minipass-fetch: 3.0.2
+      minipass-fetch: 3.0.3
       minipass-flush: 1.0.5
       minipass-pipeline: 1.2.4
       negotiator: 0.6.3
       promise-retry: 2.0.1
       socks-proxy-agent: 7.0.0
-      ssri: 10.0.3
+      ssri: 10.0.4
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -5436,6 +5436,13 @@ packages:
       brace-expansion: 2.0.1
     dev: true
 
+  /minimatch@9.0.0:
+    resolution: {integrity: sha512-0jJj8AvgKqWN05mrwuqi8QYKx1WmYSUoKSxu5Qhs9prezTz10sxAHGNZe9J9cqIJzta8DWsleh2KaVaLl6Ru2w==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: true
+
   /minimist-options@4.1.0:
     resolution: {integrity: sha512-Q4r8ghd80yhO/0j1O3B2BjweX3fiHg9cdOwjJd2J76Q135c+NDxGCqdYKQ1SKBuFfgWbAUzBfvYjPUEeNgqN1A==}
     engines: {node: '>= 6'}
@@ -5466,11 +5473,11 @@ packages:
       encoding: 0.1.13
     dev: true
 
-  /minipass-fetch@3.0.2:
-    resolution: {integrity: sha512-/ZpF1CQaWYqjbhfFgKNt3azxztEpc/JUPuMkqOgrnMQqcU8CbE409AUdJYTIWryl3PP5CBaTJZT71N49MXP/YA==}
+  /minipass-fetch@3.0.3:
+    resolution: {integrity: sha512-n5ITsTkDqYkYJZjcRWzZt9qnZKCT7nKCosJhHoj7S7zD+BP4jVbWs+odsniw5TA3E0sLomhTKOKjF86wf11PuQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minipass: 4.2.8
+      minipass: 5.0.0
       minipass-sized: 1.0.3
       minizlib: 2.1.2
     optionalDependencies:
@@ -5733,7 +5740,7 @@ packages:
     resolution: {integrity: sha512-d6RGEuRrNS5/N84iglPivjaJPxhDbZmlbTwTDX2IbcRHG5bZCdtysYMhwiPvcF4GisXHGn7xsxv+GQ7T/02M5Q==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      ignore-walk: 6.0.2
+      ignore-walk: 6.0.3
     dev: true
 
   /npm-pick-manifest@8.0.1:
@@ -5752,7 +5759,7 @@ packages:
     dependencies:
       make-fetch-happen: 11.1.0
       minipass: 4.2.8
-      minipass-fetch: 3.0.2
+      minipass-fetch: 3.0.3
       minipass-json-stream: 1.0.1
       minizlib: 2.1.2
       npm-package-arg: 10.1.0
@@ -5944,7 +5951,7 @@ packages:
       '@npmcli/promise-spawn': 6.0.2
       '@npmcli/run-script': 6.0.0
       cacache: 17.0.5
-      fs-minipass: 3.0.1
+      fs-minipass: 3.0.2
       minipass: 4.2.8
       npm-package-arg: 10.1.0
       npm-packlist: 7.0.4
@@ -5955,7 +5962,7 @@ packages:
       read-package-json: 6.0.1
       read-package-json-fast: 3.0.2
       sigstore: 1.4.0
-      ssri: 10.0.3
+      ssri: 10.0.4
       tar: 6.1.13
     transitivePeerDependencies:
       - bluebird
@@ -6127,8 +6134,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen@0.71.25:
-    resolution: {integrity: sha512-Dy/VKwAWAmr0jAUavDUmtosW8ZouFOnSv6Lh0Hn4yKggotLj0rutvxvHe3vGWbUPCWE5I0ODhif41jAAzzYCKQ==}
+  /projen@0.71.27:
+    resolution: {integrity: sha512-NJRj6B1ClpN2C1ObboInJ9zLPvrmFp0AGycGIWqTphCzlQMSHFmygVjdJglayJKb0qva4hP8CINFAW9M/5AxQQ==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
@@ -6700,11 +6707,11 @@ packages:
   /sprintf-js@1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
 
-  /ssri@10.0.3:
-    resolution: {integrity: sha512-lJtX/BFPI/VEtxZmLfeh7pzisIs6micwZ3eruD3+ds9aPsXKlYpwDS2Q7omD6WC42WO9+bnUSzlMmfv8uK8meg==}
+  /ssri@10.0.4:
+    resolution: {integrity: sha512-12+IR2CB2C28MMAw0Ncqwj5QbTcs0nGIhgJzYWzDkb21vWmfNI83KS4f3Ci6GI98WreIfG7o9UXp3C0qbpA8nQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minipass: 4.2.8
+      minipass: 5.0.0
     dev: true
 
   /ssri@9.0.1:
