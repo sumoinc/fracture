@@ -23,8 +23,8 @@ dependencies:
     specifier: ^3.6.1
     version: 3.6.1(@aws-sdk/client-dynamodb@3.321.1)(aws-sdk@2.1336.0)(jest@27.5.1)
   projen:
-    specifier: ^0.71.31
-    version: 0.71.31
+    specifier: ^0.71.32
+    version: 0.71.32
   type-fest:
     specifier: ^2.19.0
     version: 2.19.0
@@ -881,8 +881,8 @@ packages:
     dependencies:
       '@babel/highlight': 7.18.6
 
-  /@babel/compat-data@7.21.5:
-    resolution: {integrity: sha512-M+XAiQ7GzQ3FDPf0KOLkugzptnIypt0X0ma0wmlTKPR3IchgNFdx2JXxZdvd18JY5s7QkaFD/qyX0dsMpog/Ug==}
+  /@babel/compat-data@7.21.7:
+    resolution: {integrity: sha512-KYMqFYTaenzMK4yUtf4EW9wc4N9ef80FsbMtkwool5zpwl4YrT1SdWYSTRcT94KO4hannogdS+LxY7L+arP3gA==}
     engines: {node: '>=6.9.0'}
 
   /@babel/core@7.21.5:
@@ -922,7 +922,7 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0
     dependencies:
-      '@babel/compat-data': 7.21.5
+      '@babel/compat-data': 7.21.7
       '@babel/core': 7.21.5
       '@babel/helper-validator-option': 7.21.0
       browserslist: 4.21.5
@@ -6179,8 +6179,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen@0.71.31:
-    resolution: {integrity: sha512-f/gdL+NGqUebwOvfxcwsjyNMPCa67iSqJ5aVQG9StM7geZs2W7Rh8mHHyeoZ0yBVHMy0IxpLFZsUH8bmBu9t+w==}
+  /projen@0.71.32:
+    resolution: {integrity: sha512-MnCoVz6oxGzG04w7WILwfL0fvxd9145Lq72DsCVCWZ73W1rF5nHoqBiDAMwreAHQFMfarajEg4+7HhOHZwaapA==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
