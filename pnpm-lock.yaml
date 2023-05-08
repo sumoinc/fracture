@@ -23,8 +23,8 @@ dependencies:
     specifier: ^3.6.1
     version: 3.6.1(@aws-sdk/client-dynamodb@3.328.0)(aws-sdk@2.1336.0)(jest@27.5.1)
   projen:
-    specifier: ^0.71.44
-    version: 0.71.44
+    specifier: ^0.71.45
+    version: 0.71.45
   type-fest:
     specifier: ^2.19.0
     version: 2.19.0
@@ -2302,8 +2302,8 @@ packages:
     resolution: {integrity: sha512-AlcaJBi/pqqJBIQ8U9Mcpc9i8Aqxn88Skv5d+xBX006BY5u8N3mGLHa5Lgppa7L/HfwgwLgZ6NYs+Ag6uUmJRA==}
     dev: false
 
-  /boxen@7.0.2:
-    resolution: {integrity: sha512-1Z4UJabXUP1/R9rLpoU3O2lEMnG3pPLAs/ZD2lF3t2q7qD5lM8rqbtnvtvm4N0wEyNlE+9yZVTVAGmd1V5jabg==}
+  /boxen@7.1.0:
+    resolution: {integrity: sha512-ScG8CDo8dj7McqCZ5hz4dIBp20xj4unQ2lXIDa7ff6RcZElCpuNzutdwzKVvRikfNjm7CFAlR3HJHcoHkDOExQ==}
     engines: {node: '>=14.16'}
     dependencies:
       ansi-align: 3.0.1
@@ -2348,7 +2348,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001485
+      caniuse-lite: 1.0.30001486
       electron-to-chromium: 1.4.385
       node-releases: 2.0.10
       update-browserslist-db: 1.0.11(browserslist@4.21.5)
@@ -2500,8 +2500,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /caniuse-lite@1.0.30001485:
-    resolution: {integrity: sha512-8aUpZ7sjhlOyiNsg+pgcrTTPUXKh+rg544QYHSvQErljVEKJzvkYkCR/hUFeeVoEfTToUtY9cUKNRC7+c45YkA==}
+  /caniuse-lite@1.0.30001486:
+    resolution: {integrity: sha512-uv7/gXuHi10Whlj0pp5q/tsK/32J2QSqVRKQhs2j8VsDCjgyruAh/eEXHF822VqO9yT6iZKw3nRwZRSPBE9OQg==}
 
   /capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -6250,8 +6250,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen@0.71.44:
-    resolution: {integrity: sha512-L2OgONRCYr94cBq1jxYf9BcYL9MfraqUgEaeKnbsP41x40fH4xrSQ0ozzXWW+BWqDuMn0El29AS2JsXvBer6+g==}
+  /projen@0.71.45:
+    resolution: {integrity: sha512-otu2DMsjti0luWpoVK62cTQ4d+iyjwPpQf6e8a0qhfugeCEinvJzIi0vDzNZzbwnichltywrzK8OpmHcY+FfKg==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
@@ -7393,7 +7393,7 @@ packages:
     resolution: {integrity: sha512-EDxhTEVPZZRLWYcJ4ZXjGFN0oP7qYvbXWzEgRm/Yql4dHX5wDbvh89YHP6PK1lzZJYrMtXUuZZz8XGK+U6U1og==}
     engines: {node: '>=14.16'}
     dependencies:
-      boxen: 7.0.2
+      boxen: 7.1.0
       chalk: 5.2.0
       configstore: 6.0.0
       has-yarn: 3.0.0
