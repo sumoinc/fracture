@@ -1,6 +1,6 @@
 import { FractureComponent } from ".";
 import { Organization } from "./organization";
-import { Region } from "./region";
+import { Region, RegionOptions } from "./region";
 
 export interface AccountOptions {
   accountNo: string;
@@ -43,5 +43,21 @@ export class Account extends FractureComponent {
 
   public get name() {
     return this.options.name;
+  }
+
+  /*****************************************************************************
+   *
+   *  Configuration Helpers
+   *
+   ****************************************************************************/
+
+  /**
+   * Add an region to an account.
+   *
+   * @param {RegionOptions}
+   * @returns {Region}
+   */
+  public addRegion(options: RegionOptions) {
+    return new Region(this, options);
   }
 }

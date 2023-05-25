@@ -1,4 +1,4 @@
-import { Account } from "./account";
+import { Account, AccountOptions } from "./account";
 import { Fracture, FractureComponent } from "../core";
 
 export interface OrganizationOptions {
@@ -40,5 +40,21 @@ export class Organization extends FractureComponent {
 
   public get ssoStartUrl() {
     return this.options.ssoStartUrl;
+  }
+
+  /*****************************************************************************
+   *
+   *  Configuration Helpers
+   *
+   ****************************************************************************/
+
+  /**
+   * Add an account to an organization.
+   *
+   * @param {AccountOptions}
+   * @returns {Account}
+   */
+  public addAccount(options: AccountOptions) {
+    return new Account(this, options);
   }
 }
