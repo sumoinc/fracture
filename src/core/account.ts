@@ -4,7 +4,7 @@ import { Region } from "./region";
 
 export interface AccountOptions {
   accountNo: string;
-  name: string;
+  name?: string;
 }
 
 export class Account extends FractureComponent {
