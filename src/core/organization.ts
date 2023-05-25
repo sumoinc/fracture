@@ -3,6 +3,7 @@ import { Fracture, FractureComponent } from "../core";
 
 export interface OrganizationOptions {
   orgId: string;
+  ssoStartUrl?: string;
 }
 
 export class Organization extends FractureComponent {
@@ -35,5 +36,9 @@ export class Organization extends FractureComponent {
 
   public get orgId() {
     return this.options.orgId;
+  }
+
+  public get ssoStartUrl() {
+    return this.options.ssoStartUrl;
   }
 }

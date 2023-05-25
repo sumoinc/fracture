@@ -1,12 +1,15 @@
 import { FractureComponent } from ".";
 import { Organization } from "./organization";
+import { Region } from "./region";
 
 export interface AccountOptions {
   accountNo: string;
+  name?: string;
 }
 
 export class Account extends FractureComponent {
   // member components
+  public readonly regions: Region[];
   // parent
   public readonly organization: Organization;
   // all other options
@@ -22,6 +25,7 @@ export class Account extends FractureComponent {
      **************************************************************************/
 
     // member components
+    this.regions = [];
 
     // parents + inverse
     this.organization = organization;
@@ -35,5 +39,9 @@ export class Account extends FractureComponent {
 
   public get accountNo() {
     return this.options.accountNo;
+  }
+
+  public get name() {
+    return this.options.name;
   }
 }
