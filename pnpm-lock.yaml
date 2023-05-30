@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 dependencies:
   '@aws-sdk/client-dynamodb':
@@ -92,7 +96,7 @@ devDependencies:
     version: 9.5.0
   ts-jest:
     specifier: ^27.1.5
-    version: 27.1.5(@types/jest@27.5.2)(jest@27.5.1)(typescript@4.9.5)
+    version: 27.1.5(@babel/core@7.22.1)(@types/jest@27.5.2)(jest@27.5.1)(typescript@4.9.5)
   ts-node:
     specifier: ^10.9.1
     version: 10.9.1(@types/node@16.18.34)(typescript@4.9.5)
@@ -7173,7 +7177,7 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /ts-jest@27.1.5(@types/jest@27.5.2)(jest@27.5.1)(typescript@4.9.5):
+  /ts-jest@27.1.5(@babel/core@7.22.1)(@types/jest@27.5.2)(jest@27.5.1)(typescript@4.9.5):
     resolution: {integrity: sha512-Xv6jBQPoBEvBq/5i2TeSG9tt/nqkbpcurrEG1b+2yfBrcJelOZF9Ml6dmyMh7bcW9JyFbRYpR5rxROSlBLTZHA==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     hasBin: true
@@ -7194,6 +7198,7 @@ packages:
       esbuild:
         optional: true
     dependencies:
+      '@babel/core': 7.22.1
       '@types/jest': 27.5.2
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0

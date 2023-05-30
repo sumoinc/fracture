@@ -1,14 +1,20 @@
 import { Account, AccountOptions } from "./account";
+import {
+  OrganizationalUnit,
+  OrganizationalUnitOptions,
+} from "./organizational-unit";
 import { Fracture, FractureComponent } from "../core";
 
 export interface OrganizationOptions {
-  orgId: string;
+  id: string;
   ssoStartUrl?: string;
+  ssoRegion?: string;
 }
 
 export class Organization extends FractureComponent {
   // member components
   public readonly accounts: Account[];
+  public readonly organizationalUnits: OrganizationalUnit[];
   // parent
   // all other options
   public readonly options: OrganizationOptions;
@@ -24,6 +30,7 @@ export class Organization extends FractureComponent {
 
     // member components
     this.accounts = [];
+    this.organizationalUnits = [];
 
     // parents + inverse
     this.fracture.organizations.push(this);
@@ -31,15 +38,19 @@ export class Organization extends FractureComponent {
     // all other options
     this.options = options;
 
-    this.project.logger.info(`INIT Organization: "${this.orgId}"`);
+    this.project.logger.info(`INIT Organization: "${this.id}"`);
   }
 
-  public get orgId() {
-    return this.options.orgId;
+  public get id() {
+    return this.options.id;
   }
 
   public get ssoStartUrl() {
     return this.options.ssoStartUrl;
+  }
+
+  public get ssoRegion() {
+    return this.options.ssoRegion;
   }
 
   /*****************************************************************************
@@ -56,5 +67,15 @@ export class Organization extends FractureComponent {
    */
   public addAccount(options: AccountOptions) {
     return new Account(this, options);
+  }
+
+  /**
+   * Add an organizational unit to an organization.
+   *
+   * @param {OrganizationalUnitOptions}
+   * @returns {OrganizationalUnit}
+   */
+  public addOrganizationalUnit(options: OrganizationalUnitOptions) {
+    return new OrganizationalUnit(this, options);
   }
 }

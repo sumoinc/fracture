@@ -26,6 +26,7 @@ const project = new TypeScriptProject({
   peerDeps: [],
   projenrcTs: true,
   packageManager: NodePackageManager.PNPM,
+  pnpmVersion: "8",
   prettier: true,
 
   // send code coverage to codecov

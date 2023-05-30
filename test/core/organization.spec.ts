@@ -2,7 +2,7 @@ import { Organization } from "../../src/core/organization";
 import { TestFracture } from "../util";
 
 test("Smoke test", () => {
-  const org = new Organization(new TestFracture(), { orgId: "org-12345" });
+  const org = new Organization(new TestFracture(), { id: "org-12345" });
   expect(org).toBeTruthy();
-  expect(org.options.orgId).toBe("org-12345");
+  expect(org.options.id).toBe("org-12345");
 });

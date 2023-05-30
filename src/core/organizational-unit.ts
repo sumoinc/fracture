@@ -1,22 +1,21 @@
 import { FractureComponent } from ".";
+import { Account, AccountOptions } from "./account";
 import { Organization } from "./organization";
-import { Region, RegionOptions } from "./region";
 
-export interface AccountOptions {
-  id: string;
-  name?: string;
-  rootEmail?: string;
+export interface OrganizationalUnitOptions {
+  name: string;
 }
 
-export class Account extends FractureComponent {
+export class OrganizationalUnit extends FractureComponent {
   // member components
-  public readonly regions: Region[];
+  public readonly accounts: Account[];
+  public readonly organizationalUnits: OrganizationalUnit[];
   // parent
   public readonly organization: Organization;
   // all other options
-  public readonly options: AccountOptions;
+  public readonly options: OrganizationalUnitOptions;
 
-  constructor(organization: Organization, options: AccountOptions) {
+  constructor(organization: Organization, options: OrganizationalUnitOptions) {
     super(organization.fracture);
 
     /***************************************************************************
@@ -26,28 +25,21 @@ export class Account extends FractureComponent {
      **************************************************************************/
 
     // member components
-    this.regions = [];
+    this.accounts = [];
+    this.organizationalUnits = [];
 
     // parents + inverse
     this.organization = organization;
-    this.organization.accounts.push(this);
+    this.organization.organizationalUnits.push(this);
 
     // all other options
     this.options = options;
 
-    this.project.logger.info(`INIT Account: "${this.id}"`);
-  }
-
-  public get id() {
-    return this.options.id;
+    this.project.logger.info(`INIT Organizational Unit: "${this.name}"`);
   }
 
   public get name() {
     return this.options.name;
-  }
-
-  public get rootEmail() {
-    return this.options.rootEmail;
   }
 
   /*****************************************************************************
@@ -57,12 +49,14 @@ export class Account extends FractureComponent {
    ****************************************************************************/
 
   /**
-   * Add an region to an account.
+   * Add an account to an organization.
    *
-   * @param {RegionOptions}
-   * @returns {Region}
+   * @param {AccountOptions}
+   * @returns {Account}
    */
-  public addRegion(options: RegionOptions) {
-    return new Region(this, options);
+  public addAccount(options: AccountOptions) {
+    const acc = new Account(this.organization, options);
+    this.accounts.push(acc);
+    return acc;
   }
 }
