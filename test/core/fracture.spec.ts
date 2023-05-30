@@ -60,6 +60,6 @@ test("Can add services", () => {
 test("Can add organization", () => {
   const f = new Fracture(new TestProject());
   expect(f.organizations.length).toBe(0);
-  f.addOrganization({ orgId: "aaaaaaaa" });
+  f.addOrganization({ id: "aaaaaaaa" });
   expect(f.organizations.length).toBe(1);
 });
