@@ -1,25 +1,22 @@
+import { FractureComponent } from ".";
 import { Account, AccountOptions } from "./account";
-import {
-  OrganizationalUnit,
-  OrganizationalUnitOptions,
-} from "./organizational-unit";
-import { Fracture, FractureComponent } from "../core";
+import { Organization } from "./organization";
 
-export interface OrganizationOptions {
-  id: string;
-  ssoStartUrl?: string;
+export interface OrganizationalUnitOptions {
+  name: string;
 }
 
-export class Organization extends FractureComponent {
+export class OrganizationalUnit extends FractureComponent {
   // member components
   public readonly accounts: Account[];
   public readonly organizationalUnits: OrganizationalUnit[];
   // parent
+  public readonly organization: Organization;
   // all other options
-  public readonly options: OrganizationOptions;
+  public readonly options: OrganizationalUnitOptions;
 
-  constructor(fracture: Fracture, options: OrganizationOptions) {
-    super(fracture);
+  constructor(organization: Organization, options: OrganizationalUnitOptions) {
+    super(organization.fracture);
 
     /***************************************************************************
      *
@@ -32,20 +29,17 @@ export class Organization extends FractureComponent {
     this.organizationalUnits = [];
 
     // parents + inverse
-    this.fracture.organizations.push(this);
+    this.organization = organization;
+    this.organization.organizationalUnits.push(this);
 
     // all other options
     this.options = options;
 
-    this.project.logger.info(`INIT Organization: "${this.id}"`);
+    this.project.logger.info(`INIT Organizational Unit: "${this.name}"`);
   }
 
-  public get id() {
-    return this.options.id;
-  }
-
-  public get ssoStartUrl() {
-    return this.options.ssoStartUrl;
+  public get name() {
+    return this.options.name;
   }
 
   /*****************************************************************************
@@ -61,16 +55,8 @@ export class Organization extends FractureComponent {
    * @returns {Account}
    */
   public addAccount(options: AccountOptions) {
-    return new Account(this, options);
-  }
-
-  /**
-   * Add an organizational unit to an organization.
-   *
-   * @param {OrganizationalUnitOptions}
-   * @returns {OrganizationalUnit}
-   */
-  public addOrganizationalUnit(options: OrganizationalUnitOptions) {
-    return new OrganizationalUnit(this, options);
+    const acc = new Account(this.organization, options);
+    this.accounts.push(acc);
+    return acc;
   }
 }

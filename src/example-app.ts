@@ -14,8 +14,15 @@ export class ExampleApp extends Component {
       outdir: "src/example-app",
     });
 
-    fracture.addOrganization({ orgId: "o-abcdef" });
-    //org.addAccount({ account: "0000000000" });
+    const org = fracture.addOrganization({ id: "o-abcdef" });
+
+    const dev = org.addOrganizationalUnit({ name: "dev" });
+    dev.addAccount({ id: "0000000000" });
+    dev.addAccount({ id: "1111111111" });
+
+    const prod = org.addOrganizationalUnit({ name: "prod" });
+    prod.addAccount({ id: "2222222222" });
+    prod.addAccount({ id: "3333333333" });
 
     /***************************************************************************
      *  User Service

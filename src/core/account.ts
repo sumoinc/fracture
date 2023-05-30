@@ -3,8 +3,9 @@ import { Organization } from "./organization";
 import { Region, RegionOptions } from "./region";
 
 export interface AccountOptions {
-  accountNo: string;
+  id: string;
   name?: string;
+  rootEmail?: string;
 }
 
 export class Account extends FractureComponent {
@@ -34,15 +35,19 @@ export class Account extends FractureComponent {
     // all other options
     this.options = options;
 
-    this.project.logger.info(`INIT Account: "${this.accountNo}"`);
+    this.project.logger.info(`INIT Account: "${this.id}"`);
   }
 
-  public get accountNo() {
-    return this.options.accountNo;
+  public get id() {
+    return this.options.id;
   }
 
   public get name() {
     return this.options.name;
+  }
+
+  public get rootEmail() {
+    return this.options.rootEmail;
   }
 
   /*****************************************************************************
