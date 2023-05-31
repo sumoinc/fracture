@@ -7,7 +7,7 @@ export interface AccountOptions {
   id: string;
   name?: string;
   rootEmail?: string;
-  isMasterAccount?: boolean;
+  isManagementAccount?: boolean;
   organizationalUnit?: OrganizationalUnit;
 }
 
@@ -37,7 +37,7 @@ export class Account extends FractureComponent {
 
     // all other options
     const defaultOptions: Partial<AccountOptions> = {
-      isMasterAccount: false,
+      isManagementAccount: false,
     };
     this.options = { ...defaultOptions, ...options };
 
@@ -62,8 +62,8 @@ export class Account extends FractureComponent {
     return this.options.rootEmail;
   }
 
-  public get isMasterAccount() {
-    return this.options.isMasterAccount;
+  public get isManagementAccount() {
+    return this.options.isManagementAccount;
   }
 
   public get organizationalUnit() {
