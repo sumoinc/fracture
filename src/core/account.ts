@@ -1,11 +1,14 @@
-import { FractureComponent } from ".";
+import { FractureComponent } from "./component";
 import { Organization } from "./organization";
+import { OrganizationalUnit } from "./organizational-unit";
 import { Region, RegionOptions } from "./region";
 
 export interface AccountOptions {
   id: string;
   name?: string;
   rootEmail?: string;
+  isMasterAccount?: boolean;
+  organizationalUnit?: OrganizationalUnit;
 }
 
 export class Account extends FractureComponent {
@@ -33,8 +36,17 @@ export class Account extends FractureComponent {
     this.organization.accounts.push(this);
 
     // all other options
-    this.options = options;
+    const defaultOptions: Partial<AccountOptions> = {
+      isMasterAccount: false,
+    };
+    this.options = { ...defaultOptions, ...options };
 
+    // if OU defined, add account to OU
+    if (this.options.organizationalUnit) {
+      this.options.organizationalUnit.accounts.push(this);
+    }
+
+    // debugging output
     this.project.logger.info(`INIT Account: "${this.id}"`);
   }
 
@@ -48,6 +60,14 @@ export class Account extends FractureComponent {
 
   public get rootEmail() {
     return this.options.rootEmail;
+  }
+
+  public get isMasterAccount() {
+    return this.options.isMasterAccount;
+  }
+
+  public get organizationalUnit() {
+    return this.options.organizationalUnit;
   }
 
   /*****************************************************************************

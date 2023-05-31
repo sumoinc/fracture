@@ -1,6 +1,6 @@
 import { join } from "path";
 import { TypeScriptSource } from "./typescript-source";
-import { FractureComponent } from "../../core";
+import { FractureComponent } from "../../core/component";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Service } from "../../core/service";
 

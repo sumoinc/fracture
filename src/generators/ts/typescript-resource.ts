@@ -1,4 +1,4 @@
-import { FractureComponent } from "../../core";
+import { FractureComponent } from "../../core/component";
 import { Resource } from "../../core/resource";
 
 export class TypescriptResource extends FractureComponent {
