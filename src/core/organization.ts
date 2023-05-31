@@ -54,6 +54,10 @@ export class Organization extends FractureComponent {
     return this.options.ssoRegion;
   }
 
+  public get managementAccount() {
+    return this.accounts.find((a) => a.options.isManagementAccount);
+  }
+
   /*****************************************************************************
    *
    *  Configuration Helpers
