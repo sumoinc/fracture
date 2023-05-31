@@ -1,4 +1,4 @@
-import { FractureComponent } from "../../core";
+import { FractureComponent } from "../../core/component";
 import { Operation } from "../../core/operation";
 
 export class TypescriptOperation extends FractureComponent {

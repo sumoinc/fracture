@@ -1,4 +1,4 @@
-import { FractureComponent } from ".";
+import { FractureComponent } from "./component";
 import { Organization } from "./organization";
 import { OrganizationalUnit } from "./organizational-unit";
 import { Region, RegionOptions } from "./region";

@@ -1,8 +1,8 @@
 import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { FractureComponent } from ".";
 import { AccessPattern } from "./access-pattern";
+import { FractureComponent } from "./component";
 import { Operation, OperationDefault, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import { TypescriptResourceAttribute } from "../generators/ts/typescript-resource-attribute";

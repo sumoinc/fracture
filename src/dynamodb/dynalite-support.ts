@@ -1,4 +1,5 @@
-import { Fracture, FractureComponent } from "../core";
+import { FractureComponent } from "../core/component";
+import { Fracture } from "../core/fracture";
 import { TypeScriptSource } from "../generators/ts/typescript-source";
 
 export class DynaliteSupport extends FractureComponent {

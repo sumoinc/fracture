@@ -1,5 +1,5 @@
-import { FractureComponent } from ".";
 import { Account } from "./account";
+import { FractureComponent } from "./component";
 
 export interface RegionOptions {
   regionId: string;

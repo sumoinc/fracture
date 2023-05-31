@@ -1,8 +1,9 @@
 import { join } from "path";
 import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
-import { Fracture, FractureComponent } from ".";
 import { AuditStrategy } from "./audit-strategy";
+import { FractureComponent } from "./component";
+import { Fracture } from "./fracture";
 import { NamingStrategy } from "./naming-strategy";
 import { Resource, ResourceOptions } from "./resource";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";

@@ -1,7 +1,7 @@
 import { join } from "path";
 import { ValueOf } from "type-fest";
-import { FractureComponent } from "../../../core";
 import { AccessPattern } from "../../../core/access-pattern";
+import { FractureComponent } from "../../../core/component";
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "../../../core/operation";
 import { Resource } from "../../../core/resource";

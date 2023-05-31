@@ -1,5 +1,5 @@
-import { FractureComponent } from ".";
 import { Account, AccountOptions } from "./account";
+import { FractureComponent } from "./component";
 import { Organization } from "./organization";
 
 export interface OrganizationalUnitOptions {

@@ -1,4 +1,4 @@
-import { FractureComponent } from "../../core";
+import { FractureComponent } from "../../core/component";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Resource } from "../../core/resource";
 import { Service } from "../../core/service";

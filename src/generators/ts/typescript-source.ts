@@ -1,6 +1,6 @@
 import { dirname, join, relative, sep } from "path";
 import { SourceCode } from "projen";
-import { FractureComponent } from "../../core";
+import { FractureComponent } from "../../core/component";
 
 /**
  * Build a TypeScript file and make sure it's marked as being managed by

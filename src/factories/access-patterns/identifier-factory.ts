@@ -1,9 +1,9 @@
-import { FractureComponent } from "../../core";
 import {
   AccessPattern,
   AccessPatternOptions,
   ACCESS_PATTERN_TYPE,
 } from "../../core/access-pattern";
+import { FractureComponent } from "../../core/component";
 import {
   Operation,
   OPERATION_SUB_TYPE,

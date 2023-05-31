@@ -1,5 +1,6 @@
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
+import { FractureComponent } from "./component";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
@@ -7,7 +8,6 @@ import {
   ResourceAttributeGenerator,
   ResourceAttributeOptions,
 } from "./resource-attribute";
-import { FractureComponent } from "../core/component";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";
 import { DynamoTable } from "../dynamodb/dynamo-table";
 
