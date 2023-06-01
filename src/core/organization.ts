@@ -58,6 +58,10 @@ export class Organization extends FractureComponent {
     return this.accounts.find((a) => a.options.isManagementAccount);
   }
 
+  public get managedAccounts() {
+    return this.accounts.filter((a) => !a.options.isManagementAccount);
+  }
+
   /*****************************************************************************
    *
    *  Configuration Helpers
