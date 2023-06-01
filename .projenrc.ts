@@ -1,6 +1,5 @@
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
-import { ExampleApp } from "./src/example-app";
 import { VsCodeConfiguration } from "./src/projen/vscode";
 
 const authorName = "Cameron Childress";
@@ -38,7 +37,7 @@ const project = new TypeScriptProject({
 });
 
 // add example app
-new ExampleApp(project);
+//new ExampleApp(project);
 
 new VsCodeConfiguration(project);
 
