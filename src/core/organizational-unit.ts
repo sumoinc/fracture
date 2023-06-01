@@ -1,8 +1,10 @@
 import { Account, AccountOptions } from "./account";
 import { FractureComponent } from "./component";
 import { Organization } from "./organization";
+import { Region } from "./region";
 
 export interface OrganizationalUnitOptions {
+  id: string;
   name: string;
 }
 
@@ -38,8 +40,23 @@ export class OrganizationalUnit extends FractureComponent {
     this.project.logger.info(`INIT Organizational Unit: "${this.name}"`);
   }
 
+  public get id() {
+    return this.options.id;
+  }
+
   public get name() {
     return this.options.name;
+  }
+
+  public get regions() {
+    return this.accounts
+      .flatMap((account) => account.regions)
+      .reduce((acc, region) => {
+        if (!acc.find((r) => r.id === region.id)) {
+          acc.push(region);
+        }
+        return acc;
+      }, [] as Region[]);
   }
 
   /*****************************************************************************

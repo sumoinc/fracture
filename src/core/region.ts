@@ -2,7 +2,7 @@ import { Account } from "./account";
 import { FractureComponent } from "./component";
 
 export interface RegionOptions {
-  regionId: string;
+  id: string;
 }
 
 export class Region extends FractureComponent {
@@ -30,10 +30,10 @@ export class Region extends FractureComponent {
     // all other options
     this.options = options;
 
-    this.project.logger.info(`INIT Region: "${this.regionId}"`);
+    this.project.logger.info(`INIT Region: "${this.id}"`);
   }
 
-  public get regionId() {
-    return this.options.regionId;
+  public get id() {
+    return this.options.id;
   }
 }

@@ -83,6 +83,7 @@ export class Account extends FractureComponent {
    * @returns {Region}
    */
   public addRegion(options: RegionOptions) {
-    return new Region(this, options);
+    const region = this.regions.find((r) => r.id === options.id);
+    return region ? region : new Region(this, options);
   }
 }
