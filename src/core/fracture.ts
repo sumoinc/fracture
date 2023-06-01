@@ -1,4 +1,4 @@
-import { Component, LoggerOptions, LogLevel } from "projen";
+import { Component, LoggerOptions, LogLevel, typescript } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
 import { AuditStrategy } from "./audit-strategy";
@@ -20,11 +20,6 @@ import { DynaliteSupport } from "../dynamodb/dynalite-support";
  *
  */
 export interface FractureOptions {
-  /**
-   * Directory where generated code will be placed.
-   * @default project.outdir + "/" + namespace
-   */
-  outdir?: string;
   /**
    * Logging options
    * @default LogLevel.INFO
@@ -55,6 +50,7 @@ export class Fracture extends Component {
   // project and namespace
   public readonly project: TypeScriptProject;
   public readonly namespace: string;
+  public readonly outdir: string;
   // all other options
   public readonly options: Required<FractureOptions>;
 
@@ -63,7 +59,26 @@ export class Fracture extends Component {
     namespace: string = "fracture",
     options: FractureOptions = {}
   ) {
-    super(project);
+    /***************************************************************************
+     *
+     * CREATE SUB-PROJECT
+     *
+     * This powers a sub-project to house all generated code.
+     *
+     **************************************************************************/
+
+    // Build sub project
+    const subProject = new typescript.TypeScriptProject({
+      defaultReleaseBranch: "main",
+      name: namespace,
+      parent: project,
+      licensed: false,
+      outdir: `packages/${namespace}`,
+    });
+    super(subProject);
+
+    // all generated code ends up in src folder
+    this.outdir = `packages/${namespace}/src`;
 
     /***************************************************************************
      *
@@ -75,7 +90,6 @@ export class Fracture extends Component {
      **************************************************************************/
 
     const defaultOptions: Required<FractureOptions> = {
-      outdir: namespace,
       logging: {
         level: LogLevel.INFO,
       },
@@ -248,10 +262,6 @@ export class Fracture extends Component {
     this.services.forEach((service) => {
       service.build();
     });
-  }
-
-  public get outdir() {
-    return this.options.outdir;
   }
 
   public get isVersioned() {

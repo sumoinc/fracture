@@ -10,9 +10,7 @@ export class ExampleApp extends Component {
      *  Setup and configure Fracture
      **************************************************************************/
 
-    const fracture = new Fracture(project, "example", {
-      outdir: "src/example-app",
-    });
+    const fracture = new Fracture(project, "example");
 
     const org = fracture.addOrganization({ id: "o-abcdef" });
 
