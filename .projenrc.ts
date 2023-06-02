@@ -36,6 +36,10 @@ const project = new TypeScriptProject({
   autoApproveOptions: { allowedUsernames: ["sumoc-automations"] },
 });
 
+// prevent example from being bundled with NPM
+project.npmignore!.exclude("/example-app");
+
+// make sure inline tests work
 project.jest!.addTestMatch("<rootDir>/(test|src)/**/*.(spec|test).ts?(x)");
 
 // dependancies fracture needs

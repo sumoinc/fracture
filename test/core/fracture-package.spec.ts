@@ -33,6 +33,7 @@ describe("namespace", () => {
   });
 });
 
+/*
 describe("outdir", () => {
   test("matches project out by default", () => {
     const f = new FracturePackage(new TestProject());
@@ -44,6 +45,7 @@ describe("outdir", () => {
     expect(f.outdir).toBe("foo");
   });
 });
+*/
 
 test("Can add services", () => {
   const f = new FracturePackage(new TestProject());

@@ -1,10 +1,10 @@
 import { Account, AccountOptions } from "./account";
 import { FractureComponent } from "./component";
+import { FracturePackage } from "./fracture-package";
 import {
   OrganizationalUnit,
   OrganizationalUnitOptions,
 } from "./organizational-unit";
-import { FracturePackage } from "./fracture-package";
 
 export interface OrganizationOptions {
   id: string;

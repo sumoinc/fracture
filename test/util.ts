@@ -1,9 +1,10 @@
 import { Task } from "projen";
+import { TypeScriptProjectOptions } from "projen/lib/typescript";
 import {
-  TypeScriptProject,
-  TypeScriptProjectOptions,
-} from "projen/lib/typescript";
-import { FracturePackage, FracturePackageOptions } from "../src";
+  FracturePackage,
+  FracturePackageOptions,
+  FractureProject,
+} from "../src";
 
 export class TestFracturePackage extends FracturePackage {
   constructor(options: FracturePackageOptions = {}) {
@@ -13,7 +14,7 @@ export class TestFracturePackage extends FracturePackage {
   }
 }
 
-export class TestProject extends TypeScriptProject {
+export class TestProject extends FractureProject {
   constructor(
     options: Omit<
       TypeScriptProjectOptions,

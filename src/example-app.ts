@@ -1,6 +1,5 @@
 import { Component } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
-import { FracturePackage } from "./core";
 
 export class ExampleApp extends Component {
   constructor(project: TypeScriptProject) {
@@ -10,6 +9,7 @@ export class ExampleApp extends Component {
      *  Setup and configure Fracture
      **************************************************************************/
 
+    /*
     const fracture = new FracturePackage(project, "example");
 
     const org = fracture.addOrganization({ id: "o-abcdef" });
@@ -21,11 +21,12 @@ export class ExampleApp extends Component {
     const prod = org.addOrganizationalUnit({ id: "bar", name: "prod" });
     prod.addAccount({ id: "2222222222" });
     prod.addAccount({ id: "3333333333" });
+    */
 
     /***************************************************************************
      *  User Service
      **************************************************************************/
-
+    /*
     const userService = fracture.addService({ name: "user" });
 
     const user = userService.addResource({ name: "user" });
@@ -39,6 +40,7 @@ export class ExampleApp extends Component {
       shortName: "ln",
       isRequired: true,
     });
+    */
 
     /***************************************************************************
      *  Tenant Service
@@ -82,6 +84,6 @@ export class ExampleApp extends Component {
     */
 
     // build out defaults
-    fracture.build();
+    // fracture.build();
   }
 }
