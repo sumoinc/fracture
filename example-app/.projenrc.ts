@@ -11,6 +11,8 @@ const project = new FractureProject({
   },
 });
 
+project.npmignore!.exclude("packages");
+
 const identityPackage = new FracturePackage(project, "identity");
 const userService = identityPackage.addService({ name: "user" });
 const user = userService.addResource({ name: "user" });
@@ -22,6 +24,15 @@ user.addResourceAttribute({
 user.addResourceAttribute({
   name: "last-name",
   shortName: "ln",
+  isRequired: true,
+});
+
+const campanyPackage = new FracturePackage(project, "company");
+const companyService = campanyPackage.addService({ name: "company" });
+const company = companyService.addResource({ name: "company" });
+company.addResourceAttribute({
+  name: "name",
+  shortName: "nm",
   isRequired: true,
 });
 
