@@ -13,7 +13,7 @@ export class Region extends FractureComponent {
   public readonly options: RegionOptions;
 
   constructor(account: Account, options: RegionOptions) {
-    super(account.fracture);
+    super(account.fracturePackage);
 
     /***************************************************************************
      *

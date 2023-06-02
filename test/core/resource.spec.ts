@@ -1,10 +1,10 @@
 import { Resource } from "../../src/core/resource";
 import { ResourceAttribute } from "../../src/core/resource-attribute";
 import { Service } from "../../src/core/service";
-import { TestFracture } from "../util";
+import { TestFracturePackage } from "../util";
 
 const myService = () => {
-  return new Service(new TestFracture(), { name: "tenant" });
+  return new Service(new TestFracturePackage(), { name: "tenant" });
 };
 
 const myResource = () => {

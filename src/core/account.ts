@@ -20,7 +20,7 @@ export class Account extends FractureComponent {
   public readonly options: AccountOptions;
 
   constructor(organization: Organization, options: AccountOptions) {
-    super(organization.fracture);
+    super(organization.fracturePackage);
 
     /***************************************************************************
      *

@@ -9,7 +9,7 @@ export class TypescriptService extends FractureComponent {
   public readonly typeFile: TypeScriptSource;
 
   constructor(service: Service) {
-    super(service.fracture);
+    super(service.fracturePackage);
 
     this.service = service;
 
@@ -89,11 +89,16 @@ export class TypescriptService extends FractureComponent {
    ****************************************************************************/
 
   public get outdir() {
-    return join(this.fracture.outdir, "services", this.service.name, "ts");
+    return join(
+      this.fracturePackage.outdir,
+      "services",
+      this.service.name,
+      "ts"
+    );
   }
 
   public get typedir() {
-    return join(this.fracture.outdir, "types");
+    return join(this.fracturePackage.outdir, "types");
   }
 
   public get dynamoCommandDir() {

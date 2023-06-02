@@ -19,7 +19,7 @@ import { DynaliteSupport } from "../dynamodb/dynalite-support";
  * other sub components as they are created, unless they are overridden.
  *
  */
-export interface FractureOptions {
+export interface FracturePackageOptions {
   /**
    * Logging options
    * @default LogLevel.INFO
@@ -41,9 +41,9 @@ export interface FractureOptions {
 }
 
 /**
- * The root of the entire application.
+ * The root of a package
  */
-export class Fracture extends Component {
+export class FracturePackage extends Component {
   // member components
   public readonly services: Service[] = [];
   public readonly organizations: Organization[] = [];
@@ -52,12 +52,12 @@ export class Fracture extends Component {
   public readonly namespace: string;
   public readonly outdir: string;
   // all other options
-  public readonly options: Required<FractureOptions>;
+  public readonly options: Required<FracturePackageOptions>;
 
   constructor(
     project: TypeScriptProject,
     namespace: string = "fracture",
-    options: FractureOptions = {}
+    options: FracturePackageOptions = {}
   ) {
     /***************************************************************************
      *
@@ -89,7 +89,7 @@ export class Fracture extends Component {
      *
      **************************************************************************/
 
-    const defaultOptions: Required<FractureOptions> = {
+    const defaultOptions: Required<FracturePackageOptions> = {
       logging: {
         level: LogLevel.INFO,
       },
@@ -210,7 +210,7 @@ export class Fracture extends Component {
     this.options = deepMerge([
       defaultOptions,
       options,
-    ]) as Required<FractureOptions>;
+    ]) as Required<FracturePackageOptions>;
 
     this.project.logger.info("=".repeat(80));
     this.project.logger.info(`INIT Fracture: "${this.project.name}"`);
@@ -224,26 +224,6 @@ export class Fracture extends Component {
      * plays nice with fracture.
      *
      **************************************************************************/
-
-    this.project.jest!.addTestMatch(
-      "<rootDir>/(test|src)/**/*.(spec|test).ts?(x)"
-    );
-
-    // dependancies fracture needs
-    this.project.addDeps(
-      "@aws-sdk/client-dynamodb",
-      "@aws-sdk/lib-dynamodb",
-      "@aws-sdk/util-dynamodb",
-      "@faker-js/faker",
-      "@types/aws-lambda",
-      "change-case",
-      "projen",
-      "type-fest",
-      "uuid"
-    );
-    this.project.addDevDeps("@types/uuid");
-    this.project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
-
     // add Dynalite support for Jest tests
     new DynaliteSupport(this);
 

@@ -3,10 +3,10 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
-import { Fracture, FractureOptions } from "../src";
+import { FracturePackage, FracturePackageOptions } from "../src";
 
-export class TestFracture extends Fracture {
-  constructor(options: FractureOptions = {}) {
+export class TestFracturePackage extends FracturePackage {
+  constructor(options: FracturePackageOptions = {}) {
     super(new TestProject({ logging: options.logging }), "my-fracture", {
       ...options,
     });

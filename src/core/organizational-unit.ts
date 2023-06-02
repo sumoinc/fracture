@@ -18,7 +18,7 @@ export class OrganizationalUnit extends FractureComponent {
   public readonly options: OrganizationalUnitOptions;
 
   constructor(organization: Organization, options: OrganizationalUnitOptions) {
-    super(organization.fracture);
+    super(organization.fracturePackage);
 
     /***************************************************************************
      *

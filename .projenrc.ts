@@ -36,6 +36,23 @@ const project = new TypeScriptProject({
   autoApproveOptions: { allowedUsernames: ["sumoc-automations"] },
 });
 
+project.jest!.addTestMatch("<rootDir>/(test|src)/**/*.(spec|test).ts?(x)");
+
+// dependancies fracture needs
+project.addDeps(
+  "@aws-sdk/client-dynamodb",
+  "@aws-sdk/lib-dynamodb",
+  "@aws-sdk/util-dynamodb",
+  "@faker-js/faker",
+  "@types/aws-lambda",
+  "change-case",
+  "projen",
+  "type-fest",
+  "uuid"
+);
+project.addDevDeps("@types/uuid");
+project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
+
 // add example app
 //new ExampleApp(project);
 

@@ -1,5 +1,5 @@
 import { FractureComponent } from "../core/component";
-import { Fracture } from "../core/fracture";
+import { FracturePackage } from "../core/fracture-package";
 import { TypeScriptSource } from "../generators/ts/typescript-source";
 
 export class DynaliteSupport extends FractureComponent {
@@ -72,10 +72,10 @@ export class DynaliteSupport extends FractureComponent {
 
   public readonly dynaliteConfig: TypeScriptSource;
 
-  constructor(fracture: Fracture) {
-    super(fracture);
+  constructor(fracturePackage: FracturePackage) {
+    super(fracturePackage);
 
-    const { project } = this.fracture;
+    const { project } = this.fracturePackage;
 
     // add dynalite
     project.addDeps("jest-dynalite");
@@ -101,7 +101,7 @@ export class DynaliteSupport extends FractureComponent {
   // build out the dynalite config
   preSynthesize() {
     const config = {
-      tables: this.fracture.services.map((service) => {
+      tables: this.fracturePackage.services.map((service) => {
         const allGsi = service.dynamoTable.dynamoGsi.filter(
           (gsi) => gsi !== service.dynamoTable.keyDynamoGsi
         );

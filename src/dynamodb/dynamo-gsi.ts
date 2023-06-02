@@ -35,7 +35,7 @@ export class DynamoGsi extends FractureComponent {
   public readonly options: Required<DynamoGsiOptions>;
 
   constructor(dynamoTable: DynamoTable, options: DynamoGsiOptions = {}) {
-    super(dynamoTable.fracture);
+    super(dynamoTable.fracturePackage);
 
     /***************************************************************************
      *

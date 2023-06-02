@@ -1,8 +1,8 @@
 import { Account, Organization, OrganizationalUnit } from "../../src";
-import { TestFracture } from "../util";
+import { TestFracturePackage } from "../util";
 
 test("Ignores duplicates", () => {
-  const org = new Organization(new TestFracture(), { id: "org-12345" });
+  const org = new Organization(new TestFracturePackage(), { id: "org-12345" });
   const ou = new OrganizationalUnit(org, { id: "ou-12345", name: "OU" });
   const account = new Account(org, {
     id: "acc-12345",
@@ -16,7 +16,7 @@ test("Ignores duplicates", () => {
 });
 
 test("Aggregates across accounts", () => {
-  const org = new Organization(new TestFracture(), { id: "org-12345" });
+  const org = new Organization(new TestFracturePackage(), { id: "org-12345" });
   const ou = new OrganizationalUnit(org, { id: "ou-12345", name: "OU" });
   const accountOne = new Account(org, {
     id: "acc-12345",

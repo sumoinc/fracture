@@ -4,13 +4,13 @@ import { Resource } from "../../src/core/resource";
 import { ResourceAttribute } from "../../src/core/resource-attribute";
 import { Service } from "../../src/core/service";
 import { STRUCTURE_TYPE } from "../../src/core/structure";
-import { TestFracture } from "../util";
+import { TestFracturePackage } from "../util";
 
 const makeFixture = () => {
   const logging: LoggerOptions = {
     level: LogLevel.WARN,
   };
-  const fracture = new TestFracture({ logging });
+  const fracture = new TestFracturePackage({ logging });
   const service = new Service(fracture, { name: "tenant" });
   const resource = new Resource(service, {
     name: "person",

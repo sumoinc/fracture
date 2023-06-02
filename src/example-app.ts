@@ -1,6 +1,6 @@
 import { Component } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
-import { Fracture } from "./core";
+import { FracturePackage } from "./core";
 
 export class ExampleApp extends Component {
   constructor(project: TypeScriptProject) {
@@ -10,7 +10,7 @@ export class ExampleApp extends Component {
      *  Setup and configure Fracture
      **************************************************************************/
 
-    const fracture = new Fracture(project, "example");
+    const fracture = new FracturePackage(project, "example");
 
     const org = fracture.addOrganization({ id: "o-abcdef" });
 

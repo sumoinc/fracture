@@ -41,6 +41,9 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.1.3"
   },
+  "dependencies": {
+    "@sumoc/fracture": "../src"
+  },
   "pnpm": {},
   "main": "lib/index.js",
   "license": "Apache-2.0",

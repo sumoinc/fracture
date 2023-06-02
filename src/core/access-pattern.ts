@@ -44,7 +44,7 @@ export class AccessPattern extends FractureComponent {
   public readonly options: Required<AccessPatternOptions>;
 
   constructor(resource: Resource, options: AccessPatternOptions) {
-    super(resource.fracture);
+    super(resource.fracturePackage);
 
     /***************************************************************************
      *

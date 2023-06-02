@@ -15,7 +15,7 @@ export class DynamoCommand extends FractureComponent {
   public readonly operation: Operation;
 
   constructor(operation: Operation) {
-    super(operation.fracture);
+    super(operation.fracturePackage);
 
     this.operation = operation;
   }
