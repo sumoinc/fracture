@@ -1,7 +1,9 @@
+import { join } from "path";
 import { Component, LoggerOptions, LogLevel, typescript } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
 import { AuditStrategy } from "./audit-strategy";
+import { FractureProject } from "./fracture-project";
 import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
 import { OPERATION_SUB_TYPE } from "./operation";
 import { Organization, OrganizationOptions } from "./organization";
@@ -55,7 +57,7 @@ export class FracturePackage extends Component {
   public readonly options: Required<FracturePackageOptions>;
 
   constructor(
-    project: TypeScriptProject,
+    fractureProject: FractureProject,
     namespace: string = "fracture",
     options: FracturePackageOptions = {}
   ) {
@@ -68,17 +70,23 @@ export class FracturePackage extends Component {
      **************************************************************************/
 
     // Build sub project
-    const subProject = new typescript.TypeScriptProject({
+    const project = new typescript.TypeScriptProject({
       defaultReleaseBranch: "main",
       name: namespace,
-      parent: project,
+      parent: fractureProject,
       licensed: false,
-      outdir: `packages/${namespace}`,
+      outdir: join(fractureProject.packageDir, namespace),
+      eslintOptions: {
+        dirs: ["src"],
+        tsconfigPath: "./**/tsconfig.dev.json",
+      },
     });
-    super(subProject);
+    super(project);
+
+    this.project = project;
 
     // all generated code ends up in src folder
-    this.outdir = `packages/${namespace}/src`;
+    this.outdir = join("src");
 
     /***************************************************************************
      *

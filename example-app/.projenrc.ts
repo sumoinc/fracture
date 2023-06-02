@@ -1,19 +1,18 @@
-import { FractureProject } from "@sumoc/fracture";
-//import { typescript } from "projen";
+import { FracturePackage, FractureProject } from "@sumoc/fracture";
 
 const project = new FractureProject({
-  defaultReleaseBranch: "main",
   name: "example-app",
-  projenrcTs: true,
   github: false,
 
-  devDeps: [],
   deps: ["@sumoc/fracture@../src"],
-  peerDeps: [],
 
   eslintOptions: {
     dirs: ["src"],
-    tsconfigPath: "./example-app/tsconfig.dev.json",
+    tsconfigPath: "./**/tsconfig.dev.json",
   },
 });
+
+const identityPackage = new FracturePackage(project, "identity");
+identityPackage.addService({ name: "user" });
+
 project.synth();
