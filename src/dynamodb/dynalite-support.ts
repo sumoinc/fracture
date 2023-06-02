@@ -150,7 +150,7 @@ export class DynaliteSupport extends FractureComponent {
           },
         };
       }),
-      basePort: 8000,
+      basePort: 8000 + this.fracturePackage.packageIndex * 100,
     };
 
     this.dynaliteConfig.line(

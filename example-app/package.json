@@ -2,6 +2,7 @@
   "name": "example-app",
   "scripts": {
     "build": "npx projen build",
+    "build:turbo": "npx projen build:turbo",
     "bump": "npx projen bump",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",

@@ -52,6 +52,7 @@ export class FracturePackage extends Component {
   public readonly organizations: Organization[] = [];
   // project and namespace
   public readonly project: TypeScriptProject;
+  public readonly fractureProject: FractureProject;
   public readonly namespace: string;
   public readonly outdir: string;
   // all other options
@@ -81,6 +82,7 @@ export class FracturePackage extends Component {
       pnpmVersion: "8",
       prettier: true,
       projenrcTs: true,
+      deps: ["@aws-sdk/client-dynamodb", "@aws-sdk/lib-dynamodb", "uuid"],
       eslintOptions: {
         dirs: ["src"],
         tsconfigPath: "./**/tsconfig.dev.json",
@@ -90,6 +92,7 @@ export class FracturePackage extends Component {
 
     this.project = project;
     fractureProject.fracturePackages.push(this);
+    this.fractureProject = fractureProject;
 
     // all generated code ends up in src folder
     this.outdir = join("src");
@@ -268,6 +271,17 @@ export class FracturePackage extends Component {
 
   public get auditStrategy() {
     return this.options.auditStrategy;
+  }
+
+  /**
+   * Returns index for this package in the overall project.
+   * Useful when trying to split up ports for testing in parallel, etc.
+   */
+  public get packageIndex() {
+    const { fracturePackages } = this.fractureProject;
+    return (
+      fracturePackages.findIndex((p) => p.namespace === this.namespace) || 0
+    );
   }
 
   /*****************************************************************************

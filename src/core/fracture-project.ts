@@ -54,7 +54,6 @@ export class FractureProject extends TypeScriptProject {
     ]) as FractureProjectOptions;
 
     super(mergedOptions);
-
     this.options = mergedOptions;
 
     // configure workspace
@@ -76,6 +75,10 @@ export class FractureProject extends TypeScriptProject {
     return this.options.siteDir!;
   }
 
+  public get buildTask() {
+    return TurboRepo.buildTask(this);
+  }
+
   /**
    * Build the project.
    *
@@ -87,5 +90,6 @@ export class FractureProject extends TypeScriptProject {
     this.fracturePackages.forEach((p) => {
       p.build();
     });
+    this.turborepo.build();
   }
 }
