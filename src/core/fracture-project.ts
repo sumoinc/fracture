@@ -26,6 +26,7 @@ export interface FractureProjectOptions extends TypeScriptProjectOptions {
 export class FractureProject extends TypeScriptProject {
   // member components
   public fracturePackages: FracturePackage[] = [];
+  private turborepo: TurboRepo;
   // all other options
   public readonly options: FractureProjectOptions;
 
@@ -60,7 +61,7 @@ export class FractureProject extends TypeScriptProject {
     new PnpmWorkspace(this);
 
     // configure turborepo
-    new TurboRepo(this);
+    this.turborepo = new TurboRepo(this);
   }
 
   public get packageDir(): string {
