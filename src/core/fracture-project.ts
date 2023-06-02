@@ -16,8 +16,7 @@ import { TurboRepo } from "../turborepo/turbo-repo";
  */
 export interface FractureProjectOptions extends TypeScriptProjectOptions {
   packageDir?: string;
-  serviceDir?: string;
-  siteDir?: string;
+  appDir?: string;
 }
 
 /**
@@ -28,7 +27,7 @@ export class FractureProject extends TypeScriptProject {
   public fracturePackages: FracturePackage[] = [];
   private turborepo: TurboRepo;
   // all other options
-  public readonly options: FractureProjectOptions;
+  public readonly options: Required<FractureProjectOptions>;
 
   constructor(
     options: SetOptional<FractureProjectOptions, "defaultReleaseBranch">
@@ -36,8 +35,7 @@ export class FractureProject extends TypeScriptProject {
     const defaultOptions: Partial<FractureProjectOptions> = {
       defaultReleaseBranch: "main",
       packageDir: "packages",
-      serviceDir: "services",
-      siteDir: "sites",
+      appDir: "apps",
     };
 
     const requiredOptions: Partial<FractureProjectOptions> = {
@@ -52,7 +50,7 @@ export class FractureProject extends TypeScriptProject {
       defaultOptions,
       options,
       requiredOptions,
-    ]) as FractureProjectOptions;
+    ]) as Required<FractureProjectOptions>;
 
     super(mergedOptions);
     this.options = mergedOptions;
@@ -65,15 +63,11 @@ export class FractureProject extends TypeScriptProject {
   }
 
   public get packageDir(): string {
-    return this.options.packageDir!;
+    return this.options.packageDir;
   }
 
-  public get serviceDir(): string {
-    return this.options.serviceDir!;
-  }
-
-  public get siteDir(): string {
-    return this.options.siteDir!;
+  public get appDir(): string {
+    return this.options.appDir;
   }
 
   public get buildTask() {

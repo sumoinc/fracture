@@ -2,5 +2,4 @@
 
 packages:
   - packages/*
-  - services/*
-  - sites/*
+  - apps/*
