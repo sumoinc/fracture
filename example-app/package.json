@@ -42,7 +42,8 @@
     "typescript": "^5.1.3"
   },
   "dependencies": {
-    "@sumoc/fracture": "../src"
+    "@sumoc/fracture": "../src",
+    "turbo": "^1.10.1"
   },
   "pnpm": {},
   "main": "lib/index.js",

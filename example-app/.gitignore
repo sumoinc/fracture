@@ -45,3 +45,4 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
+!/pnpm-workspace.yaml

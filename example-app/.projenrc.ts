@@ -26,5 +26,6 @@ user.addResourceAttribute({
   isRequired: true,
 });
 
-identityPackage.build();
+// builds all packages
+project.build();
 project.synth();

@@ -89,6 +89,7 @@ export class FracturePackage extends Component {
     super(project);
 
     this.project = project;
+    fractureProject.fracturePackages.push(this);
 
     // all generated code ends up in src folder
     this.outdir = join("src");
@@ -244,7 +245,7 @@ export class FracturePackage extends Component {
   }
 
   /**
-   * Build the project.
+   * Build the package.
    *
    * Call this when you've configured everything, prior to preSynthesize.
    *
