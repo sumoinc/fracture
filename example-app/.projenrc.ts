@@ -13,6 +13,18 @@ const project = new FractureProject({
 });
 
 const identityPackage = new FracturePackage(project, "identity");
-identityPackage.addService({ name: "user" });
+const userService = identityPackage.addService({ name: "user" });
+const user = userService.addResource({ name: "user" });
+user.addResourceAttribute({
+  name: "first-name",
+  shortName: "fn",
+  isRequired: true,
+});
+user.addResourceAttribute({
+  name: "last-name",
+  shortName: "ln",
+  isRequired: true,
+});
 
+identityPackage.build();
 project.synth();

@@ -12,7 +12,16 @@ module.exports = {
           "KeyType": "RANGE"
         }
       ],
-      "AttributeDefinitions": [],
+      "AttributeDefinitions": [
+        {
+          "AttributeName": "pk",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "sk",
+          "AttributeType": "S"
+        }
+      ],
       "ProvisionedThroughput": {
         "ReadCapacityUnits": 1,
         "WriteCapacityUnits": 1

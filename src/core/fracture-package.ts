@@ -1,5 +1,6 @@
 import { join } from "path";
 import { Component, LoggerOptions, LogLevel, typescript } from "projen";
+import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
 import { AuditStrategy } from "./audit-strategy";
@@ -76,6 +77,10 @@ export class FracturePackage extends Component {
       parent: fractureProject,
       licensed: false,
       outdir: join(fractureProject.packageDir, namespace),
+      packageManager: NodePackageManager.PNPM,
+      pnpmVersion: "8",
+      prettier: true,
+      projenrcTs: true,
       eslintOptions: {
         dirs: ["src"],
         tsconfigPath: "./**/tsconfig.dev.json",

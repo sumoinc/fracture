@@ -32,6 +32,8 @@ jspm_packages/
 /test-reports/
 junit.xml
 /coverage/
+!/.prettierignore
+!/.prettierrc.json
 !/.npmrc
 !/test/
 !/tsconfig.json
@@ -43,3 +45,11 @@ junit.xml
 !/jest-dynalite-config.js
 !/setupBeforeEnv.ts
 !/src/types/user.ts
+!/src/services/user/ts/dynamodb/commands/create-user.ts
+!/src/services/user/ts/dynamodb/commands/create-user.spec.ts
+!/src/services/user/ts/dynamodb/commands/get-user.ts
+!/src/services/user/ts/dynamodb/commands/get-user.spec.ts
+!/src/services/user/ts/dynamodb/commands/update-user.ts
+!/src/services/user/ts/dynamodb/commands/update-user.spec.ts
+!/src/services/user/ts/dynamodb/commands/delete-user.ts
+!/src/services/user/ts/dynamodb/commands/delete-user.spec.ts
