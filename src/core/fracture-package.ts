@@ -83,6 +83,7 @@ export class FracturePackage extends Component {
       prettier: true,
       projenrcTs: true,
       deps: ["@aws-sdk/client-dynamodb", "@aws-sdk/lib-dynamodb", "uuid"],
+      devDeps: ["@types/uuid"],
       eslintOptions: {
         dirs: ["src"],
         tsconfigPath: "./**/tsconfig.dev.json",
