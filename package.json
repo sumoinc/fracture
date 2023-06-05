@@ -59,9 +59,9 @@
     "@aws-sdk/types": "^3.342.0"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.344.0",
-    "@aws-sdk/lib-dynamodb": "^3.344.0",
-    "@aws-sdk/util-dynamodb": "^3.344.0",
+    "@aws-sdk/client-dynamodb": "^3.345.0",
+    "@aws-sdk/lib-dynamodb": "^3.345.0",
+    "@aws-sdk/util-dynamodb": "^3.345.0",
     "@faker-js/faker": "^8.0.2",
     "@types/aws-lambda": "^8.10.115",
     "change-case": "^4.1.2",
