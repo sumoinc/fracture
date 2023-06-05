@@ -1,8 +1,8 @@
 import { Organization } from "../../src/core/organization";
-import { TestFracture } from "../util";
+import { TestFracturePackage } from "../util";
 
 test("Smoke test", () => {
-  const org = new Organization(new TestFracture(), { id: "org-12345" });
+  const org = new Organization(new TestFracturePackage(), { id: "org-12345" });
   expect(org).toBeTruthy();
   expect(org.options.id).toBe("org-12345");
 });

@@ -1,18 +1,18 @@
 import { Component } from "projen";
-import { Fracture } from "./fracture";
+import { FracturePackage } from "./fracture-package";
 
 export interface FractureComponentOptions {
-  fracture: Fracture;
+  fracturePackage: FracturePackage;
 }
 
 export class FractureComponent extends Component {
-  public readonly fracture: Fracture;
+  public readonly fracturePackage: FracturePackage;
   public readonly namespace: string;
 
-  constructor(fracture: Fracture) {
-    super(fracture.project);
+  constructor(fracturePackage: FracturePackage) {
+    super(fracturePackage.project);
 
-    this.fracture = fracture;
-    this.namespace = fracture.namespace;
+    this.fracturePackage = fracturePackage;
+    this.namespace = fracturePackage.namespace;
   }
 }

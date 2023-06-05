@@ -3,7 +3,7 @@ import { paramCase } from "change-case";
 import { deepMerge } from "projen/lib/util";
 import { AuditStrategy } from "./audit-strategy";
 import { FractureComponent } from "./component";
-import { Fracture } from "./fracture";
+import { FracturePackage } from "./fracture-package";
 import { NamingStrategy } from "./naming-strategy";
 import { Resource, ResourceOptions } from "./resource";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";
@@ -37,8 +37,8 @@ export class Service extends FractureComponent {
   // generators
   public readonly ts: TypescriptService;
 
-  constructor(fracture: Fracture, options: ServiceOptions) {
-    super(fracture);
+  constructor(fracturePackage: FracturePackage, options: ServiceOptions) {
+    super(fracturePackage);
     /***************************************************************************
      *
      * DEFAULT OPTIONS
@@ -47,10 +47,11 @@ export class Service extends FractureComponent {
      *
      **************************************************************************/
 
-    const { isVersioned, namingStrategy, auditStrategy } = fracture.options;
+    const { isVersioned, namingStrategy, auditStrategy } =
+      fracturePackage.options;
 
     let defaultOptions: Partial<ServiceOptions> = {
-      outdir: join(fracture.outdir, options.outdir ?? options.name),
+      outdir: join(fracturePackage.outdir, options.outdir ?? options.name),
       isVersioned,
       namingStrategy,
       auditStrategy,
@@ -63,7 +64,7 @@ export class Service extends FractureComponent {
      **************************************************************************/
 
     // inverse
-    this.fracture.services.push(this);
+    this.fracturePackage.services.push(this);
 
     // ensure name is param-cased
     const forcedOptions: Partial<ServiceOptions> = {

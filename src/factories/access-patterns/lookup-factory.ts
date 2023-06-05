@@ -16,7 +16,7 @@ export class LookupFactory extends FractureComponent {
   public readonly accessPattern: AccessPattern;
 
   constructor(resource: Resource) {
-    super(resource.fracture);
+    super(resource.fracturePackage);
 
     /***************************************************************************
      * DYNAMO

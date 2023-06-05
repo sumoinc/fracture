@@ -35,7 +35,7 @@ export class DynamoTable extends FractureComponent {
   public readonly options: Required<DynamoTableOptions>;
 
   constructor(service: Service, options: DynamoTableOptions = {}) {
-    super(service.fracture);
+    super(service.fracturePackage);
 
     /***************************************************************************
      *

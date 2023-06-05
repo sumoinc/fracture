@@ -32,11 +32,6 @@
       "type": "build"
     },
     {
-      "name": "aws-sdk",
-      "version": "2.1336.0",
-      "type": "build"
-    },
-    {
       "name": "eslint-config-prettier",
       "type": "build"
     },
@@ -109,11 +104,6 @@
       "type": "peer"
     },
     {
-      "name": "aws-sdk",
-      "version": "^2.1336.0",
-      "type": "peer"
-    },
-    {
       "name": "@aws-sdk/client-dynamodb",
       "type": "runtime"
     },
@@ -135,10 +125,6 @@
     },
     {
       "name": "change-case",
-      "type": "runtime"
-    },
-    {
-      "name": "jest-dynalite",
       "type": "runtime"
     },
     {

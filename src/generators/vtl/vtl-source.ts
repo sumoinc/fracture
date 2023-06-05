@@ -10,7 +10,7 @@ export class VtlSource extends SourceCode {
   constructor(service: Service, public readonly filePath: string) {
     super(
       service.project,
-      join(service.fracture.outdir, service.name, filePath)
+      join(service.fracturePackage.outdir, service.name, filePath)
     );
     return this;
   }

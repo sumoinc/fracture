@@ -1,19 +1,20 @@
 import { Task } from "projen";
+import { TypeScriptProjectOptions } from "projen/lib/typescript";
 import {
-  TypeScriptProject,
-  TypeScriptProjectOptions,
-} from "projen/lib/typescript";
-import { Fracture, FractureOptions } from "../src";
+  FracturePackage,
+  FracturePackageOptions,
+  FractureProject,
+} from "../src";
 
-export class TestFracture extends Fracture {
-  constructor(options: FractureOptions = {}) {
+export class TestFracturePackage extends FracturePackage {
+  constructor(options: FracturePackageOptions = {}) {
     super(new TestProject({ logging: options.logging }), "my-fracture", {
       ...options,
     });
   }
 }
 
-export class TestProject extends TypeScriptProject {
+export class TestProject extends FractureProject {
   constructor(
     options: Omit<
       TypeScriptProjectOptions,

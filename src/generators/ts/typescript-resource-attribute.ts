@@ -16,7 +16,7 @@ export class TypescriptResourceAttribute extends FractureComponent {
   public readonly resourceAttribute: ResourceAttribute;
 
   constructor(resourceAttribute: ResourceAttribute) {
-    super(resourceAttribute.fracture);
+    super(resourceAttribute.fracturePackage);
 
     //this.tsResource = tsResource;
     this.resourceAttribute = resourceAttribute;

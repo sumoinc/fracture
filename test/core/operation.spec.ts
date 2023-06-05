@@ -4,7 +4,7 @@ test("placeholder", () => {
 
 /*
 const myService = () => {
-  return new Service(new TestFracture(), { name: "tenant" });
+  return new Service(new TestFracturePackage(), { name: "tenant" });
 };
 
 const myResource = () => {

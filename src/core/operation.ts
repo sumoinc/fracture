@@ -60,7 +60,7 @@ export class Operation extends FractureComponent {
   public readonly tsDynamoCommand: DynamoCommand;
 
   constructor(accessPattern: AccessPattern, options: OperationOptions) {
-    super(accessPattern.fracture);
+    super(accessPattern.fracturePackage);
 
     /***************************************************************************
      *
@@ -123,9 +123,13 @@ export class Operation extends FractureComponent {
         ? this.resource.pluralName
         : this.resource.name;
     const prefix =
-      this.fracture.namingStrategy.operations.prefixes[this.operationSubType];
+      this.fracturePackage.namingStrategy.operations.prefixes[
+        this.operationSubType
+      ];
     const suffix =
-      this.fracture.namingStrategy.operations.suffixes[this.operationSubType];
+      this.fracturePackage.namingStrategy.operations.suffixes[
+        this.operationSubType
+      ];
 
     return [prefix, resourceName, suffix]
       .filter((part) => part.length > 0)

@@ -9,7 +9,7 @@ export class TypescriptStructure extends FractureComponent {
   public readonly structure: Structure;
 
   constructor(structure: Structure) {
-    super(structure.fracture);
+    super(structure.fracturePackage);
 
     //this.tsResource = tsResource;
     this.structure = structure;

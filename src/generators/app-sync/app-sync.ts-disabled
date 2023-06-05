@@ -6,7 +6,7 @@ export class AppSync extends FractureComponent {
   public readonly service: Service;
 
   constructor(service: Service) {
-    super(service.fracture);
+    super(service.fracturePackage);
 
     this.service = service;
   }

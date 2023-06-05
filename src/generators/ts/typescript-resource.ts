@@ -5,7 +5,7 @@ export class TypescriptResource extends FractureComponent {
   public readonly resource: Resource;
 
   constructor(resource: Resource) {
-    super(resource.fracture);
+    super(resource.fracturePackage);
 
     this.resource = resource;
 

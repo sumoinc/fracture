@@ -243,7 +243,7 @@ export class ResourceAttribute extends FractureComponent {
   public readonly ts: TypescriptResourceAttribute;
 
   constructor(resource: Resource, options: ResourceAttributeOptions) {
-    super(resource.fracture);
+    super(resource.fracturePackage);
 
     /***************************************************************************
      *

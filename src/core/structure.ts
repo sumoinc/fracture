@@ -57,7 +57,7 @@ export class Structure extends FractureComponent {
   public readonly ts: TypescriptStructure;
 
   constructor(resource: Resource, options: StructureOptions) {
-    super(resource.fracture);
+    super(resource.fracturePackage);
 
     /***************************************************************************
      *
@@ -127,7 +127,8 @@ export class Structure extends FractureComponent {
       ? this.operation.name
       : this.resource.name;
     const prefix = this.namingStrategy.structures.prefixes[this.type];
-    const suffix = this.fracture.namingStrategy.structures.suffixes[this.type];
+    const suffix =
+      this.fracturePackage.namingStrategy.structures.suffixes[this.type];
 
     return [prefix, resourceName, suffix]
       .filter((part) => part.length > 0)

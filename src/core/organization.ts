@@ -1,6 +1,6 @@
 import { Account, AccountOptions } from "./account";
 import { FractureComponent } from "./component";
-import { Fracture } from "./fracture";
+import { FracturePackage } from "./fracture-package";
 import {
   OrganizationalUnit,
   OrganizationalUnitOptions,
@@ -20,8 +20,8 @@ export class Organization extends FractureComponent {
   // all other options
   public readonly options: OrganizationOptions;
 
-  constructor(fracture: Fracture, options: OrganizationOptions) {
-    super(fracture);
+  constructor(fracturePackage: FracturePackage, options: OrganizationOptions) {
+    super(fracturePackage);
 
     /***************************************************************************
      *
@@ -34,7 +34,7 @@ export class Organization extends FractureComponent {
     this.organizationalUnits = [];
 
     // parents + inverse
-    this.fracture.organizations.push(this);
+    this.fracturePackage.organizations.push(this);
 
     // all other options
     this.options = options;
