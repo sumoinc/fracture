@@ -1,6 +1,6 @@
 import { join } from "path";
 import { paramCase } from "change-case";
-import { Component, LoggerOptions } from "projen";
+import { LoggerOptions, Project } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
@@ -36,10 +36,12 @@ export interface ServiceOptions {
   auditStrategy?: AuditStrategy;
 }
 
-export class Service extends Component {
+export class Service {
   // member components
   public readonly resources: Resource[] = [];
   public readonly dynamoTable: DynamoTable;
+  public readonly dynaliteSupport: DynaliteSupport;
+  public readonly project: Project;
   // parent
   public readonly fracture: Fracture;
   // all other options
@@ -64,7 +66,7 @@ export class Service extends Component {
 
     // all other options
     const mergedOptions = deepMerge([
-      fracture.options,
+      { ...fracture.options },
       options,
       forcedOptions,
     ]) as Required<ServiceOptions>;
@@ -95,12 +97,10 @@ export class Service extends Component {
         tsconfigPath: "./**/tsconfig.dev.json",
       },
     });
-    super(project);
+    this.project = project;
 
     this.fracture = fracture;
     this.options = mergedOptions;
-
-    console.log("project", project.outdir);
 
     /***************************************************************************
      *
@@ -108,9 +108,22 @@ export class Service extends Component {
      *
      **************************************************************************/
 
+    this.fracture.logger.info("-".repeat(80));
+    this.fracture.logger.info(`INIT Service: "${this.name}"`);
+    this.fracture.logger.info("-".repeat(80));
+
     // inverse
+    this.fracture.services.forEach((service) => {
+      this.fracture.logger.warn(
+        `SVC in fracture before push: "${service.name}"`
+      );
+    });
     this.fracture.services.push(this);
-    this.project.logger.info(`INIT Service: "${this.name}"`);
+    this.fracture.services.forEach((service) => {
+      this.fracture.logger.warn(
+        `SVC in fracture after push: "${service.name}"`
+      );
+    });
 
     /***************************************************************************
      *
@@ -123,7 +136,7 @@ export class Service extends Component {
     this.dynamoTable = new DynamoTable(this);
 
     // add Dynalite support for Jest tests
-    new DynaliteSupport(this);
+    this.dynaliteSupport = new DynaliteSupport(this);
 
     /***************************************************************************
      *
@@ -138,6 +151,7 @@ export class Service extends Component {
 
   public build() {
     this.project.logger.info(`BUILD Service: "${this.name}"`);
+    this.dynaliteSupport.build();
     this.resources.forEach((resource) => {
       resource.build();
     });
@@ -171,7 +185,12 @@ export class Service extends Component {
    */
   public get serviceIndex() {
     const { services } = this.fracture;
-    return services.findIndex((p) => p.name === this.name) || 0;
+    return (
+      services.findIndex((p) => {
+        //console.log(p.name, this.name);
+        return p.name === this.name;
+      }) || 0
+    );
   }
 
   /*****************************************************************************

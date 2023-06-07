@@ -13,7 +13,6 @@ export class TypescriptService extends Component {
 
     this.service = service;
 
-    this.project.logger.info("-".repeat(80));
     this.project.logger.info(`TS:INIT Service: "${this.service.name}"`);
 
     // typefile we'll decorate with more types in some other places

@@ -9,9 +9,7 @@ export class TypeScriptSource extends SourceCode {
   constructor(fractureComponent: Component, public readonly filePath: string) {
     super(fractureComponent.project, filePath);
 
-    this.project.logger.info(
-      `TS:INIT Source File: "${this.filePath}  ${this.fileName}"`
-    );
+    this.project.logger.info(`TS:INIT Source File: "${this.fileName}"`);
 
     return this;
   }

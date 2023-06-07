@@ -210,6 +210,10 @@ export class Fracture extends TypeScriptProject {
 
     // configure turborepo
     this.turborepo = new TurboRepo(this);
+
+    this.logger.info("=".repeat(80));
+    this.logger.info("INIT PHASE");
+    this.logger.info("=".repeat(80));
   }
 
   public get packageRoot(): string {
@@ -268,7 +272,10 @@ export class Fracture extends TypeScriptProject {
    * @returns void
    */
   public build() {
-    this.logger.info(`BUILD Fracture: "${this.name}"`);
+    this.logger.info("=".repeat(80));
+    this.logger.info("BUILD PHASE");
+    this.logger.info("=".repeat(80));
+
     this.turborepo.build();
     this.services.forEach((service) => {
       service.build();

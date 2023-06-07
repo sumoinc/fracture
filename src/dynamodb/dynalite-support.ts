@@ -79,6 +79,8 @@ export class DynaliteSupport extends Component {
 
     this.service = service;
 
+    console.log("service:", this.service.name);
+
     // pull the project for this service
     const project = service.project as TypeScriptProject;
 
@@ -104,13 +106,11 @@ export class DynaliteSupport extends Component {
   }
 
   // build out the dynalite config
-  preSynthesize() {
+  build() {
     // pull the project for this service
-
     const allGsi = this.service.dynamoTable.dynamoGsi.filter(
       (gsi) => gsi !== this.service.dynamoTable.keyDynamoGsi
     );
-
     const config = {
       tables: [
         {
@@ -168,6 +168,5 @@ export class DynaliteSupport extends Component {
     );
 
     this.dynaliteConfig.line("");
-    super.preSynthesize();
   }
 }
