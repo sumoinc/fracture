@@ -55,3 +55,4 @@ junit.xml
 !/.vscode/settings.json
 !/.vscode/extensions.json
 .turbo
+!/turbo.json

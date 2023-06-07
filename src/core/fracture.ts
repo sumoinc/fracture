@@ -61,6 +61,7 @@ export class Fracture extends TypeScriptProject {
   // member components
   public readonly services: Service[] = [];
   public readonly organizations: Organization[] = [];
+  private readonly turborepo: TurboRepo;
   // all other options
   public readonly options: Required<FractureOptions>;
 
@@ -208,7 +209,7 @@ export class Fracture extends TypeScriptProject {
     new VsCodeConfiguration(this);
 
     // configure turborepo
-    new TurboRepo(this);
+    this.turborepo = new TurboRepo(this);
   }
 
   public get packageRoot(): string {
@@ -268,6 +269,7 @@ export class Fracture extends TypeScriptProject {
    */
   public build() {
     this.logger.info(`BUILD Fracture: "${this.name}"`);
+    this.turborepo.build();
     this.services.forEach((service) => {
       service.build();
     });

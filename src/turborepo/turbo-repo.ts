@@ -45,23 +45,19 @@ export class TurboRepo extends Component {
           "//#default": {
             cache: false,
           },
-          /*
           "pre-compile": {
             dependsOn: [],
             cache: false,
           },
-          */
           compile: {
-            //dependsOn: ["pre-compile"],
+            dependsOn: ["pre-compile"],
             outputs: ["dist/**", "lib/**"],
             outputMode: "new-only",
           },
-          /*
           "post-compile": {
             dependsOn: ["compile"],
             cache: false,
           },
-          */
           test: {
             dependsOn: ["compile"],
             outputs: ["coverage**", "test-reports/**"],

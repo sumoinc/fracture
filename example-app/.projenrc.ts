@@ -13,8 +13,6 @@ const fracture = new Fracture({
 
 fracture.npmignore!.exclude("packages");
 
-//const identityPackage = new FracturePackage(project, "identity");
-//const userService = identityPackage.addService({ name: "user" });
 const userService = fracture.addService({ name: "user" });
 const user = userService.addResource({ name: "user" });
 user.addResourceAttribute({
