@@ -1,19 +1,17 @@
 import { dirname, join, relative, sep } from "path";
-import { SourceCode } from "projen";
-import { FractureComponent } from "../../core/component";
+import { Component, SourceCode } from "projen";
 
 /**
  * Build a TypeScript file and make sure it's marked as being managed by
  * projen.
  */
 export class TypeScriptSource extends SourceCode {
-  constructor(
-    fractureComponent: FractureComponent,
-    public readonly filePath: string
-  ) {
+  constructor(fractureComponent: Component, public readonly filePath: string) {
     super(fractureComponent.project, filePath);
 
-    this.project.logger.info(`TS:INIT Source File: "${this.fileName}"`);
+    this.project.logger.info(
+      `TS:INIT Source File: "${this.filePath}  ${this.fileName}"`
+    );
 
     return this;
   }

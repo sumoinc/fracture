@@ -1,11 +1,12 @@
+import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
+import { DynamoCommand, TypescriptOperation } from "../generators";
 import { AccessPattern } from "./access-pattern";
-import { FractureComponent } from "./component";
+
 import { Resource } from "./resource";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
-import { DynamoCommand, TypescriptOperation } from "../generators";
 
 /******************************************************************************
  * TYPES
@@ -46,7 +47,7 @@ export const OPERATION_SUB_TYPE = {
   READ_VERSION: "ReadVersion",
 } as const;
 
-export class Operation extends FractureComponent {
+export class Operation extends Component {
   // member components
   // parents
   public readonly accessPattern: AccessPattern;
@@ -60,7 +61,7 @@ export class Operation extends FractureComponent {
   public readonly tsDynamoCommand: DynamoCommand;
 
   constructor(accessPattern: AccessPattern, options: OperationOptions) {
-    super(accessPattern.fracturePackage);
+    super(accessPattern.project);
 
     /***************************************************************************
      *
@@ -123,13 +124,9 @@ export class Operation extends FractureComponent {
         ? this.resource.pluralName
         : this.resource.name;
     const prefix =
-      this.fracturePackage.namingStrategy.operations.prefixes[
-        this.operationSubType
-      ];
+      this.service.namingStrategy.operations.prefixes[this.operationSubType];
     const suffix =
-      this.fracturePackage.namingStrategy.operations.suffixes[
-        this.operationSubType
-      ];
+      this.service.namingStrategy.operations.suffixes[this.operationSubType];
 
     return [prefix, resourceName, suffix]
       .filter((part) => part.length > 0)

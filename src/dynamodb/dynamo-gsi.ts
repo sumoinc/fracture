@@ -1,9 +1,9 @@
 import { paramCase } from "change-case";
+import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { DynamoTable } from "./dynamo-table";
-import { FractureComponent } from "../core/component";
 import { Service } from "../core/service";
+import { DynamoTable } from "./dynamo-table";
 
 export const DYNAMO_GSI_TYPE = {
   /**
@@ -27,7 +27,7 @@ export interface DynamoGsiOptions {
   type?: ValueOf<typeof DYNAMO_GSI_TYPE>;
 }
 
-export class DynamoGsi extends FractureComponent {
+export class DynamoGsi extends Component {
   // parent
   public readonly dynamoTable: DynamoTable;
   // member components
@@ -35,7 +35,7 @@ export class DynamoGsi extends FractureComponent {
   public readonly options: Required<DynamoGsiOptions>;
 
   constructor(dynamoTable: DynamoTable, options: DynamoGsiOptions = {}) {
-    super(dynamoTable.fracturePackage);
+    super(dynamoTable.project);
 
     /***************************************************************************
      *

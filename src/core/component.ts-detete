@@ -1,0 +1,11 @@
+import { Component, Project } from "projen";
+
+export class FractureComponent extends Component {
+  public readonly project: Project;
+
+  constructor(project: Project) {
+    super(project);
+
+    this.project = project;
+  }
+}

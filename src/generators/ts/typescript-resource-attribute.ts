@@ -1,4 +1,4 @@
-import { FractureComponent } from "../../core/component";
+import { Component } from "projen";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Operation } from "../../core/operation";
 import { Resource } from "../../core/resource";
@@ -9,14 +9,14 @@ import {
 } from "../../core/resource-attribute";
 import { Service } from "../../core/service";
 
-export class TypescriptResourceAttribute extends FractureComponent {
+export class TypescriptResourceAttribute extends Component {
   // parent
   //public readonly tsResource: TypescriptResource;
   // source
   public readonly resourceAttribute: ResourceAttribute;
 
   constructor(resourceAttribute: ResourceAttribute) {
-    super(resourceAttribute.fracturePackage);
+    super(resourceAttribute.project);
 
     //this.tsResource = tsResource;
     this.resourceAttribute = resourceAttribute;

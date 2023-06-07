@@ -1,9 +1,9 @@
+import { Component } from "projen";
 import {
   AccessPattern,
   AccessPatternOptions,
   ACCESS_PATTERN_TYPE,
 } from "../../core/access-pattern";
-import { FractureComponent } from "../../core/component";
 import {
   Operation,
   OPERATION_SUB_TYPE,
@@ -15,11 +15,11 @@ import {
   ResourceAttributeType,
 } from "../../core/resource-attribute";
 
-export class IdentifierFactory extends FractureComponent {
+export class IdentifierFactory extends Component {
   public readonly accessPattern: AccessPattern;
 
   constructor(resource: Resource) {
-    super(resource.fracturePackage);
+    super(resource.project);
 
     /***************************************************************************
      * DYNAMO

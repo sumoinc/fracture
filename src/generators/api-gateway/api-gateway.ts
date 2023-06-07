@@ -1,8 +1,8 @@
-import { FractureComponent } from "../../core/component";
+import { Component } from "projen";
 import { Service } from "../../core/service";
 
-export class ApiGateway extends FractureComponent {
+export class ApiGateway extends Component {
   constructor(service: Service) {
-    super(service.fracturePackage);
+    super(service.fracture);
   }
 }

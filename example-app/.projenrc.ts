@@ -1,20 +1,21 @@
-import { FracturePackage, FractureProject } from "@sumoc/fracture";
+import { Fracture } from "@sumoc/fracture";
 
-const project = new FractureProject({
+const fracture = new Fracture({
   name: "example-app",
 
+  // delow are non standard - used for this example to make it work right.
   deps: ["@sumoc/fracture@../src"],
-
   eslintOptions: {
     dirs: ["src"],
     tsconfigPath: "./**/tsconfig.dev.json",
   },
 });
 
-project.npmignore!.exclude("packages");
+fracture.npmignore!.exclude("packages");
 
-const identityPackage = new FracturePackage(project, "identity");
-const userService = identityPackage.addService({ name: "user" });
+//const identityPackage = new FracturePackage(project, "identity");
+//const userService = identityPackage.addService({ name: "user" });
+const userService = fracture.addService({ name: "user" });
 const user = userService.addResource({ name: "user" });
 user.addResourceAttribute({
   name: "first-name",
@@ -27,6 +28,7 @@ user.addResourceAttribute({
   isRequired: true,
 });
 
+/*
 const campanyPackage = new FracturePackage(project, "company");
 const companyService = campanyPackage.addService({ name: "company" });
 const company = companyService.addResource({ name: "company" });
@@ -35,7 +37,8 @@ company.addResourceAttribute({
   shortName: "nm",
   isRequired: true,
 });
+*/
 
 // builds all packages
-project.build();
-project.synth();
+fracture.build();
+fracture.synth();

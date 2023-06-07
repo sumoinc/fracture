@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
-import { DynamoGsi, DYNAMO_GSI_TYPE } from "./dynamo-gsi";
-import { FractureComponent } from "../core/component";
+import { Component } from "projen";
 import { Service } from "../core/service";
+import { DynamoGsi, DYNAMO_GSI_TYPE } from "./dynamo-gsi";
 
 export interface DynamoTableOptions {
   /**
@@ -26,7 +26,7 @@ export interface DynamoTableOptions {
   lookupName?: string;
 }
 
-export class DynamoTable extends FractureComponent {
+export class DynamoTable extends Component {
   // parent
   public readonly service: Service;
   // member components
@@ -35,7 +35,7 @@ export class DynamoTable extends FractureComponent {
   public readonly options: Required<DynamoTableOptions>;
 
   constructor(service: Service, options: DynamoTableOptions = {}) {
-    super(service.fracturePackage);
+    super(service.project);
 
     /***************************************************************************
      *

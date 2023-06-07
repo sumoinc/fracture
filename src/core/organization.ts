@@ -1,6 +1,6 @@
+import { Component } from "projen";
 import { Account, AccountOptions } from "./account";
-import { FractureComponent } from "./component";
-import { FracturePackage } from "./fracture-package";
+import { Fracture } from "./fracture";
 import {
   OrganizationalUnit,
   OrganizationalUnitOptions,
@@ -12,16 +12,17 @@ export interface OrganizationOptions {
   ssoRegion?: string;
 }
 
-export class Organization extends FractureComponent {
+export class Organization extends Component {
   // member components
   public readonly accounts: Account[];
   public readonly organizationalUnits: OrganizationalUnit[];
   // parent
+  public readonly fracture: Fracture;
   // all other options
   public readonly options: OrganizationOptions;
 
-  constructor(fracturePackage: FracturePackage, options: OrganizationOptions) {
-    super(fracturePackage);
+  constructor(fracture: Fracture, options: OrganizationOptions) {
+    super(fracture);
 
     /***************************************************************************
      *
@@ -29,12 +30,14 @@ export class Organization extends FractureComponent {
      *
      **************************************************************************/
 
+    this.fracture = fracture;
+
     // member components
     this.accounts = [];
     this.organizationalUnits = [];
 
     // parents + inverse
-    this.fracturePackage.organizations.push(this);
+    this.fracture.organizations.push(this);
 
     // all other options
     this.options = options;

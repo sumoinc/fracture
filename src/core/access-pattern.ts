@@ -1,6 +1,8 @@
+import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { FractureComponent } from "./component";
+import { DynamoGsi } from "../dynamodb/dynamo-gsi";
+import { DynamoTable } from "../dynamodb/dynamo-table";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
@@ -8,8 +10,6 @@ import {
   ResourceAttributeGenerator,
   ResourceAttributeOptions,
 } from "./resource-attribute";
-import { DynamoGsi } from "../dynamodb/dynamo-gsi";
-import { DynamoTable } from "../dynamodb/dynamo-table";
 
 export const ACCESS_PATTERN_TYPE = {
   /**
@@ -33,7 +33,7 @@ export interface AccessPatternOptions {
   type?: ValueOf<typeof ACCESS_PATTERN_TYPE>;
 }
 
-export class AccessPattern extends FractureComponent {
+export class AccessPattern extends Component {
   // member components
   public pkAttribute: ResourceAttribute;
   public skAttribute: ResourceAttribute;
@@ -44,7 +44,7 @@ export class AccessPattern extends FractureComponent {
   public readonly options: Required<AccessPatternOptions>;
 
   constructor(resource: Resource, options: AccessPatternOptions) {
-    super(resource.fracturePackage);
+    super(resource.project);
 
     /***************************************************************************
      *

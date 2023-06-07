@@ -1,11 +1,12 @@
 import { paramCase } from "change-case";
+import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
+import { TypescriptResourceAttribute } from "../generators/ts/typescript-resource-attribute";
 import { AccessPattern } from "./access-pattern";
-import { FractureComponent } from "./component";
+
 import { Operation, OperationDefault, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
-import { TypescriptResourceAttribute } from "../generators/ts/typescript-resource-attribute";
 
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
@@ -232,7 +233,7 @@ export type ResourceAttributeOptions = {
   compositionSeperator?: string;
 };
 
-export class ResourceAttribute extends FractureComponent {
+export class ResourceAttribute extends Component {
   // member components
   public readonly compositionSources: ResourceAttribute[] = [];
   // parent
@@ -243,7 +244,7 @@ export class ResourceAttribute extends FractureComponent {
   public readonly ts: TypescriptResourceAttribute;
 
   constructor(resource: Resource, options: ResourceAttributeOptions) {
-    super(resource.fracturePackage);
+    super(resource.project);
 
     /***************************************************************************
      *

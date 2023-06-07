@@ -1,16 +1,16 @@
 import { Component, YamlFile } from "projen";
-import { FractureProject } from "../core";
+import { Fracture } from "../core";
 
 export class PnpmWorkspace extends Component {
-  constructor(fractureProject: FractureProject) {
-    super(fractureProject);
+  constructor(fracture: Fracture) {
+    super(fracture);
 
-    const { packageDir, appDir } = fractureProject;
+    const { packageRoot, appRoot } = fracture;
 
     // write pnpm-workspace.yml file
     new YamlFile(this.project, "pnpm-workspace.yaml", {
       obj: {
-        packages: [`${packageDir}/*`, `${appDir}/*`],
+        packages: [`${packageRoot}/*`, `${appRoot}/*`],
       },
     });
   }

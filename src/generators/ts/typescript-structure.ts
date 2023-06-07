@@ -1,15 +1,15 @@
-import { FractureComponent } from "../../core/component";
+import { Component } from "projen";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Resource } from "../../core/resource";
 import { Service } from "../../core/service";
 import { Structure } from "../../core/structure";
 
-export class TypescriptStructure extends FractureComponent {
+export class TypescriptStructure extends Component {
   // source
   public readonly structure: Structure;
 
   constructor(structure: Structure) {
-    super(structure.fracturePackage);
+    super(structure.project);
 
     //this.tsResource = tsResource;
     this.structure = structure;

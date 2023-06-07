@@ -1,7 +1,12 @@
 import { paramCase } from "change-case";
+import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
+import { DynamoTable } from "../dynamodb/dynamo-table";
+import { IdentifierFactory } from "../factories/access-patterns/identifier-factory";
+import { LookupFactory } from "../factories/access-patterns/lookup-factory";
+import { VersionedIdentifierFactory } from "../factories/access-patterns/versioned-identifier-factory";
+import { TypescriptResource } from "../generators/ts/typescript-resource";
 import { AccessPattern } from "./access-pattern";
-import { FractureComponent } from "./component";
 import { Operation } from "./operation";
 import {
   ResourceAttribute,
@@ -9,11 +14,6 @@ import {
 } from "./resource-attribute";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
-import { DynamoTable } from "../dynamodb/dynamo-table";
-import { IdentifierFactory } from "../factories/access-patterns/identifier-factory";
-import { LookupFactory } from "../factories/access-patterns/lookup-factory";
-import { VersionedIdentifierFactory } from "../factories/access-patterns/versioned-identifier-factory";
-import { TypescriptResource } from "../generators/ts/typescript-resource";
 
 export interface ResourceOptions {
   /**
@@ -45,7 +45,7 @@ export interface ResourceOptions {
   compositionSeperator?: string;
 }
 
-export class Resource extends FractureComponent {
+export class Resource extends Component {
   // member components
   public attributes: ResourceAttribute[] = [];
   public operations: Operation[] = [];
@@ -61,7 +61,7 @@ export class Resource extends FractureComponent {
   public readonly ts: TypescriptResource;
 
   constructor(service: Service, options: ResourceOptions) {
-    super(service.fracturePackage);
+    super(service.project);
 
     /***************************************************************************
      *

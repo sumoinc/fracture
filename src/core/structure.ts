@@ -1,6 +1,7 @@
+import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { SetRequired, ValueOf } from "type-fest";
-import { FractureComponent } from "./component";
+import { TypescriptStructure } from "../generators/ts/typescript-structure";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
@@ -8,7 +9,6 @@ import {
   ResourceAttributeGenerator,
 } from "./resource-attribute";
 import { Service } from "./service";
-import { TypescriptStructure } from "../generators/ts/typescript-structure";
 
 /******************************************************************************
  * TYPES
@@ -47,7 +47,7 @@ export const STRUCTURE_TYPE = {
  * CLASS
  *****************************************************************************/
 
-export class Structure extends FractureComponent {
+export class Structure extends Component {
   // member components
   // parent
   public readonly resource: Resource;
@@ -57,7 +57,7 @@ export class Structure extends FractureComponent {
   public readonly ts: TypescriptStructure;
 
   constructor(resource: Resource, options: StructureOptions) {
-    super(resource.fracturePackage);
+    super(resource.project);
 
     /***************************************************************************
      *
@@ -127,8 +127,7 @@ export class Structure extends FractureComponent {
       ? this.operation.name
       : this.resource.name;
     const prefix = this.namingStrategy.structures.prefixes[this.type];
-    const suffix =
-      this.fracturePackage.namingStrategy.structures.suffixes[this.type];
+    const suffix = this.namingStrategy.structures.suffixes[this.type];
 
     return [prefix, resourceName, suffix]
       .filter((part) => part.length > 0)

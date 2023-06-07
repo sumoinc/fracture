@@ -1,11 +1,11 @@
+import { Component } from "projen";
 import { Account } from "./account";
-import { FractureComponent } from "./component";
 
 export interface RegionOptions {
   id: string;
 }
 
-export class Region extends FractureComponent {
+export class Region extends Component {
   // member components
   // parent
   public readonly account: Account;
@@ -13,7 +13,7 @@ export class Region extends FractureComponent {
   public readonly options: RegionOptions;
 
   constructor(account: Account, options: RegionOptions) {
-    super(account.fracturePackage);
+    super(account.project);
 
     /***************************************************************************
      *

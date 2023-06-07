@@ -1,15 +1,15 @@
 import { join } from "path";
-import { TypeScriptSource } from "./typescript-source";
-import { FractureComponent } from "../../core/component";
+import { Component } from "projen";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Service } from "../../core/service";
+import { TypeScriptSource } from "./typescript-source";
 
-export class TypescriptService extends FractureComponent {
+export class TypescriptService extends Component {
   public readonly service: Service;
   public readonly typeFile: TypeScriptSource;
 
   constructor(service: Service) {
-    super(service.fracturePackage);
+    super(service.project);
 
     this.service = service;
 
@@ -89,16 +89,11 @@ export class TypescriptService extends FractureComponent {
    ****************************************************************************/
 
   public get outdir() {
-    return join(
-      this.fracturePackage.outdir,
-      "services",
-      this.service.name,
-      "ts"
-    );
+    return join(this.service.srcDir, "ts");
   }
 
   public get typedir() {
-    return join(this.fracturePackage.outdir, "types");
+    return join(this.outdir, "types");
   }
 
   public get dynamoCommandDir() {

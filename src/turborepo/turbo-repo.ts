@@ -1,15 +1,15 @@
 import { Component, JsonFile } from "projen";
-import { FractureProject } from "../core";
+import { Fracture } from "../core";
 
 export class TurboRepo extends Component {
-  public static buildTask(fractureProject: FractureProject) {
-    const maybeTask = fractureProject.tasks.tryFind("build:turbo");
+  public static buildTask(fracture: Fracture) {
+    const maybeTask = fracture.tasks.tryFind("build:turbo");
 
     if (maybeTask) {
       return maybeTask;
     }
 
-    const task = fractureProject.addTask("build:turbo", {
+    const task = fracture.addTask("build:turbo", {
       description: "Build using turborepo.",
     });
 
@@ -18,16 +18,16 @@ export class TurboRepo extends Component {
     return task;
   }
 
-  public fractureProject: FractureProject;
+  public fracture: Fracture;
 
-  constructor(fractureProject: FractureProject) {
-    super(fractureProject);
+  constructor(fracture: Fracture) {
+    super(fracture);
 
-    this.fractureProject = fractureProject;
+    this.fracture = fracture;
 
-    fractureProject.addGitIgnore(".turbo");
-    fractureProject.npmignore!.exclude(".turbo");
-    fractureProject.npmignore!.exclude("turbo.json");
+    fracture.addGitIgnore(".turbo");
+    fracture.npmignore!.exclude(".turbo");
+    fracture.npmignore!.exclude("turbo.json");
   }
 
   /**

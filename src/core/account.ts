@@ -1,4 +1,4 @@
-import { FractureComponent } from "./component";
+import { Component } from "projen";
 import { Organization } from "./organization";
 import { OrganizationalUnit } from "./organizational-unit";
 import { Region, RegionOptions } from "./region";
@@ -11,7 +11,7 @@ export interface AccountOptions {
   organizationalUnit?: OrganizationalUnit;
 }
 
-export class Account extends FractureComponent {
+export class Account extends Component {
   // member components
   public readonly regions: Region[];
   // parent
@@ -20,7 +20,7 @@ export class Account extends FractureComponent {
   public readonly options: AccountOptions;
 
   constructor(organization: Organization, options: AccountOptions) {
-    super(organization.fracturePackage);
+    super(organization.project);
 
     /***************************************************************************
      *

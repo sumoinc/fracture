@@ -1,8 +1,9 @@
-import { FractureComponent } from "../core/component";
-import { FracturePackage } from "../core/fracture-package";
+import { Component } from "projen";
+import { TypeScriptProject } from "projen/lib/typescript";
+import { Service } from "../core";
 import { TypeScriptSource } from "../generators/ts/typescript-source";
 
-export class DynaliteSupport extends FractureComponent {
+export class DynaliteSupport extends Component {
   /**
    *
    * Writes a dynalite testable dynamo client to a typescript input file.
@@ -71,11 +72,15 @@ export class DynaliteSupport extends FractureComponent {
   }
 
   public readonly dynaliteConfig: TypeScriptSource;
+  public readonly service: Service;
 
-  constructor(fracturePackage: FracturePackage) {
-    super(fracturePackage);
+  constructor(service: Service) {
+    super(service.project);
 
-    const { project } = this.fracturePackage;
+    this.service = service;
+
+    // pull the project for this service
+    const project = service.project as TypeScriptProject;
 
     // add dynalite
     project.addDeps("jest-dynalite");
@@ -100,8 +105,9 @@ export class DynaliteSupport extends FractureComponent {
 
   // build out the dynalite config
   preSynthesize() {
+    // pull the project for this service
     const config = {
-      tables: this.fracturePackage.services.map((service) => {
+      tables: this.service.fracture.services.map((service) => {
         const allGsi = service.dynamoTable.dynamoGsi.filter(
           (gsi) => gsi !== service.dynamoTable.keyDynamoGsi
         );
@@ -150,7 +156,7 @@ export class DynaliteSupport extends FractureComponent {
           },
         };
       }),
-      basePort: 8000 + this.fracturePackage.packageIndex * 100,
+      basePort: 8000 + this.service.serviceIndex * 100,
     };
 
     this.dynaliteConfig.line(
