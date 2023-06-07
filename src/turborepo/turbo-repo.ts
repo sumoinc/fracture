@@ -2,8 +2,17 @@ import { Component, JsonFile } from "projen";
 import { Fracture } from "../core";
 
 export const TURBO_BUILD_COMMAND = "turbo:build";
+export const TURBO_SYNTH_COMMAND = "turbo:synth";
+export const TURBO_DEPLOY_COMMAND = "turbo:deploy";
 
 export class TurboRepo extends Component {
+  /**
+   * Makea this static so it can be called by projen when building other
+   * dependancies.
+   *
+   * @param fracture
+   * @returns
+   */
   public static buildTask(fracture: Fracture) {
     const maybeTask = fracture.tasks.tryFind(TURBO_BUILD_COMMAND);
 
@@ -30,6 +39,14 @@ export class TurboRepo extends Component {
     fracture.addGitIgnore(".turbo");
     fracture.npmignore!.exclude(".turbo");
     fracture.npmignore!.exclude("turbo.json");
+
+    /**
+     * Define synth and deploy tasks.
+     */
+    const synthTask = fracture.addTask(TURBO_SYNTH_COMMAND, {
+      description: "Synth all Cloud Assembly.",
+    });
+    synthTask.exec(`pnpm turbo synth`);
   }
 
   /**
@@ -67,6 +84,11 @@ export class TurboRepo extends Component {
           },
           package: {
             dependsOn: ["test"],
+            outputMode: "new-only",
+          },
+          synth: {
+            dependsOn: [],
+            outputs: ["cdk-out/**"],
             outputMode: "new-only",
           },
         },

@@ -1,6 +1,6 @@
 import { join } from "path";
 import { paramCase } from "change-case";
-import { Project } from "projen";
+import { JsonFile, Project } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
@@ -61,6 +61,7 @@ export class FractureApp {
       pnpmVersion: "8",
       prettier: true,
       projenrcTs: true,
+      deps: ["aws-cdk", "aws-cdk-lib", "constructs"],
       eslintOptions: {
         dirs: ["src"],
         tsconfigPath: "./**/tsconfig.dev.json",
@@ -83,6 +84,25 @@ export class FractureApp {
 
     // inverse
     this.fracture.apps.push(this);
+
+    /***************************************************************************
+     *
+     * CDK CONFIG
+     *
+     **************************************************************************/
+
+    new JsonFile(this.project, "cdk.json", {
+      obj: {
+        app: "npx ts-node --prefer-ts-exts src/build.ts",
+        requireApproval: "never",
+      },
+    });
+
+    /***************************************************************************
+     *
+     * CDK SYNTH COMMAND=
+     *
+     **************************************************************************/
 
     return this;
   }

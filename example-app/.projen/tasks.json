@@ -212,6 +212,15 @@
         }
       ]
     },
+    "turbo:synth": {
+      "name": "turbo:synth",
+      "description": "Synth all Cloud Assembly.",
+      "steps": [
+        {
+          "exec": "pnpm turbo synth"
+        }
+      ]
+    },
     "unbump": {
       "name": "unbump",
       "description": "Restores version to 0.0.0",
