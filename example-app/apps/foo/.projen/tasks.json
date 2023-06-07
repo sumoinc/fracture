@@ -96,7 +96,7 @@
       "description": "Synth Cloud Assembly.",
       "steps": [
         {
-          "exec": "pnpm cdk synth"
+          "exec": "pnpm cdk synth -q"
         }
       ]
     },

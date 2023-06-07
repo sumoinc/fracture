@@ -175,12 +175,7 @@ export class Service {
    */
   public get serviceIndex() {
     const { services } = this.fracture;
-    return (
-      services.findIndex((p) => {
-        //console.log(p.name, this.name);
-        return p.name === this.name;
-      }) || 0
-    );
+    return services.findIndex((p) => p.name === this.name) || 0;
   }
 
   /*****************************************************************************

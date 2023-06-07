@@ -110,7 +110,7 @@ export class FractureApp {
     const synthTask = this.project.addTask("synth", {
       description: "Synth Cloud Assembly.",
     });
-    synthTask.exec(`pnpm cdk synth`);
+    synthTask.exec(`pnpm cdk synth -q`);
 
     return this;
   }
