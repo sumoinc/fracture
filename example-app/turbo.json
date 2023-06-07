@@ -47,11 +47,26 @@
       ],
       "outputMode": "new-only"
     },
-    "//#upgrade": {
+    "upgrade": {
+      "dependsOn": [
+        "user#upgrade"
+      ],
       "cache": false
     },
-    "upgrade": {
+    "foo#upgrade": {
       "dependsOn": [],
+      "cache": false
+    },
+    "company#upgrade": {
+      "dependsOn": [
+        "foo#upgrade"
+      ],
+      "cache": false
+    },
+    "user#upgrade": {
+      "dependsOn": [
+        "company#upgrade"
+      ],
       "cache": false
     }
   },

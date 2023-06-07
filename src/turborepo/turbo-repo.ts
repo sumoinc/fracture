@@ -66,6 +66,10 @@ export class TurboRepo extends Component {
    * @returns void
    */
   public build() {
+    const targets = this.fracture.services
+      .map((s) => s.name)
+      .concat(this.fracture.apps.map((a) => a.name));
+
     new JsonFile(this.project, "turbo.json", {
       obj: {
         $schema: "https://turborepo.org/schema.json",
@@ -100,13 +104,22 @@ export class TurboRepo extends Component {
             outputs: ["cdk-out/**"],
             outputMode: "new-only",
           },
-          "//#upgrade": {
-            cache: false,
-          },
           upgrade: {
-            dependsOn: [],
+            dependsOn: [`${targets[0]}#upgrade`],
             cache: false,
           },
+          ...targets.reduce((acc, target, idx) => {
+            return {
+              [`${target}#upgrade`]: {
+                dependsOn:
+                  idx < targets.length - 1
+                    ? [`${targets[idx + 1]}#upgrade`]
+                    : [],
+                cache: false,
+              },
+              ...acc,
+            };
+          }, {}),
         },
       },
     });
