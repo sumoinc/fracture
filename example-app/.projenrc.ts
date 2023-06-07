@@ -26,16 +26,13 @@ user.addResourceAttribute({
   isRequired: true,
 });
 
-/*
-const campanyPackage = new FracturePackage(project, "company");
-const companyService = campanyPackage.addService({ name: "company" });
+const companyService = fracture.addService({ name: "company" });
 const company = companyService.addResource({ name: "company" });
 company.addResourceAttribute({
   name: "name",
   shortName: "nm",
   isRequired: true,
 });
-*/
 
 // builds all packages
 fracture.build();
