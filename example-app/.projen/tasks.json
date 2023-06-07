@@ -24,18 +24,6 @@
         }
       ]
     },
-    "build:turbo": {
-      "name": "build:turbo",
-      "description": "Build using turborepo.",
-      "steps": [
-        {
-          "exec": "pnpm turbo default"
-        },
-        {
-          "exec": "pnpm turbo package"
-        }
-      ]
-    },
     "bump": {
       "name": "bump",
       "description": "Bumps version based on latest git tag and generates a changelog entry",
@@ -180,7 +168,7 @@
           "spawn": "bump"
         },
         {
-          "spawn": "build:turbo"
+          "spawn": "turbo:build"
         },
         {
           "spawn": "unbump"
@@ -209,6 +197,18 @@
       "steps": [
         {
           "exec": "jest --watch"
+        }
+      ]
+    },
+    "turbo:build": {
+      "name": "turbo:build",
+      "description": "Build using turborepo.",
+      "steps": [
+        {
+          "exec": "pnpm turbo default"
+        },
+        {
+          "exec": "pnpm turbo package"
         }
       ]
     },

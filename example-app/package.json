@@ -2,7 +2,6 @@
   "name": "example-app",
   "scripts": {
     "build": "npx projen build",
-    "build:turbo": "npx projen build:turbo",
     "bump": "npx projen bump",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
@@ -16,6 +15,7 @@
     "release": "npx projen release",
     "test": "npx projen test",
     "test:watch": "npx projen test:watch",
+    "turbo:build": "npx projen turbo:build",
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "watch": "npx projen watch",

@@ -1,15 +1,17 @@
 import { Component, JsonFile } from "projen";
 import { Fracture } from "../core";
 
+export const TURBO_BUILD_COMMAND = "turbo:build";
+
 export class TurboRepo extends Component {
   public static buildTask(fracture: Fracture) {
-    const maybeTask = fracture.tasks.tryFind("build:turbo");
+    const maybeTask = fracture.tasks.tryFind(TURBO_BUILD_COMMAND);
 
     if (maybeTask) {
       return maybeTask;
     }
 
-    const task = fracture.addTask("build:turbo", {
+    const task = fracture.addTask(TURBO_BUILD_COMMAND, {
       description: "Build using turborepo.",
     });
 
