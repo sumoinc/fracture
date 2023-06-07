@@ -42,4 +42,5 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
+/cdk.out/
 !/cdk.json

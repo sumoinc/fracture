@@ -69,6 +69,8 @@ export class FractureApp {
     });
     this.project = project;
 
+    this.project.gitignore.exclude("/cdk.out/");
+
     this.fracture = fracture;
     this.options = mergedOptions;
 
@@ -100,9 +102,13 @@ export class FractureApp {
 
     /***************************************************************************
      *
-     * CDK SYNTH COMMAND=
+     * CDK SYNTH COMMAND
      *
      **************************************************************************/
+    const synthTask = this.project.addTask("synth", {
+      description: "Synth Cloud Assembly.",
+    });
+    synthTask.exec(`pnpm cdk synth`);
 
     return this;
   }

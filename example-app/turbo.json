@@ -41,7 +41,9 @@
       "outputMode": "new-only"
     },
     "synth": {
-      "dependsOn": [],
+      "dependsOn": [
+        "^synth"
+      ],
       "outputs": [
         "cdk-out/**"
       ],

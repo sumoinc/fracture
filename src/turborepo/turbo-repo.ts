@@ -100,7 +100,7 @@ export class TurboRepo extends Component {
             outputMode: "new-only",
           },
           synth: {
-            dependsOn: [],
+            dependsOn: ["^synth"],
             outputs: ["cdk-out/**"],
             outputMode: "new-only",
           },
