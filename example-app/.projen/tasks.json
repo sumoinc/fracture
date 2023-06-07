@@ -221,6 +221,18 @@
         }
       ]
     },
+    "turbo:upgrade": {
+      "name": "turbo:upgrade",
+      "description": "Upgrade all projects.",
+      "steps": [
+        {
+          "exec": "pnpm run upgrade"
+        },
+        {
+          "exec": "pnpm turbo upgrade"
+        }
+      ]
+    },
     "unbump": {
       "name": "unbump",
       "description": "Restores version to 0.0.0",

@@ -3,7 +3,7 @@ import { Fracture } from "../core";
 
 export const TURBO_BUILD_COMMAND = "turbo:build";
 export const TURBO_SYNTH_COMMAND = "turbo:synth";
-export const TURBO_DEPLOY_COMMAND = "turbo:deploy";
+export const TURBO_UPGRADE_COMMAND = "turbo:upgrade";
 
 export class TurboRepo extends Component {
   /**
@@ -47,6 +47,15 @@ export class TurboRepo extends Component {
       description: "Synth all Cloud Assembly.",
     });
     synthTask.exec(`pnpm turbo synth`);
+
+    /**
+     * upgrade entire monorepo
+     */
+    const upgradeTask = fracture.addTask(TURBO_UPGRADE_COMMAND, {
+      description: "Upgrade all projects.",
+    });
+    upgradeTask.exec(`pnpm run upgrade`);
+    upgradeTask.exec(`pnpm turbo upgrade`);
   }
 
   /**
@@ -90,6 +99,13 @@ export class TurboRepo extends Component {
             dependsOn: [],
             outputs: ["cdk-out/**"],
             outputMode: "new-only",
+          },
+          "//#upgrade": {
+            cache: false,
+          },
+          upgrade: {
+            dependsOn: [],
+            cache: false,
           },
         },
       },

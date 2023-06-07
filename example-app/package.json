@@ -17,6 +17,7 @@
     "test:watch": "npx projen test:watch",
     "turbo:build": "npx projen turbo:build",
     "turbo:synth": "npx projen turbo:synth",
+    "turbo:upgrade": "npx projen turbo:upgrade",
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "watch": "npx projen watch",
