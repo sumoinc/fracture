@@ -1,10 +1,11 @@
 import { join } from "path";
 import { paramCase } from "change-case";
-import { JsonFile, Project } from "projen";
+import { JsonFile } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
 import { Fracture } from "./fracture";
+import { Service } from "./service";
 
 export interface FractureAppOptions {
   name: string;
@@ -13,7 +14,8 @@ export interface FractureAppOptions {
 
 export class FractureApp {
   // member components
-  public readonly project: Project;
+  public readonly project: TypeScriptProject;
+  public readonly services: Service[] = [];
   // parent
   public readonly fracture: Fracture;
   // all other options
@@ -121,5 +123,10 @@ export class FractureApp {
 
   public get srcDir() {
     return this.options.srcDir;
+  }
+
+  public useService(service: Service) {
+    this.project.addDeps(`${service.project.name}@workspace:*`);
+    this.services.push(service);
   }
 }

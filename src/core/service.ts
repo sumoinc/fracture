@@ -82,7 +82,7 @@ export class Service {
     // Build sub project
     const project = new TypeScriptProject({
       defaultReleaseBranch: "main",
-      name: options.name,
+      name: `@${fracture.name}/${options.name}`,
       parent: fracture,
       licensed: false,
       outdir: join(fracture.packageRoot, mergedOptions.name),

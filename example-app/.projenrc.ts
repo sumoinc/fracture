@@ -45,7 +45,8 @@ company.addResourceAttribute({
  * APPLICATION CONFIGURATION
  ******************************************************************************/
 
-fracture.addApp({ name: "foo" });
+const fooApp = fracture.addApp({ name: "foo" });
+fooApp.useService(userService);
 
 // builds all packages
 fracture.build();

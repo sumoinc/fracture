@@ -36,6 +36,7 @@
     "typescript": "^5.1.3"
   },
   "dependencies": {
+    "@example-app/user": "workspace:*",
     "aws-cdk": "^2.83.0",
     "aws-cdk-lib": "^2.83.0",
     "constructs": "^10.2.45"

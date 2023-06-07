@@ -75,6 +75,9 @@ importers:
 
   apps/foo:
     dependencies:
+      '@example-app/user':
+        specifier: workspace:*
+        version: link:../../packages/user
       aws-cdk:
         specifier: ^2.83.0
         version: 2.83.0

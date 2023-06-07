@@ -75,6 +75,11 @@
       "type": "build"
     },
     {
+      "name": "@example-app/user",
+      "version": "workspace:*",
+      "type": "runtime"
+    },
+    {
       "name": "aws-cdk",
       "type": "runtime"
     },
