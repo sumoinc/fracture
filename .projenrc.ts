@@ -57,9 +57,7 @@ project.addDeps(
 project.addDevDeps("@types/uuid");
 project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 
-// add example app
-//new ExampleApp(project);
-
+// configure vs code
 new VsCodeConfiguration(project);
 
 // generate
