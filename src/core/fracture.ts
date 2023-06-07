@@ -10,6 +10,7 @@ import { PnpmWorkspace } from "../pnpm/pnpm-workspace";
 import { VsCodeConfiguration } from "../projen";
 import { TurboRepo } from "../turborepo/turbo-repo";
 import { AuditStrategy } from "./audit-strategy";
+import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
 import { OPERATION_SUB_TYPE } from "./operation";
 import { Organization, OrganizationOptions } from "./organization";
@@ -59,6 +60,7 @@ export interface FractureOptions extends TypeScriptProjectOptions {
  */
 export class Fracture extends TypeScriptProject {
   // member components
+  public readonly apps: FractureApp[] = [];
   public readonly services: Service[] = [];
   public readonly organizations: Organization[] = [];
   private readonly turborepo: TurboRepo;
@@ -248,11 +250,11 @@ export class Fracture extends TypeScriptProject {
 
   /**
    * Add a service to the fracture project.
-   * @param {ServiceOptions}
-   * @returns {Service}
+   * @param {FractureAppOptions}
+   * @returns {FractureApp}
    */
-  public addService(options: ServiceOptions) {
-    return new Service(this, options);
+  public addApp(options: FractureAppOptions) {
+    return new FractureApp(this, options);
   }
 
   /**
@@ -262,6 +264,15 @@ export class Fracture extends TypeScriptProject {
    */
   public addOrganization(options: OrganizationOptions) {
     return new Organization(this, options);
+  }
+
+  /**
+   * Add a service to the fracture project.
+   * @param {ServiceOptions}
+   * @returns {Service}
+   */
+  public addService(options: ServiceOptions) {
+    return new Service(this, options);
   }
 
   /**

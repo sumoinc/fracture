@@ -13,6 +13,13 @@ const fracture = new Fracture({
 
 fracture.npmignore!.exclude("packages");
 
+/*******************************************************************************
+ * ORGANIZATION CONFIGURATION
+ ******************************************************************************/
+/*******************************************************************************
+ * PACKAGE CONFIGURATION
+ ******************************************************************************/
+
 const userService = fracture.addService({ name: "user" });
 const user = userService.addResource({ name: "user" });
 user.addResourceAttribute({
@@ -33,6 +40,12 @@ company.addResourceAttribute({
   shortName: "nm",
   isRequired: true,
 });
+
+/*******************************************************************************
+ * APPLICATION CONFIGURATION
+ ******************************************************************************/
+
+fracture.addApp({ name: "foo" });
 
 // builds all packages
 fracture.build();

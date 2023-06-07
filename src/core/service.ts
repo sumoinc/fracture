@@ -113,17 +113,7 @@ export class Service {
     this.fracture.logger.info("-".repeat(80));
 
     // inverse
-    this.fracture.services.forEach((service) => {
-      this.fracture.logger.warn(
-        `SVC in fracture before push: "${service.name}"`
-      );
-    });
     this.fracture.services.push(this);
-    this.fracture.services.forEach((service) => {
-      this.fracture.logger.warn(
-        `SVC in fracture after push: "${service.name}"`
-      );
-    });
 
     /***************************************************************************
      *
