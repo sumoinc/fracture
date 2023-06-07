@@ -106,29 +106,33 @@ export class DynaliteSupport extends Component {
   // build out the dynalite config
   preSynthesize() {
     // pull the project for this service
+
+    const allGsi = this.service.dynamoTable.dynamoGsi.filter(
+      (gsi) => gsi !== this.service.dynamoTable.keyDynamoGsi
+    );
+
     const config = {
-      tables: this.service.fracture.services.map((service) => {
-        const allGsi = service.dynamoTable.dynamoGsi.filter(
-          (gsi) => gsi !== service.dynamoTable.keyDynamoGsi
-        );
-        return {
-          TableName: service.dynamoTable.name,
+      tables: [
+        {
+          TableName: this.service.dynamoTable.name,
           KeySchema: [
             {
-              AttributeName: service.dynamoTable.pkName,
+              AttributeName: this.service.dynamoTable.pkName,
               KeyType: "HASH",
             },
             {
-              AttributeName: service.dynamoTable.skName,
+              AttributeName: this.service.dynamoTable.skName,
               KeyType: "RANGE",
             },
           ],
-          AttributeDefinitions: service.dynamoTable.attrributeNames.map((s) => {
-            return {
-              AttributeName: s,
-              AttributeType: "S",
-            };
-          }),
+          AttributeDefinitions: this.service.dynamoTable.attrributeNames.map(
+            (s) => {
+              return {
+                AttributeName: s,
+                AttributeType: "S",
+              };
+            }
+          ),
           GlobalSecondaryIndexes:
             allGsi.length > 0
               ? allGsi.map((gsi) => {
@@ -154,8 +158,8 @@ export class DynaliteSupport extends Component {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,
           },
-        };
-      }),
+        },
+      ],
       basePort: 8000 + this.service.serviceIndex * 100,
     };
 
