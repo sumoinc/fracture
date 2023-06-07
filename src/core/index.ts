@@ -2,6 +2,7 @@ export * from "./access-pattern";
 export * from "./account";
 export * from "./audit-strategy";
 export * from "./component";
+export * from "./fracture-app";
 export * from "./fracture-package";
 export * from "./fracture-project";
 export * from "./index";

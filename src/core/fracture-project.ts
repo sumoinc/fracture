@@ -7,6 +7,7 @@ import { deepMerge } from "projen/lib/util";
 import { SetOptional } from "type-fest";
 import { FracturePackage } from "./fracture-package";
 import { PnpmWorkspace } from "../pnpm/pnpm-workspace";
+import { VsCodeConfiguration } from "../projen";
 import { TurboRepo } from "../turborepo/turbo-repo";
 
 /**
@@ -57,6 +58,9 @@ export class FractureProject extends TypeScriptProject {
 
     // configure workspace
     new PnpmWorkspace(this);
+
+    // configure vscode
+    new VsCodeConfiguration(this);
 
     // configure turborepo
     this.turborepo = new TurboRepo(this);

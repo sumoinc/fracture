@@ -28,15 +28,6 @@ export class TurboRepo extends Component {
     fractureProject.addGitIgnore(".turbo");
     fractureProject.npmignore!.exclude(".turbo");
     fractureProject.npmignore!.exclude("turbo.json");
-
-    /*
-    this.task = fractureProject.addTask("build:turbo", {
-      description: "Build using turborepo.",
-    });
-
-    this.task.exec(`pnpm turbo default`);
-    this.task.exec(`pnpm turbo package`);
-    */
   }
 
   /**
