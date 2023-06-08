@@ -18,9 +18,14 @@ fracture.npmignore!.exclude("packages");
  ******************************************************************************/
 
 const org = fracture.addOrganization({ id: "org-123456" });
-const devAccount = org.addAccount({ id: "0000000000" });
-const stagingAccount = org.addAccount({ id: "1111111111" });
-const prodAccount = org.addAccount({ id: "2222222222" });
+const devAccount = org.addAccount({ id: "0000000000", name: "dev" });
+//const stagingAccount = org.addAccount({ id: "1111111111", name: "stage" });
+//const prodAccount = org.addAccount({ id: "2222222222", name: "prod" });
+
+fracture.addEnvironment({
+  account: devAccount,
+  region: "us-east-1",
+});
 
 /*******************************************************************************
  * SERVICE CONFIGURATION
@@ -38,6 +43,13 @@ user.addResourceAttribute({
   shortName: "ln",
   isRequired: true,
 });
+
+/**
+ * Dev Deployment:
+ * - branchTriggerPattern: 'feature/*'
+ * - environments: [east, west]
+ * then to environments: [west]
+ */
 
 const companyService = fracture.addService({ name: "company" });
 const company = companyService.addResource({ name: "company" });

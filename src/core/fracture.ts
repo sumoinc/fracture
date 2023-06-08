@@ -6,10 +6,8 @@ import {
 } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
 import { SetOptional } from "type-fest";
-import { PnpmWorkspace } from "../pnpm/pnpm-workspace";
-import { VsCodeConfiguration } from "../projen";
-import { TurboRepo } from "../turborepo/turbo-repo";
 import { AuditStrategy } from "./audit-strategy";
+import { Environment, EnvironmentOptions } from "./environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
 import { OPERATION_SUB_TYPE } from "./operation";
@@ -20,6 +18,9 @@ import {
 } from "./resource-attribute";
 import { Service, ServiceOptions } from "./service";
 import { STRUCTURE_TYPE } from "./structure";
+import { PnpmWorkspace } from "../pnpm/pnpm-workspace";
+import { VsCodeConfiguration } from "../projen";
+import { TurboRepo } from "../turborepo/turbo-repo";
 
 /**
  *
@@ -29,6 +30,7 @@ import { STRUCTURE_TYPE } from "./structure";
  */
 export interface FractureOptions extends TypeScriptProjectOptions {
   packageRoot?: string;
+  serviceRoot?: string;
   appRoot?: string;
   /**
    * Source directory inside each package
@@ -63,6 +65,7 @@ export class Fracture extends TypeScriptProject {
   public readonly apps: FractureApp[] = [];
   public readonly services: Service[] = [];
   public readonly organizations: Organization[] = [];
+  public readonly environments: Environment[] = [];
   private readonly turborepo: TurboRepo;
   // all other options
   public readonly options: Required<FractureOptions>;
@@ -81,6 +84,7 @@ export class Fracture extends TypeScriptProject {
       name: options.name,
       defaultReleaseBranch: "main",
       packageRoot: "packages",
+      serviceRoot: "services",
       appRoot: "apps",
       srcDir: "src",
       logging: {
@@ -222,6 +226,10 @@ export class Fracture extends TypeScriptProject {
     return this.options.packageRoot;
   }
 
+  public get serviceRoot(): string {
+    return this.options.serviceRoot;
+  }
+
   public get appRoot(): string {
     return this.options.appRoot;
   }
@@ -273,6 +281,15 @@ export class Fracture extends TypeScriptProject {
    */
   public addService(options: ServiceOptions) {
     return new Service(this, options);
+  }
+
+  /**
+   * Add a environment to the fracture project.
+   * @param {EnvironmentOptions}
+   * @returns {Environment}
+   */
+  public addEnvironment(options: EnvironmentOptions) {
+    return new Environment(this, options);
   }
 
   /**

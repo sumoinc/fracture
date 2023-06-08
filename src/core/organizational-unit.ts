@@ -1,7 +1,6 @@
 import { Component } from "projen";
 import { Account, AccountOptions } from "./account";
 import { Organization } from "./organization";
-import { Region } from "./region";
 
 export interface OrganizationalUnitOptions {
   id: string;
@@ -47,7 +46,7 @@ export class OrganizationalUnit extends Component {
   public get name() {
     return this.options.name;
   }
-
+  /*
   public get regions() {
     return this.accounts
       .flatMap((account) => account.regions)
@@ -58,6 +57,7 @@ export class OrganizationalUnit extends Component {
         return acc;
       }, [] as Region[]);
   }
+  */
 
   /*****************************************************************************
    *

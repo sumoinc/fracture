@@ -4,14 +4,14 @@ import { LoggerOptions, Project } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
-import { DynaliteSupport } from "../dynamodb";
-import { DynamoGsi } from "../dynamodb/dynamo-gsi";
-import { DynamoTable } from "../dynamodb/dynamo-table";
-import { TypescriptService } from "../generators/ts/typescript-service";
 import { AuditStrategy } from "./audit-strategy";
 import { Fracture } from "./fracture";
 import { NamingStrategy } from "./naming-strategy";
 import { Resource, ResourceOptions } from "./resource";
+import { DynaliteSupport } from "../dynamodb";
+import { DynamoGsi } from "../dynamodb/dynamo-gsi";
+import { DynamoTable } from "../dynamodb/dynamo-table";
+import { TypescriptService } from "../generators/ts/typescript-service";
 
 export interface ServiceOptions {
   name: string;
@@ -42,6 +42,7 @@ export class Service {
   public readonly dynamoTable: DynamoTable;
   public readonly dynaliteSupport: DynaliteSupport;
   public readonly project: Project;
+  public readonly serviceProject: TypeScriptProject;
   // parent
   public readonly fracture: Fracture;
   // all other options
@@ -71,18 +72,22 @@ export class Service {
       forcedOptions,
     ]) as Required<ServiceOptions>;
 
+    this.options = mergedOptions;
+    this.fracture = fracture;
+
     /***************************************************************************
      *
-     * CREATE SUB-PROJECT
+     * CREATE PACKAGE SUB-PROJECT
      *
-     * This powers a sub-project to house all generated code.
+     * This powers a sub-project to house all generated code as a package. This
+     * is mostly generated code and should not be touched by devs unless really
+     * needed.
      *
      **************************************************************************/
 
-    // Build sub project
     const project = new TypeScriptProject({
       defaultReleaseBranch: "main",
-      name: `@${fracture.name}/${options.name}`,
+      name: this.packageName,
       parent: fracture,
       licensed: false,
       outdir: join(fracture.packageRoot, mergedOptions.name),
@@ -99,8 +104,31 @@ export class Service {
     });
     this.project = project;
 
-    this.fracture = fracture;
-    this.options = mergedOptions;
+    /***************************************************************************
+     *
+     * CREATE SERVICE SUB-PROJECT
+     *
+     * This powers a deployable sub-project that can be adapted by developers as
+     * needed.
+     *
+     **************************************************************************/
+
+    const serviceProject = new TypeScriptProject({
+      defaultReleaseBranch: "main",
+      name: this.serviceName,
+      parent: fracture,
+      licensed: false,
+      outdir: join(fracture.serviceRoot, mergedOptions.name),
+      packageManager: NodePackageManager.PNPM,
+      pnpmVersion: "8",
+      prettier: true,
+      projenrcTs: true,
+      eslintOptions: {
+        dirs: ["src"],
+        tsconfigPath: "./**/tsconfig.dev.json",
+      },
+    });
+    this.serviceProject = serviceProject;
 
     /***************************************************************************
      *
@@ -151,6 +179,14 @@ export class Service {
 
   public get name(): string {
     return this.options.name;
+  }
+
+  public get packageName(): string {
+    return `@${this.fracture.name}/${this.name}-package`;
+  }
+
+  public get serviceName(): string {
+    return `@${this.fracture.name}/${this.name}-service`;
   }
 
   public get isVersioned(): boolean {

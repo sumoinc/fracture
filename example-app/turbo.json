@@ -55,14 +55,8 @@
       ],
       "cache": false
     },
-    "foo#upgrade": {
-      "dependsOn": [],
-      "cache": false
-    },
     "company#upgrade": {
-      "dependsOn": [
-        "foo#upgrade"
-      ],
+      "dependsOn": [],
       "cache": false
     },
     "user#upgrade": {
