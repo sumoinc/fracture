@@ -16,8 +16,14 @@ fracture.npmignore!.exclude("packages");
 /*******************************************************************************
  * ORGANIZATION CONFIGURATION
  ******************************************************************************/
+
+const org = fracture.addOrganization({ id: "org-123456" });
+const devAccount = org.addAccount({ id: "0000000000" });
+const stagingAccount = org.addAccount({ id: "1111111111" });
+const prodAccount = org.addAccount({ id: "2222222222" });
+
 /*******************************************************************************
- * PACKAGE CONFIGURATION
+ * SERVICE CONFIGURATION
  ******************************************************************************/
 
 const userService = fracture.addService({ name: "user" });
@@ -45,9 +51,11 @@ company.addResourceAttribute({
  * APPLICATION CONFIGURATION
  ******************************************************************************/
 
-const fooApp = fracture.addApp({ name: "foo" });
-fooApp.useService(userService);
+//const fooApp = fracture.addApp({ name: "foo" });
+//fooApp.useService(userService);
 
+// deploy feature branch to dev account, us-east-1
+// Deployment, Wave, and Phase are all optional
 // builds all packages
 fracture.build();
 fracture.synth();
