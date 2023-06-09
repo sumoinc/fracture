@@ -75,14 +75,14 @@ export class DynaliteSupport extends Component {
   public readonly service: Service;
 
   constructor(service: Service) {
-    super(service.project);
+    super(service.packageProject);
 
     this.service = service;
 
     console.log("service:", this.service.name);
 
     // pull the project for this service
-    const project = service.project as TypeScriptProject;
+    const project = service.packageProject as TypeScriptProject;
 
     // add dynalite
     project.addDeps("jest-dynalite");

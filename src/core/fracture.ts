@@ -18,6 +18,7 @@ import {
 } from "./resource-attribute";
 import { Service, ServiceOptions } from "./service";
 import { STRUCTURE_TYPE } from "./structure";
+import { Workflows } from "../github/workflows";
 import { PnpmWorkspace } from "../pnpm/pnpm-workspace";
 import { VsCodeConfiguration } from "../projen";
 import { TurboRepo } from "../turborepo/turbo-repo";
@@ -90,6 +91,8 @@ export class Fracture extends TypeScriptProject {
       logging: {
         level: LogLevel.INFO,
       },
+      workflowNodeVersion: "18",
+      workflowPackageCache: true,
       isVersioned: true,
       namingStrategy: {
         ts: {
@@ -216,6 +219,9 @@ export class Fracture extends TypeScriptProject {
 
     // configure turborepo
     this.turborepo = new TurboRepo(this);
+
+    // configure workflows
+    new Workflows(this);
 
     this.logger.info("=".repeat(80));
     this.logger.info("INIT PHASE");

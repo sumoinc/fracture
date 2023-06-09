@@ -28,6 +28,11 @@ jobs:
         uses: pnpm/action-setup@v2.2.4
         with:
           version: "8"
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: pnpm
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
       - name: release
@@ -55,7 +60,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: "18"
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:

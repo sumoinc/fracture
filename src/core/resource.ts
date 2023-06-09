@@ -1,11 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
-import { DynamoTable } from "../dynamodb/dynamo-table";
-import { IdentifierFactory } from "../factories/access-patterns/identifier-factory";
-import { LookupFactory } from "../factories/access-patterns/lookup-factory";
-import { VersionedIdentifierFactory } from "../factories/access-patterns/versioned-identifier-factory";
-import { TypescriptResource } from "../generators/ts/typescript-resource";
 import { AccessPattern } from "./access-pattern";
 import { Operation } from "./operation";
 import {
@@ -14,6 +9,11 @@ import {
 } from "./resource-attribute";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
+import { DynamoTable } from "../dynamodb/dynamo-table";
+import { IdentifierFactory } from "../factories/access-patterns/identifier-factory";
+import { LookupFactory } from "../factories/access-patterns/lookup-factory";
+import { VersionedIdentifierFactory } from "../factories/access-patterns/versioned-identifier-factory";
+import { TypescriptResource } from "../generators/ts/typescript-resource";
 
 export interface ResourceOptions {
   /**
@@ -61,7 +61,7 @@ export class Resource extends Component {
   public readonly ts: TypescriptResource;
 
   constructor(service: Service, options: ResourceOptions) {
-    super(service.project);
+    super(service.packageProject);
 
     /***************************************************************************
      *

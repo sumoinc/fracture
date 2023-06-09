@@ -1,4 +1,4 @@
-import { Component, JsonFile } from "projen";
+import { Component, JsonFile, Task } from "projen";
 import { Fracture } from "../core";
 
 export const TURBO_BUILD_COMMAND = "turbo:build";
@@ -7,7 +7,7 @@ export const TURBO_UPGRADE_COMMAND = "turbo:upgrade";
 
 export class TurboRepo extends Component {
   /**
-   * Makea this static so it can be called by projen when building other
+   * Make this static so it can be called by projen when building other
    * dependancies.
    *
    * @param fracture
@@ -29,7 +29,54 @@ export class TurboRepo extends Component {
     return task;
   }
 
+  /**
+   * Make this static so it can be called by projen when building other
+   * dependancies.
+   *
+   * @param fracture
+   * @returns
+   */
+  public static synthTask(fracture: Fracture) {
+    const maybeTask = fracture.tasks.tryFind(TURBO_SYNTH_COMMAND);
+
+    if (maybeTask) {
+      return maybeTask;
+    }
+
+    const task = fracture.addTask(TURBO_SYNTH_COMMAND, {
+      description: "Synth all Cloud Assembly.",
+    });
+    task.exec(`pnpm turbo synth`);
+
+    return task;
+  }
+
   public fracture: Fracture;
+
+  /**
+   * Synthesizes your app.
+   */
+  public readonly synth: Task;
+
+  /**
+   * Synthesizes your app and suppresses stdout.
+   */
+  public readonly synthSilent: Task;
+
+  /**
+   * Deploys your app.
+   */
+  public readonly deploy: Task;
+
+  /**
+   * Destroys all the stacks.
+   */
+  public readonly destroy: Task;
+
+  /**
+   * Diff against production.
+   */
+  public readonly diff: Task;
 
   constructor(fracture: Fracture) {
     super(fracture);
@@ -41,21 +88,43 @@ export class TurboRepo extends Component {
     fracture.npmignore!.exclude("turbo.json");
 
     /**
-     * Define synth and deploy tasks.
-     */
-    const synthTask = fracture.addTask(TURBO_SYNTH_COMMAND, {
-      description: "Synth all Cloud Assembly.",
-    });
-    synthTask.exec(`pnpm turbo synth`);
-
-    /**
      * upgrade entire monorepo
      */
+    /*
     const upgradeTask = fracture.addTask(TURBO_UPGRADE_COMMAND, {
       description: "Upgrade all projects.",
     });
     upgradeTask.exec(`pnpm run upgrade`);
     upgradeTask.exec(`pnpm turbo upgrade`);
+    */
+
+    this.synth = fracture.addTask("turbo:synth", {
+      description: "Synthesizes your cdk app into cdk.out",
+      exec: "pnpm turbo awscdk:synth",
+    });
+
+    this.synthSilent = fracture.addTask("turbo:synth:silent", {
+      description:
+        'Synthesizes your cdk app into cdk.out and suppresses the template in stdout (part of "pnpm build")',
+      exec: "pnpm turbo awscdk:synth -q",
+    });
+
+    this.deploy = fracture.addTask("turbo:deploy", {
+      description: "Deploys your CDK app to the AWS cloud",
+      exec: "pnpm turbo awscdk:deploy",
+      receiveArgs: true,
+    });
+
+    this.destroy = fracture.addTask("turbo:destroy", {
+      description: "Destroys your cdk app in the AWS cloud",
+      exec: "pnpm turbo awscdk:destroy",
+      receiveArgs: true,
+    });
+
+    this.diff = fracture.addTask("turbo:diff", {
+      description: "Diffs the currently deployed app against your code",
+      exec: "pnpm turbo awscdk:diff",
+    });
   }
 
   /**

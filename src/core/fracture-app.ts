@@ -126,7 +126,7 @@ export class FractureApp {
   }
 
   public useService(service: Service) {
-    this.project.addDeps(`${service.project.name}@workspace:*`);
+    this.project.addDeps(`${service.fracture.name}@workspace:*`);
     this.services.push(service);
   }
 }

@@ -1,6 +1,6 @@
 import { join } from "path";
 import { paramCase } from "change-case";
-import { LoggerOptions, Project } from "projen";
+import { LoggerOptions } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
@@ -41,7 +41,7 @@ export class Service {
   public readonly resources: Resource[] = [];
   public readonly dynamoTable: DynamoTable;
   public readonly dynaliteSupport: DynaliteSupport;
-  public readonly project: Project;
+  public readonly packageProject: TypeScriptProject;
   public readonly serviceProject: TypeScriptProject;
   // parent
   public readonly fracture: Fracture;
@@ -85,7 +85,7 @@ export class Service {
      *
      **************************************************************************/
 
-    const project = new TypeScriptProject({
+    const packageProject = new TypeScriptProject({
       defaultReleaseBranch: "main",
       name: this.packageName,
       parent: fracture,
@@ -102,7 +102,7 @@ export class Service {
         tsconfigPath: "./**/tsconfig.dev.json",
       },
     });
-    this.project = project;
+    this.packageProject = packageProject;
 
     /***************************************************************************
      *
@@ -168,7 +168,7 @@ export class Service {
   }
 
   public build() {
-    this.project.logger.info(`BUILD Service: "${this.name}"`);
+    this.packageProject.logger.info(`BUILD Service: "${this.name}"`);
     this.dynaliteSupport.build();
     this.resources.forEach((resource) => {
       resource.build();

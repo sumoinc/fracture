@@ -212,24 +212,50 @@
         }
       ]
     },
-    "turbo:synth": {
-      "name": "turbo:synth",
-      "description": "Synth all Cloud Assembly.",
+    "turbo:deploy": {
+      "name": "turbo:deploy",
+      "description": "Deploys your CDK app to the AWS cloud",
       "steps": [
         {
-          "exec": "pnpm turbo synth"
+          "exec": "pnpm turbo awscdk:deploy",
+          "receiveArgs": true
         }
       ]
     },
-    "turbo:upgrade": {
-      "name": "turbo:upgrade",
-      "description": "Upgrade all projects.",
+    "turbo:destroy": {
+      "name": "turbo:destroy",
+      "description": "Destroys your cdk app in the AWS cloud",
       "steps": [
         {
-          "exec": "pnpm run upgrade"
-        },
+          "exec": "pnpm turbo awscdk:destroy",
+          "receiveArgs": true
+        }
+      ]
+    },
+    "turbo:diff": {
+      "name": "turbo:diff",
+      "description": "Diffs the currently deployed app against your code",
+      "steps": [
         {
-          "exec": "pnpm turbo upgrade"
+          "exec": "pnpm turbo awscdk:diff"
+        }
+      ]
+    },
+    "turbo:synth": {
+      "name": "turbo:synth",
+      "description": "Synthesizes your cdk app into cdk.out",
+      "steps": [
+        {
+          "exec": "pnpm turbo awscdk:synth"
+        }
+      ]
+    },
+    "turbo:synth:silent": {
+      "name": "turbo:synth:silent",
+      "description": "Synthesizes your cdk app into cdk.out and suppresses the template in stdout (part of \"pnpm build\")",
+      "steps": [
+        {
+          "exec": "pnpm turbo awscdk:synth -q"
         }
       ]
     },

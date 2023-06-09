@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { Service } from "../core/service";
 import { DynamoGsi, DYNAMO_GSI_TYPE } from "./dynamo-gsi";
+import { Service } from "../core/service";
 
 export interface DynamoTableOptions {
   /**
@@ -35,7 +35,7 @@ export class DynamoTable extends Component {
   public readonly options: Required<DynamoTableOptions>;
 
   constructor(service: Service, options: DynamoTableOptions = {}) {
-    super(service.project);
+    super(service.packageProject);
 
     /***************************************************************************
      *
