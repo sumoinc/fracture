@@ -31,7 +31,6 @@ import { TurboRepo } from "../turborepo/turbo-repo";
  */
 export interface FractureOptions extends TypeScriptProjectOptions {
   packageRoot?: string;
-  serviceRoot?: string;
   appRoot?: string;
   /**
    * Source directory inside each package
@@ -85,7 +84,6 @@ export class Fracture extends TypeScriptProject {
       name: options.name,
       defaultReleaseBranch: "main",
       packageRoot: "packages",
-      serviceRoot: "services",
       appRoot: "apps",
       srcDir: "src",
       logging: {
@@ -230,10 +228,6 @@ export class Fracture extends TypeScriptProject {
 
   public get packageRoot(): string {
     return this.options.packageRoot;
-  }
-
-  public get serviceRoot(): string {
-    return this.options.serviceRoot;
   }
 
   public get appRoot(): string {
