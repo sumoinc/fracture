@@ -22,7 +22,7 @@ const devAccount = org.addAccount({ id: "0000000000", name: "dev" });
 //const stagingAccount = org.addAccount({ id: "1111111111", name: "stage" });
 //const prodAccount = org.addAccount({ id: "2222222222", name: "prod" });
 
-fracture.addEnvironment({
+const devUsEa01 = fracture.addEnvironment({
   account: devAccount,
   region: "us-east-1",
 });
@@ -63,8 +63,9 @@ company.addResourceAttribute({
  * APPLICATION CONFIGURATION
  ******************************************************************************/
 
-//const fooApp = fracture.addApp({ name: "foo" });
-//fooApp.useService(userService);
+const identityApp = fracture.addApp({ name: "identity-service" });
+identityApp.useService(userService);
+identityApp.addDeployment({ environment: devUsEa01 });
 
 // deploy feature branch to dev account, us-east-1
 // Deployment, Wave, and Phase are all optional

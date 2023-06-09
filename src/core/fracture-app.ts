@@ -4,6 +4,7 @@ import { JsonFile } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
+import { Deployment, DeploymentOptions } from "./deployment";
 import { Fracture } from "./fracture";
 import { Service } from "./service";
 
@@ -16,6 +17,7 @@ export class FractureApp {
   // member components
   public readonly project: TypeScriptProject;
   public readonly services: Service[] = [];
+  public readonly deployments: Deployment[] = [];
   // parent
   public readonly fracture: Fracture;
   // all other options
@@ -128,5 +130,9 @@ export class FractureApp {
   public useService(service: Service) {
     this.project.addDeps(`${service.fracture.name}@workspace:*`);
     this.services.push(service);
+  }
+
+  public addDeployment(options: DeploymentOptions) {
+    return new Deployment(this, options);
   }
 }
