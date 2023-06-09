@@ -67,7 +67,7 @@ export class Fracture extends TypeScriptProject {
   public readonly services: Service[] = [];
   public readonly organizations: Organization[] = [];
   public readonly environments: Environment[] = [];
-  private readonly turborepo: TurboRepo;
+  public readonly turborepo: TurboRepo;
   // all other options
   public readonly options: Required<FractureOptions>;
 

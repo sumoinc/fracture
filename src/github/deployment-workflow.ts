@@ -73,6 +73,7 @@ export class DeploymentWorkflow extends Component {
    */
   private renderBuildSteps(): JobStep[] {
     const fracture = this.project as Fracture;
+    const { buildTask, synthTask } = fracture.turborepo;
     //const buildTask = TurboRepo.buildTask(fracture);
     //const synthTask = TurboRepo.synthTask(fracture);
     return [
@@ -90,16 +91,18 @@ export class DeploymentWorkflow extends Component {
       ...fracture.renderWorkflowSetup({
         mutable: true,
       }),
-      /*
+
       {
         name: buildTask.name,
         run: this.github.project.runTaskCommand(buildTask),
       },
+
       {
         name: synthTask.name,
         run: this.github.project.runTaskCommand(synthTask),
+        env: { foo: "bar" },
       },
-*/
+
       //...this.postBuildSteps,
 
       // check for mutations and upload a git patch file as an artifact

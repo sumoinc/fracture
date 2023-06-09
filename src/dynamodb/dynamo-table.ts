@@ -35,7 +35,7 @@ export class DynamoTable extends Component {
   public readonly options: Required<DynamoTableOptions>;
 
   constructor(service: Service, options: DynamoTableOptions = {}) {
-    super(service.packageProject);
+    super(service.project);
 
     /***************************************************************************
      *

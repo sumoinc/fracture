@@ -9,7 +9,7 @@ export class TypescriptService extends Component {
   public readonly typeFile: TypeScriptSource;
 
   constructor(service: Service) {
-    super(service.packageProject);
+    super(service.project);
 
     this.service = service;
 

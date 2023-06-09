@@ -41,8 +41,7 @@ export class Service {
   public readonly resources: Resource[] = [];
   public readonly dynamoTable: DynamoTable;
   public readonly dynaliteSupport: DynaliteSupport;
-  public readonly packageProject: TypeScriptProject;
-  public readonly serviceProject: TypeScriptProject;
+  public readonly project: TypeScriptProject;
   // parent
   public readonly fracture: Fracture;
   // all other options
@@ -85,7 +84,7 @@ export class Service {
      *
      **************************************************************************/
 
-    const packageProject = new TypeScriptProject({
+    const project = new TypeScriptProject({
       defaultReleaseBranch: "main",
       name: this.packageName,
       parent: fracture,
@@ -102,33 +101,7 @@ export class Service {
         tsconfigPath: "./**/tsconfig.dev.json",
       },
     });
-    this.packageProject = packageProject;
-
-    /***************************************************************************
-     *
-     * CREATE SERVICE SUB-PROJECT
-     *
-     * This powers a deployable sub-project that can be adapted by developers as
-     * needed.
-     *
-     **************************************************************************/
-
-    const serviceProject = new TypeScriptProject({
-      defaultReleaseBranch: "main",
-      name: this.serviceName,
-      parent: fracture,
-      licensed: false,
-      outdir: join(fracture.serviceRoot, mergedOptions.name),
-      packageManager: NodePackageManager.PNPM,
-      pnpmVersion: "8",
-      prettier: true,
-      projenrcTs: true,
-      eslintOptions: {
-        dirs: ["src"],
-        tsconfigPath: "./**/tsconfig.dev.json",
-      },
-    });
-    this.serviceProject = serviceProject;
+    this.project = project;
 
     /***************************************************************************
      *
@@ -168,7 +141,7 @@ export class Service {
   }
 
   public build() {
-    this.packageProject.logger.info(`BUILD Service: "${this.name}"`);
+    this.project.logger.info(`BUILD Service: "${this.name}"`);
     this.dynaliteSupport.build();
     this.resources.forEach((resource) => {
       resource.build();

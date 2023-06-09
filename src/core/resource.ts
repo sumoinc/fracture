@@ -61,7 +61,7 @@ export class Resource extends Component {
   public readonly ts: TypescriptResource;
 
   constructor(service: Service, options: ResourceOptions) {
-    super(service.packageProject);
+    super(service.project);
 
     /***************************************************************************
      *

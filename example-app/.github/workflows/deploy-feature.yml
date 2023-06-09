@@ -28,3 +28,9 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm i --no-frozen-lockfile
+      - name: turbo:build
+        run: npx projen turbo:build
+      - name: turbo:synth
+        env:
+          foo: bar
+        run: npx projen turbo:synth
