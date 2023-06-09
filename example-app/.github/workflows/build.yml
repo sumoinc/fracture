@@ -30,8 +30,8 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm i --no-frozen-lockfile
-      - name: turbo:build
-        run: npx projen turbo:build
+      - name: build
+        run: npx projen build
       - name: Find mutations
         id: self_mutation
         run: |-

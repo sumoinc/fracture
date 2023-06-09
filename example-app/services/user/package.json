@@ -1,5 +1,5 @@
 {
-  "name": "@example-app/user-service",
+  "name": "@example-app/user-svc",
   "scripts": {
     "build": "npx projen build",
     "compile": "npx projen compile",

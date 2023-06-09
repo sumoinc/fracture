@@ -168,7 +168,7 @@
           "spawn": "bump"
         },
         {
-          "spawn": "turbo:build"
+          "spawn": "build"
         },
         {
           "spawn": "unbump"
@@ -208,7 +208,16 @@
           "exec": "pnpm turbo default"
         },
         {
-          "exec": "pnpm turbo package"
+          "exec": "pnpm turbo pre-compile"
+        },
+        {
+          "exec": "pnpm turbo compile"
+        },
+        {
+          "exec": "pnpm turbo post-compile"
+        },
+        {
+          "exec": "pnpm turbo test"
         }
       ]
     },
@@ -217,7 +226,7 @@
       "description": "Deploys your CDK app to the AWS cloud",
       "steps": [
         {
-          "exec": "pnpm turbo awscdk:deploy",
+          "exec": "pnpm turbo deploy",
           "receiveArgs": true
         }
       ]
@@ -227,7 +236,7 @@
       "description": "Destroys your cdk app in the AWS cloud",
       "steps": [
         {
-          "exec": "pnpm turbo awscdk:destroy",
+          "exec": "pnpm turbo destroy",
           "receiveArgs": true
         }
       ]
@@ -237,7 +246,7 @@
       "description": "Diffs the currently deployed app against your code",
       "steps": [
         {
-          "exec": "pnpm turbo awscdk:diff"
+          "exec": "pnpm turbo diff"
         }
       ]
     },
@@ -246,16 +255,7 @@
       "description": "Synthesizes your cdk app into cdk.out",
       "steps": [
         {
-          "exec": "pnpm turbo awscdk:synth"
-        }
-      ]
-    },
-    "turbo:synth:silent": {
-      "name": "turbo:synth:silent",
-      "description": "Synthesizes your cdk app into cdk.out and suppresses the template in stdout (part of \"pnpm build\")",
-      "steps": [
-        {
-          "exec": "pnpm turbo awscdk:synth -q"
+          "exec": "pnpm turbo synth"
         }
       ]
     },

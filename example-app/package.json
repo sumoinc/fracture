@@ -20,7 +20,6 @@
     "turbo:destroy": "npx projen turbo:destroy",
     "turbo:diff": "npx projen turbo:diff",
     "turbo:synth": "npx projen turbo:synth",
-    "turbo:synth:silent": "npx projen turbo:synth:silent",
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "watch": "npx projen watch",
@@ -41,7 +40,7 @@
     "jest-junit": "^15",
     "npm-check-updates": "^16",
     "prettier": "^2.8.8",
-    "projen": "^0.71.85",
+    "projen": "^0.71.88",
     "standard-version": "^9",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
@@ -49,7 +48,7 @@
   },
   "dependencies": {
     "@sumoc/fracture": "../src",
-    "turbo": "^1.10.2"
+    "turbo": "^1.10.3"
   },
   "pnpm": {},
   "main": "lib/index.js",

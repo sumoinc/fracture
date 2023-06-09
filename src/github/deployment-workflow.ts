@@ -2,7 +2,6 @@ import { Component } from "projen";
 import { GitHub, GithubWorkflow } from "projen/lib/github";
 import { JobPermission, JobStep } from "projen/lib/github/workflows-model";
 import { Fracture } from "../core";
-import { TurboRepo } from "../turborepo";
 
 const PULL_REQUEST_REF = "${{ github.event.pull_request.head.ref }}";
 const PULL_REQUEST_REPOSITORY =
@@ -74,8 +73,8 @@ export class DeploymentWorkflow extends Component {
    */
   private renderBuildSteps(): JobStep[] {
     const fracture = this.project as Fracture;
-    const buildTask = TurboRepo.buildTask(fracture);
-    const synthTask = TurboRepo.synthTask(fracture);
+    //const buildTask = TurboRepo.buildTask(fracture);
+    //const synthTask = TurboRepo.synthTask(fracture);
     return [
       {
         name: "Checkout",
@@ -91,7 +90,7 @@ export class DeploymentWorkflow extends Component {
       ...fracture.renderWorkflowSetup({
         mutable: true,
       }),
-
+      /*
       {
         name: buildTask.name,
         run: this.github.project.runTaskCommand(buildTask),
@@ -100,7 +99,7 @@ export class DeploymentWorkflow extends Component {
         name: synthTask.name,
         run: this.github.project.runTaskCommand(synthTask),
       },
-
+*/
       //...this.postBuildSteps,
 
       // check for mutations and upload a git patch file as an artifact

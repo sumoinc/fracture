@@ -1,5 +1,5 @@
 {
-  "name": "@example-app/user-package",
+  "name": "@example-app/user-pkg",
   "scripts": {
     "build": "npx projen build",
     "compile": "npx projen compile",

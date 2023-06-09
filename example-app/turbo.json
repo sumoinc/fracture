@@ -5,12 +5,14 @@
       "cache": false
     },
     "pre-compile": {
-      "dependsOn": [],
+      "dependsOn": [
+        "^pre-compile"
+      ],
       "cache": false
     },
     "compile": {
       "dependsOn": [
-        "pre-compile"
+        "^compile"
       ],
       "outputs": [
         "dist/**",
@@ -20,23 +22,17 @@
     },
     "post-compile": {
       "dependsOn": [
-        "compile"
+        "^post-compile"
       ],
       "cache": false
     },
     "test": {
       "dependsOn": [
-        "compile"
+        "^test"
       ],
       "outputs": [
         "coverage**",
         "test-reports/**"
-      ],
-      "outputMode": "new-only"
-    },
-    "package": {
-      "dependsOn": [
-        "test"
       ],
       "outputMode": "new-only"
     },

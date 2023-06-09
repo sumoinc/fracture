@@ -13,6 +13,7 @@ export class TurboRepo extends Component {
    * @param fracture
    * @returns
    */
+  /*
   public static buildTask(fracture: Fracture) {
     const maybeTask = fracture.tasks.tryFind(TURBO_BUILD_COMMAND);
 
@@ -28,6 +29,7 @@ export class TurboRepo extends Component {
     task.exec(`pnpm turbo package`);
     return task;
   }
+  */
 
   /**
    * Make this static so it can be called by projen when building other
@@ -36,6 +38,7 @@ export class TurboRepo extends Component {
    * @param fracture
    * @returns
    */
+  /*
   public static synthTask(fracture: Fracture) {
     const maybeTask = fracture.tasks.tryFind(TURBO_SYNTH_COMMAND);
 
@@ -50,33 +53,34 @@ export class TurboRepo extends Component {
 
     return task;
   }
+  */
 
   public fracture: Fracture;
 
   /**
    * Synthesizes your app.
    */
-  public readonly synth: Task;
+  public readonly buildTask: Task;
 
   /**
-   * Synthesizes your app and suppresses stdout.
+   * Synthesizes your app.
    */
-  public readonly synthSilent: Task;
+  public readonly synthTask: Task;
 
   /**
    * Deploys your app.
    */
-  public readonly deploy: Task;
+  public readonly deployTask: Task;
 
   /**
    * Destroys all the stacks.
    */
-  public readonly destroy: Task;
+  public readonly destroyTask: Task;
 
   /**
    * Diff against production.
    */
-  public readonly diff: Task;
+  public readonly diffTask: Task;
 
   constructor(fracture: Fracture) {
     super(fracture);
@@ -98,32 +102,57 @@ export class TurboRepo extends Component {
     upgradeTask.exec(`pnpm turbo upgrade`);
     */
 
-    this.synth = fracture.addTask("turbo:synth", {
+    /***************************************************************************
+     *
+     * MAIN BUILD PIPELINE
+     *
+     **************************************************************************/
+
+    this.buildTask = fracture.addTask("turbo:build", {
+      description: "Build using turborepo.",
+    });
+
+    // synths all projen files into their respedtive directories
+    this.buildTask.exec(`pnpm turbo default`);
+
+    // pre-compile activities
+    this.buildTask.exec(`pnpm turbo pre-compile`);
+
+    // build all typescript. This step is sort of redundant but a good type
+    // check anyway so leaving it for now.
+    this.buildTask.exec(`pnpm turbo compile`);
+
+    // post-compile activities
+    this.buildTask.exec(`pnpm turbo post-compile`);
+
+    // run all tests
+    this.buildTask.exec(`pnpm turbo test`);
+
+    /***************************************************************************
+     *
+     * CDK TASKS
+     *
+     **************************************************************************/
+    this.synthTask = fracture.addTask("turbo:synth", {
       description: "Synthesizes your cdk app into cdk.out",
-      exec: "pnpm turbo awscdk:synth",
+      exec: "pnpm turbo synth",
     });
 
-    this.synthSilent = fracture.addTask("turbo:synth:silent", {
-      description:
-        'Synthesizes your cdk app into cdk.out and suppresses the template in stdout (part of "pnpm build")',
-      exec: "pnpm turbo awscdk:synth -q",
-    });
-
-    this.deploy = fracture.addTask("turbo:deploy", {
+    this.deployTask = fracture.addTask("turbo:deploy", {
       description: "Deploys your CDK app to the AWS cloud",
-      exec: "pnpm turbo awscdk:deploy",
+      exec: "pnpm turbo deploy",
       receiveArgs: true,
     });
 
-    this.destroy = fracture.addTask("turbo:destroy", {
+    this.destroyTask = fracture.addTask("turbo:destroy", {
       description: "Destroys your cdk app in the AWS cloud",
-      exec: "pnpm turbo awscdk:destroy",
+      exec: "pnpm turbo destroy",
       receiveArgs: true,
     });
 
-    this.diff = fracture.addTask("turbo:diff", {
+    this.diffTask = fracture.addTask("turbo:diff", {
       description: "Diffs the currently deployed app against your code",
-      exec: "pnpm turbo awscdk:diff",
+      exec: "pnpm turbo diff",
     });
   }
 
@@ -147,25 +176,21 @@ export class TurboRepo extends Component {
             cache: false,
           },
           "pre-compile": {
-            dependsOn: [],
+            dependsOn: ["^pre-compile"],
             cache: false,
           },
           compile: {
-            dependsOn: ["pre-compile"],
+            dependsOn: ["^compile"],
             outputs: ["dist/**", "lib/**"],
             outputMode: "new-only",
           },
           "post-compile": {
-            dependsOn: ["compile"],
+            dependsOn: ["^post-compile"],
             cache: false,
           },
           test: {
-            dependsOn: ["compile"],
+            dependsOn: ["^test"],
             outputs: ["coverage**", "test-reports/**"],
-            outputMode: "new-only",
-          },
-          package: {
-            dependsOn: ["test"],
             outputMode: "new-only",
           },
           synth: {

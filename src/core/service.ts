@@ -182,11 +182,11 @@ export class Service {
   }
 
   public get packageName(): string {
-    return `@${this.fracture.name}/${this.name}-package`;
+    return `@${this.fracture.name}/${this.name}-pkg`;
   }
 
   public get serviceName(): string {
-    return `@${this.fracture.name}/${this.name}-service`;
+    return `@${this.fracture.name}/${this.name}-svc`;
   }
 
   public get isVersioned(): boolean {

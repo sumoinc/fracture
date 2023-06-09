@@ -1,5 +1,5 @@
 {
-  "name": "@example-app/company-package",
+  "name": "@example-app/company-pkg",
   "scripts": {
     "build": "npx projen build",
     "compile": "npx projen compile",
