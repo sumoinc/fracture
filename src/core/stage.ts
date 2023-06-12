@@ -1,26 +1,25 @@
-import { pascalCase } from "change-case";
 import { Component } from "projen";
 import { Environment } from "./environment";
-import { FractureApp } from "./fracture-app";
+import { Wave } from "./wave";
 
-export interface DeploymentOptions {
+export interface StageOptions {
   environment: Environment;
 }
 
-export class Deployment extends Component {
+export class Stage extends Component {
   // all other options
-  public readonly options: DeploymentOptions;
+  public readonly options: StageOptions;
 
-  constructor(app: FractureApp, options: DeploymentOptions) {
-    super(app.project);
+  constructor(wave: Wave, options: StageOptions) {
+    super(wave.project);
 
     this.options = options;
 
     // inverse
-    app.deployments.push(this);
+    wave.stages.push(this);
 
     // debugging output
-    this.project.logger.info(`INIT Deployment: "${this.name}"`);
+    this.project.logger.info(`INIT Stage: `);
   }
 
   public get env() {
@@ -40,9 +39,5 @@ export class Deployment extends Component {
 
   public get account() {
     return this.environment.account;
-  }
-
-  public get name() {
-    return pascalCase(this.account.name) + pascalCase(this.region);
   }
 }

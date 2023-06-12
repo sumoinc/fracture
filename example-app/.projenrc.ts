@@ -65,10 +65,17 @@ company.addResourceAttribute({
 
 const identityApp = fracture.addApp({ name: "identity-service" });
 identityApp.useService(userService);
-identityApp.addDeployment({ environment: devUsEa01 });
 
-// deploy feature branch to dev account, us-east-1
-// Deployment, Wave, and Phase are all optional
+/*******************************************************************************
+ * DEPLOYMENT CONFIGURATION
+ ******************************************************************************/
+
+const featurePipeline = identityApp.addPipeline({
+  name: "feature-branch",
+  branchTriggerPattern: "feature/*",
+});
+featurePipeline.addStage({ environment: devUsEa01 });
+
 // builds all packages
 fracture.build();
 fracture.synth();

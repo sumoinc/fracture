@@ -67,6 +67,8 @@ export class Fracture extends TypeScriptProject {
   public readonly organizations: Organization[] = [];
   public readonly environments: Environment[] = [];
   public readonly turborepo: TurboRepo;
+  public readonly workflows: Workflows;
+
   // all other options
   public readonly options: Required<FractureOptions>;
 
@@ -219,7 +221,7 @@ export class Fracture extends TypeScriptProject {
     this.turborepo = new TurboRepo(this);
 
     // configure workflows
-    new Workflows(this);
+    this.workflows = new Workflows(this);
 
     this.logger.info("=".repeat(80));
     this.logger.info("INIT PHASE");
