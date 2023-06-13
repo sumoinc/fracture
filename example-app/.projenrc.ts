@@ -44,13 +44,6 @@ user.addResourceAttribute({
   isRequired: true,
 });
 
-/**
- * Dev Deployment:
- * - branchTriggerPattern: 'feature/*'
- * - environments: [east, west]
- * then to environments: [west]
- */
-
 const companyService = fracture.addService({ name: "company" });
 const company = companyService.addResource({ name: "company" });
 company.addResourceAttribute({
@@ -76,6 +69,9 @@ const featurePipeline = identityApp.addPipeline({
 });
 featurePipeline.addStage({ environment: devUsEa01 });
 
-// builds all packages
+/*******************************************************************************
+ * BUILD / SYNTH
+ ******************************************************************************/
+
 fracture.build();
 fracture.synth();

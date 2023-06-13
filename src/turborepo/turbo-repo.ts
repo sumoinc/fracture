@@ -38,6 +38,10 @@ export class TurboRepo extends Component {
      *
      * MAIN BUILD PIPELINE
      *
+     * The steps defined here happen regardless of which pipeline is running.
+     * This includes building and synth for all apps and services across any
+     * environments they will be deployed into.
+     *
      **************************************************************************/
 
     this.buildTask = fracture.addTask("turbo:build", {
@@ -62,6 +66,7 @@ export class TurboRepo extends Component {
      * CDK TASKS
      *
      **************************************************************************/
+
     this.synthTask = fracture.addTask("turbo:synth", {
       description: "Synthesizes your cdk app into cdk.out",
       exec: "pnpm turbo synth",

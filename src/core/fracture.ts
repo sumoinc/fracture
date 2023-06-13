@@ -312,5 +312,8 @@ export class Fracture extends TypeScriptProject {
     this.services.forEach((service) => {
       service.build();
     });
+    this.apps.forEach((app) => {
+      app.build();
+    });
   }
 }
