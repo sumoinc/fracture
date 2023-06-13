@@ -87,6 +87,10 @@
       "type": "runtime"
     },
     {
+      "name": "esbuild",
+      "type": "runtime"
+    },
+    {
       "name": "example-app",
       "version": "workspace:*",
       "type": "runtime"

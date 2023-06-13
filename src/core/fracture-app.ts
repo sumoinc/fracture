@@ -65,7 +65,7 @@ export class FractureApp {
       pnpmVersion: "8",
       prettier: true,
       projenrcTs: true,
-      deps: ["aws-cdk", "aws-cdk-lib", "constructs"],
+      deps: ["aws-cdk", "aws-cdk-lib", "constructs", "esbuild"],
       eslintOptions: {
         dirs: ["src"],
         tsconfigPath: "./**/tsconfig.dev.json",
@@ -119,11 +119,20 @@ export class FractureApp {
       description: "Synth Cloud Assembly.",
     });
 
+    // clean the cdk.out folder out
+    synthTask.exec(`rm -rf cdk.out`);
+
+    // build for each environment
     this.pipelines.forEach((pipeline) => {
       pipeline.waves.forEach((wave) => {
         wave.stages.forEach((stage) => {
           synthTask.exec(
-            `set CDK_DEFAULT_ACCOUNT=${stage.account.id} CDK_DEFAULT_REGION=${stage.region} && pnpm cdk synth -q`
+            `set CDK_DEFAULT_ACCOUNT=${stage.account.id} CDK_DEFAULT_REGION=${
+              stage.region
+            } && pnpm cdk synth -q --output=cdk.out/${join(
+              stage.account.id,
+              stage.region
+            )}`
           );
         });
       });

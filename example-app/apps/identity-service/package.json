@@ -39,6 +39,7 @@
     "aws-cdk": "^2.83.1",
     "aws-cdk-lib": "^2.83.1",
     "constructs": "^10.2.47",
+    "esbuild": "^0.18.2",
     "example-app": "workspace:*"
   },
   "pnpm": {},

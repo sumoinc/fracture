@@ -27,6 +27,11 @@ const devUsEa01 = fracture.addEnvironment({
   region: "us-east-1",
 });
 
+const devUsEa02 = fracture.addEnvironment({
+  account: devAccount,
+  region: "us-east-2",
+});
+
 /*******************************************************************************
  * SERVICE CONFIGURATION
  ******************************************************************************/
@@ -68,6 +73,7 @@ const featurePipeline = identityApp.addPipeline({
   branchTriggerPattern: "feature/*",
 });
 featurePipeline.addStage({ environment: devUsEa01 });
+featurePipeline.addStage({ environment: devUsEa02 });
 
 /*******************************************************************************
  * BUILD / SYNTH

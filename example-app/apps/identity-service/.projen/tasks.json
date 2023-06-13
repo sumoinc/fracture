@@ -96,7 +96,13 @@
       "description": "Synth Cloud Assembly.",
       "steps": [
         {
-          "exec": "set CDK_DEFAULT_ACCOUNT=0000000000 CDK_DEFAULT_REGION=us-east-1 && pnpm cdk synth -q"
+          "exec": "rm -rf cdk.out"
+        },
+        {
+          "exec": "set CDK_DEFAULT_ACCOUNT=0000000000 CDK_DEFAULT_REGION=us-east-1 && pnpm cdk synth -q --output=cdk.out/0000000000/us-east-1"
+        },
+        {
+          "exec": "set CDK_DEFAULT_ACCOUNT=0000000000 CDK_DEFAULT_REGION=us-east-2 && pnpm cdk synth -q --output=cdk.out/0000000000/us-east-2"
         }
       ]
     },
