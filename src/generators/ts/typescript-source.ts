@@ -1,13 +1,19 @@
 import { dirname, join, relative, sep } from "path";
-import { Component, SourceCode } from "projen";
+import { Component, SourceCode, SourceCodeOptions } from "projen";
+
+export interface TypeScriptSourceOptions extends SourceCodeOptions {}
 
 /**
  * Build a TypeScript file and make sure it's marked as being managed by
  * projen.
  */
 export class TypeScriptSource extends SourceCode {
-  constructor(fractureComponent: Component, public readonly filePath: string) {
-    super(fractureComponent.project, filePath);
+  constructor(
+    fractureComponent: Component,
+    public readonly filePath: string,
+    options?: TypeScriptSourceOptions
+  ) {
+    super(fractureComponent.project, filePath, options);
 
     this.project.logger.info(`TS:INIT Source File: "${this.fileName}"`);
 

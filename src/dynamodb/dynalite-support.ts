@@ -21,7 +21,7 @@ export class DynaliteSupport extends Component {
     file.open(`...(process.env.MOCK_DYNAMODB_ENDPOINT && {`);
     file.line(`endpoint: process.env.MOCK_DYNAMODB_ENDPOINT,`);
     file.line(`sslEnabled: false,`);
-    file.line(`region: 'local',`);
+    file.line(`region: "local",`);
     file.close(`}),`);
     file.close(`}`);
     file.lines([

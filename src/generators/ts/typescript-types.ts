@@ -8,8 +8,6 @@ export class TypescriptTypes extends TypeScriptSource {
 
   constructor(service: Service) {
     super(service, join(service.srcDir, "ts", "types", service.name + ".ts"));
-
-    // remember this service name
     this.service = service;
   }
 

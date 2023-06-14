@@ -22,7 +22,10 @@ export class DynamoCommand extends TypeScriptSource {
         "dynamodb",
         "commands",
         `${operation.name}.ts`
-      )
+      ),
+      {
+        readonly: false,
+      }
     );
 
     this.operation = operation;
