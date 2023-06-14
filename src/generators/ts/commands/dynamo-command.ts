@@ -1,4 +1,4 @@
-import { Component } from "projen";
+import { join } from "path";
 import { ValueOf } from "type-fest";
 import { AccessPattern } from "../../../core/access-pattern";
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
@@ -8,430 +8,435 @@ import { Service } from "../../../core/service";
 import { Structure } from "../../../core/structure";
 import { TypeScriptSource } from "../typescript-source";
 
-export class DynamoCommand extends Component {
+export class DynamoCommand extends TypeScriptSource {
   public readonly operation: Operation;
 
   constructor(operation: Operation) {
-    super(operation.project);
+    super(
+      operation,
+      join(
+        operation.service.srcDir,
+        "ts",
+        "dynamodb",
+        "commands",
+        `${operation.name}.ts`
+      )
+    );
 
     this.operation = operation;
   }
 
-  // public build() {
-  //   this.writeCommand();
-  //   this.writeTest();
-  // }
+  preSynthesize(): void {
+    super.preSynthesize();
 
-  // public writeCommand = () => {
+    //   const tsFile = new TypeScriptSource(
+    //     this,
+    //     join(this.service.ts.dynamoCommandDir, `${this.operation.name}.ts`)
+    //   );
 
-  //   const tsFile = new TypeScriptSource(
-  //     this,
-  //     join(this.service.ts.dynamoCommandDir, `${this.operation.name}.ts`)
-  //   );
+    //   const responseType =
+    //     this.operation.operationSubType === OPERATION_SUB_TYPE.LIST
+    //       ? this.service.ts.listResponseTypeName
+    //       : this.service.ts.responseTypeName;
 
-  //   const responseType =
-  //     this.operation.operationSubType === OPERATION_SUB_TYPE.LIST
-  //       ? this.service.ts.listResponseTypeName
-  //       : this.service.ts.responseTypeName;
+    //   /***************************************************************************
+    //    *  IMPORTS
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *  IMPORTS
-  //    **************************************************************************/
+    //   tsFile.lines([
+    //     `import { DynamoDBClient } from "@aws-sdk/client-dynamodb";`,
+    //     `import { DynamoDBDocumentClient, ${this.dynamoCommandName} } from "@aws-sdk/lib-dynamodb";`,
+    //   ]);
 
-  //   tsFile.lines([
-  //     `import { DynamoDBClient } from "@aws-sdk/client-dynamodb";`,
-  //     `import { DynamoDBDocumentClient, ${this.dynamoCommandName} } from "@aws-sdk/lib-dynamodb";`,
-  //   ]);
+    //   if (this.inputStructure.hasGenerator(ResourceAttributeGenerator.GUID)) {
+    //     tsFile.line(`import { v4 as uuidv4 } from "uuid";`);
+    //   }
 
-  //   if (this.inputStructure.hasGenerator(ResourceAttributeGenerator.GUID)) {
-  //     tsFile.line(`import { v4 as uuidv4 } from "uuid";`);
-  //   }
+    //   tsFile.open(`import {`);
+    //   tsFile.line("Error,");
+    //   tsFile.line(this.inputStructure.ts.publicInterfaceName + ",");
+    //   tsFile.line(this.outputStructure.ts.publicInterfaceName + ",");
+    //   tsFile.line(responseType + ",");
+    //   tsFile.close(`} from "${this.service.ts.typeFile.pathFrom(tsFile)}";`);
+    //   tsFile.line("");
 
-  //   tsFile.open(`import {`);
-  //   tsFile.line("Error,");
-  //   tsFile.line(this.inputStructure.ts.publicInterfaceName + ",");
-  //   tsFile.line(this.outputStructure.ts.publicInterfaceName + ",");
-  //   tsFile.line(responseType + ",");
-  //   tsFile.close(`} from "${this.service.ts.typeFile.pathFrom(tsFile)}";`);
-  //   tsFile.line("");
+    //   /***************************************************************************
+    //    *
+    //    * CLIENT
+    //    *
+    //    * Use the dynalite support to create the client. This builds a testable
+    //    * client required when building Jest unit tests.
+    //    *
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *
-  //    * CLIENT
-  //    *
-  //    * Use the dynalite support to create the client. This builds a testable
-  //    * client required when building Jest unit tests.
-  //    *
-  //    **************************************************************************/
+    //   DynaliteSupport.writeDynamoClient(tsFile);
 
-  //   DynaliteSupport.writeDynamoClient(tsFile);
+    //   /***************************************************************************
+    //    *  OPEN FUNCTION
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *  OPEN FUNCTION
-  //    **************************************************************************/
+    //   tsFile.open(`export const ${this.functionName} = async (`);
+    //   tsFile.line(
+    //     `${this.inputName}: ${this.inputStructure.ts.publicInterfaceName}`
+    //   );
+    //   tsFile.close(
+    //     `): Promise<${responseType}<${this.outputStructure.ts.publicInterfaceName}>> => {`
+    //   );
+    //   tsFile.open("");
+    //   tsFile.line("");
 
-  //   tsFile.open(`export const ${this.functionName} = async (`);
-  //   tsFile.line(
-  //     `${this.inputName}: ${this.inputStructure.ts.publicInterfaceName}`
-  //   );
-  //   tsFile.close(
-  //     `): Promise<${responseType}<${this.outputStructure.ts.publicInterfaceName}>> => {`
-  //   );
-  //   tsFile.open("");
-  //   tsFile.line("");
+    //   tsFile.comments([
+    //     `An error container in case we encounter problems along the way.`,
+    //   ]);
+    //   tsFile.line(`const errors = [] as Error[];`);
+    //   tsFile.line("");
 
-  //   tsFile.comments([
-  //     `An error container in case we encounter problems along the way.`,
-  //   ]);
-  //   tsFile.line(`const errors = [] as Error[];`);
-  //   tsFile.line("");
+    //   tsFile.comments([`Assume things will go well (until they don't).`]);
+    //   tsFile.line(`let status = 200;`);
+    //   tsFile.line("");
 
-  //   tsFile.comments([`Assume things will go well (until they don't).`]);
-  //   tsFile.line(`let status = 200;`);
-  //   tsFile.line("");
+    //   /***************************************************************************
+    //    *
+    //    * UNWRAP INPUT VALUES
+    //    *
+    //    * Loop over all the inputs and unwrap them into simple variables. Then
+    //    * convert those values into their short format.
+    //    *
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *
-  //    * UNWRAP INPUT VALUES
-  //    *
-  //    * Loop over all the inputs and unwrap them into simple variables. Then
-  //    * convert those values into their short format.
-  //    *
-  //    **************************************************************************/
+    //   tsFile.comments([`Unwrap external inputs.`]);
+    //   tsFile.open(`const {`);
+    //   this.inputStructure.publicAttributes.forEach((a) => {
+    //     tsFile.line(`${a.ts.attributeName},`);
+    //   });
+    //   tsFile.close(`} = ${this.inputName};`);
+    //   tsFile.line("");
 
-  //   tsFile.comments([`Unwrap external inputs.`]);
-  //   tsFile.open(`const {`);
-  //   this.inputStructure.publicAttributes.forEach((a) => {
-  //     tsFile.line(`${a.ts.attributeName},`);
-  //   });
-  //   tsFile.close(`} = ${this.inputName};`);
-  //   tsFile.line("");
+    //   this.inputStructure.publicAttributes
+    //     // skip items with the same public and private names
+    //     .filter((a) => {
+    //       return a.ts.attributeShortName !== a.ts.attributeName;
+    //     })
+    //     .forEach((a) => {
+    //       tsFile.line(
+    //         `const ${a.ts.attributeShortName} = ${a.ts.attributeName};`
+    //       );
+    //     });
+    //   tsFile.line("");
 
-  //   this.inputStructure.publicAttributes
-  //     // skip items with the same public and private names
-  //     .filter((a) => {
-  //       return a.ts.attributeShortName !== a.ts.attributeName;
-  //     })
-  //     .forEach((a) => {
-  //       tsFile.line(
-  //         `const ${a.ts.attributeShortName} = ${a.ts.attributeName};`
-  //       );
-  //     });
-  //   tsFile.line("");
+    //   /***************************************************************************
+    //    *
+    //    * GENERATED VALUES
+    //    *
+    //    * Loop over anything that needs to be generated and generate values
+    //    * for them.
+    //    *
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *
-  //    * GENERATED VALUES
-  //    *
-  //    * Loop over anything that needs to be generated and generate values
-  //    * for them.
-  //    *
-  //    **************************************************************************/
+    //   tsFile.comments([`Generate needed values.`]);
+    //   this.inputStructure.generatedAttributes.forEach((a) => {
+    //     tsFile.line(
+    //       `const ${a.ts.attributeShortName} = ${a.ts.generationSource(
+    //         this.operation
+    //       )};`
+    //     );
+    //   });
+    //   tsFile.line("");
 
-  //   tsFile.comments([`Generate needed values.`]);
-  //   this.inputStructure.generatedAttributes.forEach((a) => {
-  //     tsFile.line(
-  //       `const ${a.ts.attributeShortName} = ${a.ts.generationSource(
-  //         this.operation
-  //       )};`
-  //     );
-  //   });
-  //   tsFile.line("");
+    //   /***************************************************************************
+    //    *
+    //    * DYNAMO COMMAND - OPEN
+    //    *
+    //    * Open the command and aupply common information like the table name.
+    //    * We don't use the result for create statesments since we already have all
+    //    * the values. We just made them!
+    //    *
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *
-  //    * DYNAMO COMMAND - OPEN
-  //    *
-  //    * Open the command and aupply common information like the table name.
-  //    * We don't use the result for create statesments since we already have all
-  //    * the values. We just made them!
-  //    *
-  //    **************************************************************************/
+    //   if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
+    //     tsFile.open(`await dynamo.send(`);
+    //   } else {
+    //     tsFile.open(`const result = await dynamo.send(`);
+    //   }
+    //   tsFile.open(`new ${this.dynamoCommandName}({`);
+    //   tsFile.line(`TableName: "${this.service.dynamoTable.name}",`);
 
-  //   if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
-  //     tsFile.open(`await dynamo.send(`);
-  //   } else {
-  //     tsFile.open(`const result = await dynamo.send(`);
-  //   }
-  //   tsFile.open(`new ${this.dynamoCommandName}({`);
-  //   tsFile.line(`TableName: "${this.service.dynamoTable.name}",`);
+    //   /***************************************************************************
+    //    *
+    //    * Create new item
+    //    *
+    //    * When creating a new item, we need to feed the entire item into the
+    //    * dynamodb PutItem command.
+    //    *
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *
-  //    * Create new item
-  //    *
-  //    * When creating a new item, we need to feed the entire item into the
-  //    * dynamodb PutItem command.
-  //    *
-  //    **************************************************************************/
+    //   if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
+    //     tsFile.open(`Item: {`);
+    //     this.inputStructure.itemAttributes.forEach((a) => {
+    //       tsFile.line(`${a.ts.attributeShortName},`);
+    //     });
+    //     tsFile.close(`},`);
+    //   }
 
-  //   if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
-  //     tsFile.open(`Item: {`);
-  //     this.inputStructure.itemAttributes.forEach((a) => {
-  //       tsFile.line(`${a.ts.attributeShortName},`);
-  //     });
-  //     tsFile.close(`},`);
-  //   }
+    //   /***************************************************************************
+    //    *
+    //    * Update Existing item
+    //    *
+    //    * When updating an item, we need to alias all names and values and use an
+    //    * expression for the update.
+    //    *
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *
-  //    * Update Existing item
-  //    *
-  //    * When updating an item, we need to alias all names and values and use an
-  //    * expression for the update.
-  //    *
-  //    **************************************************************************/
+    //   if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
+    //     const updateExpression = this.inputStructure.itemAttributes
+    //       .map((attribute) => {
+    //         return `#${attribute.ts.attributeShortName} = :${attribute.ts.attributeShortName}`;
+    //       })
+    //       .join(", ");
+    //     tsFile.line(`UpdateExpression: "set ${updateExpression}",`);
+    //     tsFile.open(`ExpressionAttributeValues: {`);
+    //     this.inputStructure.itemAttributes.forEach((attribute) => {
+    //       tsFile.line(
+    //         `":${attribute.ts.attributeShortName}": ${attribute.ts.attributeShortName},`
+    //       );
+    //     });
+    //     tsFile.close(`},`);
+    //     tsFile.open(`ExpressionAttributeNames: {`);
+    //     this.inputStructure.itemAttributes.forEach((attribute) => {
+    //       tsFile.line(
+    //         `"#${attribute.ts.attributeShortName}": "${attribute.ts.attributeShortName}",`
+    //       );
+    //     });
+    //     tsFile.close(`},`);
+    //   }
 
-  //   if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
-  //     const updateExpression = this.inputStructure.itemAttributes
-  //       .map((attribute) => {
-  //         return `#${attribute.ts.attributeShortName} = :${attribute.ts.attributeShortName}`;
-  //       })
-  //       .join(", ");
-  //     tsFile.line(`UpdateExpression: "set ${updateExpression}",`);
-  //     tsFile.open(`ExpressionAttributeValues: {`);
-  //     this.inputStructure.itemAttributes.forEach((attribute) => {
-  //       tsFile.line(
-  //         `":${attribute.ts.attributeShortName}": ${attribute.ts.attributeShortName},`
-  //       );
-  //     });
-  //     tsFile.close(`},`);
-  //     tsFile.open(`ExpressionAttributeNames: {`);
-  //     this.inputStructure.itemAttributes.forEach((attribute) => {
-  //       tsFile.line(
-  //         `"#${attribute.ts.attributeShortName}": "${attribute.ts.attributeShortName}",`
-  //       );
-  //     });
-  //     tsFile.close(`},`);
-  //   }
+    //   /***************************************************************************
+    //    *
+    //    * List Items
+    //    *
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *
-  //    * List Items
-  //    *
-  //    **************************************************************************/
+    //   if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
+    //     tsFile.line(`IndexName: "${this.lookupAccessPattern.dynamoGsi.name}",`);
+    //     // KeyConditionExpression: "Season = :s and Episode > :e",
+    //     tsFile.line(
+    //       `KeyConditionExpression: "#${this.lookupAccessPattern.pkAttribute.ts.attributeShortName} = :${this.lookupAccessPattern.pkAttribute.ts.attributeShortName} and begins_with(#${this.lookupAccessPattern.skAttribute.ts.attributeShortName}, :${this.lookupAccessPattern.skAttribute.ts.attributeShortName})",`
+    //     );
+    //     tsFile.open(`ExpressionAttributeValues: {`);
+    //     tsFile.line(
+    //       `":${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}": ${this.lookupAccessPattern.pkAttribute.ts.attributeShortName},`
+    //     );
+    //     tsFile.line(
+    //       `":${this.lookupAccessPattern.skAttribute.ts.attributeShortName}": ${this.lookupAccessPattern.skAttribute.ts.attributeShortName},`
+    //     );
+    //     tsFile.close(`},`);
+    //     tsFile.open(`ExpressionAttributeNames: {`);
+    //     tsFile.line(
+    //       `"#${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}": "${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}",`
+    //     );
+    //     tsFile.line(
+    //       `"#${this.lookupAccessPattern.skAttribute.ts.attributeShortName}": "${this.lookupAccessPattern.skAttribute.ts.attributeShortName}",`
+    //     );
+    //     tsFile.close(`},`);
+    //   }
 
-  //   if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
-  //     tsFile.line(`IndexName: "${this.lookupAccessPattern.dynamoGsi.name}",`);
-  //     // KeyConditionExpression: "Season = :s and Episode > :e",
-  //     tsFile.line(
-  //       `KeyConditionExpression: "#${this.lookupAccessPattern.pkAttribute.ts.attributeShortName} = :${this.lookupAccessPattern.pkAttribute.ts.attributeShortName} and begins_with(#${this.lookupAccessPattern.skAttribute.ts.attributeShortName}, :${this.lookupAccessPattern.skAttribute.ts.attributeShortName})",`
-  //     );
-  //     tsFile.open(`ExpressionAttributeValues: {`);
-  //     tsFile.line(
-  //       `":${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}": ${this.lookupAccessPattern.pkAttribute.ts.attributeShortName},`
-  //     );
-  //     tsFile.line(
-  //       `":${this.lookupAccessPattern.skAttribute.ts.attributeShortName}": ${this.lookupAccessPattern.skAttribute.ts.attributeShortName},`
-  //     );
-  //     tsFile.close(`},`);
-  //     tsFile.open(`ExpressionAttributeNames: {`);
-  //     tsFile.line(
-  //       `"#${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}": "${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}",`
-  //     );
-  //     tsFile.line(
-  //       `"#${this.lookupAccessPattern.skAttribute.ts.attributeShortName}": "${this.lookupAccessPattern.skAttribute.ts.attributeShortName}",`
-  //     );
-  //     tsFile.close(`},`);
-  //   }
+    //   /***************************************************************************
+    //    *
+    //    * Write Key - Certain operations require the pk and sk.
+    //    *
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *
-  //    * Write Key - Certain operations require the pk and sk.
-  //    *
-  //    **************************************************************************/
+    //   if (
+    //     this.operationSubType === OPERATION_SUB_TYPE.READ_ONE ||
+    //     this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE ||
+    //     this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
+    //   ) {
+    //     tsFile.open(`Key: {`);
+    //     tsFile.line(`${this.dynamoPkName},`);
+    //     tsFile.line(`${this.dynamoSkName},`);
+    //     tsFile.close(`},`);
+    //   }
 
-  //   if (
-  //     this.operationSubType === OPERATION_SUB_TYPE.READ_ONE ||
-  //     this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE ||
-  //     this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
-  //   ) {
-  //     tsFile.open(`Key: {`);
-  //     tsFile.line(`${this.dynamoPkName},`);
-  //     tsFile.line(`${this.dynamoSkName},`);
-  //     tsFile.close(`},`);
-  //   }
+    //   /***************************************************************************
+    //    *
+    //    * Return Values
+    //    *
+    //    * When deleting and item we want to old values (before delete).
+    //    * When Updating an item, we want the new values.
+    //    *
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *
-  //    * Return Values
-  //    *
-  //    * When deleting and item we want to old values (before delete).
-  //    * When Updating an item, we want the new values.
-  //    *
-  //    **************************************************************************/
+    //   if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
+    //     tsFile.line(`ReturnValues: "ALL_OLD",`);
+    //   }
 
-  //   if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
-  //     tsFile.line(`ReturnValues: "ALL_OLD",`);
-  //   }
+    //   if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
+    //     tsFile.line(`ReturnValues: "ALL_NEW",`);
+    //   }
+    //   /***************************************************************************
+    //    *
+    //    * Metrics
+    //    *
+    //    * We always want capacity metrics.
+    //    * Item colelction metrics only matter on mutations.
+    //    *
+    //    **************************************************************************/
 
-  //   if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
-  //     tsFile.line(`ReturnValues: "ALL_NEW",`);
-  //   }
-  //   /***************************************************************************
-  //    *
-  //    * Metrics
-  //    *
-  //    * We always want capacity metrics.
-  //    * Item colelction metrics only matter on mutations.
-  //    *
-  //    **************************************************************************/
+    //   // return some statistics (might remove this later)
+    //   tsFile.line(`ReturnConsumedCapacity: "INDEXES",`);
+    //   if (
+    //     this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE ||
+    //     this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE ||
+    //     this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE
+    //   ) {
+    //     tsFile.line(`ReturnItemCollectionMetrics: "SIZE",`);
+    //   }
 
-  //   // return some statistics (might remove this later)
-  //   tsFile.line(`ReturnConsumedCapacity: "INDEXES",`);
-  //   if (
-  //     this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE ||
-  //     this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE ||
-  //     this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE
-  //   ) {
-  //     tsFile.line(`ReturnItemCollectionMetrics: "SIZE",`);
-  //   }
+    //   /***************************************************************************
+    //    *
+    //    * DYNAMO COMMAND - CLOSE
+    //    *
+    //    * Close the args, then the send command
+    //    *
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *
-  //    * DYNAMO COMMAND - CLOSE
-  //    *
-  //    * Close the args, then the send command
-  //    *
-  //    **************************************************************************/
+    //   tsFile.close(`})`);
+    //   tsFile.close(`);`);
+    //   tsFile.line("");
 
-  //   tsFile.close(`})`);
-  //   tsFile.close(`);`);
-  //   tsFile.line("");
+    //   /***************************************************************************
+    //    *  CLOSE FUNCTION - create
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *  CLOSE FUNCTION - create
-  //    **************************************************************************/
+    //   if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
+    //     tsFile.comments([`Expand/comnvert data to output format.`]);
+    //     tsFile.open(`const data = {`);
+    //     this.outputStructure.publicAttributes.forEach((a) => {
+    //       tsFile.line(`${a.ts.attributeName}: ${a.ts.attributeShortName},`);
+    //     });
+    //     tsFile.close(`};`);
+    //     tsFile.line("");
+    //   }
 
-  //   if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
-  //     tsFile.comments([`Expand/comnvert data to output format.`]);
-  //     tsFile.open(`const data = {`);
-  //     this.outputStructure.publicAttributes.forEach((a) => {
-  //       tsFile.line(`${a.ts.attributeName}: ${a.ts.attributeShortName},`);
-  //     });
-  //     tsFile.close(`};`);
-  //     tsFile.line("");
-  //   }
+    //   /***************************************************************************
+    //    *  CLOSE FUNCTION - read
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *  CLOSE FUNCTION - read
-  //    **************************************************************************/
+    //   if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
+    //     // data
+    //     tsFile.comments([`Expand/comnvert data to output format.`]);
+    //     tsFile.open(`const data = (result.Item)`);
+    //     tsFile.open(`? {`);
+    //     this.outputStructure.publicAttributes.forEach((a) => {
+    //       tsFile.line(
+    //         `${a.ts.attributeName}: result.Item.${a.ts.attributeShortName},`
+    //       );
+    //     });
+    //     tsFile.close(`} : undefined;`);
+    //     tsFile.close("");
+    //     tsFile.line("");
 
-  //   if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
-  //     // data
-  //     tsFile.comments([`Expand/comnvert data to output format.`]);
-  //     tsFile.open(`const data = (result.Item)`);
-  //     tsFile.open(`? {`);
-  //     this.outputStructure.publicAttributes.forEach((a) => {
-  //       tsFile.line(
-  //         `${a.ts.attributeName}: result.Item.${a.ts.attributeShortName},`
-  //       );
-  //     });
-  //     tsFile.close(`} : undefined;`);
-  //     tsFile.close("");
-  //     tsFile.line("");
+    //     // errors
+    //     tsFile.comments([`Log error if no records found.`]);
+    //     tsFile.open(`if (!result.Item) {`);
+    //     tsFile.line(`status = 404;`);
+    //     tsFile.open(`errors.push({ `);
+    //     tsFile.line(`code: 12345,`);
+    //     tsFile.line(`source: "TODO",`);
+    //     tsFile.line(`message: "TODO - Item not found based on inputs.",`);
+    //     tsFile.line(`detail: "TODO",`);
+    //     tsFile.close(`})`);
+    //     tsFile.close(`}`);
+    //     tsFile.line("");
+    //   }
 
-  //     // errors
-  //     tsFile.comments([`Log error if no records found.`]);
-  //     tsFile.open(`if (!result.Item) {`);
-  //     tsFile.line(`status = 404;`);
-  //     tsFile.open(`errors.push({ `);
-  //     tsFile.line(`code: 12345,`);
-  //     tsFile.line(`source: "TODO",`);
-  //     tsFile.line(`message: "TODO - Item not found based on inputs.",`);
-  //     tsFile.line(`detail: "TODO",`);
-  //     tsFile.close(`})`);
-  //     tsFile.close(`}`);
-  //     tsFile.line("");
-  //   }
+    //   /***************************************************************************
+    //    *  CLOSE FUNCTION - update
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *  CLOSE FUNCTION - update
-  //    **************************************************************************/
+    //   if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
+    //     tsFile.comments([`Expand/comnvert data to output format.`]);
+    //     tsFile.open(`const data = (result.Attributes)`);
+    //     tsFile.open(`? {`);
+    //     this.outputStructure.publicAttributes.forEach((a) => {
+    //       tsFile.line(
+    //         `${a.ts.attributeName}: result.Attributes.${a.ts.attributeShortName},`
+    //       );
+    //     });
+    //     tsFile.close(`} : undefined;`);
+    //     tsFile.close("");
+    //     tsFile.line("");
 
-  //   if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
-  //     tsFile.comments([`Expand/comnvert data to output format.`]);
-  //     tsFile.open(`const data = (result.Attributes)`);
-  //     tsFile.open(`? {`);
-  //     this.outputStructure.publicAttributes.forEach((a) => {
-  //       tsFile.line(
-  //         `${a.ts.attributeName}: result.Attributes.${a.ts.attributeShortName},`
-  //       );
-  //     });
-  //     tsFile.close(`} : undefined;`);
-  //     tsFile.close("");
-  //     tsFile.line("");
+    //     tsFile.comments([`Log error if no records found.`]);
+    //     tsFile.open(`if (!result.Attributes) {`);
+    //     tsFile.line(`status = 404;`);
+    //     tsFile.open(`errors.push({ `);
+    //     tsFile.line(`code: 12345,`);
+    //     tsFile.line(`source: "TODO",`);
+    //     tsFile.line(`message: "TODO - Attributes not found based on inputs.",`);
+    //     tsFile.line(`detail: "TODO",`);
+    //     tsFile.close(`})`);
+    //     tsFile.close(`}`);
+    //     tsFile.line("");
+    //   }
 
-  //     tsFile.comments([`Log error if no records found.`]);
-  //     tsFile.open(`if (!result.Attributes) {`);
-  //     tsFile.line(`status = 404;`);
-  //     tsFile.open(`errors.push({ `);
-  //     tsFile.line(`code: 12345,`);
-  //     tsFile.line(`source: "TODO",`);
-  //     tsFile.line(`message: "TODO - Attributes not found based on inputs.",`);
-  //     tsFile.line(`detail: "TODO",`);
-  //     tsFile.close(`})`);
-  //     tsFile.close(`}`);
-  //     tsFile.line("");
-  //   }
+    //   /***************************************************************************
+    //    *  CLOSE FUNCTION - delete
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *  CLOSE FUNCTION - delete
-  //    **************************************************************************/
+    //   if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
+    //     tsFile.open(`const data = result.Attributes`);
+    //     tsFile.open(`? {`);
+    //     this.outputStructure.publicAttributes.forEach((a) => {
+    //       tsFile.line(
+    //         `${a.ts.attributeName}: result.Attributes.${a.ts.attributeShortName},`
+    //       );
+    //     });
+    //     tsFile.close(`} : undefined;`);
+    //     tsFile.close("");
+    //     tsFile.line("");
 
-  //   if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
-  //     tsFile.open(`const data = result.Attributes`);
-  //     tsFile.open(`? {`);
-  //     this.outputStructure.publicAttributes.forEach((a) => {
-  //       tsFile.line(
-  //         `${a.ts.attributeName}: result.Attributes.${a.ts.attributeShortName},`
-  //       );
-  //     });
-  //     tsFile.close(`} : undefined;`);
-  //     tsFile.close("");
-  //     tsFile.line("");
+    //     tsFile.comments([`Log error if no records found.`]);
+    //     tsFile.open(`if (!result.Attributes) {`);
+    //     tsFile.line(`status = 404;`);
+    //     tsFile.open(`errors.push({ `);
+    //     tsFile.line(`code: 12345,`);
+    //     tsFile.line(`source: "TODO",`);
+    //     tsFile.line(`message: "TODO - Attributes not found based on inputs.",`);
+    //     tsFile.line(`detail: "TODO",`);
+    //     tsFile.close(`})`);
+    //     tsFile.close(`}`);
+    //     tsFile.line("");
+    //   }
 
-  //     tsFile.comments([`Log error if no records found.`]);
-  //     tsFile.open(`if (!result.Attributes) {`);
-  //     tsFile.line(`status = 404;`);
-  //     tsFile.open(`errors.push({ `);
-  //     tsFile.line(`code: 12345,`);
-  //     tsFile.line(`source: "TODO",`);
-  //     tsFile.line(`message: "TODO - Attributes not found based on inputs.",`);
-  //     tsFile.line(`detail: "TODO",`);
-  //     tsFile.close(`})`);
-  //     tsFile.close(`}`);
-  //     tsFile.line("");
-  //   }
+    //   /***************************************************************************
+    //    *  CLOSE FUNCTION - list
+    //    **************************************************************************/
 
-  //   /***************************************************************************
-  //    *  CLOSE FUNCTION - list
-  //    **************************************************************************/
+    //   if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
+    //     tsFile.open(`const data = result.Items`);
+    //     tsFile.open(`? result.Items.map((item) => {`);
+    //     tsFile.open("");
+    //     tsFile.open("return {");
+    //     this.outputStructure.publicAttributes.forEach((a) => {
+    //       tsFile.line(`${a.ts.attributeName}: item.${a.ts.attributeShortName},`);
+    //     });
+    //     tsFile.close("};");
+    //     tsFile.close(`}) : [];`);
+    //     tsFile.close("");
+    //     tsFile.close("");
+    //     tsFile.line("");
+    //   }
 
-  //   if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
-  //     tsFile.open(`const data = result.Items`);
-  //     tsFile.open(`? result.Items.map((item) => {`);
-  //     tsFile.open("");
-  //     tsFile.open("return {");
-  //     this.outputStructure.publicAttributes.forEach((a) => {
-  //       tsFile.line(`${a.ts.attributeName}: item.${a.ts.attributeShortName},`);
-  //     });
-  //     tsFile.close("};");
-  //     tsFile.close(`}) : [];`);
-  //     tsFile.close("");
-  //     tsFile.close("");
-  //     tsFile.line("");
-  //   }
-
-  //   tsFile.comments([`Return result.`]);
-  //   tsFile.open(`return {`);
-  //   tsFile.line(`data,`);
-  //   tsFile.line(`errors,`);
-  //   tsFile.line(`status,`);
-  //   tsFile.close(`};`);
-  //   tsFile.close(`};`);
-  //   tsFile.line("");
-  // };
+    //   tsFile.comments([`Return result.`]);
+    //   tsFile.open(`return {`);
+    //   tsFile.line(`data,`);
+    //   tsFile.line(`errors,`);
+    //   tsFile.line(`status,`);
+    //   tsFile.close(`};`);
+    //   tsFile.close(`};`);
+    //   tsFile.line("");
+  }
 
   // public writeTest = () => {
   //   const tsTest = new TypeScriptSource(

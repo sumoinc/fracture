@@ -16,6 +16,10 @@
 /pnpm-lock.yaml linguist-generated
 /setupBeforeEnv.ts linguist-generated
 /src/ts/app.ts linguist-generated
+/src/ts/dynamodb/commands/create-company.ts linguist-generated
+/src/ts/dynamodb/commands/delete-company.ts linguist-generated
+/src/ts/dynamodb/commands/get-company.ts linguist-generated
+/src/ts/dynamodb/commands/update-company.ts linguist-generated
 /src/ts/types/company.ts linguist-generated
 /tsconfig.dev.json linguist-generated
 /tsconfig.json linguist-generated

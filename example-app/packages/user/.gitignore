@@ -46,3 +46,7 @@ junit.xml
 !/setupBeforeEnv.ts
 !/src/ts/types/user.ts
 !/src/ts/app.ts
+!/src/ts/dynamodb/commands/create-user.ts
+!/src/ts/dynamodb/commands/get-user.ts
+!/src/ts/dynamodb/commands/update-user.ts
+!/src/ts/dynamodb/commands/delete-user.ts

@@ -13,6 +13,10 @@
     "jest-dynalite-config.js",
     "setupBeforeEnv.ts",
     "src/ts/app.ts",
+    "src/ts/dynamodb/commands/create-company.ts",
+    "src/ts/dynamodb/commands/delete-company.ts",
+    "src/ts/dynamodb/commands/get-company.ts",
+    "src/ts/dynamodb/commands/update-company.ts",
     "src/ts/types/company.ts",
     "tsconfig.dev.json",
     "tsconfig.json"

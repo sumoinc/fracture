@@ -5,7 +5,7 @@ import { AccessPattern } from "./access-pattern";
 import { Resource } from "./resource";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
-import { DynamoCommand, TypescriptOperation } from "../generators";
+import { DynamoCommand } from "../generators";
 
 /******************************************************************************
  * TYPES
@@ -56,7 +56,7 @@ export class Operation extends Component {
   private _inputStructure?: Structure;
   private _outputStructure?: Structure;
   // generators
-  public readonly ts: TypescriptOperation;
+  //public readonly ts: TypescriptOperation;
   public readonly tsDynamoCommand: DynamoCommand;
 
   constructor(accessPattern: AccessPattern, options: OperationOptions) {
@@ -99,7 +99,7 @@ export class Operation extends Component {
      *
      **************************************************************************/
 
-    this.ts = new TypescriptOperation(this);
+    //this.ts = new TypescriptOperation(this);
     this.tsDynamoCommand = new DynamoCommand(this);
 
     return this;

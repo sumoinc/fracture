@@ -46,3 +46,7 @@ junit.xml
 !/setupBeforeEnv.ts
 !/src/ts/types/company.ts
 !/src/ts/app.ts
+!/src/ts/dynamodb/commands/create-company.ts
+!/src/ts/dynamodb/commands/get-company.ts
+!/src/ts/dynamodb/commands/update-company.ts
+!/src/ts/dynamodb/commands/delete-company.ts

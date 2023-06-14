@@ -6,7 +6,10 @@ import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
 import { AuditStrategy } from "./audit-strategy";
 import { Fracture } from "./fracture";
-import { NamingStrategy } from "./naming-strategy";
+import {
+  NamingStrategy,
+  formatStringByNamingStrategy,
+} from "./naming-strategy";
 import { Resource, ResourceOptions } from "./resource";
 import { DynaliteSupport } from "../dynamodb";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";
@@ -228,5 +231,25 @@ export class Service extends Component {
 
   public get lookupDynamoGsi(): DynamoGsi {
     return this.dynamoTable.lookupDynamoGsi;
+  }
+
+  /*****************************************************************************
+   *
+   *  TYPESCRIPT HELPERS
+   *
+   ****************************************************************************/
+
+  public get tsResponseTypeName() {
+    return formatStringByNamingStrategy(
+      "response",
+      this.namingStrategy.ts.typeName
+    );
+  }
+
+  public get tsLlistResponseTypeName() {
+    return formatStringByNamingStrategy(
+      "list-response",
+      this.namingStrategy.ts.typeName
+    );
   }
 }
