@@ -14,6 +14,8 @@ export class TypescriptTypes extends TypeScriptSource {
   }
 
   preSynthesize(): void {
+    super.preSynthesize();
+
     /***************************************************************************
      * GENERIC TYPES
      **************************************************************************/

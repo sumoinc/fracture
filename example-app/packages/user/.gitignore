@@ -45,3 +45,4 @@ junit.xml
 !/jest-dynalite-config.js
 !/setupBeforeEnv.ts
 !/src/ts/types/user.ts
+!/src/ts/app.ts

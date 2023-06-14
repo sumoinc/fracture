@@ -11,6 +11,7 @@ import { Resource, ResourceOptions } from "./resource";
 import { DynaliteSupport } from "../dynamodb";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";
 import { DynamoTable } from "../dynamodb/dynamo-table";
+import { CdkApp } from "../generators/cdk/cdk-app";
 import { TypescriptTypes } from "../generators/ts/typescript-types";
 
 export interface ServiceOptions {
@@ -51,6 +52,7 @@ export class Service extends Component {
 
   // output files / generators
   public readonly tsTypes: TypescriptTypes;
+  public readonly cdkApp: CdkApp;
 
   constructor(fracture: Fracture, options: ServiceOptions) {
     super(fracture);
@@ -142,6 +144,7 @@ export class Service extends Component {
     //this.ts = new TypescriptService(this);
 
     this.tsTypes = new TypescriptTypes(this);
+    this.cdkApp = new CdkApp(this);
 
     return this;
   }

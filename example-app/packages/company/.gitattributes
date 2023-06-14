@@ -15,6 +15,7 @@
 /package.json linguist-generated
 /pnpm-lock.yaml linguist-generated
 /setupBeforeEnv.ts linguist-generated
+/src/ts/app.ts linguist-generated
 /src/ts/types/company.ts linguist-generated
 /tsconfig.dev.json linguist-generated
 /tsconfig.json linguist-generated

@@ -12,6 +12,7 @@
     ".projen/tasks.json",
     "jest-dynalite-config.js",
     "setupBeforeEnv.ts",
+    "src/ts/app.ts",
     "src/ts/types/company.ts",
     "tsconfig.dev.json",
     "tsconfig.json"
