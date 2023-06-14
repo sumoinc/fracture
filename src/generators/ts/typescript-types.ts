@@ -62,43 +62,21 @@ export class TypescriptTypes extends TypeScriptSource {
      **************************************************************************/
 
     this.service.resources.forEach((resource) => {
-      resource.structures.forEach((structure) => {
-        writeInterface(structure);
-      });
+      resource.structures.forEach((structure) => writeInterface(structure));
     });
 
     /***************************************************************************
-     * INPUTS / OUTPUTS - TODO
+     * INPUTS / OUTPUTS
      **************************************************************************/
     this.service.resources.forEach((resource) => {
       resource.accessPatterns.forEach((accessPattern) => {
         accessPattern.operations.forEach((operation) => {
-          const { inputStructure, outputStructure } = operation;
-
-          this.comments(inputStructure.comments);
-          this.open(`export interface ${inputStructure.tsInterfaceName} {`);
-          inputStructure.publicAttributes.forEach((attribute) => {
-            this.comments(attribute.comments);
-            this.line(
-              `${attribute.tsAttributeName}${attribute.tsRequired}: ${attribute.tsType};`
-            );
-          });
-          this.close(`}`);
-          this.line("");
-
-          this.comments(inputStructure.comments);
-          this.open(`export interface ${outputStructure.tsInterfaceName} {`);
-          outputStructure.publicAttributes.forEach((attribute) => {
-            this.comments(attribute.comments);
-            this.line(
-              `${attribute.tsAttributeName}${attribute.tsRequired}: ${attribute.tsType};`
-            );
-          });
-          this.close(`}`);
-          this.line("");
+          writeInterface(operation.inputStructure);
+          writeInterface(operation.outputStructure);
         });
       });
     });
+
     super.preSynthesize();
   }
 }
