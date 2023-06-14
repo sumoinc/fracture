@@ -12,6 +12,7 @@ export class CdkApp extends TypeScriptSource {
     this.service = service;
   }
 
+  /*
   preSynthesize(): void {
     this.line(`import { execSync } from "child_process";`);
     this.line(`import { App, Stack } from "aws-cdk-lib";`);
@@ -37,4 +38,5 @@ export class CdkApp extends TypeScriptSource {
 
     super.preSynthesize();
   }
+  */
 }
