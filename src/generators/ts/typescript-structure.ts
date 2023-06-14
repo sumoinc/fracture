@@ -1,5 +1,5 @@
 import { Component } from "projen";
-import { formatStringByNamingStrategy } from "../../core/naming-strategy";
+
 import { Resource } from "../../core/resource";
 import { Service } from "../../core/service";
 import { Structure } from "../../core/structure";
@@ -21,12 +21,14 @@ export class TypescriptStructure extends Component {
   //   this.writePublicInterface();
   // }
 
+  /*
   public get publicInterfaceName() {
     return formatStringByNamingStrategy(
       this.structure.name,
       this.service.namingStrategy.ts.interfaceName
     );
   }
+  */
 
   // writePublicInterface() {
   //   this.service.ts.typeFile.comments(this.structure.comments);

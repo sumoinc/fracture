@@ -9,7 +9,6 @@ import {
   ResourceAttributeGenerator,
 } from "./resource-attribute";
 import { Service } from "./service";
-import { TypescriptStructure } from "../generators/ts/typescript-structure";
 
 /******************************************************************************
  * TYPES
@@ -55,7 +54,7 @@ export class Structure extends Component {
   // all other options
   public readonly options: SetRequired<StructureOptions, "type" | "comments">;
   // generators
-  public readonly ts: TypescriptStructure;
+  //public readonly ts: TypescriptStructure;
 
   constructor(resource: Resource, options: StructureOptions) {
     super(resource.project);
@@ -108,7 +107,7 @@ export class Structure extends Component {
      *
      **************************************************************************/
 
-    this.ts = new TypescriptStructure(this);
+    //this.ts = new TypescriptStructure(this);
 
     return this;
   }

@@ -1,5 +1,4 @@
 import { Component } from "projen";
-import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Operation } from "../../core/operation";
 import { Resource } from "../../core/resource";
 import {
@@ -29,6 +28,7 @@ export class TypescriptResourceAttribute extends Component {
   /**
    * Gets formatted attribute name for this resource
    */
+  /*
   public get attributeName() {
     return formatStringByNamingStrategy(
       this.resourceAttribute.name,
@@ -42,6 +42,7 @@ export class TypescriptResourceAttribute extends Component {
       this.service.namingStrategy.ts.attributeName
     );
   }
+  */
 
   public get required() {
     return this.resourceAttribute.isRequired ? "" : "?";

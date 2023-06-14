@@ -3,11 +3,9 @@ import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { AccessPattern } from "./access-pattern";
-
 import { formatStringByNamingStrategy } from "./naming-strategy";
 import { Operation, OperationDefault, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
-import { TypescriptResourceAttribute } from "../generators/ts/typescript-resource-attribute";
 
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
@@ -242,7 +240,7 @@ export class ResourceAttribute extends Component {
   // all other options
   public readonly options: Required<ResourceAttributeOptions>;
   // generators
-  public readonly ts: TypescriptResourceAttribute;
+  //public readonly ts: TypescriptResourceAttribute;
 
   constructor(resource: Resource, options: ResourceAttributeOptions) {
     super(resource.project);
@@ -341,7 +339,7 @@ export class ResourceAttribute extends Component {
      *
      **************************************************************************/
 
-    this.ts = new TypescriptResourceAttribute(this);
+    // this.ts = new TypescriptResourceAttribute(this);
 
     return this;
   }
@@ -614,6 +612,13 @@ export class ResourceAttribute extends Component {
     );
   }
 
+  public get tsAttributeShortName() {
+    return formatStringByNamingStrategy(
+      this.shortName,
+      this.resource.namingStrategy.ts.attributeName
+    );
+  }
+
   public get tsRequired() {
     return this.isRequired ? "" : "?";
   }
@@ -642,6 +647,41 @@ export class ResourceAttribute extends Component {
         return "boolean";
       default:
         throw new Error(`Unknown attribute type: ${this.type}`);
+    }
+  }
+
+  public get tsGenerationSource() {
+    const generator = this.generator;
+    switch (generator) {
+      case ResourceAttributeGenerator.NONE:
+        throw new Error("No generator! Did you call isGenerated first?");
+      case ResourceAttributeGenerator.GUID:
+        return "uuidv4()";
+      case ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP:
+        return "new Date().toISOString()";
+      case ResourceAttributeGenerator.TYPE:
+        return `"${this.resource.name}"`;
+      case ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP:
+        /*
+        if (this.hasDefaultFor(operation)) {
+          return `"${this.
+            .defaultFor(operation)
+            .toLowerCase()}"`;
+        } else {
+          return "new Date().toISOString()";
+        }
+        */
+        return "new Date().toISOString()";
+      case ResourceAttributeGenerator.COMPOSITION:
+        return this.compositionSources.length === 0
+          ? undefined
+          : this.compositionSources
+              .map((s) => {
+                return `${s.shortName}.toLowerCase()`;
+              })
+              .join(` + "${this.compositionSeperator}" + `);
+      default:
+        throw new Error(`Unknown generator: ${generator}`);
     }
   }
 }

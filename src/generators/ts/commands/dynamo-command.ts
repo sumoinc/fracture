@@ -7,6 +7,7 @@ import { Operation, OPERATION_SUB_TYPE } from "../../../core/operation";
 import { Resource } from "../../../core/resource";
 import { Service } from "../../../core/service";
 import { Structure } from "../../../core/structure";
+import { DynaliteSupport } from "../../../dynamodb";
 import { TypeScriptSource } from "../typescript-source";
 
 export class DynamoCommand extends TypeScriptSource {
@@ -28,11 +29,6 @@ export class DynamoCommand extends TypeScriptSource {
   }
 
   preSynthesize(): void {
-    //   const responseType =
-    //     this.operation.operationSubType === OPERATION_SUB_TYPE.LIST
-    //       ? this.service.ts.listResponseTypeName
-    //       : this.service.ts.responseTypeName;
-
     /***************************************************************************
      *  IMPORTS
      **************************************************************************/
@@ -48,129 +44,125 @@ export class DynamoCommand extends TypeScriptSource {
 
     this.open(`import {`);
     this.line("Error,");
-    this.line(this.inputStructure.ts.publicInterfaceName + ",");
-    this.line(this.outputStructure.ts.publicInterfaceName + ",");
+    this.line(this.inputStructure.tsInterfaceName + ",");
+    this.line(this.outputStructure.tsInterfaceName + ",");
     this.line(this.operation.tsResponseTypeName + ",");
     this.close(`} from "${this.service.tsTypes.pathFrom(this)}";`);
     this.line("");
 
-    //   /***************************************************************************
-    //    *
-    //    * CLIENT
-    //    *
-    //    * Use the dynalite support to create the client. This builds a testable
-    //    * client required when building Jest unit tests.
-    //    *
-    //    **************************************************************************/
+    /***************************************************************************
+     *
+     * CLIENT
+     *
+     * Use the dynalite support to create the client. This builds a testable
+     * client required when building Jest unit tests.
+     *
+     **************************************************************************/
 
-    //   DynaliteSupport.writeDynamoClient(tsFile);
+    DynaliteSupport.writeDynamoClient(this);
 
-    //   /***************************************************************************
-    //    *  OPEN FUNCTION
-    //    **************************************************************************/
+    /***************************************************************************
+     *  OPEN FUNCTION
+     **************************************************************************/
 
-    //   tsFile.open(`export const ${this.functionName} = async (`);
-    //   tsFile.line(
-    //     `${this.inputName}: ${this.inputStructure.ts.publicInterfaceName}`
-    //   );
-    //   tsFile.close(
-    //     `): Promise<${responseType}<${this.outputStructure.ts.publicInterfaceName}>> => {`
-    //   );
-    //   tsFile.open("");
-    //   tsFile.line("");
+    this.open(`export const ${this.functionName} = async (`);
+    this.line(`${this.inputName}: ${this.inputStructure.tsInterfaceName}`);
+    this.close(
+      `): Promise<${this.operation.tsResponseTypeName}<${this.outputStructure.tsInterfaceName}>> => {`
+    );
+    this.open("");
+    this.line("");
 
-    //   tsFile.comments([
-    //     `An error container in case we encounter problems along the way.`,
-    //   ]);
-    //   tsFile.line(`const errors = [] as Error[];`);
-    //   tsFile.line("");
+    this.comments([
+      `An error container in case we encounter problems along the way.`,
+    ]);
+    this.line(`const errors = [] as Error[];`);
+    this.line("");
 
-    //   tsFile.comments([`Assume things will go well (until they don't).`]);
-    //   tsFile.line(`let status = 200;`);
-    //   tsFile.line("");
+    this.comments([`Assume things will go well (until they don't).`]);
+    this.line(`let status = 200;`);
+    this.line("");
 
-    //   /***************************************************************************
-    //    *
-    //    * UNWRAP INPUT VALUES
-    //    *
-    //    * Loop over all the inputs and unwrap them into simple variables. Then
-    //    * convert those values into their short format.
-    //    *
-    //    **************************************************************************/
+    /***************************************************************************
+     *
+     * UNWRAP INPUT VALUES
+     *
+     * Loop over all the inputs and unwrap them into simple variables. Then
+     * convert those values into their short format.
+     *
+     **************************************************************************/
 
-    //   tsFile.comments([`Unwrap external inputs.`]);
-    //   tsFile.open(`const {`);
-    //   this.inputStructure.publicAttributes.forEach((a) => {
-    //     tsFile.line(`${a.ts.attributeName},`);
-    //   });
-    //   tsFile.close(`} = ${this.inputName};`);
-    //   tsFile.line("");
+    this.comments([`Unwrap external inputs.`]);
+    this.open(`const {`);
+    this.inputStructure.publicAttributes.forEach((attribute) => {
+      this.line(`${attribute.tsAttributeName},`);
+    });
+    this.close(`} = ${this.inputName};`);
+    this.line("");
 
-    //   this.inputStructure.publicAttributes
-    //     // skip items with the same public and private names
-    //     .filter((a) => {
-    //       return a.ts.attributeShortName !== a.ts.attributeName;
-    //     })
-    //     .forEach((a) => {
-    //       tsFile.line(
-    //         `const ${a.ts.attributeShortName} = ${a.ts.attributeName};`
-    //       );
-    //     });
-    //   tsFile.line("");
+    this.inputStructure.publicAttributes
+      // skip items with the same public and private names
+      .filter((attribute) => {
+        return attribute.tsAttributeShortName !== attribute.tsAttributeName;
+      })
+      .forEach((attribute) => {
+        this.line(
+          `const ${attribute.tsAttributeShortName} = ${attribute.tsAttributeName};`
+        );
+      });
+    this.line("");
 
-    //   /***************************************************************************
-    //    *
-    //    * GENERATED VALUES
-    //    *
-    //    * Loop over anything that needs to be generated and generate values
-    //    * for them.
-    //    *
-    //    **************************************************************************/
+    /***************************************************************************
+     *
+     * GENERATED VALUES
+     *
+     * Loop over anything that needs to be generated and generate values
+     * for them.
+     *
+     **************************************************************************/
 
-    //   tsFile.comments([`Generate needed values.`]);
-    //   this.inputStructure.generatedAttributes.forEach((a) => {
-    //     tsFile.line(
-    //       `const ${a.ts.attributeShortName} = ${a.ts.generationSource(
-    //         this.operation
-    //       )};`
-    //     );
-    //   });
-    //   tsFile.line("");
+    this.comments([`Generate needed values.`]);
+    this.inputStructure.generatedAttributes.forEach((attribute) => {
+      this.line(
+        `const ${attribute.tsAttributeShortName} = ${attribute.tsGenerationSource};`
+      );
+    });
+    this.line("");
 
-    //   /***************************************************************************
-    //    *
-    //    * DYNAMO COMMAND - OPEN
-    //    *
-    //    * Open the command and aupply common information like the table name.
-    //    * We don't use the result for create statesments since we already have all
-    //    * the values. We just made them!
-    //    *
-    //    **************************************************************************/
+    /***************************************************************************
+     *
+     * DYNAMO COMMAND - OPEN
+     *
+     * Open the command and aupply common information like the table name.
+     * We don't use the result for create statesments since we already have all
+     * the values. We just made them!
+     *
+     **************************************************************************/
 
-    //   if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
-    //     tsFile.open(`await dynamo.send(`);
-    //   } else {
-    //     tsFile.open(`const result = await dynamo.send(`);
-    //   }
-    //   tsFile.open(`new ${this.dynamoCommandName}({`);
-    //   tsFile.line(`TableName: "${this.service.dynamoTable.name}",`);
+    if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
+      this.open(`await dynamo.send(`);
+    } else {
+      this.open(`const result = await dynamo.send(`);
+    }
+    this.open(`new ${this.dynamoCommandName}({`);
+    this.line(`TableName: "${this.service.dynamoTable.name}",`);
 
-    //   /***************************************************************************
-    //    *
-    //    * Create new item
-    //    *
-    //    * When creating a new item, we need to feed the entire item into the
-    //    * dynamodb PutItem command.
-    //    *
-    //    **************************************************************************/
+    /***************************************************************************
+     *
+     * Create new item
+     *
+     * When creating a new item, we need to feed the entire item into the
+     * dynamodb PutItem command.
+     *
+     **************************************************************************/
 
-    //   if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
-    //     tsFile.open(`Item: {`);
-    //     this.inputStructure.itemAttributes.forEach((a) => {
-    //       tsFile.line(`${a.ts.attributeShortName},`);
-    //     });
-    //     tsFile.close(`},`);
-    //   }
+    if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
+      this.open(`Item: {`);
+      this.inputStructure.itemAttributes.forEach((attribute) => {
+        this.line(`${attribute.tsAttributeShortName},`);
+      });
+      this.close(`},`);
+    }
 
     //   /***************************************************************************
     //    *
@@ -649,9 +641,11 @@ export class DynamoCommand extends TypeScriptSource {
     file.open(
       `const seedData = await ${this.createOperation.tsDynamoCommand.functionName}({`
     );
-    this.createOperation.inputStructure.publicAttributes.forEach((a) => {
-      file.line(`${a.ts.attributeName}: "foo",`);
-    });
+    this.createOperation.inputStructure.publicAttributes.forEach(
+      (attribute) => {
+        file.line(`${attribute.tsAttributeName}: "foo",`);
+      }
+    );
     file.close(`});`);
     file.line("");
 
