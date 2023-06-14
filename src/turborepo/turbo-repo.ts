@@ -88,16 +88,12 @@ export class TurboRepo extends Component {
       description: "Diffs the currently deployed app against your code",
       exec: "pnpm turbo diff",
     });
-  }
 
-  /**
-   * Build the file.
-   *
-   * Call this when you've configured everything, prior to preSynthesize.
-   *
-   * @returns void
-   */
-  public build() {
+    /***************************************************************************
+     *
+     * DECLARE ROOT BUILDFILE
+     *
+     **************************************************************************/
     new JsonFile(this.project, "turbo.json", {
       obj: {
         $schema: "https://turborepo.org/schema.json",
