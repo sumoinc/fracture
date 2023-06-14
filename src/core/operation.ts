@@ -1,12 +1,11 @@
 import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { DynamoCommand, TypescriptOperation } from "../generators";
 import { AccessPattern } from "./access-pattern";
-
 import { Resource } from "./resource";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
+import { DynamoCommand, TypescriptOperation } from "../generators";
 
 /******************************************************************************
  * TYPES
@@ -106,14 +105,14 @@ export class Operation extends Component {
     return this;
   }
 
-  public build() {
-    this.project.logger.info(`BUILD Operation: "${this.name}"`);
-    this.inputStructure.build();
-    this.outputStructure.build();
-    // build generators
-    this.ts.build();
-    this.tsDynamoCommand.build();
-  }
+  // public build() {
+  //   this.project.logger.info(`BUILD Operation: "${this.name}"`);
+  //   this.inputStructure.build();
+  //   this.outputStructure.build();
+  //   // build generators
+  //   this.ts.build();
+  //   // this.tsDynamoCommand.build();
+  // }
 
   /**
    * Operation name, based on the naming strategy

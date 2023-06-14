@@ -79,5 +79,5 @@ featurePipeline.addStage({ environment: devUsEa02 });
  * BUILD / SYNTH
  ******************************************************************************/
 
-fracture.build();
+//fracture.build();
 fracture.synth();

@@ -1,8 +1,6 @@
 import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { DynamoGsi } from "../dynamodb/dynamo-gsi";
-import { DynamoTable } from "../dynamodb/dynamo-table";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
@@ -10,6 +8,8 @@ import {
   ResourceAttributeGenerator,
   ResourceAttributeOptions,
 } from "./resource-attribute";
+import { DynamoGsi } from "../dynamodb/dynamo-gsi";
+import { DynamoTable } from "../dynamodb/dynamo-table";
 
 export const ACCESS_PATTERN_TYPE = {
   /**
@@ -118,24 +118,17 @@ export class AccessPattern extends Component {
     return this;
   }
 
+  /*
   public build() {
     this.project.logger.debug(
       `BUILD Access Pattern: "${this.pkAttribute.name}:${this.skAttribute.name}" called.`
     );
-    /***************************************************************************
-     *
-     * CRUD OPERATIONS
-     *
-     * TODO
-     *
-     **************************************************************************/
-    /*
     new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.LIST,
     });
-    */
   }
+  */
 
   addPkAttributeSource(sourceAttribute: ResourceAttribute) {
     this.pkAttribute.compositionSources.push(sourceAttribute);

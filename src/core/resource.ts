@@ -175,19 +175,19 @@ export class Resource extends Component {
     return this;
   }
 
-  public build() {
-    this.project.logger.info(`BUILD Resource: "${this.name}"`);
-    this.dataStructure.build();
-    this.transientStructure.build();
-    this.operations.forEach((operation) => {
-      operation.build();
-    });
-    this.accessPatterns.forEach((accessPattern) => {
-      accessPattern.build();
-    });
-    // build generators
-    this.ts.build();
-  }
+  // public build() {
+  //   this.project.logger.info(`BUILD Resource: "${this.name}"`);
+  //   this.dataStructure.build();
+  //   this.transientStructure.build();
+  //   this.operations.forEach((operation) => {
+  //     operation.build();
+  //   });
+  //   //this.accessPatterns.forEach((accessPattern) => {
+  //   //accessPattern.build();
+  //   //});
+  //   // build generators
+  //   this.ts.build();
+  // }
 
   public get name(): string {
     return this.options.name;

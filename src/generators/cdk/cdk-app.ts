@@ -1,7 +1,5 @@
-import { join } from "path";
 import { Component } from "projen";
 import { Service } from "../../core/service";
-import { TypeScriptSource } from "../ts";
 
 export class CdkApp extends Component {
   public readonly service: Service;
@@ -12,11 +10,11 @@ export class CdkApp extends Component {
     this.service = service;
   }
 
-  public build() {
-    this.writeConstruct();
-  }
+  // public build() {
+  //   this.writeConstruct();
+  // }
 
-  public writeConstruct = () => {
-    new TypeScriptSource(this, join(this.service.ts.outdir, `app.ts`));
-  };
+  // public writeConstruct = () => {
+  //   new TypeScriptSource(this, join(this.service.ts.outdir, `app.ts`));
+  // };
 }

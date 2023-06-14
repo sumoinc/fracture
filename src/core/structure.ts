@@ -1,7 +1,7 @@
 import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { SetRequired, ValueOf } from "type-fest";
-import { TypescriptStructure } from "../generators/ts/typescript-structure";
+import { formatStringByNamingStrategy } from "./naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
@@ -9,6 +9,7 @@ import {
   ResourceAttributeGenerator,
 } from "./resource-attribute";
 import { Service } from "./service";
+import { TypescriptStructure } from "../generators/ts/typescript-structure";
 
 /******************************************************************************
  * TYPES
@@ -67,7 +68,7 @@ export class Structure extends Component {
 
     const defaultOptions: Partial<StructureOptions> = {
       type: STRUCTURE_TYPE.DATA,
-      comments: ["A gereric type"],
+      comments: ["A generic type"],
     };
 
     /***************************************************************************
@@ -116,7 +117,7 @@ export class Structure extends Component {
   public build() {
     this.project.logger.info(`BUILD Structure: "${this.name}"`);
     // build generators
-    this.ts.build();
+    //this.ts.build();
   }
 
   /**
@@ -302,5 +303,17 @@ export class Structure extends Component {
 
   public get auditStrategy() {
     return this.service.auditStrategy;
+  }
+  /*****************************************************************************
+   *
+   *  TYPESCRIPT HELPERS
+   *
+   ****************************************************************************/
+
+  public get tsInterfaceName() {
+    return formatStringByNamingStrategy(
+      this.name,
+      this.resource.namingStrategy.ts.interfaceName
+    );
   }
 }

@@ -17,9 +17,9 @@ export class TypescriptStructure extends Component {
     this.project.logger.info(`TS:INIT Structure: "${this.structure.name}"`);
   }
 
-  public build() {
-    this.writePublicInterface();
-  }
+  // public build() {
+  //   this.writePublicInterface();
+  // }
 
   public get publicInterfaceName() {
     return formatStringByNamingStrategy(
@@ -28,21 +28,21 @@ export class TypescriptStructure extends Component {
     );
   }
 
-  writePublicInterface() {
-    this.service.ts.typeFile.comments(this.structure.comments);
-    this.service.ts.typeFile.open(
-      `export interface ${this.publicInterfaceName} {`
-    );
-    this.structure.publicAttributes.forEach((a) => {
-      this.service.ts.typeFile.comments(a.comments);
-      this.service.ts.typeFile.line(
-        `${a.ts.attributeName}${a.ts.required}: ${a.ts.type};`
-      );
-    });
-    this.service.ts.typeFile.close(`}`);
+  // writePublicInterface() {
+  //   this.service.ts.typeFile.comments(this.structure.comments);
+  //   this.service.ts.typeFile.open(
+  //     `export interface ${this.publicInterfaceName} {`
+  //   );
+  //   this.structure.publicAttributes.forEach((a) => {
+  //     this.service.ts.typeFile.comments(a.comments);
+  //     this.service.ts.typeFile.line(
+  //       `${a.ts.attributeName}${a.ts.required}: ${a.ts.type};`
+  //     );
+  //   });
+  //   this.service.ts.typeFile.close(`}`);
 
-    this.service.ts.typeFile.line("");
-  }
+  //   this.service.ts.typeFile.line("");
+  // }
 
   public get service(): Service {
     return this.structure.service;

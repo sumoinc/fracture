@@ -106,38 +106,38 @@ export class FractureApp {
     return this;
   }
 
-  public build() {
-    /***************************************************************************
-     *
-     * CDK SYNTH COMMAND
-     *
-     * Do this step in the build process so that we can know all the environments.
-     *
-     **************************************************************************/
+  // public build() {
+  //   /***************************************************************************
+  //    *
+  //    * CDK SYNTH COMMAND
+  //    *
+  //    * Do this step in the build process so that we can know all the environments.
+  //    *
+  //    **************************************************************************/
 
-    const synthTask = this.project.addTask("synth", {
-      description: "Synth Cloud Assembly.",
-    });
+  //   const synthTask = this.project.addTask("synth", {
+  //     description: "Synth Cloud Assembly.",
+  //   });
 
-    // clean the cdk.out folder out
-    synthTask.exec(`rm -rf cdk.out`);
+  //   // clean the cdk.out folder out
+  //   synthTask.exec(`rm -rf cdk.out`);
 
-    // build for each environment
-    this.pipelines.forEach((pipeline) => {
-      pipeline.waves.forEach((wave) => {
-        wave.stages.forEach((stage) => {
-          synthTask.exec(
-            `set CDK_DEFAULT_ACCOUNT=${stage.account.id} CDK_DEFAULT_REGION=${
-              stage.region
-            } && pnpm cdk synth -q --output=cdk.out/${join(
-              stage.account.id,
-              stage.region
-            )}`
-          );
-        });
-      });
-    });
-  }
+  //   // build for each environment
+  //   this.pipelines.forEach((pipeline) => {
+  //     pipeline.waves.forEach((wave) => {
+  //       wave.stages.forEach((stage) => {
+  //         synthTask.exec(
+  //           `set CDK_DEFAULT_ACCOUNT=${stage.account.id} CDK_DEFAULT_REGION=${
+  //             stage.region
+  //           } && pnpm cdk synth -q --output=cdk.out/${join(
+  //             stage.account.id,
+  //             stage.region
+  //           )}`
+  //         );
+  //       });
+  //     });
+  //   });
+  // }
 
   public get name(): string {
     return this.options.name;

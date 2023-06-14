@@ -1,6 +1,6 @@
 import { join } from "path";
 import { paramCase } from "change-case";
-import { LoggerOptions } from "projen";
+import { Component, LoggerOptions } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
@@ -11,7 +11,7 @@ import { Resource, ResourceOptions } from "./resource";
 import { DynaliteSupport } from "../dynamodb";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";
 import { DynamoTable } from "../dynamodb/dynamo-table";
-import { TypescriptService } from "../generators/ts/typescript-service";
+import { TypescriptTypes } from "../generators/ts/typescript-types";
 
 export interface ServiceOptions {
   name: string;
@@ -36,7 +36,7 @@ export interface ServiceOptions {
   auditStrategy?: AuditStrategy;
 }
 
-export class Service {
+export class Service extends Component {
   // member components
   public readonly resources: Resource[] = [];
   public readonly dynamoTable: DynamoTable;
@@ -47,9 +47,13 @@ export class Service {
   // all other options
   public readonly options: Required<ServiceOptions>;
   // generators
-  public readonly ts: TypescriptService;
+  //public readonly ts: TypescriptService;
+
+  // output files / generators
+  public readonly tsTypes: TypescriptTypes;
 
   constructor(fracture: Fracture, options: ServiceOptions) {
+    super(fracture);
     /***************************************************************************
      *
      * DEFAULT OPTIONS
@@ -135,20 +139,24 @@ export class Service {
      *
      **************************************************************************/
 
-    this.ts = new TypescriptService(this);
+    //this.ts = new TypescriptService(this);
+
+    this.tsTypes = new TypescriptTypes(this);
 
     return this;
   }
 
+  /*
   public build() {
     this.project.logger.info(`BUILD Service: "${this.name}"`);
-    this.dynaliteSupport.build();
+    //this.dynaliteSupport.build();
     this.resources.forEach((resource) => {
       resource.build();
     });
     // build generators
     this.ts.build();
   }
+  */
 
   public get name(): string {
     return this.options.name;

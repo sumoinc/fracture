@@ -304,6 +304,7 @@ export class Fracture extends TypeScriptProject {
    * @returns void
    */
   public build() {
+    /*
     this.logger.info("=".repeat(80));
     this.logger.info("BUILD PHASE");
     this.logger.info("=".repeat(80));
@@ -315,5 +316,6 @@ export class Fracture extends TypeScriptProject {
     this.apps.forEach((app) => {
       app.build();
     });
+    */
   }
 }

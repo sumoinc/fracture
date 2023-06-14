@@ -2,11 +2,12 @@ import { paramCase } from "change-case";
 import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { TypescriptResourceAttribute } from "../generators/ts/typescript-resource-attribute";
 import { AccessPattern } from "./access-pattern";
 
+import { formatStringByNamingStrategy } from "./naming-strategy";
 import { Operation, OperationDefault, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
+import { TypescriptResourceAttribute } from "../generators/ts/typescript-resource-attribute";
 
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
@@ -598,5 +599,49 @@ export class ResourceAttribute extends Component {
       this.isGenerated &&
       this.generator === ResourceAttributeGenerator.COMPOSITION
     );
+  }
+
+  /*****************************************************************************
+   *
+   *  TYPESCRIPT HELPERS
+   *
+   ****************************************************************************/
+
+  public get tsAttributeName() {
+    return formatStringByNamingStrategy(
+      this.name,
+      this.resource.namingStrategy.ts.attributeName
+    );
+  }
+
+  public get tsRequired() {
+    return this.isRequired ? "" : "?";
+  }
+
+  public get tsType() {
+    switch (this.type) {
+      case ResourceAttributeType.GUID:
+      case ResourceAttributeType.STRING:
+      case ResourceAttributeType.EMAIL:
+      case ResourceAttributeType.PHONE:
+      case ResourceAttributeType.URL:
+      case ResourceAttributeType.DATE:
+      case ResourceAttributeType.TIME:
+      case ResourceAttributeType.DATE_TIME:
+      case ResourceAttributeType.JSON:
+      case ResourceAttributeType.IPADDRESS:
+        return "string";
+      case ResourceAttributeType.INT:
+      case ResourceAttributeType.FLOAT:
+      case ResourceAttributeType.TIMESTAMP:
+      case ResourceAttributeType.COUNT:
+      case ResourceAttributeType.AVERAGE:
+      case ResourceAttributeType.SUM:
+        return "number";
+      case ResourceAttributeType.BOOLEAN:
+        return "boolean";
+      default:
+        throw new Error(`Unknown attribute type: ${this.type}`);
+    }
   }
 }

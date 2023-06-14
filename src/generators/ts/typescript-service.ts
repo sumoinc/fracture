@@ -73,7 +73,7 @@ export class TypescriptService extends Component {
   }
 
   public build() {
-    this.cdkApp.build();
+    //this.cdkApp.build();
   }
 
   public get responseTypeName() {
