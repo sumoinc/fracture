@@ -106,7 +106,8 @@ export class DynaliteSupport extends Component {
   }
 
   // build out the dynalite config
-  build() {
+  synthesize() {
+    super.synthesize();
     // pull the project for this service
     const allGsi = this.service.dynamoTable.dynamoGsi.filter(
       (gsi) => gsi !== this.service.dynamoTable.keyDynamoGsi
