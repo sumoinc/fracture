@@ -10,3 +10,4 @@ src/ts/dynamodb/commands/update-user.ts
 src/ts/dynamodb/commands/update-user.spec.ts
 src/ts/dynamodb/commands/delete-user.ts
 src/ts/dynamodb/commands/delete-user.spec.ts
+src/ts/app.ts

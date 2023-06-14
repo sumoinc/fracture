@@ -3,10 +3,12 @@ import { Component } from "projen";
 import { TypeScriptSource } from "./typescript-source";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Service } from "../../core/service";
+import { CdkApp } from "../cdk/cdk-app";
 
 export class TypescriptService extends Component {
   public readonly service: Service;
   public readonly typeFile: TypeScriptSource;
+  public readonly cdkApp: CdkApp;
 
   constructor(service: Service) {
     super(service.project);
@@ -65,9 +67,14 @@ export class TypescriptService extends Component {
       committed: true,
     });
     */
+
+    // CDK app componants
+    this.cdkApp = new CdkApp(this.service);
   }
 
-  public build() {}
+  public build() {
+    this.cdkApp.build();
+  }
 
   public get responseTypeName() {
     return formatStringByNamingStrategy(

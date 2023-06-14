@@ -15,6 +15,7 @@
 /package.json linguist-generated
 /pnpm-lock.yaml linguist-generated
 /setupBeforeEnv.ts linguist-generated
+/src/ts/app.ts linguist-generated
 /src/ts/dynamodb/commands/create-user.spec.ts linguist-generated
 /src/ts/dynamodb/commands/create-user.ts linguist-generated
 /src/ts/dynamodb/commands/delete-user.spec.ts linguist-generated

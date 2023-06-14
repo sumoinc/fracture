@@ -53,3 +53,4 @@ junit.xml
 !/src/ts/dynamodb/commands/update-company.spec.ts
 !/src/ts/dynamodb/commands/delete-company.ts
 !/src/ts/dynamodb/commands/delete-company.spec.ts
+!/src/ts/app.ts

@@ -12,6 +12,7 @@
     ".projen/tasks.json",
     "jest-dynalite-config.js",
     "setupBeforeEnv.ts",
+    "src/ts/app.ts",
     "src/ts/dynamodb/commands/create-user.spec.ts",
     "src/ts/dynamodb/commands/create-user.ts",
     "src/ts/dynamodb/commands/delete-user.spec.ts",
