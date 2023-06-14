@@ -1,5 +1,6 @@
 import { join } from "path";
 import { ValueOf } from "type-fest";
+import { ResourceAttributeGenerator } from "../../../core";
 import { AccessPattern } from "../../../core/access-pattern";
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "../../../core/operation";
@@ -27,38 +28,31 @@ export class DynamoCommand extends TypeScriptSource {
   }
 
   preSynthesize(): void {
-    super.preSynthesize();
-
-    //   const tsFile = new TypeScriptSource(
-    //     this,
-    //     join(this.service.ts.dynamoCommandDir, `${this.operation.name}.ts`)
-    //   );
-
     //   const responseType =
     //     this.operation.operationSubType === OPERATION_SUB_TYPE.LIST
     //       ? this.service.ts.listResponseTypeName
     //       : this.service.ts.responseTypeName;
 
-    //   /***************************************************************************
-    //    *  IMPORTS
-    //    **************************************************************************/
+    /***************************************************************************
+     *  IMPORTS
+     **************************************************************************/
 
-    //   tsFile.lines([
-    //     `import { DynamoDBClient } from "@aws-sdk/client-dynamodb";`,
-    //     `import { DynamoDBDocumentClient, ${this.dynamoCommandName} } from "@aws-sdk/lib-dynamodb";`,
-    //   ]);
+    this.lines([
+      `import { DynamoDBClient } from "@aws-sdk/client-dynamodb";`,
+      `import { DynamoDBDocumentClient, ${this.dynamoCommandName} } from "@aws-sdk/lib-dynamodb";`,
+    ]);
 
-    //   if (this.inputStructure.hasGenerator(ResourceAttributeGenerator.GUID)) {
-    //     tsFile.line(`import { v4 as uuidv4 } from "uuid";`);
-    //   }
+    if (this.inputStructure.hasGenerator(ResourceAttributeGenerator.GUID)) {
+      this.line(`import { v4 as uuidv4 } from "uuid";`);
+    }
 
-    //   tsFile.open(`import {`);
-    //   tsFile.line("Error,");
-    //   tsFile.line(this.inputStructure.ts.publicInterfaceName + ",");
-    //   tsFile.line(this.outputStructure.ts.publicInterfaceName + ",");
-    //   tsFile.line(responseType + ",");
-    //   tsFile.close(`} from "${this.service.ts.typeFile.pathFrom(tsFile)}";`);
-    //   tsFile.line("");
+    this.open(`import {`);
+    this.line("Error,");
+    this.line(this.inputStructure.ts.publicInterfaceName + ",");
+    this.line(this.outputStructure.ts.publicInterfaceName + ",");
+    this.line(this.operation.tsResponseTypeName + ",");
+    this.close(`} from "${this.service.tsTypes.pathFrom(this)}";`);
+    this.line("");
 
     //   /***************************************************************************
     //    *
@@ -436,6 +430,8 @@ export class DynamoCommand extends TypeScriptSource {
     //   tsFile.close(`};`);
     //   tsFile.close(`};`);
     //   tsFile.line("");
+
+    super.preSynthesize();
   }
 
   // public writeTest = () => {

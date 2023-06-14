@@ -200,4 +200,16 @@ export class Operation extends Component {
   public get service(): Service {
     return this.resource.service;
   }
+
+  /*****************************************************************************
+   *
+   *  TYPESCRIPT HELPERS
+   *
+   ****************************************************************************/
+
+  public get tsResponseTypeName() {
+    return this.operationSubType === OPERATION_SUB_TYPE.LIST
+      ? this.service.tsLlistResponseTypeName
+      : this.service.tsResponseTypeName;
+  }
 }
