@@ -100,7 +100,15 @@ export class Service extends Component {
       pnpmVersion: "8",
       prettier: true,
       projenrcTs: true,
-      deps: ["@aws-sdk/client-dynamodb", "@aws-sdk/lib-dynamodb", "uuid"],
+      deps: [
+        "@aws-sdk/client-dynamodb",
+        "@aws-sdk/lib-dynamodb",
+        "aws-cdk",
+        "aws-cdk-lib",
+        "constructs",
+        "uuid",
+      ],
+
       devDeps: ["@types/uuid"],
       eslintOptions: {
         dirs: ["src"],

@@ -13,12 +13,28 @@ export class CdkApp extends TypeScriptSource {
   }
 
   preSynthesize(): void {
+    this.line(`import { execSync } from "child_process";`);
+    this.line(`import { App, Stack } from "aws-cdk-lib";`);
+    this.line("");
+
+    // determine build identifier using git branch name
+    this.lines([
+      'const branchName = execSync("git rev-parse --abbrev-ref HEAD").toString("utf8").replace(/[\\n\\rs]+$/, "");',
+      `const branchPath = branchName.split("/");`,
+      `const buildId = branchPath[branchPath.length - 1];`,
+    ]);
+    this.line("");
+
+    // determine service name
+    this.line(`const serviceName = "${this.service.name}";`);
+    this.line("");
+
+    // create app
+    this.line(`const app = new App();`);
+
+    // create stack
+    this.line(`const stack = new Stack(app, \`\${serviceName}-\${buildId}\`);`);
+
     super.preSynthesize();
-    // public build() {
-    //   this.writeConstruct();
-    // }
-    // public writeConstruct = () => {
-    //   new TypeScriptSource(this, join(this.service.ts.outdir, `app.ts`));
-    // };
   }
 }

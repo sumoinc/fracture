@@ -12,7 +12,6 @@ const serviceName = "example-app";
 
 const app = new App();
 const stack = new Stack(app, `${serviceName}-${buildId}`);
-
 new EventBus(stack, "example-event-bus");
 
 new NodejsFunction(stack, "foo", {

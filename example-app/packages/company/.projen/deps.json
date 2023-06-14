@@ -97,6 +97,18 @@
       "type": "runtime"
     },
     {
+      "name": "aws-cdk",
+      "type": "runtime"
+    },
+    {
+      "name": "aws-cdk-lib",
+      "type": "runtime"
+    },
+    {
+      "name": "constructs",
+      "type": "runtime"
+    },
+    {
       "name": "jest-dynalite",
       "type": "runtime"
     },
