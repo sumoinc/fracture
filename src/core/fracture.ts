@@ -232,7 +232,7 @@ export class Fracture extends TypeScriptProject {
     source.line("const foo = 'bar';");
 
     new SampleFile(this, "src/samplefile.ts", {
-      contents: ["const foo = 'bar';"].join("\n"),
+      contents: ["const bar = 'foo';"].join("\n"),
     });
   }
 
