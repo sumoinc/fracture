@@ -90,7 +90,6 @@ export class DynamoCommandTest extends TypeScriptSource {
       );
       this.line("");
 
-      this.line(`console.log(data, errors, status);`);
       this.line(`expect(data).toBeTruthy();`);
       this.line(`expect(errors.length).toBe(0);`);
       this.line(`expect(status).toBe(200);`);
@@ -152,7 +151,8 @@ export class DynamoCommandTest extends TypeScriptSource {
       this.line(
         `const { data, errors, status } = await ${this.functionName}(fixture);`
       );
-      this.line(`console.log(data);`);
+      this.line("");
+
       this.line(`expect(data).toBeTruthy();`);
       this.line(`expect(errors.length).toBe(0);`);
       this.line(`expect(status).toBe(200);`);

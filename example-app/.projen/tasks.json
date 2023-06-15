@@ -88,6 +88,9 @@
       "steps": [
         {
           "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
+        },
+        {
+          "exec": "pnpm turbo eslint"
         }
       ]
     },

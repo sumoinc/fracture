@@ -49,7 +49,7 @@ export const createCompany = async (
    */
   const id = uuidv4();
   const t = "company";
-  const v = new Date().toISOString();
+  const v = "latest";
   const cd = new Date().toISOString();
   const ud = new Date().toISOString();
   const pk = id.toLowerCase();
@@ -73,8 +73,6 @@ export const createCompany = async (
     })
   );
 
-  console.log(pk);
-  console.log(sk);
   /**
    * Expand/comnvert data to output format.
    */

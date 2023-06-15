@@ -36,6 +36,15 @@ export class TurboRepo extends Component {
 
     /***************************************************************************
      *
+     * PROJEN DEFAULTS
+     *
+     **************************************************************************/
+
+    // add eslint to default task so we get nice clean generated files
+    fracture.defaultTask?.exec(`pnpm turbo eslint`);
+
+    /***************************************************************************
+     *
      * MAIN BUILD PIPELINE
      *
      * The steps defined here happen regardless of which pipeline is running.
@@ -64,7 +73,6 @@ export class TurboRepo extends Component {
 
     // synth all cdk cloud assembly
     this.buildTask.exec(`pnpm turbo synth`);
-
     /***************************************************************************
      *
      * CDK TASKS

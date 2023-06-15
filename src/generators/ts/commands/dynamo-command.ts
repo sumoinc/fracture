@@ -127,7 +127,9 @@ export class DynamoCommand extends TypeScriptSource {
     this.comments([`Generate needed values.`]);
     this.inputStructure.generatedAttributes.forEach((attribute) => {
       this.line(
-        `const ${attribute.tsAttributeShortName} = ${attribute.tsGenerationSource};`
+        `const ${
+          attribute.tsAttributeShortName
+        } = ${attribute.getTsGenerationSource(this.operation)};`
       );
     });
     this.line("");
@@ -293,9 +295,6 @@ export class DynamoCommand extends TypeScriptSource {
     this.close(`);`);
     this.line("");
 
-    this.line(`console.log(${this.dynamoPkName});`);
-    this.line(`console.log(${this.dynamoSkName});`);
-
     /***************************************************************************
      *  CLOSE FUNCTION - create
      **************************************************************************/
@@ -316,8 +315,6 @@ export class DynamoCommand extends TypeScriptSource {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
       // data
-      this.line("console.log(result)");
-
       this.comments([`Expand/comnvert data to output format.`]);
       this.open(`const data = result.Item`);
       this.open(`? {`);

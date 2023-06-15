@@ -45,7 +45,7 @@ export const deleteCompany = async (
    * Generate needed values.
    */
   const t = "company";
-  const v = new Date().toISOString();
+  const v = "latest";
   const pk = id.toLowerCase();
   const sk = t.toLowerCase() + "#" + v.toLowerCase();
 
@@ -62,8 +62,6 @@ export const deleteCompany = async (
     })
   );
 
-  console.log(pk);
-  console.log(sk);
   const data = result.Attributes
     ? {
         id: result.Attributes.id,

@@ -650,7 +650,7 @@ export class ResourceAttribute extends Component {
     }
   }
 
-  public get tsGenerationSource() {
+  public getTsGenerationSource(operation: Operation) {
     const generator = this.generator;
     switch (generator) {
       case ResourceAttributeGenerator.NONE:
@@ -662,16 +662,11 @@ export class ResourceAttribute extends Component {
       case ResourceAttributeGenerator.TYPE:
         return `"${this.resource.name}"`;
       case ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP:
-        /*
         if (this.hasDefaultFor(operation)) {
-          return `"${this.
-            .defaultFor(operation)
-            .toLowerCase()}"`;
+          return `"${this.defaultFor(operation).toLowerCase()}"`;
         } else {
           return "new Date().toISOString()";
         }
-        */
-        return "new Date().toISOString()";
       case ResourceAttributeGenerator.COMPOSITION:
         return this.compositionSources.length === 0
           ? undefined

@@ -36,7 +36,6 @@ test("Smoke test", async () => {
   };
   const { data, errors, status } = await getUser(fixture);
 
-  console.log(data, errors, status);
   expect(data).toBeTruthy();
   expect(errors.length).toBe(0);
   expect(status).toBe(200);

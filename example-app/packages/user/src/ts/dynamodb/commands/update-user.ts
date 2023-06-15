@@ -48,7 +48,7 @@ export const updateUser = async (
    * Generate needed values.
    */
   const t = "user";
-  const v = new Date().toISOString();
+  const v = "latest";
   const ud = new Date().toISOString();
   const pk = id.toLowerCase();
   const sk = t.toLowerCase() + "#" + v.toLowerCase();
@@ -77,8 +77,6 @@ export const updateUser = async (
     })
   );
 
-  console.log(pk);
-  console.log(sk);
   /**
    * Expand/comnvert data to output format.
    */

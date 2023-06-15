@@ -47,7 +47,7 @@ export const updateCompany = async (
    * Generate needed values.
    */
   const t = "company";
-  const v = new Date().toISOString();
+  const v = "latest";
   const ud = new Date().toISOString();
   const pk = id.toLowerCase();
   const sk = t.toLowerCase() + "#" + v.toLowerCase();
@@ -74,8 +74,6 @@ export const updateCompany = async (
     })
   );
 
-  console.log(pk);
-  console.log(sk);
   /**
    * Expand/comnvert data to output format.
    */
