@@ -1,4 +1,4 @@
-import { LogLevel, LoggerOptions } from "projen";
+import { LogLevel, LoggerOptions, SampleFile, SourceCode } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import {
   TypeScriptProject,
@@ -226,6 +226,14 @@ export class Fracture extends TypeScriptProject {
     this.logger.info("=".repeat(80));
     this.logger.info("INIT PHASE");
     this.logger.info("=".repeat(80));
+
+    // temporary experiment formatting
+    const source = new SourceCode(this, "sourcecode.ts");
+    source.line("const foo = 'bar';");
+
+    new SampleFile(this, "samplefile.ts", {
+      contents: ["const foo = 'bar';"].join("\n"),
+    });
   }
 
   public get packageRoot(): string {
