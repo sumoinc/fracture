@@ -228,10 +228,10 @@ export class Fracture extends TypeScriptProject {
     this.logger.info("=".repeat(80));
 
     // temporary experiment formatting
-    const source = new SourceCode(this, "sourcecode.ts");
+    const source = new SourceCode(this, "src/sourcecode.ts");
     source.line("const foo = 'bar';");
 
-    new SampleFile(this, "samplefile.ts", {
+    new SampleFile(this, "src/samplefile.ts", {
       contents: ["const foo = 'bar';"].join("\n"),
     });
   }

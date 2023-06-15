@@ -23,7 +23,7 @@
     ".vscode/settings.json",
     "LICENSE",
     "pnpm-workspace.yaml",
-    "sourcecode.ts",
+    "src/sourcecode.ts",
     "tsconfig.dev.json",
     "tsconfig.json",
     "turbo.json"
