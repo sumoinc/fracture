@@ -19,14 +19,13 @@ const config = {
     sslEnabled: false,
     region: "local",
   }),
-}
+};
 const client = new DynamoDBClient(config);
 const dynamo = DynamoDBDocumentClient.from(client);
 
 export const getCompany = async (
   input: GetCompanyInput
 ): Promise<Response<GetCompanyOutput>> => {
-
   /**
    * An error container in case we encounter problems along the way.
    */
@@ -40,10 +39,7 @@ export const getCompany = async (
   /**
    * Unwrap external inputs.
    */
-  const {
-    id,
-  } = input;
-
+  const { id } = input;
 
   /**
    * Generate needed values.
@@ -67,15 +63,16 @@ export const getCompany = async (
   /**
    * Expand/comnvert data to output format.
    */
-  const data = (result.Item)
+  const data = result.Item
     ? {
-      id: result.Item.id,
-      type: result.Item.t,
-      version: result.Item.v,
-      createdAt: result.Item.cd,
-      updatedAt: result.Item.ud,
-      name: result.Item.nm,
-    } : undefined;
+        id: result.Item.id,
+        type: result.Item.t,
+        version: result.Item.v,
+        createdAt: result.Item.cd,
+        updatedAt: result.Item.ud,
+        name: result.Item.nm,
+      }
+    : undefined;
 
   /**
    * Log error if no records found.
@@ -87,7 +84,7 @@ export const getCompany = async (
       source: "TODO",
       message: "TODO - Item not found based on inputs.",
       detail: "TODO",
-    })
+    });
   }
 
   /**

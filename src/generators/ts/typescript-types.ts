@@ -21,21 +21,21 @@ export class TypescriptTypes extends TypeScriptSource {
     this.line(`source: string;`);
     this.line(`message: string;`);
     this.line(`detail: string;`);
-    this.close(`}`);
+    this.close(`};`);
     this.line("\n");
 
     this.open(`export type ${this.service.tsResponseTypeName}<T> = {`);
     this.line(`data?: T;`);
     this.line(`errors: Error[];`);
     this.line(`status: number;`);
-    this.close(`}`);
+    this.close(`};`);
     this.line("\n");
 
     this.open(`export type ${this.service.tsLlistResponseTypeName}<T> = {`);
     this.line(`data?: T[];`);
     this.line(`errors: Error[];`);
     this.line(`status: number;`);
-    this.close(`}`);
+    this.close(`};`);
     this.line("\n");
 
     /***************************************************************************

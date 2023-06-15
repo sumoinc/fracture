@@ -20,14 +20,13 @@ const config = {
     sslEnabled: false,
     region: "local",
   }),
-}
+};
 const client = new DynamoDBClient(config);
 const dynamo = DynamoDBDocumentClient.from(client);
 
 export const createCompany = async (
   input: CreateCompanyInput
 ): Promise<Response<CreateCompanyOutput>> => {
-
   /**
    * An error container in case we encounter problems along the way.
    */
@@ -41,9 +40,7 @@ export const createCompany = async (
   /**
    * Unwrap external inputs.
    */
-  const {
-    name,
-  } = input;
+  const { name } = input;
 
   const nm = name;
 

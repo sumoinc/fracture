@@ -23,7 +23,7 @@ export class DynaliteSupport extends Component {
     file.line(`sslEnabled: false,`);
     file.line(`region: "local",`);
     file.close(`}),`);
-    file.close(`}`);
+    file.close(`};`);
     file.lines([
       `const client = new DynamoDBClient(config);`,
       `const ${name} = DynamoDBDocumentClient.from(client);`,
