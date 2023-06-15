@@ -60,6 +60,9 @@ export const getCompany = async (
     })
   );
 
+  console.log(pk);
+  console.log(sk);
+  console.log(result);
   /**
    * Expand/comnvert data to output format.
    */

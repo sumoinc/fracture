@@ -77,6 +77,8 @@ export const updateUser = async (
     })
   );
 
+  console.log(pk);
+  console.log(sk);
   /**
    * Expand/comnvert data to output format.
    */

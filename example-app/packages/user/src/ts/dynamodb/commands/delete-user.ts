@@ -62,6 +62,8 @@ export const deleteUser = async (
     })
   );
 
+  console.log(pk);
+  console.log(sk);
   const data = result.Attributes
     ? {
         id: result.Attributes.id,

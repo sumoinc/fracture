@@ -74,6 +74,8 @@ export const updateCompany = async (
     })
   );
 
+  console.log(pk);
+  console.log(sk);
   /**
    * Expand/comnvert data to output format.
    */

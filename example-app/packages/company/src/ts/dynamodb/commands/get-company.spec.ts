@@ -34,6 +34,8 @@ test("Smoke test", async () => {
     id: seedData.data.id,
   };
   const { data, errors, status } = await getCompany(fixture);
+
+  console.log(data, errors, status);
   expect(data).toBeTruthy();
   expect(errors.length).toBe(0);
   expect(status).toBe(200);

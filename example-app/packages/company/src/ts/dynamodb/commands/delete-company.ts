@@ -62,6 +62,8 @@ export const deleteCompany = async (
     })
   );
 
+  console.log(pk);
+  console.log(sk);
   const data = result.Attributes
     ? {
         id: result.Attributes.id,

@@ -75,6 +75,8 @@ export const createUser = async (
     })
   );
 
+  console.log(pk);
+  console.log(sk);
   /**
    * Expand/comnvert data to output format.
    */
