@@ -123,6 +123,7 @@ export class DynamoCommandTest extends TypeScriptSource {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
       // create some test data
+
       this.writeSeedData(this);
       this.open(`const fixture : ${this.inputStructure.tsInterfaceName} = {`);
       this.line(`id: seedData.data.id,`);
@@ -141,6 +142,7 @@ export class DynamoCommandTest extends TypeScriptSource {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
       // create some test data
+
       this.writeSeedData(this);
       this.open(`const fixture : ${this.inputStructure.tsInterfaceName} = {`);
       this.line(`lookupText: 'f',`);

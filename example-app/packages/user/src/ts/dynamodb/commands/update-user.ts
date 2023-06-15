@@ -19,14 +19,13 @@ const config = {
     sslEnabled: false,
     region: "local",
   }),
-}
+};
 const client = new DynamoDBClient(config);
 const dynamo = DynamoDBDocumentClient.from(client);
 
 export const updateUser = async (
   input: UpdateUserInput
 ): Promise<Response<UpdateUserOutput>> => {
-
   /**
    * An error container in case we encounter problems along the way.
    */
@@ -40,11 +39,7 @@ export const updateUser = async (
   /**
    * Unwrap external inputs.
    */
-  const {
-    id,
-    firstName,
-    lastName,
-  } = input;
+  const { id, firstName, lastName } = input;
 
   const fn = firstName;
   const ln = lastName;
@@ -85,16 +80,17 @@ export const updateUser = async (
   /**
    * Expand/comnvert data to output format.
    */
-  const data = (result.Attributes)
+  const data = result.Attributes
     ? {
-      id: result.Attributes.id,
-      type: result.Attributes.t,
-      version: result.Attributes.v,
-      createdAt: result.Attributes.cd,
-      updatedAt: result.Attributes.ud,
-      firstName: result.Attributes.fn,
-      lastName: result.Attributes.ln,
-    } : undefined;
+        id: result.Attributes.id,
+        type: result.Attributes.t,
+        version: result.Attributes.v,
+        createdAt: result.Attributes.cd,
+        updatedAt: result.Attributes.ud,
+        firstName: result.Attributes.fn,
+        lastName: result.Attributes.ln,
+      }
+    : undefined;
 
   /**
    * Log error if no records found.
@@ -106,7 +102,7 @@ export const updateUser = async (
       source: "TODO",
       message: "TODO - Attributes not found based on inputs.",
       detail: "TODO",
-    })
+    });
   }
 
   /**

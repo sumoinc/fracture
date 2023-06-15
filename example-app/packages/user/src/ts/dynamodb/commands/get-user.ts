@@ -1,11 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
-import {
-  Error,
-  GetUserInput,
-  GetUserOutput,
-  Response,
-} from "../../types/user";
+import { Error, GetUserInput, GetUserOutput, Response } from "../../types/user";
 
 /**
  * Generate a DynamoDB client, configure it to use a local endpoint when needed
@@ -19,14 +14,13 @@ const config = {
     sslEnabled: false,
     region: "local",
   }),
-}
+};
 const client = new DynamoDBClient(config);
 const dynamo = DynamoDBDocumentClient.from(client);
 
 export const getUser = async (
   input: GetUserInput
 ): Promise<Response<GetUserOutput>> => {
-
   /**
    * An error container in case we encounter problems along the way.
    */
@@ -40,10 +34,7 @@ export const getUser = async (
   /**
    * Unwrap external inputs.
    */
-  const {
-    id,
-  } = input;
-
+  const { id } = input;
 
   /**
    * Generate needed values.
@@ -67,16 +58,17 @@ export const getUser = async (
   /**
    * Expand/comnvert data to output format.
    */
-  const data = (result.Item)
+  const data = result.Item
     ? {
-      id: result.Item.id,
-      type: result.Item.t,
-      version: result.Item.v,
-      createdAt: result.Item.cd,
-      updatedAt: result.Item.ud,
-      firstName: result.Item.fn,
-      lastName: result.Item.ln,
-    } : undefined;
+        id: result.Item.id,
+        type: result.Item.t,
+        version: result.Item.v,
+        createdAt: result.Item.cd,
+        updatedAt: result.Item.ud,
+        firstName: result.Item.fn,
+        lastName: result.Item.ln,
+      }
+    : undefined;
 
   /**
    * Log error if no records found.
@@ -88,7 +80,7 @@ export const getUser = async (
       source: "TODO",
       message: "TODO - Item not found based on inputs.",
       detail: "TODO",
-    })
+    });
   }
 
   /**

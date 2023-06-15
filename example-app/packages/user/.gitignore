@@ -47,10 +47,6 @@ junit.xml
 !/src/ts/types/user.ts
 !/src/ts/app.ts
 !/src/ts/dynamodb/commands/create-user.ts
-!/src/ts/dynamodb/commands/create-user.spec.ts
 !/src/ts/dynamodb/commands/get-user.ts
-!/src/ts/dynamodb/commands/get-user.spec.ts
 !/src/ts/dynamodb/commands/update-user.ts
-!/src/ts/dynamodb/commands/update-user.spec.ts
 !/src/ts/dynamodb/commands/delete-user.ts
-!/src/ts/dynamodb/commands/delete-user.spec.ts

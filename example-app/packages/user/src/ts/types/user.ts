@@ -3,19 +3,19 @@ export type Error = {
   source: string;
   message: string;
   detail: string;
-}
+};
 
 export type Response<T> = {
   data?: T;
   errors: Error[];
   status: number;
-}
+};
 
 export type ListResponse<T> = {
   data?: T[];
   errors: Error[];
   status: number;
-}
+};
 
 /**
  * A generic type
