@@ -26,6 +26,7 @@ const dynamo = DynamoDBDocumentClient.from(client);
 export const deleteUser = async (
   input: DeleteUserInput
 ): Promise<Response<DeleteUserOutput>> => {
+
   /**
    * An error container in case we encounter problems along the way.
    */
@@ -39,7 +40,10 @@ export const deleteUser = async (
   /**
    * Unwrap external inputs.
    */
-  const { id } = input;
+  const {
+    id,
+  } = input;
+
 
   /**
    * Generate needed values.
@@ -64,16 +68,15 @@ export const deleteUser = async (
 
   const data = result.Attributes
     ? {
-        id: result.Attributes.id,
-        type: result.Attributes.t,
-        version: result.Attributes.v,
-        createdAt: result.Attributes.cd,
-        updatedAt: result.Attributes.ud,
-        deletedAt: result.Attributes.dd,
-        firstName: result.Attributes.fn,
-        lastName: result.Attributes.ln,
-      }
-    : undefined;
+      id: result.Attributes.id,
+      type: result.Attributes.t,
+      version: result.Attributes.v,
+      createdAt: result.Attributes.cd,
+      updatedAt: result.Attributes.ud,
+      deletedAt: result.Attributes.dd,
+      firstName: result.Attributes.fn,
+      lastName: result.Attributes.ln,
+    } : undefined;
 
   /**
    * Log error if no records found.
@@ -85,7 +88,7 @@ export const deleteUser = async (
       source: "TODO",
       message: "TODO - Attributes not found based on inputs.",
       detail: "TODO",
-    });
+    })
   }
 
   /**

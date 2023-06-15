@@ -27,6 +27,7 @@ const dynamo = DynamoDBDocumentClient.from(client);
 export const createUser = async (
   input: CreateUserInput
 ): Promise<Response<CreateUserOutput>> => {
+
   /**
    * An error container in case we encounter problems along the way.
    */
@@ -40,7 +41,10 @@ export const createUser = async (
   /**
    * Unwrap external inputs.
    */
-  const { firstName, lastName } = input;
+  const {
+    firstName,
+    lastName,
+  } = input;
 
   const fn = firstName;
   const ln = lastName;

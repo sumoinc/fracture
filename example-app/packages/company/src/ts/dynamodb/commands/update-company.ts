@@ -26,6 +26,7 @@ const dynamo = DynamoDBDocumentClient.from(client);
 export const updateCompany = async (
   input: UpdateCompanyInput
 ): Promise<Response<UpdateCompanyOutput>> => {
+
   /**
    * An error container in case we encounter problems along the way.
    */
@@ -39,7 +40,10 @@ export const updateCompany = async (
   /**
    * Unwrap external inputs.
    */
-  const { id, name } = input;
+  const {
+    id,
+    name,
+  } = input;
 
   const nm = name;
 
@@ -77,16 +81,15 @@ export const updateCompany = async (
   /**
    * Expand/comnvert data to output format.
    */
-  const data = result.Attributes
+  const data = (result.Attributes)
     ? {
-        id: result.Attributes.id,
-        type: result.Attributes.t,
-        version: result.Attributes.v,
-        createdAt: result.Attributes.cd,
-        updatedAt: result.Attributes.ud,
-        name: result.Attributes.nm,
-      }
-    : undefined;
+      id: result.Attributes.id,
+      type: result.Attributes.t,
+      version: result.Attributes.v,
+      createdAt: result.Attributes.cd,
+      updatedAt: result.Attributes.ud,
+      name: result.Attributes.nm,
+    } : undefined;
 
   /**
    * Log error if no records found.
@@ -98,7 +101,7 @@ export const updateCompany = async (
       source: "TODO",
       message: "TODO - Attributes not found based on inputs.",
       detail: "TODO",
-    });
+    })
   }
 
   /**

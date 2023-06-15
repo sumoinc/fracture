@@ -26,6 +26,7 @@ const dynamo = DynamoDBDocumentClient.from(client);
 export const deleteCompany = async (
   input: DeleteCompanyInput
 ): Promise<Response<DeleteCompanyOutput>> => {
+
   /**
    * An error container in case we encounter problems along the way.
    */
@@ -39,7 +40,10 @@ export const deleteCompany = async (
   /**
    * Unwrap external inputs.
    */
-  const { id } = input;
+  const {
+    id,
+  } = input;
+
 
   /**
    * Generate needed values.
@@ -64,15 +68,14 @@ export const deleteCompany = async (
 
   const data = result.Attributes
     ? {
-        id: result.Attributes.id,
-        type: result.Attributes.t,
-        version: result.Attributes.v,
-        createdAt: result.Attributes.cd,
-        updatedAt: result.Attributes.ud,
-        deletedAt: result.Attributes.dd,
-        name: result.Attributes.nm,
-      }
-    : undefined;
+      id: result.Attributes.id,
+      type: result.Attributes.t,
+      version: result.Attributes.v,
+      createdAt: result.Attributes.cd,
+      updatedAt: result.Attributes.ud,
+      deletedAt: result.Attributes.dd,
+      name: result.Attributes.nm,
+    } : undefined;
 
   /**
    * Log error if no records found.
@@ -84,7 +87,7 @@ export const deleteCompany = async (
       source: "TODO",
       message: "TODO - Attributes not found based on inputs.",
       detail: "TODO",
-    });
+    })
   }
 
   /**

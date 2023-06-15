@@ -80,7 +80,7 @@ export class DynamoCommandTest extends TypeScriptSource {
       // create some test data
       this.writeSeedData(this);
       // run test
-      this.open(`const fixture : ${this.inputStructure.tsInterfaceName} = {`);
+      this.open(`const fixture: ${this.inputStructure.tsInterfaceName} = {`);
       this.inputStructure.publicAttributes.forEach((a) => {
         this.line(`${a.tsAttributeName}: seedData.data.${a.tsAttributeName},`);
       });
@@ -160,9 +160,8 @@ export class DynamoCommandTest extends TypeScriptSource {
      *  CLOSE TEST
      **************************************************************************/
 
-    this.close(`})`);
+    this.close(`});`);
     this.line("");
-    // };
 
     super.preSynthesize();
   }
@@ -236,7 +235,7 @@ export class DynamoCommandTest extends TypeScriptSource {
 
     file.open(`if (!seedData.data) {`);
     file.line(`throw new Error("Error creating seed data.");`);
-    file.close(`};`);
+    file.close(`}`);
     file.line("");
   }
 
