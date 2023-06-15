@@ -55,6 +55,10 @@ export class TurboRepo extends Component {
     // check anyway so leaving it for now.
     this.buildTask.exec(`pnpm turbo compile`);
 
+    // lint before we test to clean up generated files even when tests fail
+    // linting happens agani after testing but whatever
+    this.buildTask.exec(`pnpm turbo eslint`);
+
     // run all tests
     this.buildTask.exec(`pnpm turbo test`);
 
@@ -106,14 +110,18 @@ export class TurboRepo extends Component {
             outputs: ["dist/**", "lib/**"],
             outputMode: "new-only",
           },
-          test: {
-            dependsOn: ["^test"],
-            outputs: ["coverage**", "test-reports/**"],
-            outputMode: "new-only",
+          eslint: {
+            dependsOn: ["^eslint"],
+            cache: false,
           },
           synth: {
             dependsOn: ["^synth"],
             outputs: ["cdk-out/**"],
+            outputMode: "new-only",
+          },
+          test: {
+            dependsOn: ["^test"],
+            outputs: ["coverage**", "test-reports/**"],
             outputMode: "new-only",
           },
         },

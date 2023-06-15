@@ -59,7 +59,7 @@ export class Operation extends Component {
   // generators
   //public readonly ts: TypescriptOperation;
   public readonly tsDynamoCommand: DynamoCommand;
-  public readonly tsDynamoCommandTest?: DynamoCommandTest;
+  public readonly tsDynamoCommandTest: DynamoCommandTest;
 
   constructor(accessPattern: AccessPattern, options: OperationOptions) {
     super(accessPattern.project);
@@ -103,12 +103,7 @@ export class Operation extends Component {
 
     //this.ts = new TypescriptOperation(this);
     this.tsDynamoCommand = new DynamoCommand(this);
-    if (
-      this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE ||
-      this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
-    ) {
-      this.tsDynamoCommandTest = new DynamoCommandTest(this);
-    }
+    this.tsDynamoCommandTest = new DynamoCommandTest(this);
 
     return this;
   }

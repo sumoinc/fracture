@@ -211,6 +211,9 @@
           "exec": "pnpm turbo compile"
         },
         {
+          "exec": "pnpm turbo eslint"
+        },
+        {
           "exec": "pnpm turbo test"
         },
         {

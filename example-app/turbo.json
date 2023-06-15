@@ -14,15 +14,11 @@
       ],
       "outputMode": "new-only"
     },
-    "test": {
+    "eslint": {
       "dependsOn": [
-        "^test"
+        "^eslint"
       ],
-      "outputs": [
-        "coverage**",
-        "test-reports/**"
-      ],
-      "outputMode": "new-only"
+      "cache": false
     },
     "synth": {
       "dependsOn": [
@@ -30,6 +26,16 @@
       ],
       "outputs": [
         "cdk-out/**"
+      ],
+      "outputMode": "new-only"
+    },
+    "test": {
+      "dependsOn": [
+        "^test"
+      ],
+      "outputs": [
+        "coverage**",
+        "test-reports/**"
       ],
       "outputMode": "new-only"
     }
