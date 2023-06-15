@@ -1,9 +1,7 @@
-import { createTables, deleteTables, startDb, stopDb, } from "jest-dynalite";
+import { createTables, deleteTables, startDb, stopDb } from "jest-dynalite";
 import { createCompany } from "./create-company";
 import { updateCompany } from "./update-company";
-import {
-  UpdateCompanyInput,
-} from "../../types/company";
+import { UpdateCompanyInput } from "../../types/company";
 
 /**
  * Sometimes dynalite tests can require a little additional
@@ -32,7 +30,7 @@ test("Smoke test", async () => {
     throw new Error("Error creating seed data.");
   }
 
-  const fixture : UpdateCompanyInput = {
+  const fixture: UpdateCompanyInput = {
     id: seedData.data.id,
     name: "bar",
   };

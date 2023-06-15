@@ -18,9 +18,7 @@
 /src/ts/app.ts linguist-generated
 /src/ts/dynamodb/commands/create-company.spec.ts linguist-generated
 /src/ts/dynamodb/commands/create-company.ts linguist-generated
-/src/ts/dynamodb/commands/delete-company.spec.ts linguist-generated
 /src/ts/dynamodb/commands/delete-company.ts linguist-generated
-/src/ts/dynamodb/commands/get-company.spec.ts linguist-generated
 /src/ts/dynamodb/commands/get-company.ts linguist-generated
 /src/ts/dynamodb/commands/update-company.spec.ts linguist-generated
 /src/ts/dynamodb/commands/update-company.ts linguist-generated

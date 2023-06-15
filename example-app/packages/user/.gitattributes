@@ -18,9 +18,7 @@
 /src/ts/app.ts linguist-generated
 /src/ts/dynamodb/commands/create-user.spec.ts linguist-generated
 /src/ts/dynamodb/commands/create-user.ts linguist-generated
-/src/ts/dynamodb/commands/delete-user.spec.ts linguist-generated
 /src/ts/dynamodb/commands/delete-user.ts linguist-generated
-/src/ts/dynamodb/commands/get-user.spec.ts linguist-generated
 /src/ts/dynamodb/commands/get-user.ts linguist-generated
 /src/ts/dynamodb/commands/update-user.spec.ts linguist-generated
 /src/ts/dynamodb/commands/update-user.ts linguist-generated

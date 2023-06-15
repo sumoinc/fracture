@@ -1,8 +1,6 @@
-import { createTables, deleteTables, startDb, stopDb, } from "jest-dynalite";
+import { createTables, deleteTables, startDb, stopDb } from "jest-dynalite";
 import { createUser } from "./create-user";
-import {
-  CreateUserInput,
-} from "../../types/user";
+import { CreateUserInput } from "../../types/user";
 
 /**
  * Sometimes dynalite tests can require a little additional
@@ -23,7 +21,7 @@ afterEach(deleteTables);
 afterAll(stopDb);
 
 test("Smoke test", async () => {
-  const fixture : CreateUserInput = {
+  const fixture: CreateUserInput = {
     firstName: "foo",
     lastName: "foo",
   };

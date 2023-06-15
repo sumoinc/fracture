@@ -1,8 +1,6 @@
-import { createTables, deleteTables, startDb, stopDb, } from "jest-dynalite";
+import { createTables, deleteTables, startDb, stopDb } from "jest-dynalite";
 import { createCompany } from "./create-company";
-import {
-  CreateCompanyInput,
-} from "../../types/company";
+import { CreateCompanyInput } from "../../types/company";
 
 /**
  * Sometimes dynalite tests can require a little additional
@@ -23,7 +21,7 @@ afterEach(deleteTables);
 afterAll(stopDb);
 
 test("Smoke test", async () => {
-  const fixture : CreateCompanyInput = {
+  const fixture: CreateCompanyInput = {
     name: "foo",
   };
   const { data, errors, status } = await createCompany(fixture);
