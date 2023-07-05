@@ -2,6 +2,9 @@ import { Task } from "projen";
 import { TypeScriptProjectOptions } from "projen/lib/typescript";
 import { Fracture } from "../src";
 
+export const TEST_ACCOUNT_ONE = "000000000000";
+export const TEST_ORG_ONE = "org-123456";
+
 export class TestFracture extends Fracture {
   constructor(
     options: Omit<
@@ -19,7 +22,7 @@ export class TestFracture extends Fracture {
   testOrg = () => {
     return this.organizations.length > 0
       ? this.organizations[0]
-      : this.addOrganization({ id: "org-123456" });
+      : this.addOrganization({ id: TEST_ORG_ONE });
   };
 
   testEnvironment = () => {
@@ -34,7 +37,7 @@ export class TestFracture extends Fracture {
   testAccount = () => {
     return this.testOrg().accounts.length > 0
       ? this.testOrg().accounts[0]
-      : this.testOrg().addAccount({ id: "0000000000", name: "dev" });
+      : this.testOrg().addAccount({ id: TEST_ACCOUNT_ONE, name: "dev" });
   };
 
   testApp = () => {

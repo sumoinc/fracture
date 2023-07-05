@@ -1,32 +1,30 @@
 import { LoggerOptions, LogLevel } from "projen";
 import { OPERATION_SUB_TYPE, OPERATION_TYPE } from "../../src/core/operation";
-import { Resource } from "../../src/core/resource";
-import { ResourceAttribute } from "../../src/core/resource-attribute";
-import { Service } from "../../src/core/service";
 import { STRUCTURE_TYPE } from "../../src/core/structure";
-import { TestFracturePackage } from "../util";
+import { TestFracture } from "../util";
 
 const makeFixture = () => {
   const logging: LoggerOptions = {
     level: LogLevel.WARN,
   };
-  const fracture = new TestFracturePackage({ logging });
-  const service = new Service(fracture, { name: "tenant" });
-  const resource = new Resource(service, {
+  const fracture = new TestFracture({ logging });
+  const service = fracture.addService({ name: "tenant" });
+  // const service = new Service(fracture, { name: "tenant" });
+  const resource = service.addResource({
     name: "person",
     pluralName: "people",
   });
-  new ResourceAttribute(resource, {
+  resource.addResourceAttribute({
     name: "my-name",
     shortName: "mn",
     //isRequired: true,
   });
-  const fn = new ResourceAttribute(resource, {
+  const fn = resource.addResourceAttribute({
     name: "first-name",
     shortName: "fn",
     isRequired: true,
   });
-  const ln = new ResourceAttribute(resource, {
+  const ln = resource.addResourceAttribute({
     name: "last-name",
     shortName: "ln",
     isRequired: true,
@@ -409,7 +407,10 @@ describe("Parent", () => {
      **************************************************************************/
 
     expectedStructures.forEach((expectedStructure) => {
+      console.log("Expected", expectedStructure);
       const structureFixture = resourceFixture.structures.find((s) => {
+        console.log(s.type);
+        console.log(s.operation?.operationSubType);
         return (
           s.type === expectedStructure.type &&
           (expectedStructure.operationSubType.length === 0 ||

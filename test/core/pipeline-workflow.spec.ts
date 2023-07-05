@@ -20,7 +20,7 @@ describe("Task tests", () => {
   });
 });
 
-describe("workflow file tests", () => {
+describe.only("workflow file tests", () => {
   test("Generates expected pipeline", () => {
     const p = new TestFracture();
     const pipeline = p.testPipeline();

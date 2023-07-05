@@ -2,8 +2,8 @@ import { paramCase } from "change-case";
 import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { Service } from "../core/service";
 import { DynamoTable } from "./dynamo-table";
+import { Service } from "../core/service";
 
 export const DYNAMO_GSI_TYPE = {
   /**

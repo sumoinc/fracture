@@ -24,15 +24,6 @@ export class PipelineWorkflow extends Component {
 
     this.options = options;
 
-    const pipeline = this.pipeline;
-
-    pipeline.stages.forEach((stage) => {
-      fracture.addTask(`${DEPLOY_TASK_PREFIX}:${stage.name}`, {
-        description: `CDK deploy  of ${stage.name} stage`,
-        exec: `cdk deploy *-${stage.name} --require-approval never`,
-      });
-    });
-
     // debugging output
     this.project.logger.info(
       `INIT Pipeline Workflow: "${this.pipeline.deployName}"`
@@ -43,7 +34,7 @@ export class PipelineWorkflow extends Component {
     return this.options.pipeline;
   }
 
-  synthesize(): void {
+  preSynthesize(): void {
     const fracture = this.project as Fracture;
     const pipeline = this.pipeline;
     const app = pipeline.app;
@@ -52,7 +43,22 @@ export class PipelineWorkflow extends Component {
      *
      * TASK CONFIGURATION
      *
-     * Builds the tasks in projen and package.json to do the cdk deployment.
+     * Adds a task to projen for each deployment stage.
+     *
+     ******************************************************************************/
+
+    pipeline.stages.forEach((stage) => {
+      fracture.addTask(`${DEPLOY_TASK_PREFIX}:${stage.name}`, {
+        description: `CDK deploy  of ${stage.name} stage`,
+        exec: `cdk deploy *-${stage.name} --require-approval never`,
+      });
+    });
+
+    /*******************************************************************************
+     *
+     * WORKFLOW CONFIGURATION
+     *
+     * Builds github workflow for stages created in tasks above.
      *
      ******************************************************************************/
 

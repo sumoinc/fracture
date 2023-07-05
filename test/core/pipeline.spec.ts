@@ -1,5 +1,3 @@
-import { synthSnapshot } from "projen/lib/util/synth";
-import { Fracture } from "../../src/core/fracture";
 import { TestFracture } from "../util";
 
 test("Smoke test", () => {

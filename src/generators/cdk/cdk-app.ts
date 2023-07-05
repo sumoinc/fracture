@@ -1,6 +1,6 @@
 import { join } from "path";
 import { Service } from "../../core/service";
-import { TypeScriptSource } from "../ts";
+import { TypeScriptSource } from "../ts/typescript-source";
 
 export class CdkApp extends TypeScriptSource {
   public readonly service: Service;
