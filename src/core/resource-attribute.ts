@@ -1,11 +1,11 @@
 import { paramCase } from "change-case";
+import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { AccessPattern } from "./access-pattern";
-import { FractureComponent } from "./component";
+import { formatStringByNamingStrategy } from "./naming-strategy";
 import { Operation, OperationDefault, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
-import { TypescriptResourceAttribute } from "../generators/ts/typescript-resource-attribute";
 
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
@@ -232,7 +232,7 @@ export type ResourceAttributeOptions = {
   compositionSeperator?: string;
 };
 
-export class ResourceAttribute extends FractureComponent {
+export class ResourceAttribute extends Component {
   // member components
   public readonly compositionSources: ResourceAttribute[] = [];
   // parent
@@ -240,10 +240,10 @@ export class ResourceAttribute extends FractureComponent {
   // all other options
   public readonly options: Required<ResourceAttributeOptions>;
   // generators
-  public readonly ts: TypescriptResourceAttribute;
+  //public readonly ts: TypescriptResourceAttribute;
 
   constructor(resource: Resource, options: ResourceAttributeOptions) {
-    super(resource.fracturePackage);
+    super(resource.project);
 
     /***************************************************************************
      *
@@ -339,7 +339,7 @@ export class ResourceAttribute extends FractureComponent {
      *
      **************************************************************************/
 
-    this.ts = new TypescriptResourceAttribute(this);
+    // this.ts = new TypescriptResourceAttribute(this);
 
     return this;
   }
@@ -597,5 +597,86 @@ export class ResourceAttribute extends FractureComponent {
       this.isGenerated &&
       this.generator === ResourceAttributeGenerator.COMPOSITION
     );
+  }
+
+  /*****************************************************************************
+   *
+   *  TYPESCRIPT HELPERS
+   *
+   ****************************************************************************/
+
+  public get tsAttributeName() {
+    return formatStringByNamingStrategy(
+      this.name,
+      this.resource.namingStrategy.ts.attributeName
+    );
+  }
+
+  public get tsAttributeShortName() {
+    return formatStringByNamingStrategy(
+      this.shortName,
+      this.resource.namingStrategy.ts.attributeName
+    );
+  }
+
+  public get tsRequired() {
+    return this.isRequired ? "" : "?";
+  }
+
+  public get tsType() {
+    switch (this.type) {
+      case ResourceAttributeType.GUID:
+      case ResourceAttributeType.STRING:
+      case ResourceAttributeType.EMAIL:
+      case ResourceAttributeType.PHONE:
+      case ResourceAttributeType.URL:
+      case ResourceAttributeType.DATE:
+      case ResourceAttributeType.TIME:
+      case ResourceAttributeType.DATE_TIME:
+      case ResourceAttributeType.JSON:
+      case ResourceAttributeType.IPADDRESS:
+        return "string";
+      case ResourceAttributeType.INT:
+      case ResourceAttributeType.FLOAT:
+      case ResourceAttributeType.TIMESTAMP:
+      case ResourceAttributeType.COUNT:
+      case ResourceAttributeType.AVERAGE:
+      case ResourceAttributeType.SUM:
+        return "number";
+      case ResourceAttributeType.BOOLEAN:
+        return "boolean";
+      default:
+        throw new Error(`Unknown attribute type: ${this.type}`);
+    }
+  }
+
+  public getTsGenerationSource(operation: Operation) {
+    const generator = this.generator;
+    switch (generator) {
+      case ResourceAttributeGenerator.NONE:
+        throw new Error("No generator! Did you call isGenerated first?");
+      case ResourceAttributeGenerator.GUID:
+        return "uuidv4()";
+      case ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP:
+        return "new Date().toISOString()";
+      case ResourceAttributeGenerator.TYPE:
+        return `"${this.resource.name}"`;
+      case ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP:
+        if (this.hasDefaultFor(operation)) {
+          return `"${this.defaultFor(operation).toLowerCase()}"`;
+        } else {
+          return "new Date().toISOString()";
+        }
+      case ResourceAttributeGenerator.COMPOSITION:
+        return this.compositionSources.length === 0
+          ? undefined
+          : this.compositionSources
+              .map((s) => {
+                return `${s.shortName}.toLowerCase()`;
+              })
+              .join(` + "${this.compositionSeperator}" + `);
+      default:
+        throw new Error(`Unknown generator: ${generator}`);
+    }
   }
 }

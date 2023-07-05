@@ -8,10 +8,7 @@ import { Service } from "../../core/service";
  */
 export class VtlSource extends SourceCode {
   constructor(service: Service, public readonly filePath: string) {
-    super(
-      service.project,
-      join(service.fracturePackage.outdir, service.name, filePath)
-    );
+    super(service.project, join(service.srcDir, filePath));
     return this;
   }
 

@@ -1,10 +1,9 @@
-import { Account } from "../../src/core/account";
-import { Organization } from "../../src/core/organization";
-import { TestFracturePackage } from "../util";
+import { TEST_ACCOUNT_ONE, TestFracture } from "../util";
 
 test("Smoke test", () => {
-  const org = new Organization(new TestFracturePackage(), { id: "org-12345" });
-  const account = new Account(org, { id: "acc-12345" });
+  const fracture = new TestFracture();
+  const account = fracture.testAccount();
+
   expect(account).toBeTruthy();
-  expect(account.options.id).toBe("acc-12345");
+  expect(account.options.id).toBe(TEST_ACCOUNT_ONE);
 });

@@ -1,19 +1,18 @@
 import { join } from "path";
+import { Component } from "projen";
 import { TypeScriptSource } from "./typescript-source";
-import { FractureComponent } from "../../core/component";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Service } from "../../core/service";
 
-export class TypescriptService extends FractureComponent {
+export class TypescriptService extends Component {
   public readonly service: Service;
   public readonly typeFile: TypeScriptSource;
 
   constructor(service: Service) {
-    super(service.fracturePackage);
+    super(service.project);
 
     this.service = service;
 
-    this.project.logger.info("-".repeat(80));
     this.project.logger.info(`TS:INIT Service: "${this.service.name}"`);
 
     // typefile we'll decorate with more types in some other places
@@ -66,9 +65,13 @@ export class TypescriptService extends FractureComponent {
       committed: true,
     });
     */
+
+    // CDK app componants
   }
 
-  public build() {}
+  public build() {
+    //this.cdkApp.build();
+  }
 
   public get responseTypeName() {
     return formatStringByNamingStrategy(
@@ -89,16 +92,11 @@ export class TypescriptService extends FractureComponent {
    ****************************************************************************/
 
   public get outdir() {
-    return join(
-      this.fracturePackage.outdir,
-      "services",
-      this.service.name,
-      "ts"
-    );
+    return join(this.service.srcDir, "ts");
   }
 
   public get typedir() {
-    return join(this.fracturePackage.outdir, "types");
+    return join(this.outdir, "types");
   }
 
   public get dynamoCommandDir() {

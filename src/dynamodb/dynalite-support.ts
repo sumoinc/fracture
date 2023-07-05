@@ -1,8 +1,9 @@
-import { FractureComponent } from "../core/component";
-import { FracturePackage } from "../core/fracture-package";
+import { Component } from "projen";
+import { TypeScriptProject } from "projen/lib/typescript";
+import { Service } from "../core";
 import { TypeScriptSource } from "../generators/ts/typescript-source";
 
-export class DynaliteSupport extends FractureComponent {
+export class DynaliteSupport extends Component {
   /**
    *
    * Writes a dynalite testable dynamo client to a typescript input file.
@@ -20,9 +21,9 @@ export class DynaliteSupport extends FractureComponent {
     file.open(`...(process.env.MOCK_DYNAMODB_ENDPOINT && {`);
     file.line(`endpoint: process.env.MOCK_DYNAMODB_ENDPOINT,`);
     file.line(`sslEnabled: false,`);
-    file.line(`region: 'local',`);
+    file.line(`region: "local",`);
     file.close(`}),`);
-    file.close(`}`);
+    file.close(`};`);
     file.lines([
       `const client = new DynamoDBClient(config);`,
       `const ${name} = DynamoDBDocumentClient.from(client);`,
@@ -71,11 +72,17 @@ export class DynaliteSupport extends FractureComponent {
   }
 
   public readonly dynaliteConfig: TypeScriptSource;
+  public readonly service: Service;
 
-  constructor(fracturePackage: FracturePackage) {
-    super(fracturePackage);
+  constructor(service: Service) {
+    super(service.project);
 
-    const { project } = this.fracturePackage;
+    this.service = service;
+
+    console.log("service:", this.service.name);
+
+    // pull the project for this service
+    const project = service.project as TypeScriptProject;
 
     // add dynalite
     project.addDeps("jest-dynalite");
@@ -99,30 +106,34 @@ export class DynaliteSupport extends FractureComponent {
   }
 
   // build out the dynalite config
-  preSynthesize() {
+  synthesize() {
+    super.synthesize();
+    // pull the project for this service
+    const allGsi = this.service.dynamoTable.dynamoGsi.filter(
+      (gsi) => gsi !== this.service.dynamoTable.keyDynamoGsi
+    );
     const config = {
-      tables: this.fracturePackage.services.map((service) => {
-        const allGsi = service.dynamoTable.dynamoGsi.filter(
-          (gsi) => gsi !== service.dynamoTable.keyDynamoGsi
-        );
-        return {
-          TableName: service.dynamoTable.name,
+      tables: [
+        {
+          TableName: this.service.dynamoTable.name,
           KeySchema: [
             {
-              AttributeName: service.dynamoTable.pkName,
+              AttributeName: this.service.dynamoTable.pkName,
               KeyType: "HASH",
             },
             {
-              AttributeName: service.dynamoTable.skName,
+              AttributeName: this.service.dynamoTable.skName,
               KeyType: "RANGE",
             },
           ],
-          AttributeDefinitions: service.dynamoTable.attrributeNames.map((s) => {
-            return {
-              AttributeName: s,
-              AttributeType: "S",
-            };
-          }),
+          AttributeDefinitions: this.service.dynamoTable.attrributeNames.map(
+            (s) => {
+              return {
+                AttributeName: s,
+                AttributeType: "S",
+              };
+            }
+          ),
           GlobalSecondaryIndexes:
             allGsi.length > 0
               ? allGsi.map((gsi) => {
@@ -148,9 +159,9 @@ export class DynaliteSupport extends FractureComponent {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,
           },
-        };
-      }),
-      basePort: 8000 + this.fracturePackage.packageIndex * 100,
+        },
+      ],
+      basePort: 8000 + this.service.serviceIndex * 100,
     };
 
     this.dynaliteConfig.line(
@@ -158,6 +169,5 @@ export class DynaliteSupport extends FractureComponent {
     );
 
     this.dynaliteConfig.line("");
-    super.preSynthesize();
   }
 }

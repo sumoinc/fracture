@@ -1,6 +1,8 @@
 import { dirname, join, relative, sep } from "path";
-import { SourceCode } from "projen";
-import { FractureComponent } from "../../core/component";
+import { Component, SourceCode, SourceCodeOptions } from "projen";
+import { TypeScriptProject } from "projen/lib/typescript";
+
+export interface TypeScriptSourceOptions extends SourceCodeOptions {}
 
 /**
  * Build a TypeScript file and make sure it's marked as being managed by
@@ -8,10 +10,19 @@ import { FractureComponent } from "../../core/component";
  */
 export class TypeScriptSource extends SourceCode {
   constructor(
-    fractureComponent: FractureComponent,
-    public readonly filePath: string
+    fractureComponent: Component,
+    public readonly filePath: string,
+    options?: TypeScriptSourceOptions
   ) {
-    super(fractureComponent.project, filePath);
+    // make the file editable so that prettier can format it
+    const defaultOptions = {
+      readonly: false,
+    };
+
+    super(fractureComponent.project, filePath, {
+      ...defaultOptions,
+      ...options,
+    });
 
     this.project.logger.info(`TS:INIT Source File: "${this.fileName}"`);
 
@@ -48,10 +59,14 @@ export class TypeScriptSource extends SourceCode {
     return join(relativeDir, this.fileName.split(".")[0]);
   }
 
-  // mark as managed
   preSynthesize() {
+    // mark as managed
     this.line("// " + this.marker);
     this.line("\n");
+    // make sure prettier isn't ignoring it so we can clean it up and format it
+    const project = this.project as TypeScriptProject;
+    project.prettier?.addIgnorePattern(`!${this.filePath}`);
+    // call parent
     super.preSynthesize();
   }
 }

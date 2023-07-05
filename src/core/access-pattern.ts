@@ -1,6 +1,6 @@
+import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { FractureComponent } from "./component";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
@@ -33,7 +33,7 @@ export interface AccessPatternOptions {
   type?: ValueOf<typeof ACCESS_PATTERN_TYPE>;
 }
 
-export class AccessPattern extends FractureComponent {
+export class AccessPattern extends Component {
   // member components
   public pkAttribute: ResourceAttribute;
   public skAttribute: ResourceAttribute;
@@ -44,7 +44,7 @@ export class AccessPattern extends FractureComponent {
   public readonly options: Required<AccessPatternOptions>;
 
   constructor(resource: Resource, options: AccessPatternOptions) {
-    super(resource.fracturePackage);
+    super(resource.project);
 
     /***************************************************************************
      *
@@ -118,24 +118,17 @@ export class AccessPattern extends FractureComponent {
     return this;
   }
 
+  /*
   public build() {
     this.project.logger.debug(
       `BUILD Access Pattern: "${this.pkAttribute.name}:${this.skAttribute.name}" called.`
     );
-    /***************************************************************************
-     *
-     * CRUD OPERATIONS
-     *
-     * TODO
-     *
-     **************************************************************************/
-    /*
     new Operation(this, {
       operationType: OPERATION_TYPE.MUTATION,
       operationSubType: OPERATION_SUB_TYPE.LIST,
     });
-    */
   }
+  */
 
   addPkAttributeSource(sourceAttribute: ResourceAttribute) {
     this.pkAttribute.compositionSources.push(sourceAttribute);

@@ -1,14 +1,13 @@
+import { Component } from "projen";
 import { Account, AccountOptions } from "./account";
-import { FractureComponent } from "./component";
 import { Organization } from "./organization";
-import { Region } from "./region";
 
 export interface OrganizationalUnitOptions {
   id: string;
   name: string;
 }
 
-export class OrganizationalUnit extends FractureComponent {
+export class OrganizationalUnit extends Component {
   // member components
   public readonly accounts: Account[];
   public readonly organizationalUnits: OrganizationalUnit[];
@@ -18,7 +17,7 @@ export class OrganizationalUnit extends FractureComponent {
   public readonly options: OrganizationalUnitOptions;
 
   constructor(organization: Organization, options: OrganizationalUnitOptions) {
-    super(organization.fracturePackage);
+    super(organization.project);
 
     /***************************************************************************
      *
@@ -47,7 +46,7 @@ export class OrganizationalUnit extends FractureComponent {
   public get name() {
     return this.options.name;
   }
-
+  /*
   public get regions() {
     return this.accounts
       .flatMap((account) => account.regions)
@@ -58,6 +57,7 @@ export class OrganizationalUnit extends FractureComponent {
         return acc;
       }, [] as Region[]);
   }
+  */
 
   /*****************************************************************************
    *

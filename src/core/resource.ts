@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
+import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { AccessPattern } from "./access-pattern";
-import { FractureComponent } from "./component";
 import { Operation } from "./operation";
 import {
   ResourceAttribute,
@@ -45,7 +45,7 @@ export interface ResourceOptions {
   compositionSeperator?: string;
 }
 
-export class Resource extends FractureComponent {
+export class Resource extends Component {
   // member components
   public attributes: ResourceAttribute[] = [];
   public operations: Operation[] = [];
@@ -61,7 +61,7 @@ export class Resource extends FractureComponent {
   public readonly ts: TypescriptResource;
 
   constructor(service: Service, options: ResourceOptions) {
-    super(service.fracturePackage);
+    super(service.project);
 
     /***************************************************************************
      *
@@ -175,19 +175,19 @@ export class Resource extends FractureComponent {
     return this;
   }
 
-  public build() {
-    this.project.logger.info(`BUILD Resource: "${this.name}"`);
-    this.dataStructure.build();
-    this.transientStructure.build();
-    this.operations.forEach((operation) => {
-      operation.build();
-    });
-    this.accessPatterns.forEach((accessPattern) => {
-      accessPattern.build();
-    });
-    // build generators
-    this.ts.build();
-  }
+  // public build() {
+  //   this.project.logger.info(`BUILD Resource: "${this.name}"`);
+  //   this.dataStructure.build();
+  //   this.transientStructure.build();
+  //   this.operations.forEach((operation) => {
+  //     operation.build();
+  //   });
+  //   //this.accessPatterns.forEach((accessPattern) => {
+  //   //accessPattern.build();
+  //   //});
+  //   // build generators
+  //   this.ts.build();
+  // }
 
   public get name(): string {
     return this.options.name;

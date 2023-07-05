@@ -1,11 +1,11 @@
-import { FractureComponent } from "../../core/component";
+import { Component } from "projen";
 import { Operation } from "../../core/operation";
 
-export class TypescriptOperation extends FractureComponent {
+export class TypescriptOperation extends Component {
   public readonly operation: Operation;
 
   constructor(operation: Operation) {
-    super(operation.fracturePackage);
+    super(operation.project);
 
     this.operation = operation;
 

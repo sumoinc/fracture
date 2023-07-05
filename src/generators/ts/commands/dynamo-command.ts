@@ -1,61 +1,57 @@
 import { join } from "path";
 import { ValueOf } from "type-fest";
+import { ResourceAttributeGenerator } from "../../../core";
 import { AccessPattern } from "../../../core/access-pattern";
-import { FractureComponent } from "../../../core/component";
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "../../../core/operation";
 import { Resource } from "../../../core/resource";
-import { ResourceAttributeGenerator } from "../../../core/resource-attribute";
 import { Service } from "../../../core/service";
 import { Structure } from "../../../core/structure";
-import { DynaliteSupport } from "../../../dynamodb/dynalite-support";
+import { DynaliteSupport } from "../../../dynamodb";
 import { TypeScriptSource } from "../typescript-source";
 
-export class DynamoCommand extends FractureComponent {
+export class DynamoCommand extends TypeScriptSource {
   public readonly operation: Operation;
 
   constructor(operation: Operation) {
-    super(operation.fracturePackage);
+    super(
+      operation,
+      join(
+        operation.service.srcDir,
+        "ts",
+        "dynamodb",
+        "commands",
+        `${operation.name}.ts`
+      ),
+      {
+        readonly: false,
+      }
+    );
 
     this.operation = operation;
   }
 
-  public build() {
-    this.writeCommand();
-    this.writeTest();
-  }
-
-  public writeCommand = () => {
-    const tsFile = new TypeScriptSource(
-      this,
-      join(this.service.ts.dynamoCommandDir, `${this.operation.name}.ts`)
-    );
-
-    const responseType =
-      this.operation.operationSubType === OPERATION_SUB_TYPE.LIST
-        ? this.service.ts.listResponseTypeName
-        : this.service.ts.responseTypeName;
-
+  preSynthesize(): void {
     /***************************************************************************
      *  IMPORTS
      **************************************************************************/
 
-    tsFile.lines([
+    this.lines([
       `import { DynamoDBClient } from "@aws-sdk/client-dynamodb";`,
       `import { DynamoDBDocumentClient, ${this.dynamoCommandName} } from "@aws-sdk/lib-dynamodb";`,
     ]);
 
     if (this.inputStructure.hasGenerator(ResourceAttributeGenerator.GUID)) {
-      tsFile.line(`import { v4 as uuidv4 } from "uuid";`);
+      this.line(`import { v4 as uuidv4 } from "uuid";`);
     }
 
-    tsFile.open(`import {`);
-    tsFile.line("Error,");
-    tsFile.line(this.inputStructure.ts.publicInterfaceName + ",");
-    tsFile.line(this.outputStructure.ts.publicInterfaceName + ",");
-    tsFile.line(responseType + ",");
-    tsFile.close(`} from "${this.service.ts.typeFile.pathFrom(tsFile)}";`);
-    tsFile.line("");
+    this.open(`import {`);
+    this.line("Error,");
+    this.line(this.inputStructure.tsInterfaceName + ",");
+    this.line(this.outputStructure.tsInterfaceName + ",");
+    this.line(this.operation.tsResponseTypeName + ",");
+    this.close(`} from "${this.service.tsTypes.pathFrom(this)}";`);
+    this.line("");
 
     /***************************************************************************
      *
@@ -66,31 +62,29 @@ export class DynamoCommand extends FractureComponent {
      *
      **************************************************************************/
 
-    DynaliteSupport.writeDynamoClient(tsFile);
+    DynaliteSupport.writeDynamoClient(this);
 
     /***************************************************************************
      *  OPEN FUNCTION
      **************************************************************************/
 
-    tsFile.open(`export const ${this.functionName} = async (`);
-    tsFile.line(
-      `${this.inputName}: ${this.inputStructure.ts.publicInterfaceName}`
+    this.open(`export const ${this.functionName} = async (`);
+    this.line(`${this.inputName}: ${this.inputStructure.tsInterfaceName}`);
+    this.close(
+      `): Promise<${this.operation.tsResponseTypeName}<${this.outputStructure.tsInterfaceName}>> => {`
     );
-    tsFile.close(
-      `): Promise<${responseType}<${this.outputStructure.ts.publicInterfaceName}>> => {`
-    );
-    tsFile.open("");
-    tsFile.line("");
+    this.open("");
+    this.line("");
 
-    tsFile.comments([
+    this.comments([
       `An error container in case we encounter problems along the way.`,
     ]);
-    tsFile.line(`const errors = [] as Error[];`);
-    tsFile.line("");
+    this.line(`const errors = [] as Error[];`);
+    this.line("");
 
-    tsFile.comments([`Assume things will go well (until they don't).`]);
-    tsFile.line(`let status = 200;`);
-    tsFile.line("");
+    this.comments([`Assume things will go well (until they don't).`]);
+    this.line(`let status = 200;`);
+    this.line("");
 
     /***************************************************************************
      *
@@ -101,25 +95,25 @@ export class DynamoCommand extends FractureComponent {
      *
      **************************************************************************/
 
-    tsFile.comments([`Unwrap external inputs.`]);
-    tsFile.open(`const {`);
-    this.inputStructure.publicAttributes.forEach((a) => {
-      tsFile.line(`${a.ts.attributeName},`);
+    this.comments([`Unwrap external inputs.`]);
+    this.open(`const {`);
+    this.inputStructure.publicAttributes.forEach((attribute) => {
+      this.line(`${attribute.tsAttributeName},`);
     });
-    tsFile.close(`} = ${this.inputName};`);
-    tsFile.line("");
+    this.close(`} = ${this.inputName};`);
+    this.line("");
 
     this.inputStructure.publicAttributes
       // skip items with the same public and private names
-      .filter((a) => {
-        return a.ts.attributeShortName !== a.ts.attributeName;
+      .filter((attribute) => {
+        return attribute.tsAttributeShortName !== attribute.tsAttributeName;
       })
-      .forEach((a) => {
-        tsFile.line(
-          `const ${a.ts.attributeShortName} = ${a.ts.attributeName};`
+      .forEach((attribute) => {
+        this.line(
+          `const ${attribute.tsAttributeShortName} = ${attribute.tsAttributeName};`
         );
       });
-    tsFile.line("");
+    this.line("");
 
     /***************************************************************************
      *
@@ -130,15 +124,15 @@ export class DynamoCommand extends FractureComponent {
      *
      **************************************************************************/
 
-    tsFile.comments([`Generate needed values.`]);
-    this.inputStructure.generatedAttributes.forEach((a) => {
-      tsFile.line(
-        `const ${a.ts.attributeShortName} = ${a.ts.generationSource(
-          this.operation
-        )};`
+    this.comments([`Generate needed values.`]);
+    this.inputStructure.generatedAttributes.forEach((attribute) => {
+      this.line(
+        `const ${
+          attribute.tsAttributeShortName
+        } = ${attribute.getTsGenerationSource(this.operation)};`
       );
     });
-    tsFile.line("");
+    this.line("");
 
     /***************************************************************************
      *
@@ -151,12 +145,12 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
-      tsFile.open(`await dynamo.send(`);
+      this.open(`await dynamo.send(`);
     } else {
-      tsFile.open(`const result = await dynamo.send(`);
+      this.open(`const result = await dynamo.send(`);
     }
-    tsFile.open(`new ${this.dynamoCommandName}({`);
-    tsFile.line(`TableName: "${this.service.dynamoTable.name}",`);
+    this.open(`new ${this.dynamoCommandName}({`);
+    this.line(`TableName: "${this.service.dynamoTable.name}",`);
 
     /***************************************************************************
      *
@@ -168,11 +162,11 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
-      tsFile.open(`Item: {`);
-      this.inputStructure.itemAttributes.forEach((a) => {
-        tsFile.line(`${a.ts.attributeShortName},`);
+      this.open(`Item: {`);
+      this.inputStructure.itemAttributes.forEach((attribute) => {
+        this.line(`${attribute.tsAttributeShortName},`);
       });
-      tsFile.close(`},`);
+      this.close(`},`);
     }
 
     /***************************************************************************
@@ -187,24 +181,24 @@ export class DynamoCommand extends FractureComponent {
     if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
       const updateExpression = this.inputStructure.itemAttributes
         .map((attribute) => {
-          return `#${attribute.ts.attributeShortName} = :${attribute.ts.attributeShortName}`;
+          return `#${attribute.tsAttributeShortName} = :${attribute.tsAttributeShortName}`;
         })
         .join(", ");
-      tsFile.line(`UpdateExpression: "set ${updateExpression}",`);
-      tsFile.open(`ExpressionAttributeValues: {`);
+      this.line(`UpdateExpression: "set ${updateExpression}",`);
+      this.open(`ExpressionAttributeValues: {`);
       this.inputStructure.itemAttributes.forEach((attribute) => {
-        tsFile.line(
-          `":${attribute.ts.attributeShortName}": ${attribute.ts.attributeShortName},`
+        this.line(
+          `":${attribute.tsAttributeShortName}": ${attribute.tsAttributeShortName},`
         );
       });
-      tsFile.close(`},`);
-      tsFile.open(`ExpressionAttributeNames: {`);
+      this.close(`},`);
+      this.open(`ExpressionAttributeNames: {`);
       this.inputStructure.itemAttributes.forEach((attribute) => {
-        tsFile.line(
-          `"#${attribute.ts.attributeShortName}": "${attribute.ts.attributeShortName}",`
+        this.line(
+          `"#${attribute.tsAttributeShortName}": "${attribute.tsAttributeShortName}",`
         );
       });
-      tsFile.close(`},`);
+      this.close(`},`);
     }
 
     /***************************************************************************
@@ -214,27 +208,27 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
-      tsFile.line(`IndexName: "${this.lookupAccessPattern.dynamoGsi.name}",`);
+      this.line(`IndexName: "${this.lookupAccessPattern.dynamoGsi.name}",`);
       // KeyConditionExpression: "Season = :s and Episode > :e",
-      tsFile.line(
-        `KeyConditionExpression: "#${this.lookupAccessPattern.pkAttribute.ts.attributeShortName} = :${this.lookupAccessPattern.pkAttribute.ts.attributeShortName} and begins_with(#${this.lookupAccessPattern.skAttribute.ts.attributeShortName}, :${this.lookupAccessPattern.skAttribute.ts.attributeShortName})",`
+      this.line(
+        `KeyConditionExpression: "#${this.lookupAccessPattern.pkAttribute.tsAttributeShortName} = :${this.lookupAccessPattern.pkAttribute.tsAttributeShortName} and begins_with(#${this.lookupAccessPattern.skAttribute.tsAttributeShortName}, :${this.lookupAccessPattern.skAttribute.tsAttributeShortName})",`
       );
-      tsFile.open(`ExpressionAttributeValues: {`);
-      tsFile.line(
-        `":${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}": ${this.lookupAccessPattern.pkAttribute.ts.attributeShortName},`
+      this.open(`ExpressionAttributeValues: {`);
+      this.line(
+        `":${this.lookupAccessPattern.pkAttribute.tsAttributeShortName}": ${this.lookupAccessPattern.pkAttribute.tsAttributeShortName},`
       );
-      tsFile.line(
-        `":${this.lookupAccessPattern.skAttribute.ts.attributeShortName}": ${this.lookupAccessPattern.skAttribute.ts.attributeShortName},`
+      this.line(
+        `":${this.lookupAccessPattern.skAttribute.tsAttributeShortName}": ${this.lookupAccessPattern.skAttribute.tsAttributeShortName},`
       );
-      tsFile.close(`},`);
-      tsFile.open(`ExpressionAttributeNames: {`);
-      tsFile.line(
-        `"#${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}": "${this.lookupAccessPattern.pkAttribute.ts.attributeShortName}",`
+      this.close(`},`);
+      this.open(`ExpressionAttributeNames: {`);
+      this.line(
+        `"#${this.lookupAccessPattern.pkAttribute.tsAttributeShortName}": "${this.lookupAccessPattern.pkAttribute.tsAttributeShortName}",`
       );
-      tsFile.line(
-        `"#${this.lookupAccessPattern.skAttribute.ts.attributeShortName}": "${this.lookupAccessPattern.skAttribute.ts.attributeShortName}",`
+      this.line(
+        `"#${this.lookupAccessPattern.skAttribute.tsAttributeShortName}": "${this.lookupAccessPattern.skAttribute.tsAttributeShortName}",`
       );
-      tsFile.close(`},`);
+      this.close(`},`);
     }
 
     /***************************************************************************
@@ -248,10 +242,10 @@ export class DynamoCommand extends FractureComponent {
       this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE ||
       this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE
     ) {
-      tsFile.open(`Key: {`);
-      tsFile.line(`${this.dynamoPkName},`);
-      tsFile.line(`${this.dynamoSkName},`);
-      tsFile.close(`},`);
+      this.open(`Key: {`);
+      this.line(`${this.dynamoPkName},`);
+      this.line(`${this.dynamoSkName},`);
+      this.close(`},`);
     }
 
     /***************************************************************************
@@ -264,11 +258,11 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
-      tsFile.line(`ReturnValues: "ALL_OLD",`);
+      this.line(`ReturnValues: "ALL_OLD",`);
     }
 
     if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
-      tsFile.line(`ReturnValues: "ALL_NEW",`);
+      this.line(`ReturnValues: "ALL_NEW",`);
     }
     /***************************************************************************
      *
@@ -280,13 +274,13 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     // return some statistics (might remove this later)
-    tsFile.line(`ReturnConsumedCapacity: "INDEXES",`);
+    this.line(`ReturnConsumedCapacity: "INDEXES",`);
     if (
       this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE ||
       this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE ||
       this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE
     ) {
-      tsFile.line(`ReturnItemCollectionMetrics: "SIZE",`);
+      this.line(`ReturnItemCollectionMetrics: "SIZE",`);
     }
 
     /***************************************************************************
@@ -297,22 +291,22 @@ export class DynamoCommand extends FractureComponent {
      *
      **************************************************************************/
 
-    tsFile.close(`})`);
-    tsFile.close(`);`);
-    tsFile.line("");
+    this.close(`})`);
+    this.close(`);`);
+    this.line("");
 
     /***************************************************************************
      *  CLOSE FUNCTION - create
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
-      tsFile.comments([`Expand/comnvert data to output format.`]);
-      tsFile.open(`const data = {`);
+      this.comments([`Expand/comnvert data to output format.`]);
+      this.open(`const data = {`);
       this.outputStructure.publicAttributes.forEach((a) => {
-        tsFile.line(`${a.ts.attributeName}: ${a.ts.attributeShortName},`);
+        this.line(`${a.tsAttributeName}: ${a.tsAttributeShortName},`);
       });
-      tsFile.close(`};`);
-      tsFile.line("");
+      this.close(`};`);
+      this.line("");
     }
 
     /***************************************************************************
@@ -321,30 +315,30 @@ export class DynamoCommand extends FractureComponent {
 
     if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
       // data
-      tsFile.comments([`Expand/comnvert data to output format.`]);
-      tsFile.open(`const data = (result.Item)`);
-      tsFile.open(`? {`);
+      this.comments([`Expand/comnvert data to output format.`]);
+      this.open(`const data = result.Item`);
+      this.open(`? {`);
       this.outputStructure.publicAttributes.forEach((a) => {
-        tsFile.line(
-          `${a.ts.attributeName}: result.Item.${a.ts.attributeShortName},`
+        this.line(
+          `${a.tsAttributeName}: result.Item.${a.tsAttributeShortName},`
         );
       });
-      tsFile.close(`} : undefined;`);
-      tsFile.close("");
-      tsFile.line("");
+      this.close(`} : undefined;`);
+      this.close("");
+      this.line("");
 
       // errors
-      tsFile.comments([`Log error if no records found.`]);
-      tsFile.open(`if (!result.Item) {`);
-      tsFile.line(`status = 404;`);
-      tsFile.open(`errors.push({ `);
-      tsFile.line(`code: 12345,`);
-      tsFile.line(`source: "TODO",`);
-      tsFile.line(`message: "TODO - Item not found based on inputs.",`);
-      tsFile.line(`detail: "TODO",`);
-      tsFile.close(`})`);
-      tsFile.close(`}`);
-      tsFile.line("");
+      this.comments([`Log error if no records found.`]);
+      this.open(`if (!result.Item) {`);
+      this.line(`status = 404;`);
+      this.open(`errors.push({ `);
+      this.line(`code: 12345,`);
+      this.line(`source: "TODO",`);
+      this.line(`message: "TODO - Item not found based on inputs.",`);
+      this.line(`detail: "TODO",`);
+      this.close(`})`);
+      this.close(`}`);
+      this.line("");
     }
 
     /***************************************************************************
@@ -352,29 +346,29 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
-      tsFile.comments([`Expand/comnvert data to output format.`]);
-      tsFile.open(`const data = (result.Attributes)`);
-      tsFile.open(`? {`);
+      this.comments([`Expand/comnvert data to output format.`]);
+      this.open(`const data = (result.Attributes)`);
+      this.open(`? {`);
       this.outputStructure.publicAttributes.forEach((a) => {
-        tsFile.line(
-          `${a.ts.attributeName}: result.Attributes.${a.ts.attributeShortName},`
+        this.line(
+          `${a.tsAttributeName}: result.Attributes.${a.tsAttributeShortName},`
         );
       });
-      tsFile.close(`} : undefined;`);
-      tsFile.close("");
-      tsFile.line("");
+      this.close(`} : undefined;`);
+      this.close("");
+      this.line("");
 
-      tsFile.comments([`Log error if no records found.`]);
-      tsFile.open(`if (!result.Attributes) {`);
-      tsFile.line(`status = 404;`);
-      tsFile.open(`errors.push({ `);
-      tsFile.line(`code: 12345,`);
-      tsFile.line(`source: "TODO",`);
-      tsFile.line(`message: "TODO - Attributes not found based on inputs.",`);
-      tsFile.line(`detail: "TODO",`);
-      tsFile.close(`})`);
-      tsFile.close(`}`);
-      tsFile.line("");
+      this.comments([`Log error if no records found.`]);
+      this.open(`if (!result.Attributes) {`);
+      this.line(`status = 404;`);
+      this.open(`errors.push({ `);
+      this.line(`code: 12345,`);
+      this.line(`source: "TODO",`);
+      this.line(`message: "TODO - Attributes not found based on inputs.",`);
+      this.line(`detail: "TODO",`);
+      this.close(`})`);
+      this.close(`}`);
+      this.line("");
     }
 
     /***************************************************************************
@@ -382,28 +376,28 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
-      tsFile.open(`const data = result.Attributes`);
-      tsFile.open(`? {`);
+      this.open(`const data = result.Attributes`);
+      this.open(`? {`);
       this.outputStructure.publicAttributes.forEach((a) => {
-        tsFile.line(
-          `${a.ts.attributeName}: result.Attributes.${a.ts.attributeShortName},`
+        this.line(
+          `${a.tsAttributeName}: result.Attributes.${a.tsAttributeShortName},`
         );
       });
-      tsFile.close(`} : undefined;`);
-      tsFile.close("");
-      tsFile.line("");
+      this.close(`} : undefined;`);
+      this.close("");
+      this.line("");
 
-      tsFile.comments([`Log error if no records found.`]);
-      tsFile.open(`if (!result.Attributes) {`);
-      tsFile.line(`status = 404;`);
-      tsFile.open(`errors.push({ `);
-      tsFile.line(`code: 12345,`);
-      tsFile.line(`source: "TODO",`);
-      tsFile.line(`message: "TODO - Attributes not found based on inputs.",`);
-      tsFile.line(`detail: "TODO",`);
-      tsFile.close(`})`);
-      tsFile.close(`}`);
-      tsFile.line("");
+      this.comments([`Log error if no records found.`]);
+      this.open(`if (!result.Attributes) {`);
+      this.line(`status = 404;`);
+      this.open(`errors.push({ `);
+      this.line(`code: 12345,`);
+      this.line(`source: "TODO",`);
+      this.line(`message: "TODO - Attributes not found based on inputs.",`);
+      this.line(`detail: "TODO",`);
+      this.close(`})`);
+      this.close(`}`);
+      this.line("");
     }
 
     /***************************************************************************
@@ -411,185 +405,187 @@ export class DynamoCommand extends FractureComponent {
      **************************************************************************/
 
     if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
-      tsFile.open(`const data = result.Items`);
-      tsFile.open(`? result.Items.map((item) => {`);
-      tsFile.open("");
-      tsFile.open("return {");
+      this.open(`const data = result.Items`);
+      this.open(`? result.Items.map((item) => {`);
+      this.open("");
+      this.open("return {");
       this.outputStructure.publicAttributes.forEach((a) => {
-        tsFile.line(`${a.ts.attributeName}: item.${a.ts.attributeShortName},`);
+        this.line(`${a.tsAttributeName}: item.${a.tsAttributeShortName},`);
       });
-      tsFile.close("};");
-      tsFile.close(`}) : [];`);
-      tsFile.close("");
-      tsFile.close("");
-      tsFile.line("");
+      this.close("};");
+      this.close(`}) : [];`);
+      this.close("");
+      this.close("");
+      this.line("");
     }
 
-    tsFile.comments([`Return result.`]);
-    tsFile.open(`return {`);
-    tsFile.line(`data,`);
-    tsFile.line(`errors,`);
-    tsFile.line(`status,`);
-    tsFile.close(`};`);
-    tsFile.close(`};`);
-    tsFile.line("");
-  };
+    this.comments([`Return result.`]);
+    this.open(`return {`);
+    this.line(`data,`);
+    this.line(`errors,`);
+    this.line(`status,`);
+    this.close(`};`);
+    this.close(`};`);
+    this.line("");
 
-  public writeTest = () => {
-    const tsTest = new TypeScriptSource(
-      this,
-      join(
-        this.service.ts.outdir,
-        "dynamodb",
-        "commands",
-        `${this.operation.name}.spec.ts`
-      )
-    );
-    /***************************************************************************
-     *  IMPORTS
-     **************************************************************************/
-    DynaliteSupport.writeJestImports(tsTest);
-    tsTest.line(
-      `import { ${this.createOperation.tsDynamoCommand.functionName} } from "./${this.createOperation.name}";`
-    );
-    if (
-      this.createOperation.tsDynamoCommand.functionName !== this.functionName
-    ) {
-      tsTest.line(
-        `import { ${this.functionName} } from "./${this.operation.name}";`
-      );
-    }
-    tsTest.open(`import {`);
-    tsTest.line(this.inputStructure.ts.publicInterfaceName + ",");
-    tsTest.close(`} from "${this.service.ts.typeFile.pathFrom(tsTest)}";`);
-    tsTest.line("");
+    super.preSynthesize();
+  }
 
-    /***************************************************************************
-     *  CONFIGURE TESTS
-     **************************************************************************/
+  // public writeTest = () => {
+  //   const tsTest = new TypeScriptSource(
+  //     this,
+  //     join(
+  //       this.service.ts.outdir,
+  //       "dynamodb",
+  //       "commands",
+  //       `${this.operation.name}.spec.ts`
+  //     )
+  //   );
+  //   /***************************************************************************
+  //    *  IMPORTS
+  //    **************************************************************************/
+  //   DynaliteSupport.writeJestImports(tsTest);
+  //   tsTest.line(
+  //     `import { ${this.createOperation.tsDynamoCommand.functionName} } from "./${this.createOperation.name}";`
+  //   );
+  //   if (
+  //     this.createOperation.tsDynamoCommand.functionName !== this.functionName
+  //   ) {
+  //     tsTest.line(
+  //       `import { ${this.functionName} } from "./${this.operation.name}";`
+  //     );
+  //   }
+  //   tsTest.open(`import {`);
+  //   tsTest.line(this.inputStructure.ts.publicInterfaceName + ",");
+  //   tsTest.close(`} from "${this.service.ts.typeFile.pathFrom(tsTest)}";`);
+  //   tsTest.line("");
 
-    DynaliteSupport.writeJestConfig(tsTest);
-    tsTest.open(`test("Smoke test", async () => {`);
+  //   /***************************************************************************
+  //    *  CONFIGURE TESTS
+  //    **************************************************************************/
 
-    /***************************************************************************
-     *  CREATE TEST
-     **************************************************************************/
+  //   DynaliteSupport.writeJestConfig(tsTest);
+  //   tsTest.open(`test("Smoke test", async () => {`);
 
-    if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
-      tsTest.open(
-        `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
-      );
-      this.inputStructure.publicAttributes.forEach((a) => {
-        tsTest.line(`${a.ts.attributeName}: "foo",`);
-      });
-      tsTest.close(`};`);
-      tsTest.line(
-        `const { data, errors, status } = await ${this.functionName}(fixture);`
-      );
-      tsTest.line(`expect(data).toBeTruthy();`);
-      tsTest.line(`expect(errors.length).toBe(0);`);
-      tsTest.line(`expect(status).toBe(200);`);
-    }
+  //   /***************************************************************************
+  //    *  CREATE TEST
+  //    **************************************************************************/
 
-    /***************************************************************************
-     *  READ TEST
-     **************************************************************************/
+  //   if (this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
+  //     tsTest.open(
+  //       `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
+  //     );
+  //     this.inputStructure.publicAttributes.forEach((a) => {
+  //       tsTest.line(`${a.tsAttributeName}: "foo",`);
+  //     });
+  //     tsTest.close(`};`);
+  //     tsTest.line(
+  //       `const { data, errors, status } = await ${this.functionName}(fixture);`
+  //     );
+  //     tsTest.line(`expect(data).toBeTruthy();`);
+  //     tsTest.line(`expect(errors.length).toBe(0);`);
+  //     tsTest.line(`expect(status).toBe(200);`);
+  //   }
 
-    if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
-      // create some test data
-      this.writeSeedData(tsTest);
-      // run test
-      tsTest.open(
-        `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
-      );
-      this.inputStructure.publicAttributes.forEach((a) => {
-        tsTest.line(
-          `${a.ts.attributeName}: seedData.data.${a.ts.attributeName},`
-        );
-      });
-      tsTest.close(`};`);
-      tsTest.line(
-        `const { data, errors, status } = await ${this.functionName}(fixture);`
-      );
+  //   /***************************************************************************
+  //    *  READ TEST
+  //    **************************************************************************/
 
-      tsTest.line(`expect(data).toBeTruthy();`);
-      tsTest.line(`expect(errors.length).toBe(0);`);
-      tsTest.line(`expect(status).toBe(200);`);
-    }
+  //   if (this.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
+  //     // create some test data
+  //     this.writeSeedData(tsTest);
+  //     // run test
+  //     tsTest.open(
+  //       `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
+  //     );
+  //     this.inputStructure.publicAttributes.forEach((a) => {
+  //       tsTest.line(
+  //         `${a.tsAttributeName}: seedData.data.${a.tsAttributeName},`
+  //       );
+  //     });
+  //     tsTest.close(`};`);
+  //     tsTest.line(
+  //       `const { data, errors, status } = await ${this.functionName}(fixture);`
+  //     );
 
-    /***************************************************************************
-     *  UPDATE TEST
-     **************************************************************************/
+  //     tsTest.line(`expect(data).toBeTruthy();`);
+  //     tsTest.line(`expect(errors.length).toBe(0);`);
+  //     tsTest.line(`expect(status).toBe(200);`);
+  //   }
 
-    if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
-      // create some test data
-      this.writeSeedData(tsTest);
-      tsTest.open(
-        `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
-      );
-      tsTest.line(`id: seedData.data.id,`);
-      this.inputStructure.publicAttributes
-        .filter((a) => a.name !== "id")
-        .forEach((a) => {
-          tsTest.line(`${a.ts.attributeName}: "bar",`);
-        });
-      tsTest.close(`};`);
-      tsTest.line(
-        `const { data, errors, status } = await ${this.functionName}(fixture);`
-      );
-      tsTest.line(`expect(data).toBeTruthy();`);
-      tsTest.line(`expect(errors.length).toBe(0);`);
-      tsTest.line(`expect(status).toBe(200);`);
-    }
+  //   /***************************************************************************
+  //    *  UPDATE TEST
+  //    **************************************************************************/
 
-    /***************************************************************************
-     *  DELETE TEST
-     **************************************************************************/
+  //   if (this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
+  //     // create some test data
+  //     this.writeSeedData(tsTest);
+  //     tsTest.open(
+  //       `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
+  //     );
+  //     tsTest.line(`id: seedData.data.id,`);
+  //     this.inputStructure.publicAttributes
+  //       .filter((a) => a.name !== "id")
+  //       .forEach((a) => {
+  //         tsTest.line(`${a.tsAttributeName}: "bar",`);
+  //       });
+  //     tsTest.close(`};`);
+  //     tsTest.line(
+  //       `const { data, errors, status } = await ${this.functionName}(fixture);`
+  //     );
+  //     tsTest.line(`expect(data).toBeTruthy();`);
+  //     tsTest.line(`expect(errors.length).toBe(0);`);
+  //     tsTest.line(`expect(status).toBe(200);`);
+  //   }
 
-    if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
-      // create some test data
-      this.writeSeedData(tsTest);
-      tsTest.open(
-        `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
-      );
-      tsTest.line(`id: seedData.data.id,`);
-      tsTest.close(`};`);
-      tsTest.line(
-        `const { data, errors, status } = await ${this.functionName}(fixture);`
-      );
-      tsTest.line(`expect(data).toBeTruthy();`);
-      tsTest.line(`expect(errors.length).toBe(0);`);
-      tsTest.line(`expect(status).toBe(200);`);
-    }
+  //   /***************************************************************************
+  //    *  DELETE TEST
+  //    **************************************************************************/
 
-    /***************************************************************************
-     *  LIST TEST
-     **************************************************************************/
+  //   if (this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE) {
+  //     // create some test data
+  //     this.writeSeedData(tsTest);
+  //     tsTest.open(
+  //       `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
+  //     );
+  //     tsTest.line(`id: seedData.data.id,`);
+  //     tsTest.close(`};`);
+  //     tsTest.line(
+  //       `const { data, errors, status } = await ${this.functionName}(fixture);`
+  //     );
+  //     tsTest.line(`expect(data).toBeTruthy();`);
+  //     tsTest.line(`expect(errors.length).toBe(0);`);
+  //     tsTest.line(`expect(status).toBe(200);`);
+  //   }
 
-    if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
-      // create some test data
-      this.writeSeedData(tsTest);
-      tsTest.open(
-        `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
-      );
-      tsTest.line(`lookupText: 'f',`);
-      tsTest.close(`};`);
-      tsTest.line(
-        `const { data, errors, status } = await ${this.functionName}(fixture);`
-      );
-      tsTest.line(`console.log(data);`);
-      tsTest.line(`expect(data).toBeTruthy();`);
-      tsTest.line(`expect(errors.length).toBe(0);`);
-      tsTest.line(`expect(status).toBe(200);`);
-    }
+  //   /***************************************************************************
+  //    *  LIST TEST
+  //    **************************************************************************/
 
-    /***************************************************************************
-     *  CLOSE TEST
-     **************************************************************************/
+  //   if (this.operationSubType === OPERATION_SUB_TYPE.LIST) {
+  //     // create some test data
+  //     this.writeSeedData(tsTest);
+  //     tsTest.open(
+  //       `const fixture : ${this.inputStructure.ts.publicInterfaceName} = {`
+  //     );
+  //     tsTest.line(`lookupText: 'f',`);
+  //     tsTest.close(`};`);
+  //     tsTest.line(
+  //       `const { data, errors, status } = await ${this.functionName}(fixture);`
+  //     );
+  //     tsTest.line(`console.log(data);`);
+  //     tsTest.line(`expect(data).toBeTruthy();`);
+  //     tsTest.line(`expect(errors.length).toBe(0);`);
+  //     tsTest.line(`expect(status).toBe(200);`);
+  //   }
 
-    tsTest.close(`})`);
-    tsTest.line("");
-  };
+  //   /***************************************************************************
+  //    *  CLOSE TEST
+  //    **************************************************************************/
+
+  //   tsTest.close(`})`);
+  //   tsTest.line("");
+  // };
 
   /**
    * determine which dynamo command we will need for this operation.
@@ -650,9 +646,11 @@ export class DynamoCommand extends FractureComponent {
     file.open(
       `const seedData = await ${this.createOperation.tsDynamoCommand.functionName}({`
     );
-    this.createOperation.inputStructure.publicAttributes.forEach((a) => {
-      file.line(`${a.ts.attributeName}: "foo",`);
-    });
+    this.createOperation.inputStructure.publicAttributes.forEach(
+      (attribute) => {
+        file.line(`${attribute.tsAttributeName}: "foo",`);
+      }
+    );
     file.close(`});`);
     file.line("");
 

@@ -2,7 +2,6 @@
   "name": "example-app",
   "scripts": {
     "build": "npx projen build",
-    "build:turbo": "npx projen build:turbo",
     "bump": "npx projen bump",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
@@ -16,6 +15,11 @@
     "release": "npx projen release",
     "test": "npx projen test",
     "test:watch": "npx projen test:watch",
+    "turbo:build": "npx projen turbo:build",
+    "turbo:deploy": "npx projen turbo:deploy",
+    "turbo:destroy": "npx projen turbo:destroy",
+    "turbo:diff": "npx projen turbo:diff",
+    "turbo:synth": "npx projen turbo:synth",
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "watch": "npx projen watch",
@@ -36,7 +40,7 @@
     "jest-junit": "^15",
     "npm-check-updates": "^16",
     "prettier": "^2.8.8",
-    "projen": "^0.71.82",
+    "projen": "^0.71.107",
     "standard-version": "^9",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
@@ -44,7 +48,7 @@
   },
   "dependencies": {
     "@sumoc/fracture": "../src",
-    "turbo": "^1.10.1"
+    "turbo": "^1.10.5"
   },
   "pnpm": {},
   "main": "lib/index.js",

@@ -1,6 +1,7 @@
+import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { SetRequired, ValueOf } from "type-fest";
-import { FractureComponent } from "./component";
+import { formatStringByNamingStrategy } from "./naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
@@ -8,7 +9,6 @@ import {
   ResourceAttributeGenerator,
 } from "./resource-attribute";
 import { Service } from "./service";
-import { TypescriptStructure } from "../generators/ts/typescript-structure";
 
 /******************************************************************************
  * TYPES
@@ -47,17 +47,17 @@ export const STRUCTURE_TYPE = {
  * CLASS
  *****************************************************************************/
 
-export class Structure extends FractureComponent {
+export class Structure extends Component {
   // member components
   // parent
   public readonly resource: Resource;
   // all other options
   public readonly options: SetRequired<StructureOptions, "type" | "comments">;
   // generators
-  public readonly ts: TypescriptStructure;
+  //public readonly ts: TypescriptStructure;
 
   constructor(resource: Resource, options: StructureOptions) {
-    super(resource.fracturePackage);
+    super(resource.project);
 
     /***************************************************************************
      *
@@ -67,7 +67,7 @@ export class Structure extends FractureComponent {
 
     const defaultOptions: Partial<StructureOptions> = {
       type: STRUCTURE_TYPE.DATA,
-      comments: ["A gereric type"],
+      comments: ["A generic type"],
     };
 
     /***************************************************************************
@@ -107,7 +107,7 @@ export class Structure extends FractureComponent {
      *
      **************************************************************************/
 
-    this.ts = new TypescriptStructure(this);
+    //this.ts = new TypescriptStructure(this);
 
     return this;
   }
@@ -116,7 +116,7 @@ export class Structure extends FractureComponent {
   public build() {
     this.project.logger.info(`BUILD Structure: "${this.name}"`);
     // build generators
-    this.ts.build();
+    //this.ts.build();
   }
 
   /**
@@ -127,8 +127,7 @@ export class Structure extends FractureComponent {
       ? this.operation.name
       : this.resource.name;
     const prefix = this.namingStrategy.structures.prefixes[this.type];
-    const suffix =
-      this.fracturePackage.namingStrategy.structures.suffixes[this.type];
+    const suffix = this.namingStrategy.structures.suffixes[this.type];
 
     return [prefix, resourceName, suffix]
       .filter((part) => part.length > 0)
@@ -303,5 +302,17 @@ export class Structure extends FractureComponent {
 
   public get auditStrategy() {
     return this.service.auditStrategy;
+  }
+  /*****************************************************************************
+   *
+   *  TYPESCRIPT HELPERS
+   *
+   ****************************************************************************/
+
+  public get tsInterfaceName() {
+    return formatStringByNamingStrategy(
+      this.name,
+      this.resource.namingStrategy.ts.interfaceName
+    );
   }
 }

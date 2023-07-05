@@ -1,26 +1,26 @@
-import { FractureComponent } from "./component";
+import { paramCase, pascalCase } from "change-case";
+import { Component } from "projen";
+import { deepMerge } from "projen/lib/util";
 import { Organization } from "./organization";
 import { OrganizationalUnit } from "./organizational-unit";
-import { Region, RegionOptions } from "./region";
 
 export interface AccountOptions {
   id: string;
-  name?: string;
+  name: string;
   rootEmail?: string;
   isManagementAccount?: boolean;
   organizationalUnit?: OrganizationalUnit;
 }
 
-export class Account extends FractureComponent {
+export class Account extends Component {
   // member components
-  public readonly regions: Region[];
   // parent
   public readonly organization: Organization;
   // all other options
   public readonly options: AccountOptions;
 
   constructor(organization: Organization, options: AccountOptions) {
-    super(organization.fracturePackage);
+    super(organization.project);
 
     /***************************************************************************
      *
@@ -28,18 +28,25 @@ export class Account extends FractureComponent {
      *
      **************************************************************************/
 
-    // member components
-    this.regions = [];
-
     // parents + inverse
     this.organization = organization;
     this.organization.accounts.push(this);
+
+    const forcedOptions: Partial<AccountOptions> = {
+      name: paramCase(options.name),
+    };
 
     // all other options
     const defaultOptions: Partial<AccountOptions> = {
       isManagementAccount: false,
     };
-    this.options = { ...defaultOptions, ...options };
+
+    // all other options
+    this.options = deepMerge([
+      defaultOptions,
+      options,
+      forcedOptions,
+    ]) as AccountOptions;
 
     // if OU defined, add account to OU
     if (this.options.organizationalUnit) {
@@ -55,7 +62,7 @@ export class Account extends FractureComponent {
   }
 
   public get name() {
-    return this.options.name;
+    return pascalCase(this.options.name);
   }
 
   public get rootEmail() {
@@ -68,22 +75,5 @@ export class Account extends FractureComponent {
 
   public get organizationalUnit() {
     return this.options.organizationalUnit;
-  }
-
-  /*****************************************************************************
-   *
-   *  Configuration Helpers
-   *
-   ****************************************************************************/
-
-  /**
-   * Add an region to an account.
-   *
-   * @param {RegionOptions}
-   * @returns {Region}
-   */
-  public addRegion(options: RegionOptions) {
-    const region = this.regions.find((r) => r.id === options.id);
-    return region ? region : new Region(this, options);
   }
 }

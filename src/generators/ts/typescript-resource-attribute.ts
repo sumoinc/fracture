@@ -1,5 +1,4 @@
-import { FractureComponent } from "../../core/component";
-import { formatStringByNamingStrategy } from "../../core/naming-strategy";
+import { Component } from "projen";
 import { Operation } from "../../core/operation";
 import { Resource } from "../../core/resource";
 import {
@@ -9,14 +8,14 @@ import {
 } from "../../core/resource-attribute";
 import { Service } from "../../core/service";
 
-export class TypescriptResourceAttribute extends FractureComponent {
+export class TypescriptResourceAttribute extends Component {
   // parent
   //public readonly tsResource: TypescriptResource;
   // source
   public readonly resourceAttribute: ResourceAttribute;
 
   constructor(resourceAttribute: ResourceAttribute) {
-    super(resourceAttribute.fracturePackage);
+    super(resourceAttribute.project);
 
     //this.tsResource = tsResource;
     this.resourceAttribute = resourceAttribute;
@@ -29,6 +28,7 @@ export class TypescriptResourceAttribute extends FractureComponent {
   /**
    * Gets formatted attribute name for this resource
    */
+  /*
   public get attributeName() {
     return formatStringByNamingStrategy(
       this.resourceAttribute.name,
@@ -42,6 +42,7 @@ export class TypescriptResourceAttribute extends FractureComponent {
       this.service.namingStrategy.ts.attributeName
     );
   }
+  */
 
   public get required() {
     return this.resourceAttribute.isRequired ? "" : "?";

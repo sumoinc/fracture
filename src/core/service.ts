@@ -1,18 +1,30 @@
 import { join } from "path";
 import { paramCase } from "change-case";
+import { Component, LoggerOptions } from "projen";
+import { NodePackageManager } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
 import { AuditStrategy } from "./audit-strategy";
-import { FractureComponent } from "./component";
-import { FracturePackage } from "./fracture-package";
-import { NamingStrategy } from "./naming-strategy";
+import { Fracture } from "./fracture";
+import {
+  NamingStrategy,
+  formatStringByNamingStrategy,
+} from "./naming-strategy";
 import { Resource, ResourceOptions } from "./resource";
+import { DynaliteSupport } from "../dynamodb";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";
 import { DynamoTable } from "../dynamodb/dynamo-table";
-import { TypescriptService } from "../generators/ts/typescript-service";
+import { CdkApp } from "../generators/cdk/cdk-app";
+import { TypescriptTypes } from "../generators/ts/typescript-types";
 
 export interface ServiceOptions {
   name: string;
-  outdir?: string;
+  srcDir?: string;
+  /**
+   * Logging options
+   * @default LogLevel.INFO
+   */
+  logging?: LoggerOptions;
   /**
    * Versioned.
    * @default fracture default
@@ -28,43 +40,33 @@ export interface ServiceOptions {
   auditStrategy?: AuditStrategy;
 }
 
-export class Service extends FractureComponent {
+export class Service extends Component {
   // member components
   public readonly resources: Resource[] = [];
   public readonly dynamoTable: DynamoTable;
+  public readonly dynaliteSupport: DynaliteSupport;
+  public readonly project: TypeScriptProject;
+  // parent
+  public readonly fracture: Fracture;
   // all other options
   public readonly options: Required<ServiceOptions>;
   // generators
-  public readonly ts: TypescriptService;
+  //public readonly ts: TypescriptService;
 
-  constructor(fracturePackage: FracturePackage, options: ServiceOptions) {
-    super(fracturePackage);
+  // output files / generators
+  public readonly tsTypes: TypescriptTypes;
+  public readonly cdkApp: CdkApp;
+
+  constructor(fracture: Fracture, options: ServiceOptions) {
+    super(fracture);
     /***************************************************************************
      *
      * DEFAULT OPTIONS
      *
-     * We'll glue the name or requested outdir to the primary fracture outdir
+     * These are the options that will be used through all code generation
+     * unless explicitly overridden.
      *
      **************************************************************************/
-
-    const { isVersioned, namingStrategy, auditStrategy } =
-      fracturePackage.options;
-
-    let defaultOptions: Partial<ServiceOptions> = {
-      outdir: join(fracturePackage.outdir, options.outdir ?? options.name),
-      isVersioned,
-      namingStrategy,
-      auditStrategy,
-    };
-
-    /***************************************************************************
-     *
-     * INIT SERVICE
-     *
-     **************************************************************************/
-
-    // inverse
-    this.fracturePackage.services.push(this);
 
     // ensure name is param-cased
     const forcedOptions: Partial<ServiceOptions> = {
@@ -72,13 +74,64 @@ export class Service extends FractureComponent {
     };
 
     // all other options
-    this.options = deepMerge([
-      defaultOptions,
+    const mergedOptions = deepMerge([
+      { ...fracture.options },
       options,
       forcedOptions,
     ]) as Required<ServiceOptions>;
 
-    this.project.logger.info(`INIT Service: "${this.name}"`);
+    this.options = mergedOptions;
+    this.fracture = fracture;
+
+    /***************************************************************************
+     *
+     * CREATE PACKAGE SUB-PROJECT
+     *
+     * This powers a sub-project to house all generated code as a package. This
+     * is mostly generated code and should not be touched by devs unless really
+     * needed.
+     *
+     **************************************************************************/
+
+    const project = new TypeScriptProject({
+      defaultReleaseBranch: "main",
+      name: this.packageName,
+      parent: fracture,
+      licensed: false,
+      outdir: join(fracture.packageRoot, mergedOptions.name),
+      packageManager: NodePackageManager.PNPM,
+      pnpmVersion: "8",
+      prettier: true,
+      projenrcTs: true,
+      deps: [
+        "@aws-sdk/client-dynamodb",
+        "@aws-sdk/lib-dynamodb",
+        "aws-cdk",
+        "aws-cdk-lib",
+        "constructs",
+        "uuid",
+      ],
+
+      devDeps: ["@types/uuid"],
+      eslintOptions: {
+        dirs: ["src"],
+        tsconfigPath: "./**/tsconfig.dev.json",
+      },
+    });
+    this.project = project;
+
+    /***************************************************************************
+     *
+     * INIT SERVICE
+     *
+     **************************************************************************/
+
+    this.fracture.logger.info("-".repeat(80));
+    this.fracture.logger.info(`INIT Service: "${this.name}"`);
+    this.fracture.logger.info("-".repeat(80));
+
+    // inverse
+    this.fracture.services.push(this);
 
     /***************************************************************************
      *
@@ -90,28 +143,45 @@ export class Service extends FractureComponent {
 
     this.dynamoTable = new DynamoTable(this);
 
+    // add Dynalite support for Jest tests
+    this.dynaliteSupport = new DynaliteSupport(this);
+
     /***************************************************************************
      *
      * GENERATORS
      *
      **************************************************************************/
 
-    this.ts = new TypescriptService(this);
+    //this.ts = new TypescriptService(this);
+
+    this.tsTypes = new TypescriptTypes(this);
+    this.cdkApp = new CdkApp(this);
 
     return this;
   }
 
+  /*
   public build() {
     this.project.logger.info(`BUILD Service: "${this.name}"`);
+    //this.dynaliteSupport.build();
     this.resources.forEach((resource) => {
       resource.build();
     });
     // build generators
     this.ts.build();
   }
+  */
 
   public get name(): string {
     return this.options.name;
+  }
+
+  public get packageName(): string {
+    return `@${this.fracture.name}/${this.name}-pkg`;
+  }
+
+  public get serviceName(): string {
+    return `@${this.fracture.name}/${this.name}-svc`;
   }
 
   public get isVersioned(): boolean {
@@ -124,6 +194,19 @@ export class Service extends FractureComponent {
 
   public get auditStrategy() {
     return this.options.auditStrategy;
+  }
+
+  public get srcDir() {
+    return this.options.srcDir;
+  }
+
+  /**
+   * Returns index for this package in the overall project.
+   * Useful when trying to split up ports for testing in parallel, etc.
+   */
+  public get serviceIndex() {
+    const { services } = this.fracture;
+    return services.findIndex((p) => p.name === this.name) || 0;
   }
 
   /*****************************************************************************
@@ -148,5 +231,25 @@ export class Service extends FractureComponent {
 
   public get lookupDynamoGsi(): DynamoGsi {
     return this.dynamoTable.lookupDynamoGsi;
+  }
+
+  /*****************************************************************************
+   *
+   *  TYPESCRIPT HELPERS
+   *
+   ****************************************************************************/
+
+  public get tsResponseTypeName() {
+    return formatStringByNamingStrategy(
+      "response",
+      this.namingStrategy.ts.typeName
+    );
+  }
+
+  public get tsLlistResponseTypeName() {
+    return formatStringByNamingStrategy(
+      "list-response",
+      this.namingStrategy.ts.typeName
+    );
   }
 }

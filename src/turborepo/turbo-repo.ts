@@ -1,52 +1,111 @@
-import { Component, JsonFile } from "projen";
-import { FractureProject } from "../core";
+import { Component, JsonFile, Task } from "projen";
+import { Fracture } from "../core";
 
 export class TurboRepo extends Component {
-  public static buildTask(fractureProject: FractureProject) {
-    const maybeTask = fractureProject.tasks.tryFind("build:turbo");
-
-    if (maybeTask) {
-      return maybeTask;
-    }
-
-    const task = fractureProject.addTask("build:turbo", {
-      description: "Build using turborepo.",
-    });
-
-    task.exec(`pnpm turbo default`);
-    task.exec(`pnpm turbo package`);
-    return task;
-  }
-
-  public fractureProject: FractureProject;
-
-  constructor(fractureProject: FractureProject) {
-    super(fractureProject);
-
-    this.fractureProject = fractureProject;
-
-    fractureProject.addGitIgnore(".turbo");
-    fractureProject.npmignore!.exclude(".turbo");
-    fractureProject.npmignore!.exclude("turbo.json");
-
-    /*
-    this.task = fractureProject.addTask("build:turbo", {
-      description: "Build using turborepo.",
-    });
-
-    this.task.exec(`pnpm turbo default`);
-    this.task.exec(`pnpm turbo package`);
-    */
-  }
+  /**
+   * Synthesizes your app.
+   */
+  public readonly buildTask: Task;
 
   /**
-   * Build the file.
-   *
-   * Call this when you've configured everything, prior to preSynthesize.
-   *
-   * @returns void
+   * Synthesizes your app.
    */
-  public build() {
+  public readonly synthTask: Task;
+
+  /**
+   * Deploys your app.
+   */
+  public readonly deployTask: Task;
+
+  /**
+   * Destroys all the stacks.
+   */
+  public readonly destroyTask: Task;
+
+  /**
+   * Diff against production.
+   */
+  public readonly diffTask: Task;
+
+  constructor(fracture: Fracture) {
+    super(fracture);
+
+    fracture.addGitIgnore(".turbo");
+    fracture.npmignore!.exclude(".turbo");
+    fracture.npmignore!.exclude("turbo.json");
+
+    /***************************************************************************
+     *
+     * PROJEN DEFAULTS
+     *
+     **************************************************************************/
+
+    // add eslint to default task so we get nice clean generated files
+    fracture.defaultTask?.exec(`pnpm turbo eslint`);
+
+    /***************************************************************************
+     *
+     * MAIN BUILD PIPELINE
+     *
+     * The steps defined here happen regardless of which pipeline is running.
+     * This includes building and synth for all apps and services across any
+     * environments they will be deployed into.
+     *
+     **************************************************************************/
+
+    this.buildTask = fracture.addTask("turbo:build", {
+      description: "Build using turborepo.",
+    });
+
+    // synths all projen files into their respedtive directories
+    this.buildTask.exec(`pnpm turbo default`);
+
+    // build all typescript. This step is sort of redundant but a good type
+    // check anyway so leaving it for now.
+    this.buildTask.exec(`pnpm turbo compile`);
+
+    // lint before we test to clean up generated files even when tests fail
+    // linting happens agani after testing but whatever
+    this.buildTask.exec(`pnpm turbo eslint`);
+
+    // run all tests
+    this.buildTask.exec(`pnpm turbo test`);
+
+    // synth all cdk cloud assembly
+    this.buildTask.exec(`pnpm turbo synth`);
+    /***************************************************************************
+     *
+     * CDK TASKS
+     *
+     **************************************************************************/
+
+    this.synthTask = fracture.addTask("turbo:synth", {
+      description: "Synthesizes your cdk app into cdk.out",
+      exec: "pnpm turbo synth",
+    });
+
+    this.deployTask = fracture.addTask("turbo:deploy", {
+      description: "Deploys your CDK app to the AWS cloud",
+      exec: "pnpm turbo deploy",
+      receiveArgs: true,
+    });
+
+    this.destroyTask = fracture.addTask("turbo:destroy", {
+      description: "Destroys your cdk app in the AWS cloud",
+      exec: "pnpm turbo destroy",
+      receiveArgs: true,
+    });
+
+    this.diffTask = fracture.addTask("turbo:diff", {
+      description: "Diffs the currently deployed app against your code",
+      exec: "pnpm turbo diff",
+    });
+
+    /***************************************************************************
+     *
+     * DECLARE ROOT BUILDFILE
+     *
+     **************************************************************************/
     new JsonFile(this.project, "turbo.json", {
       obj: {
         $schema: "https://turborepo.org/schema.json",
@@ -54,30 +113,23 @@ export class TurboRepo extends Component {
           "//#default": {
             cache: false,
           },
-          /*
-          "pre-compile": {
-            dependsOn: [],
-            cache: false,
-          },
-          */
           compile: {
-            //dependsOn: ["pre-compile"],
+            dependsOn: ["^compile"],
             outputs: ["dist/**", "lib/**"],
             outputMode: "new-only",
           },
-          /*
-          "post-compile": {
-            dependsOn: ["compile"],
+          eslint: {
+            dependsOn: ["^eslint"],
             cache: false,
           },
-          */
-          test: {
-            dependsOn: ["compile"],
-            outputs: ["coverage**", "test-reports/**"],
+          synth: {
+            dependsOn: ["^synth"],
+            outputs: ["cdk-out/**"],
             outputMode: "new-only",
           },
-          package: {
-            dependsOn: ["test"],
+          test: {
+            dependsOn: ["^test"],
+            outputs: ["coverage**", "test-reports/**"],
             outputMode: "new-only",
           },
         },

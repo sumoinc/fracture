@@ -1,11 +1,11 @@
-import { FractureComponent } from "../../core/component";
+import { Component } from "projen";
 import { Resource } from "../../core/resource";
 
-export class TypescriptResource extends FractureComponent {
+export class TypescriptResource extends Component {
   public readonly resource: Resource;
 
   constructor(resource: Resource) {
-    super(resource.fracturePackage);
+    super(resource.project);
 
     this.resource = resource;
 

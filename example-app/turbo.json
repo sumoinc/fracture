@@ -5,25 +5,37 @@
       "cache": false
     },
     "compile": {
+      "dependsOn": [
+        "^compile"
+      ],
       "outputs": [
         "dist/**",
         "lib/**"
       ],
       "outputMode": "new-only"
     },
+    "eslint": {
+      "dependsOn": [
+        "^eslint"
+      ],
+      "cache": false
+    },
+    "synth": {
+      "dependsOn": [
+        "^synth"
+      ],
+      "outputs": [
+        "cdk-out/**"
+      ],
+      "outputMode": "new-only"
+    },
     "test": {
       "dependsOn": [
-        "compile"
+        "^test"
       ],
       "outputs": [
         "coverage**",
         "test-reports/**"
-      ],
-      "outputMode": "new-only"
-    },
-    "package": {
-      "dependsOn": [
-        "test"
       ],
       "outputMode": "new-only"
     }

@@ -1,11 +1,12 @@
+import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { AccessPattern } from "./access-pattern";
-import { FractureComponent } from "./component";
 import { Resource } from "./resource";
 import { Service } from "./service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
-import { DynamoCommand, TypescriptOperation } from "../generators";
+import { DynamoCommand } from "../generators";
+import { DynamoCommandTest } from "../generators/ts/commands/dynamo-command-test";
 
 /******************************************************************************
  * TYPES
@@ -46,7 +47,7 @@ export const OPERATION_SUB_TYPE = {
   READ_VERSION: "ReadVersion",
 } as const;
 
-export class Operation extends FractureComponent {
+export class Operation extends Component {
   // member components
   // parents
   public readonly accessPattern: AccessPattern;
@@ -56,11 +57,12 @@ export class Operation extends FractureComponent {
   private _inputStructure?: Structure;
   private _outputStructure?: Structure;
   // generators
-  public readonly ts: TypescriptOperation;
+  //public readonly ts: TypescriptOperation;
   public readonly tsDynamoCommand: DynamoCommand;
+  public readonly tsDynamoCommandTest: DynamoCommandTest;
 
   constructor(accessPattern: AccessPattern, options: OperationOptions) {
-    super(accessPattern.fracturePackage);
+    super(accessPattern.project);
 
     /***************************************************************************
      *
@@ -99,19 +101,11 @@ export class Operation extends FractureComponent {
      *
      **************************************************************************/
 
-    this.ts = new TypescriptOperation(this);
+    //this.ts = new TypescriptOperation(this);
     this.tsDynamoCommand = new DynamoCommand(this);
+    this.tsDynamoCommandTest = new DynamoCommandTest(this);
 
     return this;
-  }
-
-  public build() {
-    this.project.logger.info(`BUILD Operation: "${this.name}"`);
-    this.inputStructure.build();
-    this.outputStructure.build();
-    // build generators
-    this.ts.build();
-    this.tsDynamoCommand.build();
   }
 
   /**
@@ -123,13 +117,9 @@ export class Operation extends FractureComponent {
         ? this.resource.pluralName
         : this.resource.name;
     const prefix =
-      this.fracturePackage.namingStrategy.operations.prefixes[
-        this.operationSubType
-      ];
+      this.service.namingStrategy.operations.prefixes[this.operationSubType];
     const suffix =
-      this.fracturePackage.namingStrategy.operations.suffixes[
-        this.operationSubType
-      ];
+      this.service.namingStrategy.operations.suffixes[this.operationSubType];
 
     return [prefix, resourceName, suffix]
       .filter((part) => part.length > 0)
@@ -203,5 +193,17 @@ export class Operation extends FractureComponent {
 
   public get service(): Service {
     return this.resource.service;
+  }
+
+  /*****************************************************************************
+   *
+   *  TYPESCRIPT HELPERS
+   *
+   ****************************************************************************/
+
+  public get tsResponseTypeName() {
+    return this.operationSubType === OPERATION_SUB_TYPE.LIST
+      ? this.service.tsLlistResponseTypeName
+      : this.service.tsResponseTypeName;
   }
 }

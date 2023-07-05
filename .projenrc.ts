@@ -57,10 +57,20 @@ project.addDeps(
 project.addDevDeps("@types/uuid");
 project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 
-// add example app
-//new ExampleApp(project);
-
+// configure vs code
 new VsCodeConfiguration(project);
+
+// test workflow
+/*
+if (project.github) {
+  const workflow = project.github.addWorkflow("build-example-app");
+
+  workflow.on({
+    pullRequest: {},
+    workflowDispatch: {}, // allow manual triggering
+  });
+}
+*/
 
 // generate
 project.synth();
