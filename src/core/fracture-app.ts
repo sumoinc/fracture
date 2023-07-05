@@ -152,7 +152,7 @@ export class FractureApp {
     this.services.push(service);
   }
 
-  public addPipeline(options: PipelineOptions) {
-    return new Pipeline(this, options);
+  public addPipeline(options: Omit<PipelineOptions, "app">) {
+    return new Pipeline(this.fracture, { ...options, app: this });
   }
 }

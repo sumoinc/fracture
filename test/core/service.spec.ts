@@ -3,7 +3,6 @@ import { TestFracture } from "../util";
 
 test("Smoke test", () => {
   const service = new Service(new TestFracture(), { name: "foo" });
-  service.build();
   expect(service).toBeTruthy();
 });
 

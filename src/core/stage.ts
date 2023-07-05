@@ -3,9 +3,13 @@ import { Environment } from "./environment";
 import { Wave } from "./wave";
 
 export interface StageOptions {
+  name: string;
   environment: Environment;
 }
 
+/**
+ * A stage is a deployment to a single environment.
+ */
 export class Stage extends Component {
   // all other options
   public readonly options: StageOptions;
@@ -27,6 +31,10 @@ export class Stage extends Component {
       account: this.account.id,
       region: this.region,
     };
+  }
+
+  public get name() {
+    return this.options.name;
   }
 
   public get environment() {

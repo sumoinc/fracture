@@ -1,11 +1,14 @@
 import { Component } from "projen";
+import { Fracture } from "./fracture";
 import { FractureApp } from "./fracture-app";
-import { Stage, StageOptions } from "./stage";
+import { PipelineWorkflow } from "./pipeline-workflow";
+import { StageOptions } from "./stage";
 import { Wave, WaveOptions } from "./wave";
 
 export interface PipelineOptions {
   name: string;
   branchTriggerPattern: string;
+  app: FractureApp;
 }
 
 export class Pipeline extends Component {
@@ -13,13 +16,22 @@ export class Pipeline extends Component {
   public readonly options: PipelineOptions;
   public readonly waves: Wave[] = [];
 
-  constructor(app: FractureApp, options: PipelineOptions) {
-    super(app.project);
+  /**
+   * Because the github workflow is build on the base project we pass in the app
+   * but the component is actually based the root project
+   */
+  constructor(fracture: Fracture, options: PipelineOptions) {
+    super(fracture);
 
     this.options = options;
 
     // inverse
-    app.pipelines.push(this);
+    this.app.pipelines.push(this);
+
+    // init workflow for this pipeline
+    new PipelineWorkflow(fracture, {
+      pipeline: this,
+    });
 
     // debugging output
     this.project.logger.info(`INIT Pipeline: "${this.name}"`);
@@ -29,8 +41,20 @@ export class Pipeline extends Component {
     return this.options.name;
   }
 
+  public get deployName() {
+    return `deploy-${this.name}`;
+  }
+
   public get branchTriggerPattern() {
     return this.options.branchTriggerPattern;
+  }
+
+  public get app() {
+    return this.options.app;
+  }
+
+  public get stages() {
+    return this.waves.flatMap((wave) => wave.stages);
   }
 
   public addWave(options: WaveOptions) {
@@ -39,6 +63,6 @@ export class Pipeline extends Component {
 
   public addStage(options: StageOptions) {
     const wave = this.addWave({ name: "default" });
-    return new Stage(wave, options);
+    return wave.addStage(options);
   }
 }
