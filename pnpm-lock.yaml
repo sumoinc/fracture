@@ -24,8 +24,18 @@ dependencies:
     specifier: ^4.1.2
     version: 4.1.2
   projen:
+<<<<<<< Updated upstream
     specifier: ^0.71.125
     version: 0.71.125
+=======
+<<<<<<< Updated upstream
+    specifier: ^0.71.158
+    version: 0.71.158
+=======
+    specifier: ^0.71.159
+    version: 0.71.159
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
   type-fest:
     specifier: ^2.19.0
     version: 2.19.0
@@ -166,8 +176,17 @@ packages:
     resolution: {integrity: sha512-nQYDJon87quPwt2JZJwUN2GFKJnvE5kWb6tZP4xb5biSGUKBqDQo06oYed7yokatCuCMouIXV462aN0fWODtOw==}
     engines: {node: '>=14.0.0'}
     dependencies:
+<<<<<<< Updated upstream
       '@aws-sdk/types': 3.357.0
       tslib: 2.6.0
+=======
+<<<<<<< Updated upstream
+      '@aws-sdk/types': 3.370.0
+=======
+      '@aws-sdk/types': 3.357.0
+>>>>>>> Stashed changes
+      tslib: 2.6.1
+>>>>>>> Stashed changes
     dev: true
 
   /@aws-sdk/client-dynamodb@3.363.0:
@@ -550,19 +569,42 @@ packages:
     resolution: {integrity: sha512-oMsXdMmNwHpUbebETO44bq0N4SocEMGfPjYNUTRs8md7ita5fuFd2qFuvf+ZRt6iVcGWluIqmF8DidD+b7d+TA==}
     engines: {node: '>=14.0.0'}
     dependencies:
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+      '@aws-sdk/abort-controller': 3.370.0
+      '@aws-sdk/protocol-http': 3.370.0
+      '@aws-sdk/querystring-builder': 3.370.0
+      '@aws-sdk/types': 3.370.0
+=======
+>>>>>>> Stashed changes
       '@aws-sdk/abort-controller': 3.357.0
       '@aws-sdk/protocol-http': 3.357.0
       '@aws-sdk/querystring-builder': 3.357.0
       '@aws-sdk/types': 3.357.0
+<<<<<<< Updated upstream
       tslib: 2.6.0
+=======
+>>>>>>> Stashed changes
+      tslib: 2.6.1
+>>>>>>> Stashed changes
     dev: true
 
   /@aws-sdk/protocol-http@3.357.0:
     resolution: {integrity: sha512-w1JHiI50VEea7duDeAspUiKJmmdIQblvRyjVMOqWA6FIQAyDVuEiPX7/MdQr0ScxhtRQxHbP0I4MFyl7ctRQvA==}
     engines: {node: '>=14.0.0'}
     dependencies:
+<<<<<<< Updated upstream
       '@aws-sdk/types': 3.357.0
       tslib: 2.6.0
+=======
+<<<<<<< Updated upstream
+      '@aws-sdk/types': 3.370.0
+=======
+      '@aws-sdk/types': 3.357.0
+>>>>>>> Stashed changes
+      tslib: 2.6.1
+>>>>>>> Stashed changes
     dev: true
 
   /@aws-sdk/querystring-builder@3.357.0:
@@ -578,11 +620,25 @@ packages:
     resolution: {integrity: sha512-R7wbT2SkgWNEAxMekOTNcPcvBszabW2+qHjrcelbbVJNjx/2yK+MbpZI4WRSncByQMeeoW+aSUP+JgsbpiOWfw==}
     engines: {node: '>=14.0.0'}
     dependencies:
+<<<<<<< Updated upstream
       '@aws-sdk/middleware-stack': 3.357.0
       '@aws-sdk/types': 3.357.0
       '@aws-sdk/util-stream': 3.360.0
       '@smithy/types': 1.1.0
       tslib: 2.6.0
+=======
+<<<<<<< Updated upstream
+      '@aws-sdk/middleware-stack': 3.370.0
+      '@aws-sdk/types': 3.370.0
+      '@aws-sdk/util-stream': 3.370.0
+=======
+      '@aws-sdk/middleware-stack': 3.357.0
+      '@aws-sdk/types': 3.357.0
+      '@aws-sdk/util-stream': 3.360.0
+>>>>>>> Stashed changes
+      '@smithy/types': 1.2.0
+      tslib: 2.6.1
+>>>>>>> Stashed changes
     dev: true
 
   /@aws-sdk/token-providers@3.363.0:
@@ -603,7 +659,27 @@ packages:
     resolution: {integrity: sha512-/riCRaXg3p71BeWnShrai0y0QTdXcouPSM0Cn1olZbzTf7s71aLEewrc96qFrL70XhY4XvnxMpqQh+r43XIL3g==}
     engines: {node: '>=14.0.0'}
     dependencies:
+<<<<<<< Updated upstream
       tslib: 2.6.0
+=======
+<<<<<<< Updated upstream
+      '@smithy/types': 1.2.0
+=======
+>>>>>>> Stashed changes
+      tslib: 2.6.1
+    dev: true
+
+  /@aws-sdk/types@3.378.0:
+    resolution: {integrity: sha512-qP0CvR/ItgktmN8YXpGQglzzR/6s0nrsQ4zIfx3HMwpsBTwuouYahcCtF1Vr82P4NFcoDA412EJahJ2pIqEd+w==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@smithy/types': 2.0.2
+      tslib: 2.6.1
+<<<<<<< Updated upstream
+=======
+    dev: false
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
   /@aws-sdk/util-base64@3.310.0:
     resolution: {integrity: sha512-v3+HBKQvqgdzcbL+pFswlx5HQsd9L6ZTlyPVL2LS9nNXnCcR3XgGz9jRskikRUuUvUXtkSG1J88GAOnJ/apTPg==}
@@ -1795,8 +1871,23 @@ packages:
     resolution: {integrity: sha512-rJcpRi/yUi6TyCEkjdTH86/ExBuKlfctEXhG9/4gMJ3/cnPcHJJnr0mQ9evSEO+3DbpT/Nxq90bcTBdTIAmCig==}
     engines: {node: '>=14.0.0'}
     dependencies:
+<<<<<<< Updated upstream
       '@smithy/util-buffer-from': 1.0.1
       tslib: 2.6.0
+=======
+      tslib: 2.6.1
+<<<<<<< Updated upstream
+=======
+    dev: false
+>>>>>>> Stashed changes
+
+  /@smithy/url-parser@2.0.1:
+    resolution: {integrity: sha512-NpHVOAwddo+OyyIoujDL9zGL96piHWrTNXqltWmBvlUoWgt1HPyBuKs6oHjioyFnNZXUqveTOkEEq0U5w6Uv8A==}
+    dependencies:
+      '@smithy/querystring-parser': 2.0.1
+      '@smithy/types': 2.0.2
+      tslib: 2.6.1
+>>>>>>> Stashed changes
     dev: false
 
   /@smithy/util-body-length-browser@1.0.1:
@@ -2567,10 +2658,21 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
+<<<<<<< Updated upstream
       caniuse-lite: 1.0.30001512
       electron-to-chromium: 1.4.450
       node-releases: 2.0.12
       update-browserslist-db: 1.0.11(browserslist@4.21.9)
+=======
+      caniuse-lite: 1.0.30001518
+<<<<<<< Updated upstream
+      electron-to-chromium: 1.4.478
+=======
+      electron-to-chromium: 1.4.479
+>>>>>>> Stashed changes
+      node-releases: 2.0.13
+      update-browserslist-db: 1.0.11(browserslist@4.21.10)
+>>>>>>> Stashed changes
     dev: true
 
   /bs-logger@0.2.6:
@@ -3318,8 +3420,18 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
+<<<<<<< Updated upstream
   /electron-to-chromium@1.4.450:
     resolution: {integrity: sha512-BLG5HxSELlrMx7dJ2s+8SFlsCtJp37Zpk2VAxyC6CZtbc+9AJeZHfYHbrlSgdXp6saQ8StMqOTEDaBKgA7u1sw==}
+=======
+<<<<<<< Updated upstream
+  /electron-to-chromium@1.4.478:
+    resolution: {integrity: sha512-qjTA8djMXd+ruoODDFGnRCRBpID+AAfYWCyGtYTNhsuwxI19s8q19gbjKTwRS5z/LyVf5wICaIiPQGLekmbJbA==}
+=======
+  /electron-to-chromium@1.4.479:
+    resolution: {integrity: sha512-ABv1nHMIR8I5n3O3Een0gr6i0mfM+YcTZqjHy3pAYaOjgFG+BMquuKrSyfYf5CbEkLr9uM05RA3pOk4udNB/aQ==}
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     dev: true
 
   /emittery@0.8.1:
@@ -6316,8 +6428,18 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
+<<<<<<< Updated upstream
   /projen@0.71.125:
     resolution: {integrity: sha512-PE9qfv+6r7aFsA+N/daZXHeSkIW7PjGEUsCq33JlxRU4P2d7N+j9hg1HrCzB/T2PSoflPuxjG40kjGfnbFB+3A==}
+=======
+<<<<<<< Updated upstream
+  /projen@0.71.158:
+    resolution: {integrity: sha512-OOnIPLz++P6OOW9V+Og6vCTZ5622LOpfuqDA5DMtrkATIO5aUsy9bAC60WPYiTWq92tZ/aR35Ndgdx30taRjJw==}
+=======
+  /projen@0.71.159:
+    resolution: {integrity: sha512-PpoOqe4Gx2AAJaEfFa3NpFveBqr8aUsWkymkhN8IjplrMYjePCzIMPT+z/vkQuj6J0u8+Uq1OhpQRbStSMi8JA==}
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:

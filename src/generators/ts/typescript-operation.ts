@@ -13,6 +13,4 @@ export class TypescriptOperation extends Component {
 
     return this;
   }
-
-  public build() {}
 }
