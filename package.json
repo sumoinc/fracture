@@ -31,49 +31,41 @@
     "organization": true
   },
   "devDependencies": {
-    "@aws-sdk/smithy-client": "3.360.0",
-    "@aws-sdk/types": "3.357.0",
+    "@aws-sdk/smithy-client": "3.370.0",
+    "@aws-sdk/types": "3.378.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16",
     "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-prettier": "^8.9.0",
     "eslint-import-resolver-node": "^0.3.7",
     "eslint-import-resolver-typescript": "^3.5.5",
-    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-import": "^2.28.0",
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^27.5.1",
     "jest-junit": "^15",
     "npm-check-updates": "^16",
     "prettier": "^2.8.8",
-    "projen": "^0.71.125",
+    "projen": "^0.71.161",
     "standard-version": "^9",
     "ts-jest": "^27.1.5",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.5"
   },
   "peerDependencies": {
-    "@aws-sdk/smithy-client": "^3.360.0",
-    "@aws-sdk/types": "^3.357.0"
+    "@aws-sdk/smithy-client": "^3.370.0",
+    "@aws-sdk/types": "^3.378.0"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.363.0",
-    "@aws-sdk/lib-dynamodb": "^3.365.0",
-    "@aws-sdk/util-dynamodb": "^3.365.0",
+    "@aws-sdk/client-dynamodb": "^3.382.0",
+    "@aws-sdk/lib-dynamodb": "^3.382.0",
+    "@aws-sdk/util-dynamodb": "^3.382.0",
     "@faker-js/faker": "^8.0.2",
     "@types/aws-lambda": "^8.10.119",
     "change-case": "^4.1.2",
-<<<<<<< Updated upstream
-    "projen": "^0.71.125",
-=======
-<<<<<<< Updated upstream
-    "projen": "^0.71.158",
-=======
-    "projen": "^0.71.159",
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+    "projen": "^0.71.161",
     "type-fest": "^2.19.0",
     "uuid": "^8.3.2"
   },

@@ -33,7 +33,13 @@ const project = new TypeScriptProject({
 
   // autoapproval of auto update PRs
   autoApproveUpgrades: true,
-  autoApproveOptions: { allowedUsernames: ["sumoc-automations"] },
+  autoApproveOptions: {
+    /**
+     * Allow both manual and automated triggers to be auto-approved.
+     */
+    allowedUsernames: ["github-actions[bot]", "cameroncf"],
+    label: "auto-approve",
+  },
 });
 
 // prevent example from being bundled with NPM
