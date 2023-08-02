@@ -1,4 +1,4 @@
-import { TEST_ORG_ONE, TEST_REGION_ONE, TestFracture } from "./test-util";
+import { TEST_ORG_ONE, TestFracture } from "./test-util";
 
 /*******************************************************************************
  * TEST SETUP
