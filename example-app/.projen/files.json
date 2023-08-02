@@ -4,6 +4,7 @@
     ".gitattributes",
     ".github/pull_request_template.md",
     ".github/workflows/build.yml",
+    ".github/workflows/deploy-feature-branch.yml",
     ".github/workflows/deploy-feature.yml",
     ".github/workflows/deploy-main.yml",
     ".github/workflows/deploy-pr.yml",

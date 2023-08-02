@@ -3,7 +3,7 @@ import { Fracture } from "@sumoc/fracture";
 const fracture = new Fracture({
   name: "example-app",
 
-  // delow are non standard - used for this example to make it work right.
+  // below are non standard - used for this example to make it work right.
   deps: ["@sumoc/fracture@../src"],
   eslintOptions: {
     dirs: ["src"],
@@ -72,8 +72,8 @@ const featurePipeline = identityApp.addPipeline({
   name: "feature-branch",
   branchTriggerPattern: "feature/*",
 });
-featurePipeline.addStage({ environment: devUsEa01 });
-featurePipeline.addStage({ environment: devUsEa02 });
+featurePipeline.addStage({ name: "East Coast", environment: devUsEa01 });
+featurePipeline.addStage({ name: "West Coast", environment: devUsEa02 });
 
 /*******************************************************************************
  * BUILD / SYNTH

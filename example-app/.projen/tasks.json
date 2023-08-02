@@ -41,6 +41,24 @@
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
     },
+    "cdk:deploy:East Coast": {
+      "name": "cdk:deploy:East Coast",
+      "description": "CDK deploy  of East Coast stage",
+      "steps": [
+        {
+          "exec": "cdk deploy *-East Coast --require-approval never"
+        }
+      ]
+    },
+    "cdk:deploy:West Coast": {
+      "name": "cdk:deploy:West Coast",
+      "description": "CDK deploy  of West Coast stage",
+      "steps": [
+        {
+          "exec": "cdk deploy *-West Coast --require-approval never"
+        }
+      ]
+    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",
@@ -292,7 +310,7 @@
           "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@sumoc/fracture'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@sumoc/fracture'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@sumoc/fracture'"
         },
         {
           "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@sumoc/fracture'"
@@ -301,13 +319,13 @@
           "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@sumoc/fracture'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@sumoc/fracture'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@sumoc/fracture'"
         },
         {
           "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "pnpm update"
+          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node typescript @sumoc/fracture turbo"
         },
         {
           "exec": "npx projen"
