@@ -1,11 +1,13 @@
 import { pascalCase } from "change-case";
 import { Component } from "projen";
+import { ValueOf } from "type-fest";
 import { Account } from "./account";
 import { Fracture } from "./fracture";
+import { REGION_IDENTITIER } from "./region";
 
 export interface EnvironmentOptions {
   account: Account;
-  region: string;
+  region: ValueOf<typeof REGION_IDENTITIER>;
 }
 
 export class Environment extends Component {

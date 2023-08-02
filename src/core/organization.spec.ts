@@ -10,7 +10,6 @@ let org: Organization;
 beforeEach(() => {
   const fracture = new Fracture({
     name: "test-project",
-    defaultReleaseBranch: "main",
   });
   org = fracture.addOrganization({ id: "test-org" });
 });
