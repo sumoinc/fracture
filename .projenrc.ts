@@ -33,7 +33,10 @@ const project = new TypeScriptProject({
 
   // autoapproval of auto update PRs
   autoApproveUpgrades: true,
-  autoApproveOptions: { allowedUsernames: ["sumoc-automations"] },
+  autoApproveOptions: {
+    /*allowedUsernames: ["sumoc-automations"]*/
+    label: "auto-approve",
+  },
 });
 
 // prevent example from being bundled with NPM
