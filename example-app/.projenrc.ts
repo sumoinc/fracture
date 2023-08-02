@@ -1,4 +1,5 @@
 import { Fracture } from "@sumoc/fracture";
+import { REGION_IDENTITIER } from "@sumoc/fracture/core/region";
 
 const fracture = new Fracture({
   name: "example-app",
@@ -22,14 +23,14 @@ const devAccount = org.addAccount({ id: "0000000000", name: "dev" });
 //const stagingAccount = org.addAccount({ id: "1111111111", name: "stage" });
 //const prodAccount = org.addAccount({ id: "2222222222", name: "prod" });
 
-const devUsEa01 = fracture.addEnvironment({
+const devUsEast = fracture.addEnvironment({
   account: devAccount,
-  region: "us-east-1",
+  region: REGION_IDENTITIER.US_EAST_1,
 });
 
-const devUsEa02 = fracture.addEnvironment({
+const devUsWest = fracture.addEnvironment({
   account: devAccount,
-  region: "us-east-2",
+  region: REGION_IDENTITIER.US_WEST_2,
 });
 
 /*******************************************************************************
@@ -72,8 +73,8 @@ const featurePipeline = identityApp.addPipeline({
   name: "feature-branch",
   branchTriggerPattern: "feature/*",
 });
-featurePipeline.addStage({ name: "East Coast", environment: devUsEa01 });
-featurePipeline.addStage({ name: "West Coast", environment: devUsEa02 });
+featurePipeline.addStage({ name: "East Coast", environment: devUsEast });
+featurePipeline.addStage({ name: "West Coast", environment: devUsWest });
 
 /*******************************************************************************
  * BUILD / SYNTH
