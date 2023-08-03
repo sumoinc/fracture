@@ -48,9 +48,9 @@ export class PipelineWorkflow extends Component {
      ******************************************************************************/
 
     pipeline.stages.forEach((stage) => {
-      fracture.addTask(`${DEPLOY_TASK_PREFIX}:${stage.id}`, {
+      fracture.addTask(stage.taskName, {
         description: `CDK deploy of ${stage.name} stage`,
-        exec: `cdk deploy *-${stage.id} --require-approval never`,
+        exec: `cdk deploy *-${stage.taskName} --require-approval never`,
       });
     });
 

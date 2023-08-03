@@ -1,6 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { Environment } from "./environment";
+import { DEPLOY_TASK_PREFIX } from "./pipeline-workflow";
 import { Wave } from "./wave";
 
 export interface StageOptions {
@@ -36,6 +37,10 @@ export class Stage extends Component {
 
   public get id() {
     return paramCase(this.name);
+  }
+
+  public get taskName() {
+    return `${DEPLOY_TASK_PREFIX}:${this.id}`;
   }
 
   public get name() {
