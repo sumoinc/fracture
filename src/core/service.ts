@@ -188,6 +188,10 @@ export class Service extends Component {
     return this.options.srcDir;
   }
 
+  public get serviceRoot() {
+    return join(this.fracture.packageRoot, this.name);
+  }
+
   /**
    * Returns index for this package in the overall project.
    * Useful when trying to split up ports for testing in parallel, etc.

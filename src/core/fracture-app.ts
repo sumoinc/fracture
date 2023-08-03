@@ -114,6 +114,10 @@ export class FractureApp {
     return this.options.srcDir;
   }
 
+  public get appRoot() {
+    return join(this.fracture.appRoot, this.name);
+  }
+
   public useService(service: Service) {
     this.project.addDeps(`${service.fracture.name}@workspace:*`);
     this.services.push(service);

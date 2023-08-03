@@ -1,4 +1,4 @@
-import { TestFracture } from "../util";
+import { TestFracture } from "../util/test-util";
 
 test("Smoke test", () => {
   const pipeline = new TestFracture().testPipeline();

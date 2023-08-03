@@ -11,13 +11,13 @@ export class Wave extends Component {
   public readonly options: WaveOptions;
   public readonly stages: Stage[] = [];
 
-  constructor(pipoeline: Pipeline, options: WaveOptions) {
-    super(pipoeline.project);
+  constructor(pipeline: Pipeline, options: WaveOptions) {
+    super(pipeline.project);
 
     this.options = options;
 
     // inverse
-    pipoeline.waves.push(this);
+    pipeline.waves.push(this);
 
     // debugging output
     this.project.logger.info(`INIT Wave: "${this.name}"`);

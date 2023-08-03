@@ -10,12 +10,18 @@ import { Fracture, REGION_IDENTITIER } from "../core";
 let workflow: DeploymentWorkflow;
 
 beforeEach(() => {
-  fracture = new Fracture({
+  /**
+   * Fracture
+   */
+  const fracture = new Fracture({
     name: "test-project",
     logging: {
       level: LogLevel.OFF,
     },
   });
+  /**
+   * Environment
+   */
   const org = fracture.addOrganization({ id: "test-org" });
   const account = org.addAccount({ id: "id", name: "test-account" });
   const devUsEast = fracture.addEnvironment({
@@ -26,14 +32,28 @@ beforeEach(() => {
     account,
     region: REGION_IDENTITIER.US_WEST_2,
   });
+  /**
+   * Services & App
+   */
+  const companyService = fracture.addService({ name: "company" });
+  const company = companyService.addResource({ name: "company" });
+  company.addResourceAttribute({
+    name: "name",
+    shortName: "nm",
+    isRequired: true,
+  });
   const app = fracture.addApp({ name: "identity-service" });
+  app.useService(companyService);
+  /**
+   * Deployment pipeline
+   */
   const pipeline = app.addPipeline({
     name: "feature-branch",
-    branchTriggerPattern: "feature/*",
+    branchTriggerPatterns: ["feature/*"],
   });
   pipeline.addStage({ name: "East Coast", environment: devUsEast });
   pipeline.addStage({ name: "West Coast", environment: devUsWest });
-  workflow = new DeploymentWorkflow(pipeline, { name: "deploy-test" });
+  workflow = new DeploymentWorkflow(pipeline);
 });
 
 /*******************************************************************************
@@ -42,10 +62,10 @@ beforeEach(() => {
 
 describe("workflow file tests", () => {
   test("Generates expected pipeline", () => {
-    const workflow = synthWorkflow("deploy-test");
-    expect(workflow).toMatchSnapshot();
+    const deployWorkflow = synthWorkflow();
+    expect(deployWorkflow).toMatchSnapshot();
 
-    console.log(workflow);
+    console.log(deployWorkflow);
     /* const fileContent =
       workflows[`.github/workflows/${pipeline.deployName}.yml`];
     console.log(workflows[`.github/workflows/${pipeline.deployName}.yml`]);
@@ -66,7 +86,7 @@ describe("formatting", () => {
  *
  */
 
-function synthWorkflow(name: string): any {
+function synthWorkflow(): any {
   const snapshot = synthSnapshot(workflow.project);
   const filtered = Object.keys(snapshot)
     .filter((path) => path.startsWith(`.github/workflows/${workflow.name}`))

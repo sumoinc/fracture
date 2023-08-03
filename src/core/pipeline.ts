@@ -7,7 +7,7 @@ import { Wave, WaveOptions } from "./wave";
 
 export interface PipelineOptions {
   name: string;
-  branchTriggerPattern: string;
+  branchTriggerPatterns: string[];
   app: FractureApp;
 }
 
@@ -45,8 +45,8 @@ export class Pipeline extends Component {
     return `deploy-${this.name}`;
   }
 
-  public get branchTriggerPattern() {
-    return this.options.branchTriggerPattern;
+  public get branchTriggerPatterns() {
+    return this.options.branchTriggerPatterns;
   }
 
   public get app() {

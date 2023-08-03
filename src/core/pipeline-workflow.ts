@@ -1,5 +1,5 @@
 import { Component } from "projen";
-import { GitHub, GithubWorkflow } from "projen/lib/github";
+import { GitHub } from "projen/lib/github";
 import { Fracture } from "./fracture";
 import { Pipeline } from "./pipeline";
 
@@ -50,7 +50,7 @@ export class PipelineWorkflow extends Component {
     pipeline.stages.forEach((stage) => {
       fracture.addTask(stage.taskName, {
         description: `CDK deploy of ${stage.name} stage`,
-        exec: `cdk deploy *-${stage.taskName} --require-approval never`,
+        exec: `cdk deploy *-${stage.id} --require-approval never`,
       });
     });
 
@@ -69,18 +69,17 @@ export class PipelineWorkflow extends Component {
       throw new Error("Pipeline requires a github project");
     }
 
-    new GithubWorkflow(github, pipeline.deployName);
+    // new GithubWorkflow(github, pipeline.deployName);
 
     // build code
-
     // new BuildWorkflow(project, {
     //   name: "deploy",
     //   buildTask: project.buildTask,
     //   artifactsDirectory: project.artifactsDirectory,
-    // containerImage: options.workflowContainerImage,
-    // gitIdentity: this.workflowGitIdentity,
-    // mutableBuild: options.mutableBuild,
-    // preBuildSteps: this.renderWorkflowSetup({
+    //   containerImage: options.workflowContainerImage,
+    //   gitIdentity: this.workflowGitIdentity,
+    //   mutableBuild: options.mutableBuild,
+    //   preBuildSteps: this.renderWorkflowSetup({
     //   mutable: options.mutableBuild ?? true,
     // }),
     // postBuildSteps: options.postBuildSteps,

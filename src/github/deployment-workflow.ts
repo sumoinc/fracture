@@ -22,7 +22,10 @@ export class DeploymentWorkflow extends Component {
   private readonly githubWorkflow: GithubWorkflow;
   private readonly options: Required<DeploymentWorkflowOptions>;
 
-  constructor(pipeline: Pipeline, options: DeploymentWorkflowOptions) {
+  constructor(
+    pipeline: Pipeline,
+    options: Partial<DeploymentWorkflowOptions> = {}
+  ) {
     super(pipeline.project);
 
     const github = GitHub.of(pipeline.project);
@@ -33,20 +36,48 @@ export class DeploymentWorkflow extends Component {
     }
     this.github = github;
 
-    this.options = options;
+    const defaultOptions = {
+      name: `deploy-${pipeline.name}`,
+    };
 
+    this.options = { ...defaultOptions, ...options };
     this.githubWorkflow = new GithubWorkflow(github, this.name);
+
+    /**
+     * Trigger on push when any of the files in the app or it's component
+     * services are modified.
+     */
     this.githubWorkflow.on({
-      pullRequest: {},
+      push: {
+        branches: pipeline.branchTriggerPatterns,
+        paths: [pipeline.app.appRoot].concat(
+          pipeline.app.services.map((s) => s.serviceRoot)
+        ),
+      },
       workflowDispatch: {}, // allow manual triggering
     });
 
+    // build
     this.addBuildJob();
+
+    // deploy in waves
+    console.log(pipeline.waves.length);
+    pipeline.waves.forEach((wave) => {
+      console.log(wave.name);
+      wave.stages.forEach((stage) => {
+        console.log(wave.name, stage.name);
+        this.addDeployJob();
+      });
+    });
   }
 
   public get name() {
     return this.options.name;
   }
+
+  /*****************************************************************************
+   * BUILD & SYTH
+   ****************************************************************************/
 
   private addBuildJob() {
     this.githubWorkflow.addJob(BUILD_JOBID, {
@@ -74,8 +105,6 @@ export class DeploymentWorkflow extends Component {
   private renderBuildSteps(): JobStep[] {
     const fracture = this.project as Fracture;
     const { buildTask, synthTask } = fracture.turborepo;
-    //const buildTask = TurboRepo.buildTask(fracture);
-    //const synthTask = TurboRepo.synthTask(fracture);
     return [
       {
         name: "Checkout",
@@ -136,5 +165,29 @@ export class DeploymentWorkflow extends Component {
           ]),
           */
     ];
+  }
+
+  /*****************************************************************************
+   * DEPLOY
+   ****************************************************************************/
+
+  private addDeployJob() {
+    this.githubWorkflow.addJob(BUILD_JOBID, {
+      runsOn: ["ubuntu-latest"],
+      env: {
+        CI: "true",
+      },
+      permissions: {
+        contents: JobPermission.WRITE,
+      },
+      steps: (() => this.renderBuildSteps()) as any,
+      /*outputs: {
+        [SELF_MUTATION_HAPPENED_OUTPUT]: {
+          stepId: SELF_MUTATION_STEP,
+          outputName: SELF_MUTATION_HAPPENED_OUTPUT,
+        },
+      },
+      */
+    });
   }
 }
