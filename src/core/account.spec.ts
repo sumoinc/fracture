@@ -1,3 +1,4 @@
+import { LogLevel } from "projen";
 import { Account } from "./account";
 import { Fracture } from "./fracture";
 
@@ -10,6 +11,9 @@ let account: Account;
 beforeEach(() => {
   const fracture = new Fracture({
     name: "test-project",
+    logging: {
+      level: LogLevel.OFF,
+    },
   });
   const org = fracture.addOrganization({ id: "test-org" });
   account = org.addAccount({ id: "id", name: "test-account" });

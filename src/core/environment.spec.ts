@@ -1,3 +1,4 @@
+import { LogLevel } from "projen";
 import { Environment } from "./environment";
 import { Fracture } from "./fracture";
 import { REGION_IDENTITIER } from "./region";
@@ -11,6 +12,9 @@ let environment: Environment;
 beforeEach(() => {
   const fracture = new Fracture({
     name: "test-project",
+    logging: {
+      level: LogLevel.OFF,
+    },
   });
   const org = fracture.addOrganization({ id: "test-org" });
   const account = org.addAccount({ id: "id", name: "test-account" });
