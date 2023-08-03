@@ -17,10 +17,6 @@ export class TypescriptStructure extends Component {
     this.project.logger.info(`TS:INIT Structure: "${this.structure.name}"`);
   }
 
-  // public build() {
-  //   this.writePublicInterface();
-  // }
-
   /*
   public get publicInterfaceName() {
     return formatStringByNamingStrategy(

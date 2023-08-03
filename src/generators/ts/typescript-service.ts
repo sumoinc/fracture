@@ -69,10 +69,6 @@ export class TypescriptService extends Component {
     // CDK app componants
   }
 
-  public build() {
-    //this.cdkApp.build();
-  }
-
   public get responseTypeName() {
     return formatStringByNamingStrategy(
       "response",

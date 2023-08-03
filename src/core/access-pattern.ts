@@ -118,18 +118,6 @@ export class AccessPattern extends Component {
     return this;
   }
 
-  /*
-  public build() {
-    this.project.logger.debug(
-      `BUILD Access Pattern: "${this.pkAttribute.name}:${this.skAttribute.name}" called.`
-    );
-    new Operation(this, {
-      operationType: OPERATION_TYPE.MUTATION,
-      operationSubType: OPERATION_SUB_TYPE.LIST,
-    });
-  }
-  */
-
   addPkAttributeSource(sourceAttribute: ResourceAttribute) {
     this.pkAttribute.compositionSources.push(sourceAttribute);
   }

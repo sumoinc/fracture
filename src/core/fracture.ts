@@ -295,27 +295,4 @@ export class Fracture extends TypeScriptProject {
   public addEnvironment(options: EnvironmentOptions) {
     return new Environment(this, options);
   }
-
-  /**
-   * Build services.
-   *
-   * Call this when you've configured everything, prior to preSynthesize.
-   *
-   * @returns void
-   */
-  public build() {
-    /*
-    this.logger.info("=".repeat(80));
-    this.logger.info("BUILD PHASE");
-    this.logger.info("=".repeat(80));
-
-    this.turborepo.build();
-    this.services.forEach((service) => {
-      service.build();
-    });
-    this.apps.forEach((app) => {
-      app.build();
-    });
-    */
-  }
 }

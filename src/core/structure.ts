@@ -112,13 +112,6 @@ export class Structure extends Component {
     return this;
   }
 
-  // build structures
-  public build() {
-    this.project.logger.info(`BUILD Structure: "${this.name}"`);
-    // build generators
-    //this.ts.build();
-  }
-
   /**
    * Structure name, based on the naming strategy
    */

@@ -11,6 +11,4 @@ export class TypescriptResource extends Component {
 
     this.project.logger.info(`TS:INIT Resource: "${this.resource.name}"`);
   }
-
-  public build() {}
 }

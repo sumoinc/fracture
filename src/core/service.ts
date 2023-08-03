@@ -160,18 +160,6 @@ export class Service extends Component {
     return this;
   }
 
-  /*
-  public build() {
-    this.project.logger.info(`BUILD Service: "${this.name}"`);
-    //this.dynaliteSupport.build();
-    this.resources.forEach((resource) => {
-      resource.build();
-    });
-    // build generators
-    this.ts.build();
-  }
-  */
-
   public get name(): string {
     return this.options.name;
   }
