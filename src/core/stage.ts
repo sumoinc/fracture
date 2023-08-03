@@ -1,3 +1,4 @@
+import { paramCase } from "change-case";
 import { Component } from "projen";
 import { Environment } from "./environment";
 import { Wave } from "./wave";
@@ -31,6 +32,10 @@ export class Stage extends Component {
       account: this.account.id,
       region: this.region,
     };
+  }
+
+  public get id() {
+    return paramCase(this.name);
   }
 
   public get name() {
