@@ -79,7 +79,7 @@ export class DynaliteSupport extends Component {
 
     this.service = service;
 
-    console.log("service:", this.service.name);
+    // console.log("service:", this.service.name);
 
     // pull the project for this service
     const project = service.project as TypeScriptProject;

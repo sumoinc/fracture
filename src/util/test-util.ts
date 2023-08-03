@@ -1,4 +1,4 @@
-import { Task } from "projen";
+import { LogLevel, Task } from "projen";
 import { TypeScriptProjectOptions } from "projen/lib/typescript";
 import { Fracture } from "../";
 
@@ -16,6 +16,9 @@ export class TestFracture extends Fracture {
     super({
       name: "test-project",
       defaultReleaseBranch: "main",
+      logging: {
+        level: LogLevel.OFF,
+      },
       ...options,
     });
   }

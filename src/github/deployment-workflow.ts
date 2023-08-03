@@ -1,7 +1,7 @@
 import { Component } from "projen";
 import { GitHub, GithubWorkflow } from "projen/lib/github";
 import { JobPermission, JobStep } from "projen/lib/github/workflows-model";
-import { Fracture } from "../core";
+import { Fracture, Pipeline } from "../core";
 
 const PULL_REQUEST_REF = "${{ github.event.pull_request.head.ref }}";
 const PULL_REQUEST_REPOSITORY =
@@ -19,13 +19,13 @@ export interface DeploymentWorkflowOptions {
 
 export class DeploymentWorkflow extends Component {
   private readonly github: GitHub;
-  private readonly workflow: GithubWorkflow;
+  private readonly githubWorkflow: GithubWorkflow;
   private readonly options: Required<DeploymentWorkflowOptions>;
 
-  constructor(project: Fracture, options: DeploymentWorkflowOptions) {
-    super(project);
+  constructor(pipeline: Pipeline, options: DeploymentWorkflowOptions) {
+    super(pipeline.project);
 
-    const github = GitHub.of(project);
+    const github = GitHub.of(pipeline.project);
     if (!github) {
       throw new Error(
         "DeploymentWorkflow is currently only supported for GitHub projects"
@@ -35,8 +35,8 @@ export class DeploymentWorkflow extends Component {
 
     this.options = options;
 
-    this.workflow = new GithubWorkflow(github, this.name);
-    this.workflow.on({
+    this.githubWorkflow = new GithubWorkflow(github, this.name);
+    this.githubWorkflow.on({
       pullRequest: {},
       workflowDispatch: {}, // allow manual triggering
     });
@@ -49,7 +49,7 @@ export class DeploymentWorkflow extends Component {
   }
 
   private addBuildJob() {
-    this.workflow.addJob(BUILD_JOBID, {
+    this.githubWorkflow.addJob(BUILD_JOBID, {
       runsOn: ["ubuntu-latest"],
       env: {
         CI: "true",

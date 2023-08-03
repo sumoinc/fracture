@@ -1,5 +1,4 @@
 import { Component } from "projen";
-import { DeploymentWorkflow } from "./deployment-workflow";
 import { Fracture } from "../core";
 
 export class Workflows extends Component {
@@ -12,6 +11,7 @@ export class Workflows extends Component {
   constructor(project: Fracture) {
     super(project);
 
+    /*
     new DeploymentWorkflow(project, {
       name: "deploy-feature",
     });
@@ -23,5 +23,6 @@ export class Workflows extends Component {
     new DeploymentWorkflow(project, {
       name: "deploy-main",
     });
+    */
   }
 }
