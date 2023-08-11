@@ -37,7 +37,7 @@ export class PipelineWorkflow extends Component {
   preSynthesize(): void {
     const fracture = this.project as Fracture;
     const pipeline = this.pipeline;
-    const app = pipeline.app;
+    //const app = pipeline.app;
 
     /*******************************************************************************
      *
@@ -62,7 +62,7 @@ export class PipelineWorkflow extends Component {
      *
      ******************************************************************************/
 
-    console.log(`DEBUG: "${pipeline.deployName}"`, fracture.name, app.name);
+    console.log(`DEBUG: "${pipeline.deployName}"`, fracture.name);
 
     const github = GitHub.of(fracture);
     if (!github) {

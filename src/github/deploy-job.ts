@@ -37,7 +37,7 @@ export class DeployJob extends Component {
    *
    * @default "npx projen deploy"
    */
-  deployCommand: string;
+  public readonly deployCommand: string;
 
   constructor(fracture: Fracture, options: Partial<DeployJobOptions> = {}) {
     super(fracture);

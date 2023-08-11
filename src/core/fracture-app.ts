@@ -5,7 +5,7 @@ import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
 import { Fracture } from "./fracture";
-import { Pipeline, PipelineOptions } from "./pipeline";
+import { Pipeline } from "./pipeline";
 import { Service } from "./service";
 
 export interface FractureAppOptions {
@@ -123,7 +123,9 @@ export class FractureApp {
     this.services.push(service);
   }
 
+  /*
   public addPipeline(options: Omit<PipelineOptions, "app">) {
     return new Pipeline(this.fracture, { ...options, app: this });
   }
+  */
 }

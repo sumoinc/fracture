@@ -21,7 +21,7 @@ import { STRUCTURE_TYPE } from "./structure";
 import { Workflows } from "../github/workflows";
 import { PnpmWorkspace } from "../pnpm/pnpm-workspace";
 import { VsCodeConfiguration } from "../projen";
-import { TurboRepo } from "../turborepo/turbo-repo";
+import { TurboRepo, TurboRepoOptions } from "../turborepo/turbo-repo";
 
 /**
  *
@@ -55,6 +55,18 @@ export interface FractureOptions extends TypeScriptProjectOptions {
    * The audit strategy to use for generated code.
    */
   auditStrategy?: AuditStrategy;
+  /**
+   * Enable Turborepo
+   *
+   * @default true
+   */
+  turboRepoEnabled?: boolean;
+  /**
+   * Options for using TurboRepo
+   *
+   * @default {}
+   */
+  turboRepoOptions?: TurboRepoOptions;
 }
 
 /**
@@ -66,7 +78,7 @@ export class Fracture extends TypeScriptProject {
   public readonly services: Service[] = [];
   public readonly organizations: Organization[] = [];
   public readonly environments: Environment[] = [];
-  public readonly turborepo: TurboRepo;
+  // public readonly turborepo: TurboRepo;
   public readonly workflows: Workflows;
 
   // all other options
@@ -217,8 +229,20 @@ export class Fracture extends TypeScriptProject {
     // configure vscode
     new VsCodeConfiguration(this);
 
-    // configure turborepo
-    this.turborepo = new TurboRepo(this);
+    /***************************************************************************
+     * TUBOREPO
+     **************************************************************************/
+
+    const turboRepoEnabled = options.turboRepoEnabled ?? true;
+    const turboRepoOptions = options.turboRepoOptions ?? {};
+
+    if (turboRepoEnabled) {
+      new TurboRepo(this, turboRepoOptions);
+    }
+
+    /***************************************************************************
+     * WORKFLOWS
+     **************************************************************************/
 
     // configure workflows
     this.workflows = new Workflows(this);

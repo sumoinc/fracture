@@ -1,8 +1,10 @@
+import { paramCase } from "change-case";
 import { Component } from "projen";
 import { GitHub, GithubWorkflow } from "projen/lib/github";
 import { BuildJob } from "./build-job";
 import { DeployJob } from "./deploy-job";
 import { Fracture, Pipeline } from "../core";
+import { TurboRepo } from "../turborepo";
 
 export interface DeploymentWorkflowOptions {
   /**
@@ -41,19 +43,27 @@ export class DeploymentWorkflow extends Component {
   constructor(fracture: Fracture, options: DeploymentWorkflowOptions) {
     super(fracture);
 
+    /***************************************************************************
+     * LOCALS
+     **************************************************************************/
+
     const github = GitHub.of(fracture);
     if (!github) {
       throw new Error(
-        "DeploymentWorkflow is currently only supported for GitHub projects"
+        "DeploymentWorkflow is currently only supported for GitHub enabled projects"
       );
     }
+
+    const turboRepo = TurboRepo.of(fracture);
 
     /***************************************************************************
      * Props
      **************************************************************************/
 
-    this.name = options.name ?? "deployment";
-    this.filePath = options.filePath ?? `.github/workflows/${this.name}.yml`;
+    this.name = options.name ? paramCase(options.name) : "deployment";
+    this.filePath =
+      options.filePath ?? `.github/workflows/${paramCase(this.name)}.yml`;
+    console.log(this.filePath);
     const { pipeline } = options;
 
     /***************************************************************************
@@ -69,25 +79,59 @@ export class DeploymentWorkflow extends Component {
     this.githubWorkflow.on({
       push: {
         branches: pipeline.branchTriggerPatterns,
+        paths: [],
+        /*
         paths: [pipeline.app.appRoot].concat(
           pipeline.app.services.map((s) => s.serviceRoot)
         ),
+        */
       },
       workflowDispatch: {}, // allow manual triggering
     });
 
-    // build all deployment artifacts
-    const buildJob = new BuildJob(fracture);
+    /***************************************************************************
+     *
+     * BUILD JOB
+     *
+     * Can leverage turbo-repo if it's available.
+     *
+     **************************************************************************/
+
+    const buildJob = !turboRepo
+      ? new BuildJob(fracture)
+      : new BuildJob(fracture, {
+          buildCommand: fracture.runTaskCommand(turboRepo.buildTask),
+          synthCommand: fracture.runTaskCommand(turboRepo.synthTask),
+        });
+
     this.githubWorkflow.addJob(buildJob.jobId, buildJob.job);
 
+    /***************************************************************************
+     *
+     * DEPLOY JOBS
+     *
+     **************************************************************************/
+
+    // no waves, just use default workflow
+    if (pipeline.waves.length === 0) {
+      const deployJob = !turboRepo
+        ? new DeployJob(fracture)
+        : new DeployJob(fracture, {
+            deployCommand: fracture.runTaskCommand(turboRepo.deployTask),
+          });
+      this.githubWorkflow.addJob(deployJob.jobId, deployJob.job);
+    }
+
     // add deployment waves to workflow
-    pipeline.waves.forEach((wave) => {
-      wave.stages.forEach(() => {
-        const deployJob = new DeployJob(pipeline.project as Fracture);
-        this.githubWorkflow.addJob(deployJob.jobId, deployJob.job);
-        //console.log(wave.name, stage.name);
-        //this.addDeployJob(stage);
+    if (pipeline.waves.length > 0) {
+      pipeline.waves.forEach((wave) => {
+        wave.stages.forEach(() => {
+          const deployJob = new DeployJob(pipeline.project as Fracture);
+          this.githubWorkflow.addJob(deployJob.jobId, deployJob.job);
+          //console.log(wave.name, stage.name);
+          //this.addDeployJob(stage);
+        });
       });
-    });
+    }
   }
 }

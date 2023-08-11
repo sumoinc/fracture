@@ -1,7 +1,19 @@
 import { Component, JsonFile, Task } from "projen";
 import { Fracture } from "../core";
 
+export interface TurboRepoOptions {}
+
 export class TurboRepo extends Component {
+  /**
+   * Returns the `TurboRepo` component of a project or `undefined` if the project
+   * does not have a TurboRepo component.
+   */
+  public static of(fracture: Fracture): TurboRepo | undefined {
+    const isTurboRepo = (c: Component): c is TurboRepo =>
+      c instanceof TurboRepo;
+    return fracture.components.find(isTurboRepo);
+  }
+
   /**
    * Synthesizes your app.
    */
@@ -27,7 +39,8 @@ export class TurboRepo extends Component {
    */
   public readonly diffTask: Task;
 
-  constructor(fracture: Fracture) {
+  // @ts-ignore
+  constructor(fracture: Fracture, options: TurboRepoOptions = {}) {
     super(fracture);
 
     fracture.addGitIgnore(".turbo");

@@ -1,6 +1,5 @@
 import { Component } from "projen";
 import { Fracture } from "./fracture";
-import { FractureApp } from "./fracture-app";
 import { PipelineWorkflow } from "./pipeline-workflow";
 import { StageOptions } from "./stage";
 import { Wave, WaveOptions } from "./wave";
@@ -8,7 +7,7 @@ import { Wave, WaveOptions } from "./wave";
 export interface PipelineOptions {
   name: string;
   branchTriggerPatterns: string[];
-  app: FractureApp;
+  //app: FractureApp;
 }
 
 export class Pipeline extends Component {
@@ -26,7 +25,7 @@ export class Pipeline extends Component {
     this.options = options;
 
     // inverse
-    this.app.pipelines.push(this);
+    //this.app.pipelines.push(this);
 
     // init workflow for this pipeline
     new PipelineWorkflow(fracture, {
@@ -49,9 +48,11 @@ export class Pipeline extends Component {
     return this.options.branchTriggerPatterns;
   }
 
+  /*
   public get app() {
     return this.options.app;
   }
+  */
 
   public get stages() {
     return this.waves.flatMap((wave) => wave.stages);
