@@ -1,33 +1,40 @@
 import { Component } from "projen";
-import { Pipeline } from "./pipeline";
+import { Fracture } from "./fracture";
 import { Stage, StageOptions } from "./stage";
 
 export interface WaveOptions {
+  /**
+   * Name for this wave.
+   */
   name: string;
 }
 
 export class Wave extends Component {
-  // all other options
-  public readonly options: WaveOptions;
+  /**
+   * All stages in this wave
+   */
   public readonly stages: Stage[] = [];
+  /**
+   * Name for this wave.
+   */
+  public readonly name: string;
 
-  constructor(pipeline: Pipeline, options: WaveOptions) {
-    super(pipeline.project);
+  constructor(fracture: Fracture, options: WaveOptions) {
+    super(fracture);
 
-    this.options = options;
+    /***************************************************************************
+     * Props
+     **************************************************************************/
 
-    // inverse
-    pipeline.waves.push(this);
+    this.name = options.name;
 
     // debugging output
     this.project.logger.info(`INIT Wave: "${this.name}"`);
   }
 
-  public get name() {
-    return this.options.name;
-  }
-
   public addStage(options: StageOptions) {
-    return new Stage(this, options);
+    const stage = new Stage(this.project as Fracture, options);
+    this.stages.push(stage);
+    return stage;
   }
 }

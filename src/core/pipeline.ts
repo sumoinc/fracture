@@ -59,11 +59,16 @@ export class Pipeline extends Component {
   }
 
   public addWave(options: WaveOptions) {
-    return new Wave(this, options);
+    const wave = new Wave(this.project as Fracture, options);
+    this.waves.push(wave);
+    return wave;
   }
 
   public addStage(options: StageOptions) {
-    const wave = this.addWave({ name: "default" });
+    const wave =
+      this.waves.length === 0
+        ? this.addWave({ name: "default" })
+        : this.waves[this.waves.length - 1];
     return wave.addStage(options);
   }
 }

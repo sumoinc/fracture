@@ -61,9 +61,7 @@ export class DeploymentWorkflow extends Component {
      **************************************************************************/
 
     this.name = options.name ? paramCase(options.name) : "deployment";
-    this.filePath =
-      options.filePath ?? `.github/workflows/${paramCase(this.name)}.yml`;
-    console.log(this.filePath);
+    this.filePath = options.filePath ?? `.github/workflows/${this.name}.yml`;
     const { pipeline } = options;
 
     /***************************************************************************

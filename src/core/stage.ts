@@ -1,64 +1,77 @@
-import { paramCase } from "change-case";
 import { Component } from "projen";
-import { Environment } from "./environment";
-import { DEPLOY_TASK_PREFIX } from "./pipeline-workflow";
-import { Wave } from "./wave";
+import { ValueOf } from "type-fest";
+import { Fracture } from "./fracture";
+import { REGION_IDENTITIER } from "./region";
 
 export interface StageOptions {
+  /**
+   * Name for tihs stage.
+   */
   name: string;
-  environment: Environment;
+  /**
+   * Account for this stage.
+   */
+  account: string;
+  /**
+   * Region for this stage.
+   */
+  region: ValueOf<typeof REGION_IDENTITIER>;
 }
 
 /**
  * A stage is a deployment to a single environment.
  */
 export class Stage extends Component {
-  // all other options
-  public readonly options: StageOptions;
+  /**
+   * Name for tihs stage.
+   */
+  public readonly name: string;
+  /**
+   * Account for this stage.
+   */
+  public readonly account: string;
+  /**
+   * Region for this stage.
+   */
+  public readonly region: ValueOf<typeof REGION_IDENTITIER>;
+  /**
+   * Env for this stage.
+   */
+  public readonly env: {
+    account: string;
+    region: ValueOf<typeof REGION_IDENTITIER>;
+  };
 
-  constructor(wave: Wave, options: StageOptions) {
-    super(wave.project);
+  constructor(fracture: Fracture, options: StageOptions) {
+    super(fracture);
 
-    this.options = options;
+    /***************************************************************************
+     * Props
+     **************************************************************************/
 
-    // inverse
-    wave.stages.push(this);
+    this.name = options.name;
+    this.account = options.account;
+    this.region = options.region;
+    this.env = {
+      account: this.account,
+      region: this.region,
+    };
 
     // debugging output
     this.project.logger.info(`INIT Stage: `);
   }
 
-  public get env() {
-    return {
-      account: this.account.id,
-      region: this.region,
-    };
-  }
-
+  /*
   public get id() {
     return paramCase(this.name);
-  }
+  }*/
 
   /**
    * Deployment Job name to be used in YAML deployments
    */
+  /*
   public get taskName() {
     return `${DEPLOY_TASK_PREFIX}:${this.id}`;
   }
-
-  public get name() {
-    return this.options.name;
-  }
-
-  public get environment() {
-    return this.options.environment;
-  }
-
-  public get region() {
-    return this.environment.region;
-  }
-
-  public get account() {
-    return this.environment.account;
-  }
+  */
 }

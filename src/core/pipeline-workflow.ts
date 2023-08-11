@@ -36,7 +36,7 @@ export class PipelineWorkflow extends Component {
 
   preSynthesize(): void {
     const fracture = this.project as Fracture;
-    const pipeline = this.pipeline;
+    //const pipeline = this.pipeline;
     //const app = pipeline.app;
 
     /*******************************************************************************
@@ -47,12 +47,14 @@ export class PipelineWorkflow extends Component {
      *
      ******************************************************************************/
 
+    /*
     pipeline.stages.forEach((stage) => {
       fracture.addTask(stage.taskName, {
         description: `CDK deploy of ${stage.name} stage`,
         exec: `cdk deploy *-${stage.id} --require-approval never`,
       });
     });
+    */
 
     /*******************************************************************************
      *
@@ -62,7 +64,7 @@ export class PipelineWorkflow extends Component {
      *
      ******************************************************************************/
 
-    console.log(`DEBUG: "${pipeline.deployName}"`, fracture.name);
+    // console.log(`DEBUG: "${pipeline.deployName}"`, fracture.name);
 
     const github = GitHub.of(fracture);
     if (!github) {

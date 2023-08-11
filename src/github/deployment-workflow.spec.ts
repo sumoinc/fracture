@@ -50,7 +50,7 @@ import { Fracture, Pipeline } from "../core";
 // });
 
 /*******************************************************************************
- * DEPLOY WORKFLOW
+ * DEFAULT WORKFLOWS
  ******************************************************************************/
 
 describe("Default workflow", () => {
@@ -109,13 +109,39 @@ describe("Default workflow", () => {
       pipeline,
     });
 
-    console.log(workflow.filePath);
-
     const content = synthWorkflow(workflow);
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
 });
+
+/*******************************************************************************
+ * WAVES & STAGES
+ ******************************************************************************/
+
+describe.only("Waves & Stages", () => {
+  test("one wave, one stage", () => {
+    const fracture = new Fracture({
+      name: "test-project",
+      logging: {
+        level: LogLevel.OFF,
+      },
+    });
+    const pipeline = new Pipeline(fracture, {
+      name: "default",
+      branchTriggerPatterns: ["main"],
+    });
+    const workflow = new DeploymentWorkflow(fracture, { pipeline });
+
+    const content = synthWorkflow(workflow);
+    expect(content).toMatchSnapshot();
+    console.log(content);
+  });
+});
+
+/*******************************************************************************
+ * MISC TESTS
+ ******************************************************************************/
 
 test("has valid filepath", () => {
   const fracture = new Fracture({
@@ -166,13 +192,10 @@ function synthWorkflow(workflow: DeploymentWorkflow): any {
   const filtered = Object.keys(snapshot)
     .filter((path) => path.match(workflow.filePath))
     .reduce((obj, key) => {
-      console.log(key);
       return {
         ...obj,
         [key]: snapshot[key],
       };
     }, {} as { [key: string]: any });
-
-  //console.log(snapshot);
   return filtered[workflow.filePath];
 }
