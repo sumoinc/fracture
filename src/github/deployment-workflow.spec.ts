@@ -53,7 +53,7 @@ beforeEach(() => {
   });
   pipeline.addStage({ name: "East Coast", environment: devUsEast });
   pipeline.addStage({ name: "West Coast", environment: devUsWest });
-  workflow = new DeploymentWorkflow(pipeline);
+  workflow = new DeploymentWorkflow(fracture, { pipeline });
 });
 
 /*******************************************************************************
@@ -65,7 +65,9 @@ describe("workflow file tests", () => {
     const deployWorkflow = synthWorkflow();
     expect(deployWorkflow).toMatchSnapshot();
 
-    console.log(deployWorkflow);
+    const d = deployWorkflow[workflow.filePath];
+    console.log(d);
+
     /* const fileContent =
       workflows[`.github/workflows/${pipeline.deployName}.yml`];
     console.log(workflows[`.github/workflows/${pipeline.deployName}.yml`]);
@@ -75,10 +77,12 @@ describe("workflow file tests", () => {
   });
 });
 
+/*
 describe("formatting", () => {
   test("Deployments depend on build", () => {});
   test("Deployments depend on branch", () => {});
 });
+*/
 
 /**
  *
@@ -89,7 +93,7 @@ describe("formatting", () => {
 function synthWorkflow(): any {
   const snapshot = synthSnapshot(workflow.project);
   const filtered = Object.keys(snapshot)
-    .filter((path) => path.startsWith(`.github/workflows/${workflow.name}`))
+    .filter((path) => path.startsWith(workflow.filePath))
     .reduce((obj, key) => {
       return {
         ...obj,

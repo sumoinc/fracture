@@ -39,6 +39,9 @@ export class Stage extends Component {
     return paramCase(this.name);
   }
 
+  /**
+   * Deployment Job name to be used in YAML deployments
+   */
   public get taskName() {
     return `${DEPLOY_TASK_PREFIX}:${this.id}`;
   }
