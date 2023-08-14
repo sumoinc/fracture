@@ -99,7 +99,13 @@ export class DeploymentWorkflow extends Component {
       ? new BuildJob(fracture)
       : new BuildJob(fracture, {
           buildCommand: fracture.runTaskCommand(turboRepo.buildTask),
-          synthCommand: fracture.runTaskCommand(turboRepo.synthTask),
+
+          postBuildSteps: [
+            {
+              name: "Synth",
+              run: fracture.runTaskCommand(turboRepo.synthTask),
+            },
+          ],
         });
 
     this.githubWorkflow.addJob(buildJob.jobId, buildJob.job);

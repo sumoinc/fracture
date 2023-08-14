@@ -3,6 +3,7 @@ import {
   Job,
   JobCallingReusableWorkflow,
   JobPermission,
+  JobStep,
 } from "projen/lib/github/workflows-model";
 import { Fracture } from "../core";
 
@@ -38,11 +39,23 @@ export interface BuildJobOptions {
    */
   buildCommand?: string;
   /**
+   * Steps to run before the build commend is executed.
+   *
+   * @default []
+   */
+  preBuildSteps?: JobStep[];
+  /**
+   * Steps to run before the build commend is executed.
+   *
+   * @default []
+   */
+  postBuildSteps?: JobStep[];
+  /**
    * The command to run to synth the project.
    *
    * @default "npx projen synth"
    */
-  synthCommand?: string;
+  //synthCommand?: string;
 }
 
 export class BuildJob extends Component {
@@ -73,19 +86,25 @@ export class BuildJob extends Component {
    *
    * @default false
    */
-  downloadLfs: boolean;
+  public readonly downloadLfs: boolean;
   /**
    * The command to run to build the project.
    *
    * @default "npx projen build"
    */
-  buildCommand: string;
+  public readonly buildCommand: string;
   /**
-   * The command to run to synth the project.
+   * Steps to run before the build commend is executed.
    *
-   * @default "npx projen synth"
+   * @default []
    */
-  synthCommand: string;
+  public readonly preBuildSteps?: JobStep[];
+  /**
+   * Steps to run before the build commend is executed.
+   *
+   * @default []
+   */
+  public readonly postBuildSteps?: JobStep[];
 
   constructor(fracture: Fracture, options: BuildJobOptions = {}) {
     super(fracture);
@@ -101,8 +120,9 @@ export class BuildJob extends Component {
       options.pullRequestRepository ??
       "${{ github.event.pull_request.head.repo.full_name }}";
     this.downloadLfs = options.downloadLfs ?? false;
+    this.preBuildSteps = options.preBuildSteps ?? [];
     this.buildCommand = options.buildCommand ?? "npx projen build";
-    this.synthCommand = options.synthCommand ?? "npx projen synth";
+    this.postBuildSteps = options.postBuildSteps ?? [];
 
     /***************************************************************************
      * Create job definition
@@ -129,14 +149,15 @@ export class BuildJob extends Component {
         ...fracture.renderWorkflowSetup({
           mutable: true,
         }),
+
+        ...this.preBuildSteps,
+
         {
           name: "Build",
           run: this.buildCommand,
         },
-        {
-          name: "Synth",
-          run: this.synthCommand,
-        },
+
+        ...this.postBuildSteps,
       ],
     };
   }
