@@ -7,7 +7,7 @@ import {
   ResourceAttribute,
   ResourceAttributeOptions,
 } from "./resource-attribute";
-import { Service } from "./service";
+import { Service } from "./fracture-service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
 import { DynamoTable } from "../dynamodb/dynamo-table";
 import { IdentifierFactory } from "../factories/access-patterns/identifier-factory";

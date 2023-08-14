@@ -8,7 +8,7 @@ import {
   ResourceAttribute,
   ResourceAttributeGenerator,
 } from "./resource-attribute";
-import { Service } from "./service";
+import { Service } from "./fracture-service";
 
 /******************************************************************************
  * TYPES

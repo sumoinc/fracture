@@ -5,16 +5,18 @@ import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { deepMerge } from "projen/lib/util";
 import { Fracture } from "./fracture";
+import { Service } from "./fracture-service";
 import { Pipeline } from "./pipeline";
-import { Service } from "./service";
 
 export interface FractureAppOptions {
   name: string;
   srcDir?: string;
 }
 
-export class FractureApp {
-  // member components
+export class FractureApp extends TypeScriptProject {
+  /**
+   * Projen project representing
+   */
   public readonly project: TypeScriptProject;
   public readonly services: Service[] = [];
   public readonly pipelines: Pipeline[] = [];

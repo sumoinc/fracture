@@ -1,7 +1,7 @@
 import { join } from "path";
 import { TypeScriptSource } from "./typescript-source";
 import { Structure } from "../../core";
-import { Service } from "../../core/service";
+import { Service } from "../../core/fracture-service";
 
 export class TypescriptTypes extends TypeScriptSource {
   public readonly service: Service;

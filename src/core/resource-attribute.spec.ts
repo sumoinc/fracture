@@ -1,6 +1,6 @@
 import { Resource } from "../../src/core/resource";
 import { ResourceAttribute } from "../../src/core/resource-attribute";
-import { Service } from "../../src/core/service";
+import { Service } from "./fracture-service";
 import { TestFracture } from "../util/test-util";
 
 test("Smoke test", () => {

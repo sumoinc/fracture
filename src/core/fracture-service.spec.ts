@@ -1,4 +1,4 @@
-import { Service } from "../../src/core/service";
+import { Service } from "./fracture-service";
 import { TestFracture } from "../util/test-util";
 
 test("Smoke test", () => {

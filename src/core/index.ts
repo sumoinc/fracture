@@ -14,7 +14,7 @@ export * from "./pipeline";
 export * from "./region";
 export * from "./resource-attribute";
 export * from "./resource";
-export * from "./service";
+export * from "./fracture-service";
 export * from "./stage";
 export * from "./structure";
 export * from "./wave";

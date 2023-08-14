@@ -99,7 +99,6 @@ export class DeploymentWorkflow extends Component {
       ? new BuildJob(fracture)
       : new BuildJob(fracture, {
           buildCommand: fracture.runTaskCommand(turboRepo.buildTask),
-
           postBuildSteps: [
             {
               name: "Synth",

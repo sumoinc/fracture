@@ -1,7 +1,7 @@
 import { Component } from "projen";
 
 import { Resource } from "../../core/resource";
-import { Service } from "../../core/service";
+import { Service } from "../../core/fracture-service";
 import { Structure } from "../../core/structure";
 
 export class TypescriptStructure extends Component {

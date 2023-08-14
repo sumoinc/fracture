@@ -9,6 +9,7 @@ import { SetOptional } from "type-fest";
 import { AuditStrategy } from "./audit-strategy";
 import { Environment, EnvironmentOptions } from "./environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
+import { Service, ServiceOptions } from "./fracture-service";
 import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
 import { OPERATION_SUB_TYPE } from "./operation";
 import { Organization, OrganizationOptions } from "./organization";
@@ -16,7 +17,6 @@ import {
   ResourceAttributeGenerator,
   ResourceAttributeType,
 } from "./resource-attribute";
-import { Service, ServiceOptions } from "./service";
 import { STRUCTURE_TYPE } from "./structure";
 import { Workflows } from "../github/workflows";
 import { PnpmWorkspace } from "../pnpm/pnpm-workspace";
@@ -30,20 +30,34 @@ import { TurboRepo, TurboRepoOptions } from "../turborepo/turbo-repo";
  *
  */
 export interface FractureOptions extends TypeScriptProjectOptions {
+  /**
+   * Root relative directory which contains all packages.
+   * All Frcture Services are saves as packages here.
+   *
+   * @default "packages"
+   */
   packageRoot?: string;
+  /**
+   * Root relative directory which contains all apps.
+   *
+   * @default "apps"
+   */
   appRoot?: string;
   /**
-   * Source directory inside each package
+   * Relative source directory inside each package and app
+   *
    * @default "src"
    */
   srcDir?: string;
   /**
    * Logging options
-   * @default LogLevel.INFO
+   *
+   * @default LogLevel.NONE
    */
   logging?: LoggerOptions;
   /**
    * Versioned.
+   *
    * @default true
    */
   isVersioned?: boolean;
@@ -73,6 +87,25 @@ export interface FractureOptions extends TypeScriptProjectOptions {
  * The root of the entire application.
  */
 export class Fracture extends TypeScriptProject {
+  /**
+   * Root relative directory which contains all packages.
+   * All Frcture Services are saves as packages here.
+   *
+   * @default "packages"
+   */
+  public readonly packageRoot?: string;
+  /**
+   * Root relative directory which contains all apps.
+   *
+   * @default "apps"
+   */
+  public readonly appRoot?: string;
+  /**
+   * Relative source directory inside each package and app
+   *
+   * @default "src"
+   */
+  public readonly srcDir?: string;
   // member components
   public readonly apps: FractureApp[] = [];
   public readonly services: Service[] = [];
@@ -84,7 +117,30 @@ export class Fracture extends TypeScriptProject {
   // all other options
   public readonly options: Required<FractureOptions>;
 
-  constructor(options: SetOptional<FractureOptions, "defaultReleaseBranch">) {
+  constructor(options: FractureOptions) {
+    /***************************************************************************
+     * Projen Props
+     **************************************************************************/
+
+    const projenOptions: FractureOptions = {
+      name: options.name,
+      defaultReleaseBranch: "main",
+      packageManager: NodePackageManager.PNPM,
+      pnpmVersion: "8",
+      prettier: true,
+      projenrcTs: true,
+    };
+
+    super(projenOptions);
+
+    /***************************************************************************
+     * Props
+     **************************************************************************/
+
+    this.packageRoot = options.packageRoot ?? "packages";
+    this.appRoot = options.appRoot ?? "apps";
+    this.srcDir = options.srcDir ?? "src";
+
     /***************************************************************************
      *
      * DEFAULT OPTIONS

@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { DynamoGsi, DYNAMO_GSI_TYPE } from "./dynamo-gsi";
-import { Service } from "../core/service";
+import { Service } from "../core/fracture-service";
 
 export interface DynamoTableOptions {
   /**

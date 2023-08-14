@@ -1,6 +1,6 @@
 import { join } from "path";
 import { SourceCode } from "projen";
-import { Service } from "../../core/service";
+import { Service } from "../../core/fracture-service";
 
 /**
  * Build a VTL file and make sure it's marked as being managed by

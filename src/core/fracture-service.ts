@@ -40,7 +40,7 @@ export interface ServiceOptions {
   auditStrategy?: AuditStrategy;
 }
 
-export class Service extends Component {
+export class Service extends TypeScriptProject {
   // member components
   public readonly resources: Resource[] = [];
   public readonly dynamoTable: DynamoTable;

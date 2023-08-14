@@ -6,7 +6,7 @@ import {
   ResourceAttributeGenerator,
   ResourceAttributeType,
 } from "../../core/resource-attribute";
-import { Service } from "../../core/service";
+import { Service } from "../../core/fracture-service";
 
 export class TypescriptResourceAttribute extends Component {
   // parent

@@ -2,7 +2,7 @@ import { join } from "path";
 import { Component } from "projen";
 import { TypeScriptSource } from "./typescript-source";
 import { formatStringByNamingStrategy } from "../../core/naming-strategy";
-import { Service } from "../../core/service";
+import { Service } from "../../core/fracture-service";
 
 export class TypescriptService extends Component {
   public readonly service: Service;

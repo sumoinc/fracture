@@ -3,7 +3,7 @@ import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { AccessPattern } from "./access-pattern";
 import { Resource } from "./resource";
-import { Service } from "./service";
+import { Service } from "./fracture-service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
 import { DynamoCommand } from "../generators";
 import { DynamoCommandTest } from "../generators/ts/commands/dynamo-command-test";

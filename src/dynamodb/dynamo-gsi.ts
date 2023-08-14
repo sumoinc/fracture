@@ -3,7 +3,7 @@ import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { DynamoTable } from "./dynamo-table";
-import { Service } from "../core/service";
+import { Service } from "../core/fracture-service";
 
 export const DYNAMO_GSI_TYPE = {
   /**

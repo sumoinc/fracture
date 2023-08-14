@@ -4,7 +4,7 @@ import { AccessPattern } from "../../../core/access-pattern";
 import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "../../../core/operation";
 import { Resource } from "../../../core/resource";
-import { Service } from "../../../core/service";
+import { Service } from "../../../core/fracture-service";
 import { Structure } from "../../../core/structure";
 import { DynaliteSupport } from "../../../dynamodb";
 import { TypeScriptSource } from "../typescript-source";
