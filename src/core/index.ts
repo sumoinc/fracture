@@ -8,7 +8,6 @@ export * from "./fracture";
 export * from "./operation";
 export * from "./organization";
 export * from "./organizational-unit";
-export * from "./pipeline-workflow";
 export * from "./pipeline";
 export * from "./region";
 export * from "./resource-attribute";

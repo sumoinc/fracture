@@ -1,59 +1,81 @@
 import { Component } from "projen";
 import { Fracture } from "./fracture";
-import { PipelineWorkflow } from "./pipeline-workflow";
-import { StageOptions } from "./stage";
-import { Wave, WaveOptions } from "./wave";
 
 export interface PipelineOptions {
+  /**
+   * Name for this pipeline.
+   */
   name: string;
+  /**
+   * What branches shoudl trigger this pipeline?
+   */
   branchTriggerPatterns: string[];
-  //app: FractureApp;
+  /**
+   * What paths should trigger this pipeline?
+   *
+   * @default [] (all)
+   */
+  pathTriggerPatterns?: string[];
+  /**
+   * Allow this pipeline to be triggered manually?
+   *
+   * @default true
+   */
+  manualTrigger?: boolean;
+  /**
+   * Should this pipeline deploy the app after build?
+   *
+   * @default false
+   */
+  deploy?: boolean;
 }
 
 export class Pipeline extends Component {
-  // all other options
-  public readonly options: PipelineOptions;
-  public readonly waves: Wave[] = [];
-
   /**
-   * Because the github workflow is build on the base project we pass in the app
-   * but the component is actually based the root project
+   * Name for this pipeline.
    */
+  public readonly name: string;
+  /**
+   * What branches shoudl trigger this pipeline?
+   */
+  public readonly branchTriggerPatterns: string[];
+  /**
+   * What paths should trigger this pipeline?
+   *
+   * @default [] (all)
+   */
+  public readonly pathTriggerPatterns: string[];
+  /**
+   * Allow this pipeline to be triggered manually?
+   *
+   * @default true
+   */
+  public readonly manualTrigger: boolean;
+  /**
+   * Should this pipeline deploy the app after build?
+   *
+   * @default false
+   */
+  public readonly deploy: boolean;
+
   constructor(fracture: Fracture, options: PipelineOptions) {
     super(fracture);
 
-    this.options = options;
+    /***************************************************************************
+     * Props
+     **************************************************************************/
 
-    // inverse
-    //this.app.pipelines.push(this);
-
-    // init workflow for this pipeline
-    new PipelineWorkflow(fracture, {
-      pipeline: this,
-    });
+    this.name = options.name;
+    this.branchTriggerPatterns = options.branchTriggerPatterns;
+    this.pathTriggerPatterns = options.pathTriggerPatterns ?? [];
+    this.manualTrigger = options.manualTrigger ?? true;
+    this.deploy = options.deploy ?? false;
 
     // debugging output
-    this.project.logger.info(`INIT Pipeline: "${this.name}"`);
-  }
-
-  public get name() {
-    return this.options.name;
-  }
-
-  public get deployName() {
-    return `deploy-${this.name}`;
-  }
-
-  public get branchTriggerPatterns() {
-    return this.options.branchTriggerPatterns;
+    //this.project.logger.info(`INIT Pipeline: "${this.name}"`);
   }
 
   /*
-  public get app() {
-    return this.options.app;
-  }
-  */
-
   public get stages() {
     return this.waves.flatMap((wave) => wave.stages);
   }
@@ -71,4 +93,5 @@ export class Pipeline extends Component {
         : this.waves[this.waves.length - 1];
     return wave.addStage(options);
   }
+  */
 }
