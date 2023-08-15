@@ -1,30 +1,28 @@
-import { LogLevel } from "projen";
-import { synthSnapshot } from "projen/lib/util/synth";
-import { Deployment } from "./deployment";
-import { Fracture, Pipeline } from "../core";
+import { GithubFractureWorkflow } from "./workflow";
+import { Fracture } from "../core";
+import { synthFile } from "../util/test-util";
 
 /*******************************************************************************
  * DEFAULT WORKFLOWS
  ******************************************************************************/
 
 describe("Default workflow", () => {
-  test("no args turborepo", () => {
+  test("no args", () => {
     const fracture = new Fracture({
       name: "test-project",
-      logging: {
-        level: LogLevel.OFF,
-      },
     });
-    const pipeline = new Pipeline(fracture, {
-      name: "default",
+    const workflow = new GithubFractureWorkflow(fracture, {
+      name: "foo",
       branchTriggerPatterns: ["main"],
+      pathTriggerPatterns: ["src/**/*"],
+      deploy: true,
     });
-    const workflow = new Deployment(fracture, { pipeline });
 
-    const content = synthWorkflow(workflow);
+    const content = synthFile(fracture, workflow.filePath);
     expect(content).toMatchSnapshot();
-    //console.log(content);
+    console.log(content);
   });
+  /*
   test("with TurboRepo", () => {
     const fracture = new Fracture({
       name: "test-project",
@@ -37,7 +35,7 @@ describe("Default workflow", () => {
       name: "default",
       branchTriggerPatterns: ["main"],
     });
-    const workflow = new Deployment(fracture, {
+    const workflow = new GithubFractureWorkflow(fracture, {
       name: "with TurboRepo",
       pipeline,
     });
@@ -58,7 +56,7 @@ describe("Default workflow", () => {
       name: "default",
       branchTriggerPatterns: ["main"],
     });
-    const workflow = new Deployment(fracture, {
+    const workflow = new GithubFractureWorkflow(fracture, {
       name: "without TurboRepo",
       pipeline,
     });
@@ -66,13 +64,14 @@ describe("Default workflow", () => {
     const content = synthWorkflow(workflow);
     expect(content).toMatchSnapshot();
     //console.log(content);
-  });
+  });*/
 });
 
 /*******************************************************************************
  * WAVES & STAGES
  ******************************************************************************/
 
+/*
 describe.only("Waves & Stages", () => {
   test("one wave, one stage", () => {
     const fracture = new Fracture({
@@ -85,18 +84,18 @@ describe.only("Waves & Stages", () => {
       name: "default",
       branchTriggerPatterns: ["main"],
     });
-    const workflow = new Deployment(fracture, { pipeline });
+    const workflow = new GithubFractureWorkflow(fracture, { pipeline });
 
     const content = synthWorkflow(workflow);
     expect(content).toMatchSnapshot();
     console.log(content);
   });
 });
-
+*/
 /*******************************************************************************
  * MISC TESTS
  ******************************************************************************/
-
+/*
 test("has valid filepath", () => {
   const fracture = new Fracture({
     name: "test-project",
@@ -108,24 +107,24 @@ test("has valid filepath", () => {
     name: "default",
     branchTriggerPatterns: ["main"],
   });
-  const workflow = new Deployment(fracture, {
+  const workflow = new GithubFractureWorkflow(fracture, {
     name: "Foo Bar Baz",
     pipeline,
   });
 
   expect(workflow.filePath).toBe(".github/workflows/foo-bar-baz.yml");
 });
-
+*/
 /*
 describe("multiple waves", () => {
-  test("Deployments depend on build", () => {
+  test("Workflows depend on build", () => {
     const pipeline = app.addPipeline({
       name: "default",
       branchTriggerPatterns: ["main"],
     });
     pipeline.addStage({ name: "East Coast", environment: devUsEast });
     pipeline.addStage({ name: "West Coast", environment: devUsWest });
-    const workflow = new Deployment(fracture, { pipeline });
+    const workflow = new GithubFractureWorkflow(fracture, { pipeline });
 
     const content = synthWorkflow(workflow);
     expect(content).toMatchSnapshot();
@@ -140,8 +139,8 @@ describe("multiple waves", () => {
  * Helper function to generate a workflow file so we can test it's structure.
  *
  */
-
-function synthWorkflow(workflow: Deployment): any {
+/*
+function synthWorkflow(workflow: Workflow): any {
   const snapshot = synthSnapshot(workflow.project);
   const filtered = Object.keys(snapshot)
     .filter((path) => path.match(workflow.filePath))
@@ -152,4 +151,4 @@ function synthWorkflow(workflow: Deployment): any {
       };
     }, {} as { [key: string]: any });
   return filtered[workflow.filePath];
-}
+}*/

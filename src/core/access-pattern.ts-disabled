@@ -1,7 +1,7 @@
 import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { Operation, OPERATION_SUB_TYPE } from "./operation";
+import { Operation, OPERATION_SUB_TYPE } from "./operation.ts-disabled";
 import { Resource } from "./resource";
 import {
   ResourceAttribute,

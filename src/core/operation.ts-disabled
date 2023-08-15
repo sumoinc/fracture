@@ -1,9 +1,9 @@
 import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { AccessPattern } from "./access-pattern";
-import { Resource } from "./resource";
-import { Structure, STRUCTURE_TYPE } from "./structure";
+import { AccessPattern } from "./access-pattern.ts-disabled";
+import { Resource } from "./resource.ts-disabled";
+import { Structure, STRUCTURE_TYPE } from "./structure.ts-disabled";
 import { DynamoCommand } from "../generators";
 import { DynamoCommandTest } from "../generators/ts/commands/dynamo-command-test";
 

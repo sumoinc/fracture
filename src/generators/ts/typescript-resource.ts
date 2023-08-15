@@ -1,5 +1,5 @@
 import { Component } from "projen";
-import { Resource } from "../../core/resource";
+import { Resource } from "../../core/resource.ts-disabled";
 
 export class TypescriptResource extends Component {
   public readonly resource: Resource;

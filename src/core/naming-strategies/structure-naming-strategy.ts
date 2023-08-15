@@ -6,8 +6,8 @@ import {
   TypescriptNamingStrategyOptions,
 } from "./typescript-naming-strategy";
 import { Fracture } from "../fracture";
-import { OPERATION_SUB_TYPE } from "../operation";
-import { STRUCTURE_TYPE } from "../structure";
+import { OPERATION_SUB_TYPE } from "../operation.ts-disabled";
+import { STRUCTURE_TYPE } from "../structure.ts-disabled";
 
 export type StructureNamingStrategyOptions = {
   prefixes: {

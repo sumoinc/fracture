@@ -1,10 +1,10 @@
 import { IdentifierFactory } from "./identifier-factory";
-import { OPERATION_SUB_TYPE } from "../../core/operation";
-import { Resource } from "../../core/resource";
+import { OPERATION_SUB_TYPE } from "../../core/operation.ts-disabled";
 import {
   ResourceAttributeGenerator,
   ResourceAttributeType,
-} from "../../core/resource-attribute";
+} from "../../core/resource-attribute.ts-disabled";
+import { Resource } from "../../core/resource.ts-disabled";
 
 export class VersionedIdentifierFactory extends IdentifierFactory {
   constructor(resource: Resource) {

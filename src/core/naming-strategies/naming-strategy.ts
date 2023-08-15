@@ -14,8 +14,8 @@ import {
   VtlNamingStrategyOptions,
 } from "./vtl-naming-strategy";
 import { Fracture } from "../fracture";
-import { OPERATION_SUB_TYPE } from "../operation";
-import { STRUCTURE_TYPE } from "../structure";
+import { OPERATION_SUB_TYPE } from "../operation.ts-disabled";
+import { STRUCTURE_TYPE } from "../structure.ts-disabled";
 
 export const NAMING_STRATEGY_TYPE = {
   /**

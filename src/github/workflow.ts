@@ -1,58 +1,60 @@
 import { paramCase } from "change-case";
-import { Component } from "projen";
-import { GitHub, GithubWorkflow } from "projen/lib/github";
+import {
+  GitHub,
+  GithubWorkflow,
+  GithubWorkflowOptions,
+} from "projen/lib/github";
 import { BuildJob } from "./build-job";
-import { DeployJob } from "./deploy-job";
-import { Fracture, Pipeline } from "../core";
+import { Fracture } from "../core";
 import { TurboRepo } from "../turborepo";
 
-export interface DeploymentOptions {
+export interface GithubFractureWorkflowOptions extends GithubWorkflowOptions {
   /**
    * The name of the workflow.
-   *
-   * @default "deployment"
    */
-  name?: string;
+  name: string;
   /**
-   * Storage location for this workflow.
-   *
-   * @default ".github/workflows/{this.name}.yml"
+   * What branches shoudl trigger this pipeline?
    */
-  filePath?: string;
+  branchTriggerPatterns: string[];
   /**
-   * the pipeline defnition being used for this workflow
+   * What paths should trigger this pipeline?
    */
-  pipeline: Pipeline;
+  pathTriggerPatterns: string[];
+  /**
+   * Pipelines always builds but don't always deploy.
+   * Should this pipeline deploy the app after build?
+   */
+  deploy: boolean;
 }
 
-export class Deployment extends Component {
-  private readonly githubWorkflow: GithubWorkflow;
+export class GithubFractureWorkflow extends GithubWorkflow {
   /**
    * The name of the workflow.
-   *
-   * @default "deployment"
    */
   public readonly name: string;
   /**
    * Storage location for this workflow.
-   *
-   * @default ".github/workflows/{this.name}.yml"
    */
   public readonly filePath: string;
 
-  constructor(fracture: Fracture, options: DeploymentOptions) {
-    super(fracture);
-
+  constructor(fracture: Fracture, options: GithubFractureWorkflowOptions) {
     /***************************************************************************
-     * LOCALS
+     * Super
      **************************************************************************/
 
     const github = GitHub.of(fracture);
     if (!github) {
       throw new Error(
-        "Deployment is currently only supported for GitHub enabled projects"
+        "Fracture workflows are currently only supported for GitHub enabled projects"
       );
     }
+    const name = options.name ? paramCase(options.name) : "deployment";
+    super(github, name, options);
+
+    /***************************************************************************
+     * Locals
+     **************************************************************************/
 
     const turboRepo = TurboRepo.of(fracture);
 
@@ -60,29 +62,17 @@ export class Deployment extends Component {
      * Props
      **************************************************************************/
 
-    this.name = options.name ? paramCase(options.name) : "deployment";
-    this.filePath = options.filePath ?? `.github/workflows/${this.name}.yml`;
-    const { pipeline } = options;
+    this.name = name;
+    this.filePath = `.github/workflows/${this.name}.yml`;
 
     /***************************************************************************
-     * Workflow definition
+     * Triggers
      **************************************************************************/
 
-    this.githubWorkflow = new GithubWorkflow(github, this.name);
-
-    /**
-     * Trigger on push when any of the files in the app or it's component
-     * services are modified.
-     */
-    this.githubWorkflow.on({
+    this.on({
       push: {
-        branches: pipeline.branchTriggerPatterns,
-        paths: [],
-        /*
-        paths: [pipeline.app.appRoot].concat(
-          pipeline.app.services.map((s) => s.serviceRoot)
-        ),
-        */
+        branches: options.branchTriggerPatterns,
+        paths: options.pathTriggerPatterns,
       },
       workflowDispatch: {}, // allow manual triggering
     });
@@ -91,7 +81,7 @@ export class Deployment extends Component {
      *
      * BUILD JOB
      *
-     * Can leverage turbo-repo if it's available.
+     * Leverage turbo-repo commands, if available.
      *
      **************************************************************************/
 
@@ -99,15 +89,9 @@ export class Deployment extends Component {
       ? new BuildJob(fracture)
       : new BuildJob(fracture, {
           buildCommand: fracture.runTaskCommand(turboRepo.buildTask),
-          postBuildSteps: [
-            {
-              name: "Synth",
-              run: fracture.runTaskCommand(turboRepo.synthTask),
-            },
-          ],
+          synthCommand: fracture.runTaskCommand(turboRepo.synthTask),
         });
-
-    this.githubWorkflow.addJob(buildJob.jobId, buildJob.job);
+    this.addJob(buildJob.jobId, buildJob.job);
 
     /***************************************************************************
      *
@@ -116,6 +100,7 @@ export class Deployment extends Component {
      **************************************************************************/
 
     // no waves, just use default workflow
+    /*
     if (pipeline.waves.length === 0) {
       const deployJob = !turboRepo
         ? new DeployJob(fracture)
@@ -123,9 +108,10 @@ export class Deployment extends Component {
             deployCommand: fracture.runTaskCommand(turboRepo.deployTask),
           });
       this.githubWorkflow.addJob(deployJob.jobId, deployJob.job);
-    }
+    }*/
 
     // add deployment waves to workflow
+    /*
     if (pipeline.waves.length > 0) {
       pipeline.waves.forEach((wave) => {
         wave.stages.forEach(() => {
@@ -136,5 +122,6 @@ export class Deployment extends Component {
         });
       });
     }
+    */
   }
 }

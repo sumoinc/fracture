@@ -39,13 +39,13 @@ export interface BuildJobOptions {
    */
   buildCommand?: string;
   /**
-   * Steps to run before the build commend is executed.
+   * Steps to run before the build command is executed.
    *
    * @default []
    */
   preBuildSteps?: JobStep[];
   /**
-   * Steps to run before the build commend is executed.
+   * Steps to run before the build command is executed.
    *
    * @default []
    */
@@ -55,7 +55,19 @@ export interface BuildJobOptions {
    *
    * @default "npx projen synth"
    */
-  //synthCommand?: string;
+  synthCommand?: string;
+  /**
+   * Steps to run before the synth command is executed.
+   *
+   * @default []
+   */
+  preSynthSteps?: JobStep[];
+  /**
+   * Steps to run before the synth command is executed.
+   *
+   * @default []
+   */
+  postSynthSteps?: JobStep[];
 }
 
 export class BuildJob extends Component {
@@ -87,6 +99,7 @@ export class BuildJob extends Component {
    * @default false
    */
   public readonly downloadLfs: boolean;
+
   /**
    * The command to run to build the project.
    *
@@ -94,17 +107,35 @@ export class BuildJob extends Component {
    */
   public readonly buildCommand: string;
   /**
-   * Steps to run before the build commend is executed.
+   * Steps to run before the build command is executed.
    *
    * @default []
    */
   public readonly preBuildSteps?: JobStep[];
   /**
-   * Steps to run before the build commend is executed.
+   * Steps to run before the build command is executed.
    *
    * @default []
    */
   public readonly postBuildSteps?: JobStep[];
+  /**
+   * The command to run to synth the project.
+   *
+   * @default "npx projen synth"
+   */
+  public readonly synthCommand?: string;
+  /**
+   * Steps to run before the synth command is executed.
+   *
+   * @default []
+   */
+  public readonly preSynthSteps?: JobStep[];
+  /**
+   * Steps to run before the synth command is executed.
+   *
+   * @default []
+   */
+  public readonly postSynthSteps?: JobStep[];
 
   constructor(fracture: Fracture, options: BuildJobOptions = {}) {
     super(fracture);
@@ -120,9 +151,12 @@ export class BuildJob extends Component {
       options.pullRequestRepository ??
       "${{ github.event.pull_request.head.repo.full_name }}";
     this.downloadLfs = options.downloadLfs ?? false;
-    this.preBuildSteps = options.preBuildSteps ?? [];
     this.buildCommand = options.buildCommand ?? "npx projen build";
+    this.preBuildSteps = options.preBuildSteps ?? [];
     this.postBuildSteps = options.postBuildSteps ?? [];
+    this.synthCommand = options.synthCommand ?? "npx projen synth";
+    this.preSynthSteps = options.preSynthSteps ?? [];
+    this.postSynthSteps = options.postSynthSteps ?? [];
 
     /***************************************************************************
      * Create job definition
@@ -151,13 +185,18 @@ export class BuildJob extends Component {
         }),
 
         ...this.preBuildSteps,
-
         {
           name: "Build",
           run: this.buildCommand,
         },
-
         ...this.postBuildSteps,
+
+        ...this.preSynthSteps,
+        {
+          name: "Synth",
+          run: this.synthCommand,
+        },
+        ...this.postSynthSteps,
       ],
     };
   }

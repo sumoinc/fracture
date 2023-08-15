@@ -1,5 +1,5 @@
-import { Resource } from "../../src/core/resource";
-import { ResourceAttribute } from "../../src/core/resource-attribute";
+import { Resource } from "./resource.ts-disabled";
+import { ResourceAttribute } from "./resource-attribute.ts-disabled";
 import { Service } from "./fracture-service";
 import { TestFracture } from "../util/test-util";
 

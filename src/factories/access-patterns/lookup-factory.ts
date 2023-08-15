@@ -3,14 +3,14 @@ import {
   AccessPattern,
   AccessPatternOptions,
   ACCESS_PATTERN_TYPE,
-} from "../../core/access-pattern";
+} from "../../core/access-pattern.ts-disabled";
 import {
   Operation,
   OPERATION_SUB_TYPE,
   OPERATION_TYPE,
-} from "../../core/operation";
-import { Resource } from "../../core/resource";
-import { ResourceAttributeGenerator } from "../../core/resource-attribute";
+} from "../../core/operation.ts-disabled";
+import { ResourceAttributeGenerator } from "../../core/resource-attribute.ts-disabled";
+import { Resource } from "../../core/resource.ts-disabled";
 
 export class LookupFactory extends Component {
   public readonly accessPattern: AccessPattern;

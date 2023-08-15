@@ -1,5 +1,5 @@
 import { Component } from "projen";
-import { Account, AccountOptions } from "./account";
+import { Account, AccountOptions } from "./account.ts-disabled";
 import { Fracture } from "./fracture";
 import {
   OrganizationalUnit,

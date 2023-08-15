@@ -1,4 +1,5 @@
 import { Component } from "projen";
+import { GitHub } from "projen/lib/github";
 import { Fracture } from "./fracture";
 
 export interface PipelineOptions {
@@ -16,12 +17,6 @@ export interface PipelineOptions {
    * @default [] (all)
    */
   pathTriggerPatterns?: string[];
-  /**
-   * Allow this pipeline to be triggered manually?
-   *
-   * @default true
-   */
-  manualTrigger?: boolean;
   /**
    * Should this pipeline deploy the app after build?
    *
@@ -46,12 +41,7 @@ export class Pipeline extends Component {
    */
   public readonly pathTriggerPatterns: string[];
   /**
-   * Allow this pipeline to be triggered manually?
-   *
-   * @default true
-   */
-  public readonly manualTrigger: boolean;
-  /**
+   * Pipelines always builds but don't always deploy.
    * Should this pipeline deploy the app after build?
    *
    * @default false
@@ -68,8 +58,21 @@ export class Pipeline extends Component {
     this.name = options.name;
     this.branchTriggerPatterns = options.branchTriggerPatterns;
     this.pathTriggerPatterns = options.pathTriggerPatterns ?? [];
-    this.manualTrigger = options.manualTrigger ?? true;
     this.deploy = options.deploy ?? false;
+
+    /***************************************************************************
+     *
+     * Github Workflow
+     *
+     * this is the only platform currently supported in fracture.
+     *
+     **************************************************************************/
+
+    const github = GitHub.of(fracture);
+
+    if (github) {
+      // todo
+    }
 
     // debugging output
     //this.project.logger.info(`INIT Pipeline: "${this.name}"`);

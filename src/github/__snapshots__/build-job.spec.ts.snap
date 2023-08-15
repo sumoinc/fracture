@@ -51,6 +51,10 @@ Object {
       "name": "Post Step",
       "run": "echo 'pre step'",
     },
+    Object {
+      "name": "Synth",
+      "run": "npx projen synth",
+    },
   ],
 }
 `;
@@ -98,99 +102,9 @@ Object {
       "name": "Build",
       "run": "npx projen build",
     },
-  ],
-}
-`;
-
-exports[`Default workflow no args turborepo 1`] = `
-Object {
-  "env": Object {
-    "CI": "true",
-  },
-  "permissions": Object {
-    "contents": "write",
-  },
-  "runsOn": Array [
-    "ubuntu-latest",
-  ],
-  "steps": Array [
     Object {
-      "name": "Checkout",
-      "uses": "actions/checkout@v3",
-      "with": Object {
-        "ref": "\${{ github.event.pull_request.head.ref }}",
-        "repository": "\${{ github.event.pull_request.head.repo.full_name }}",
-      },
-    },
-    Object {
-      "name": "Setup pnpm",
-      "uses": "pnpm/action-setup@v2.2.4",
-      "with": Object {
-        "version": "8",
-      },
-    },
-    Object {
-      "name": "Setup Node.js",
-      "uses": "actions/setup-node@v3",
-      "with": Object {
-        "cache": "pnpm",
-        "node-version": "18",
-      },
-    },
-    Object {
-      "name": "Install dependencies",
-      "run": "pnpm i --no-frozen-lockfile",
-    },
-    Object {
-      "name": "Build",
-      "run": "npx projen build",
-    },
-  ],
-}
-`;
-
-exports[`Turborepo based - build job 1`] = `
-Object {
-  "env": Object {
-    "CI": "true",
-  },
-  "permissions": Object {
-    "contents": "write",
-  },
-  "runsOn": Array [
-    "ubuntu-latest",
-  ],
-  "steps": Array [
-    Object {
-      "name": "Checkout",
-      "uses": "actions/checkout@v3",
-      "with": Object {
-        "ref": "\${{ github.event.pull_request.head.ref }}",
-        "repository": "\${{ github.event.pull_request.head.repo.full_name }}",
-      },
-    },
-    Object {
-      "name": "Setup pnpm",
-      "uses": "pnpm/action-setup@v2.2.4",
-      "with": Object {
-        "version": "8",
-      },
-    },
-    Object {
-      "name": "Setup Node.js",
-      "uses": "actions/setup-node@v3",
-      "with": Object {
-        "cache": "pnpm",
-        "node-version": "18",
-      },
-    },
-    Object {
-      "name": "Install dependencies",
-      "run": "pnpm i --no-frozen-lockfile",
-    },
-    Object {
-      "name": "Build",
-      "run": "npx projen build",
+      "name": "Synth",
+      "run": "npx projen synth",
     },
   ],
 }

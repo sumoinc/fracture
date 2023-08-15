@@ -1,8 +1,8 @@
 import { Component } from "projen";
 
-import { Resource } from "../../core/resource";
 import { Service } from "../../core/fracture-service";
-import { Structure } from "../../core/structure";
+import { Resource } from "../../core/resource.ts-disabled";
+import { Structure } from "../../core/structure.ts-disabled";
 
 export class TypescriptStructure extends Component {
   // source

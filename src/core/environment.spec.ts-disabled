@@ -1,5 +1,5 @@
 import { LogLevel } from "projen";
-import { Environment } from "./environment";
+import { Environment } from "./environment.ts-disabled";
 import { Fracture } from "./fracture";
 import { REGION_IDENTITIER } from "./region";
 

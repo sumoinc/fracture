@@ -3,12 +3,12 @@ import { deepMerge } from "projen/lib/util";
 import { SetRequired, ValueOf } from "type-fest";
 //import { Service } from "./fracture-service";
 import { formatStringByNamingStrategy } from "./naming-strategies/naming-strategy";
-import { Operation, OPERATION_SUB_TYPE } from "./operation";
-import { Resource } from "./resource";
+import { Operation, OPERATION_SUB_TYPE } from "./operation.ts-disabled";
+import { Resource } from "./resource.ts-disabled";
 import {
   ResourceAttribute,
   ResourceAttributeGenerator,
-} from "./resource-attribute";
+} from "./resource-attribute.ts-disabled";
 
 /******************************************************************************
  * TYPES
@@ -115,7 +115,7 @@ export class Structure extends Component {
   /**
    * Structure name, based on the naming strategy
    */
-
+  /*
   public get name() {
     const resourceName = this.operation
       ? this.operation.name
@@ -127,6 +127,7 @@ export class Structure extends Component {
       .filter((part) => part.length > 0)
       .join("-");
   }
+  */
 
   public get type() {
     return this.options.type;

@@ -1,5 +1,5 @@
 import { LogLevel } from "projen";
-import { Account } from "./account";
+import { Account } from "./account.ts-disabled";
 import { Fracture } from "./fracture";
 
 /*******************************************************************************

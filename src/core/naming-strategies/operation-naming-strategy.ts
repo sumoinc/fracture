@@ -3,7 +3,7 @@ import { Component } from "projen";
 import { ValueOf } from "type-fest";
 
 import { Fracture } from "../fracture";
-import { OPERATION_SUB_TYPE } from "../operation";
+import { OPERATION_SUB_TYPE } from "../operation.ts-disabled";
 
 export type OperationNamingStrategyOptions = {
   prefixes?: {

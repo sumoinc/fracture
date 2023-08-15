@@ -1,12 +1,12 @@
 import { Component } from "projen";
-import { Operation } from "../../core/operation";
-import { Resource } from "../../core/resource";
+import { Service } from "../../core/fracture-service";
+import { Operation } from "../../core/operation.ts-disabled";
 import {
   ResourceAttribute,
   ResourceAttributeGenerator,
   ResourceAttributeType,
-} from "../../core/resource-attribute";
-import { Service } from "../../core/fracture-service";
+} from "../../core/resource-attribute.ts-disabled";
+import { Resource } from "../../core/resource.ts-disabled";
 
 export class TypescriptResourceAttribute extends Component {
   // parent

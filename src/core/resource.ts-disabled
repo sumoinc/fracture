@@ -1,14 +1,14 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
-import { AccessPattern } from "./access-pattern";
-import { Operation } from "./operation";
+import { AccessPattern } from "./access-pattern.ts-disabled";
+import { Service } from "./fracture-service";
+import { Operation } from "./operation.ts-disabled";
 import {
   ResourceAttribute,
   ResourceAttributeOptions,
-} from "./resource-attribute";
-import { Service } from "./fracture-service";
-import { Structure, STRUCTURE_TYPE } from "./structure";
+} from "./resource-attribute.ts-disabled";
+import { Structure, STRUCTURE_TYPE } from "./structure.ts-disabled";
 import { DynamoTable } from "../dynamodb/dynamo-table";
 import { IdentifierFactory } from "../factories/access-patterns/identifier-factory";
 import { LookupFactory } from "../factories/access-patterns/lookup-factory";

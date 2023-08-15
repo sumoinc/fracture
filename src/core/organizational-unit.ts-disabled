@@ -1,6 +1,6 @@
 import { Component } from "projen";
-import { Account, AccountOptions } from "./account";
-import { Organization } from "./organization";
+import { Account, AccountOptions } from "./account.ts-disabled";
+import { Organization } from "./organization.ts-disabled";
 
 export interface OrganizationalUnitOptions {
   id: string;
