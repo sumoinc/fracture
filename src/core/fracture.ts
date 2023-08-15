@@ -4,6 +4,8 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
+import { FractureApp, FractureAppOptions } from "./fracture-app";
+import { FractureService, FractureServiceOptions } from "./fracture-service";
 import { TurboRepo, TurboRepoOptions } from "../turborepo/turbo-repo";
 
 export interface FractureOptions extends Partial<TypeScriptProjectOptions> {
@@ -121,6 +123,17 @@ export class Fracture extends TypeScriptProject {
     this.serviceRoot = options.serviceRoot ?? "services";
     this.appRoot = options.appRoot ?? "apps";
     this.srcDir = options.srcDir ?? "src";
+
+    /***************************************************************************
+     * TUBOREPO
+     **************************************************************************/
+
+    const turboRepoEnabled = options.turboRepoEnabled ?? true;
+    const turboRepoOptions = options.turboRepoOptions ?? {};
+
+    if (turboRepoEnabled) {
+      new TurboRepo(this, turboRepoOptions);
+    }
 
     /***************************************************************************
      *
@@ -267,18 +280,6 @@ export class Fracture extends TypeScriptProject {
     // configure vscode
     new VsCodeConfiguration(this);
     */
-
-    /***************************************************************************
-     * TUBOREPO
-     **************************************************************************/
-
-    const turboRepoEnabled = options.turboRepoEnabled ?? true;
-    const turboRepoOptions = options.turboRepoOptions ?? {};
-
-    if (turboRepoEnabled) {
-      new TurboRepo(this, turboRepoOptions);
-    }
-
     /***************************************************************************
      * WORKFLOWS
      **************************************************************************/
@@ -286,9 +287,9 @@ export class Fracture extends TypeScriptProject {
     // configure workflows
     //this.workflows = new Workflows(this);
 
-    this.logger.info("=".repeat(80));
-    this.logger.info("INIT PHASE");
-    this.logger.info("=".repeat(80));
+    // this.logger.info("=".repeat(80));
+    // this.logger.info("INIT PHASE");
+    // this.logger.info("=".repeat(80));
 
     return this;
   }
@@ -332,10 +333,9 @@ export class Fracture extends TypeScriptProject {
    * @param {FractureAppOptions}
    * @returns {FractureApp}
    */
-  /*
   public addApp(options: FractureAppOptions) {
     return new FractureApp(this, options);
-  }*/
+  }
 
   /**
    * Add an organization to the fracture project.
@@ -351,9 +351,9 @@ export class Fracture extends TypeScriptProject {
    * @param {ServiceOptions}
    * @returns {Service}
    */
-  /* public addService(options: ServiceOptions) {
-    return new Service(this, options);
-  }*/
+  public addService(options: FractureServiceOptions) {
+    return new FractureService(this, options);
+  }
 
   /**
    * Add a environment to the fracture project.

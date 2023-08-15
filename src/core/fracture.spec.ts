@@ -10,12 +10,13 @@ beforeEach(() => {
 test("Smoke test", () => {
   expect(fracture).toBeTruthy();
 });
+
 describe("validate generated project files", () => {
   test("Detect new files", () => {
     const content = synthFiles(fracture, "");
     const fileList = Object.keys(content);
     expect(fileList).toMatchSnapshot();
-    console.log(JSON.stringify(fileList, null, 2));
+    //console.log(JSON.stringify(fileList, null, 2));
   });
 
   test(".eslintrc.json", () => {
@@ -28,8 +29,41 @@ describe("validate generated project files", () => {
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
+  test(".github/pull_request_template.md", () => {
+    const content = synthFile(fracture, ".github/pull_request_template.md");
+    expect(content).toMatchSnapshot();
+    // console.log(JSON.stringify(content, null, 2));
+  });
+  test(".github/workflows/build.yml", () => {
+    const content = synthFile(fracture, ".github/workflows/build.yml");
+    expect(content).toMatchSnapshot();
+    // console.log(JSON.stringify(content, null, 2));
+  });
+  test(".github/workflows/pull-request-lint.yml", () => {
+    const content = synthFile(
+      fracture,
+      ".github/workflows/pull-request-lint.yml"
+    );
+    expect(content).toMatchSnapshot();
+    // console.log(JSON.stringify(content, null, 2));
+  });
+  test(".github/workflows/release.yml", () => {
+    const content = synthFile(fracture, ".github/workflows/release.yml");
+    expect(content).toMatchSnapshot();
+    // console.log(JSON.stringify(content, null, 2));
+  });
+  test(".github/workflows/upgrade-main.yml", () => {
+    const content = synthFile(fracture, ".github/workflows/upgrade-main.yml");
+    expect(content).toMatchSnapshot();
+    // console.log(JSON.stringify(content, null, 2));
+  });
   test(".gitignore", () => {
     const content = synthFile(fracture, ".gitignore");
+    expect(content).toMatchSnapshot();
+    // console.log(JSON.stringify(content, null, 2));
+  });
+  test(".mergify.yml", () => {
+    const content = synthFile(fracture, ".mergify.yml");
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
@@ -40,6 +74,16 @@ describe("validate generated project files", () => {
   });
   test(".npmrc", () => {
     const content = synthFile(fracture, ".npmrc");
+    expect(content).toMatchSnapshot();
+    // console.log(JSON.stringify(content, null, 2));
+  });
+  test(".prettierignore", () => {
+    const content = synthFile(fracture, ".prettierignore");
+    expect(content).toMatchSnapshot();
+    // console.log(JSON.stringify(content, null, 2));
+  });
+  test(".prettierrc.json", () => {
+    const content = synthFile(fracture, ".prettierrc.json");
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
@@ -87,5 +131,21 @@ describe("validate generated project files", () => {
     const content = synthFile(fracture, "tsconfig.json");
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
+  });
+  test("turbo.json", () => {
+    const content = synthFile(fracture, "turbo.json");
+    expect(content).toMatchSnapshot();
+    //console.log(JSON.stringify(content, null, 2));
+  });
+});
+
+describe("Helper functions", () => {
+  test("Add app", () => {
+    const app = fracture.addApp({ name: "test-app" });
+    expect(app).toBeTruthy();
+  });
+  test("Add service", () => {
+    const service = fracture.addService({ name: "test-service" });
+    expect(service).toBeTruthy();
   });
 });
