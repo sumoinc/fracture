@@ -45,9 +45,7 @@ export class GithubFractureWorkflow extends GithubWorkflow {
 
     const github = GitHub.of(fracture);
     if (!github) {
-      throw new Error(
-        "Fracture workflows are currently only supported for GitHub enabled projects"
-      );
+      throw new Error("Github must be actie to use this workflow.");
     }
     const name = options.name ? paramCase(options.name) : "deployment";
     super(github, name, options);

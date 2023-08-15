@@ -1,6 +1,7 @@
 import { Component } from "projen";
 import { GitHub } from "projen/lib/github";
 import { Fracture } from "./fracture";
+import { GithubFractureWorkflow } from "../github/workflow";
 
 export interface PipelineOptions {
   /**
@@ -18,6 +19,7 @@ export interface PipelineOptions {
    */
   pathTriggerPatterns?: string[];
   /**
+   * Pipelines always build and synth but don't always deploy.
    * Should this pipeline deploy the app after build?
    *
    * @default false
@@ -31,7 +33,7 @@ export class Pipeline extends Component {
    */
   public readonly name: string;
   /**
-   * What branches shoudl trigger this pipeline?
+   * What branches should trigger this pipeline?
    */
   public readonly branchTriggerPatterns: string[];
   /**
@@ -41,7 +43,7 @@ export class Pipeline extends Component {
    */
   public readonly pathTriggerPatterns: string[];
   /**
-   * Pipelines always builds but don't always deploy.
+   * Pipelines always build and synth but don't always deploy.
    * Should this pipeline deploy the app after build?
    *
    * @default false
@@ -71,11 +73,13 @@ export class Pipeline extends Component {
     const github = GitHub.of(fracture);
 
     if (github) {
-      // todo
+      new GithubFractureWorkflow(fracture, {
+        name: this.name,
+        branchTriggerPatterns: this.branchTriggerPatterns,
+        pathTriggerPatterns: this.pathTriggerPatterns,
+        deploy: this.deploy,
+      });
     }
-
-    // debugging output
-    //this.project.logger.info(`INIT Pipeline: "${this.name}"`);
   }
 
   /*

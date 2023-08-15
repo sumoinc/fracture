@@ -23,7 +23,7 @@ describe("Default workflow", () => {
 
     const content = synthFile(fracture, workflow.filePath);
     expect(content).toMatchSnapshot();
-    console.log(content);
+    //console.log(content);
   });
 
   test("without turborepo", () => {
