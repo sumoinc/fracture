@@ -6,7 +6,7 @@ import { DeployJob } from "./deploy-job";
 import { Fracture, Pipeline } from "../core";
 import { TurboRepo } from "../turborepo";
 
-export interface DeploymentWorkflowOptions {
+export interface DeploymentOptions {
   /**
    * The name of the workflow.
    *
@@ -25,7 +25,7 @@ export interface DeploymentWorkflowOptions {
   pipeline: Pipeline;
 }
 
-export class DeploymentWorkflow extends Component {
+export class Deployment extends Component {
   private readonly githubWorkflow: GithubWorkflow;
   /**
    * The name of the workflow.
@@ -40,7 +40,7 @@ export class DeploymentWorkflow extends Component {
    */
   public readonly filePath: string;
 
-  constructor(fracture: Fracture, options: DeploymentWorkflowOptions) {
+  constructor(fracture: Fracture, options: DeploymentOptions) {
     super(fracture);
 
     /***************************************************************************
@@ -50,7 +50,7 @@ export class DeploymentWorkflow extends Component {
     const github = GitHub.of(fracture);
     if (!github) {
       throw new Error(
-        "DeploymentWorkflow is currently only supported for GitHub enabled projects"
+        "Deployment is currently only supported for GitHub enabled projects"
       );
     }
 

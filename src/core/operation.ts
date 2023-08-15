@@ -3,7 +3,6 @@ import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { AccessPattern } from "./access-pattern";
 import { Resource } from "./resource";
-import { Service } from "./fracture-service";
 import { Structure, STRUCTURE_TYPE } from "./structure";
 import { DynamoCommand } from "../generators";
 import { DynamoCommandTest } from "../generators/ts/commands/dynamo-command-test";
@@ -93,7 +92,7 @@ export class Operation extends Component {
       options,
     ]) as Required<OperationOptions>;
 
-    this.project.logger.info(`INFO Operation: "${this.name}"`);
+    //this.project.logger.info(`INFO Operation: "${this.name}"`);
 
     /***************************************************************************
      *
@@ -111,6 +110,7 @@ export class Operation extends Component {
   /**
    * Operation name, based on the naming strategy
    */
+  /*
   public get name() {
     const resourceName =
       this.operationSubType === OPERATION_SUB_TYPE.LIST
@@ -125,6 +125,7 @@ export class Operation extends Component {
       .filter((part) => part.length > 0)
       .join("-");
   }
+  */
 
   public get operationType() {
     return this.options.operationType;
@@ -191,9 +192,11 @@ export class Operation extends Component {
     return this.accessPattern.resource;
   }
 
+  /*
   public get service(): Service {
     return this.resource.service;
   }
+  */
 
   /*****************************************************************************
    *
@@ -201,9 +204,11 @@ export class Operation extends Component {
    *
    ****************************************************************************/
 
+  /*
   public get tsResponseTypeName() {
     return this.operationSubType === OPERATION_SUB_TYPE.LIST
       ? this.service.tsLlistResponseTypeName
       : this.service.tsResponseTypeName;
   }
+  */
 }

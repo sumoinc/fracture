@@ -1,53 +1,7 @@
 import { LogLevel } from "projen";
 import { synthSnapshot } from "projen/lib/util/synth";
-import { DeploymentWorkflow } from "./deployment-workflow";
+import { Deployment } from "./deployment";
 import { Fracture, Pipeline } from "../core";
-
-/*******************************************************************************
- * TEST SETUP
- ******************************************************************************/
-
-// let fracture: Fracture;
-// let app: FractureApp;
-// let devUsEast: Environment;
-// let devUsWest: Environment;
-
-// beforeEach(() => {
-//   /**
-//    * Fracture
-//    */
-//   fracture = new Fracture({
-//     name: "test-project",
-//     logging: {
-//       level: LogLevel.OFF,
-//     },
-//   });
-//   /**
-//    * Environment
-//    */
-//   const org = fracture.addOrganization({ id: "test-org" });
-//   const account = org.addAccount({ id: "id", name: "test-account" });
-//   devUsEast = fracture.addEnvironment({
-//     account,
-//     region: REGION_IDENTITIER.US_EAST_1,
-//   });
-//   devUsWest = fracture.addEnvironment({
-//     account,
-//     region: REGION_IDENTITIER.US_WEST_2,
-//   });
-//   /**
-//    * Services & App
-//    */
-//   const companyService = fracture.addService({ name: "company" });
-//   const company = companyService.addResource({ name: "company" });
-//   company.addResourceAttribute({
-//     name: "name",
-//     shortName: "nm",
-//     isRequired: true,
-//   });
-//   app = fracture.addApp({ name: "identity-service" });
-//   app.useService(companyService);
-// });
 
 /*******************************************************************************
  * DEFAULT WORKFLOWS
@@ -65,7 +19,7 @@ describe("Default workflow", () => {
       name: "default",
       branchTriggerPatterns: ["main"],
     });
-    const workflow = new DeploymentWorkflow(fracture, { pipeline });
+    const workflow = new Deployment(fracture, { pipeline });
 
     const content = synthWorkflow(workflow);
     expect(content).toMatchSnapshot();
@@ -83,7 +37,7 @@ describe("Default workflow", () => {
       name: "default",
       branchTriggerPatterns: ["main"],
     });
-    const workflow = new DeploymentWorkflow(fracture, {
+    const workflow = new Deployment(fracture, {
       name: "with TurboRepo",
       pipeline,
     });
@@ -104,7 +58,7 @@ describe("Default workflow", () => {
       name: "default",
       branchTriggerPatterns: ["main"],
     });
-    const workflow = new DeploymentWorkflow(fracture, {
+    const workflow = new Deployment(fracture, {
       name: "without TurboRepo",
       pipeline,
     });
@@ -131,7 +85,7 @@ describe.only("Waves & Stages", () => {
       name: "default",
       branchTriggerPatterns: ["main"],
     });
-    const workflow = new DeploymentWorkflow(fracture, { pipeline });
+    const workflow = new Deployment(fracture, { pipeline });
 
     const content = synthWorkflow(workflow);
     expect(content).toMatchSnapshot();
@@ -154,7 +108,7 @@ test("has valid filepath", () => {
     name: "default",
     branchTriggerPatterns: ["main"],
   });
-  const workflow = new DeploymentWorkflow(fracture, {
+  const workflow = new Deployment(fracture, {
     name: "Foo Bar Baz",
     pipeline,
   });
@@ -171,7 +125,7 @@ describe("multiple waves", () => {
     });
     pipeline.addStage({ name: "East Coast", environment: devUsEast });
     pipeline.addStage({ name: "West Coast", environment: devUsWest });
-    const workflow = new DeploymentWorkflow(fracture, { pipeline });
+    const workflow = new Deployment(fracture, { pipeline });
 
     const content = synthWorkflow(workflow);
     expect(content).toMatchSnapshot();
@@ -187,7 +141,7 @@ describe("multiple waves", () => {
  *
  */
 
-function synthWorkflow(workflow: DeploymentWorkflow): any {
+function synthWorkflow(workflow: Deployment): any {
   const snapshot = synthSnapshot(workflow.project);
   const filtered = Object.keys(snapshot)
     .filter((path) => path.match(workflow.filePath))

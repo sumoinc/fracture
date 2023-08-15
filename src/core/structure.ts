@@ -1,7 +1,7 @@
 import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { SetRequired, ValueOf } from "type-fest";
-import { Service } from "./fracture-service";
+//import { Service } from "./fracture-service";
 import { formatStringByNamingStrategy } from "./naming-strategies/naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
@@ -115,6 +115,7 @@ export class Structure extends Component {
   /**
    * Structure name, based on the naming strategy
    */
+
   public get name() {
     const resourceName = this.operation
       ? this.operation.name
