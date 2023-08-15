@@ -1,14 +1,14 @@
 import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { SetRequired, ValueOf } from "type-fest";
-import { formatStringByNamingStrategy } from "./naming-strategy";
+import { Service } from "./fracture-service";
+import { formatStringByNamingStrategy } from "./naming-strategies/naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 import {
   ResourceAttribute,
   ResourceAttributeGenerator,
 } from "./resource-attribute";
-import { Service } from "./fracture-service";
 
 /******************************************************************************
  * TYPES

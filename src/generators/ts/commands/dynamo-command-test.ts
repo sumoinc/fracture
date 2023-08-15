@@ -1,10 +1,10 @@
 import { join } from "path";
 import { ValueOf } from "type-fest";
 import { AccessPattern } from "../../../core/access-pattern";
-import { formatStringByNamingStrategy } from "../../../core/naming-strategy";
+import { Service } from "../../../core/fracture-service";
+import { formatStringByNamingStrategy } from "../../../core/naming-strategies/naming-strategy";
 import { Operation, OPERATION_SUB_TYPE } from "../../../core/operation";
 import { Resource } from "../../../core/resource";
-import { Service } from "../../../core/fracture-service";
 import { Structure } from "../../../core/structure";
 import { DynaliteSupport } from "../../../dynamodb";
 import { TypeScriptSource } from "../typescript-source";

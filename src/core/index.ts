@@ -5,7 +5,7 @@ export * from "./environment";
 export * from "./fracture-app";
 export * from "./fracture";
 export * from "./index";
-export * from "./naming-strategy";
+export * from "./naming-strategies/naming-strategy";
 export * from "./operation";
 export * from "./organization";
 export * from "./organizational-unit";

@@ -10,7 +10,10 @@ import { AuditStrategy } from "./audit-strategy";
 import { Environment, EnvironmentOptions } from "./environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { Service, ServiceOptions } from "./fracture-service";
-import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
+import {
+  NamingStrategy,
+  NAMING_STRATEGY_TYPE,
+} from "./naming-strategies/naming-strategy";
 import { OPERATION_SUB_TYPE } from "./operation";
 import { Organization, OrganizationOptions } from "./organization";
 import {

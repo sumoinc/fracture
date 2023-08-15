@@ -3,7 +3,7 @@ import { Component } from "projen";
 import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
 import { AccessPattern } from "./access-pattern";
-import { formatStringByNamingStrategy } from "./naming-strategy";
+import { formatStringByNamingStrategy } from "./naming-strategies/naming-strategy";
 import { Operation, OperationDefault, OPERATION_SUB_TYPE } from "./operation";
 import { Resource } from "./resource";
 

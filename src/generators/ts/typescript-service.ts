@@ -1,8 +1,8 @@
 import { join } from "path";
 import { Component } from "projen";
 import { TypeScriptSource } from "./typescript-source";
-import { formatStringByNamingStrategy } from "../../core/naming-strategy";
 import { Service } from "../../core/fracture-service";
+import { formatStringByNamingStrategy } from "../../core/naming-strategies/naming-strategy";
 
 export class TypescriptService extends Component {
   public readonly service: Service;

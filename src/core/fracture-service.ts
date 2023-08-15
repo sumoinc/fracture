@@ -9,7 +9,7 @@ import { Fracture } from "./fracture";
 import {
   NamingStrategy,
   formatStringByNamingStrategy,
-} from "./naming-strategy";
+} from "./naming-strategies/naming-strategy";
 import { Resource, ResourceOptions } from "./resource";
 import { DynaliteSupport } from "../dynamodb";
 import { DynamoGsi } from "../dynamodb/dynamo-gsi";
