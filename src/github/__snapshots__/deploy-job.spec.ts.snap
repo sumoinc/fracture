@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Default - basic deploy job 1`] = `
+Object {
+  "env": Object {
+    "CI": "true",
+  },
+  "permissions": Object {
+    "contents": "write",
+  },
+  "runsOn": Array [
+    "ubuntu-latest",
+  ],
+  "steps": Array [
+    Object {
+      "name": "Deploy",
+      "run": "npx projen deploy",
+    },
+  ],
+}
+`;

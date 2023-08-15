@@ -2,15 +2,18 @@ import { GithubFractureWorkflow } from "./workflow";
 import { Fracture } from "../core";
 import { synthFile } from "../util/test-util";
 
+let fracture: Fracture;
+
+beforeEach(() => {
+  fracture = new Fracture();
+});
+
 /*******************************************************************************
  * DEFAULT WORKFLOWS
  ******************************************************************************/
 
 describe("Default workflow", () => {
   test("no args", () => {
-    const fracture = new Fracture({
-      name: "test-project",
-    });
     const workflow = new GithubFractureWorkflow(fracture, {
       name: "foo",
       branchTriggerPatterns: ["main"],
@@ -22,49 +25,22 @@ describe("Default workflow", () => {
     expect(content).toMatchSnapshot();
     console.log(content);
   });
-  /*
-  test("with TurboRepo", () => {
-    const fracture = new Fracture({
-      name: "test-project",
-      logging: {
-        level: LogLevel.OFF,
-      },
+
+  test("without turborepo", () => {
+    const noTurbo = new Fracture({
       turboRepoEnabled: false,
     });
-    const pipeline = new Pipeline(fracture, {
-      name: "default",
+    const workflow = new GithubFractureWorkflow(noTurbo, {
+      name: "foo",
       branchTriggerPatterns: ["main"],
-    });
-    const workflow = new GithubFractureWorkflow(fracture, {
-      name: "with TurboRepo",
-      pipeline,
+      pathTriggerPatterns: ["src/**/*"],
+      deploy: true,
     });
 
-    const content = synthWorkflow(workflow);
+    const content = synthFile(noTurbo, workflow.filePath);
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
-  test("without TurboRepo", () => {
-    const fracture = new Fracture({
-      name: "test-project",
-      logging: {
-        level: LogLevel.OFF,
-      },
-      turboRepoEnabled: true,
-    });
-    const pipeline = new Pipeline(fracture, {
-      name: "default",
-      branchTriggerPatterns: ["main"],
-    });
-    const workflow = new GithubFractureWorkflow(fracture, {
-      name: "without TurboRepo",
-      pipeline,
-    });
-
-    const content = synthWorkflow(workflow);
-    expect(content).toMatchSnapshot();
-    //console.log(content);
-  });*/
 });
 
 /*******************************************************************************
