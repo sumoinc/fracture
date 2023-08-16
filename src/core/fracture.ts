@@ -85,6 +85,10 @@ export class Fracture extends TypeScriptProject {
    * @default "src"
    */
   public readonly srcDir: string;
+  /**
+   * The default release branch for this project
+   */
+  public readonly defaultReleaseBranch: string;
   // member components
   // public readonly apps: FractureApp[] = [];
   // public readonly services: Service[] = [];
@@ -101,9 +105,11 @@ export class Fracture extends TypeScriptProject {
      * Projen Props
      **************************************************************************/
 
+    const defaultReleaseBranch = options.defaultReleaseBranch ?? "main";
+
     const projenOptions: TypeScriptProjectOptions = {
       name: options.name ?? "fracture",
-      defaultReleaseBranch: "main",
+      defaultReleaseBranch,
       packageManager: NodePackageManager.PNPM,
       pnpmVersion: "8",
       logging: options.logging ?? {
@@ -125,6 +131,7 @@ export class Fracture extends TypeScriptProject {
     this.serviceRoot = options.serviceRoot ?? "services";
     this.appRoot = options.appRoot ?? "apps";
     this.srcDir = options.srcDir ?? "src";
+    this.defaultReleaseBranch = defaultReleaseBranch;
 
     /***************************************************************************
      * TUBOREPO

@@ -7,15 +7,45 @@ import {
   NodeProjectOptions,
 } from "projen/lib/javascript";
 import { Fracture } from "../core";
+import { Netlify, NetlifyOptions } from "../netlify/netlify";
 
 export interface NuxtJsAppOptions extends Partial<NodeProjectOptions> {
   /**
    * Name for the app. This also becomes the directory where the app is created.
    */
   name: string;
+  /**
+   * Should this app be deployed to Netlify?
+   *
+   * @default false
+   */
+  netlify?: boolean;
+  /**
+   * Options for Netlify deployment.
+   *
+   * @default {}
+   */
+  netlifyOptions?: NetlifyOptions;
 }
 
 export class NuxtJsApp extends NodeProject {
+  /**
+   * Name for the app. This also becomes the directory where the app is created.
+   */
+  public readonly name: string;
+  /**
+   * Should this app be deployed to Netlify?
+   *
+   * @default false
+   */
+  public readonly netlify: boolean;
+  /**
+   * Options for Netlify deployment.
+   *
+   * @default {}
+   */
+  public readonly netlifyOptions: NetlifyOptions;
+
   constructor(fracture: Fracture, options: NuxtJsAppOptions) {
     /***************************************************************************
      * Projen Props
@@ -35,6 +65,14 @@ export class NuxtJsApp extends NodeProject {
     };
 
     super(projenOptions);
+
+    /***************************************************************************
+     * PROPS
+     **************************************************************************/
+
+    this.name = options.name;
+    this.netlify = options.netlify ?? false;
+    this.netlifyOptions = options.netlifyOptions ?? {};
 
     /***************************************************************************
      * .gitignore
@@ -153,5 +191,13 @@ export class NuxtJsApp extends NodeProject {
         "README.md": "add public files here",
       },
     });
+
+    /***************************************************************************
+     * CONFIGURE NETLIFY DEPLOYMENT
+     **************************************************************************/
+
+    if (this.netlify) {
+      new Netlify(fracture, options.netlifyOptions ?? { nameBase: this.name });
+    }
   }
 }

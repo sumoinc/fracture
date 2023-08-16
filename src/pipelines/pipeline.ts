@@ -1,7 +1,9 @@
+import { paramCase } from "change-case";
 import { Component } from "projen";
 import { BuildWorkflow } from "projen/lib/build";
 import { GitHub } from "projen/lib/github";
-import { Job, JobPermission } from "projen/lib/github/workflows-model";
+import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
+import { SetRequired } from "type-fest";
 import { Fracture } from "../core/fracture";
 import { TurboRepo } from "../turborepo";
 
@@ -29,7 +31,16 @@ export interface PipelineOptions {
   deploy?: boolean;
 }
 
+export type PipelineJob = SetRequired<Partial<Job>, "name"> & {
+  steps: PipelineStep[];
+};
+export type PipelineStep = SetRequired<Partial<JobStep>, "name">;
+
 export class Pipeline extends Component {
+  /**
+   * If for this pipeline (suitable as filename)
+   */
+  public readonly id: string;
   /**
    * Name for this pipeline.
    */
@@ -54,7 +65,7 @@ export class Pipeline extends Component {
   /**
    * All jobs for this pipeline.
    */
-  public readonly jobs: Job[] = [];
+  public readonly jobs: PipelineJob[] = [];
 
   constructor(fracture: Fracture, options: PipelineOptions) {
     super(fracture);
@@ -64,17 +75,15 @@ export class Pipeline extends Component {
      **************************************************************************/
 
     this.name = options.name;
+    this.id = paramCase(this.name);
     this.branchTriggerPatterns = options.branchTriggerPatterns;
     this.pathTriggerPatterns = options.pathTriggerPatterns ?? [];
     this.deploy = options.deploy ?? false;
   }
 
-  /*
-  addJob(options: JobOptions): Job {
-    const job = new Job(this.project as Fracture, options);
+  addJob(job: PipelineJob): void {
     this.jobs.push(job);
-    return job;
-  }*/
+  }
 
   synthesize(): void {
     const fracture = this.project as Fracture;
@@ -131,23 +140,18 @@ export class Pipeline extends Component {
       });
 
       /*************************************************************************
-       * Deploy
+       * Post build jobs
        ************************************************************************/
 
-      const job: Job = {
-        runsOn: ["ubuntu-latest"],
-        steps: [
-          {
-            name: "foo",
-            run: "bar",
+      this.jobs.forEach((job) => {
+        buildWorkflow.addPostBuildJob(job.name, {
+          runsOn: ["ubuntu-latest"],
+          steps: job.steps,
+          permissions: {
+            contents: JobPermission.READ,
           },
-        ],
-        permissions: {
-          contents: JobPermission.READ,
-        },
-      };
-
-      buildWorkflow.addPostBuildJob("someid", job);
+        });
+      });
     }
   }
 }
