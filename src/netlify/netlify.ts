@@ -17,6 +17,12 @@ export interface NetlifyOptions {
    * @default fracture.defaultReleaseBranch
    */
   productionBranchName?: string;
+  /**
+   * The Netlify siteID for this site/app
+   *
+   * @default '${{ secrets.NETLIFY_SITE_ID }}'
+   */
+  netlifySsiteId?: string;
 }
 
 export class Netlify extends Component {
@@ -33,8 +39,14 @@ export class Netlify extends Component {
    * @default fracture.defaultReleaseBranch
    */
   public readonly productionBranchName: string;
+  /**
+   * The Netlify siteID for this site/app
+   *
+   * @default '${{ secrets.NETLIFY_SITE_ID }}'
+   */
+  public readonly netlifySsiteId: string;
 
-  constructor(fracture: Fracture, options: NetlifyOptions) {
+  constructor(fracture: Fracture, options: NetlifyOptions = {}) {
     super(fracture);
 
     /***************************************************************************
@@ -44,6 +56,8 @@ export class Netlify extends Component {
     this.nameBase = options.nameBase ?? "netlify";
     this.productionBranchName =
       options.productionBranchName ?? fracture.defaultReleaseBranch;
+    this.netlifySsiteId =
+      options.netlifySsiteId ?? "${{ secrets.NETLIFY_SITE_ID }}";
 
     /***************************************************************************
      * Create production deployment pipeline with netlify as the target
@@ -64,7 +78,7 @@ export class Netlify extends Component {
             args: "deploy --dir=.output/public --prod",
           },
           env: {
-            NETLIFY_SITE_ID: "${{ secrets.NETLIFY_SITE_ID }}",
+            NETLIFY_SITE_ID: this.netlifySsiteId,
             NETLIFY_AUTH_TOKEN: "${{ secrets.NETLIFY_AUTH_TOKEN }}",
           },
         },

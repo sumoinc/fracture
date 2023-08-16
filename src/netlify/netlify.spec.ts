@@ -1,17 +1,30 @@
+import { Netlify } from "./netlify";
 import { Fracture } from "../core/fracture";
-import { NuxtJsApp } from "../nuxtjs";
 import { synthFile } from "../util/test-util";
 
 let fracture: Fracture;
-//let app: NuxtJsApp;
 
 beforeEach(() => {
   fracture = new Fracture();
-  /*app = */ new NuxtJsApp(fracture, { name: "test", netlify: true });
 });
 
-test("Smoke test", () => {
-  const content = synthFile(fracture, ".github/workflows/test-deploy-main.yml");
+test("No args", () => {
+  new Netlify(fracture);
+  const content = synthFile(
+    fracture,
+    ".github/workflows/netlify-deploy-main.yml"
+  );
   expect(content).toMatchSnapshot();
-  console.log(content);
+  //console.log(content);
+});
+
+test("With  args", () => {
+  new Netlify(fracture, {
+    nameBase: "foo",
+    productionBranchName: "bar",
+    netlifySsiteId: "baz",
+  });
+  const content = synthFile(fracture, ".github/workflows/foo-deploy-bar.yml");
+  expect(content).toMatchSnapshot();
+  //console.log(content);
 });
