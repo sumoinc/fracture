@@ -6,6 +6,8 @@ import {
 } from "projen/lib/typescript";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { FractureService, FractureServiceOptions } from "./fracture-service";
+import { PnpmWorkspace } from "../pnpm";
+import { VsCodeConfiguration } from "../projen";
 import { TurboRepo, TurboRepoOptions } from "../turborepo/turbo-repo";
 
 export interface FractureOptions extends Partial<TypeScriptProjectOptions> {
@@ -134,6 +136,18 @@ export class Fracture extends TypeScriptProject {
     if (turboRepoEnabled) {
       new TurboRepo(this, turboRepoOptions);
     }
+
+    /***************************************************************************
+     * PNPM - enable workspaces
+     **************************************************************************/
+
+    new PnpmWorkspace(this);
+
+    /***************************************************************************
+     * VS CODE
+     **************************************************************************/
+
+    new VsCodeConfiguration(this);
 
     /***************************************************************************
      *
@@ -274,11 +288,7 @@ export class Fracture extends TypeScriptProject {
     super(mergedOptions);
     this.options = mergedOptions;
 
-    // configure workspace
-    new PnpmWorkspace(this);
 
-    // configure vscode
-    new VsCodeConfiguration(this);
     */
     /***************************************************************************
      * WORKFLOWS

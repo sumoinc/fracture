@@ -1,5 +1,5 @@
-import { Fracture } from "./fracture";
 import { Pipeline } from "./pipeline";
+import { Fracture } from "../core/fracture";
 
 let fracture: Fracture;
 
