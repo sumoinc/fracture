@@ -12,8 +12,8 @@ import {
 import {
   ResourceAttributeGenerator,
   ResourceAttributeType,
-} from "../../core/resource-attribute.ts-disabled";
-import { Resource } from "../../core/resource.ts-disabled";
+} from "../../core/resource-attribute.ts";
+import { Resource } from "../../core/resource.ts";
 
 export class IdentifierFactory extends Component {
   public readonly accessPattern: AccessPattern;

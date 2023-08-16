@@ -7,7 +7,7 @@ import {
   Operation,
   OPERATION_SUB_TYPE,
 } from "../../../core/operation.ts-disabled";
-import { Resource } from "../../../core/resource.ts-disabled";
+import { Resource } from "../../../core/resource.ts";
 import { Structure } from "../../../core/structure.ts-disabled";
 import { DynaliteSupport } from "../../../dynamodb";
 import { TypeScriptSource } from "../typescript-source";

@@ -9,8 +9,8 @@ import {
   OPERATION_SUB_TYPE,
   OPERATION_TYPE,
 } from "../../core/operation.ts-disabled";
-import { ResourceAttributeGenerator } from "../../core/resource-attribute.ts-disabled";
-import { Resource } from "../../core/resource.ts-disabled";
+import { ResourceAttributeGenerator } from "../../core/resource-attribute.ts";
+import { Resource } from "../../core/resource.ts";
 
 export class LookupFactory extends Component {
   public readonly accessPattern: AccessPattern;

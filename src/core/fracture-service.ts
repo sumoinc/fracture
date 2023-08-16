@@ -21,7 +21,7 @@ export interface FractureServiceOptions
   //logging?: LoggerOptions;
   /**
    * Versioned.
-   * @default fracture default
+   * @default false
    */
   //isVersioned?: boolean;
   /**

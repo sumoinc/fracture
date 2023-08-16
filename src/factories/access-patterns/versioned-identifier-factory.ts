@@ -3,8 +3,8 @@ import { OPERATION_SUB_TYPE } from "../../core/operation.ts-disabled";
 import {
   ResourceAttributeGenerator,
   ResourceAttributeType,
-} from "../../core/resource-attribute.ts-disabled";
-import { Resource } from "../../core/resource.ts-disabled";
+} from "../../core/resource-attribute.ts";
+import { Resource } from "../../core/resource.ts";
 
 export class VersionedIdentifierFactory extends IdentifierFactory {
   constructor(resource: Resource) {
