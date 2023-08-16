@@ -89,16 +89,6 @@ export class Fracture extends TypeScriptProject {
    * The default release branch for this project
    */
   public readonly defaultReleaseBranch: string;
-  // member components
-  // public readonly apps: FractureApp[] = [];
-  // public readonly services: Service[] = [];
-  // public readonly organizations: Organization[] = [];
-  // public readonly environments: Environment[] = [];
-  // // public readonly turborepo: TurboRepo;
-  // public readonly workflows: Workflows;
-
-  // // all other options
-  // public readonly options: Required<FractureOptions>;
 
   constructor(options: FractureOptions = {}) {
     /***************************************************************************

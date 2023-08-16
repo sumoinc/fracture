@@ -9,6 +9,9 @@ import { Fracture } from "./fracture";
 
 export interface FractureServiceOptions
   extends Partial<TypeScriptProjectOptions> {
+  /**
+   * A name for the service
+   */
   name: string;
   // srcDir?: string;
   /**
@@ -32,6 +35,10 @@ export interface FractureServiceOptions
 }
 
 export class FractureService extends TypeScriptProject {
+  /**
+   * A name for the service
+   */
+  name: string;
   // member components
   // public readonly resources: Resource[] = [];
   // public readonly dynamoTable: DynamoTable;
@@ -75,6 +82,8 @@ export class FractureService extends TypeScriptProject {
     /***************************************************************************
      * Props
      **************************************************************************/
+
+    this.name = options.name;
   }
 
   /***************************************************************************
