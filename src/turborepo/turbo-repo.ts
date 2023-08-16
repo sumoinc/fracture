@@ -47,6 +47,8 @@ export class TurboRepo extends Component {
     fracture.npmignore!.exclude(".turbo");
     fracture.npmignore!.exclude("turbo.json");
 
+    fracture.addDevDeps("turbo");
+
     /***************************************************************************
      *
      * PROJEN DEFAULTS
@@ -54,7 +56,7 @@ export class TurboRepo extends Component {
      **************************************************************************/
 
     // add eslint to default task so we get nice clean generated files
-    // fracture.defaultTask?.exec(`pnpm turbo eslint`);
+    fracture.defaultTask?.exec(`pnpm turbo eslint`);
 
     /***************************************************************************
      *
@@ -79,7 +81,7 @@ export class TurboRepo extends Component {
 
     // lint before we test to clean up generated files even when tests fail
     // linting happens agani after testing but whatever
-    // this.buildTask.exec(`pnpm turbo eslint`);
+    this.buildTask.exec(`pnpm turbo eslint`);
 
     // run all tests
     this.buildTask.exec(`pnpm turbo test`);

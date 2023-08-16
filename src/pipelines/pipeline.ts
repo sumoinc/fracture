@@ -114,15 +114,6 @@ export class Pipeline extends Component {
         workflowDispatch: {}, // allow manual triggering
       };
 
-      const postBuildSteps = turborepo
-        ? [
-            {
-              name: turborepo.synthTask.name,
-              run: fracture.runTaskCommand(turborepo.synthTask),
-            },
-          ]
-        : [];
-
       const buildWorkflow = new BuildWorkflow(fracture, {
         name: this.name,
         buildTask,
@@ -133,7 +124,7 @@ export class Pipeline extends Component {
         // preBuildSteps: this.renderWorkflowSetup({
         //   mutable: options.mutableBuild ?? true,
         // }),
-        postBuildSteps,
+        // postBuildSteps,
         // runsOn: options.workflowRunsOn,
         workflowTriggers,
         // permissions: workflowPermissions,
