@@ -1,6 +1,6 @@
 import { join } from "path";
 import { Service } from "../../core/fracture-service";
-import { TypeScriptSource } from "../ts/typescript-source";
+import { TypeScriptSource } from "../ts/source";
 
 export class CdkApp extends TypeScriptSource {
   public readonly service: Service;

@@ -136,6 +136,10 @@
       "type": "runtime"
     },
     {
+      "name": "typescript",
+      "type": "runtime"
+    },
+    {
       "name": "uuid",
       "type": "runtime"
     }

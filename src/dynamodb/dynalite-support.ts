@@ -1,7 +1,7 @@
 import { DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi } from "./dynamo-gsi";
 import { Fracture, FractureService } from "../core";
-import { TypeScriptSource } from "../generators/ts/typescript-source";
+import { TypeScriptSource } from "../generators/ts/source";
 
 export const addDynaliteSupport = (service: FractureService) => {
   // add setup to the jest config

@@ -11,5 +11,5 @@ test("Smoke test", () => {
   new FractureService(fracture, { name: "foo" });
   const content = synthFile(fracture, "services/foo/generated/ts/types.ts");
   expect(content).toMatchSnapshot();
-  // console.log(content);
+  console.log(content);
 });

@@ -1,7 +1,19 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { ValueOf } from "type-fest";
 import { DynamoAttribute } from "./dynamo-attribute";
 import { FractureService } from "../core";
+
+export const DynamoGsiType = {
+  /**
+   * The pk/sk GSI
+   */
+  PRIMARY: "PRIMARY",
+  /**
+   * all other GSI
+   */
+  SECONDARY: "SECONDARY",
+} as const;
 
 export interface DynamoGsiOptions {
   /**
@@ -16,6 +28,12 @@ export interface DynamoGsiOptions {
    * SK for the GSI
    */
   sk: DynamoAttribute;
+  /**
+   * Type of GSI
+   *
+   * @default DynamoGsiType.SECONDARY
+   */
+  type?: ValueOf<typeof DynamoGsiType>;
 }
 
 export class DynamoGsi extends Component {
@@ -31,6 +49,12 @@ export class DynamoGsi extends Component {
    * SK for the GSI
    */
   public readonly sk: DynamoAttribute;
+  /**
+   * Type of GSI
+   *
+   * @default DynamoGsiType.SECONDARY
+   */
+  public readonly type?: ValueOf<typeof DynamoGsiType>;
 
   constructor(service: FractureService, options: DynamoGsiOptions) {
     super(service);
@@ -42,5 +66,6 @@ export class DynamoGsi extends Component {
     this.name = paramCase(options.name);
     this.pk = options.pk;
     this.sk = options.sk;
+    this.type = options.type ?? DynamoGsiType.SECONDARY;
   }
 }

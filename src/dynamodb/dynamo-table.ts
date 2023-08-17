@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { AttributeType, DynamoAttribute } from "./dynamo-attribute";
-import { DynamoGsi, DynamoGsiOptions } from "./dynamo-gsi";
+import { DynamoGsi, DynamoGsiOptions, DynamoGsiType } from "./dynamo-gsi";
 import { FractureService } from "../core";
 
 export interface DynamoTableOptions {
@@ -74,6 +74,7 @@ export class DynamoTable extends Component {
       name: "key",
       pk: this.pk,
       sk: this.sk,
+      type: DynamoGsiType.PRIMARY,
     });
 
     /***************************************************************************

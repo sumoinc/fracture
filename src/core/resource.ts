@@ -2,9 +2,13 @@ import { paramCase } from "change-case";
 import { Component } from "projen";
 import { FractureService } from "./fracture-service";
 import {
+  ManagementType,
   ResourceAttribute,
+  ResourceAttributeGenerator,
   ResourceAttributeOptions,
+  VisabilityType,
 } from "./resource-attribute";
+import { Structure, StructureType } from "./structure";
 
 export interface ResourceOptions {
   /**
@@ -46,9 +50,25 @@ export class Resource extends Component {
    */
   public comments: string[];
   /**
+   * Primary key for tis resource.
+   */
+  public pk: ResourceAttribute;
+  /**
+   * Sort key for tis resource.
+   */
+  public sk: ResourceAttribute;
+  /**
+   * Lookup key for tis resource.
+   */
+  public idx: ResourceAttribute;
+  /**
    * All attributes in this resource.
    */
   public attributes: ResourceAttribute[] = [];
+  /**
+   * Full data strcuture
+   */
+  public dataStructure: Structure;
 
   constructor(service: FractureService, options: ResourceOptions) {
     super(service);
@@ -67,19 +87,90 @@ export class Resource extends Component {
     this.comments = options.comments ?? [];
 
     /***************************************************************************
-     * Typescript
+     * Initial data structure
      **************************************************************************/
 
-    //new TypeScriptSource(fracture, "foo.ts").comments(["file"]);
+    this.dataStructure = new Structure(service, {
+      name: `${this.name}-data`,
+      type: StructureType.DATA,
+    });
+
+    /***************************************************************************
+     * Primary Access Pattern
+     **************************************************************************/
+
+    this.pk = this.addAttribute({
+      name: "id",
+      shortName: service.dynamoTable.pk.name,
+      comments: [`Identifier for this record.`],
+      management: ManagementType.SYSTEM_MANAGED,
+      visibility: VisabilityType.USER_VISIBLE,
+    });
+    this.sk = this.addAttribute({
+      name: service.dynamoTable.sk.name,
+      comments: [`Sort Key for this record.`],
+      management: ManagementType.SYSTEM_MANAGED,
+      visibility: VisabilityType.HIDDEN,
+      generator: ResourceAttributeGenerator.COMPOSITION,
+    });
+
+    /***************************************************************************
+     * Lookup Access Pattern
+     **************************************************************************/
+
+    this.idx = this.addAttribute({
+      name: service.dynamoTable.idx.name,
+      comments: [`Lookup value for this record.`],
+      management: ManagementType.SYSTEM_MANAGED,
+      visibility: VisabilityType.HIDDEN,
+    });
+
+    /***************************************************************************
+     * Type Attribute
+     **************************************************************************/
+
+    const type = this.addAttribute({
+      name: "type",
+      shortName: "_t",
+      comments: [`Type of record.`],
+      management: ManagementType.SYSTEM_MANAGED,
+      visibility: VisabilityType.USER_VISIBLE,
+      generator: ResourceAttributeGenerator.TYPE,
+    });
+    this.sk.addCompositionSource(type);
+
+    /***************************************************************************
+     * Version Attribute
+     **************************************************************************/
+
+    const version = this.addAttribute({
+      name: "version",
+      shortName: "_v",
+      comments: [`Verion for record.`],
+      management: ManagementType.SYSTEM_MANAGED,
+      visibility: VisabilityType.USER_VISIBLE,
+      generator: ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP,
+    });
+    this.sk.addCompositionSource(version);
 
     return this;
   }
 
   public addAttribute(options: ResourceAttributeOptions) {
     const service = this.project as FractureService;
-    const resource = new ResourceAttribute(service, options);
-    this.attributes.push(resource);
-    return resource;
+
+    // build resource attribute
+    const attribute = new ResourceAttribute(service, options);
+    this.attributes.push(attribute);
+
+    // add resource attribute to the data structure
+    this.dataStructure.addAttribute({
+      name: attribute.name,
+      comments: attribute.comments,
+      required: true,
+    });
+
+    return attribute;
   }
 
   /***************************************************************************

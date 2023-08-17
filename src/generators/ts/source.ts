@@ -1,7 +1,7 @@
 import { dirname, join, relative, sep } from "path";
 import { SourceCode, SourceCodeOptions } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
-import { TypescriptStrategy } from "./typescript-strategy";
+import { TypescriptStrategy } from "./strategy";
 import { FractureService } from "../../core";
 
 export interface TypeScriptSourceOptions extends SourceCodeOptions {}

@@ -1,5 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { ValueOf } from "type-fest";
 import { FractureService } from "./fracture-service";
 
 /**
@@ -114,23 +115,45 @@ import { FractureService } from "./fracture-service";
 //   SUM: "Sum",
 // } as const;
 
-// export const ResourceAttributeGenerator = {
-//   AUTO_INCREMENT: "Increment",
-//   GUID: "Guid",
-//   CURRENT_DATE_TIME_STAMP: "CurrentDateTimeStamp",
-//   TYPE: "Type",
-//   NONE: "None",
-//   VERSION_DATE_TIME_STAMP: "VersionDateTimeStamp",
-//   /**
-//    * Composed of other attributes
-//    */
-//   COMPOSITION: "Composition",
-// } as const;
+export const ResourceAttributeGenerator = {
+  AUTO_INCREMENT: "Increment",
+  GUID: "Guid",
+  CURRENT_DATE_TIME_STAMP: "CurrentDateTimeStamp",
+  TYPE: "Type",
+  NONE: "None",
+  VERSION_DATE_TIME_STAMP: "VersionDateTimeStamp",
+  /**
+   * Composed of other attributes
+   */
+  COMPOSITION: "Composition",
+} as const;
 
 // export const ValidationRule = {
 //   REQUIRED: "Required",
 //   TYPE: "Type",
 // } as const;
+
+export const ManagementType = {
+  /**
+   * USers are intended to edit this value.
+   */
+  USER_MANAGED: "USER_MANAGED",
+  /**
+   * This value is intended to be automatically managed by the system.
+   */
+  SYSTEM_MANAGED: "SYSTEM_MANAGED",
+} as const;
+
+export const VisabilityType = {
+  /**
+   * Value can appear in API input / output.
+   */
+  USER_VISIBLE: "USER_VISIBLE",
+  /**
+   * System value, not shown or visible to user.
+   */
+  HIDDEN: "HIDDEN",
+} as const;
 
 export type ResourceAttributeOptions = {
   /**
@@ -153,6 +176,30 @@ export type ResourceAttributeOptions = {
    */
   comments?: string[];
   /**
+   * Is this managed by the end user or the system?
+   *
+   * @default ManagementType.USER_MANAGED
+   */
+  management?: ValueOf<typeof ManagementType>;
+  /**
+   * Is this value visible to the end user?
+   *
+   * @default VisabilityType.USER_VISIBLE
+   */
+  visibility?: ValueOf<typeof VisabilityType>;
+  /**
+   * The separator to use when composing this attribute from other attributes.
+   *
+   * @default: '#'
+   */
+  compositionsSeperator?: string;
+  /**
+   * The generator to use to build this attribute.
+   *
+   * @default ResourceAttributeGenerator.NONE
+   */
+  generator?: ValueOf<typeof ResourceAttributeGenerator>;
+  /**
    * The type for this attribute.
    * @default ResourceAttributeType.STRING
    */
@@ -174,11 +221,7 @@ export type ResourceAttributeOptions = {
    * @default false
    */
   // isSystem?: boolean;
-  /**
-   * The generator to use to build this attribute.
-   * @default ResourceAttributeGenerator.NONE
-   */
-  // generator?: ValueOf<typeof ResourceAttributeGenerator>;
+
   /**
    * What operations do we generate this attribute on?
    * @default false
@@ -223,11 +266,6 @@ export type ResourceAttributeOptions = {
    * Position this attribute should occupy when sorted.
    */
   // sortPosition?: number;
-  /**
-   * The separator to use when composing this attribute from other attributes.
-   * @default: '#'
-   */
-  // compositionSeperator?: string;
 };
 
 export class ResourceAttribute extends Component {
@@ -250,6 +288,37 @@ export class ResourceAttribute extends Component {
    * @default []
    */
   public comments: string[];
+  /**
+   * Is this managed by the end user or the system?
+   *
+   * @default ManagementType.USER_MANAGED
+   */
+  public readonly management: ValueOf<typeof ManagementType>;
+  /**
+   * Is this value visible to the end user?
+   *
+   * @default VisabilityType.USER_VISIBLE
+   */
+  public readonly visibility: ValueOf<typeof VisabilityType>;
+  /**
+   * Is this attribute value composed of other attribute values?
+   * If so they are stored in this array.
+   *
+   * @default[]
+   */
+  public readonly compositionSources: ResourceAttribute[] = [];
+  /**
+   * The separator to use when composing this attribute from other attributes.
+   *
+   * @default: '#'
+   */
+  public readonly compositionsSeperator: string;
+  /**
+   * The generator to use to build this attribute.
+   *
+   * @default ResourceAttributeGenerator.NONE
+   */
+  public readonly generator: ValueOf<typeof ResourceAttributeGenerator>;
 
   constructor(service: FractureService, options: ResourceAttributeOptions) {
     super(service);
@@ -263,8 +332,24 @@ export class ResourceAttribute extends Component {
       ? paramCase(options.shortName)
       : this.name;
     this.comments = options.comments ?? [];
+    this.management = options.management ?? ManagementType.USER_MANAGED;
+    this.visibility = options.visibility ?? VisabilityType.USER_VISIBLE;
+    this.compositionsSeperator = options.compositionsSeperator ?? "#";
+    this.generator = options.generator ?? ResourceAttributeGenerator.NONE;
 
-    /***************************************************************************
+    return this;
+  }
+
+  public addCompositionSource(a: ResourceAttribute) {
+    if (this.generator !== ResourceAttributeGenerator.COMPOSITION) {
+      throw new Error(
+        "Cannot add composition source to non-composed attribute."
+      );
+    }
+    this.compositionSources.push(a);
+  }
+
+  /***************************************************************************
      *
      * DEFAULT OPTIONS
      *
@@ -275,7 +360,7 @@ export class ResourceAttribute extends Component {
 
     **************************************************************************/
 
-    /*s
+  /*s
     const defaultOptions: Partial<ResourceAttributeOptions> = {
       comments: [`A ${options.name}.`],
       type: ResourceAttributeType.STRING,
@@ -292,56 +377,53 @@ export class ResourceAttribute extends Component {
       deleteValidations: [],
       importValidations: [],
       sortPosition: resource.attributes.length,
-      compositionSeperator: resource.options.compositionSeperator,
+      compositionsSeperator: resource.options.compositionsSeperator,
     };
     */
 
-    /***************************************************************************
-     *
-     * INIT RESOURCE
-     *
-     **************************************************************************/
+  /***************************************************************************
+   *
+   * INIT RESOURCE
+   *
+   **************************************************************************/
 
-    // if it's not generated, we need to validate type
-    // if (!this.isGenerated) {
-    //   this.options.createValidations.push(ValidationRule.TYPE);
-    //   this.options.readValidations.push(ValidationRule.TYPE);
-    //   this.options.updateValidations.push(ValidationRule.TYPE);
-    //   this.options.deleteValidations.push(ValidationRule.TYPE);
-    //   this.options.importValidations.push(ValidationRule.TYPE);
-    // }
+  // if it's not generated, we need to validate type
+  // if (!this.isGenerated) {
+  //   this.options.createValidations.push(ValidationRule.TYPE);
+  //   this.options.readValidations.push(ValidationRule.TYPE);
+  //   this.options.updateValidations.push(ValidationRule.TYPE);
+  //   this.options.deleteValidations.push(ValidationRule.TYPE);
+  //   this.options.importValidations.push(ValidationRule.TYPE);
+  // }
 
-    // // if it's required, we need to validate as resuired
-    // if (this.options.isRequired) {
-    //   this.options.createValidations.unshift(ValidationRule.REQUIRED);
-    //   this.options.readValidations.unshift(ValidationRule.REQUIRED);
-    //   this.options.updateValidations.unshift(ValidationRule.REQUIRED);
-    //   this.options.deleteValidations.unshift(ValidationRule.REQUIRED);
-    //   this.options.importValidations.unshift(ValidationRule.REQUIRED);
-    // }
+  // // if it's required, we need to validate as resuired
+  // if (this.options.isRequired) {
+  //   this.options.createValidations.unshift(ValidationRule.REQUIRED);
+  //   this.options.readValidations.unshift(ValidationRule.REQUIRED);
+  //   this.options.updateValidations.unshift(ValidationRule.REQUIRED);
+  //   this.options.deleteValidations.unshift(ValidationRule.REQUIRED);
+  //   this.options.importValidations.unshift(ValidationRule.REQUIRED);
+  // }
 
-    // // decorate comments as needed type
-    // if (this.options.type === ResourceAttributeType.GUID) {
-    //   this.options.comments.push(`@type A GUID string.`);
-    // }
+  // // decorate comments as needed type
+  // if (this.options.type === ResourceAttributeType.GUID) {
+  //   this.options.comments.push(`@type A GUID string.`);
+  // }
 
-    // it's generated
-    // if (this.isGenerated) {
-    //   this.options.comments.push(
-    //     `@readonly This attribute is managed automatically by the system.`
-    //   );
-    // }
+  // it's generated
+  // if (this.isGenerated) {
+  //   this.options.comments.push(
+  //     `@readonly This attribute is managed automatically by the system.`
+  //   );
+  // }
 
-    /***************************************************************************
-     *
-     * GENERATORS
-     *
-     **************************************************************************/
+  /***************************************************************************
+   *
+   * GENERATORS
+   *
+   **************************************************************************/
 
-    // this.ts = new TypescriptResourceAttribute(this);
-
-    return this;
-  }
+  // this.ts = new TypescriptResourceAttribute(this);
 
   /*****************************************************************************
    *
@@ -390,8 +472,8 @@ export class ResourceAttribute extends Component {
   //   return this.options.outputOn;
   // }
 
-  // public get compositionSeperator() {
-  //   return this.options.compositionSeperator;
+  // public get compositionsSeperator() {
+  //   return this.options.compositionsSeperator;
   // }
 
   // /*****************************************************************************
@@ -673,7 +755,7 @@ export class ResourceAttribute extends Component {
   //             .map((s) => {
   //               return `${s.shortName}.toLowerCase()`;
   //             })
-  //             .join(` + "${this.compositionSeperator}" + `);
+  //             .join(` + "${this.compositionsSeperator}" + `);
   //     default:
   //       throw new Error(`Unknown generator: ${generator}`);
   //   }

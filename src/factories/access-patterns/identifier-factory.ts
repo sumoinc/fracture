@@ -3,7 +3,7 @@ import {
   AccessPattern,
   AccessPatternOptions,
   ACCESS_PATTERN_TYPE,
-} from "../../core/access-pattern.ts-disabled";
+} from "../../core/access-pattern.ts";
 import {
   Operation,
   OPERATION_SUB_TYPE,

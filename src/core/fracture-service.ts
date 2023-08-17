@@ -8,7 +8,7 @@ import {
 import { Fracture } from "./fracture";
 import { Resource, ResourceOptions } from "./resource";
 import { DynamoTable } from "../dynamodb";
-import { TypescriptServiceTypes } from "../generators/ts/typescript-service-types";
+import * as ts from "../generators/ts";
 
 export interface FractureServiceOptions
   extends Partial<TypeScriptProjectOptions> {
@@ -94,7 +94,7 @@ export class FractureService extends TypeScriptProject {
 
     const typesFile = join("generated", "ts", "types.ts");
 
-    new TypescriptServiceTypes(this, typesFile, {
+    new ts.TypescriptServiceTypes(this, typesFile, {
       service: this,
     });
   }
