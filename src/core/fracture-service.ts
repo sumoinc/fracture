@@ -94,30 +94,6 @@ export class FractureService extends TypeScriptProject {
     return resource;
   }
 
-  /***************************************************************************
-   *
-   * DEFAULT OPTIONS
-   *
-   * These are the options that will be used through all code generation
-   * unless explicitly overridden.
-   *
-   **************************************************************************/
-
-  //   // ensure name is param-cased
-  //   const forcedOptions: Partial<ServiceOptions> = {
-  //     name: paramCase(options.name),
-  //   };
-
-  //   // all other options
-  //   const mergedOptions = deepMerge([
-  //     { ...fracture.options },
-  //     options,
-  //     forcedOptions,
-  //   ]) as Required<ServiceOptions>;
-
-  //   this.options = mergedOptions;
-  //   this.fracture = fracture;
-
   //   /***************************************************************************
   //    *
   //    * CREATE PACKAGE SUB-PROJECT
