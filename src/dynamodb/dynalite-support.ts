@@ -1,6 +1,6 @@
+import { DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi } from "./dynamo-gsi";
 import { Fracture, FractureService } from "../core";
-import { ResourceAttribute } from "../core/resource-attribute";
 import { TypeScriptSource } from "../generators/ts/typescript-source";
 
 export const addDynaliteSupport = (service: FractureService) => {
@@ -43,7 +43,7 @@ export class DynaliteConfig extends TypeScriptSource {
         acc.push(g.sk);
       }
       return acc;
-    }, [] as ResourceAttribute[]);
+    }, [] as DynamoAttribute[]);
 
     const config = {
       tables: [
@@ -60,7 +60,7 @@ export class DynaliteConfig extends TypeScriptSource {
             },
           ],
           AttributeDefinitions: allAttributes.map(
-            (attribute: ResourceAttribute) => {
+            (attribute: DynamoAttribute) => {
               return {
                 AttributeName: attribute.name,
                 AttributeType: "S",

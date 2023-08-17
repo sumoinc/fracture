@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { DynamoAttribute } from "./dynamo-attribute";
 import { FractureService } from "../core";
-import { ResourceAttribute } from "../core/resource-attribute";
 
 export interface DynamoGsiOptions {
   /**
@@ -11,12 +11,11 @@ export interface DynamoGsiOptions {
   /**
    * PK for the GSI
    */
-  pk: ResourceAttribute;
+  pk: DynamoAttribute;
   /**
    * SK for the GSI
    */
-  sk: ResourceAttribute;
-  //type?: ValueOf<typeof DYNAMO_GSI_TYPE>;
+  sk: DynamoAttribute;
 }
 
 export class DynamoGsi extends Component {
@@ -27,11 +26,11 @@ export class DynamoGsi extends Component {
   /**
    * PK for the GSI
    */
-  public readonly pk: ResourceAttribute;
+  public readonly pk: DynamoAttribute;
   /**
    * SK for the GSI
    */
-  public readonly sk: ResourceAttribute;
+  public readonly sk: DynamoAttribute;
 
   constructor(service: FractureService, options: DynamoGsiOptions) {
     super(service);

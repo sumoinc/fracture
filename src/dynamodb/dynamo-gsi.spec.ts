@@ -1,6 +1,6 @@
+import { DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi } from "./dynamo-gsi";
 import { Fracture, FractureService } from "../core";
-import { ResourceAttribute } from "../core/resource-attribute";
 
 let service: FractureService;
 
@@ -10,8 +10,8 @@ beforeEach(() => {
 });
 
 test("Smoke test", () => {
-  const pk = new ResourceAttribute(service, { name: "pk" });
-  const sk = new ResourceAttribute(service, { name: "sk" });
+  const pk = new DynamoAttribute(service, { name: "pk" });
+  const sk = new DynamoAttribute(service, { name: "sk" });
   const gsi = new DynamoGsi(service, { name: "foo", pk, sk });
   expect(gsi).toBeTruthy();
 });

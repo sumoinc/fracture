@@ -1,8 +1,8 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { AttributeType, DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi, DynamoGsiOptions } from "./dynamo-gsi";
 import { FractureService } from "../core";
-import { ResourceAttribute } from "../core/resource-attribute";
 
 export interface DynamoTableOptions {
   /**
@@ -34,9 +34,9 @@ export class DynamoTable extends Component {
    * Name for the table.
    */
   public readonly name: string;
-  public readonly pk: ResourceAttribute;
-  public readonly sk: ResourceAttribute;
-  public readonly idx: ResourceAttribute;
+  public readonly pk: DynamoAttribute;
+  public readonly sk: DynamoAttribute;
+  public readonly idx: DynamoAttribute;
   public readonly keyGsi: DynamoGsi;
   public readonly lookupGsi: DynamoGsi;
   public readonly gsi: DynamoGsi[] = [];
@@ -52,9 +52,17 @@ export class DynamoTable extends Component {
     const pkName = options.pkName ?? "pk";
     const skName = options.skName ?? "sk";
     const lookupName = options.idxName ?? "idx";
-    this.pk = new ResourceAttribute(service, { name: pkName });
-    this.sk = new ResourceAttribute(service, { name: skName });
-    this.idx = new ResourceAttribute(service, {
+    this.pk = new DynamoAttribute(service, {
+      name: pkName,
+      attributeType: AttributeType.STRING,
+      keyType: "HASH",
+    });
+    this.sk = new DynamoAttribute(service, {
+      name: skName,
+      attributeType: AttributeType.STRING,
+      keyType: "RANGE",
+    });
+    this.idx = new DynamoAttribute(service, {
       name: lookupName,
     });
 
