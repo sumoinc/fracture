@@ -27,30 +27,6 @@ export class TypescriptServiceTypes extends TypeScriptSource {
      **************************************************************************/
 
     this.service = options.service;
-
-    /***************************************************************************
-     *
-     * DYNAMODB COMMANDS PACKAGE FILE
-     *
-     * We create this package.json file to make sure cruft and extra packages
-     * from lower package files aren't packaged up with the commands.
-     *
-     **************************************************************************/
-
-    /* comment out for now, some dependancies need to be managed here.
-    new JsonFile(this.project, join(this.dynamoCommandDir, "package.json"), {
-      obj: {
-        name: `${this.service.name}-service-dynamodb-commands`,
-        version: "0.0.1",
-        private: true,
-        dependencies: {},
-      },
-      newline: true,
-      committed: true,
-    });
-    */
-
-    // CDK app componants
   }
 
   synthesize(): void {
