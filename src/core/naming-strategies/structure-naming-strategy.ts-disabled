@@ -4,7 +4,7 @@ import { ValueOf } from "type-fest";
 import {
   TypescriptNamingStrategy,
   TypescriptNamingStrategyOptions,
-} from "./typescript-naming-strategy";
+} from "../../generators/ts/typescript-strategy";
 import { Fracture } from "../fracture";
 import { OPERATION_SUB_TYPE } from "../operation.ts-disabled";
 import { STRUCTURE_TYPE } from "../structure.ts-disabled";

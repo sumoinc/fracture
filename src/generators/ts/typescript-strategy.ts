@@ -1,10 +1,10 @@
 import { camelCase, paramCase, pascalCase } from "change-case";
 import { Component } from "projen";
 import { ValueOf } from "type-fest";
-import { NAMING_STRATEGY_TYPE } from "./naming-strategy";
-import { Fracture } from "../fracture";
+import { Fracture } from "../../core/fracture";
+import { NAMING_STRATEGY_TYPE } from "../../core/naming-strategies/naming-strategy";
 
-export type TypescriptNamingStrategyOptions = {
+export type TypescriptStrategyOptions = {
   attributeName?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   className?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   enumName?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
@@ -14,7 +14,8 @@ export type TypescriptNamingStrategyOptions = {
   interfaceName?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   typeName?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
 };
-export class TypescriptNamingStrategy extends Component {
+
+export class TypescriptStrategy extends Component {
   public readonly attributeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   public readonly className: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   public readonly enumName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
@@ -24,10 +25,7 @@ export class TypescriptNamingStrategy extends Component {
   public readonly interfaceName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   public readonly typeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
 
-  constructor(
-    fracture: Fracture,
-    options: TypescriptNamingStrategyOptions = {}
-  ) {
+  constructor(fracture: Fracture, options: TypescriptStrategyOptions = {}) {
     super(fracture);
 
     /***************************************************************************
@@ -46,12 +44,41 @@ export class TypescriptNamingStrategy extends Component {
       options.interfaceName ?? NAMING_STRATEGY_TYPE.PASCAL_CASE;
     this.typeName = options.typeName ?? NAMING_STRATEGY_TYPE.PASCAL_CASE;
   }
+
+  public formatAttributeName(s: string) {
+    return format(s, this.attributeName);
+  }
+
+  public formatClassName(s: string) {
+    return format(s, this.className);
+  }
+
+  public formatEnumName(s: string) {
+    return format(s, this.enumName);
+  }
+
+  public formatFileName(s: string) {
+    return format(s, this.fileName);
+  }
+
+  public formatFunctionName(s: string) {
+    return format(s, this.functionName);
+  }
+
+  public formatFunctionParameterName(s: string) {
+    return format(s, this.functionParameterName);
+  }
+
+  public formatInterfaceName(s: string) {
+    return format(s, this.interfaceName);
+  }
+
+  public formatTypeName(s: string) {
+    return format(s, this.typeName);
+  }
 }
 
-export const formatStringByNamingStrategy = (
-  s: string,
-  ns: ValueOf<typeof NAMING_STRATEGY_TYPE>
-) => {
+const format = (s: string, ns: ValueOf<typeof NAMING_STRATEGY_TYPE>) => {
   switch (ns) {
     case NAMING_STRATEGY_TYPE.CAMEL_CASE:
       return camelCase(s);

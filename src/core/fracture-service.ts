@@ -6,6 +6,8 @@ import {
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
 import { Fracture } from "./fracture";
+import { Resource, ResourceOptions } from "./resource";
+import { TypescriptServiceTypes } from "../generators/ts/typescript-service-types";
 
 export interface FractureServiceOptions
   extends Partial<TypeScriptProjectOptions> {
@@ -36,24 +38,13 @@ export interface FractureServiceOptions
 
 export class FractureService extends TypeScriptProject {
   /**
-   * A name for the service
+   * A name for the service.
    */
-  name: string;
-  // member components
-  // public readonly resources: Resource[] = [];
-  // public readonly dynamoTable: DynamoTable;
-  // public readonly dynaliteSupport: DynaliteSupport;
-  // public readonly project: TypeScriptProject;
-  // // parent
-  // public readonly fracture: Fracture;
-  // // all other options
-  // public readonly options: Required<ServiceOptions>;
-  // // generators
-  // //public readonly ts: TypescriptService;
-
-  // // output files / generators
-  // public readonly tsTypes: TypescriptTypes;
-  // public readonly cdkApp: CdkApp;
+  public readonly name: string;
+  /**
+   * All resourcers in this service.
+   */
+  public resources: Resource[] = [];
 
   constructor(fracture: Fracture, options: FractureServiceOptions) {
     /***************************************************************************
@@ -84,6 +75,23 @@ export class FractureService extends TypeScriptProject {
      **************************************************************************/
 
     this.name = options.name;
+
+    /***************************************************************************
+     * Typescript Generators
+     **************************************************************************/
+
+    const typesFile = join(outdir, "generated", "ts", "types.ts");
+
+    new TypescriptServiceTypes(fracture, typesFile, {
+      service: this,
+    });
+  }
+
+  public addResource(options: ResourceOptions) {
+    const fracture = this.parent as Fracture;
+    const resource = new Resource(fracture, options);
+    this.resources.push(resource);
+    return resource;
   }
 
   /***************************************************************************

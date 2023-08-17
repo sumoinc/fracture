@@ -1,6 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { Fracture } from "./fracture";
+import { TypeScriptSource } from "../generators";
 
 export interface ResourceOptions {
   /**
@@ -59,71 +60,77 @@ export class Resource extends Component {
     this.comments = options.comments ?? [];
 
     /***************************************************************************
-     *
-     * ACCESS PATTERNS
-     *
-     * Add verioned or non-versioned identifier
-     *
+     * Typescript
      **************************************************************************/
 
-    // if (this.isVersioned) {
-    //   new VersionedIdentifierFactory(this);
-    // } else {
-    //   new IdentifierFactory(this);
-    // }
-
-    /***************************************************************************1`
-     *
-     * RESOURCE ATTRIBUTES
-     *
-     * Add some default attributes based on the resource's options.
-     *
-     **************************************************************************/
-
-    /**
-     * Add an (optional) Audit Strategies
-     */
-
-    // if (this.auditStrategy.create.dateAttribute) {
-    //   this.addResourceAttribute(this.auditStrategy.create.dateAttribute);
-    // }
-    // if (this.auditStrategy.create.userAttribute) {
-    //   this.addResourceAttribute(this.auditStrategy.create.userAttribute);
-    // }
-    // if (this.auditStrategy.update.dateAttribute) {
-    //   this.addResourceAttribute(this.auditStrategy.update.dateAttribute);
-    // }
-    // if (this.auditStrategy.update.userAttribute) {
-    //   this.addResourceAttribute(this.auditStrategy.update.userAttribute);
-    // }
-    // if (this.auditStrategy.delete.dateAttribute) {
-    //   this.addResourceAttribute(this.auditStrategy.delete.dateAttribute);
-    // }
-    // if (this.auditStrategy.delete.userAttribute) {
-    //   this.addResourceAttribute(this.auditStrategy.delete.userAttribute);
-    // }
-
-    /***************************************************************************
-     *
-     * DATA STRUCTURES
-     *
-     **************************************************************************/
-
-    // this.dataStructure = new Structure(this, { type: STRUCTURE_TYPE.DATA });
-    // this.transientStructure = new Structure(this, {
-    //   type: STRUCTURE_TYPE.TRANSIENT,
-    // });
-
-    /***************************************************************************
-     *
-     * GENERATORS
-     *
-     **************************************************************************/
-
-    // this.ts = new TypescriptResource(this);
+    new TypeScriptSource(fracture, "foo.ts").comments(["file"]);
 
     return this;
   }
+
+  /***************************************************************************
+   *
+   * ACCESS PATTERNS
+   *
+   * Add verioned or non-versioned identifier
+   *
+   **************************************************************************/
+
+  // if (this.isVersioned) {
+  //   new VersionedIdentifierFactory(this);
+  // } else {
+  //   new IdentifierFactory(this);
+  // }
+
+  /***************************************************************************1`
+   *
+   * RESOURCE ATTRIBUTES
+   *
+   * Add some default attributes based on the resource's options.
+   *
+   **************************************************************************/
+
+  /**
+   * Add an (optional) Audit Strategies
+   */
+
+  // if (this.auditStrategy.create.dateAttribute) {
+  //   this.addResourceAttribute(this.auditStrategy.create.dateAttribute);
+  // }
+  // if (this.auditStrategy.create.userAttribute) {
+  //   this.addResourceAttribute(this.auditStrategy.create.userAttribute);
+  // }
+  // if (this.auditStrategy.update.dateAttribute) {
+  //   this.addResourceAttribute(this.auditStrategy.update.dateAttribute);
+  // }
+  // if (this.auditStrategy.update.userAttribute) {
+  //   this.addResourceAttribute(this.auditStrategy.update.userAttribute);
+  // }
+  // if (this.auditStrategy.delete.dateAttribute) {
+  //   this.addResourceAttribute(this.auditStrategy.delete.dateAttribute);
+  // }
+  // if (this.auditStrategy.delete.userAttribute) {
+  //   this.addResourceAttribute(this.auditStrategy.delete.userAttribute);
+  // }
+
+  /***************************************************************************
+   *
+   * DATA STRUCTURES
+   *
+   **************************************************************************/
+
+  // this.dataStructure = new Structure(this, { type: STRUCTURE_TYPE.DATA });
+  // this.transientStructure = new Structure(this, {
+  //   type: STRUCTURE_TYPE.TRANSIENT,
+  // });
+
+  /***************************************************************************
+   *
+   * GENERATORS
+   *
+   **************************************************************************/
+
+  // this.ts = new TypescriptResource(this);
 
   /**
    * Adds an attribute

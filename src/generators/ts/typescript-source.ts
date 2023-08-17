@@ -1,6 +1,8 @@
 import { dirname, join, relative, sep } from "path";
-import { Component, SourceCode, SourceCodeOptions } from "projen";
+import { SourceCode, SourceCodeOptions } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
+import { TypescriptStrategy } from "./typescript-strategy";
+import { Fracture } from "../../core";
 
 export interface TypeScriptSourceOptions extends SourceCodeOptions {}
 
@@ -9,28 +11,39 @@ export interface TypeScriptSourceOptions extends SourceCodeOptions {}
  * projen.
  */
 export class TypeScriptSource extends SourceCode {
+  /**
+   * full filepathfor this file.
+   */
+  public readonly filePath: string;
+  /**
+   * fFilename, without path.
+   */
+  public readonly fileName: string;
+  /**
+   * The naming strategy to use for this file.
+   */
+  public readonly strategy: TypescriptStrategy;
+
   constructor(
-    fractureComponent: Component,
-    public readonly filePath: string,
+    fracture: Fracture,
+    filePath: string,
     options?: TypeScriptSourceOptions
   ) {
-    // make the file editable so that prettier can format it
-    const defaultOptions = {
+    super(fracture, filePath, {
+      // make the file editable so that prettier can format it
       readonly: false,
-    };
-
-    super(fractureComponent.project, filePath, {
-      ...defaultOptions,
       ...options,
     });
 
-    this.project.logger.info(`TS:INIT Source File: "${this.fileName}"`);
+    /***************************************************************************
+     * Props
+     **************************************************************************/
+
+    this.filePath = filePath;
+    this.fileName = this.filePath.split(sep).pop() as string;
+    this.strategy = new TypescriptStrategy(fracture);
 
     return this;
-  }
-
-  public get fileName(): string {
-    return this.filePath.split(sep).pop() as string;
   }
 
   /**

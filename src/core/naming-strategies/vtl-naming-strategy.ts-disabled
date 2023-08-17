@@ -1,7 +1,7 @@
 import { camelCase, paramCase, pascalCase } from "change-case";
 import { Component } from "projen";
 import { ValueOf } from "type-fest";
-import { NAMING_STRATEGY_TYPE } from "./naming-strategy";
+import { NAMING_STRATEGY_TYPE } from "./naming-strategy.ts-disabled";
 import { Fracture } from "../fracture";
 
 export type VtlNamingStrategyOptions = {
