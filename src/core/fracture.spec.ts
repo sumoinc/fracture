@@ -13,6 +13,12 @@ test("Smoke test", () => {
 
 describe("validate generated project files", () => {
   test("Detect new files", () => {
+    // make it just a little bit complicated
+    const service = fracture.addService({ name: "test-service" });
+    const resource = service.addResource({ name: "test-resource" });
+    resource.addAttribute({ name: "test-attribute" });
+
+    // snapshot all files.
     const content = synthFiles(fracture, "");
     const fileList = Object.keys(content);
     expect(fileList).toMatchSnapshot();
