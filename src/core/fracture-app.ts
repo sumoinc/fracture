@@ -47,6 +47,7 @@ export class FractureApp extends TypeScriptProject {
         tsconfigPath: "./**/tsconfig.dev.json",
       },
       licensed: false,
+      projenrcTs: true,
     };
 
     super(projenOptions);

@@ -27,8 +27,6 @@ jobs:
           repository: \${{ github.event.pull_request.head.repo.full_name }}
       - name: turbo:build
         run: npx projen turbo:build
-      - name: turbo:synth
-        run: npx projen turbo:synth
       - name: Find mutations
         id: self_mutation
         run: |-

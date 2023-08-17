@@ -71,6 +71,7 @@ export class FractureService extends TypeScriptProject {
         tsconfigPath: "./**/tsconfig.dev.json",
       },
       licensed: false,
+      projenrcTs: true,
     };
 
     super(projenOptions);
@@ -91,7 +92,7 @@ export class FractureService extends TypeScriptProject {
      * Typescript Generators
      **************************************************************************/
 
-    const typesFile = join(outdir, "generated", "ts", "types.ts");
+    const typesFile = join("generated", "ts", "types.ts");
 
     new TypescriptServiceTypes(this, typesFile, {
       service: this,

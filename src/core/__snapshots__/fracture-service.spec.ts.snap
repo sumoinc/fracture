@@ -10,6 +10,7 @@ Array [
   "services/foo/.projen/deps.json",
   "services/foo/.projen/files.json",
   "services/foo/.projen/tasks.json",
+  "services/foo/generated/ts/types.ts",
   "services/foo/package.json",
   "services/foo/README.md",
   "services/foo/src/index.ts",
@@ -254,6 +255,7 @@ exports[`validate generated project files services/foo/.gitattributes 1`] = `
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated
 /.projen/tasks.json linguist-generated
+/generated/ts/types.ts linguist-generated
 /package.json linguist-generated
 /pnpm-lock.yaml linguist-generated
 /tsconfig.dev.json linguist-generated
@@ -303,6 +305,7 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
+!/generated/ts/types.ts
 "
 `;
 

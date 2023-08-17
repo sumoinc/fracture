@@ -168,8 +168,11 @@ exports[`validate generated project files .gitattributes 1`] = `
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated
 /.projen/tasks.json linguist-generated
+/.vscode/extensions.json linguist-generated
+/.vscode/settings.json linguist-generated
 /package.json linguist-generated
 /pnpm-lock.yaml linguist-generated
+/pnpm-workspace.yaml linguist-generated
 /tsconfig.dev.json linguist-generated
 /tsconfig.json linguist-generated
 /turbo.json linguist-generated"
@@ -531,6 +534,9 @@ junit.xml
 !/.eslintrc.json
 .turbo
 !/turbo.json
+!/pnpm-workspace.yaml
+!/.vscode/settings.json
+!/.vscode/extensions.json
 "
 `;
 
@@ -693,6 +699,10 @@ Object {
       "type": "build",
     },
     Object {
+      "name": "turbo",
+      "type": "build",
+    },
+    Object {
       "name": "typescript",
       "type": "build",
     },
@@ -720,6 +730,9 @@ Object {
     ".projen/deps.json",
     ".projen/files.json",
     ".projen/tasks.json",
+    ".vscode/extensions.json",
+    ".vscode/settings.json",
+    "pnpm-workspace.yaml",
     "tsconfig.dev.json",
     "tsconfig.json",
     "turbo.json",
@@ -1023,13 +1036,13 @@ Object {
           "exec": "pnpm update npm-check-updates",
         },
         Object {
-          "exec": "npm-check-updates --upgrade --target=minor --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,typescript",
+          "exec": "npm-check-updates --upgrade --target=minor --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,turbo,typescript",
         },
         Object {
           "exec": "pnpm i --no-frozen-lockfile",
         },
         Object {
-          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node typescript",
+          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node turbo typescript",
         },
         Object {
           "exec": "npx projen",
@@ -1070,7 +1083,10 @@ Array [
   ".projen/deps.json",
   ".projen/files.json",
   ".projen/tasks.json",
+  ".vscode/extensions.json",
+  ".vscode/settings.json",
   "package.json",
+  "pnpm-workspace.yaml",
   "README.md",
   "src/index.ts",
   "test/hello.test.ts",
@@ -1104,6 +1120,7 @@ Object {
     "standard-version": "^9",
     "ts-jest": "*",
     "ts-node": "*",
+    "turbo": "*",
     "typescript": "*",
   },
   "jest": Object {
