@@ -1,13 +1,15 @@
 import { Fracture } from "./fracture";
+import { FractureService } from "./fracture-service";
 import { ResourceAttribute } from "./resource-attribute";
 
-let fracture: Fracture;
+let service: FractureService;
 
 beforeEach(() => {
-  fracture = new Fracture();
+  const fracture = new Fracture();
+  service = new FractureService(fracture, { name: "test" });
 });
 
 test("Smoke test", () => {
-  const resource = new ResourceAttribute(fracture, { name: "foo" });
+  const resource = new ResourceAttribute(service, { name: "foo" });
   expect(resource).toBeTruthy();
 });

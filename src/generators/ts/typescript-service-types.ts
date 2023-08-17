@@ -1,5 +1,4 @@
 import { TypeScriptSource, TypeScriptSourceOptions } from "./typescript-source";
-import { Fracture } from "../../core";
 import { FractureService } from "../../core/fracture-service";
 
 export interface TypescriptServiceTypesOptions extends TypeScriptSourceOptions {
@@ -16,11 +15,11 @@ export class TypescriptServiceTypes extends TypeScriptSource {
   public readonly service: FractureService;
 
   constructor(
-    fracture: Fracture,
+    service: FractureService,
     filePath: string,
     options: TypescriptServiceTypesOptions
   ) {
-    super(fracture, filePath, options);
+    super(service, filePath, options);
 
     /***************************************************************************
      * Props

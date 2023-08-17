@@ -1,7 +1,7 @@
 import { camelCase, paramCase, pascalCase } from "change-case";
 import { Component } from "projen";
 import { ValueOf } from "type-fest";
-import { Fracture } from "../../core/fracture";
+import { FractureService } from "../../core";
 import { NAMING_STRATEGY_TYPE } from "../../core/naming-strategies/naming-strategy";
 
 export type TypescriptStrategyOptions = {
@@ -25,8 +25,11 @@ export class TypescriptStrategy extends Component {
   public readonly interfaceName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   public readonly typeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
 
-  constructor(fracture: Fracture, options: TypescriptStrategyOptions = {}) {
-    super(fracture);
+  constructor(
+    service: FractureService,
+    options: TypescriptStrategyOptions = {}
+  ) {
+    super(service);
 
     /***************************************************************************
      * PROPS

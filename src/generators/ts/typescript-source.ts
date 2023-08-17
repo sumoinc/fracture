@@ -2,7 +2,7 @@ import { dirname, join, relative, sep } from "path";
 import { SourceCode, SourceCodeOptions } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { TypescriptStrategy } from "./typescript-strategy";
-import { Fracture } from "../../core";
+import { FractureService } from "../../core";
 
 export interface TypeScriptSourceOptions extends SourceCodeOptions {}
 
@@ -25,11 +25,11 @@ export class TypeScriptSource extends SourceCode {
   public readonly strategy: TypescriptStrategy;
 
   constructor(
-    fracture: Fracture,
+    service: FractureService,
     filePath: string,
     options?: TypeScriptSourceOptions
   ) {
-    super(fracture, filePath, {
+    super(service, filePath, {
       // make the file editable so that prettier can format it
       readonly: false,
       ...options,
@@ -41,7 +41,7 @@ export class TypeScriptSource extends SourceCode {
 
     this.filePath = filePath;
     this.fileName = this.filePath.split(sep).pop() as string;
-    this.strategy = new TypescriptStrategy(fracture);
+    this.strategy = new TypescriptStrategy(service);
 
     return this;
   }

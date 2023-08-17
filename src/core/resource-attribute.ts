@@ -1,6 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { Fracture } from "./fracture";
+import { FractureService } from "./fracture-service";
 
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
@@ -251,8 +251,8 @@ export class ResourceAttribute extends Component {
    */
   public comments: string[];
 
-  constructor(fracture: Fracture, options: ResourceAttributeOptions) {
-    super(fracture);
+  constructor(service: FractureService, options: ResourceAttributeOptions) {
+    super(service);
 
     /***************************************************************************
      * Props

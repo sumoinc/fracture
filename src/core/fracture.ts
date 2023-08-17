@@ -89,6 +89,14 @@ export class Fracture extends TypeScriptProject {
    * The default release branch for this project
    */
   public readonly defaultReleaseBranch: string;
+  /**
+   * All services in this project.
+   */
+  public readonly services: FractureService[] = [];
+  /**
+   * All apps in this project.
+   */
+  public readonly apps: FractureApp[] = [];
 
   constructor(options: FractureOptions = {}) {
     /***************************************************************************
@@ -146,16 +154,31 @@ export class Fracture extends TypeScriptProject {
 
     new VsCodeConfiguration(this);
 
-    /***************************************************************************
-     *
-     * DEFAULT OPTIONS
-     *
-     * These are the options that will be used through all code generation
-     * unless explicitly overridden.
-     *
-     **************************************************************************/
+    return this;
+  }
 
-    /*
+  public addService(options: FractureServiceOptions) {
+    const service = new FractureService(this, options);
+    this.services.push(service);
+    return service;
+  }
+
+  public addApp(options: FractureAppOptions) {
+    const app = new FractureApp(this, options);
+    this.apps.push(app);
+    return app;
+  }
+
+  /***************************************************************************
+   *
+   * DEFAULT OPTIONS
+   *
+   * These are the options that will be used through all code generation
+   * unless explicitly overridden.
+   *
+   **************************************************************************/
+
+  /*
     const defaultOptions: Partial<FractureOptions> = {
       name: options.name,
       defaultReleaseBranch: "main",
@@ -287,19 +310,19 @@ export class Fracture extends TypeScriptProject {
 
 
     */
-    /***************************************************************************
-     * WORKFLOWS
-     **************************************************************************/
+  /***************************************************************************
+   * WORKFLOWS
+   **************************************************************************/
 
-    // configure workflows
-    //this.workflows = new Workflows(this);
+  // configure workflows
+  //this.workflows = new Workflows(this);
 
-    // this.logger.info("=".repeat(80));
-    // this.logger.info("INIT PHASE");
-    // this.logger.info("=".repeat(80));
+  // this.logger.info("=".repeat(80));
+  // this.logger.info("INIT PHASE");
+  // this.logger.info("=".repeat(80));
 
-    return this;
-  }
+  //   return this;
+  // }
 
   /*
   public get packageRoot(): string {
@@ -340,9 +363,9 @@ export class Fracture extends TypeScriptProject {
    * @param {FractureAppOptions}
    * @returns {FractureApp}
    */
-  public addApp(options: FractureAppOptions) {
-    return new FractureApp(this, options);
-  }
+  // public addApp(options: FractureAppOptions) {
+  //   return new FractureApp(this, options);
+  // }
 
   /**
    * Add an organization to the fracture project.
@@ -358,9 +381,9 @@ export class Fracture extends TypeScriptProject {
    * @param {ServiceOptions}
    * @returns {Service}
    */
-  public addService(options: FractureServiceOptions) {
-    return new FractureService(this, options);
-  }
+  // public addService(options: FractureServiceOptions) {
+  //   return new FractureService(this, options);
+  // }
 
   /**
    * Add a environment to the fracture project.

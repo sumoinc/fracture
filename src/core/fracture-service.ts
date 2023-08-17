@@ -7,6 +7,7 @@ import {
 } from "projen/lib/typescript";
 import { Fracture } from "./fracture";
 import { Resource, ResourceOptions } from "./resource";
+import { DynamoTable } from "../dynamodb";
 import { TypescriptServiceTypes } from "../generators/ts/typescript-service-types";
 
 export interface FractureServiceOptions
@@ -45,6 +46,10 @@ export class FractureService extends TypeScriptProject {
    * All resourcers in this service.
    */
   public resources: Resource[] = [];
+  /**
+   * Table defnition for the table that supports this service.
+   */
+  public readonly dynamoTable: DynamoTable;
 
   constructor(fracture: Fracture, options: FractureServiceOptions) {
     /***************************************************************************
@@ -77,19 +82,24 @@ export class FractureService extends TypeScriptProject {
     this.name = options.name;
 
     /***************************************************************************
+     * Dynamo Configuration
+     **************************************************************************/
+
+    this.dynamoTable = new DynamoTable(this, { name: this.name });
+
+    /***************************************************************************
      * Typescript Generators
      **************************************************************************/
 
     const typesFile = join(outdir, "generated", "ts", "types.ts");
 
-    new TypescriptServiceTypes(fracture, typesFile, {
+    new TypescriptServiceTypes(this, typesFile, {
       service: this,
     });
   }
 
   public addResource(options: ResourceOptions) {
-    const fracture = this.parent as Fracture;
-    const resource = new Resource(fracture, options);
+    const resource = new Resource(this, options);
     this.resources.push(resource);
     return resource;
   }

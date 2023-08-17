@@ -1,130 +1,133 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { DynamoGsi, DYNAMO_GSI_TYPE } from "./dynamo-gsi";
-import { Fracture } from "../core";
+import { DynamoGsi, DynamoGsiOptions } from "./dynamo-gsi";
+import { FractureService } from "../core";
+import { ResourceAttribute } from "../core/resource-attribute";
 
 export interface DynamoTableOptions {
   /**
-   * Name for the Resource.
-   * @default: uses service name
+   * Name for the table.
    */
-  name?: string;
+  name: string;
   /**
    * Name to use for PK attribute.
+   *
    * @default: "pk"
    */
   pkName?: string;
   /**
    * Name to use for SK attribute.
+   *
    * @default: "sk"
    */
   skName?: string;
   /**
    * Name to use for Lookup attribute.
+   *
    * @default: "idx"
    */
-  lookupName?: string;
+  idxName?: string;
 }
 
 export class DynamoTable extends Component {
-  constructor(fracture: Fracture, options: DynamoTableOptions = {}) {
-    super(fracture);
+  /**
+   * Name for the table.
+   */
+  public readonly name: string;
+  public readonly pk: ResourceAttribute;
+  public readonly sk: ResourceAttribute;
+  public readonly idx: ResourceAttribute;
+  public readonly keyGsi: DynamoGsi;
+  public readonly lookupGsi: DynamoGsi;
+  public readonly gsi: DynamoGsi[] = [];
+
+  constructor(service: FractureService, options: DynamoTableOptions) {
+    super(service);
 
     /***************************************************************************
-     *
-     * DEFAULT OPTIONS
-     *
-     * We'll glue the name or requested outdir to the primary fracture outdir
-     *
+     * Props
      **************************************************************************/
 
-    let defaultOptions: Required<DynamoTableOptions> = {
-      name: paramCase(service.name),
-      pkName: "pk",
-      skName: "sk",
-      lookupName: "idx",
-    };
+    this.name = paramCase(options.name);
+    const pkName = options.pkName ?? "pk";
+    const skName = options.skName ?? "sk";
+    const lookupName = options.idxName ?? "idx";
+    this.pk = new ResourceAttribute(service, { name: pkName });
+    this.sk = new ResourceAttribute(service, { name: skName });
+    this.idx = new ResourceAttribute(service, {
+      name: lookupName,
+    });
 
     /***************************************************************************
-     *
-     * INIT TABLE
-     *
+     * Build Key GSI
      **************************************************************************/
 
-    // ensure name is param-cased
-    const forcedOptions: Partial<DynamoTableOptions> = {
-      name: options.name ? paramCase(options.name) : paramCase(service.name),
-    };
+    this.keyGsi = this.addGsi({
+      name: "key",
+      pk: this.pk,
+      sk: this.sk,
+    });
 
-    // parent
-    this.service = service;
+    /***************************************************************************
+     * Build Lookup GSI
+     **************************************************************************/
 
-    // compine options
-    this.options = {
-      ...defaultOptions,
-      ...options,
-      ...forcedOptions,
-    };
+    this.lookupGsi = this.addGsi({
+      name: "loookup",
+      pk: this.sk,
+      sk: this.idx,
+    });
 
     return this;
   }
 
-  public get name(): string {
-    return this.options.name;
+  public addGsi(options: DynamoGsiOptions) {
+    const service = this.project as FractureService;
+    const gsi = new DynamoGsi(service, options);
+    this.gsi.push(gsi);
+    return gsi;
   }
 
-  public get pkName(): string {
-    return this.options.pkName;
-  }
+  // public get attrributeNames(): string[] {
+  //   return this.dynamoGsi.reduce((acc, gsi) => {
+  //     if (acc.indexOf(gsi.pkName) === -1) {
+  //       acc.push(gsi.pkName);
+  //     }
+  //     if (acc.indexOf(gsi.skName) === -1) {
+  //       acc.push(gsi.skName);
+  //     }
+  //     return acc;
+  //   }, [] as string[]);
+  // }
 
-  public get skName(): string {
-    return this.options.skName;
-  }
+  // public get keyDynamoGsi(): DynamoGsi {
+  //   let dynamoGsi = this.dynamoGsi.find((g) => g.isKeyGsi);
 
-  public get lookupName(): string {
-    return this.options.lookupName;
-  }
+  //   // create the key GSI
+  //   if (!dynamoGsi) {
+  //     dynamoGsi = new DynamoGsi(this, {
+  //       pkName: this.pkName,
+  //       skName: this.skName,
+  //       type: DYNAMO_GSI_TYPE.KEY,
+  //     });
+  //   }
 
-  public get attrributeNames(): string[] {
-    return this.dynamoGsi.reduce((acc, gsi) => {
-      if (acc.indexOf(gsi.pkName) === -1) {
-        acc.push(gsi.pkName);
-      }
-      if (acc.indexOf(gsi.skName) === -1) {
-        acc.push(gsi.skName);
-      }
-      return acc;
-    }, [] as string[]);
-  }
+  //   return dynamoGsi;
+  // }
 
-  public get keyDynamoGsi(): DynamoGsi {
-    let dynamoGsi = this.dynamoGsi.find((g) => g.isKeyGsi);
+  // public get lookupDynamoGsi(): DynamoGsi {
+  //   let dynamoGsi = this.dynamoGsi.find((g) => g.isLookupGsi);
 
-    // create the key GSI
-    if (!dynamoGsi) {
-      dynamoGsi = new DynamoGsi(this, {
-        pkName: this.pkName,
-        skName: this.skName,
-        type: DYNAMO_GSI_TYPE.KEY,
-      });
-    }
+  //   // create the key GSI
+  //   if (!dynamoGsi) {
+  //     dynamoGsi = new DynamoGsi(this, {
+  //       name: "lookup",
+  //       pkName: "sk",
+  //       skName: "idx",
+  //       type: DYNAMO_GSI_TYPE.LOOKUP,
+  //     });
+  //   }
 
-    return dynamoGsi;
-  }
-
-  public get lookupDynamoGsi(): DynamoGsi {
-    let dynamoGsi = this.dynamoGsi.find((g) => g.isLookupGsi);
-
-    // create the key GSI
-    if (!dynamoGsi) {
-      dynamoGsi = new DynamoGsi(this, {
-        name: "lookup",
-        pkName: "sk",
-        skName: "idx",
-        type: DYNAMO_GSI_TYPE.LOOKUP,
-      });
-    }
-
-    return dynamoGsi;
-  }
+  //   return dynamoGsi;
+  // }
 }

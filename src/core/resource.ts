@@ -1,7 +1,10 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { Fracture } from "./fracture";
-import { TypeScriptSource } from "../generators";
+import { FractureService } from "./fracture-service";
+import {
+  ResourceAttribute,
+  ResourceAttributeOptions,
+} from "./resource-attribute";
 
 export interface ResourceOptions {
   /**
@@ -42,9 +45,13 @@ export class Resource extends Component {
    * @default []
    */
   public comments: string[];
+  /**
+   * All attributes in this resource.
+   */
+  public attributes: ResourceAttribute[] = [];
 
-  constructor(fracture: Fracture, options: ResourceOptions) {
-    super(fracture);
+  constructor(service: FractureService, options: ResourceOptions) {
+    super(service);
 
     /***************************************************************************
      * Props
@@ -63,9 +70,16 @@ export class Resource extends Component {
      * Typescript
      **************************************************************************/
 
-    new TypeScriptSource(fracture, "foo.ts").comments(["file"]);
+    //new TypeScriptSource(fracture, "foo.ts").comments(["file"]);
 
     return this;
+  }
+
+  public addAttribute(options: ResourceAttributeOptions) {
+    const service = this.project as FractureService;
+    const resource = new ResourceAttribute(service, options);
+    this.attributes.push(resource);
+    return resource;
   }
 
   /***************************************************************************
