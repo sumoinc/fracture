@@ -1,6 +1,5 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { ValueOf } from "type-fest";
 import { FractureService } from "./fracture-service";
 import {
   StructureAttribute,
@@ -11,32 +10,28 @@ import {
  * TYPES
  *****************************************************************************/
 
-export const StructureType = {
-  INPUT: "Input",
-  OUTPUT: "Output",
-  /**
-   * Represents the structure of persistant data.
-   * This is also the shape of data in internal messages for things such as
-   * SQS and EventBridge.
-   */
-  DATA: "Data",
-} as const;
-
 export type StructureOptions = {
   /**
    *  Name for the structure.
    */
   name: string;
   /**
-   *  Type of structure
+   * Type parameter for this structure type.
+   *
+   * @default undefined
+   * @example 'T' for MyType<T> generic
    */
-  type: ValueOf<typeof StructureType>;
+  typeParameter?: string;
   /**
    * Comment lines to add to the Structure.
    *
    * @default []
    */
   comments?: string[];
+  /**
+   * Options for the attributes to add when initializing the structure.
+   */
+  attributes?: StructureAttributeOptions[];
 };
 
 /******************************************************************************
@@ -49,9 +44,12 @@ export class Structure extends Component {
    */
   public readonly name: string;
   /**
-   *  Type of structure
+   * Type parameter for this structure type.
+   *
+   * @default undefined
+   * @example 'T' for MyType<T> generic
    */
-  public readonly type: ValueOf<typeof StructureType>;
+  public readonly typeParameter?: string;
   /**
    * Comment lines to add to the Structure.
    *
@@ -71,8 +69,14 @@ export class Structure extends Component {
      **************************************************************************/
 
     this.name = paramCase(options.name);
-    this.type = options.type;
+    this.typeParameter = options.typeParameter;
     this.comments = options.comments ?? [];
+
+    if (options.attributes) {
+      options.attributes.forEach((attributeOptions) => {
+        this.addAttribute(attributeOptions);
+      });
+    }
 
     // //
     // if (

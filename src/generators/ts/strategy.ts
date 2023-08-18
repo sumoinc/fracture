@@ -16,6 +16,16 @@ export type TypescriptStrategyOptions = {
 };
 
 export class TypescriptStrategy extends Component {
+  /**
+   * Returns the `TypescriptStrategy` component for the service or
+   * undefined if the service does not have a TypescriptStrategy component.
+   */
+  public static of(service: FractureService): TypescriptStrategy | undefined {
+    const isTypescriptStrategy = (c: Component): c is TypescriptStrategy =>
+      c instanceof TypescriptStrategy;
+    return service.components.find(isTypescriptStrategy);
+  }
+
   public readonly attributeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   public readonly className: ValueOf<typeof NAMING_STRATEGY_TYPE>;
   public readonly enumName: ValueOf<typeof NAMING_STRATEGY_TYPE>;

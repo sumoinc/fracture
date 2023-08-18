@@ -8,7 +8,7 @@ import {
   ResourceAttributeOptions,
   VisabilityType,
 } from "./resource-attribute";
-import { Structure, StructureType } from "./structure";
+import { Structure, StructureOptions } from "./structure";
 
 export interface ResourceOptions {
   /**
@@ -66,9 +66,21 @@ export class Resource extends Component {
    */
   public attributes: ResourceAttribute[] = [];
   /**
-   * Full data strcuture
+   * All structures for this resource.
    */
-  public dataStructure: Structure;
+  public structures: Structure[] = [];
+  /**
+   * Public facing data structure using full attributes names.
+   * Excludes hidden attributes.
+   */
+  public publicDataStructure: Structure;
+  /**
+   * Entire private data structure using shortnames.
+   * Includes all attributes, including hidden ones.
+   * This data shape is that unmarchalled data in dynamo looks like and can be
+   * used within internal messaging like SQS and EventBus.
+   */
+  public privateDataStructure: Structure;
 
   constructor(service: FractureService, options: ResourceOptions) {
     super(service);
@@ -87,12 +99,15 @@ export class Resource extends Component {
     this.comments = options.comments ?? [];
 
     /***************************************************************************
-     * Initial data structure
+     * Initialize data structures
      **************************************************************************/
 
-    this.dataStructure = new Structure(service, {
+    this.publicDataStructure = this.addStructure({
       name: `${this.name}-data`,
-      type: StructureType.DATA,
+    });
+
+    this.privateDataStructure = this.addStructure({
+      name: `${this.name}-data-private`,
     });
 
     /***************************************************************************
@@ -156,21 +171,50 @@ export class Resource extends Component {
     return this;
   }
 
+  /**
+   * Adds an attribute to this resource.
+   * Also manages some data structures used in code generation.
+   */
   public addAttribute(options: ResourceAttributeOptions) {
     const service = this.project as FractureService;
 
-    // build resource attribute
+    /***************************************************************************
+     * Update Resource Attribute
+     **************************************************************************/
+
     const attribute = new ResourceAttribute(service, options);
     this.attributes.push(attribute);
 
-    // add resource attribute to the data structure
-    this.dataStructure.addAttribute({
+    /***************************************************************************
+     * Update data structures
+     **************************************************************************/
+
+    // if user visible, add to public data structure
+    if (options.visibility === VisabilityType.USER_VISIBLE) {
+      this.publicDataStructure.addAttribute({
+        name: attribute.name,
+        type: attribute.type,
+        comments: attribute.comments,
+        required: true,
+      });
+    }
+
+    // everything goes into private data structure
+    this.privateDataStructure.addAttribute({
       name: attribute.name,
+      type: attribute.type,
       comments: attribute.comments,
       required: true,
     });
 
     return attribute;
+  }
+
+  public addStructure(options: StructureOptions) {
+    const service = this.project as FractureService;
+    const structure = new Structure(service, options);
+    this.structures.push(structure);
+    return structure;
   }
 
   /***************************************************************************

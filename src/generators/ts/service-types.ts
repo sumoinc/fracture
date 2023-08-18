@@ -1,4 +1,5 @@
 import ts from "typescript";
+import { TypeFactory } from "./factories/type";
 import { TypeScriptSource, TypeScriptSourceOptions } from "./source";
 import { FractureService } from "../../core/fracture-service";
 
@@ -34,74 +35,76 @@ export class TypescriptServiceTypes extends TypeScriptSource {
      * Common Types
      **************************************************************************/
 
-    this.open(`export type Error = {`);
-    this.line(`code: number;`);
-    this.line(`source: string;`);
-    this.line(`message: string;`);
-    this.line(`detail: string;`);
-    this.close(`}`);
-    this.line("");
+    const service = this.project as FractureService;
+    const types = TypeFactory.toTypes({
+      service,
+      structures: service.structures,
+    });
+    /*
+    const typeArray = service.structures.map((structure) => {
+      // in case of MyType<T> or similar
+      const typeParameter = structure.typeParameter
+        ? [
+            factory.createTypeParameterDeclaration(
+              undefined,
+              factory.createIdentifier(structure.typeParameter),
+              undefined,
+              undefined
+            ),
+          ]
+        : undefined;
 
-    this.open(`export type ${this.strategy.formatTypeName("response")}<T> = {`);
-    this.line(`data?: T;`);
-    this.line(`errors: Error[];`);
-    this.line(`status: number;`);
-    this.close(`}`);
-    this.line("");
+      // build properties for this type
+      const properties = TypeAttributeFactory.toTypeProperies({
+        service,
+        attributes: structure.attributes,
+      });
 
-    this.open(
-      `export type ${this.strategy.formatTypeName("list-response")}<T> = {`
-    );
-    this.line(`data?: T[];`);
-    this.line(`errors: Error[];`);
-    this.line(`status: number;`);
-    this.close(`}`);
-    this.line("");
+      // define the type
+      const type = factory.createTypeAliasDeclaration(
+        [factory.createToken(ts.SyntaxKind.ExportKeyword)],
+        factory.createIdentifier(this.strategy.formatTypeName(structure.name)),
+        typeParameter,
+        properties
+      );
 
-    const aId = ts.factory.createIdentifier("a");
-    const bId = ts.factory.createIdentifier("b");
-    const addId = ts.factory.createIdentifier("add");
-    const numberKeyword = ts.factory.createKeywordTypeNode(
-      ts.SyntaxKind.NumberKeyword
-    );
+      // add comments if needed
+      if (structure.comments.length) {
+        addSyntheticLeadingComment(
+          type,
+          ts.SyntaxKind.MultiLineCommentTrivia,
+          `*\n * ${structure.comments.join("\n * ")}\n`,
+          true
+        );
+      }
 
-    const addFunc = ts.factory.createFunctionDeclaration(
-      undefined,
-      undefined,
-      addId,
-      undefined,
-      [
-        ts.factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          aId,
-          undefined,
-          numberKeyword,
-          undefined
-        ),
-        ts.factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          bId,
-          undefined,
-          numberKeyword,
-          undefined
-        ),
-      ],
-      numberKeyword,
-      ts.factory.createBlock(
-        [
-          ts.factory.createReturnStatement(
-            ts.factory.createBinaryExpression(
-              aId,
-              ts.factory.createToken(ts.SyntaxKind.PlusToken),
-              bId
-            )
-          ),
-        ],
-        true
-      )
-    );
+      return type;
+    });
+    */
+
+    // this.open(`export type Error = {`);
+    // this.line(`code: number;`);
+    // this.line(`source: string;`);
+    // this.line(`message: string;`);
+    // this.line(`detail: string;`);
+    // this.close(`}`);
+    // this.line("");
+
+    // this.open(`export type ${this.strategy.formatTypeName("response")}<T> = {`);
+    // this.line(`data?: T;`);
+    // this.line(`errors: Error[];`);
+    // this.line(`status: number;`);
+    // this.close(`}`);
+    // this.line("");
+
+    // this.open(
+    //   `export type ${this.strategy.formatTypeName("list-response")}<T> = {`
+    // );
+    // this.line(`data?: T[];`);
+    // this.line(`errors: Error[];`);
+    // this.line(`status: number;`);
+    // this.close(`}`);
+    // this.line("");
 
     function print(nodes: any) {
       const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
@@ -110,7 +113,7 @@ export class TypescriptServiceTypes extends TypeScriptSource {
         "",
         ts.ScriptTarget.Latest,
         false,
-        ts.ScriptKind.TSX
+        ts.ScriptKind.TS
       );
 
       console.log(
@@ -118,7 +121,7 @@ export class TypescriptServiceTypes extends TypeScriptSource {
       );
     }
 
-    print([addFunc]);
+    print(types);
 
     super.synthesize();
   }

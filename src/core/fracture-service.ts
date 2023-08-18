@@ -7,8 +7,14 @@ import {
 } from "projen/lib/typescript";
 import { Fracture } from "./fracture";
 import { Resource, ResourceOptions } from "./resource";
+import { ResourceAttributeType } from "./resource-attribute";
+import { Structure, StructureOptions } from "./structure";
 import { DynamoTable } from "../dynamodb";
 import * as ts from "../generators/ts";
+import {
+  TypescriptStrategy,
+  TypescriptStrategyOptions,
+} from "../generators/ts/strategy";
 
 export interface FractureServiceOptions
   extends Partial<TypeScriptProjectOptions> {
@@ -16,6 +22,12 @@ export interface FractureServiceOptions
    * A name for the service
    */
   name: string;
+  /**
+   * Typescript strategy options
+   *
+   * @default fracture defaults
+   */
+  typescriptStrategyOptions?: TypescriptStrategyOptions;
   // srcDir?: string;
   /**
    * Logging options
@@ -43,6 +55,10 @@ export class FractureService extends TypeScriptProject {
    */
   public readonly name: string;
   /**
+   * Defines typescript naming conventions for this service.
+   */
+  public readonly typescriptStrategy: TypescriptStrategy;
+  /**
    * All resourcers in this service.
    */
   public resources: Resource[] = [];
@@ -50,6 +66,13 @@ export class FractureService extends TypeScriptProject {
    * Table defnition for the table that supports this service.
    */
   public readonly dynamoTable: DynamoTable;
+  /**
+   * All structures for this service.
+   */
+  public structures: Structure[] = [];
+  public readonly errorStructure: Structure;
+  public readonly responseStructure: Structure;
+  public readonly listResponseStructure: Structure;
 
   constructor(fracture: Fracture, options: FractureServiceOptions) {
     /***************************************************************************
@@ -81,12 +104,74 @@ export class FractureService extends TypeScriptProject {
      **************************************************************************/
 
     this.name = options.name;
+    this.typescriptStrategy = new TypescriptStrategy(this);
 
     /***************************************************************************
      * Dynamo Configuration
      **************************************************************************/
 
     this.dynamoTable = new DynamoTable(this, { name: this.name });
+
+    /***************************************************************************
+     * Initialize standard structures
+     **************************************************************************/
+
+    this.errorStructure = this.addStructure({
+      name: `error`,
+      comments: ["foo"],
+      attributes: [
+        {
+          name: `code`,
+          type: ResourceAttributeType.INT,
+          comments: ["bar"],
+        },
+        {
+          name: `source`,
+        },
+        {
+          name: `message`,
+        },
+        {
+          name: `detail`,
+        },
+      ],
+    });
+
+    this.responseStructure = this.addStructure({
+      name: `response`,
+      typeParameter: `T`,
+      attributes: [
+        {
+          name: `data`,
+          required: false,
+        },
+        {
+          name: `errors`,
+        },
+        {
+          name: `status`,
+          type: ResourceAttributeType.INT,
+        },
+      ],
+    });
+
+    this.listResponseStructure = this.addStructure({
+      name: `list-response`,
+      typeParameter: `T`,
+      attributes: [
+        {
+          name: `data`,
+          required: false,
+        },
+        {
+          name: `errors`,
+        },
+        {
+          name: `status`,
+          type: ResourceAttributeType.INT,
+        },
+      ],
+    });
 
     /***************************************************************************
      * Typescript Generators
@@ -103,6 +188,12 @@ export class FractureService extends TypeScriptProject {
     const resource = new Resource(this, options);
     this.resources.push(resource);
     return resource;
+  }
+
+  public addStructure(options: StructureOptions) {
+    const structure = new Structure(this, options);
+    this.structures.push(structure);
+    return structure;
   }
 
   //   /***************************************************************************

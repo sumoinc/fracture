@@ -6,114 +6,114 @@ import { FractureService } from "./fracture-service";
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
  */
-// export const ResourceAttributeType = {
-//   /**
-//    *  A unique identifier for an object. This scalar is serialized like a String but isn't meant to be human-readable.
-//    *  Long format GUID
-//    */
-//   GUID: "GUID",
-//   /**
-//    *  In GraphQL:   A UTF-8 character sequence.
-//    *  In DynamoDB:  Maximum DynamoDB item size limit of 400 KB (DynamoDB limit)
-//    *                When used as DynamoDB Key:
-//    *                  For a simple primary key, the maximum length of the first attribute value (the partition key) is 2048 bytes.
-//    *                  For a composite primary key, the maximum length of the second attribute value (the sort key) is 1024 bytes.
-//    */
-//   STRING: "String",
-//   /**
-//    *  In GraphQL:   An integer value between -(231) and 232-1.
-//    *  In DynamoDB:  Stored as Number
-//    *                Numbers can be positive, negative, or zero. Numbers can have up to 38 digits of precision.
-//    *                Exceeding this results in an exception.
-//    *                Positive range: 1E-130 to 9.9999999999999999999999999999999999999E+125
-//    *                Negative range: -9.9999999999999999999999999999999999999E+125 to -1E-130
-//    */
-//   INT: "Int",
-//   /**
-//    *  In GraphQL:   An IEEE 754 floating point value.
-//    *  In DynamoDB:  Stored as Number
-//    *                Numbers can be positive, negative, or zero. Numbers can have up to 38 digits of precision.
-//    *                Exceeding this results in an exception.
-//    *                Positive range: 1E-130 to 9.9999999999999999999999999999999999999E+125
-//    *                Negative range: -9.9999999999999999999999999999999999999E+125 to -1E-130
-//    */
-//   FLOAT: "Float",
-//   /**
-//    *  In GraphQL:   A Boolean value, either true or false.
-//    */
-//   BOOLEAN: "Boolean",
-//   /*****************************************************************************
-//    *
-//    *  APPSYNC TYPES
-//    *
-//    *  Additional data types which AppSync supports.
-//    *
-//    ****************************************************************************/
-//   /**
-//    *  GraphQL:  An extended ISO 8601 date string in the format YYYY-MM-DD.
-//    *  DynamoDB: Stored as string
-//    */
-//   DATE: "Date",
-//   /**
-//    *  GraphQL:  An extended ISO 8601 time string in the format hh:mm:ss.sss.
-//    *  DynamoDB: Stored as string
-//    */
-//   TIME: "Time",
-//   /**
-//    *  GraphQL:  An extended ISO 8601 date and time string in the format YYYY-MM-DDThh:mm:ss.sssZ.
-//    *  DynamoDB: Stored as string
-//    */
-//   DATE_TIME: "DateTime",
-//   /**
-//    *  GraphQl:  An integer value representing the number of seconds before or after 1970-01-01-T00:00Z.
-//    *  DynamoDB: Stored as Number
-//    */
-//   TIMESTAMP: "Timestamp",
-//   /**
-//    *  GraphQL:  An email address in the format local-part@domain-part as defined by RFC 822.
-//    *  DynamoDB: Stored as string
-//    */
-//   EMAIL: "Email",
-//   /**
-//    *  GraphQL:  A JSON string. Any valid JSON construct is automatically parsed and loaded in the resolver mapping
-//    *            templates as maps, lists, or scalar values rather than as the literal input strings. Unquoted strings or
-//    *            otherwise invalid JSON result in a GraphQL validation error.
-//    *  DynamoDB: Stored as ???
-//    */
-//   JSON: "JSON",
-//   /**
-//    *  GraphQL:  A phone number. Phone numbers can contain either spaces or hyphens to separate digit groups. Phone
-//    *            numbers without a country code are assumed to be US/North American numbers adhering to the
-//    *            North American Numbering Plan (NANP).
-//    *  DynamoDB: Stored as string
-//    */
-//   PHONE: "Phone",
-//   /**
-//    *  GraphQL:  A URL as defined by RFC 1738. For example, https://www.amazon.com/dp/B000NZW3KC/ or
-//    *            mailto:example@example.com. URLs must contain a schema (http, mailto) and can't contain two forward
-//    *            slashes (//) in the path part.
-//    *  DynamoDB: Stored as string
-//    */
-//   URL: "URL",
-//   /**
-//    *  GraphQL:  A valid IPv4 or IPv6 address. IPv4 addresses are expected in quad-dotted notation (123.12.34.56).
-//    *            IPv6 addresses are expected in non-bracketed, colon-separated format (1a2b:3c4b::1234:4567). You can
-//    *            include an optional CIDR suffix (123.45.67.89/16) to indicate subnet mask.
-//    *  DynamoDB: Stored as string
-//    */
-//   IPADDRESS: "IPAddress",
-//   /*****************************************************************************
-//    *
-//    *  FRACTURE TYPES
-//    *
-//    *  Special types used by Fracture. That are currently used primarily to store values calculated based on other
-//    *  attributes.
-//    *
-//    ****************************************************************************/
-//   COUNT: "Count",
-//   AVERAGE: "Average",
-//   SUM: "Sum",
-// } as const;
+export const ResourceAttributeType = {
+  /**
+   *  A unique identifier for an object. This scalar is serialized like a String but isn't meant to be human-readable.
+   *  Long format GUID
+   */
+  GUID: "GUID",
+  /**
+   *  In GraphQL:   A UTF-8 character sequence.
+   *  In DynamoDB:  Maximum DynamoDB item size limit of 400 KB (DynamoDB limit)
+   *                When used as DynamoDB Key:
+   *                  For a simple primary key, the maximum length of the first attribute value (the partition key) is 2048 bytes.
+   *                  For a composite primary key, the maximum length of the second attribute value (the sort key) is 1024 bytes.
+   */
+  STRING: "String",
+  /**
+   *  In GraphQL:   An integer value between -(231) and 232-1.
+   *  In DynamoDB:  Stored as Number
+   *                Numbers can be positive, negative, or zero. Numbers can have up to 38 digits of precision.
+   *                Exceeding this results in an exception.
+   *                Positive range: 1E-130 to 9.9999999999999999999999999999999999999E+125
+   *                Negative range: -9.9999999999999999999999999999999999999E+125 to -1E-130
+   */
+  INT: "Int",
+  /**
+   *  In GraphQL:   An IEEE 754 floating point value.
+   *  In DynamoDB:  Stored as Number
+   *                Numbers can be positive, negative, or zero. Numbers can have up to 38 digits of precision.
+   *                Exceeding this results in an exception.
+   *                Positive range: 1E-130 to 9.9999999999999999999999999999999999999E+125
+   *                Negative range: -9.9999999999999999999999999999999999999E+125 to -1E-130
+   */
+  FLOAT: "Float",
+  /**
+   *  In GraphQL:   A Boolean value, either true or false.
+   */
+  BOOLEAN: "Boolean",
+  /*****************************************************************************
+   *
+   *  APPSYNC TYPES
+   *
+   *  Additional data types which AppSync supports.
+   *
+   ****************************************************************************/
+  /**
+   *  GraphQL:  An extended ISO 8601 date string in the format YYYY-MM-DD.
+   *  DynamoDB: Stored as string
+   */
+  DATE: "Date",
+  /**
+   *  GraphQL:  An extended ISO 8601 time string in the format hh:mm:ss.sss.
+   *  DynamoDB: Stored as string
+   */
+  TIME: "Time",
+  /**
+   *  GraphQL:  An extended ISO 8601 date and time string in the format YYYY-MM-DDThh:mm:ss.sssZ.
+   *  DynamoDB: Stored as string
+   */
+  DATE_TIME: "DateTime",
+  /**
+   *  GraphQl:  An integer value representing the number of seconds before or after 1970-01-01-T00:00Z.
+   *  DynamoDB: Stored as Number
+   */
+  TIMESTAMP: "Timestamp",
+  /**
+   *  GraphQL:  An email address in the format local-part@domain-part as defined by RFC 822.
+   *  DynamoDB: Stored as string
+   */
+  EMAIL: "Email",
+  /**
+   *  GraphQL:  A JSON string. Any valid JSON construct is automatically parsed and loaded in the resolver mapping
+   *            templates as maps, lists, or scalar values rather than as the literal input strings. Unquoted strings or
+   *            otherwise invalid JSON result in a GraphQL validation error.
+   *  DynamoDB: Stored as ???
+   */
+  JSON: "JSON",
+  /**
+   *  GraphQL:  A phone number. Phone numbers can contain either spaces or hyphens to separate digit groups. Phone
+   *            numbers without a country code are assumed to be US/North American numbers adhering to the
+   *            North American Numbering Plan (NANP).
+   *  DynamoDB: Stored as string
+   */
+  PHONE: "Phone",
+  /**
+   *  GraphQL:  A URL as defined by RFC 1738. For example, https://www.amazon.com/dp/B000NZW3KC/ or
+   *            mailto:example@example.com. URLs must contain a schema (http, mailto) and can't contain two forward
+   *            slashes (//) in the path part.
+   *  DynamoDB: Stored as string
+   */
+  URL: "URL",
+  /**
+   *  GraphQL:  A valid IPv4 or IPv6 address. IPv4 addresses are expected in quad-dotted notation (123.12.34.56).
+   *            IPv6 addresses are expected in non-bracketed, colon-separated format (1a2b:3c4b::1234:4567). You can
+   *            include an optional CIDR suffix (123.45.67.89/16) to indicate subnet mask.
+   *  DynamoDB: Stored as string
+   */
+  IPADDRESS: "IPAddress",
+  /*****************************************************************************
+   *
+   *  FRACTURE TYPES
+   *
+   *  Special types used by Fracture. That are currently used primarily to store values calculated based on other
+   *  attributes.
+   *
+   ****************************************************************************/
+  COUNT: "Count",
+  AVERAGE: "Average",
+  SUM: "Sum",
+} as const;
 
 export const ResourceAttributeGenerator = {
   AUTO_INCREMENT: "Increment",
@@ -175,6 +175,12 @@ export type ResourceAttributeOptions = {
    * @default []
    */
   comments?: string[];
+  /**
+   * What is the type for tis attribute?
+   *
+   * @default ResourceAttributeType.STRING
+   */
+  type?: ValueOf<typeof ResourceAttributeType>;
   /**
    * Is this managed by the end user or the system?
    *
@@ -289,6 +295,12 @@ export class ResourceAttribute extends Component {
    */
   public comments: string[];
   /**
+   * What is the type for tis attribute?
+   *
+   * @default ResourceAttributeType.STRING
+   */
+  public readonly type: ValueOf<typeof ResourceAttributeType>;
+  /**
    * Is this managed by the end user or the system?
    *
    * @default ManagementType.USER_MANAGED
@@ -332,6 +344,7 @@ export class ResourceAttribute extends Component {
       ? paramCase(options.shortName)
       : this.name;
     this.comments = options.comments ?? [];
+    this.type = options.type ?? ResourceAttributeType.STRING;
     this.management = options.management ?? ManagementType.USER_MANAGED;
     this.visibility = options.visibility ?? VisabilityType.USER_VISIBLE;
     this.compositionsSeperator = options.compositionsSeperator ?? "#";
