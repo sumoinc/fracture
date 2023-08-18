@@ -288,106 +288,8 @@ export class Resource extends Component {
    */
   public addAttribute(options: ResourceAttributeOptions) {
     const service = this.project as FractureService;
-
-    /***************************************************************************
-     * Update Resource Attribute
-     **************************************************************************/
-
     const attribute = new ResourceAttribute(service, options);
     this.attributes.push(attribute);
-
-    /***************************************************************************
-     * Update data structures
-     **************************************************************************/
-
-    // if user visible, add to public data structure
-    if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-      this.publicDataStructure.addAttribute({
-        name: attribute.name,
-        type: attribute.type,
-        comments: attribute.comments,
-        required: true,
-      });
-    }
-
-    // everything goes into private data structure
-    this.privateDataStructure.addAttribute({
-      name: attribute.shortName,
-      type: attribute.type,
-      comments: attribute.comments,
-      required: true,
-    });
-
-    /***************************************************************************
-     * Operation inputs / outputs
-     **************************************************************************/
-
-    // if user visible it might be an input or output
-    if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-      // all outputs get everything visible
-      this.createOperation.outputStructure.addAttribute({
-        name: attribute.name,
-        type: attribute.type,
-        comments: attribute.comments,
-        required: true,
-      });
-      this.readOperation.outputStructure.addAttribute({
-        name: attribute.name,
-        type: attribute.type,
-        comments: attribute.comments,
-        required: true,
-      });
-      this.updateOperation.outputStructure.addAttribute({
-        name: attribute.name,
-        type: attribute.type,
-        comments: attribute.comments,
-        required: true,
-      });
-      this.deleteOperation.outputStructure.addAttribute({
-        name: attribute.name,
-        type: attribute.type,
-        comments: attribute.comments,
-        required: true,
-      });
-
-      // create / update / delete need identifiers
-      if (attribute.identifier === IdentifierType.PRIMARY) {
-        this.readOperation.inputStructure.addAttribute({
-          name: attribute.name,
-          type: attribute.type,
-          comments: attribute.comments,
-          required: true,
-        });
-        this.updateOperation.inputStructure.addAttribute({
-          name: attribute.name,
-          type: attribute.type,
-          comments: attribute.comments,
-          required: true,
-        });
-        this.deleteOperation.inputStructure.addAttribute({
-          name: attribute.name,
-          type: attribute.type,
-          comments: attribute.comments,
-          required: true,
-        });
-      }
-
-      // create/update get all user managed
-      if (attribute.management === ManagementType.USER_MANAGED) {
-        this.createOperation.inputStructure.addAttribute({
-          name: attribute.name,
-          type: attribute.type,
-          comments: attribute.comments,
-          required: true,
-        });
-        this.updateOperation.inputStructure.addAttribute({
-          name: attribute.name,
-          type: attribute.type,
-          comments: attribute.comments,
-          required: true,
-        });
-      }
-    }
 
     return attribute;
   }
@@ -404,5 +306,119 @@ export class Resource extends Component {
     const operation = new Operation(service, options);
     this.operations.push(operation);
     return operation;
+  }
+
+  /*****************************************************************************
+   *
+   * Pre-synth
+   *
+   * We should have all our operations and attributes added now so it's safe to
+   * start looping over them and preparing for codegen.
+   *
+   ****************************************************************************/
+  preSynthesize(): void {
+    super.preSynthesize();
+
+    /***************************************************************************
+     * Loop attributes & build data structures
+     **************************************************************************/
+    this.attributes.forEach((attribute) => {
+      /***************************************************************************
+       * Update data structures
+       **************************************************************************/
+
+      // if user visible, add to public data structure
+      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
+        this.publicDataStructure.addAttribute({
+          name: attribute.name,
+          type: attribute.type,
+          comments: attribute.comments,
+          required: true,
+        });
+      }
+
+      // everything goes into private data structure
+      this.privateDataStructure.addAttribute({
+        name: attribute.shortName,
+        type: attribute.type,
+        comments: attribute.comments,
+        required: true,
+      });
+
+      /***************************************************************************
+       * Operation inputs / outputs
+       **************************************************************************/
+
+      // if user visible it might be an input or output
+      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
+        // all outputs get everything visible
+        this.createOperation.outputStructure.addAttribute({
+          name: attribute.name,
+          type: attribute.type,
+          comments: attribute.comments,
+          required: true,
+        });
+        this.readOperation.outputStructure.addAttribute({
+          name: attribute.name,
+          type: attribute.type,
+          comments: attribute.comments,
+          required: true,
+        });
+        this.updateOperation.outputStructure.addAttribute({
+          name: attribute.name,
+          type: attribute.type,
+          comments: attribute.comments,
+          required: true,
+        });
+        this.deleteOperation.outputStructure.addAttribute({
+          name: attribute.name,
+          type: attribute.type,
+          comments: attribute.comments,
+          required: true,
+        });
+
+        // create / update / delete need identifiers
+        if (attribute.identifier === IdentifierType.PRIMARY) {
+          this.readOperation.inputStructure.addAttribute({
+            name: attribute.name,
+            type: attribute.type,
+            comments: attribute.comments,
+            required: true,
+          });
+          this.updateOperation.inputStructure.addAttribute({
+            name: attribute.name,
+            type: attribute.type,
+            comments: attribute.comments,
+            required: true,
+          });
+          this.deleteOperation.inputStructure.addAttribute({
+            name: attribute.name,
+            type: attribute.type,
+            comments: attribute.comments,
+            required: true,
+          });
+        }
+
+        // create/update get all user managed
+        if (attribute.management === ManagementType.USER_MANAGED) {
+          this.createOperation.inputStructure.addAttribute({
+            name: attribute.name,
+            type: attribute.type,
+            comments: attribute.comments,
+            required: true,
+          });
+          this.updateOperation.inputStructure.addAttribute({
+            name: attribute.name,
+            type: attribute.type,
+            comments: attribute.comments,
+            required: true,
+          });
+        }
+      }
+    }); // and loop attributes
+
+    /***************************************************************************
+     * Typescript Generators
+     **************************************************************************/
   }
 }

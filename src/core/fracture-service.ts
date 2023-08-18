@@ -208,10 +208,9 @@ export class FractureService extends TypeScriptProject {
 
   /*****************************************************************************
    *
-   * Pre-synth
+   * Pre-synthesis
    *
-   * We should have all our operations and attributes added now so it's safe to
-   * start looping over them and preparing for codegen.
+   * Add file generation tagets here.
    *
    ****************************************************************************/
   preSynthesize(): void {
