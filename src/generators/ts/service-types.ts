@@ -1,5 +1,5 @@
 import ts from "typescript";
-import { TypeFactory } from "./factories/type";
+import { toTypes } from "./factories/type";
 import { TypeScriptSource, TypeScriptSourceOptions } from "./source";
 import { FractureService } from "../../core/fracture-service";
 
@@ -36,7 +36,7 @@ export class TypescriptServiceTypes extends TypeScriptSource {
      **************************************************************************/
 
     const service = this.project as FractureService;
-    const types = TypeFactory.toTypes({
+    const types = toTypes({
       service,
       structures: service.structures,
     });

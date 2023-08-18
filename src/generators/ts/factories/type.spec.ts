@@ -1,4 +1,5 @@
-import { TypeFactory } from "./type";
+import { toType } from "./type";
+import { printNodes } from "./typescript-factory";
 import { Fracture, FractureService } from "../../../core";
 import { Structure } from "../../../core/structure";
 import { StructureAttributeType } from "../../../core/structure-attribute";
@@ -14,15 +15,70 @@ beforeEach(() => {
 test("Smoke test", () => {
   const structure = new Structure(service, {
     name: "MyType",
+  });
+  const type = toType({ service, structure });
+  const content = printNodes([type]);
+  expect(content).toMatchSnapshot();
+});
+
+test("Generic and type param support", () => {
+  const structure = new Structure(service, {
+    name: "MyType",
+    typeParameter: "T",
     attributes: [
       {
-        name: "id",
-        type: StructureAttributeType.STRING,
+        name: "arrayType",
+        required: true,
+        type: StructureAttributeType.ARRAY,
+        typeParameter: "T",
+      },
+      {
+        name: "customType",
+        required: true,
+        type: StructureAttributeType.CUSTOM,
+        typeParameter: "CustomValue",
       },
     ],
   });
-  const type = TypeFactory.toType({ service, structure });
-  const content = TypeFactory.print([type]);
+  const type = toType({ service, structure });
+  const content = printNodes([type]);
+  expect(content).toMatchSnapshot();
+  // console.log(content);
+});
 
-  console.log(content);
+test("Optional and Required work", () => {
+  const structure = new Structure(service, {
+    name: "MyType",
+    attributes: [
+      {
+        name: "should-be-required",
+        required: true,
+      },
+      {
+        name: "should-be-optional",
+        required: false,
+      },
+    ],
+  });
+  const type = toType({ service, structure });
+  const content = printNodes([type]);
+  expect(content).toMatchSnapshot();
+});
+
+test("All attribute types should match snapshot", () => {
+  const attributes = Object.entries(StructureAttributeType).map(
+    ([key, value]) => {
+      return { name: key, type: value };
+    }
+  );
+  const structure = new Structure(service, {
+    name: "MyType",
+    attributes,
+  });
+
+  const type = toType({ service, structure });
+  const content = printNodes([type]);
+  expect(content).toMatchSnapshot();
+
+  // console.log(content);
 });

@@ -6,7 +6,8 @@ import { ResourceAttributeType } from "./resource-attribute";
 
 export const StructureAttributeType = {
   ...ResourceAttributeType,
-  STRUCTURE: "Structure",
+  ARRAY: "Array",
+  CUSTOM: "Custom",
 } as const;
 
 export type StructureAttributeOptions = {
