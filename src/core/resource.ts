@@ -1,3 +1,4 @@
+import { join } from "path";
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { FractureService } from "./fracture-service";
@@ -11,6 +12,12 @@ import {
   VisabilityType,
 } from "./resource-attribute";
 import { Structure, StructureOptions } from "./structure";
+import { TypescriptCommand } from "../generators/ts/command";
+import { TypescriptLambdaApiGatewayConstruct } from "../generators/ts/lambda-api-gateway-construct";
+import { TypescriptLambdaApiGatewayHandler } from "../generators/ts/lambda-api-gateway-handler";
+import { TypescriptLambdaAppsyncConstruct } from "../generators/ts/lambda-appsync-construct";
+import { TypescriptLambdaAppsyncHandler } from "../generators/ts/lambda-appsync-handler";
+import { TypescriptStrategy } from "../generators/ts/strategy";
 
 export interface ResourceOptions {
   /**
@@ -319,9 +326,12 @@ export class Resource extends Component {
   preSynthesize(): void {
     super.preSynthesize();
 
+    const service = this.project as FractureService;
+
     /***************************************************************************
      * Loop attributes & build data structures
      **************************************************************************/
+
     this.attributes.forEach((attribute) => {
       /***************************************************************************
        * Update data structures
@@ -420,5 +430,60 @@ export class Resource extends Component {
     /***************************************************************************
      * Typescript Generators
      **************************************************************************/
+
+    const strategy = TypescriptStrategy.of(service);
+
+    if (!strategy) {
+      throw new Error(`No TypescriptStrategy defined at the service level.`);
+    }
+
+    // paths
+    const comamndRoot = join("generated", "ts", "commands");
+    const apiGatewayRoot = join("generated", "ts", "lambda", "apigw");
+    const appsyncRoot = join("generated", "ts", "lambda", "appsync");
+
+    this.operations.forEach((operation) => {
+      const format = (suffix: string) => {
+        const base = strategy.formatFileName(`${operation.name}-${suffix}`);
+        return `${base}.ts`;
+      };
+
+      // command
+      new TypescriptCommand(service, join(comamndRoot, format("command")), {
+        operation,
+      });
+
+      // api gateway support
+      new TypescriptLambdaApiGatewayConstruct(
+        service,
+        join(apiGatewayRoot, format("")),
+        {
+          operation,
+        }
+      );
+      new TypescriptLambdaApiGatewayHandler(
+        service,
+        join(apiGatewayRoot, "handlers", format("")),
+        {
+          operation,
+        }
+      );
+
+      // appsync support
+      new TypescriptLambdaAppsyncConstruct(
+        service,
+        join(appsyncRoot, format("")),
+        {
+          operation,
+        }
+      );
+      new TypescriptLambdaAppsyncHandler(
+        service,
+        join(appsyncRoot, "handlers", format("")),
+        {
+          operation,
+        }
+      );
+    });
   }
 }

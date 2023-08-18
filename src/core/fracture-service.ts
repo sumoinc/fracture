@@ -221,7 +221,6 @@ export class FractureService extends TypeScriptProject {
      **************************************************************************/
 
     const tsRoot = join("generated", "ts");
-
     const typesFile = join(tsRoot, "types.ts");
     new TypescriptTypes(this, typesFile);
   }
