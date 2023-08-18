@@ -1,5 +1,5 @@
+import { printNodes } from "./print-nodes";
 import { toType } from "./type";
-import { printNodes } from "./typescript-factory";
 import { Fracture, FractureService } from "../../../core";
 import { Structure } from "../../../core/structure";
 import { StructureAttributeType } from "../../../core/structure-attribute";

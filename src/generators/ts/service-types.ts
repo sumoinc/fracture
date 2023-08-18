@@ -1,6 +1,6 @@
 import { TextFile, TextFileOptions } from "projen";
+import { printNodes } from "./factories/print-nodes";
 import { toTypes } from "./factories/type";
-import { printNodes } from "./factories/typescript-factory";
 import { FractureService } from "../../core/fracture-service";
 
 export class TypescriptServiceTypes extends TextFile {
