@@ -8,7 +8,7 @@ import {
   Operation,
   OPERATION_SUB_TYPE,
   OPERATION_TYPE,
-} from "../../core/operation.ts-disabled";
+} from "../../core/operation.ts/index.js";
 import { ResourceAttributeGenerator } from "../../core/resource-attribute.ts";
 import { Resource } from "../../core/resource.ts";
 

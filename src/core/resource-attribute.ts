@@ -128,20 +128,26 @@ export const ResourceAttributeGenerator = {
   COMPOSITION: "Composition",
 } as const;
 
-// export const ValidationRule = {
-//   REQUIRED: "Required",
-//   TYPE: "Type",
-// } as const;
-
 export const ManagementType = {
   /**
-   * USers are intended to edit this value.
+   * Users are intended to edit this value.
    */
   USER_MANAGED: "USER_MANAGED",
   /**
    * This value is intended to be automatically managed by the system.
    */
   SYSTEM_MANAGED: "SYSTEM_MANAGED",
+} as const;
+
+export const IdentifierType = {
+  /**
+   * This attribute is an identifier for this resource.
+   */
+  PRIMARY: "PRIMARY",
+  /**
+   * Not used as an identifier
+   */
+  NONE: "NONE",
 } as const;
 
 export const VisabilityType = {
@@ -194,17 +200,47 @@ export type ResourceAttributeOptions = {
    */
   visibility?: ValueOf<typeof VisabilityType>;
   /**
+   * Is this value an identifier for this resource?
+   *
+   * @default IdentifierType.NONE
+   */
+  identifier?: ValueOf<typeof IdentifierType>;
+  /**
    * The separator to use when composing this attribute from other attributes.
    *
    * @default: '#'
    */
   compositionsSeperator?: string;
   /**
-   * The generator to use to build this attribute.
+   * The generator to use for all operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
   generator?: ValueOf<typeof ResourceAttributeGenerator>;
+  /**
+   * The generator to use for create operations
+   *
+   * @default ResourceAttributeGenerator.NONE
+   */
+  createGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  /**
+   * The generator to use for read operations
+   *
+   * @default ResourceAttributeGenerator.NONE
+   */
+  readGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  /**
+   * The generator to use for update operations
+   *
+   * @default ResourceAttributeGenerator.NONE
+   */
+  updateGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  /**
+   * The generator to use for delete operations
+   *
+   * @default ResourceAttributeGenerator.NONE
+   */
+  deleteGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
   /**
    * The type for this attribute.
    * @default ResourceAttributeType.STRING
@@ -313,6 +349,12 @@ export class ResourceAttribute extends Component {
    */
   public readonly visibility: ValueOf<typeof VisabilityType>;
   /**
+   * Is this value an identifier for this resource?
+   *
+   * @default IdentifierType.NONE
+   */
+  public readonly identifier: ValueOf<typeof IdentifierType>;
+  /**
    * Is this attribute value composed of other attribute values?
    * If so they are stored in this array.
    *
@@ -326,11 +368,29 @@ export class ResourceAttribute extends Component {
    */
   public readonly compositionsSeperator: string;
   /**
-   * The generator to use to build this attribute.
+   * The generator to use for create operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  public readonly generator: ValueOf<typeof ResourceAttributeGenerator>;
+  public readonly createGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  /**
+   * The generator to use for read operations
+   *
+   * @default ResourceAttributeGenerator.NONE
+   */
+  public readonly readGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  /**
+   * The generator to use for update operations
+   *
+   * @default ResourceAttributeGenerator.NONE
+   */
+  public readonly updateGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  /**
+   * The generator to use for delete operations
+   *
+   * @default ResourceAttributeGenerator.NONE
+   */
+  public readonly deleteGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
 
   constructor(service: FractureService, options: ResourceAttributeOptions) {
     super(service);
@@ -347,14 +407,25 @@ export class ResourceAttribute extends Component {
     this.type = options.type ?? ResourceAttributeType.STRING;
     this.management = options.management ?? ManagementType.USER_MANAGED;
     this.visibility = options.visibility ?? VisabilityType.USER_VISIBLE;
+    this.identifier = options.identifier ?? IdentifierType.NONE;
     this.compositionsSeperator = options.compositionsSeperator ?? "#";
-    this.generator = options.generator ?? ResourceAttributeGenerator.NONE;
+
+    /***************************************************************************
+     * Generators
+     **************************************************************************/
+
+    const defaultGenerator =
+      options.generator ?? ResourceAttributeGenerator.NONE;
+    this.createGenerator = options.createGenerator ?? defaultGenerator;
+    this.readGenerator = options.readGenerator ?? defaultGenerator;
+    this.updateGenerator = options.updateGenerator ?? defaultGenerator;
+    this.deleteGenerator = options.deleteGenerator ?? defaultGenerator;
 
     return this;
   }
 
   public addCompositionSource(a: ResourceAttribute) {
-    if (this.generator !== ResourceAttributeGenerator.COMPOSITION) {
+    if (this.createGenerator !== ResourceAttributeGenerator.COMPOSITION) {
       throw new Error(
         "Cannot add composition source to non-composed attribute."
       );

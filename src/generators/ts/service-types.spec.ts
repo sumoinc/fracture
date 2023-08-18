@@ -11,5 +11,30 @@ test("Smoke test", () => {
   new FractureService(fracture, { name: "foo" });
   const content = synthFile(fracture, "services/foo/generated/ts/types.ts");
   expect(content).toMatchSnapshot();
-  //console.log(content);
+  // console.log(content);
+});
+
+test("Resource formatting test", () => {
+  new FractureService(fracture, {
+    name: "foo",
+    resourceOptions: [
+      {
+        name: "User",
+        attributeOptions: [
+          {
+            name: "first-name",
+            shortName: "fn",
+          },
+          {
+            name: "last-name",
+            shortName: "ln",
+          },
+        ],
+      },
+    ],
+  });
+
+  const content = synthFile(fracture, "services/foo/generated/ts/types.ts");
+  expect(content).toMatchSnapshot();
+  // console.log(content);
 });

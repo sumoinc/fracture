@@ -29,9 +29,9 @@ export type StructureOptions = {
    */
   comments?: string[];
   /**
-   * Options for the attributes to add when initializing the structure.
+   * Options for attributes to add when initializing the structure.
    */
-  attributes?: StructureAttributeOptions[];
+  attributeOptions?: StructureAttributeOptions[];
 };
 
 /******************************************************************************
@@ -72,9 +72,9 @@ export class Structure extends Component {
     this.typeParameter = options.typeParameter;
     this.comments = options.comments ?? [];
 
-    if (options.attributes) {
-      options.attributes.forEach((attributeOptions) => {
-        this.addAttribute(attributeOptions);
+    if (options.attributeOptions) {
+      options.attributeOptions.forEach((attributeOption) => {
+        this.addAttribute(attributeOption);
       });
     }
 

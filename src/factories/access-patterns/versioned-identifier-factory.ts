@@ -1,5 +1,5 @@
 import { IdentifierFactory } from "./identifier-factory";
-import { OPERATION_SUB_TYPE } from "../../core/operation.ts-disabled";
+import { OPERATION_SUB_TYPE } from "../../core/operation.ts";
 import {
   ResourceAttributeGenerator,
   ResourceAttributeType,

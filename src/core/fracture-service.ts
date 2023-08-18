@@ -28,6 +28,10 @@ export interface FractureServiceOptions
    * @default fracture defaults
    */
   typescriptStrategyOptions?: TypescriptStrategyOptions;
+  /**
+   * Options for resources to add when initializing the service.
+   */
+  resourceOptions?: ResourceOptions[];
   // srcDir?: string;
   /**
    * Logging options
@@ -118,7 +122,7 @@ export class FractureService extends TypeScriptProject {
 
     this.errorStructure = this.addStructure({
       name: `error`,
-      attributes: [
+      attributeOptions: [
         {
           name: `code`,
           type: StructureAttributeType.INT,
@@ -138,7 +142,7 @@ export class FractureService extends TypeScriptProject {
     this.responseStructure = this.addStructure({
       name: `response`,
       typeParameter: `T`,
-      attributes: [
+      attributeOptions: [
         {
           name: `data`,
           type: StructureAttributeType.CUSTOM,
@@ -160,7 +164,7 @@ export class FractureService extends TypeScriptProject {
     this.listResponseStructure = this.addStructure({
       name: `list-response`,
       typeParameter: `T`,
-      attributes: [
+      attributeOptions: [
         {
           name: `data`,
           type: StructureAttributeType.ARRAY,
@@ -178,6 +182,16 @@ export class FractureService extends TypeScriptProject {
         },
       ],
     });
+
+    /***************************************************************************
+     * Resources based on options
+     **************************************************************************/
+
+    if (options.resourceOptions) {
+      options.resourceOptions.forEach((resourceOption) => {
+        this.addResource(resourceOption);
+      });
+    }
 
     /***************************************************************************
      * Typescript Generators

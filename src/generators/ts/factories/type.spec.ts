@@ -25,7 +25,7 @@ test("Generic and type param support", () => {
   const structure = new Structure(service, {
     name: "MyType",
     typeParameter: "T",
-    attributes: [
+    attributeOptions: [
       {
         name: "arrayType",
         required: true,
@@ -49,7 +49,7 @@ test("Generic and type param support", () => {
 test("Optional and Required work", () => {
   const structure = new Structure(service, {
     name: "MyType",
-    attributes: [
+    attributeOptions: [
       {
         name: "should-be-required",
         required: true,
@@ -66,14 +66,14 @@ test("Optional and Required work", () => {
 });
 
 test("All attribute types should match snapshot", () => {
-  const attributes = Object.entries(StructureAttributeType).map(
+  const attributeOptions = Object.entries(StructureAttributeType).map(
     ([key, value]) => {
       return { name: key, type: value };
     }
   );
   const structure = new Structure(service, {
     name: "MyType",
-    attributes,
+    attributeOptions,
   });
 
   const type = toType({ service, structure });

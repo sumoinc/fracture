@@ -1,7 +1,9 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { FractureService } from "./fracture-service";
+import { Operation, OperationOptions } from "./operation";
 import {
+  IdentifierType,
   ManagementType,
   ResourceAttribute,
   ResourceAttributeGenerator,
@@ -28,6 +30,10 @@ export interface ResourceOptions {
    * @default []
    */
   comments?: string[];
+  /**
+   * Options for attributes to add when initializing the resource.
+   */
+  attributeOptions?: ResourceAttributeOptions[];
 }
 
 export class Resource extends Component {
@@ -49,26 +55,32 @@ export class Resource extends Component {
    * @default []
    */
   public comments: string[];
+
   /**
-   * Primary key for tis resource.
+   * Primary key for this resource.
    */
   public pk: ResourceAttribute;
   /**
-   * Sort key for tis resource.
+   * Sort key for this resource.
    */
   public sk: ResourceAttribute;
   /**
-   * Lookup key for tis resource.
+   * Lookup key for this resource.
    */
   public idx: ResourceAttribute;
+  /**
+   * Id key for this resource.
+   */
+  public id: ResourceAttribute;
+  public type: ResourceAttribute;
+  public version: ResourceAttribute;
+  public dateCreated: ResourceAttribute;
+  public dateModified: ResourceAttribute;
+  public dateDeleted: ResourceAttribute;
   /**
    * All attributes in this resource.
    */
   public attributes: ResourceAttribute[] = [];
-  /**
-   * All structures for this resource.
-   */
-  public structures: Structure[] = [];
   /**
    * Public facing data structure using full attributes names.
    * Excludes hidden attributes.
@@ -81,6 +93,18 @@ export class Resource extends Component {
    * used within internal messaging like SQS and EventBus.
    */
   public privateDataStructure: Structure;
+  /**
+   * All structures for this resource.
+   */
+  public structures: Structure[] = [];
+  public createOperation: Operation;
+  public readOperation: Operation;
+  public updateOperation: Operation;
+  public deleteOperation: Operation;
+  /**
+   * All operations for this resource.
+   */
+  public operations: Operation[] = [];
 
   constructor(service: FractureService, options: ResourceOptions) {
     super(service);
@@ -107,19 +131,47 @@ export class Resource extends Component {
     });
 
     this.privateDataStructure = this.addStructure({
-      name: `${this.name}-data-private`,
+      name: `internal-${this.name}-data`,
     });
 
     /***************************************************************************
-     * Primary Access Pattern
+     * Operations
+     **************************************************************************/
+
+    // Create
+    this.createOperation = this.addOperation({
+      name: `create-${this.name}`,
+      dynamoGsi: service.dynamoTable.keyGsi,
+    });
+
+    // Read
+    this.readOperation = this.addOperation({
+      name: `get-${this.name}`,
+      dynamoGsi: service.dynamoTable.keyGsi,
+    });
+
+    // Update
+    this.updateOperation = this.addOperation({
+      name: `update-${this.name}`,
+      dynamoGsi: service.dynamoTable.keyGsi,
+    });
+
+    // Delete
+    this.deleteOperation = this.addOperation({
+      name: `delete-${this.name}`,
+      dynamoGsi: service.dynamoTable.keyGsi,
+    });
+
+    /***************************************************************************
+     * PArtition and Sort Key
      **************************************************************************/
 
     this.pk = this.addAttribute({
-      name: "id",
-      shortName: service.dynamoTable.pk.name,
-      comments: [`Identifier for this record.`],
+      name: service.dynamoTable.pk.name,
+      comments: [`Partition Key for this record.`],
       management: ManagementType.SYSTEM_MANAGED,
-      visibility: VisabilityType.USER_VISIBLE,
+      visibility: VisabilityType.HIDDEN,
+      generator: ResourceAttributeGenerator.COMPOSITION,
     });
     this.sk = this.addAttribute({
       name: service.dynamoTable.sk.name,
@@ -138,36 +190,95 @@ export class Resource extends Component {
       comments: [`Lookup value for this record.`],
       management: ManagementType.SYSTEM_MANAGED,
       visibility: VisabilityType.HIDDEN,
+      generator: ResourceAttributeGenerator.COMPOSITION,
+      compositionsSeperator: " ",
     });
+
+    /***************************************************************************
+     * Identifier Attribute
+     **************************************************************************/
+
+    this.id = this.addAttribute({
+      name: "id",
+      comments: [`Identifier for this record.`],
+      management: ManagementType.SYSTEM_MANAGED,
+      visibility: VisabilityType.USER_VISIBLE,
+      identifier: IdentifierType.PRIMARY,
+      createGenerator: ResourceAttributeGenerator.GUID,
+    });
+    this.sk.addCompositionSource(this.id);
 
     /***************************************************************************
      * Type Attribute
      **************************************************************************/
 
-    const type = this.addAttribute({
+    this.type = this.addAttribute({
       name: "type",
-      shortName: "_t",
+      shortName: "t",
       comments: [`Type of record.`],
       management: ManagementType.SYSTEM_MANAGED,
       visibility: VisabilityType.USER_VISIBLE,
-      generator: ResourceAttributeGenerator.TYPE,
+      createGenerator: ResourceAttributeGenerator.TYPE,
     });
-    this.sk.addCompositionSource(type);
+    this.sk.addCompositionSource(this.type);
 
     /***************************************************************************
      * Version Attribute
      **************************************************************************/
 
-    const version = this.addAttribute({
+    this.version = this.addAttribute({
       name: "version",
-      shortName: "_v",
-      comments: [`Verion for record.`],
+      shortName: "v",
+      comments: [`Version for record.`],
       management: ManagementType.SYSTEM_MANAGED,
       visibility: VisabilityType.USER_VISIBLE,
-      generator: ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP,
+      createGenerator: ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP,
     });
-    this.sk.addCompositionSource(version);
+    this.sk.addCompositionSource(this.version);
 
+    /***************************************************************************
+     * Audit Dates
+     **************************************************************************/
+
+    this.dateCreated = this.addAttribute({
+      name: "created-timestamp",
+      shortName: "ct",
+      comments: [`The timestamp representing when this record was created.`],
+      management: ManagementType.SYSTEM_MANAGED,
+      visibility: VisabilityType.USER_VISIBLE,
+      createGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
+      updateGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
+    });
+    this.dateModified = this.addAttribute({
+      name: "modified-timestamp",
+      shortName: "mt",
+      comments: [
+        `The timestamp representing when this record was last modified.`,
+      ],
+      management: ManagementType.SYSTEM_MANAGED,
+      visibility: VisabilityType.USER_VISIBLE,
+      updateGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
+    });
+    this.dateDeleted = this.addAttribute({
+      name: "deleted-timestamp",
+      shortName: "dt",
+      comments: [
+        `The timestamp representing when this record was marked as deleted.`,
+      ],
+      management: ManagementType.SYSTEM_MANAGED,
+      visibility: VisabilityType.HIDDEN,
+      deleteGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
+    });
+
+    /***************************************************************************
+     * Attributes based on options
+     **************************************************************************/
+
+    if (options.attributeOptions) {
+      options.attributeOptions.forEach((attributeOption) => {
+        this.addAttribute(attributeOption);
+      });
+    }
     return this;
   }
 
@@ -190,7 +301,7 @@ export class Resource extends Component {
      **************************************************************************/
 
     // if user visible, add to public data structure
-    if (options.visibility === VisabilityType.USER_VISIBLE) {
+    if (attribute.visibility === VisabilityType.USER_VISIBLE) {
       this.publicDataStructure.addAttribute({
         name: attribute.name,
         type: attribute.type,
@@ -201,11 +312,82 @@ export class Resource extends Component {
 
     // everything goes into private data structure
     this.privateDataStructure.addAttribute({
-      name: attribute.name,
+      name: attribute.shortName,
       type: attribute.type,
       comments: attribute.comments,
       required: true,
     });
+
+    /***************************************************************************
+     * Operation inputs / outputs
+     **************************************************************************/
+
+    // if user visible it might be an input or output
+    if (attribute.visibility === VisabilityType.USER_VISIBLE) {
+      // all outputs get everything visible
+      this.createOperation.outputStructure.addAttribute({
+        name: attribute.name,
+        type: attribute.type,
+        comments: attribute.comments,
+        required: true,
+      });
+      this.readOperation.outputStructure.addAttribute({
+        name: attribute.name,
+        type: attribute.type,
+        comments: attribute.comments,
+        required: true,
+      });
+      this.updateOperation.outputStructure.addAttribute({
+        name: attribute.name,
+        type: attribute.type,
+        comments: attribute.comments,
+        required: true,
+      });
+      this.deleteOperation.outputStructure.addAttribute({
+        name: attribute.name,
+        type: attribute.type,
+        comments: attribute.comments,
+        required: true,
+      });
+
+      // create / update / delete need identifiers
+      if (attribute.identifier === IdentifierType.PRIMARY) {
+        this.readOperation.inputStructure.addAttribute({
+          name: attribute.name,
+          type: attribute.type,
+          comments: attribute.comments,
+          required: true,
+        });
+        this.updateOperation.inputStructure.addAttribute({
+          name: attribute.name,
+          type: attribute.type,
+          comments: attribute.comments,
+          required: true,
+        });
+        this.deleteOperation.inputStructure.addAttribute({
+          name: attribute.name,
+          type: attribute.type,
+          comments: attribute.comments,
+          required: true,
+        });
+      }
+
+      // create/update get all user managed
+      if (attribute.management === ManagementType.USER_MANAGED) {
+        this.createOperation.inputStructure.addAttribute({
+          name: attribute.name,
+          type: attribute.type,
+          comments: attribute.comments,
+          required: true,
+        });
+        this.updateOperation.inputStructure.addAttribute({
+          name: attribute.name,
+          type: attribute.type,
+          comments: attribute.comments,
+          required: true,
+        });
+      }
+    }
 
     return attribute;
   }
@@ -217,226 +399,10 @@ export class Resource extends Component {
     return structure;
   }
 
-  /***************************************************************************
-   *
-   * ACCESS PATTERNS
-   *
-   * Add verioned or non-versioned identifier
-   *
-   **************************************************************************/
-
-  // if (this.isVersioned) {
-  //   new VersionedIdentifierFactory(this);
-  // } else {
-  //   new IdentifierFactory(this);
-  // }
-
-  /***************************************************************************1`
-   *
-   * RESOURCE ATTRIBUTES
-   *
-   * Add some default attributes based on the resource's options.
-   *
-   **************************************************************************/
-
-  /**
-   * Add an (optional) Audit Strategies
-   */
-
-  // if (this.auditStrategy.create.dateAttribute) {
-  //   this.addResourceAttribute(this.auditStrategy.create.dateAttribute);
-  // }
-  // if (this.auditStrategy.create.userAttribute) {
-  //   this.addResourceAttribute(this.auditStrategy.create.userAttribute);
-  // }
-  // if (this.auditStrategy.update.dateAttribute) {
-  //   this.addResourceAttribute(this.auditStrategy.update.dateAttribute);
-  // }
-  // if (this.auditStrategy.update.userAttribute) {
-  //   this.addResourceAttribute(this.auditStrategy.update.userAttribute);
-  // }
-  // if (this.auditStrategy.delete.dateAttribute) {
-  //   this.addResourceAttribute(this.auditStrategy.delete.dateAttribute);
-  // }
-  // if (this.auditStrategy.delete.userAttribute) {
-  //   this.addResourceAttribute(this.auditStrategy.delete.userAttribute);
-  // }
-
-  /***************************************************************************
-   *
-   * DATA STRUCTURES
-   *
-   **************************************************************************/
-
-  // this.dataStructure = new Structure(this, { type: STRUCTURE_TYPE.DATA });
-  // this.transientStructure = new Structure(this, {
-  //   type: STRUCTURE_TYPE.TRANSIENT,
-  // });
-
-  /***************************************************************************
-   *
-   * GENERATORS
-   *
-   **************************************************************************/
-
-  // this.ts = new TypescriptResource(this);
-
-  /**
-   * Adds an attribute
-   */
-  // public addResourceAttribute(options: ResourceAttributeOptions) {
-  //   return new ResourceAttribute(this, options);
-  // }
-
-  // public getAttributeByName(name: string): ResourceAttribute | undefined {
-  //   return this.attributes.find((attribute) => attribute.name === name);
-  // }
-
-  // public addLookupSource(attribute: ResourceAttribute) {
-  //   if (!attribute.isRequired) {
-  //     throw new Error(
-  //       `Lookup sources must be required. Attribute "${attribute.name}" is not required.`
-  //     );
-  //   }
-  //   this.lookupAccessPattern.addSkAttributeSource(attribute);
-  // }
-
-  /*****************************************************************************
-   *
-   * ACCESS PATTERN / PK and SK HELPERS
-   *
-   ****************************************************************************/
-
-  // public get keyAccessPattern(): AccessPattern {
-  //   return this.accessPatterns.find(
-  //     (accessPattern) => accessPattern.isKeyAccessPattern
-  //   )!;
-  // }
-
-  // public get lookupAccessPattern(): AccessPattern {
-  //   let accessPattern = this.accessPatterns.find(
-  //     (ap) => ap.isLookupAccessPattern
-  //   )!;
-
-  //   // create it as needed
-  //   if (!accessPattern) {
-  //     accessPattern = new LookupFactory(this).accessPattern;
-  //   }
-
-  //   return accessPattern;
-  // }
-
-  // public get partitionKey(): ResourceAttribute {
-  //   return this.keyAccessPattern.pkAttribute;
-  // }
-
-  // public get sortKey(): ResourceAttribute {
-  //   return this.keyAccessPattern.skAttribute;
-  // }
-
-  // public get partitionKeySources(): ResourceAttribute[] {
-  //   return this.partitionKey.compositionSources.filter((resourceAttribute) => {
-  //     return resourceAttribute;
-  //   });
-  // }
-
-  // public get sortKeySources(): ResourceAttribute[] {
-  //   return this.sortKey.compositionSources.filter((resourceAttribute) => {
-  //     return resourceAttribute;
-  //   });
-  // }
-
-  // public get composableAttributes(): ResourceAttribute[] {
-  //   return this.attributes.filter((resourceAttribute) => {
-  //     return resourceAttribute.isComposableGenerator;
-  //   });
-  // }
-
-  // public get composableAttributeSources(): ResourceAttribute[] {
-  //   const returnAttributes: ResourceAttribute[] = [];
-  //   this.composableAttributes.forEach((resourceAttribute) => {
-  //     resourceAttribute.compositionSources.forEach((sourceAttribute) => {
-  //       returnAttributes.push(sourceAttribute);
-  //     });
-  //   });
-  //   return returnAttributes;
-  // }
-
-  // public get dataAttributes(): ResourceAttribute[] {
-  //   return this.attributes.filter((a) => a.isData);
-  // }
-
-  // public get publicAttributes(): ResourceAttribute[] {
-  //   return this.attributes.filter((a) => a.isPublic);
-  // }
-  // public get privateAttributes(): ResourceAttribute[] {
-  //   return this.attributes.filter((a) => a.isPrivate);
-  // }
-
-  /**
-   *
-   * Returns an array of generated attributes for a given operation.
-   *
-   * @param operation
-   * @returns
-   */
-  /*
-  public generatedAttributesForOperation(
-    operation: Operation,
-    isPublic?: boolean
-  ): ResourceAttribute[] {
-    const returnAttributes = this.attributes.filter((a) =>
-      a.isGeneratedOn(operation)
-    );
-
-    // optionally filter by public marker
-    if (isPublic == undefined) {
-      return returnAttributes;
-    } else {
-      return returnAttributes.filter((a) => a.isPublic === isPublic);
-    }
+  public addOperation(options: OperationOptions) {
+    const service = this.project as FractureService;
+    const operation = new Operation(service, options);
+    this.operations.push(operation);
+    return operation;
   }
-  */
-
-  /**
-   *
-   * Returns an of non-generated attributes we need in order to fully form the
-   * pk and sk.
-   *
-   * Don't include data elements sinc they come in already fromt he outside.
-   *
-   * @param operation
-   * @returns
-   */
-  /*
-  public externalKeyAttributesForOperation(
-    operation: Operation,
-    isPublic?: boolean
-  ): ResourceAttribute[] {
-    const generatedAttributes = this.generatedAttributesForOperation(
-      operation,
-      isPublic
-    );
-
-    return this.composableAttributeSources.filter(
-      (keyAttribute) =>
-        !keyAttribute.isData &&
-        !generatedAttributes.some(
-          (generatedAttribute) => keyAttribute === generatedAttribute
-        )
-    );
-  }
-  */
-
-  // public get dynamoTable(): DynamoTable {
-  //   return this.service.dynamoTable;
-  // }
-
-  // public get namingStrategy() {
-  //   return this.service.namingStrategy;
-  // }
-
-  // public get auditStrategy() {
-  //   return this.service.auditStrategy;
-  // }
 }
