@@ -1,2 +1,2 @@
-export * from "./service-types";
+export * from "./types";
 export * from "./source";

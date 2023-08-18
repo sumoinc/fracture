@@ -10,7 +10,7 @@ import { Resource, ResourceOptions } from "./resource";
 import { Structure, StructureOptions } from "./structure";
 import { StructureAttributeType } from "./structure-attribute";
 import { DynamoTable } from "../dynamodb";
-import * as ts from "../generators/ts";
+import { TypescriptTypes } from "../generators";
 import {
   TypescriptStrategy,
   TypescriptStrategyOptions,
@@ -192,14 +192,6 @@ export class FractureService extends TypeScriptProject {
         this.addResource(resourceOption);
       });
     }
-
-    /***************************************************************************
-     * Typescript Generators
-     **************************************************************************/
-
-    const typesFile = join("generated", "ts", "types.ts");
-
-    new ts.TypescriptServiceTypes(this, typesFile);
   }
 
   public addResource(options: ResourceOptions) {
@@ -214,165 +206,24 @@ export class FractureService extends TypeScriptProject {
     return structure;
   }
 
-  //   /***************************************************************************
-  //    *
-  //    * CREATE PACKAGE SUB-PROJECT
-  //    *
-  //    * This powers a sub-project to house all generated code as a package. This
-  //    * is mostly generated code and should not be touched by devs unless really
-  //    * needed.
-  //    *
-  //    **************************************************************************/
+  /*****************************************************************************
+   *
+   * Pre-synth
+   *
+   * We should have all our operations and attributes added now so it's safe to
+   * start looping over them and preparing for codegen.
+   *
+   ****************************************************************************/
+  preSynthesize(): void {
+    super.preSynthesize();
 
-  //   const project = new TypeScriptProject({
-  //     defaultReleaseBranch: "main",
-  //     name: this.packageName,
-  //     parent: fracture,
-  //     licensed: false,
-  //     outdir: join(fracture.packageRoot, mergedOptions.name),
-  //     packageManager: NodePackageManager.PNPM,
-  //     pnpmVersion: "8",
-  //     prettier: true,
-  //     projenrcTs: true,
-  //     deps: [
-  //       "@aws-sdk/client-dynamodb",
-  //       "@aws-sdk/lib-dynamodb",
-  //       "aws-cdk",
-  //       "aws-cdk-lib",
-  //       "constructs",
-  //       "uuid",
-  //     ],
+    /***************************************************************************
+     * Typescript Generators
+     **************************************************************************/
 
-  //     devDeps: ["@types/uuid"],
-  //     eslintOptions: {
-  //       dirs: ["src"],
-  //       tsconfigPath: "./**/tsconfig.dev.json",
-  //     },
-  //   });
-  //   this.project = project;
+    const tsRoot = join("generated", "ts");
 
-  //   /***************************************************************************
-  //    *
-  //    * INIT SERVICE
-  //    *
-  //    **************************************************************************/
-
-  //   this.fracture.logger.info("-".repeat(80));
-  //   this.fracture.logger.info(`INIT Service: "${this.name}"`);
-  //   this.fracture.logger.info("-".repeat(80));
-
-  //   // inverse
-  //   this.fracture.services.push(this);
-
-  //   /***************************************************************************
-  //    *
-  //    * DYNAMO TABLE
-  //    *
-  //    * Add dynamo table per options defined in service definition
-  //    *
-  //    **************************************************************************/
-
-  //   this.dynamoTable = new DynamoTable(this);
-
-  //   // add Dynalite support for Jest tests
-  //   this.dynaliteSupport = new DynaliteSupport(this);
-
-  //   /***************************************************************************
-  //    *
-  //    * GENERATORS
-  //    *
-  //    **************************************************************************/
-
-  //   //this.ts = new TypescriptService(this);
-
-  //   this.tsTypes = new TypescriptTypes(this);
-  //   this.cdkApp = new CdkApp(this);
-
-  //   return this;
-  // }
-
-  // public get name(): string {
-  //   return this.options.name;
-  // }
-
-  // public get packageName(): string {
-  //   return `@${this.fracture.name}/${this.name}-pkg`;
-  // }
-
-  // public get serviceName(): string {
-  //   return `@${this.fracture.name}/${this.name}-svc`;
-  // }
-
-  // public get isVersioned(): boolean {
-  //   return this.options.isVersioned;
-  // }
-
-  // public get namingStrategy(): NamingStrategy {
-  //   return this.options.namingStrategy;
-  // }
-
-  // public get auditStrategy() {
-  //   return this.options.auditStrategy;
-  // }
-
-  // public get srcDir() {
-  //   return this.options.srcDir;
-  // }
-
-  // public get serviceRoot() {
-  //   return join(this.fracture.packageRoot, this.name);
-  // }
-
-  // /**
-  //  * Returns index for this package in the overall project.
-  //  * Useful when trying to split up ports for testing in parallel, etc.
-  //  */
-  // public get serviceIndex() {
-  //   const { services } = this.fracture;
-  //   return services.findIndex((p) => p.name === this.name) || 0;
-  // }
-
-  // /*****************************************************************************
-  //  *
-  //  *  Configuration Helpers
-  //  *
-  //  ****************************************************************************/
-
-  // /**
-  //  * Add a resource to the fracture project.
-  //  *
-  //  * @param {ResourceOptions}
-  //  * @returns {Resource}
-  //  */
-  // public addResource(options: ResourceOptions) {
-  //   return new Resource(this, options);
-  // }
-
-  // public get keyDynamoGsi(): DynamoGsi {
-  //   return this.dynamoTable.keyDynamoGsi;
-  // }
-
-  // public get lookupDynamoGsi(): DynamoGsi {
-  //   return this.dynamoTable.lookupDynamoGsi;
-  // }
-
-  // /*****************************************************************************
-  //  *
-  //  *  TYPESCRIPT HELPERS
-  //  *
-  //  ****************************************************************************/
-
-  // public get tsResponseTypeName() {
-  //   return formatStringByNamingStrategy(
-  //     "response",
-  //     this.namingStrategy.ts.typeName
-  //   );
-  // }
-
-  // public get tsLlistResponseTypeName() {
-  //   return formatStringByNamingStrategy(
-  //     "list-response",
-  //     this.namingStrategy.ts.typeName
-  //   );
-  // }
+    const typesFile = join(tsRoot, "types.ts");
+    new TypescriptTypes(this, typesFile);
+  }
 }

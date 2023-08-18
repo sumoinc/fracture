@@ -3,7 +3,7 @@ import { printNodes } from "./factories/print-nodes";
 import { toTypes } from "./factories/type";
 import { FractureService } from "../../core/fracture-service";
 
-export class TypescriptServiceTypes extends TextFile {
+export class TypescriptTypes extends TextFile {
   constructor(
     service: FractureService,
     filePath: string,
