@@ -1,4 +1,3 @@
-import { ValueOf } from "type-fest";
 import { SyntaxKind, addSyntheticLeadingComment, factory } from "typescript";
 import { FractureService } from "../../../core";
 import {
@@ -37,28 +36,89 @@ export const toTypeProperty = ({
   service: FractureService;
   attribute: StructureAttribute;
 }) => {
+  /***************************************************************************
+   * Strategy
+   **************************************************************************/
+
   const strategy = TypescriptStrategy.of(service);
 
   if (!strategy) {
     throw new Error(`No TypescriptStrategy defined at the service level.`);
   }
 
+  /***************************************************************************
+   * Type Closure
+   **************************************************************************/
+
+  const toTypePropertyType = () => {
+    const { type, typeParameter } = {
+      typeParameter: "any",
+      ...attribute,
+    };
+
+    switch (type) {
+      case StructureAttributeType.GUID:
+      case StructureAttributeType.STRING:
+      case StructureAttributeType.EMAIL:
+      case StructureAttributeType.PHONE:
+      case StructureAttributeType.URL:
+      case StructureAttributeType.DATE:
+      case StructureAttributeType.TIME:
+      case StructureAttributeType.DATE_TIME:
+      case StructureAttributeType.JSON:
+      case StructureAttributeType.IPADDRESS:
+        return factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
+      case StructureAttributeType.INT:
+      case StructureAttributeType.FLOAT:
+      case StructureAttributeType.TIMESTAMP:
+      case StructureAttributeType.COUNT:
+      case StructureAttributeType.AVERAGE:
+      case StructureAttributeType.SUM:
+        return factory.createKeywordTypeNode(SyntaxKind.NumberKeyword);
+      case StructureAttributeType.BOOLEAN:
+        return factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword);
+      case StructureAttributeType.ARRAY:
+        return factory.createTypeReferenceNode(
+          factory.createIdentifier("Array"),
+          typeParameter === "any"
+            ? [factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)]
+            : [
+                factory.createTypeReferenceNode(
+                  factory.createIdentifier(
+                    strategy.formatTypeName(typeParameter)
+                  ),
+                  undefined
+                ),
+              ]
+        );
+      case StructureAttributeType.CUSTOM:
+        return typeParameter === "any"
+          ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+          : factory.createTypeReferenceNode(
+              factory.createIdentifier(strategy.formatTypeName(typeParameter)),
+              undefined
+            );
+
+      default:
+        throw new Error(`Unknown attribute type: ${type}`);
+    }
+  };
+
+  /***************************************************************************
+   * Build Type
+   **************************************************************************/
+
   // is this attribute required?
   const required = !attribute.required
     ? factory.createToken(SyntaxKind.QuestionToken)
     : undefined;
-
-  const propertyType = toTypePropertyType(
-    attribute.type,
-    attribute.typeParameter
-  );
 
   // define the property
   const prop = factory.createPropertySignature(
     undefined,
     factory.createIdentifier(strategy.formatAttributeName(attribute.name)),
     required,
-    propertyType
+    toTypePropertyType()
   );
 
   // add comments if needed
@@ -72,50 +132,4 @@ export const toTypeProperty = ({
   }
 
   return prop;
-};
-
-const toTypePropertyType = (
-  type: ValueOf<typeof StructureAttributeType>,
-  typeParameter: string = "any"
-) => {
-  switch (type) {
-    case StructureAttributeType.GUID:
-    case StructureAttributeType.STRING:
-    case StructureAttributeType.EMAIL:
-    case StructureAttributeType.PHONE:
-    case StructureAttributeType.URL:
-    case StructureAttributeType.DATE:
-    case StructureAttributeType.TIME:
-    case StructureAttributeType.DATE_TIME:
-    case StructureAttributeType.JSON:
-    case StructureAttributeType.IPADDRESS:
-      return factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
-    case StructureAttributeType.INT:
-    case StructureAttributeType.FLOAT:
-    case StructureAttributeType.TIMESTAMP:
-    case StructureAttributeType.COUNT:
-    case StructureAttributeType.AVERAGE:
-    case StructureAttributeType.SUM:
-      return factory.createKeywordTypeNode(SyntaxKind.NumberKeyword);
-    case StructureAttributeType.BOOLEAN:
-      return factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword);
-    case StructureAttributeType.ARRAY:
-      return factory.createTypeReferenceNode(
-        factory.createIdentifier("Array"),
-        [
-          factory.createTypeReferenceNode(
-            factory.createIdentifier(typeParameter),
-            undefined
-          ),
-        ]
-      );
-    case StructureAttributeType.CUSTOM:
-      return factory.createTypeReferenceNode(
-        factory.createIdentifier(typeParameter),
-        undefined
-      );
-
-    default:
-      throw new Error(`Unknown attribute type: ${type}`);
-  }
 };

@@ -47,7 +47,7 @@ export class TypeScriptSource extends SourceCode {
   }
 
   /**
-   * Add multiple l;ines to the file at one time.
+   * Add multiple lines to the file at one time.
    * @param lines
    */
   public comments(lines: string[]): void {

@@ -7,8 +7,8 @@ import {
 } from "projen/lib/typescript";
 import { Fracture } from "./fracture";
 import { Resource, ResourceOptions } from "./resource";
-import { ResourceAttributeType } from "./resource-attribute";
 import { Structure, StructureOptions } from "./structure";
+import { StructureAttributeType } from "./structure-attribute";
 import { DynamoTable } from "../dynamodb";
 import * as ts from "../generators/ts";
 import {
@@ -118,12 +118,10 @@ export class FractureService extends TypeScriptProject {
 
     this.errorStructure = this.addStructure({
       name: `error`,
-      comments: ["foo"],
       attributes: [
         {
           name: `code`,
-          type: ResourceAttributeType.INT,
-          comments: ["bar"],
+          type: StructureAttributeType.INT,
         },
         {
           name: `source`,
@@ -143,14 +141,18 @@ export class FractureService extends TypeScriptProject {
       attributes: [
         {
           name: `data`,
+          type: StructureAttributeType.CUSTOM,
+          typeParameter: `T`,
           required: false,
         },
         {
           name: `errors`,
+          type: StructureAttributeType.ARRAY,
+          typeParameter: `error`,
         },
         {
           name: `status`,
-          type: ResourceAttributeType.INT,
+          type: StructureAttributeType.INT,
         },
       ],
     });
@@ -161,14 +163,18 @@ export class FractureService extends TypeScriptProject {
       attributes: [
         {
           name: `data`,
+          type: StructureAttributeType.ARRAY,
+          typeParameter: `T`,
           required: false,
         },
         {
           name: `errors`,
+          type: StructureAttributeType.ARRAY,
+          typeParameter: `error`,
         },
         {
           name: `status`,
-          type: ResourceAttributeType.INT,
+          type: StructureAttributeType.INT,
         },
       ],
     });
@@ -179,9 +185,7 @@ export class FractureService extends TypeScriptProject {
 
     const typesFile = join("generated", "ts", "types.ts");
 
-    new ts.TypescriptServiceTypes(this, typesFile, {
-      service: this,
-    });
+    new ts.TypescriptServiceTypes(this, typesFile);
   }
 
   public addResource(options: ResourceOptions) {

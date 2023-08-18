@@ -18,7 +18,7 @@ describe("validate generated project files", () => {
     const content = synthFiles(fracture, "services");
     const fileList = Object.keys(content);
     expect(fileList).toMatchSnapshot();
-    //console.log(JSON.stringify(fileList, null, 2));
+    // console.log(JSON.stringify(fileList, null, 2));
   });
 
   test("services/foo/.eslintrc.json", () => {

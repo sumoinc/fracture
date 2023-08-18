@@ -26,7 +26,7 @@ export type StructureAttributeOptions = {
   /**
    * Type parameter for this structure attribute.
    *
-   * @default undefined
+   * @default any
    * @example 'T' for MyType<T> generic
    */
   typeParameter?: string;
@@ -60,7 +60,7 @@ export class StructureAttribute extends Component {
   /**
    * Type parameter for this structure attribute.
    *
-   * @default undefined
+   * @default any
    * @example 'T' for MyType<T> generic
    */
   public readonly typeParameter?: string;
@@ -87,7 +87,7 @@ export class StructureAttribute extends Component {
 
     this.name = paramCase(options.name);
     this.type = options.type ?? StructureAttributeType.STRING;
-    this.typeParameter = options.typeParameter;
+    this.typeParameter = options.typeParameter ?? "any";
     this.comments = options.comments ?? [];
     this.required = options.required ?? true;
 

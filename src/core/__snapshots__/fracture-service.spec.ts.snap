@@ -421,6 +421,7 @@ Object {
     ".projen/deps.json",
     ".projen/files.json",
     ".projen/tasks.json",
+    "generated/ts/types.ts",
     "tsconfig.dev.json",
     "tsconfig.json",
   ],
