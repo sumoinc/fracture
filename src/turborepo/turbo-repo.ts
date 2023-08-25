@@ -23,10 +23,6 @@ export class TurboRepo extends Component {
    */
   public readonly testTask: Task;
   /**
-   * Synthesizes your app.
-   */
-  //public readonly synthTask: Task;
-  /**
    * Deploys your app.
    */
   public readonly deployTask: Task;
@@ -79,16 +75,6 @@ export class TurboRepo extends Component {
     });
     fracture.testTask.reset();
     fracture.testTask.spawn(this.testTask);
-
-    /***************************************************************************
-     *
-     * PACKAGE
-     *
-     * Package up all the artifacts for later deployment steps.
-     *
-     **************************************************************************/
-
-    //fracture.packageTask.exec("pnpm turbo package");
 
     /***************************************************************************
      *

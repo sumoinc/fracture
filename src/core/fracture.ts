@@ -122,6 +122,9 @@ export class Fracture extends TypeScriptProject {
       licensed: false,
       deps: ["@sumoc/fracture"],
 
+      // tell projen not to in clude the package step during builds for this project
+      package: false,
+
       // pnpm configs
       packageManager: NodePackageManager.PNPM,
       pnpmVersion: "8",
