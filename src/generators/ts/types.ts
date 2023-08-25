@@ -1,24 +1,22 @@
-import { TextFile, TextFileOptions } from "projen";
+import { buildTypes } from "./factories/build-type";
 import { printNodes } from "./factories/print-nodes";
-import { toTypes } from "./factories/type";
 import { FractureService } from "../../core/fracture-service";
+import { GeneratedTypescriptFile } from "../generated-typescript-file";
 
-export class TypescriptTypes extends TextFile {
-  constructor(
-    service: FractureService,
-    filePath: string,
-    options: TextFileOptions = {}
-  ) {
-    super(service, filePath, options);
+export class GeneratedTypes extends GeneratedTypescriptFile {
+  constructor(service: FractureService) {
+    super(service, "types.ts");
   }
 
-  synthesize(): void {
+  preSynthesize(): void {
+    super.preSynthesize();
+
     /***************************************************************************
      * Service Level Types
      **************************************************************************/
 
     const service = this.project as FractureService;
-    const serviceTypes = toTypes({
+    const serviceTypes = buildTypes({
       service,
       structures: service.structures,
     });
@@ -30,7 +28,7 @@ export class TypescriptTypes extends TextFile {
 
     service.resources.forEach((resource) => {
       // baseline data entities
-      const resourceTypes = toTypes({
+      const resourceTypes = buildTypes({
         service,
         structures: resource.structures,
       });
@@ -41,7 +39,7 @@ export class TypescriptTypes extends TextFile {
 
       // inputs and outputs for each operation
       resource.operations.forEach((operation) => {
-        const operationTypes = toTypes({
+        const operationTypes = buildTypes({
           service,
           structures: operation.structures,
         });
@@ -52,7 +50,5 @@ export class TypescriptTypes extends TextFile {
         });
       });
     });
-
-    super.synthesize();
   }
 }

@@ -43,7 +43,7 @@ describe("validate generated project files", () => {
   test(".github/workflows/build.yml", () => {
     const content = synthFile(fracture, ".github/workflows/build.yml");
     expect(content).toMatchSnapshot();
-    // console.log(JSON.stringify(content, null, 2));
+    //console.log(content);
   });
   test(".github/workflows/pull-request-lint.yml", () => {
     const content = synthFile(
@@ -106,7 +106,7 @@ describe("validate generated project files", () => {
   test(".projen/tasks.json", () => {
     const content = synthFile(fracture, ".projen/tasks.json");
     expect(content).toMatchSnapshot();
-    // console.log(JSON.stringify(content, null, 2));
+    //console.log(JSON.stringify(content, null, 2));
   });
   test("package.json", () => {
     const content = synthFile(fracture, "package.json");

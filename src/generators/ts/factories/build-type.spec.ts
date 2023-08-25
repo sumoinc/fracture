@@ -1,5 +1,5 @@
+import { buildType } from "./build-type";
 import { printNodes } from "./print-nodes";
-import { toType } from "./type";
 import { Fracture, FractureService } from "../../../core";
 import { Structure } from "../../../core/structure";
 import { StructureAttributeType } from "../../../core/structure-attribute";
@@ -16,7 +16,7 @@ test("Smoke test", () => {
   const structure = new Structure(service, {
     name: "MyType",
   });
-  const type = toType({ service, structure });
+  const type = buildType({ service, structure });
   const content = printNodes([type]);
   expect(content).toMatchSnapshot();
 });
@@ -40,7 +40,7 @@ test("Generic and type param support", () => {
       },
     ],
   });
-  const type = toType({ service, structure });
+  const type = buildType({ service, structure });
   const content = printNodes([type]);
   expect(content).toMatchSnapshot();
   // console.log(content);
@@ -60,7 +60,7 @@ test("Optional and Required work", () => {
       },
     ],
   });
-  const type = toType({ service, structure });
+  const type = buildType({ service, structure });
   const content = printNodes([type]);
   expect(content).toMatchSnapshot();
 });
@@ -76,7 +76,7 @@ test("All attribute types should match snapshot", () => {
     attributeOptions,
   });
 
-  const type = toType({ service, structure });
+  const type = buildType({ service, structure });
   const content = printNodes([type]);
   expect(content).toMatchSnapshot();
 

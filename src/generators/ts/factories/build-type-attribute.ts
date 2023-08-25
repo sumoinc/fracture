@@ -9,7 +9,7 @@ import { TypescriptStrategy } from "../strategy";
 /**
  * Turns and array of StructureAttributes into Typescript properties.
  */
-export const toTypeProperies = ({
+export const buildTypeProperies = ({
   service,
   attributes,
 }: {
@@ -18,7 +18,7 @@ export const toTypeProperies = ({
 }) => {
   return factory.createTypeLiteralNode(
     attributes.map((attribute) => {
-      return toTypeProperty({
+      return buildTypeProperty({
         service,
         attribute,
       });
@@ -29,7 +29,7 @@ export const toTypeProperies = ({
 /**
  * Turns one StructureAttribute into a Typescript property.
  */
-export const toTypeProperty = ({
+export const buildTypeProperty = ({
   service,
   attribute,
 }: {
@@ -50,7 +50,7 @@ export const toTypeProperty = ({
    * Type Closure
    **************************************************************************/
 
-  const toTypePropertyType = () => {
+  const buildTypePropertyType = () => {
     const { type, typeParameter } = {
       typeParameter: "any",
       ...attribute,
@@ -118,7 +118,7 @@ export const toTypeProperty = ({
     undefined,
     factory.createIdentifier(strategy.formatAttributeName(attribute.name)),
     required,
-    toTypePropertyType()
+    buildTypePropertyType()
   );
 
   // add comments if needed

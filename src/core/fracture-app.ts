@@ -15,18 +15,6 @@ export interface FractureAppOptions extends Partial<TypeScriptProjectOptions> {
 }
 
 export class FractureApp extends TypeScriptProject {
-  /**
-   * Projen project representing
-   */
-  // public readonly project: TypeScriptProject;
-  // public readonly services: Service[] = [];
-  // public readonly pipelines: Pipeline[] = [];
-  // // parent
-  // public readonly fracture: Fracture;
-  // // all other options
-  // public readonly options: Required<FractureAppOptions>;
-  // generators
-
   constructor(fracture: Fracture, options: FractureAppOptions) {
     /***************************************************************************
      * Projen Props
@@ -138,6 +126,7 @@ export class FractureApp extends TypeScriptProject {
 
     return this;
   }
+
   /*
 
   public get name(): string {
@@ -159,8 +148,6 @@ export class FractureApp extends TypeScriptProject {
   */
 
   /*
-  public addPipeline(options: Omit<PipelineOptions, "app">) {
-    return new Pipeline(this.fracture, { ...options, app: this });
-  }
+
   */
 }

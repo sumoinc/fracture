@@ -1,5 +1,5 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from "typescript";
-import { toTypeProperies } from "./type-attribute";
+import { buildTypeProperies } from "./build-type-attribute";
 import { FractureService } from "../../../core";
 import { Structure } from "../../../core/structure";
 import { TypescriptStrategy } from "../strategy";
@@ -7,7 +7,7 @@ import { TypescriptStrategy } from "../strategy";
 /**
  * Turns and array of Structures into Typescript types.
  */
-export const toTypes = ({
+export const buildTypes = ({
   service,
   structures,
 }: {
@@ -15,7 +15,7 @@ export const toTypes = ({
   structures: Structure[];
 }) => {
   return structures.map((structure) => {
-    return toType({
+    return buildType({
       service,
       structure,
     });
@@ -25,7 +25,7 @@ export const toTypes = ({
 /**
  * Turns one Structure into a Typescript type.
  */
-export const toType = ({
+export const buildType = ({
   service,
   structure,
 }: {
@@ -59,7 +59,7 @@ export const toType = ({
     : undefined;
 
   // build properties for this type
-  const properties = toTypeProperies({
+  const properties = buildTypeProperies({
     service,
     attributes: structure.attributes,
   });

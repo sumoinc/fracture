@@ -5,7 +5,6 @@ import { GitHub } from "projen/lib/github";
 import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
 import { SetRequired } from "type-fest";
 import { Fracture } from "../core/fracture";
-import { TurboRepo } from "../turborepo";
 
 export interface PipelineOptions {
   /**
@@ -97,14 +96,11 @@ export class Pipeline extends Component {
      **************************************************************************/
 
     const github = GitHub.of(fracture);
-    const turborepo = TurboRepo.of(fracture);
 
     if (github) {
       /*************************************************************************
        * Build
        ************************************************************************/
-
-      const buildTask = turborepo ? turborepo.buildTask : fracture.buildTask;
 
       const workflowTriggers = {
         push: {
@@ -116,7 +112,7 @@ export class Pipeline extends Component {
 
       const buildWorkflow = new BuildWorkflow(fracture, {
         name: this.name,
-        buildTask,
+        buildTask: fracture.buildTask,
         artifactsDirectory: fracture.artifactsDirectory,
         // containerImage: options.workflowContainerImage,
         // gitIdentity: this.workflowGitIdentity,
