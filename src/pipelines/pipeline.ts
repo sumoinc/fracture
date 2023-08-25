@@ -84,7 +84,7 @@ export class Pipeline extends Component {
     this.jobs.push(job);
   }
 
-  synthesize(): void {
+  preSynthesize(): void {
     const fracture = this.project as Fracture;
 
     /***************************************************************************

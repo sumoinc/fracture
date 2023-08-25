@@ -145,12 +145,12 @@ export class Fracture extends TypeScriptProject {
      **************************************************************************/
 
     this.productionPipeline = this.addPipeline({
-      name: "production",
+      name: "deploy-production",
       branchTriggerPatterns: ["main"],
     });
 
     this.featurePipeline = this.addPipeline({
-      name: "feature",
+      name: "deploy-feature",
       branchTriggerPatterns: ["feature/*"],
     });
 
