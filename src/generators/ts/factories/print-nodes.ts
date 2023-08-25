@@ -8,7 +8,7 @@ import {
 } from "typescript";
 
 /**
- * Input must be an array, ven though it's not typed as such.
+ * Input must be an array, even though it's not typed as such.
  */
 export const printNodes = (nodes: any) => {
   const printer = createPrinter({ newLine: NewLineKind.LineFeed });

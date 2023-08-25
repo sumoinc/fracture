@@ -4,8 +4,9 @@ import { BuildWorkflow } from "projen/lib/build";
 import { GitHub } from "projen/lib/github";
 import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
 import { SetRequired } from "type-fest";
+import { FractureService } from "../core";
+import { Environment } from "../core/environment";
 import { Fracture } from "../core/fracture";
-import { TurboRepo } from "../turborepo";
 
 export interface PipelineOptions {
   /**
@@ -85,7 +86,29 @@ export class Pipeline extends Component {
     this.jobs.push(job);
   }
 
-  synthesize(): void {
+  addServiceDeployments(
+    services: Array<FractureService>,
+    environments: Array<Environment>
+  ): void {
+    services.forEach((service) => {
+      environments.forEach((environment) => {
+        this.addJob({
+          name: `deploy-${service.name}-${environment.name}`,
+          permissions: {
+            contents: JobPermission.WRITE,
+          },
+          steps: [
+            {
+              name: "Deploy",
+              run: `npx aws-cdk@${service.cdkDeps.cdkVersion} deploy --no-rollback --app ${service.cdkOutDistDir} *-${environment.name}`,
+            },
+          ],
+        });
+      });
+    });
+  }
+
+  preSynthesize(): void {
     const fracture = this.project as Fracture;
 
     /***************************************************************************
@@ -97,14 +120,11 @@ export class Pipeline extends Component {
      **************************************************************************/
 
     const github = GitHub.of(fracture);
-    const turborepo = TurboRepo.of(fracture);
 
     if (github) {
       /*************************************************************************
        * Build
        ************************************************************************/
-
-      const buildTask = turborepo ? turborepo.buildTask : fracture.buildTask;
 
       const workflowTriggers = {
         push: {
@@ -116,18 +136,18 @@ export class Pipeline extends Component {
 
       const buildWorkflow = new BuildWorkflow(fracture, {
         name: this.name,
-        buildTask,
+        buildTask: fracture.buildTask,
         artifactsDirectory: fracture.artifactsDirectory,
-        // containerImage: options.workflowContainerImage,
-        // gitIdentity: this.workflowGitIdentity,
         mutableBuild: false,
-        // preBuildSteps: this.renderWorkflowSetup({
-        //   mutable: options.mutableBuild ?? true,
-        // }),
-        // postBuildSteps,
-        // runsOn: options.workflowRunsOn,
         workflowTriggers,
-        // permissions: workflowPermissions,
+      });
+
+      // move outputs to the dist folder so they can be saved as one big honkin artifact
+      fracture.services.forEach((service) => {
+        buildWorkflow.addPostBuildSteps({
+          name: `Copy Service to Dist (${service.name})`,
+          run: `mkdir -p ${service.cdkOutDistDir} && cp -r ${service.cdkOutBuildDir}/* ${service.cdkOutDistDir}`,
+        });
       });
 
       /*************************************************************************

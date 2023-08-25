@@ -10,11 +10,13 @@ Array [
   "services/foo/.projen/deps.json",
   "services/foo/.projen/files.json",
   "services/foo/.projen/tasks.json",
-  "services/foo/generated/ts/types.ts",
+  "services/foo/cdk.json",
   "services/foo/package.json",
   "services/foo/README.md",
-  "services/foo/src/index.ts",
-  "services/foo/test/hello.test.ts",
+  "services/foo/src/generated/main.ts",
+  "services/foo/src/generated/types.ts",
+  "services/foo/src/main.ts",
+  "services/foo/test/main.test.ts",
   "services/foo/tsconfig.dev.json",
   "services/foo/tsconfig.json",
 ]
@@ -255,9 +257,11 @@ exports[`validate generated project files services/foo/.gitattributes 1`] = `
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated
 /.projen/tasks.json linguist-generated
-/generated/ts/types.ts linguist-generated
+/cdk.json linguist-generated
 /package.json linguist-generated
 /pnpm-lock.yaml linguist-generated
+/src/generated/main.ts linguist-generated
+/src/generated/types.ts linguist-generated
 /tsconfig.dev.json linguist-generated
 /tsconfig.json linguist-generated"
 `;
@@ -305,7 +309,13 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
-!/generated/ts/types.ts
+/assets/
+!/cdk.json
+/cdk.out/
+.cdk.staging/
+.parcel-cache/
+!/src/generated/types.ts
+!/src/generated/main.ts
 "
 `;
 
@@ -329,6 +339,9 @@ dist
 /.projenrc.js
 tsconfig.tsbuildinfo
 /.eslintrc.json
+!/assets/
+cdk.out/
+.cdk.staging/
 "
 `;
 
@@ -361,6 +374,15 @@ Object {
       "name": "@typescript-eslint/parser",
       "type": "build",
       "version": "^5",
+    },
+    Object {
+      "name": "aws-cdk",
+      "type": "build",
+      "version": "^2.93.0",
+    },
+    Object {
+      "name": "esbuild",
+      "type": "build",
     },
     Object {
       "name": "eslint-import-resolver-node",
@@ -402,8 +424,22 @@ Object {
       "type": "build",
     },
     Object {
+      "name": "ts-node",
+      "type": "build",
+    },
+    Object {
       "name": "typescript",
       "type": "build",
+    },
+    Object {
+      "name": "aws-cdk-lib",
+      "type": "runtime",
+      "version": "^2.93.0",
+    },
+    Object {
+      "name": "constructs",
+      "type": "runtime",
+      "version": "^10.0.5",
     },
   ],
 }
@@ -421,7 +457,7 @@ Object {
     ".projen/deps.json",
     ".projen/files.json",
     ".projen/tasks.json",
-    "generated/ts/types.ts",
+    "cdk.json",
     "tsconfig.dev.json",
     "tsconfig.json",
   ],
@@ -456,14 +492,13 @@ Object {
         },
       ],
     },
+    "bundle": Object {
+      "description": "Prepare assets",
+      "name": "bundle",
+    },
     "compile": Object {
       "description": "Only compile",
       "name": "compile",
-      "steps": Array [
-        Object {
-          "exec": "tsc --build",
-        },
-      ],
     },
     "default": Object {
       "description": "Synthesize project files",
@@ -472,6 +507,35 @@ Object {
         Object {
           "cwd": "../..",
           "exec": "npx projen default",
+        },
+      ],
+    },
+    "deploy": Object {
+      "description": "Deploys your CDK app to the AWS cloud",
+      "name": "deploy",
+      "steps": Array [
+        Object {
+          "exec": "cdk deploy",
+          "receiveArgs": true,
+        },
+      ],
+    },
+    "destroy": Object {
+      "description": "Destroys your cdk app in the AWS cloud",
+      "name": "destroy",
+      "steps": Array [
+        Object {
+          "exec": "cdk destroy",
+          "receiveArgs": true,
+        },
+      ],
+    },
+    "diff": Object {
+      "description": "Diffs the currently deployed app against your code",
+      "name": "diff",
+      "steps": Array [
+        Object {
+          "exec": "cdk diff",
         },
       ],
     },
@@ -505,18 +569,15 @@ Object {
     "package": Object {
       "description": "Creates the distribution package",
       "name": "package",
-      "steps": Array [
-        Object {
-          "exec": "mkdir -p dist/js",
-        },
-        Object {
-          "exec": "mv $(npm pack) dist/js/",
-        },
-      ],
     },
     "post-compile": Object {
       "description": "Runs after successful compilation",
       "name": "post-compile",
+      "steps": Array [
+        Object {
+          "spawn": "synth:silent",
+        },
+      ],
     },
     "post-upgrade": Object {
       "description": "Runs after upgrading dependencies",
@@ -525,6 +586,24 @@ Object {
     "pre-compile": Object {
       "description": "Prepare the project for compilation",
       "name": "pre-compile",
+    },
+    "synth": Object {
+      "description": "Synthesizes your cdk app into cdk.out",
+      "name": "synth",
+      "steps": Array [
+        Object {
+          "exec": "cdk synth",
+        },
+      ],
+    },
+    "synth:silent": Object {
+      "description": "Synthesizes your cdk app into cdk.out and suppresses the template in stdout (part of \\"yarn build\\")",
+      "name": "synth:silent",
+      "steps": Array [
+        Object {
+          "exec": "cdk synth -q",
+        },
+      ],
     },
     "test": Object {
       "description": "Run tests",
@@ -559,13 +638,13 @@ Object {
           "exec": "pnpm update npm-check-updates",
         },
         Object {
-          "exec": "npm-check-updates --upgrade --target=minor --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,npm-check-updates,projen,ts-jest,typescript",
+          "exec": "npm-check-updates --upgrade --target=minor --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,aws-cdk,esbuild,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,npm-check-updates,projen,ts-jest,ts-node,typescript,aws-cdk-lib,constructs",
         },
         Object {
           "exec": "pnpm i --no-frozen-lockfile",
         },
         Object {
-          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit npm-check-updates projen ts-jest typescript",
+          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk esbuild eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit npm-check-updates projen ts-jest ts-node typescript aws-cdk-lib constructs",
         },
         Object {
           "exec": "npx projen",
@@ -576,11 +655,14 @@ Object {
       ],
     },
     "watch": Object {
-      "description": "Watch & compile in the background",
+      "description": "Watches changes in your source code and rebuilds and deploys to the current account",
       "name": "watch",
       "steps": Array [
         Object {
-          "exec": "tsc --build -w",
+          "exec": "cdk deploy --hotswap",
+        },
+        Object {
+          "exec": "cdk watch",
         },
       ],
     },
@@ -593,11 +675,17 @@ exports[`validate generated project files services/foo/README.md 1`] = `"# repla
 exports[`validate generated project files services/foo/package.json 1`] = `
 Object {
   "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \\"npx projen\\".",
+  "dependencies": Object {
+    "aws-cdk-lib": "^2.93.0",
+    "constructs": "^10.0.5",
+  },
   "devDependencies": Object {
     "@types/jest": "*",
     "@types/node": "^16",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
+    "aws-cdk": "^2.93.0",
+    "esbuild": "*",
     "eslint": "^8",
     "eslint-import-resolver-node": "*",
     "eslint-import-resolver-typescript": "*",
@@ -607,6 +695,7 @@ Object {
     "npm-check-updates": "^16",
     "projen": "*",
     "ts-jest": "*",
+    "ts-node": "*",
     "typescript": "*",
   },
   "jest": Object {
@@ -650,44 +739,36 @@ Object {
     ],
   },
   "license": "UNLICENSED",
-  "main": "lib/index.js",
   "name": "foo",
   "pnpm": Object {},
   "scripts": Object {
     "build": "npx projen build",
+    "bundle": "npx projen bundle",
     "compile": "npx projen compile",
     "default": "npx projen default",
+    "deploy": "npx projen deploy",
+    "destroy": "npx projen destroy",
+    "diff": "npx projen diff",
     "eslint": "npx projen eslint",
     "package": "npx projen package",
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
     "pre-compile": "npx projen pre-compile",
     "projen": "npx projen",
+    "synth": "npx projen synth",
+    "synth:silent": "npx projen synth:silent",
     "test": "npx projen test",
     "test:watch": "npx projen test:watch",
     "upgrade": "npx projen upgrade",
     "watch": "npx projen watch",
   },
-  "types": "lib/index.d.ts",
   "version": "0.0.0",
 }
 `;
 
-exports[`validate generated project files services/foo/src/index.ts 1`] = `
-"export class Hello {
-  public sayHello() {
-    return 'hello, world!';
-  }
-}"
-`;
+exports[`validate generated project files services/foo/src/index.ts 1`] = `undefined`;
 
-exports[`validate generated project files services/foo/test/hello.test.ts 1`] = `
-"import { Hello } from '../src';
-
-test('hello', () => {
-  expect(new Hello().sayHello()).toBe('hello, world!');
-});"
-`;
+exports[`validate generated project files services/foo/test/hello.test.ts 1`] = `undefined`;
 
 exports[`validate generated project files services/foo/tsconfig.dev.json 1`] = `
 Object {
@@ -756,7 +837,9 @@ Object {
     "stripInternal": true,
     "target": "ES2019",
   },
-  "exclude": Array [],
+  "exclude": Array [
+    "cdk.out",
+  ],
   "include": Array [
     "src/**/*.ts",
   ],

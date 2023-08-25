@@ -180,7 +180,7 @@ export type ResourceAttributeOptions = {
    *
    * @default []
    */
-  comments?: string[];
+  comments?: Array<string>;
   /**
    * What is the type for tis attribute?
    *
@@ -329,7 +329,7 @@ export class ResourceAttribute extends Component {
    *
    * @default []
    */
-  public comments: string[];
+  public comments: Array<string>;
   /**
    * What is the type for tis attribute?
    *
@@ -360,7 +360,7 @@ export class ResourceAttribute extends Component {
    *
    * @default[]
    */
-  public readonly compositionSources: ResourceAttribute[] = [];
+  public readonly compositionSources: Array<ResourceAttribute> = [];
   /**
    * The separator to use when composing this attribute from other attributes.
    *

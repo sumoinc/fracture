@@ -4,8 +4,10 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
+import { Environment, EnvironmentOptions } from "./environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { FractureService, FractureServiceOptions } from "./fracture-service";
+import { Pipeline, PipelineOptions } from "../pipelines";
 import { PnpmWorkspace } from "../pnpm";
 import { VsCodeConfiguration } from "../projen";
 import { TurboRepo, TurboRepoOptions } from "../turborepo/turbo-repo";
@@ -50,12 +52,6 @@ export interface FractureOptions extends Partial<TypeScriptProjectOptions> {
    */
   //auditStrategy?: AuditStrategy;
   /**
-   * Enable Turborepo
-   *
-   * @default true
-   */
-  turboRepoEnabled?: boolean;
-  /**
    * Options for using TurboRepo
    *
    * @default {}
@@ -92,11 +88,21 @@ export class Fracture extends TypeScriptProject {
   /**
    * All services in this project.
    */
-  public readonly services: FractureService[] = [];
+  public readonly services: Array<FractureService> = [];
   /**
    * All apps in this project.
    */
-  public readonly apps: FractureApp[] = [];
+  public readonly apps: Array<FractureApp> = [];
+  public readonly productionPipeline: Pipeline;
+  public readonly featurePipeline: Pipeline;
+  /**
+   * Deployment Pipelines
+   */
+  public readonly pipelines: Array<Pipeline> = [];
+  /**
+   * Deployment Environments
+   */
+  public readonly environments: Array<Environment> = [];
 
   constructor(options: FractureOptions = {}) {
     /***************************************************************************
@@ -108,6 +114,7 @@ export class Fracture extends TypeScriptProject {
     const projenOptions: TypeScriptProjectOptions = {
       name: options.name ?? "fracture",
       defaultReleaseBranch,
+      package: false,
       packageManager: NodePackageManager.PNPM,
       pnpmVersion: "8",
       logging: options.logging ?? {
@@ -136,12 +143,21 @@ export class Fracture extends TypeScriptProject {
      * TUBOREPO
      **************************************************************************/
 
-    const turboRepoEnabled = options.turboRepoEnabled ?? true;
-    const turboRepoOptions = options.turboRepoOptions ?? {};
+    new TurboRepo(this, options.turboRepoOptions ?? {});
 
-    if (turboRepoEnabled) {
-      new TurboRepo(this, turboRepoOptions);
-    }
+    /***************************************************************************
+     * PIPELNES
+     **************************************************************************/
+
+    this.productionPipeline = this.addPipeline({
+      name: "deploy-production",
+      branchTriggerPatterns: ["main"],
+    });
+
+    this.featurePipeline = this.addPipeline({
+      name: "deploy-feature",
+      branchTriggerPatterns: ["feature/*"],
+    });
 
     /***************************************************************************
      * PNPM - enable workspaces
@@ -168,6 +184,18 @@ export class Fracture extends TypeScriptProject {
     const app = new FractureApp(this, options);
     this.apps.push(app);
     return app;
+  }
+
+  public addPipeline(options: PipelineOptions) {
+    const pipeline = new Pipeline(this, options);
+    this.pipelines.push(pipeline);
+    return pipeline;
+  }
+
+  public addEnvironment(options: EnvironmentOptions) {
+    const environment = new Environment(this, options);
+    this.environments.push(environment);
+    return environment;
   }
 
   /***************************************************************************

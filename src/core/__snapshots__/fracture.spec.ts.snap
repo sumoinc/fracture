@@ -155,6 +155,8 @@ exports[`validate generated project files .gitattributes 1`] = `
 /.gitattributes linguist-generated
 /.github/pull_request_template.md linguist-generated
 /.github/workflows/build.yml linguist-generated
+/.github/workflows/deploy-feature.yml linguist-generated
+/.github/workflows/deploy-production.yml linguist-generated
 /.github/workflows/pull-request-lint.yml linguist-generated
 /.github/workflows/release.yml linguist-generated
 /.github/workflows/upgrade-main.yml linguist-generated
@@ -537,6 +539,8 @@ junit.xml
 !/pnpm-workspace.yaml
 !/.vscode/settings.json
 !/.vscode/extensions.json
+!/.github/workflows/deploy-production.yml
+!/.github/workflows/deploy-feature.yml
 "
 `;
 
@@ -574,7 +578,6 @@ exports[`validate generated project files .npmignore 1`] = `
 /test-reports/
 junit.xml
 /coverage/
-permissions-backup.acl
 /dist/changelog.md
 /dist/version.txt
 /.mergify.yml
@@ -594,6 +597,7 @@ tsconfig.tsbuildinfo
 /.eslintrc.json
 .turbo
 turbo.json
+permissions-backup.acl
 "
 `;
 
@@ -722,6 +726,8 @@ Object {
     ".gitattributes",
     ".github/pull_request_template.md",
     ".github/workflows/build.yml",
+    ".github/workflows/deploy-feature.yml",
+    ".github/workflows/deploy-production.yml",
     ".github/workflows/pull-request-lint.yml",
     ".github/workflows/release.yml",
     ".github/workflows/upgrade-main.yml",
@@ -841,7 +847,7 @@ Object {
           "exec": "ts-node --project tsconfig.dev.json .projenrc.ts",
         },
         Object {
-          "exec": "pnpm turbo eslint",
+          "spawn": "turbo:eslint",
         },
       ],
     },
@@ -887,18 +893,15 @@ Object {
     "package": Object {
       "description": "Creates the distribution package",
       "name": "package",
-      "steps": Array [
-        Object {
-          "exec": "mkdir -p dist/js",
-        },
-        Object {
-          "exec": "mv $(npm pack) dist/js/",
-        },
-      ],
     },
     "post-compile": Object {
       "description": "Runs after successful compilation",
       "name": "post-compile",
+      "steps": Array [
+        Object {
+          "spawn": "synth:silent",
+        },
+      ],
     },
     "post-upgrade": Object {
       "description": "Runs after upgrading dependencies",
@@ -932,16 +935,30 @@ Object {
         },
       ],
     },
+    "synth": Object {
+      "description": "Synthesizes your cdk app into cdk.out",
+      "name": "synth",
+      "steps": Array [
+        Object {
+          "exec": "pnpm turbo synth",
+        },
+      ],
+    },
+    "synth:silent": Object {
+      "description": "Synthesizes your cdk app into cdk.out",
+      "name": "synth:silent",
+      "steps": Array [
+        Object {
+          "exec": "pnpm turbo synth:silent",
+        },
+      ],
+    },
     "test": Object {
       "description": "Run tests",
       "name": "test",
       "steps": Array [
         Object {
-          "exec": "jest --passWithNoTests --updateSnapshot",
-          "receiveArgs": true,
-        },
-        Object {
-          "spawn": "eslint",
+          "spawn": "turbo:test",
         },
       ],
     },
@@ -951,27 +968,6 @@ Object {
       "steps": Array [
         Object {
           "exec": "jest --watch",
-        },
-      ],
-    },
-    "turbo:build": Object {
-      "description": "Build using turborepo.",
-      "name": "turbo:build",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo default",
-        },
-        Object {
-          "exec": "pnpm turbo compile",
-        },
-        Object {
-          "exec": "pnpm turbo eslint",
-        },
-        Object {
-          "exec": "pnpm turbo test",
-        },
-        Object {
-          "exec": "pnpm turbo synth",
         },
       ],
     },
@@ -1004,12 +1000,21 @@ Object {
         },
       ],
     },
-    "turbo:synth": Object {
-      "description": "Synthesizes your cdk app into cdk.out",
-      "name": "turbo:synth",
+    "turbo:eslint": Object {
+      "description": "Lint all repos",
+      "name": "turbo:eslint",
       "steps": Array [
         Object {
-          "exec": "pnpm turbo synth",
+          "exec": "pnpm turbo eslint",
+        },
+      ],
+    },
+    "turbo:test": Object {
+      "description": "Lint all repos",
+      "name": "turbo:test",
+      "steps": Array [
+        Object {
+          "exec": "pnpm turbo test",
         },
       ],
     },
@@ -1075,6 +1080,8 @@ Array [
   ".gitattributes",
   ".github/pull_request_template.md",
   ".github/workflows/build.yml",
+  ".github/workflows/deploy-feature.yml",
+  ".github/workflows/deploy-production.yml",
   ".github/workflows/pull-request-lint.yml",
   ".github/workflows/release.yml",
   ".github/workflows/upgrade-main.yml",
@@ -1100,6 +1107,7 @@ Array [
   "services/test-service/.projen/deps.json",
   "services/test-service/.projen/files.json",
   "services/test-service/.projen/tasks.json",
+  "services/test-service/cdk.json",
   "services/test-service/generated/ts/commands/create-test-resource-command.ts",
   "services/test-service/generated/ts/commands/delete-test-resource-command.ts",
   "services/test-service/generated/ts/commands/get-test-resource-command.ts",
@@ -1120,11 +1128,12 @@ Array [
   "services/test-service/generated/ts/lambda/appsync/handlers/get-test-resource.ts",
   "services/test-service/generated/ts/lambda/appsync/handlers/update-test-resource.ts",
   "services/test-service/generated/ts/lambda/appsync/update-test-resource.ts",
-  "services/test-service/generated/ts/types.ts",
   "services/test-service/package.json",
   "services/test-service/README.md",
-  "services/test-service/src/index.ts",
-  "services/test-service/test/hello.test.ts",
+  "services/test-service/src/generated/main.ts",
+  "services/test-service/src/generated/types.ts",
+  "services/test-service/src/main.ts",
+  "services/test-service/test/main.test.ts",
   "services/test-service/tsconfig.dev.json",
   "services/test-service/tsconfig.json",
   "src/index.ts",
@@ -1223,13 +1232,15 @@ Object {
     "pre-compile": "npx projen pre-compile",
     "projen": "npx projen",
     "release": "npx projen release",
+    "synth": "npx projen synth",
+    "synth:silent": "npx projen synth:silent",
     "test": "npx projen test",
     "test:watch": "npx projen test:watch",
-    "turbo:build": "npx projen turbo:build",
     "turbo:deploy": "npx projen turbo:deploy",
     "turbo:destroy": "npx projen turbo:destroy",
     "turbo:diff": "npx projen turbo:diff",
-    "turbo:synth": "npx projen turbo:synth",
+    "turbo:eslint": "npx projen turbo:eslint",
+    "turbo:test": "npx projen turbo:test",
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "watch": "npx projen watch",
@@ -1336,9 +1347,6 @@ Object {
   "$schema": "https://turborepo.org/schema.json",
   "//": "~~ Generated by projen. To modify, edit .projenrc.ts and run \\"npx projen\\".",
   "pipeline": Object {
-    "//#default": Object {
-      "cache": false,
-    },
     "compile": Object {
       "dependsOn": Array [
         "^compile",
@@ -1364,6 +1372,15 @@ Object {
         "cdk-out/**",
       ],
     },
+    "synth:silent": Object {
+      "dependsOn": Array [
+        "^synth:silent",
+      ],
+      "outputMode": "new-only",
+      "outputs": Array [
+        "cdk-out/**",
+      ],
+    },
     "test": Object {
       "dependsOn": Array [
         "^test",
@@ -1372,6 +1389,7 @@ Object {
       "outputs": Array [
         "coverage**",
         "test-reports/**",
+        "**/__snapshots__/**",
       ],
     },
   },

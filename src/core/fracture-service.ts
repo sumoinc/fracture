@@ -1,23 +1,25 @@
 import { join } from "path";
 import { paramCase } from "change-case";
-import { NodePackageManager } from "projen/lib/javascript";
 import {
-  TypeScriptProject,
-  TypeScriptProjectOptions,
-} from "projen/lib/typescript";
+  AwsCdkTypeScriptApp,
+  AwsCdkTypeScriptAppOptions,
+} from "projen/lib/awscdk";
+import { NodePackageManager } from "projen/lib/javascript";
+
 import { Fracture } from "./fracture";
 import { Resource, ResourceOptions } from "./resource";
 import { Structure, StructureOptions } from "./structure";
 import { StructureAttributeType } from "./structure-attribute";
 import { DynamoTable } from "../dynamodb";
-import { TypescriptTypes } from "../generators";
+import { GeneratedTypes } from "../generators";
+import { GeneratedCdkApp } from "../generators/ts/cdk-app";
 import {
   TypescriptStrategy,
   TypescriptStrategyOptions,
 } from "../generators/ts/strategy";
 
 export interface FractureServiceOptions
-  extends Partial<TypeScriptProjectOptions> {
+  extends Partial<AwsCdkTypeScriptAppOptions> {
   /**
    * A name for the service
    */
@@ -31,7 +33,7 @@ export interface FractureServiceOptions
   /**
    * Options for resources to add when initializing the service.
    */
-  resourceOptions?: ResourceOptions[];
+  resourceOptions?: Array<ResourceOptions>;
   // srcDir?: string;
   /**
    * Logging options
@@ -53,7 +55,7 @@ export interface FractureServiceOptions
   //auditStrategy?: AuditStrategy;
 }
 
-export class FractureService extends TypeScriptProject {
+export class FractureService extends AwsCdkTypeScriptApp {
   /**
    * A name for the service.
    */
@@ -65,7 +67,7 @@ export class FractureService extends TypeScriptProject {
   /**
    * All resourcers in this service.
    */
-  public resources: Resource[] = [];
+  public resources: Array<Resource> = [];
   /**
    * Table defnition for the table that supports this service.
    */
@@ -73,10 +75,18 @@ export class FractureService extends TypeScriptProject {
   /**
    * All structures for this service.
    */
-  public structures: Structure[] = [];
+  public structures: Array<Structure> = [];
   public readonly errorStructure: Structure;
   public readonly responseStructure: Structure;
   public readonly listResponseStructure: Structure;
+  /**
+   * Output directory for CDK artifacts (cdk.out)
+   */
+  public readonly cdkOutBuildDir: string;
+  /**
+   * Where deployable artifacts are stored in pipeline runs
+   */
+  public readonly cdkOutDistDir: string;
 
   constructor(fracture: Fracture, options: FractureServiceOptions) {
     /***************************************************************************
@@ -86,8 +96,9 @@ export class FractureService extends TypeScriptProject {
     // ensure name is param-cased for outdir
     const outdir = join(fracture.serviceRoot, paramCase(options.name));
 
-    const projenOptions: TypeScriptProjectOptions = {
+    const projenOptions: AwsCdkTypeScriptAppOptions = {
       name: options.name,
+      cdkVersion: "2.93.0",
       defaultReleaseBranch: "main",
       parent: fracture,
       packageManager: NodePackageManager.PNPM,
@@ -109,6 +120,8 @@ export class FractureService extends TypeScriptProject {
 
     this.name = options.name;
     this.typescriptStrategy = new TypescriptStrategy(this);
+    this.cdkOutBuildDir = join(outdir, "cdk.out");
+    this.cdkOutDistDir = join(fracture.artifactsDirectory, outdir, "cdk.out");
 
     /***************************************************************************
      * Dynamo Configuration
@@ -192,6 +205,13 @@ export class FractureService extends TypeScriptProject {
         this.addResource(resourceOption);
       });
     }
+
+    /***************************************************************************
+     * Typescript Generators
+     **************************************************************************/
+
+    new GeneratedTypes(this);
+    new GeneratedCdkApp(this);
   }
 
   public addResource(options: ResourceOptions) {
@@ -204,24 +224,5 @@ export class FractureService extends TypeScriptProject {
     const structure = new Structure(this, options);
     this.structures.push(structure);
     return structure;
-  }
-
-  /*****************************************************************************
-   *
-   * Pre-synthesis
-   *
-   * Add file generation tagets here.
-   *
-   ****************************************************************************/
-  preSynthesize(): void {
-    super.preSynthesize();
-
-    /***************************************************************************
-     * Typescript Generators
-     **************************************************************************/
-
-    const tsRoot = join("generated", "ts");
-    const typesFile = join(tsRoot, "types.ts");
-    new TypescriptTypes(this, typesFile);
   }
 }

@@ -76,7 +76,7 @@ export class Operation extends Component {
   /**
    * All structures for this resource.
    */
-  public structures: Structure[] = [];
+  public structures: Array<Structure> = [];
 
   constructor(service: FractureService, options: OperationOptions) {
     super(service);

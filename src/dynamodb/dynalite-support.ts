@@ -21,7 +21,7 @@ export class DynaliteConfig extends TypeScriptSource {
     // add dynalite
     service.addDeps("jest-dynalite");
     // dynalite wants this specific peer version for marshalling
-    service.addPeerDeps("aws-sdk@^2.1336.0");
+    //service.addPeerDeps("aws-sdk@^2.1336.0");
 
     return this;
   }
