@@ -82,7 +82,7 @@ export class Fracture extends TypeScriptProject {
    */
   public readonly srcDir: string;
   /**
-   * The default release branch for this project
+   * The default release branch for this project.
    */
   public readonly defaultReleaseBranch: string;
   /**
@@ -114,18 +114,21 @@ export class Fracture extends TypeScriptProject {
     const projenOptions: TypeScriptProjectOptions = {
       name: options.name ?? "fracture",
       defaultReleaseBranch,
-      package: false,
-      packageManager: NodePackageManager.PNPM,
-      pnpmVersion: "8",
       logging: options.logging ?? {
         level: LogLevel.OFF,
       },
-      workflowNodeVersion: "18",
-      workflowPackageCache: true,
       prettier: true,
       projenrcTs: true,
       licensed: false,
       deps: ["@sumoc/fracture"],
+
+      // pnpm configs
+      packageManager: NodePackageManager.PNPM,
+      pnpmVersion: "8",
+
+      // node version for GitHub actions
+      workflowNodeVersion: "18",
+      workflowPackageCache: true,
     };
 
     super(projenOptions);
