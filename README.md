@@ -9,6 +9,20 @@ Aren't services usually already code?
 
 This definition need some work.
 
+## Nomenclature / Smithy and CDK
+
+This framework borrows some of it's nomenclature from OO, the [Smithy Project at AWS](https://smithy.io/2.0) and the CDK.
+
+- A Resource is one entity or thing to be represented by a model.
+- Each Resource has many Attributes to describe it.
+- Services are a collection of Resources plus their behaviors, this is the smallest deployable unit in the framework. These don't include any UI, only APIs.
+- Apps are stand along websites, web apps, or other "stuff" that is user facing.
+
+Each fracture app is a monorepo containing three primary workspaces
+
+1. Services (/services) - Each represents one api opr "service" in a traditional sense. UI is not meant to live here. Developers are meant to add and edit code here easily.
+1. Apps (/apps) - Each web facing UI. UI is means to live here. Developers are meant to add and edit code here easily.
+
 ## Setting up Fracture
 
 Give it a name, that's it!

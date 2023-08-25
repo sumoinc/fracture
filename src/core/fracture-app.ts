@@ -1,30 +1,61 @@
 import { join } from "path";
 import { paramCase } from "change-case";
-import { JsonFile } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
-import { TypeScriptProject } from "projen/lib/typescript";
-import { deepMerge } from "projen/lib/util";
+import {
+  TypeScriptProject,
+  TypeScriptProjectOptions,
+} from "projen/lib/typescript";
 import { Fracture } from "./fracture";
-import { Pipeline, PipelineOptions } from "./pipeline";
-import { Service } from "./service";
 
-export interface FractureAppOptions {
+export interface FractureAppOptions extends Partial<TypeScriptProjectOptions> {
+  /**
+   * Name for the app. This also becomes the directory where the app is created.
+   */
   name: string;
-  srcDir?: string;
 }
 
-export class FractureApp {
-  // member components
-  public readonly project: TypeScriptProject;
-  public readonly services: Service[] = [];
-  public readonly pipelines: Pipeline[] = [];
-  // parent
-  public readonly fracture: Fracture;
-  // all other options
-  public readonly options: Required<FractureAppOptions>;
+export class FractureApp extends TypeScriptProject {
+  /**
+   * Projen project representing
+   */
+  // public readonly project: TypeScriptProject;
+  // public readonly services: Service[] = [];
+  // public readonly pipelines: Pipeline[] = [];
+  // // parent
+  // public readonly fracture: Fracture;
+  // // all other options
+  // public readonly options: Required<FractureAppOptions>;
   // generators
 
   constructor(fracture: Fracture, options: FractureAppOptions) {
+    /***************************************************************************
+     * Projen Props
+     **************************************************************************/
+
+    // ensure name is param-cased for outdir
+    const outdir = join(fracture.appRoot, paramCase(options.name));
+
+    const projenOptions: TypeScriptProjectOptions = {
+      name: options.name,
+      defaultReleaseBranch: "main",
+      parent: fracture,
+      packageManager: NodePackageManager.PNPM,
+      pnpmVersion: "8",
+      outdir,
+      eslintOptions: {
+        dirs: ["src"],
+        tsconfigPath: "./**/tsconfig.dev.json",
+      },
+      licensed: false,
+      projenrcTs: true,
+    };
+
+    super(projenOptions);
+
+    /***************************************************************************
+     * Props
+     **************************************************************************/
+
     /***************************************************************************
      *
      * DEFAULT OPTIONS
@@ -35,16 +66,16 @@ export class FractureApp {
      **************************************************************************/
 
     // ensure name is param-cased
-    const forcedOptions: Partial<FractureAppOptions> = {
-      name: paramCase(options.name),
-    };
+    // const forcedOptions: Partial<FractureAppOptions> = {
+    //   name: paramCase(options.name),
+    // };
 
-    // all other options
-    const mergedOptions = deepMerge([
-      { ...fracture.options },
-      options,
-      forcedOptions,
-    ]) as Required<FractureAppOptions>;
+    // // all other options
+    // const mergedOptions = deepMerge([
+    //   { ...fracture.options },
+    //   options,
+    //   forcedOptions,
+    // ]) as Required<FractureAppOptions>;
 
     /***************************************************************************
      *
@@ -55,28 +86,29 @@ export class FractureApp {
      **************************************************************************/
 
     // Build sub project
-    const project = new TypeScriptProject({
-      defaultReleaseBranch: "main",
-      name: options.name,
-      parent: fracture,
-      licensed: false,
-      outdir: join(fracture.appRoot, mergedOptions.name),
-      packageManager: NodePackageManager.PNPM,
-      pnpmVersion: "8",
-      prettier: true,
-      projenrcTs: true,
-      deps: ["aws-cdk", "aws-cdk-lib", "constructs", "esbuild"],
-      eslintOptions: {
-        dirs: ["src"],
-        tsconfigPath: "./**/tsconfig.dev.json",
-      },
-    });
-    this.project = project;
 
-    this.project.gitignore.exclude("/cdk.out/");
+    // const project = new TypeScriptProject({
+    //   defaultReleaseBranch: "main",
+    //   name: options.name,
+    //   parent: fracture,
+    //   licensed: false,
+    //   outdir: join(fracture.appRoot, mergedOptions.name),
+    //   packageManager: NodePackageManager.PNPM,
+    //   pnpmVersion: "8",
+    //   prettier: true,
+    //   projenrcTs: true,
+    //   deps: ["aws-cdk", "aws-cdk-lib", "constructs", "esbuild"],
+    //   eslintOptions: {
+    //     dirs: ["src"],
+    //     tsconfigPath: "./**/tsconfig.dev.json",
+    //   },
+    // });
+    // this.project = project;
 
-    this.fracture = fracture;
-    this.options = mergedOptions;
+    // this.project.gitignore.exclude("/cdk.out/");
+
+    // this.fracture = fracture;
+    // this.options = mergedOptions;
 
     /***************************************************************************
      *
@@ -84,12 +116,12 @@ export class FractureApp {
      *
      **************************************************************************/
 
-    this.fracture.logger.info("-".repeat(80));
-    this.fracture.logger.info(`INIT APP: "${this.name}"`);
-    this.fracture.logger.info("-".repeat(80));
+    // this.fracture.logger.info("-".repeat(80));
+    // this.fracture.logger.info(`INIT APP: "${this.name}"`);
+    // this.fracture.logger.info("-".repeat(80));
 
-    // inverse
-    this.fracture.apps.push(this);
+    // // inverse
+    // this.fracture.apps.push(this);
 
     /***************************************************************************
      *
@@ -97,14 +129,16 @@ export class FractureApp {
      *
      **************************************************************************/
 
-    new JsonFile(this.project, "cdk.json", {
-      obj: {
-        app: "npx ts-node --prefer-ts-exts src/build.ts",
-        requireApproval: "never",
-      },
-    });
+    // new JsonFile(this.project, "cdk.json", {
+    //   obj: {
+    //     app: "npx ts-node --prefer-ts-exts src/build.ts",
+    //     requireApproval: "never",
+    //   },
+    // });
+
     return this;
   }
+  /*
 
   public get name(): string {
     return this.options.name;
@@ -114,12 +148,19 @@ export class FractureApp {
     return this.options.srcDir;
   }
 
+  public get appRoot() {
+    return join(this.fracture.appRoot, this.name);
+  }
+
   public useService(service: Service) {
     this.project.addDeps(`${service.fracture.name}@workspace:*`);
     this.services.push(service);
   }
+  */
 
+  /*
   public addPipeline(options: Omit<PipelineOptions, "app">) {
     return new Pipeline(this.fracture, { ...options, app: this });
   }
+  */
 }

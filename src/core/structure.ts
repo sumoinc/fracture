@@ -1,14 +1,10 @@
+import { paramCase } from "change-case";
 import { Component } from "projen";
-import { deepMerge } from "projen/lib/util";
-import { SetRequired, ValueOf } from "type-fest";
-import { formatStringByNamingStrategy } from "./naming-strategy";
-import { Operation, OPERATION_SUB_TYPE } from "./operation";
-import { Resource } from "./resource";
+import { FractureService } from "./fracture-service";
 import {
-  ResourceAttribute,
-  ResourceAttributeGenerator,
-} from "./resource-attribute";
-import { Service } from "./service";
+  StructureAttribute,
+  StructureAttributeOptions,
+} from "./structure-attribute";
 
 /******************************************************************************
  * TYPES
@@ -16,90 +12,82 @@ import { Service } from "./service";
 
 export type StructureOptions = {
   /**
-   *  Type of structure
+   *  Name for the structure.
    */
-  type?: ValueOf<typeof STRUCTURE_TYPE>;
+  name: string;
   /**
-   * Required if type is input or output
+   * Type parameter for this structure type.
+   *
+   * @default undefined
+   * @example 'T' for MyType<T> generic
    */
-  operation?: Operation;
+  typeParameter?: string;
   /**
    * Comment lines to add to the Structure.
+   *
    * @default []
    */
   comments?: string[];
+  /**
+   * Options for attributes to add when initializing the structure.
+   */
+  attributeOptions?: StructureAttributeOptions[];
 };
-
-export const STRUCTURE_TYPE = {
-  INPUT: "Input",
-  OUTPUT: "Output",
-  /**
-   * Represents the structure of persistant data
-   */
-  DATA: "Data",
-  /**
-   * Represents the structure of transient data such as messages or events
-   */
-  TRANSIENT: "Transient",
-} as const;
 
 /******************************************************************************
  * CLASS
  *****************************************************************************/
 
 export class Structure extends Component {
-  // member components
-  // parent
-  public readonly resource: Resource;
-  // all other options
-  public readonly options: SetRequired<StructureOptions, "type" | "comments">;
-  // generators
-  //public readonly ts: TypescriptStructure;
+  /**
+   *  Name for the structure.
+   */
+  public readonly name: string;
+  /**
+   * Type parameter for this structure type.
+   *
+   * @default undefined
+   * @example 'T' for MyType<T> generic
+   */
+  public readonly typeParameter?: string;
+  /**
+   * Comment lines to add to the Structure.
+   *
+   * @default []
+   */
+  public readonly comments: string[];
+  /**
+   * All attributes in this structure.
+   */
+  public attributes: StructureAttribute[] = [];
 
-  constructor(resource: Resource, options: StructureOptions) {
-    super(resource.project);
+  constructor(service: FractureService, options: StructureOptions) {
+    super(service);
 
     /***************************************************************************
-     *
-     * DEFAULT OPTIONS
-     *
+     * Props
      **************************************************************************/
 
-    const defaultOptions: Partial<StructureOptions> = {
-      type: STRUCTURE_TYPE.DATA,
-      comments: ["A generic type"],
-    };
+    this.name = paramCase(options.name);
+    this.typeParameter = options.typeParameter;
+    this.comments = options.comments ?? [];
 
-    /***************************************************************************
-     *
-     * INIT OPERATION
-     *
-     **************************************************************************/
-
-    // member components
-
-    // parents + inverse
-    this.resource = resource;
-    this.resource.structures.push(this);
-
-    // all other options
-    this.options = deepMerge([defaultOptions, options]) as SetRequired<
-      StructureOptions,
-      "type" | "comments"
-    >;
-
-    this.project.logger.info(`INIT Structure: "${this.name}"`);
-
-    //
-    if (
-      (this.type === STRUCTURE_TYPE.INPUT ||
-        this.type === STRUCTURE_TYPE.OUTPUT) &&
-      !this.operation
-    ) {
-      throw new Error(
-        `Operation option is required for Input and Output Structires`
-      );
+    if (options.attributeOptions) {
+      options.attributeOptions.forEach((attributeOption) => {
+        this.addAttribute(attributeOption);
+      });
     }
+
+    // //
+    // if (
+    //   (this.type === StructureType.INPUT ||
+    //     this.type === StructureType.OUTPUT) &&
+    //   !this.operation
+    // ) {
+    //   throw new Error(
+    //     `Operation option is required for Input and Output Structires`
+    //   );
+    // }
 
     /***************************************************************************
      *
@@ -112,9 +100,17 @@ export class Structure extends Component {
     return this;
   }
 
+  public addAttribute(options: StructureAttributeOptions) {
+    const service = this.project as FractureService;
+    const attribute = new StructureAttribute(service, options);
+    this.attributes.push(attribute);
+    return attribute;
+  }
+
   /**
    * Structure name, based on the naming strategy
    */
+  /*
   public get name() {
     const resourceName = this.operation
       ? this.operation.name
@@ -126,186 +122,175 @@ export class Structure extends Component {
       .filter((part) => part.length > 0)
       .join("-");
   }
+  */
 
-  public get type() {
-    return this.options.type;
-  }
+  // public getResourceAttributeByName(name: string) {
+  //   return this.attributes.find((a) => a.name === name);
+  // }
 
-  public get operation(): Operation | undefined {
-    return this.options.operation;
-  }
+  // private sortAttributes(
+  //   resourceAttributes: ResourceAttribute[]
+  // ): ResourceAttribute[] {
+  //   return resourceAttributes.sort((a, b) => {
+  //     if (a.sortPosition < b.sortPosition) {
+  //       return -1;
+  //     } else if (a.sortPosition > b.sortPosition) {
+  //       return 1;
+  //     } else {
+  //       return 0;
+  //     }
+  //   });
+  // }
 
-  public get comments(): string[] {
-    return this.options.comments;
-  }
+  // /**
+  //  * Includes all public attributes, plus generated attributes and GSI
+  //  * attributes. This is a good list to use for dynamodb operations.
+  //  */
+  // public get attributes(): ResourceAttribute[] {
+  //   return this.sortAttributes(this.resource.attributes);
+  // }
 
-  public getResourceAttributeByName(name: string) {
-    return this.attributes.find((a) => a.name === name);
-  }
+  // /**
+  //  * Attributes that should be exposed to the public. Inputs, outputs, etc
+  //  */
+  // public get publicAttributes(): ResourceAttribute[] {
+  //   switch (this.type) {
+  //     case StructureType.DATA:
+  //       return this.attributes.filter((a: ResourceAttribute) => {
+  //         return !a.isAccessPatternKey;
+  //       });
 
-  private sortAttributes(
-    resourceAttributes: ResourceAttribute[]
-  ): ResourceAttribute[] {
-    return resourceAttributes.sort((a, b) => {
-      if (a.sortPosition < b.sortPosition) {
-        return -1;
-      } else if (a.sortPosition > b.sortPosition) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-  }
+  //     // INPUTS
+  //     case StructureType.INPUT:
+  //       switch (this.operation!.operationSubType) {
+  //         case OPERATION_SUB_TYPE.CREATE_ONE:
+  //           return this.attributes.filter((a: ResourceAttribute) => {
+  //             return a.isData;
+  //           });
 
-  /**
-   * Includes all public attributes, plus generated attributes and GSI
-   * attributes. This is a good list to use for dynamodb operations.
-   */
-  public get attributes(): ResourceAttribute[] {
-    return this.sortAttributes(this.resource.attributes);
-  }
+  //         case OPERATION_SUB_TYPE.READ_ONE:
+  //         case OPERATION_SUB_TYPE.DELETE_ONE:
+  //           return this.keyAttributeSources.filter((a) => {
+  //             return !a.isGeneratedOn(this.operation);
+  //           });
 
-  /**
-   * Attributes that should be exposed to the public. Inputs, outputs, etc
-   */
-  public get publicAttributes(): ResourceAttribute[] {
-    switch (this.type) {
-      case STRUCTURE_TYPE.DATA:
-        return this.attributes.filter((a: ResourceAttribute) => {
-          return !a.isAccessPatternKey;
-        });
+  //         case OPERATION_SUB_TYPE.UPDATE_ONE:
+  //           return this.attributes.filter((a: ResourceAttribute) => {
+  //             return (
+  //               !a.isSystem && (a.isData || !a.isGeneratedOn(this.operation))
+  //             );
+  //           });
 
-      // INPUTS
-      case STRUCTURE_TYPE.INPUT:
-        switch (this.operation!.operationSubType) {
-          case OPERATION_SUB_TYPE.CREATE_ONE:
-            return this.attributes.filter((a: ResourceAttribute) => {
-              return a.isData;
-            });
+  //         case OPERATION_SUB_TYPE.LIST:
+  //           return [this.resource.lookupAccessPattern.skAttribute];
 
-          case OPERATION_SUB_TYPE.READ_ONE:
-          case OPERATION_SUB_TYPE.DELETE_ONE:
-            return this.keyAttributeSources.filter((a) => {
-              return !a.isGeneratedOn(this.operation);
-            });
+  //         default:
+  //           return [];
+  //       }
 
-          case OPERATION_SUB_TYPE.UPDATE_ONE:
-            return this.attributes.filter((a: ResourceAttribute) => {
-              return (
-                !a.isSystem && (a.isData || !a.isGeneratedOn(this.operation))
-              );
-            });
+  //     case StructureType.OUTPUT:
+  //       return this.attributes.filter((a: ResourceAttribute) => {
+  //         return !a.isAccessPatternKey && a.isOutputOn(this.operation);
+  //       });
 
-          case OPERATION_SUB_TYPE.LIST:
-            return [this.resource.lookupAccessPattern.skAttribute];
+  //     case StructureType.TRANSIENT:
+  //       return this.attributes.filter((a: ResourceAttribute) => {
+  //         return !a.isAccessPatternKey;
+  //       });
+  //   }
+  // }
 
-          default:
-            return [];
-        }
+  // public get itemAttributes(): ResourceAttribute[] {
+  //   // only applies to inputs
+  //   if (this.type !== StructureType.INPUT) {
+  //     return [];
+  //   }
+  //   // on create, put in everything
+  //   if (this.operation?.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
+  //     return this.sortAttributes(
+  //       this.publicAttributes.concat(this.generatedAttributes)
+  //     );
+  //   }
 
-      case STRUCTURE_TYPE.OUTPUT:
-        return this.attributes.filter((a: ResourceAttribute) => {
-          return !a.isAccessPatternKey && a.isOutputOn(this.operation);
-        });
+  //   // on read we need all the parts of the pk and sk that are not generated on read
+  //   if (this.operation?.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
+  //     return this.keyAttributeSources.filter((a) => !a.isGenerated);
+  //   }
 
-      case STRUCTURE_TYPE.TRANSIENT:
-        return this.attributes.filter((a: ResourceAttribute) => {
-          return !a.isAccessPatternKey;
-        });
-    }
-  }
+  //   if (this.operation?.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
+  //     return this.sortAttributes(
+  //       this.publicAttributes.concat(this.generatedAttributes).filter((a) => {
+  //         return !a.isKeyPart;
+  //       })
+  //     );
+  //   }
 
-  public get itemAttributes(): ResourceAttribute[] {
-    // only applies to inputs
-    if (this.type !== STRUCTURE_TYPE.INPUT) {
-      return [];
-    }
-    // on create, put in everything
-    if (this.operation?.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE) {
-      return this.sortAttributes(
-        this.publicAttributes.concat(this.generatedAttributes)
-      );
-    }
+  //   return [];
+  // }
 
-    // on read we need all the parts of the pk and sk that are not generated on read
-    if (this.operation?.operationSubType === OPERATION_SUB_TYPE.READ_ONE) {
-      return this.keyAttributeSources.filter((a) => !a.isGenerated);
-    }
+  // public get keyAttributes(): ResourceAttribute[] {
+  //   // only applies to inputs
+  //   if (this.type === StructureType.INPUT) {
+  //     return this.attributes.filter((a) => a.isPartitionKey || a.isSortKey);
+  //   }
+  //   return [];
+  // }
 
-    if (this.operation?.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE) {
-      return this.sortAttributes(
-        this.publicAttributes.concat(this.generatedAttributes).filter((a) => {
-          return !a.isKeyPart;
-        })
-      );
-    }
+  // public get keyAttributeSources(): ResourceAttribute[] {
+  //   let returnAttributes = [] as ResourceAttribute[];
+  //   this.keyAttributes.forEach((keyAttribute) => {
+  //     keyAttribute.compositionSources.forEach((sourceAttribute) => {
+  //       returnAttributes.push(sourceAttribute as ResourceAttribute);
+  //     });
+  //   });
+  //   return returnAttributes;
+  // }
 
-    return [];
-  }
+  // public get generatedAttributes(): ResourceAttribute[] {
+  //   // only applies to inputs
+  //   if (this.type === StructureType.INPUT) {
+  //     return this.attributes.filter((a) => a.isGeneratedOn(this.operation));
+  //   }
+  //   return [];
+  // }
 
-  public get keyAttributes(): ResourceAttribute[] {
-    // only applies to inputs
-    if (this.type === STRUCTURE_TYPE.INPUT) {
-      return this.attributes.filter((a) => a.isPartitionKey || a.isSortKey);
-    }
-    return [];
-  }
+  // public hasGenerator(
+  //   generator: ValueOf<typeof ResourceAttributeGenerator>
+  // ): boolean {
+  //   // generator only apply to operations
+  //   if (!this.operation) {
+  //     return false;
+  //   }
+  //   return this.attributes.some(
+  //     (a) => a.isGeneratedOn(this.operation) && a.generator === generator
+  //   );
+  // }
 
-  public get keyAttributeSources(): ResourceAttribute[] {
-    let returnAttributes = [] as ResourceAttribute[];
-    this.keyAttributes.forEach((keyAttribute) => {
-      keyAttribute.compositionSources.forEach((sourceAttribute) => {
-        returnAttributes.push(sourceAttribute as ResourceAttribute);
-      });
-    });
-    return returnAttributes;
-  }
+  // public get attributeNames() {
+  //   return this.attributes.map((attribute) => attribute.name);
+  // }
 
-  public get generatedAttributes(): ResourceAttribute[] {
-    // only applies to inputs
-    if (this.type === STRUCTURE_TYPE.INPUT) {
-      return this.attributes.filter((a) => a.isGeneratedOn(this.operation));
-    }
-    return [];
-  }
+  // public get service(): Service {
+  //   return this.resource.service;
+  // }
 
-  public hasGenerator(
-    generator: ValueOf<typeof ResourceAttributeGenerator>
-  ): boolean {
-    // generator only apply to operations
-    if (!this.operation) {
-      return false;
-    }
-    return this.attributes.some(
-      (a) => a.isGeneratedOn(this.operation) && a.generator === generator
-    );
-  }
+  // public get namingStrategy() {
+  //   return this.service.namingStrategy;
+  // }
 
-  public get attributeNames() {
-    return this.attributes.map((attribute) => attribute.name);
-  }
+  // public get auditStrategy() {
+  //   return this.service.auditStrategy;
+  // }
+  // /*****************************************************************************
+  //  *
+  //  *  TYPESCRIPT HELPERS
+  //  *
+  //  ****************************************************************************/
 
-  public get service(): Service {
-    return this.resource.service;
-  }
-
-  public get namingStrategy() {
-    return this.service.namingStrategy;
-  }
-
-  public get auditStrategy() {
-    return this.service.auditStrategy;
-  }
-  /*****************************************************************************
-   *
-   *  TYPESCRIPT HELPERS
-   *
-   ****************************************************************************/
-
-  public get tsInterfaceName() {
-    return formatStringByNamingStrategy(
-      this.name,
-      this.resource.namingStrategy.ts.interfaceName
-    );
-  }
+  // public get tsInterfaceName() {
+  //   return formatStringByNamingStrategy(
+  //     this.name,
+  //     this.resource.namingStrategy.ts.interfaceName
+  //   );
+  // }
 }

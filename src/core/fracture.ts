@@ -4,84 +4,182 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
-import { deepMerge } from "projen/lib/util";
-import { SetOptional } from "type-fest";
-import { AuditStrategy } from "./audit-strategy";
-import { Environment, EnvironmentOptions } from "./environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
-import { NamingStrategy, NAMING_STRATEGY_TYPE } from "./naming-strategy";
-import { OPERATION_SUB_TYPE } from "./operation";
-import { Organization, OrganizationOptions } from "./organization";
-import {
-  ResourceAttributeGenerator,
-  ResourceAttributeType,
-} from "./resource-attribute";
-import { Service, ServiceOptions } from "./service";
-import { STRUCTURE_TYPE } from "./structure";
-import { Workflows } from "../github/workflows";
-import { PnpmWorkspace } from "../pnpm/pnpm-workspace";
+import { FractureService, FractureServiceOptions } from "./fracture-service";
+import { PnpmWorkspace } from "../pnpm";
 import { VsCodeConfiguration } from "../projen";
-import { TurboRepo } from "../turborepo/turbo-repo";
+import { TurboRepo, TurboRepoOptions } from "../turborepo/turbo-repo";
 
-/**
- *
- * Top level options for Fracture. These options also apply to services and
- * other sub components as they are created, unless they are overridden.
- *
- */
-export interface FractureOptions extends TypeScriptProjectOptions {
-  packageRoot?: string;
+export interface FractureOptions extends Partial<TypeScriptProjectOptions> {
+  /**
+   * Root relative directory which contains all services.
+   *
+   * @default "services"
+   */
+  serviceRoot?: string;
+  /**
+   * Root relative directory which contains all apps.
+   *
+   * @default "apps"
+   */
   appRoot?: string;
   /**
-   * Source directory inside each package
+   * Relative source directory inside each package and app
+   *
    * @default "src"
    */
   srcDir?: string;
   /**
    * Logging options
-   * @default LogLevel.INFO
+   *
+   * @default { level: LogLevel.OFF }
    */
   logging?: LoggerOptions;
   /**
    * Versioned.
+   *
    * @default true
    */
-  isVersioned?: boolean;
+  //isVersioned?: boolean;
   /**
    * The naming strategy to use for generated code.
    */
-  namingStrategy?: NamingStrategy;
+  //namingStrategy?: NamingStrategy;
   /**
    * The audit strategy to use for generated code.
    */
-  auditStrategy?: AuditStrategy;
+  //auditStrategy?: AuditStrategy;
+  /**
+   * Enable Turborepo
+   *
+   * @default true
+   */
+  turboRepoEnabled?: boolean;
+  /**
+   * Options for using TurboRepo
+   *
+   * @default {}
+   */
+  turboRepoOptions?: TurboRepoOptions;
 }
 
 /**
  * The root of the entire application.
  */
 export class Fracture extends TypeScriptProject {
-  // member components
+  /**
+   * Root relative directory which contains all services.
+   *
+   * @default "services"
+   */
+  public readonly serviceRoot: string;
+  /**
+   * Root relative directory which contains all apps.
+   *
+   * @default "apps"
+   */
+  public readonly appRoot: string;
+  /**
+   * Relative source directory inside each package and app
+   *
+   * @default "src"
+   */
+  public readonly srcDir: string;
+  /**
+   * The default release branch for this project
+   */
+  public readonly defaultReleaseBranch: string;
+  /**
+   * All services in this project.
+   */
+  public readonly services: FractureService[] = [];
+  /**
+   * All apps in this project.
+   */
   public readonly apps: FractureApp[] = [];
-  public readonly services: Service[] = [];
-  public readonly organizations: Organization[] = [];
-  public readonly environments: Environment[] = [];
-  public readonly turborepo: TurboRepo;
-  public readonly workflows: Workflows;
 
-  // all other options
-  public readonly options: Required<FractureOptions>;
-
-  constructor(options: SetOptional<FractureOptions, "defaultReleaseBranch">) {
+  constructor(options: FractureOptions = {}) {
     /***************************************************************************
-     *
-     * DEFAULT OPTIONS
-     *
-     * These are the options that will be used through all code generation
-     * unless explicitly overridden.
-     *
+     * Projen Props
      **************************************************************************/
 
+    const defaultReleaseBranch = options.defaultReleaseBranch ?? "main";
+
+    const projenOptions: TypeScriptProjectOptions = {
+      name: options.name ?? "fracture",
+      defaultReleaseBranch,
+      packageManager: NodePackageManager.PNPM,
+      pnpmVersion: "8",
+      logging: options.logging ?? {
+        level: LogLevel.OFF,
+      },
+      workflowNodeVersion: "18",
+      workflowPackageCache: true,
+      prettier: true,
+      projenrcTs: true,
+      licensed: false,
+      deps: ["@sumoc/fracture"],
+    };
+
+    super(projenOptions);
+
+    /***************************************************************************
+     * Props
+     **************************************************************************/
+
+    this.serviceRoot = options.serviceRoot ?? "services";
+    this.appRoot = options.appRoot ?? "apps";
+    this.srcDir = options.srcDir ?? "src";
+    this.defaultReleaseBranch = defaultReleaseBranch;
+
+    /***************************************************************************
+     * TUBOREPO
+     **************************************************************************/
+
+    const turboRepoEnabled = options.turboRepoEnabled ?? true;
+    const turboRepoOptions = options.turboRepoOptions ?? {};
+
+    if (turboRepoEnabled) {
+      new TurboRepo(this, turboRepoOptions);
+    }
+
+    /***************************************************************************
+     * PNPM - enable workspaces
+     **************************************************************************/
+
+    new PnpmWorkspace(this);
+
+    /***************************************************************************
+     * VS CODE
+     **************************************************************************/
+
+    new VsCodeConfiguration(this);
+
+    return this;
+  }
+
+  public addService(options: FractureServiceOptions) {
+    const service = new FractureService(this, options);
+    this.services.push(service);
+    return service;
+  }
+
+  public addApp(options: FractureAppOptions) {
+    const app = new FractureApp(this, options);
+    this.apps.push(app);
+    return app;
+  }
+
+  /***************************************************************************
+   *
+   * DEFAULT OPTIONS
+   *
+   * These are the options that will be used through all code generation
+   * unless explicitly overridden.
+   *
+   **************************************************************************/
+
+  /*
     const defaultOptions: Partial<FractureOptions> = {
       name: options.name,
       defaultReleaseBranch: "main",
@@ -211,23 +309,23 @@ export class Fracture extends TypeScriptProject {
     super(mergedOptions);
     this.options = mergedOptions;
 
-    // configure workspace
-    new PnpmWorkspace(this);
 
-    // configure vscode
-    new VsCodeConfiguration(this);
+    */
+  /***************************************************************************
+   * WORKFLOWS
+   **************************************************************************/
 
-    // configure turborepo
-    this.turborepo = new TurboRepo(this);
+  // configure workflows
+  //this.workflows = new Workflows(this);
 
-    // configure workflows
-    this.workflows = new Workflows(this);
+  // this.logger.info("=".repeat(80));
+  // this.logger.info("INIT PHASE");
+  // this.logger.info("=".repeat(80));
 
-    this.logger.info("=".repeat(80));
-    this.logger.info("INIT PHASE");
-    this.logger.info("=".repeat(80));
-  }
+  //   return this;
+  // }
 
+  /*
   public get packageRoot(): string {
     return this.options.packageRoot;
   }
@@ -247,6 +345,7 @@ export class Fracture extends TypeScriptProject {
   public get auditStrategy() {
     return this.options.auditStrategy;
   }
+  */
 
   /*
   public get buildTask() {
@@ -265,34 +364,34 @@ export class Fracture extends TypeScriptProject {
    * @param {FractureAppOptions}
    * @returns {FractureApp}
    */
-  public addApp(options: FractureAppOptions) {
-    return new FractureApp(this, options);
-  }
+  // public addApp(options: FractureAppOptions) {
+  //   return new FractureApp(this, options);
+  // }
 
   /**
    * Add an organization to the fracture project.
    * @param {OrganizationOptions}
    * @returns {Organization}
    */
-  public addOrganization(options: OrganizationOptions) {
+  /*public addOrganization(options: OrganizationOptions) {
     return new Organization(this, options);
-  }
+  }*/
 
   /**
    * Add a service to the fracture project.
    * @param {ServiceOptions}
    * @returns {Service}
    */
-  public addService(options: ServiceOptions) {
-    return new Service(this, options);
-  }
+  // public addService(options: FractureServiceOptions) {
+  //   return new FractureService(this, options);
+  // }
 
   /**
    * Add a environment to the fracture project.
    * @param {EnvironmentOptions}
    * @returns {Environment}
    */
-  public addEnvironment(options: EnvironmentOptions) {
+  /*public addEnvironment(options: EnvironmentOptions) {
     return new Environment(this, options);
-  }
+  }*/
 }

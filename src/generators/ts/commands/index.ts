@@ -1,1 +1,1 @@
-export * from "./dynamo-command";
+// export * from "./dynamo-command.ts-disabled";

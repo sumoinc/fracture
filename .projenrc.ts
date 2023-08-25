@@ -58,6 +58,7 @@ project.addDeps(
   "change-case",
   "projen",
   "type-fest",
+  "typescript",
   "uuid"
 );
 project.addDevDeps("@types/uuid");

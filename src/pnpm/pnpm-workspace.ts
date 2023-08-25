@@ -5,12 +5,12 @@ export class PnpmWorkspace extends Component {
   constructor(fracture: Fracture) {
     super(fracture);
 
-    const { packageRoot, appRoot } = fracture;
+    const { serviceRoot, appRoot } = fracture;
 
     // write pnpm-workspace.yml file
     new YamlFile(this.project, "pnpm-workspace.yaml", {
       obj: {
-        packages: [`${packageRoot}/*`, `${appRoot}/*`],
+        packages: [`${serviceRoot}/*`, `${appRoot}/*`],
       },
     });
   }

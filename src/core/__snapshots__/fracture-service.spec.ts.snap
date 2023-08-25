@@ -1,0 +1,764 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`validate generated project files Detect new files 1`] = `
+Array [
+  "services/foo/.eslintrc.json",
+  "services/foo/.gitattributes",
+  "services/foo/.gitignore",
+  "services/foo/.npmignore",
+  "services/foo/.npmrc",
+  "services/foo/.projen/deps.json",
+  "services/foo/.projen/files.json",
+  "services/foo/.projen/tasks.json",
+  "services/foo/generated/ts/types.ts",
+  "services/foo/package.json",
+  "services/foo/README.md",
+  "services/foo/src/index.ts",
+  "services/foo/test/hello.test.ts",
+  "services/foo/tsconfig.dev.json",
+  "services/foo/tsconfig.json",
+]
+`;
+
+exports[`validate generated project files services/foo/.eslintrc.json 1`] = `
+Object {
+  "env": Object {
+    "jest": true,
+    "node": true,
+  },
+  "extends": Array [
+    "plugin:import/typescript",
+  ],
+  "ignorePatterns": Array [
+    "*.js",
+    "*.d.ts",
+    "node_modules/",
+    "*.generated.ts",
+    "coverage",
+  ],
+  "overrides": Array [],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": Object {
+    "ecmaVersion": 2018,
+    "project": "./**/tsconfig.dev.json",
+    "sourceType": "module",
+  },
+  "plugins": Array [
+    "@typescript-eslint",
+    "import",
+  ],
+  "root": true,
+  "rules": Object {
+    "@typescript-eslint/indent": Array [
+      "error",
+      2,
+    ],
+    "@typescript-eslint/member-delimiter-style": Array [
+      "error",
+    ],
+    "@typescript-eslint/member-ordering": Array [
+      "error",
+      Object {
+        "default": Array [
+          "public-static-field",
+          "public-static-method",
+          "protected-static-field",
+          "protected-static-method",
+          "private-static-field",
+          "private-static-method",
+          "field",
+          "constructor",
+          "method",
+        ],
+      },
+    ],
+    "@typescript-eslint/no-floating-promises": Array [
+      "error",
+    ],
+    "@typescript-eslint/no-require-imports": Array [
+      "error",
+    ],
+    "@typescript-eslint/no-shadow": Array [
+      "error",
+    ],
+    "@typescript-eslint/return-await": Array [
+      "error",
+    ],
+    "array-bracket-newline": Array [
+      "error",
+      "consistent",
+    ],
+    "array-bracket-spacing": Array [
+      "error",
+      "never",
+    ],
+    "brace-style": Array [
+      "error",
+      "1tbs",
+      Object {
+        "allowSingleLine": true,
+      },
+    ],
+    "comma-dangle": Array [
+      "error",
+      "always-multiline",
+    ],
+    "comma-spacing": Array [
+      "error",
+      Object {
+        "after": true,
+        "before": false,
+      },
+    ],
+    "curly": Array [
+      "error",
+      "multi-line",
+      "consistent",
+    ],
+    "dot-notation": Array [
+      "error",
+    ],
+    "import/no-extraneous-dependencies": Array [
+      "error",
+      Object {
+        "devDependencies": Array [
+          "**/test/**",
+          "**/build-tools/**",
+        ],
+        "optionalDependencies": false,
+        "peerDependencies": true,
+      },
+    ],
+    "import/no-unresolved": Array [
+      "error",
+    ],
+    "import/order": Array [
+      "warn",
+      Object {
+        "alphabetize": Object {
+          "caseInsensitive": true,
+          "order": "asc",
+        },
+        "groups": Array [
+          "builtin",
+          "external",
+        ],
+      },
+    ],
+    "indent": Array [
+      "off",
+    ],
+    "key-spacing": Array [
+      "error",
+    ],
+    "keyword-spacing": Array [
+      "error",
+    ],
+    "max-len": Array [
+      "error",
+      Object {
+        "code": 150,
+        "ignoreComments": true,
+        "ignoreRegExpLiterals": true,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreUrls": true,
+      },
+    ],
+    "no-bitwise": Array [
+      "error",
+    ],
+    "no-duplicate-imports": Array [
+      "error",
+    ],
+    "no-multi-spaces": Array [
+      "error",
+      Object {
+        "ignoreEOLComments": false,
+      },
+    ],
+    "no-multiple-empty-lines": Array [
+      "error",
+    ],
+    "no-return-await": Array [
+      "off",
+    ],
+    "no-shadow": Array [
+      "off",
+    ],
+    "no-trailing-spaces": Array [
+      "error",
+    ],
+    "object-curly-newline": Array [
+      "error",
+      Object {
+        "consistent": true,
+        "multiline": true,
+      },
+    ],
+    "object-curly-spacing": Array [
+      "error",
+      "always",
+    ],
+    "object-property-newline": Array [
+      "error",
+      Object {
+        "allowAllPropertiesOnSameLine": true,
+      },
+    ],
+    "quote-props": Array [
+      "error",
+      "consistent-as-needed",
+    ],
+    "quotes": Array [
+      "error",
+      "single",
+      Object {
+        "avoidEscape": true,
+      },
+    ],
+    "semi": Array [
+      "error",
+      "always",
+    ],
+    "space-before-blocks": Array [
+      "error",
+    ],
+  },
+  "settings": Object {
+    "import/parsers": Object {
+      "@typescript-eslint/parser": Array [
+        ".ts",
+        ".tsx",
+      ],
+    },
+    "import/resolver": Object {
+      "node": Object {},
+      "typescript": Object {
+        "alwaysTryTypes": true,
+        "project": "./**/tsconfig.dev.json",
+      },
+    },
+  },
+}
+`;
+
+exports[`validate generated project files services/foo/.gitattributes 1`] = `
+"# ~~ Generated by projen. To modify, edit .projenrc.js and run \\"npx projen\\".
+
+/.eslintrc.json linguist-generated
+/.gitattributes linguist-generated
+/.gitignore linguist-generated
+/.npmignore linguist-generated
+/.npmrc linguist-generated
+/.projen/** linguist-generated
+/.projen/deps.json linguist-generated
+/.projen/files.json linguist-generated
+/.projen/tasks.json linguist-generated
+/generated/ts/types.ts linguist-generated
+/package.json linguist-generated
+/pnpm-lock.yaml linguist-generated
+/tsconfig.dev.json linguist-generated
+/tsconfig.json linguist-generated"
+`;
+
+exports[`validate generated project files services/foo/.gitignore 1`] = `
+"# ~~ Generated by projen. To modify, edit .projenrc.js and run \\"npx projen\\".
+!/.gitattributes
+!/.projen/tasks.json
+!/.projen/deps.json
+!/.projen/files.json
+!/package.json
+!/.npmignore
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+pids
+*.pid
+*.seed
+*.pid.lock
+lib-cov
+coverage
+*.lcov
+.nyc_output
+build/Release
+node_modules/
+jspm_packages/
+*.tsbuildinfo
+.eslintcache
+*.tgz
+.yarn-integrity
+.cache
+!/.projenrc.js
+/test-reports/
+junit.xml
+/coverage/
+!/.npmrc
+!/test/
+!/tsconfig.json
+!/tsconfig.dev.json
+!/src/
+/lib
+/dist/
+!/.eslintrc.json
+!/generated/ts/types.ts
+"
+`;
+
+exports[`validate generated project files services/foo/.npmignore 1`] = `
+"# ~~ Generated by projen. To modify, edit .projenrc.js and run \\"npx projen\\".
+/.projen/
+/test-reports/
+junit.xml
+/coverage/
+/test/
+/tsconfig.dev.json
+/src/
+!/lib/
+!/lib/**/*.js
+!/lib/**/*.d.ts
+dist
+/tsconfig.json
+/.github/
+/.vscode/
+/.idea/
+/.projenrc.js
+tsconfig.tsbuildinfo
+/.eslintrc.json
+"
+`;
+
+exports[`validate generated project files services/foo/.npmrc 1`] = `
+"# ~~ Generated by projen. To modify, edit .projenrc.js and run \\"npx projen\\".
+
+resolution-mode=highest
+"
+`;
+
+exports[`validate generated project files services/foo/.projen/deps.json 1`] = `
+Object {
+  "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \\"npx projen\\".",
+  "dependencies": Array [
+    Object {
+      "name": "@types/jest",
+      "type": "build",
+    },
+    Object {
+      "name": "@types/node",
+      "type": "build",
+      "version": "^16",
+    },
+    Object {
+      "name": "@typescript-eslint/eslint-plugin",
+      "type": "build",
+      "version": "^5",
+    },
+    Object {
+      "name": "@typescript-eslint/parser",
+      "type": "build",
+      "version": "^5",
+    },
+    Object {
+      "name": "eslint-import-resolver-node",
+      "type": "build",
+    },
+    Object {
+      "name": "eslint-import-resolver-typescript",
+      "type": "build",
+    },
+    Object {
+      "name": "eslint-plugin-import",
+      "type": "build",
+    },
+    Object {
+      "name": "eslint",
+      "type": "build",
+      "version": "^8",
+    },
+    Object {
+      "name": "jest",
+      "type": "build",
+    },
+    Object {
+      "name": "jest-junit",
+      "type": "build",
+      "version": "^15",
+    },
+    Object {
+      "name": "npm-check-updates",
+      "type": "build",
+      "version": "^16",
+    },
+    Object {
+      "name": "projen",
+      "type": "build",
+    },
+    Object {
+      "name": "ts-jest",
+      "type": "build",
+    },
+    Object {
+      "name": "typescript",
+      "type": "build",
+    },
+  ],
+}
+`;
+
+exports[`validate generated project files services/foo/.projen/files.json 1`] = `
+Object {
+  "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \\"npx projen\\".",
+  "files": Array [
+    ".eslintrc.json",
+    ".gitattributes",
+    ".gitignore",
+    ".npmignore",
+    ".npmrc",
+    ".projen/deps.json",
+    ".projen/files.json",
+    ".projen/tasks.json",
+    "generated/ts/types.ts",
+    "tsconfig.dev.json",
+    "tsconfig.json",
+  ],
+}
+`;
+
+exports[`validate generated project files services/foo/.projen/tasks.json 1`] = `
+Object {
+  "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \\"npx projen\\".",
+  "env": Object {
+    "PATH": "$(pnpm -c exec \\"node --print process.env.PATH\\")",
+  },
+  "tasks": Object {
+    "build": Object {
+      "description": "Full release build",
+      "name": "build",
+      "steps": Array [
+        Object {
+          "spawn": "pre-compile",
+        },
+        Object {
+          "spawn": "compile",
+        },
+        Object {
+          "spawn": "post-compile",
+        },
+        Object {
+          "spawn": "test",
+        },
+        Object {
+          "spawn": "package",
+        },
+      ],
+    },
+    "compile": Object {
+      "description": "Only compile",
+      "name": "compile",
+      "steps": Array [
+        Object {
+          "exec": "tsc --build",
+        },
+      ],
+    },
+    "default": Object {
+      "description": "Synthesize project files",
+      "name": "default",
+      "steps": Array [
+        Object {
+          "cwd": "../..",
+          "exec": "npx projen default",
+        },
+      ],
+    },
+    "eslint": Object {
+      "description": "Runs eslint against the codebase",
+      "name": "eslint",
+      "steps": Array [
+        Object {
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools",
+        },
+      ],
+    },
+    "install": Object {
+      "description": "Install project dependencies and update lockfile (non-frozen)",
+      "name": "install",
+      "steps": Array [
+        Object {
+          "exec": "pnpm i --no-frozen-lockfile",
+        },
+      ],
+    },
+    "install:ci": Object {
+      "description": "Install project dependencies using frozen lockfile",
+      "name": "install:ci",
+      "steps": Array [
+        Object {
+          "exec": "pnpm i --frozen-lockfile",
+        },
+      ],
+    },
+    "package": Object {
+      "description": "Creates the distribution package",
+      "name": "package",
+      "steps": Array [
+        Object {
+          "exec": "mkdir -p dist/js",
+        },
+        Object {
+          "exec": "mv $(npm pack) dist/js/",
+        },
+      ],
+    },
+    "post-compile": Object {
+      "description": "Runs after successful compilation",
+      "name": "post-compile",
+    },
+    "post-upgrade": Object {
+      "description": "Runs after upgrading dependencies",
+      "name": "post-upgrade",
+    },
+    "pre-compile": Object {
+      "description": "Prepare the project for compilation",
+      "name": "pre-compile",
+    },
+    "test": Object {
+      "description": "Run tests",
+      "name": "test",
+      "steps": Array [
+        Object {
+          "exec": "jest --passWithNoTests --updateSnapshot",
+          "receiveArgs": true,
+        },
+        Object {
+          "spawn": "eslint",
+        },
+      ],
+    },
+    "test:watch": Object {
+      "description": "Run jest in watch mode",
+      "name": "test:watch",
+      "steps": Array [
+        Object {
+          "exec": "jest --watch",
+        },
+      ],
+    },
+    "upgrade": Object {
+      "description": "upgrade dependencies",
+      "env": Object {
+        "CI": "0",
+      },
+      "name": "upgrade",
+      "steps": Array [
+        Object {
+          "exec": "pnpm update npm-check-updates",
+        },
+        Object {
+          "exec": "npm-check-updates --upgrade --target=minor --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,npm-check-updates,projen,ts-jest,typescript",
+        },
+        Object {
+          "exec": "pnpm i --no-frozen-lockfile",
+        },
+        Object {
+          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit npm-check-updates projen ts-jest typescript",
+        },
+        Object {
+          "exec": "npx projen",
+        },
+        Object {
+          "spawn": "post-upgrade",
+        },
+      ],
+    },
+    "watch": Object {
+      "description": "Watch & compile in the background",
+      "name": "watch",
+      "steps": Array [
+        Object {
+          "exec": "tsc --build -w",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`validate generated project files services/foo/README.md 1`] = `"# replace this"`;
+
+exports[`validate generated project files services/foo/package.json 1`] = `
+Object {
+  "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \\"npx projen\\".",
+  "devDependencies": Object {
+    "@types/jest": "*",
+    "@types/node": "^16",
+    "@typescript-eslint/eslint-plugin": "^5",
+    "@typescript-eslint/parser": "^5",
+    "eslint": "^8",
+    "eslint-import-resolver-node": "*",
+    "eslint-import-resolver-typescript": "*",
+    "eslint-plugin-import": "*",
+    "jest": "*",
+    "jest-junit": "^15",
+    "npm-check-updates": "^16",
+    "projen": "*",
+    "ts-jest": "*",
+    "typescript": "*",
+  },
+  "jest": Object {
+    "clearMocks": true,
+    "collectCoverage": true,
+    "coverageDirectory": "coverage",
+    "coveragePathIgnorePatterns": Array [
+      "/node_modules/",
+    ],
+    "coverageReporters": Array [
+      "json",
+      "lcov",
+      "clover",
+      "cobertura",
+      "text",
+    ],
+    "globals": Object {
+      "ts-jest": Object {
+        "tsconfig": "tsconfig.dev.json",
+      },
+    },
+    "preset": "ts-jest",
+    "reporters": Array [
+      "default",
+      Array [
+        "jest-junit",
+        Object {
+          "outputDirectory": "test-reports",
+        },
+      ],
+    ],
+    "testMatch": Array [
+      "<rootDir>/src/**/__tests__/**/*.ts?(x)",
+      "<rootDir>/(test|src)/**/*(*.)@(spec|test).ts?(x)",
+    ],
+    "testPathIgnorePatterns": Array [
+      "/node_modules/",
+    ],
+    "watchPathIgnorePatterns": Array [
+      "/node_modules/",
+    ],
+  },
+  "license": "UNLICENSED",
+  "main": "lib/index.js",
+  "name": "foo",
+  "pnpm": Object {},
+  "scripts": Object {
+    "build": "npx projen build",
+    "compile": "npx projen compile",
+    "default": "npx projen default",
+    "eslint": "npx projen eslint",
+    "package": "npx projen package",
+    "post-compile": "npx projen post-compile",
+    "post-upgrade": "npx projen post-upgrade",
+    "pre-compile": "npx projen pre-compile",
+    "projen": "npx projen",
+    "test": "npx projen test",
+    "test:watch": "npx projen test:watch",
+    "upgrade": "npx projen upgrade",
+    "watch": "npx projen watch",
+  },
+  "types": "lib/index.d.ts",
+  "version": "0.0.0",
+}
+`;
+
+exports[`validate generated project files services/foo/src/index.ts 1`] = `
+"export class Hello {
+  public sayHello() {
+    return 'hello, world!';
+  }
+}"
+`;
+
+exports[`validate generated project files services/foo/test/hello.test.ts 1`] = `
+"import { Hello } from '../src';
+
+test('hello', () => {
+  expect(new Hello().sayHello()).toBe('hello, world!');
+});"
+`;
+
+exports[`validate generated project files services/foo/tsconfig.dev.json 1`] = `
+Object {
+  "compilerOptions": Object {
+    "alwaysStrict": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "lib": Array [
+      "es2019",
+    ],
+    "module": "CommonJS",
+    "noEmitOnError": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "stripInternal": true,
+    "target": "ES2019",
+  },
+  "exclude": Array [
+    "node_modules",
+  ],
+  "include": Array [
+    ".projenrc.js",
+    "src/**/*.ts",
+    "test/**/*.ts",
+  ],
+}
+`;
+
+exports[`validate generated project files services/foo/tsconfig.json 1`] = `
+Object {
+  "compilerOptions": Object {
+    "alwaysStrict": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "lib": Array [
+      "es2019",
+    ],
+    "module": "CommonJS",
+    "noEmitOnError": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "lib",
+    "resolveJsonModule": true,
+    "rootDir": "src",
+    "strict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "stripInternal": true,
+    "target": "ES2019",
+  },
+  "exclude": Array [],
+  "include": Array [
+    "src/**/*.ts",
+  ],
+}
+`;

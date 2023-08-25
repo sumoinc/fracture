@@ -1,42 +1,22 @@
+import { paramCase } from "change-case";
 import { Component } from "projen";
-import { deepMerge } from "projen/lib/util";
 import { ValueOf } from "type-fest";
-import { AccessPattern } from "./access-pattern";
-import { Resource } from "./resource";
-import { Service } from "./service";
-import { Structure, STRUCTURE_TYPE } from "./structure";
-import { DynamoCommand } from "../generators";
-import { DynamoCommandTest } from "../generators/ts/commands/dynamo-command-test";
+import { FractureService } from "./fracture-service";
+import { Structure, StructureOptions } from "./structure";
+import { StructureAttributeOptions } from "./structure-attribute";
+import { DynamoGsi } from "../dynamodb";
 
 /******************************************************************************
  * TYPES
  *****************************************************************************/
 
-export type OperationOptions = {
-  /**
-   * What (generic) type of operation is this?
-   * Default: query
-   */
-  operationType?: ValueOf<typeof OPERATION_TYPE>;
-  /**
-   * What (more specific) specific type of operation is this?
-   * Default: list
-   */
-  operationSubType?: ValueOf<typeof OPERATION_SUB_TYPE>;
-};
-
-export type OperationDefault = {
-  operationSubType: ValueOf<typeof OPERATION_SUB_TYPE>;
-  default: string;
-};
-
-export const OPERATION_TYPE = {
+export const OperationType = {
   QUERY: "Query",
   MUTATION: "Mutation",
   SUBSCRIPTION: "Subscription",
 } as const;
 
-export const OPERATION_SUB_TYPE = {
+export const OperationSubType = {
   CREATE_ONE: "CreateOne",
   READ_ONE: "ReadOne",
   UPDATE_ONE: "UpdateOne",
@@ -47,70 +27,97 @@ export const OPERATION_SUB_TYPE = {
   READ_VERSION: "ReadVersion",
 } as const;
 
+export type OperationOptions = {
+  /**
+   * Name for this operation.
+   */
+  name: string;
+  /**
+   * Global secondary index used in this operation. This might also be the
+   * primary PK and SK index.
+   */
+  dynamoGsi: DynamoGsi;
+  /**
+   * What (generic) type of operation is this?
+   * Default: query
+   */
+  operationType?: ValueOf<typeof OperationType>;
+  /**
+   * What (more specific) specific type of operation is this?
+   * Default: list
+   */
+  operationSubType?: ValueOf<typeof OperationSubType>;
+  inputAttributeOptions?: Array<StructureAttributeOptions>;
+  outputAttributeOptions?: Array<StructureAttributeOptions>;
+};
+
 export class Operation extends Component {
-  // member components
-  // parents
-  public readonly accessPattern: AccessPattern;
-  // all other options
-  public readonly options: Required<OperationOptions>;
-  // private cached properties
-  private _inputStructure?: Structure;
-  private _outputStructure?: Structure;
-  // generators
-  //public readonly ts: TypescriptOperation;
-  public readonly tsDynamoCommand: DynamoCommand;
-  public readonly tsDynamoCommandTest: DynamoCommandTest;
+  /**
+   * Name for this operation.
+   */
+  public readonly name: string;
+  /**
+   * Global secondary index used in this operation. This might also be the
+   * primary PK and SK index.
+   */
+  public readonly dynamoGsi: DynamoGsi;
+  /**
+   * What (generic) type of operation is this?
+   * Default: query
+   */
+  public readonly operationType: ValueOf<typeof OperationType>;
+  /**
+   * What (more specific) specific type of operation is this?
+   * Default: list
+   */
+  public readonly operationSubType: ValueOf<typeof OperationSubType>;
+  public readonly inputStructure: Structure;
+  public readonly outputStructure: Structure;
+  /**
+   * All structures for this resource.
+   */
+  public structures: Structure[] = [];
 
-  constructor(accessPattern: AccessPattern, options: OperationOptions) {
-    super(accessPattern.project);
-
-    /***************************************************************************
-     *
-     * DEFAULT OPTIONS
-     *
-     **************************************************************************/
-
-    const defaultOptions: Partial<OperationOptions> = {
-      operationType: OPERATION_TYPE.QUERY,
-    };
-
-    /***************************************************************************
-     *
-     * INIT OPERATION
-     *
-     **************************************************************************/
-
-    // member components
-
-    // parents + inverse
-    this.accessPattern = accessPattern;
-    this.accessPattern.operations.push(this);
-    this.resource.operations.push(this);
-
-    // all other options
-    this.options = deepMerge([
-      defaultOptions,
-      options,
-    ]) as Required<OperationOptions>;
-
-    this.project.logger.info(`INFO Operation: "${this.name}"`);
+  constructor(service: FractureService, options: OperationOptions) {
+    super(service);
 
     /***************************************************************************
-     *
-     * GENERATORS
-     *
+     * Props
      **************************************************************************/
 
-    //this.ts = new TypescriptOperation(this);
-    this.tsDynamoCommand = new DynamoCommand(this);
-    this.tsDynamoCommandTest = new DynamoCommandTest(this);
+    this.name = paramCase(options.name);
+    this.dynamoGsi = options.dynamoGsi;
+    this.operationSubType = options.operationSubType || OperationSubType.LIST;
+    this.operationType = options.operationType || OperationType.QUERY;
+
+    /***************************************************************************
+     * Initialize data structures
+     **************************************************************************/
+
+    this.inputStructure = this.addStructure({
+      name: `${this.name}-input`,
+      attributeOptions: options.inputAttributeOptions ?? [],
+    });
+
+    this.outputStructure = this.addStructure({
+      name: `${this.name}-output`,
+      attributeOptions: options.outputAttributeOptions ?? [],
+    });
 
     return this;
+  }
+
+  public addStructure(options: StructureOptions) {
+    const service = this.project as FractureService;
+    const structure = new Structure(service, options);
+    this.structures.push(structure);
+    return structure;
   }
 
   /**
    * Operation name, based on the naming strategy
    */
+  /*
   public get name() {
     const resourceName =
       this.operationSubType === OPERATION_SUB_TYPE.LIST
@@ -125,38 +132,39 @@ export class Operation extends Component {
       .filter((part) => part.length > 0)
       .join("-");
   }
+  */
 
-  public get operationType() {
-    return this.options.operationType;
-  }
+  // public get operationType() {
+  //   return this.options.operationType;
+  // }
 
-  public get operationSubType() {
-    return this.options.operationSubType;
-  }
+  // public get operationSubType() {
+  //   return this.options.operationSubType;
+  // }
 
-  public get isWrite(): boolean {
-    return this.isCreate || this.isUpdate || this.isImport;
-  }
+  // public get isWrite(): boolean {
+  //   return this.isCreate || this.isUpdate || this.isImport;
+  // }
 
-  public get isCreate(): boolean {
-    return this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE;
-  }
+  // public get isCreate(): boolean {
+  //   return this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE;
+  // }
 
-  public get isRead(): boolean {
-    return this.operationSubType === OPERATION_SUB_TYPE.READ_ONE;
-  }
+  // public get isRead(): boolean {
+  //   return this.operationSubType === OPERATION_SUB_TYPE.READ_ONE;
+  // }
 
-  public get isUpdate(): boolean {
-    return this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE;
-  }
+  // public get isUpdate(): boolean {
+  //   return this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE;
+  // }
 
-  public get isDelete(): boolean {
-    return this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE;
-  }
+  // public get isDelete(): boolean {
+  //   return this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE;
+  // }
 
-  public get isImport(): boolean {
-    return this.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE;
-  }
+  // public get isImport(): boolean {
+  //   return this.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE;
+  // }
 
   /***************************************************************************
    *
@@ -167,33 +175,35 @@ export class Operation extends Component {
    *
    **************************************************************************/
 
-  public get inputStructure(): Structure {
-    if (!this._inputStructure) {
-      this._inputStructure = new Structure(this.resource, {
-        type: STRUCTURE_TYPE.INPUT,
-        operation: this,
-      });
-    }
-    return this._inputStructure;
-  }
+  // public get inputStructure(): Structure {
+  //   if (!this._inputStructure) {
+  //     this._inputStructure = new Structure(this.resource, {
+  //       type: STRUCTURE_TYPE.INPUT,
+  //       operation: this,
+  //     });
+  //   }
+  //   return this._inputStructure;
+  // }
 
-  public get outputStructure(): Structure {
-    if (!this._outputStructure) {
-      this._outputStructure = new Structure(this.resource, {
-        type: STRUCTURE_TYPE.OUTPUT,
-        operation: this,
-      });
-    }
-    return this._outputStructure;
-  }
+  // public get outputStructure(): Structure {
+  //   if (!this._outputStructure) {
+  //     this._outputStructure = new Structure(this.resource, {
+  //       type: STRUCTURE_TYPE.OUTPUT,
+  //       operation: this,
+  //     });
+  //   }
+  //   return this._outputStructure;
+  // }
 
-  public get resource(): Resource {
-    return this.accessPattern.resource;
-  }
+  // public get resource(): Resource {
+  //   return this.accessPattern.resource;
+  // }
 
+  /*
   public get service(): Service {
     return this.resource.service;
   }
+  */
 
   /*****************************************************************************
    *
@@ -201,9 +211,11 @@ export class Operation extends Component {
    *
    ****************************************************************************/
 
+  /*
   public get tsResponseTypeName() {
     return this.operationSubType === OPERATION_SUB_TYPE.LIST
       ? this.service.tsLlistResponseTypeName
       : this.service.tsResponseTypeName;
   }
+  */
 }

@@ -1,137 +1,142 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { DynamoGsi, DYNAMO_GSI_TYPE } from "./dynamo-gsi";
-import { Service } from "../core/service";
+import { AttributeType, DynamoAttribute } from "./dynamo-attribute";
+import { DynamoGsi, DynamoGsiOptions, DynamoGsiType } from "./dynamo-gsi";
+import { FractureService } from "../core";
 
 export interface DynamoTableOptions {
   /**
-   * Name for the Resource.
-   * @default: uses service name
+   * Name for the table.
    */
-  name?: string;
+  name: string;
   /**
    * Name to use for PK attribute.
+   *
    * @default: "pk"
    */
   pkName?: string;
   /**
    * Name to use for SK attribute.
+   *
    * @default: "sk"
    */
   skName?: string;
   /**
    * Name to use for Lookup attribute.
+   *
    * @default: "idx"
    */
-  lookupName?: string;
+  idxName?: string;
 }
 
 export class DynamoTable extends Component {
-  // parent
-  public readonly service: Service;
-  // member components
-  public dynamoGsi: DynamoGsi[] = [];
-  // all other options
-  public readonly options: Required<DynamoTableOptions>;
+  /**
+   * Name for the table.
+   */
+  public readonly name: string;
+  public readonly pk: DynamoAttribute;
+  public readonly sk: DynamoAttribute;
+  public readonly idx: DynamoAttribute;
+  public readonly keyGsi: DynamoGsi;
+  public readonly lookupGsi: DynamoGsi;
+  public readonly gsi: DynamoGsi[] = [];
 
-  constructor(service: Service, options: DynamoTableOptions = {}) {
-    super(service.project);
-
-    /***************************************************************************
-     *
-     * DEFAULT OPTIONS
-     *
-     * We'll glue the name or requested outdir to the primary fracture outdir
-     *
-     **************************************************************************/
-
-    let defaultOptions: Required<DynamoTableOptions> = {
-      name: paramCase(service.name),
-      pkName: "pk",
-      skName: "sk",
-      lookupName: "idx",
-    };
+  constructor(service: FractureService, options: DynamoTableOptions) {
+    super(service);
 
     /***************************************************************************
-     *
-     * INIT TABLE
-     *
+     * Props
      **************************************************************************/
 
-    // ensure name is param-cased
-    const forcedOptions: Partial<DynamoTableOptions> = {
-      name: options.name ? paramCase(options.name) : paramCase(service.name),
-    };
+    this.name = paramCase(options.name);
+    const pkName = options.pkName ?? "pk";
+    const skName = options.skName ?? "sk";
+    const lookupName = options.idxName ?? "idx";
+    this.pk = new DynamoAttribute(service, {
+      name: pkName,
+      attributeType: AttributeType.STRING,
+      keyType: "HASH",
+    });
+    this.sk = new DynamoAttribute(service, {
+      name: skName,
+      attributeType: AttributeType.STRING,
+      keyType: "RANGE",
+    });
+    this.idx = new DynamoAttribute(service, {
+      name: lookupName,
+    });
 
-    // parent
-    this.service = service;
+    /***************************************************************************
+     * Build Key GSI
+     **************************************************************************/
 
-    // compine options
-    this.options = {
-      ...defaultOptions,
-      ...options,
-      ...forcedOptions,
-    };
+    this.keyGsi = this.addGsi({
+      name: "key",
+      pk: this.pk,
+      sk: this.sk,
+      type: DynamoGsiType.PRIMARY,
+    });
+
+    /***************************************************************************
+     * Build Lookup GSI
+     **************************************************************************/
+
+    this.lookupGsi = this.addGsi({
+      name: "loookup",
+      pk: this.sk,
+      sk: this.idx,
+    });
 
     return this;
   }
 
-  public get name(): string {
-    return this.options.name;
+  public addGsi(options: DynamoGsiOptions) {
+    const service = this.project as FractureService;
+    const gsi = new DynamoGsi(service, options);
+    this.gsi.push(gsi);
+    return gsi;
   }
 
-  public get pkName(): string {
-    return this.options.pkName;
-  }
+  // public get attrributeNames(): string[] {
+  //   return this.dynamoGsi.reduce((acc, gsi) => {
+  //     if (acc.indexOf(gsi.pkName) === -1) {
+  //       acc.push(gsi.pkName);
+  //     }
+  //     if (acc.indexOf(gsi.skName) === -1) {
+  //       acc.push(gsi.skName);
+  //     }
+  //     return acc;
+  //   }, [] as string[]);
+  // }
 
-  public get skName(): string {
-    return this.options.skName;
-  }
+  // public get keyDynamoGsi(): DynamoGsi {
+  //   let dynamoGsi = this.dynamoGsi.find((g) => g.isKeyGsi);
 
-  public get lookupName(): string {
-    return this.options.lookupName;
-  }
+  //   // create the key GSI
+  //   if (!dynamoGsi) {
+  //     dynamoGsi = new DynamoGsi(this, {
+  //       pkName: this.pkName,
+  //       skName: this.skName,
+  //       type: DYNAMO_GSI_TYPE.KEY,
+  //     });
+  //   }
 
-  public get attrributeNames(): string[] {
-    return this.dynamoGsi.reduce((acc, gsi) => {
-      if (acc.indexOf(gsi.pkName) === -1) {
-        acc.push(gsi.pkName);
-      }
-      if (acc.indexOf(gsi.skName) === -1) {
-        acc.push(gsi.skName);
-      }
-      return acc;
-    }, [] as string[]);
-  }
+  //   return dynamoGsi;
+  // }
 
-  public get keyDynamoGsi(): DynamoGsi {
-    let dynamoGsi = this.dynamoGsi.find((g) => g.isKeyGsi);
+  // public get lookupDynamoGsi(): DynamoGsi {
+  //   let dynamoGsi = this.dynamoGsi.find((g) => g.isLookupGsi);
 
-    // create the key GSI
-    if (!dynamoGsi) {
-      dynamoGsi = new DynamoGsi(this, {
-        pkName: this.pkName,
-        skName: this.skName,
-        type: DYNAMO_GSI_TYPE.KEY,
-      });
-    }
+  //   // create the key GSI
+  //   if (!dynamoGsi) {
+  //     dynamoGsi = new DynamoGsi(this, {
+  //       name: "lookup",
+  //       pkName: "sk",
+  //       skName: "idx",
+  //       type: DYNAMO_GSI_TYPE.LOOKUP,
+  //     });
+  //   }
 
-    return dynamoGsi;
-  }
-
-  public get lookupDynamoGsi(): DynamoGsi {
-    let dynamoGsi = this.dynamoGsi.find((g) => g.isLookupGsi);
-
-    // create the key GSI
-    if (!dynamoGsi) {
-      dynamoGsi = new DynamoGsi(this, {
-        name: "lookup",
-        pkName: "sk",
-        skName: "idx",
-        type: DYNAMO_GSI_TYPE.LOOKUP,
-      });
-    }
-
-    return dynamoGsi;
-  }
+  //   return dynamoGsi;
+  // }
 }
