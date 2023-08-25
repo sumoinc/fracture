@@ -92,39 +92,6 @@ export class TurboRepo extends Component {
 
     /***************************************************************************
      *
-     * MAIN BUILD PIPELINE
-     *
-     * The steps defined here happen regardless of which pipeline is running.
-     * This includes building and synth for all apps and services across any
-     * environments they will be deployed into.
-     *
-     **************************************************************************/
-
-    //fracture.postCompileTask?.spawn(this.lintTask);
-
-    // this.buildTask = fracture.addTask("turbo:build", {
-    //   description: "Build using turborepo.",
-    // });
-
-    // // synths all projen files into their respedtive directories
-    // this.buildTask.exec(`pnpm turbo default`);
-
-    // // build all typescript. This step is sort of redundant but a good type
-    // // check anyway so leaving it for now.
-    // this.buildTask.exec(`pnpm turbo compile`);
-
-    // // lint before we test to clean up generated files even when tests fail
-    // // linting happens agani after testing but whatever
-    // this.buildTask.exec(`pnpm turbo eslint`);
-
-    // // run all tests
-    // this.buildTask.exec(`pnpm turbo test`);
-
-    // // synth all cdk cloud assembly
-    // this.buildTask.exec(`pnpm turbo synth`);
-
-    /***************************************************************************
-     *
      * SYNTH TASK
      *
      * We want to synth all workspaces and packages during the build task's

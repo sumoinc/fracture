@@ -4,6 +4,8 @@ import { BuildWorkflow } from "projen/lib/build";
 import { GitHub } from "projen/lib/github";
 import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
 import { SetRequired } from "type-fest";
+import { FractureService } from "../core";
+import { Environment } from "../core/environment";
 import { Fracture } from "../core/fracture";
 
 export interface PipelineOptions {
@@ -84,6 +86,28 @@ export class Pipeline extends Component {
     this.jobs.push(job);
   }
 
+  addServiceDeployments(
+    services: Array<FractureService>,
+    environments: Array<Environment>
+  ): void {
+    services.forEach((service) => {
+      environments.forEach((environment) => {
+        this.addJob({
+          name: `deploy-${service.name}-${environment.name}`,
+          permissions: {
+            contents: JobPermission.WRITE,
+          },
+          steps: [
+            {
+              name: "Deploy",
+              run: `npx aws-cdk@${service.cdkDeps.cdkVersion} deploy --no-rollback --app ${service.cdkOutDistDir} *-${environment.name}`,
+            },
+          ],
+        });
+      });
+    });
+  }
+
   preSynthesize(): void {
     const fracture = this.project as Fracture;
 
@@ -114,16 +138,16 @@ export class Pipeline extends Component {
         name: this.name,
         buildTask: fracture.buildTask,
         artifactsDirectory: fracture.artifactsDirectory,
-        // containerImage: options.workflowContainerImage,
-        // gitIdentity: this.workflowGitIdentity,
         mutableBuild: false,
-        // preBuildSteps: this.renderWorkflowSetup({
-        //   mutable: options.mutableBuild ?? true,
-        // }),
-        // postBuildSteps,
-        // runsOn: options.workflowRunsOn,
         workflowTriggers,
-        // permissions: workflowPermissions,
+      });
+
+      // move outputs to the dist folder so they can be saved as one big honkin artifact
+      fracture.services.forEach((service) => {
+        buildWorkflow.addPostBuildSteps({
+          name: `Copy Service to Dist (${service.name})`,
+          run: `mkdir -p ${service.cdkOutDistDir} && cp -r ${service.cdkOutBuildDir}/* ${service.cdkOutDistDir}`,
+        });
       });
 
       /*************************************************************************

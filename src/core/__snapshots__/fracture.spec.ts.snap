@@ -155,6 +155,8 @@ exports[`validate generated project files .gitattributes 1`] = `
 /.gitattributes linguist-generated
 /.github/pull_request_template.md linguist-generated
 /.github/workflows/build.yml linguist-generated
+/.github/workflows/deploy-feature.yml linguist-generated
+/.github/workflows/deploy-production.yml linguist-generated
 /.github/workflows/pull-request-lint.yml linguist-generated
 /.github/workflows/release.yml linguist-generated
 /.github/workflows/upgrade-main.yml linguist-generated
@@ -537,6 +539,8 @@ junit.xml
 !/pnpm-workspace.yaml
 !/.vscode/settings.json
 !/.vscode/extensions.json
+!/.github/workflows/deploy-production.yml
+!/.github/workflows/deploy-feature.yml
 "
 `;
 
@@ -574,7 +578,6 @@ exports[`validate generated project files .npmignore 1`] = `
 /test-reports/
 junit.xml
 /coverage/
-permissions-backup.acl
 /dist/changelog.md
 /dist/version.txt
 /.mergify.yml
@@ -594,6 +597,7 @@ tsconfig.tsbuildinfo
 /.eslintrc.json
 .turbo
 turbo.json
+permissions-backup.acl
 "
 `;
 
@@ -722,6 +726,8 @@ Object {
     ".gitattributes",
     ".github/pull_request_template.md",
     ".github/workflows/build.yml",
+    ".github/workflows/deploy-feature.yml",
+    ".github/workflows/deploy-production.yml",
     ".github/workflows/pull-request-lint.yml",
     ".github/workflows/release.yml",
     ".github/workflows/upgrade-main.yml",
@@ -1074,8 +1080,8 @@ Array [
   ".gitattributes",
   ".github/pull_request_template.md",
   ".github/workflows/build.yml",
-  ".github/workflows/feature.yml",
-  ".github/workflows/production.yml",
+  ".github/workflows/deploy-feature.yml",
+  ".github/workflows/deploy-production.yml",
   ".github/workflows/pull-request-lint.yml",
   ".github/workflows/release.yml",
   ".github/workflows/upgrade-main.yml",

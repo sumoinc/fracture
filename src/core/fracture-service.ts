@@ -79,6 +79,14 @@ export class FractureService extends AwsCdkTypeScriptApp {
   public readonly errorStructure: Structure;
   public readonly responseStructure: Structure;
   public readonly listResponseStructure: Structure;
+  /**
+   * Output directory for CDK artifacts (cdk.out)
+   */
+  public readonly cdkOutBuildDir: string;
+  /**
+   * Where deployable artifacts are stored in pipeline runs
+   */
+  public readonly cdkOutDistDir: string;
 
   constructor(fracture: Fracture, options: FractureServiceOptions) {
     /***************************************************************************
@@ -112,6 +120,8 @@ export class FractureService extends AwsCdkTypeScriptApp {
 
     this.name = options.name;
     this.typescriptStrategy = new TypescriptStrategy(this);
+    this.cdkOutBuildDir = join(outdir, "cdk.out");
+    this.cdkOutDistDir = join(fracture.artifactsDirectory, outdir, "cdk.out");
 
     /***************************************************************************
      * Dynamo Configuration

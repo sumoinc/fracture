@@ -4,6 +4,7 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
+import { Environment, EnvironmentOptions } from "./environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { FractureService, FractureServiceOptions } from "./fracture-service";
 import { Pipeline, PipelineOptions } from "../pipelines";
@@ -98,6 +99,10 @@ export class Fracture extends TypeScriptProject {
    * Deployment Pipelines
    */
   public readonly pipelines: Array<Pipeline> = [];
+  /**
+   * Deployment Environments
+   */
+  public readonly environments: Array<Environment> = [];
 
   constructor(options: FractureOptions = {}) {
     /***************************************************************************
@@ -185,6 +190,12 @@ export class Fracture extends TypeScriptProject {
     const pipeline = new Pipeline(this, options);
     this.pipelines.push(pipeline);
     return pipeline;
+  }
+
+  public addEnvironment(options: EnvironmentOptions) {
+    const environment = new Environment(this, options);
+    this.environments.push(environment);
+    return environment;
   }
 
   /***************************************************************************
