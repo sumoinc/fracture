@@ -17,7 +17,7 @@ test("Smoke test", () => {
 
   const content = synthFile(fracture, ".github/workflows/foo.yml");
   expect(content).toMatchSnapshot();
-  // console.log(content);
+  console.log(content);
 });
 
 /*

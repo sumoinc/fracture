@@ -3,14 +3,14 @@ import {
   AccessPattern,
   AccessPatternOptions,
   ACCESS_PATTERN_TYPE,
-} from "../../core/access-pattern.ts";
+} from "../../core/access-pattern.js";
 import {
   Operation,
   OPERATION_SUB_TYPE,
   OPERATION_TYPE,
 } from "../../core/operation.ts/index.js";
-import { ResourceAttributeGenerator } from "../../core/resource-attribute.ts";
-import { Resource } from "../../core/resource.ts";
+import { ResourceAttributeGenerator } from "../../core/resource-attribute.js";
+import { Resource } from "../../core/resource.js";
 
 export class LookupFactory extends Component {
   public readonly accessPattern: AccessPattern;

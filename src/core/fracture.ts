@@ -118,6 +118,7 @@ export class Fracture extends TypeScriptProject {
       prettier: true,
       projenrcTs: true,
       licensed: false,
+      deps: ["@sumoc/fracture"],
     };
 
     super(projenOptions);

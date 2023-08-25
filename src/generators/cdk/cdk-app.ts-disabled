@@ -1,11 +1,11 @@
 import { join } from "path";
-import { Service } from "../../core/fracture-service";
+import { FractureService } from "../../core/fracture-service";
 import { TypeScriptSource } from "../ts/source";
 
 export class CdkApp extends TypeScriptSource {
-  public readonly service: Service;
+  public readonly service: FractureService;
 
-  constructor(service: Service) {
+  constructor(service: FractureService) {
     super(service, join(service.srcDir, "ts", "app.ts"));
 
     // remember this service name
