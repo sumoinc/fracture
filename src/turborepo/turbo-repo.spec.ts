@@ -17,20 +17,20 @@ describe("validate generated project files", () => {
     expect(content).toMatchSnapshot();
     //console.log(JSON.stringify(content, null, 2));
     // @ts-ignore
-    console.log(JSON.stringify(content.tasks.build, null, 2));
+    // console.log(JSON.stringify(content.tasks.build, null, 2));
     // @ts-ignore
-    console.log(JSON.stringify(content.tasks.default, null, 2));
+    // console.log(JSON.stringify(content.tasks.default, null, 2));
     // @ts-ignore
-    console.log(JSON.stringify(content.tasks["pre-compile"], null, 2));
+    // console.log(JSON.stringify(content.tasks["pre-compile"], null, 2));
     // @ts-ignore
-    console.log(JSON.stringify(content.tasks.compile, null, 2));
+    // console.log(JSON.stringify(content.tasks.compile, null, 2));
     // @ts-ignore
-    console.log(JSON.stringify(content.tasks["post-compile"], null, 2));
+    // console.log(JSON.stringify(content.tasks["post-compile"], null, 2));
     // @ts-ignore
-    console.log(JSON.stringify(content.tasks.test, null, 2));
+    // console.log(JSON.stringify(content.tasks.test, null, 2));
     // @ts-ignore
-    console.log(JSON.stringify(content.tasks.package, null, 2));
+    // console.log(JSON.stringify(content.tasks.package, null, 2));
     // @ts-ignore
-    console.log(JSON.stringify(content.tasks.eslint, null, 2));
+    // console.log(JSON.stringify(content.tasks.eslint, null, 2));
   });
 });

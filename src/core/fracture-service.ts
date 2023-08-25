@@ -101,8 +101,6 @@ export class FractureService extends AwsCdkTypeScriptApp {
       cdkVersion: "2.93.0",
       defaultReleaseBranch: "main",
       parent: fracture,
-      packageManager: NodePackageManager.PNPM,
-      pnpmVersion: "8",
       outdir,
       eslintOptions: {
         dirs: ["src"],
@@ -110,6 +108,10 @@ export class FractureService extends AwsCdkTypeScriptApp {
       },
       licensed: false,
       projenrcTs: true,
+
+      // pnpm configs
+      packageManager: NodePackageManager.PNPM,
+      pnpmVersion: "8",
     };
 
     super(projenOptions);

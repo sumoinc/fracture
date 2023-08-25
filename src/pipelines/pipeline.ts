@@ -134,12 +134,17 @@ export class Pipeline extends Component {
         workflowDispatch: {}, // allow manual triggering
       };
 
+      const workFlowSetup = fracture.renderWorkflowSetup({
+        mutable: false,
+      });
+
       const buildWorkflow = new BuildWorkflow(fracture, {
         name: this.name,
         buildTask: fracture.buildTask,
         artifactsDirectory: fracture.artifactsDirectory,
         mutableBuild: false,
         workflowTriggers,
+        preBuildSteps: workFlowSetup,
       });
 
       // move outputs to the dist folder so they can be saved as one big honkin artifact

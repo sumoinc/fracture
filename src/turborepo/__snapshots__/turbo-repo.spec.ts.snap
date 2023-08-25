@@ -143,6 +143,14 @@ Object {
     "package": Object {
       "description": "Creates the distribution package",
       "name": "package",
+      "steps": Array [
+        Object {
+          "exec": "mkdir -p dist/js",
+        },
+        Object {
+          "exec": "mv $(npm pack) dist/js/",
+        },
+      ],
     },
     "post-compile": Object {
       "description": "Runs after successful compilation",
