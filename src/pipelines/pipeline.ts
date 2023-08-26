@@ -1,4 +1,3 @@
-import { paramCase } from "change-case";
 import { Component } from "projen";
 import { BuildWorkflow } from "projen/lib/build";
 import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
@@ -8,26 +7,9 @@ import { Fracture } from "../core/fracture";
 
 export interface PipelineOptions {
   /**
-   * Name for this pipeline.
+   * Branch that triggers this pipeline.
    */
-  name: string;
-  /**
-   * What branches shoudl trigger this pipeline?
-   */
-  branchTriggerPatterns: string[];
-  /**
-   * What paths should trigger this pipeline?
-   *
-   * @default [] (all)
-   */
-  pathTriggerPatterns?: string[];
-  /**
-   * Pipelines always build and synth but don't always deploy.
-   * Should this pipeline deploy the app after build?
-   *
-   * @default false
-   */
-  deploy?: boolean;
+  branchName: string;
 }
 
 export type PipelineJob = SetRequired<Partial<Job>, "name"> & {
@@ -36,6 +18,21 @@ export type PipelineJob = SetRequired<Partial<Job>, "name"> & {
 export type PipelineStep = SetRequired<Partial<JobStep>, "name">;
 
 export class Pipeline extends Component {
+  /**
+   * Returns a environment by name, or undefined if it doesn't exist
+   */
+  public static byBranchName(
+    fracture: Fracture,
+    branchName: string
+  ): Pipeline | undefined {
+    const isDefined = (c: Component): c is Pipeline =>
+      c instanceof Pipeline && c.branchName === branchName;
+    return fracture.components.find(isDefined);
+  }
+  /**
+   * Branch that triggers this pipeline.
+   */
+  public readonly branchName: string;
   /**
    * Name for this pipeline.
    */
@@ -49,7 +46,7 @@ export class Pipeline extends Component {
    *
    * @default [] (all)
    */
-  public readonly pathTriggerPatterns: string[];
+  public readonly pathTriggerPatterns: string[] = [];
   /**
    * All jobs for this pipeline.
    */
@@ -60,15 +57,28 @@ export class Pipeline extends Component {
   public readonly workflow: BuildWorkflow;
 
   constructor(fracture: Fracture, options: PipelineOptions) {
+    /***************************************************************************
+     * Check Duplicates
+     **************************************************************************/
+
+    const branchName = options.branchName;
+
+    if (Pipeline.byBranchName(fracture, branchName)) {
+      throw new Error(`Duplicate pipeline for branch name "${branchName}".`);
+    }
+
     super(fracture);
 
     /***************************************************************************
      * Props
      **************************************************************************/
 
-    this.name = paramCase(options.name);
-    this.branchTriggerPatterns = options.branchTriggerPatterns;
-    this.pathTriggerPatterns = options.pathTriggerPatterns ?? [];
+    this.branchName = options.branchName;
+    this.name = `deploy-${this.branchName}}`;
+    this.branchTriggerPatterns =
+      options.branchName === fracture.defaultReleaseBranch
+        ? [options.branchName]
+        : [`${options.branchName}/*`];
 
     /*************************************************************************
      * Create initial workflow

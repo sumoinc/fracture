@@ -1,11 +1,11 @@
 import { join } from "path";
 import { paramCase } from "change-case";
+import { Project } from "projen";
 import {
   AwsCdkTypeScriptApp,
   AwsCdkTypeScriptAppOptions,
 } from "projen/lib/awscdk";
 import { NodePackageManager } from "projen/lib/javascript";
-import { Branch } from "./branch";
 import { Environment } from "./environment";
 import { Fracture } from "./fracture";
 import { Resource, ResourceOptions } from "./resource";
@@ -18,6 +18,7 @@ import {
   TypescriptStrategy,
   TypescriptStrategyOptions,
 } from "../generators/ts/strategy";
+import { Pipeline } from "../pipelines";
 import { DeployTarget } from "../pipelines/deploy-target";
 
 export interface FractureServiceOptions
@@ -58,6 +59,17 @@ export interface FractureServiceOptions
 }
 
 export class FractureService extends AwsCdkTypeScriptApp {
+  /**
+   * Returns an account by name, or undefined if it doesn't exist
+   */
+  public static byName(
+    fracture: Fracture,
+    name: string
+  ): FractureService | undefined {
+    const isDefined = (c: Project): c is FractureService =>
+      c instanceof FractureService && c.name === name;
+    return fracture.subprojects.find(isDefined);
+  }
   /**
    * A name for the service.
    */
@@ -240,18 +252,19 @@ export class FractureService extends AwsCdkTypeScriptApp {
 
   public addDeployTarget(branchName: string, environmentName: string) {
     const fracture = this.parent as Fracture;
-    const branch = Branch.byName(fracture, branchName);
+    const pipeline = Pipeline.byBranchName(fracture, branchName);
     const environment = Environment.byName(fracture, environmentName);
 
-    if (!branch) {
-      throw new Error(`Branch ${branchName} not found`);
+    if (!pipeline) {
+      throw new Error(`Pipeline for branch "${branchName}" not found`);
     }
     if (!environment) {
-      throw new Error(`Environment ${environmentName} not found`);
+      throw new Error(
+        `Environment for environmentName "${environmentName}" not found`
+      );
     }
 
     const deployTarget = new DeployTarget(fracture, {
-      branch,
       environment,
       service: this,
     });

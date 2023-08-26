@@ -4,10 +4,12 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
-import { Branch, BranchOptions } from "./branch";
+import { ValueOf } from "type-fest";
+import { Account } from "./account";
 import { Environment, EnvironmentOptions } from "./environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { FractureService, FractureServiceOptions } from "./fracture-service";
+import { REGION_IDENTITIER } from "./region";
 import { Pipeline, PipelineOptions } from "../pipelines";
 import { PnpmWorkspace } from "../pnpm";
 import { VsCodeConfiguration } from "../projen";
@@ -39,19 +41,21 @@ export interface FractureOptions extends Partial<TypeScriptProjectOptions> {
    */
   logging?: LoggerOptions;
   /**
-   * Versioned.
+   * Branch names to build pipelines for
    *
-   * @default true
+   * @default ["main", "feature", "fix", "chore"]
    */
-  //isVersioned?: boolean;
+  branchNames?: Array<string>;
   /**
-   * The naming strategy to use for generated code.
+   * Default Account number for environments.
+   * @default 0000000000
    */
-  //namingStrategy?: NamingStrategy;
+  defaultAccountNumber?: string;
   /**
-   * The audit strategy to use for generated code.
+   * Default region  for environments.
+   * @default us-east-1
    */
-  //auditStrategy?: AuditStrategy;
+  defaultRegion?: ValueOf<typeof REGION_IDENTITIER>;
   /**
    * Options for using TurboRepo
    *
@@ -87,6 +91,20 @@ export class Fracture extends TypeScriptProject {
    */
   public readonly defaultReleaseBranch: string;
   /**
+   * Default Account number for environments.
+   * @default 0000000000
+   */
+  public readonly defaultAccountNumber: string;
+  /**
+   * Default region  for environments.
+   * @default us-east-1
+   */
+  public readonly defaultRegion: ValueOf<typeof REGION_IDENTITIER>;
+  /**
+   * All services in this project.
+   */
+  public readonly accounts: Array<Account> = [];
+  /**
    * All services in this project.
    */
   public readonly services: Array<FractureService> = [];
@@ -94,10 +112,6 @@ export class Fracture extends TypeScriptProject {
    * All apps in this project.
    */
   public readonly apps: Array<FractureApp> = [];
-  /**
-   * Branching strategy to use for pipelines.
-   */
-  public readonly branches: Array<Branch> = [];
   /**
    * Deployment Pipelines
    */
@@ -147,6 +161,8 @@ export class Fracture extends TypeScriptProject {
     this.appRoot = options.appRoot ?? "apps";
     this.srcDir = options.srcDir ?? "src";
     this.defaultReleaseBranch = defaultReleaseBranch;
+    this.defaultAccountNumber = options.defaultAccountNumber ?? "0000000000";
+    this.defaultRegion = options.defaultRegion ?? "us-east-1";
 
     /***************************************************************************
      * TUBOREPO
@@ -158,19 +174,17 @@ export class Fracture extends TypeScriptProject {
      * BRANCH STRATEGY & PIPELINES
      **************************************************************************/
 
-    this.addBranch({
-      name: this.defaultReleaseBranch,
-      shortName: "prod",
-    });
-    this.addBranch({
-      name: "feature",
-      shortName: "feat",
-    });
-    this.addBranch({
-      name: "fix",
-    });
-    this.addBranch({
-      name: "chore",
+    const branchNames = options.branchNames ?? [
+      "main",
+      "feature",
+      "fix",
+      "chore",
+    ];
+
+    branchNames.forEach((branchName) => {
+      this.addPipeline({
+        branchName,
+      });
     });
 
     /***************************************************************************
@@ -188,10 +202,8 @@ export class Fracture extends TypeScriptProject {
     return this;
   }
 
-  public addService(options: FractureServiceOptions) {
-    const service = new FractureService(this, options);
-    this.services.push(service);
-    return service;
+  public addAccount(options: FractureAppOptions) {
+    return new FractureApp(this, options);
   }
 
   public addApp(options: FractureAppOptions) {
@@ -200,6 +212,11 @@ export class Fracture extends TypeScriptProject {
     return app;
   }
 
+  public addService(options: FractureServiceOptions) {
+    const service = new FractureService(this, options);
+    this.services.push(service);
+    return service;
+  }
   public addPipeline(options: PipelineOptions) {
     const pipeline = new Pipeline(this, options);
     this.pipelines.push(pipeline);
@@ -207,24 +224,7 @@ export class Fracture extends TypeScriptProject {
   }
 
   public addEnvironment(options: EnvironmentOptions) {
-    const environment = new Environment(this, options);
-    this.environments.push(environment);
-    return environment;
-  }
-
-  public addBranch(options: BranchOptions) {
-    const branch = new Branch(this, options);
-
-    this.addPipeline({
-      name: `deploy-${branch.shortName}`,
-      branchTriggerPatterns:
-        branch.name === this.defaultReleaseBranch
-          ? [branch.name]
-          : [`${branch.name}/*`],
-    });
-
-    this.branches.push(branch);
-    return branch;
+    return new Environment(this, options);
   }
 
   /***************************************************************************
