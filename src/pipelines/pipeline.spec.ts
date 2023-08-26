@@ -23,7 +23,7 @@ test("Smoke test", () => {
 });
 
 test("able to add deployment environments", () => {
-  const usEast = new Environment(fracture, {
+  new Environment(fracture, {
     name: "us-east",
     account: new Account(fracture, {
       name: "my-account",
@@ -33,16 +33,12 @@ test("able to add deployment environments", () => {
   });
   const myService = fracture.addService({ name: "my-service" });
   const myOtherService = fracture.addService({ name: "my-other-service" });
-
-  // deploy both services to ue-east-1
-  fracture.featurePipeline.addServiceDeployments(
-    [myService, myOtherService],
-    [usEast]
-  );
+  const deployTarget = myService.addDeployTarget("main", "us-east");
+  myOtherService.addDeployTarget("main", "us-east");
 
   const content = synthFile(
     fracture,
-    `.github/workflows/${fracture.featurePipeline.name}.yml`
+    `.github/workflows/deploy-${deployTarget.name}.yml`
   );
   expect(content).toMatchSnapshot();
   // console.log(content);

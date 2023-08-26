@@ -22,6 +22,17 @@ export interface EnvironmentOptions {
 
 export class Environment extends Component {
   /**
+   * Returns a environment by name, or undefined if it doesn't exist
+   */
+  public static byName(
+    fracture: Fracture,
+    name: string
+  ): Environment | undefined {
+    const isTypescriptStrategy = (c: Component): c is Environment =>
+      c instanceof Environment && c.name === name;
+    return fracture.components.find(isTypescriptStrategy);
+  }
+  /**
    * Friendly name for environment
    */
   public readonly name: string;

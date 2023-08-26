@@ -1,11 +1,9 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { BuildWorkflow } from "projen/lib/build";
-import { GitHub } from "projen/lib/github";
 import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
 import { SetRequired } from "type-fest";
-import { FractureService } from "../core";
-import { Environment } from "../core/environment";
+import { DeployTarget } from "./deploy-target";
 import { Fracture } from "../core/fracture";
 
 export interface PipelineOptions {
@@ -39,10 +37,6 @@ export type PipelineStep = SetRequired<Partial<JobStep>, "name">;
 
 export class Pipeline extends Component {
   /**
-   * If for this pipeline (suitable as filename)
-   */
-  public readonly id: string;
-  /**
    * Name for this pipeline.
    */
   public readonly name: string;
@@ -57,16 +51,13 @@ export class Pipeline extends Component {
    */
   public readonly pathTriggerPatterns: string[];
   /**
-   * Pipelines always build and synth but don't always deploy.
-   * Should this pipeline deploy the app after build?
-   *
-   * @default false
-   */
-  public readonly deploy: boolean;
-  /**
    * All jobs for this pipeline.
    */
   public readonly jobs: PipelineJob[] = [];
+  /**
+   * Pipeline workflow
+   */
+  public readonly workflow: BuildWorkflow;
 
   constructor(fracture: Fracture, options: PipelineOptions) {
     super(fracture);
@@ -75,99 +66,74 @@ export class Pipeline extends Component {
      * Props
      **************************************************************************/
 
-    this.name = options.name;
-    this.id = paramCase(this.name);
+    this.name = paramCase(options.name);
     this.branchTriggerPatterns = options.branchTriggerPatterns;
     this.pathTriggerPatterns = options.pathTriggerPatterns ?? [];
-    this.deploy = options.deploy ?? false;
+
+    /*************************************************************************
+     * Create initial workflow
+     ************************************************************************/
+
+    const workflowTriggers = {
+      push: {
+        branches: this.branchTriggerPatterns,
+        paths: this.pathTriggerPatterns,
+      },
+      workflowDispatch: {}, // allow manual triggering
+    };
+
+    const workFlowSetup = fracture.renderWorkflowSetup({
+      mutable: false,
+    });
+
+    this.workflow = new BuildWorkflow(fracture, {
+      name: this.name,
+      buildTask: fracture.buildTask,
+      artifactsDirectory: fracture.artifactsDirectory,
+      mutableBuild: false,
+      workflowTriggers,
+      preBuildSteps: workFlowSetup,
+    });
   }
 
   addJob(job: PipelineJob): void {
-    this.jobs.push(job);
+    this.workflow.addPostBuildJob(job.name, {
+      runsOn: ["ubuntu-latest"],
+      steps: job.steps,
+      permissions: {
+        contents: JobPermission.READ,
+      },
+    });
   }
 
-  addServiceDeployments(
-    services: Array<FractureService>,
-    environments: Array<Environment>
-  ): void {
-    services.forEach((service) => {
-      environments.forEach((environment) => {
-        this.addJob({
-          name: `deploy-${service.name}-${environment.name}`,
-          permissions: {
-            contents: JobPermission.WRITE,
-          },
-          steps: [
-            {
-              name: "Deploy",
-              run: `npx aws-cdk@${service.cdkDeps.cdkVersion} deploy --no-rollback --app ${service.cdkOutDistDir} *-${environment.name}`,
-            },
-          ],
-        });
-      });
+  addDeployment(deployTarget: DeployTarget): void {
+    this.addJob({
+      name: `deploy-${deployTarget.name}`,
+      permissions: {
+        contents: JobPermission.WRITE,
+      },
+      steps: [
+        {
+          name: "Deploy",
+          run: `npx aws-cdk@${deployTarget.service.cdkDeps.cdkVersion} deploy --no-rollback --app ${deployTarget.service.cdkOutDistDir} ${deployTarget.name}`,
+        },
+      ],
     });
   }
 
   preSynthesize(): void {
     const fracture = this.project as Fracture;
 
-    /***************************************************************************
-     *
-     * Github Workflow
-     *
-     * this is the only platform currently supported in fracture.
-     *
-     **************************************************************************/
+    /*************************************************************************
+     * Post build steps
+     ************************************************************************/
 
-    const github = GitHub.of(fracture);
-
-    if (github) {
-      /*************************************************************************
-       * Build
-       ************************************************************************/
-
-      const workflowTriggers = {
-        push: {
-          branches: this.branchTriggerPatterns,
-          paths: this.pathTriggerPatterns,
-        },
-        workflowDispatch: {}, // allow manual triggering
-      };
-
-      const workFlowSetup = fracture.renderWorkflowSetup({
-        mutable: false,
+    // move outputs to the dist folder so they can be saved as one big artifact
+    fracture.services.forEach((service) => {
+      this.workflow.addPostBuildSteps({
+        name: `Copy Service to Dist (${service.name})`,
+        run: `mkdir -p ${service.cdkOutDistDir} && cp -r ${service.cdkOutBuildDir}/* ${service.cdkOutDistDir}`,
       });
-
-      const buildWorkflow = new BuildWorkflow(fracture, {
-        name: this.name,
-        buildTask: fracture.buildTask,
-        artifactsDirectory: fracture.artifactsDirectory,
-        mutableBuild: false,
-        workflowTriggers,
-        preBuildSteps: workFlowSetup,
-      });
-
-      // move outputs to the dist folder so they can be saved as one big honkin artifact
-      fracture.services.forEach((service) => {
-        buildWorkflow.addPostBuildSteps({
-          name: `Copy Service to Dist (${service.name})`,
-          run: `mkdir -p ${service.cdkOutDistDir} && cp -r ${service.cdkOutBuildDir}/* ${service.cdkOutDistDir}`,
-        });
-      });
-
-      /*************************************************************************
-       * Post build jobs
-       ************************************************************************/
-
-      this.jobs.forEach((job) => {
-        buildWorkflow.addPostBuildJob(job.name, {
-          runsOn: ["ubuntu-latest"],
-          steps: job.steps,
-          permissions: {
-            contents: JobPermission.READ,
-          },
-        });
-      });
-    }
+    });
   }
 }

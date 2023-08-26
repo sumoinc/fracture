@@ -4,6 +4,7 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
+import { Branch, BranchOptions } from "./branch";
 import { Environment, EnvironmentOptions } from "./environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { FractureService, FractureServiceOptions } from "./fracture-service";
@@ -93,8 +94,10 @@ export class Fracture extends TypeScriptProject {
    * All apps in this project.
    */
   public readonly apps: Array<FractureApp> = [];
-  public readonly productionPipeline: Pipeline;
-  public readonly featurePipeline: Pipeline;
+  /**
+   * Branching strategy to use for pipelines.
+   */
+  public readonly branches: Array<Branch> = [];
   /**
    * Deployment Pipelines
    */
@@ -152,17 +155,22 @@ export class Fracture extends TypeScriptProject {
     new TurboRepo(this, options.turboRepoOptions ?? {});
 
     /***************************************************************************
-     * PIPELNES
+     * BRANCH STRATEGY & PIPELINES
      **************************************************************************/
 
-    this.productionPipeline = this.addPipeline({
-      name: "deploy-production",
-      branchTriggerPatterns: ["main"],
+    this.addBranch({
+      name: this.defaultReleaseBranch,
+      shortName: "prod",
     });
-
-    this.featurePipeline = this.addPipeline({
-      name: "deploy-feature",
-      branchTriggerPatterns: ["feature/*"],
+    this.addBranch({
+      name: "feature",
+      shortName: "feat",
+    });
+    this.addBranch({
+      name: "fix",
+    });
+    this.addBranch({
+      name: "chore",
     });
 
     /***************************************************************************
@@ -202,6 +210,21 @@ export class Fracture extends TypeScriptProject {
     const environment = new Environment(this, options);
     this.environments.push(environment);
     return environment;
+  }
+
+  public addBranch(options: BranchOptions) {
+    const branch = new Branch(this, options);
+
+    this.addPipeline({
+      name: `deploy-${branch.shortName}`,
+      branchTriggerPatterns:
+        branch.name === this.defaultReleaseBranch
+          ? [branch.name]
+          : [`${branch.name}/*`],
+    });
+
+    this.branches.push(branch);
+    return branch;
   }
 
   /***************************************************************************
