@@ -1,5 +1,5 @@
-import { DeployTarget } from "./deploy-target";
 import { Pipeline } from "./pipeline";
+import { ServiceDeployTarget } from "./service-deploy-target";
 import { Environment, FractureService } from "../core";
 import { Fracture } from "../core/fracture";
 import { synthFile } from "../util/test-util";
@@ -7,7 +7,7 @@ import { synthFile } from "../util/test-util";
 describe("success conditions", () => {
   test("Smoke test", () => {
     const fracture = new Fracture();
-    const deployTarget = new DeployTarget(fracture, {
+    const deployTarget = new ServiceDeployTarget(fracture, {
       branchName: "main",
       environment: new Environment(fracture, {
         name: "my-env",
@@ -30,4 +30,26 @@ describe("success conditions", () => {
   });
 });
 
-describe("failure conditions", () => {});
+describe("failure conditions", () => {
+  test("prevent duplicate configs", () => {
+    const fracture = new Fracture();
+    new Environment(fracture, {
+      name: "my-env",
+    });
+    new FractureService(fracture, {
+      name: "my-service",
+    });
+    new ServiceDeployTarget(fracture, {
+      branchName: "main",
+      environmentName: "my-env",
+      serviceName: "my-service",
+    });
+    expect(() => {
+      new ServiceDeployTarget(fracture, {
+        branchName: "main",
+        environmentName: "my-env",
+        serviceName: "my-service",
+      });
+    }).toThrow("Duplicate deploy target");
+  });
+});

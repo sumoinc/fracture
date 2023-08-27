@@ -2,7 +2,6 @@ import { Component } from "projen";
 import { BuildWorkflow } from "projen/lib/build";
 import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
 import { SetRequired } from "type-fest";
-import { DeployTarget } from "./deploy-target";
 import { Fracture } from "../core/fracture";
 
 export interface PipelineOptions {
@@ -106,7 +105,7 @@ export class Pipeline extends Component {
     });
   }
 
-  addJob(job: PipelineJob): void {
+  addPostBuildJob(job: PipelineJob): void {
     this.workflow.addPostBuildJob(job.name, {
       runsOn: ["ubuntu-latest"],
       steps: job.steps,
@@ -116,19 +115,8 @@ export class Pipeline extends Component {
     });
   }
 
-  addDeployment(deployTarget: DeployTarget): void {
-    this.addJob({
-      name: `deploy-${deployTarget.name}`,
-      permissions: {
-        contents: JobPermission.WRITE,
-      },
-      steps: [
-        {
-          name: "Deploy",
-          run: `npx aws-cdk@${deployTarget.service.cdkDeps.cdkVersion} deploy --no-rollback --app ${deployTarget.service.cdkOutDistDir} ${deployTarget.name}`,
-        },
-      ],
-    });
+  addPostBuildStep(step: PipelineStep): void {
+    this.workflow.addPostBuildSteps(step);
   }
 
   preSynthesize(): void {

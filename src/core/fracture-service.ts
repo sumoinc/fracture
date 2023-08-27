@@ -6,7 +6,6 @@ import {
   AwsCdkTypeScriptAppOptions,
 } from "projen/lib/awscdk";
 import { NodePackageManager } from "projen/lib/javascript";
-import { Environment } from "./environment";
 import { Fracture } from "./fracture";
 import { Resource, ResourceOptions } from "./resource";
 import { Structure, StructureOptions } from "./structure";
@@ -18,8 +17,6 @@ import {
   TypescriptStrategy,
   TypescriptStrategyOptions,
 } from "../generators/ts/strategy";
-import { Pipeline } from "../pipelines";
-import { DeployTarget } from "../pipelines/deploy-target";
 
 export interface FractureServiceOptions
   extends Partial<AwsCdkTypeScriptAppOptions> {
@@ -101,10 +98,6 @@ export class FractureService extends AwsCdkTypeScriptApp {
    * Where deployable artifacts are stored in pipeline runs
    */
   public readonly cdkOutDistDir: string;
-  /**
-   * Environemnts to build for
-   */
-  public readonly buildTargets: Array<DeployTarget> = [];
 
   constructor(fracture: Fracture, options: FractureServiceOptions) {
     /***************************************************************************
@@ -244,34 +237,5 @@ export class FractureService extends AwsCdkTypeScriptApp {
     const structure = new Structure(this, options);
     this.structures.push(structure);
     return structure;
-  }
-
-  public addBuildTarget(target: DeployTarget) {
-    this.buildTargets.push(target);
-  }
-
-  public addDeployTarget(branchName: string, environmentName: string) {
-    const fracture = this.parent as Fracture;
-    const pipeline = Pipeline.byBranchName(fracture, branchName);
-    const environment = Environment.byName(fracture, environmentName);
-
-    if (!pipeline) {
-      throw new Error(`Pipeline for branch "${branchName}" not found`);
-    }
-    if (!environment) {
-      throw new Error(
-        `Environment for environmentName "${environmentName}" not found`
-      );
-    }
-
-    const deployTarget = new DeployTarget(fracture, {
-      environment,
-      service: this,
-    });
-
-    // always build for all targets
-    this.addBuildTarget(deployTarget);
-
-    return deployTarget;
   }
 }

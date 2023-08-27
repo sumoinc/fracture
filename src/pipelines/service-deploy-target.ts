@@ -1,11 +1,12 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { JobPermission } from "projen/lib/github/workflows-model";
 import { Pipeline } from "./pipeline";
 import { FractureService } from "../core";
 import { Environment } from "../core/environment";
 import { Fracture } from "../core/fracture";
 
-export interface DeployTargetOptions {
+export interface ServiceDeployTargetOptions {
   /**
    * The branch name this deployment is targeting.
    * Either branchName or pipeline must be included.
@@ -38,22 +39,26 @@ export interface DeployTargetOptions {
   service?: FractureService;
 }
 
-export class DeployTarget extends Component {
+export class ServiceDeployTarget extends Component {
   /**
    * Returns an deploy target by name, or undefined if it doesn't exist
    */
   public static byName(
     fracture: Fracture,
     name: string
-  ): DeployTarget | undefined {
-    const isDefined = (c: Component): c is DeployTarget =>
-      c instanceof DeployTarget && c.name === name;
+  ): ServiceDeployTarget | undefined {
+    const isDefined = (c: Component): c is ServiceDeployTarget =>
+      c instanceof ServiceDeployTarget && c.name === name;
     return fracture.components.find(isDefined);
   }
   /**
    * This becomes the name for the stack when it's generated.
    */
   public readonly name: string;
+  /**
+   * The pattern to use when deploying stacks for this target
+   */
+  public readonly stackPattern: string;
   /**
    * Name for this pipeline.
    */
@@ -66,11 +71,15 @@ export class DeployTarget extends Component {
    */
   public readonly environment: Environment;
   /**
+   * The environment to deploy to.
+   */
+  public readonly pipeline: Pipeline;
+  /**
    * Service this target is for.
    */
   public readonly service: FractureService;
 
-  constructor(fracture: Fracture, options: DeployTargetOptions) {
+  constructor(fracture: Fracture, options: ServiceDeployTargetOptions) {
     /***************************************************************************
      * Resolve optional inputs
      **************************************************************************/
@@ -131,11 +140,11 @@ export class DeployTarget extends Component {
      **************************************************************************/
 
     const name = `${paramCase(options.service!.name)}-${paramCase(
-      options.environment!.name
+      options.pipeline!.branchName
     )}-${paramCase(options.environment!.name)}`;
 
-    if (DeployTarget.byName(fracture, name)) {
-      throw new Error(`Duplicate deploy target name "${name}".`);
+    if (ServiceDeployTarget.byName(fracture, name)) {
+      throw new Error(`Duplicate deploy target "${name}".`);
     }
 
     super(fracture);
@@ -145,12 +154,36 @@ export class DeployTarget extends Component {
      **************************************************************************/
 
     this.name = name;
+    this.stackPattern = `*-${paramCase(
+      options.pipeline!.branchName
+    )}-${paramCase(options.environment!.name)}`;
     this.env = {
       account: options.environment!.accountNumber,
       region: options.environment!.region,
     };
 
     this.environment = options.environment!;
+    this.pipeline = options.pipeline!;
     this.service = options.service!;
+
+    // make surer we copy the cdk files over properly
+    this.pipeline.addPostBuildStep({
+      name: `Copy Service to Dist (${this.service.name})`,
+      run: `mkdir -p ${this.service.cdkOutDistDir} && cp -r ${this.service.cdkOutBuildDir}/* ${this.service.cdkOutDistDir}`,
+    });
+
+    // add deploy job to pipeline
+    this.pipeline.addPostBuildJob({
+      name: `deploy-${this.name}`,
+      permissions: {
+        contents: JobPermission.WRITE,
+      },
+      steps: [
+        {
+          name: "Deploy",
+          run: `npx aws-cdk@${this.service.cdkDeps.cdkVersion} deploy --no-rollback --app ${this.service.cdkOutDistDir} ${this.stackPattern}`,
+        },
+      ],
+    });
   }
 }
