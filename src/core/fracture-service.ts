@@ -110,7 +110,7 @@ export class FractureService extends AwsCdkTypeScriptApp {
     const projenOptions: AwsCdkTypeScriptAppOptions = {
       name: options.name,
       cdkVersion: "2.93.0",
-      defaultReleaseBranch: "main",
+      defaultReleaseBranch: fracture.defaultReleaseBranch,
       parent: fracture,
       outdir,
       eslintOptions: {
@@ -118,6 +118,7 @@ export class FractureService extends AwsCdkTypeScriptApp {
         tsconfigPath: "./**/tsconfig.dev.json",
       },
       licensed: false,
+      prettier: true,
       projenrcTs: true,
 
       // pnpm configs

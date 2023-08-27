@@ -1112,6 +1112,8 @@ Array [
   "services/test-service/.gitignore",
   "services/test-service/.npmignore",
   "services/test-service/.npmrc",
+  "services/test-service/.prettierignore",
+  "services/test-service/.prettierrc.json",
   "services/test-service/.projen/deps.json",
   "services/test-service/.projen/files.json",
   "services/test-service/.projen/tasks.json",
