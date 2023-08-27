@@ -1,35 +1,14 @@
-import { paramCase } from "change-case";
 import { Component } from "projen";
 import { BuildWorkflow } from "projen/lib/build";
-import { GitHub } from "projen/lib/github";
 import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
 import { SetRequired } from "type-fest";
-import { FractureService } from "../core";
-import { Environment } from "../core/environment";
 import { Fracture } from "../core/fracture";
 
 export interface PipelineOptions {
   /**
-   * Name for this pipeline.
+   * Branch that triggers this pipeline.
    */
-  name: string;
-  /**
-   * What branches shoudl trigger this pipeline?
-   */
-  branchTriggerPatterns: string[];
-  /**
-   * What paths should trigger this pipeline?
-   *
-   * @default [] (all)
-   */
-  pathTriggerPatterns?: string[];
-  /**
-   * Pipelines always build and synth but don't always deploy.
-   * Should this pipeline deploy the app after build?
-   *
-   * @default false
-   */
-  deploy?: boolean;
+  branchName: string;
 }
 
 export type PipelineJob = SetRequired<Partial<Job>, "name"> & {
@@ -39,9 +18,20 @@ export type PipelineStep = SetRequired<Partial<JobStep>, "name">;
 
 export class Pipeline extends Component {
   /**
-   * If for this pipeline (suitable as filename)
+   * Returns a environment by name, or undefined if it doesn't exist
    */
-  public readonly id: string;
+  public static byBranchName(
+    fracture: Fracture,
+    branchName: string
+  ): Pipeline | undefined {
+    const isDefined = (c: Component): c is Pipeline =>
+      c instanceof Pipeline && c.branchName === branchName;
+    return fracture.components.find(isDefined);
+  }
+  /**
+   * Branch that triggers this pipeline.
+   */
+  public readonly branchName: string;
   /**
    * Name for this pipeline.
    */
@@ -55,119 +45,93 @@ export class Pipeline extends Component {
    *
    * @default [] (all)
    */
-  public readonly pathTriggerPatterns: string[];
-  /**
-   * Pipelines always build and synth but don't always deploy.
-   * Should this pipeline deploy the app after build?
-   *
-   * @default false
-   */
-  public readonly deploy: boolean;
+  public readonly pathTriggerPatterns: string[] = [];
   /**
    * All jobs for this pipeline.
    */
   public readonly jobs: PipelineJob[] = [];
+  /**
+   * Pipeline workflow
+   */
+  public readonly workflow: BuildWorkflow;
 
   constructor(fracture: Fracture, options: PipelineOptions) {
+    /***************************************************************************
+     * Check Duplicates
+     **************************************************************************/
+
+    const branchName = options.branchName;
+
+    if (Pipeline.byBranchName(fracture, branchName)) {
+      throw new Error(`Duplicate pipeline for branch name "${branchName}".`);
+    }
+
     super(fracture);
 
     /***************************************************************************
      * Props
      **************************************************************************/
 
-    this.name = options.name;
-    this.id = paramCase(this.name);
-    this.branchTriggerPatterns = options.branchTriggerPatterns;
-    this.pathTriggerPatterns = options.pathTriggerPatterns ?? [];
-    this.deploy = options.deploy ?? false;
-  }
+    this.branchName = options.branchName;
+    this.name = `deploy-${this.branchName}}`;
+    this.branchTriggerPatterns =
+      options.branchName === fracture.defaultReleaseBranch
+        ? [options.branchName]
+        : [`${options.branchName}/*`];
 
-  addJob(job: PipelineJob): void {
-    this.jobs.push(job);
-  }
+    /*************************************************************************
+     * Create initial workflow
+     ************************************************************************/
 
-  addServiceDeployments(
-    services: Array<FractureService>,
-    environments: Array<Environment>
-  ): void {
-    services.forEach((service) => {
-      environments.forEach((environment) => {
-        this.addJob({
-          name: `deploy-${service.name}-${environment.name}`,
-          permissions: {
-            contents: JobPermission.WRITE,
-          },
-          steps: [
-            {
-              name: "Deploy",
-              run: `npx aws-cdk@${service.cdkDeps.cdkVersion} deploy --no-rollback --app ${service.cdkOutDistDir} *-${environment.name}`,
-            },
-          ],
-        });
-      });
+    const workflowTriggers = {
+      push: {
+        branches: this.branchTriggerPatterns,
+        paths: this.pathTriggerPatterns,
+      },
+      workflowDispatch: {}, // allow manual triggering
+    };
+
+    const workFlowSetup = fracture.renderWorkflowSetup({
+      mutable: false,
     });
+
+    this.workflow = new BuildWorkflow(fracture, {
+      name: this.name,
+      buildTask: fracture.buildTask,
+      artifactsDirectory: fracture.artifactsDirectory,
+      mutableBuild: false,
+      workflowTriggers,
+      preBuildSteps: workFlowSetup,
+    });
+  }
+
+  addPostBuildJob(job: PipelineJob): void {
+    this.workflow.addPostBuildJob(job.name, {
+      runsOn: ["ubuntu-latest"],
+      steps: job.steps,
+      permissions: {
+        contents: JobPermission.READ,
+      },
+    });
+  }
+
+  addPostBuildStep(step: PipelineStep): void {
+    this.workflow.addPostBuildSteps(step);
   }
 
   preSynthesize(): void {
     const fracture = this.project as Fracture;
 
-    /***************************************************************************
-     *
-     * Github Workflow
-     *
-     * this is the only platform currently supported in fracture.
-     *
-     **************************************************************************/
+    /*************************************************************************
+     * Post build steps
+     ************************************************************************/
 
-    const github = GitHub.of(fracture);
-
-    if (github) {
-      /*************************************************************************
-       * Build
-       ************************************************************************/
-
-      const workflowTriggers = {
-        push: {
-          branches: this.branchTriggerPatterns,
-          paths: this.pathTriggerPatterns,
-        },
-        workflowDispatch: {}, // allow manual triggering
-      };
-
-      const workFlowSetup = fracture.renderWorkflowSetup({
-        mutable: false,
+    // move outputs to the dist folder so they can be saved as one big artifact
+    fracture.services.forEach((service) => {
+      this.workflow.addPostBuildSteps({
+        name: `Copy Service to Dist (${service.name})`,
+        run: `mkdir -p ${service.cdkOutDistDir} && cp -r ${service.cdkOutBuildDir}/* ${service.cdkOutDistDir}`,
       });
-
-      const buildWorkflow = new BuildWorkflow(fracture, {
-        name: this.name,
-        buildTask: fracture.buildTask,
-        artifactsDirectory: fracture.artifactsDirectory,
-        mutableBuild: false,
-        workflowTriggers,
-        preBuildSteps: workFlowSetup,
-      });
-
-      // move outputs to the dist folder so they can be saved as one big honkin artifact
-      fracture.services.forEach((service) => {
-        buildWorkflow.addPostBuildSteps({
-          name: `Copy Service to Dist (${service.name})`,
-          run: `mkdir -p ${service.cdkOutDistDir} && cp -r ${service.cdkOutBuildDir}/* ${service.cdkOutDistDir}`,
-        });
-      });
-
-      /*************************************************************************
-       * Post build jobs
-       ************************************************************************/
-
-      this.jobs.forEach((job) => {
-        buildWorkflow.addPostBuildJob(job.name, {
-          runsOn: ["ubuntu-latest"],
-          steps: job.steps,
-          permissions: {
-            contents: JobPermission.READ,
-          },
-        });
-      });
-    }
+    });
   }
 }

@@ -1,7 +1,5 @@
-import { paramCase } from "change-case";
 import { Component } from "projen";
 import { Fracture } from "../core";
-import { Pipeline } from "../pipelines";
 
 export interface NetlifyOptions {
   /**
@@ -63,9 +61,9 @@ export class Netlify extends Component {
      * Create production deployment pipeline with netlify as the target
      **************************************************************************/
 
+    /*
     const prodPipeline = new Pipeline(fracture, {
-      name: paramCase(`${this.nameBase}-deploy-${this.productionBranchName}`),
-      branchTriggerPatterns: [this.productionBranchName],
+      branchName: "main",
     });
 
     prodPipeline.addJob({
@@ -84,5 +82,6 @@ export class Netlify extends Component {
         },
       ],
     });
+    */
   }
 }

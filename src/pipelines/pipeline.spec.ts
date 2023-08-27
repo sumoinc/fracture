@@ -1,49 +1,63 @@
 import { Pipeline } from "./pipeline";
-import { Account } from "../core/account";
-import { Environment } from "../core/environment";
+import { ServiceDeployTarget } from "./service-deploy-target";
+import { Environment, FractureService } from "../core";
 import { Fracture } from "../core/fracture";
 import { synthFile } from "../util/test-util";
 
-let fracture: Fracture;
+describe("success conditions", () => {
+  test("Smoke test", () => {
+    const fracture = new Fracture();
+    const pipeline = new Pipeline(fracture, {
+      branchName: "foo",
+    });
+    expect(pipeline).toBeTruthy();
 
-beforeEach(() => {
-  fracture = new Fracture();
+    const content = synthFile(
+      fracture,
+      `.github/workflows/${pipeline.name}.yml`
+    );
+    expect(content).toMatchSnapshot();
+    //console.log(content);
+  });
+  test("With two services", () => {
+    const fracture = new Fracture();
+    const environment = new Environment(fracture, {
+      name: "us-east",
+      accountNumber: "123456789",
+    });
+    new ServiceDeployTarget(fracture, {
+      branchName: "main",
+      environment,
+      service: new FractureService(fracture, {
+        name: "service-one",
+      }),
+    });
+    new ServiceDeployTarget(fracture, {
+      branchName: "main",
+      environment,
+      service: new FractureService(fracture, {
+        name: "service-two",
+      }),
+    });
+    const pipeline = Pipeline.byBranchName(fracture, "main");
+    expect(pipeline).toBeTruthy();
+
+    const content = synthFile(
+      fracture,
+      `.github/workflows/${pipeline!.name}.yml`
+    );
+    expect(content).toMatchSnapshot();
+    console.log(content);
+  });
 });
 
-test("Smoke test", () => {
-  const pipeline = new Pipeline(fracture, {
-    name: "foo",
-    branchTriggerPatterns: ["main"],
+describe("failure conditions", () => {
+  test("duplicate branch", () => {
+    const fracture = new Fracture();
+    expect(() => {
+      new Pipeline(fracture, {
+        branchName: "main",
+      });
+    }).toThrow("Duplicate pipeline for branch name");
   });
-  expect(pipeline).toBeTruthy();
-
-  const content = synthFile(fracture, ".github/workflows/foo.yml");
-  expect(content).toMatchSnapshot();
-  //console.log(content);
-});
-
-test("able to add deployment environments", () => {
-  const usEast = new Environment(fracture, {
-    name: "us-east",
-    account: new Account(fracture, {
-      name: "my-account",
-      accountNumber: "123",
-    }),
-    region: "us-east-1",
-  });
-  const myService = fracture.addService({ name: "my-service" });
-  const myOtherService = fracture.addService({ name: "my-other-service" });
-
-  // deploy both services to ue-east-1
-  fracture.featurePipeline.addServiceDeployments(
-    [myService, myOtherService],
-    [usEast]
-  );
-
-  const content = synthFile(
-    fracture,
-    `.github/workflows/${fracture.featurePipeline.name}.yml`
-  );
-  expect(content).toMatchSnapshot();
-  // console.log(content);
 });

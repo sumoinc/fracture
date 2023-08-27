@@ -1,11 +1,11 @@
 import { join } from "path";
 import { paramCase } from "change-case";
+import { Project } from "projen";
 import {
   AwsCdkTypeScriptApp,
   AwsCdkTypeScriptAppOptions,
 } from "projen/lib/awscdk";
 import { NodePackageManager } from "projen/lib/javascript";
-
 import { Fracture } from "./fracture";
 import { Resource, ResourceOptions } from "./resource";
 import { Structure, StructureOptions } from "./structure";
@@ -56,6 +56,17 @@ export interface FractureServiceOptions
 }
 
 export class FractureService extends AwsCdkTypeScriptApp {
+  /**
+   * Returns an account by name, or undefined if it doesn't exist
+   */
+  public static byName(
+    fracture: Fracture,
+    name: string
+  ): FractureService | undefined {
+    const isDefined = (c: Project): c is FractureService =>
+      c instanceof FractureService && c.name === name;
+    return fracture.subprojects.find(isDefined);
+  }
   /**
    * A name for the service.
    */
