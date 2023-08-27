@@ -7,6 +7,8 @@ Array [
   "apps/test/.gitignore",
   "apps/test/.npmignore",
   "apps/test/.npmrc",
+  "apps/test/.prettierignore",
+  "apps/test/.prettierrc.json",
   "apps/test/.projen/deps.json",
   "apps/test/.projen/files.json",
   "apps/test/.projen/tasks.json",
@@ -27,6 +29,8 @@ Object {
   },
   "extends": Array [
     "plugin:import/typescript",
+    "prettier",
+    "plugin:prettier/recommended",
   ],
   "ignorePatterns": Array [
     "*.js",
@@ -45,16 +49,10 @@ Object {
   "plugins": Array [
     "@typescript-eslint",
     "import",
+    "prettier",
   ],
   "root": true,
   "rules": Object {
-    "@typescript-eslint/indent": Array [
-      "error",
-      2,
-    ],
-    "@typescript-eslint/member-delimiter-style": Array [
-      "error",
-    ],
     "@typescript-eslint/member-ordering": Array [
       "error",
       Object {
@@ -82,37 +80,6 @@ Object {
     ],
     "@typescript-eslint/return-await": Array [
       "error",
-    ],
-    "array-bracket-newline": Array [
-      "error",
-      "consistent",
-    ],
-    "array-bracket-spacing": Array [
-      "error",
-      "never",
-    ],
-    "brace-style": Array [
-      "error",
-      "1tbs",
-      Object {
-        "allowSingleLine": true,
-      },
-    ],
-    "comma-dangle": Array [
-      "error",
-      "always-multiline",
-    ],
-    "comma-spacing": Array [
-      "error",
-      Object {
-        "after": true,
-        "before": false,
-      },
-    ],
-    "curly": Array [
-      "error",
-      "multi-line",
-      "consistent",
     ],
     "dot-notation": Array [
       "error",
@@ -144,37 +111,14 @@ Object {
         ],
       },
     ],
-    "indent": Array [
-      "off",
-    ],
     "key-spacing": Array [
       "error",
-    ],
-    "keyword-spacing": Array [
-      "error",
-    ],
-    "max-len": Array [
-      "error",
-      Object {
-        "code": 150,
-        "ignoreComments": true,
-        "ignoreRegExpLiterals": true,
-        "ignoreStrings": true,
-        "ignoreTemplateLiterals": true,
-        "ignoreUrls": true,
-      },
     ],
     "no-bitwise": Array [
       "error",
     ],
     "no-duplicate-imports": Array [
       "error",
-    ],
-    "no-multi-spaces": Array [
-      "error",
-      Object {
-        "ignoreEOLComments": false,
-      },
     ],
     "no-multiple-empty-lines": Array [
       "error",
@@ -188,39 +132,7 @@ Object {
     "no-trailing-spaces": Array [
       "error",
     ],
-    "object-curly-newline": Array [
-      "error",
-      Object {
-        "consistent": true,
-        "multiline": true,
-      },
-    ],
-    "object-curly-spacing": Array [
-      "error",
-      "always",
-    ],
-    "object-property-newline": Array [
-      "error",
-      Object {
-        "allowAllPropertiesOnSameLine": true,
-      },
-    ],
-    "quote-props": Array [
-      "error",
-      "consistent-as-needed",
-    ],
-    "quotes": Array [
-      "error",
-      "single",
-      Object {
-        "avoidEscape": true,
-      },
-    ],
-    "semi": Array [
-      "error",
-      "always",
-    ],
-    "space-before-blocks": Array [
+    "prettier/prettier": Array [
       "error",
     ],
   },
@@ -250,6 +162,8 @@ exports[`validate generated project files apps/test/.gitattributes 1`] = `
 /.gitignore linguist-generated
 /.npmignore linguist-generated
 /.npmrc linguist-generated
+/.prettierignore linguist-generated
+/.prettierrc.json linguist-generated
 /.projen/** linguist-generated
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated
@@ -295,6 +209,8 @@ jspm_packages/
 /test-reports/
 junit.xml
 /coverage/
+!/.prettierignore
+!/.prettierrc.json
 !/.npmrc
 !/test/
 !/tsconfig.json
@@ -360,6 +276,10 @@ Object {
       "version": "^5",
     },
     Object {
+      "name": "eslint-config-prettier",
+      "type": "build",
+    },
+    Object {
       "name": "eslint-import-resolver-node",
       "type": "build",
     },
@@ -369,6 +289,10 @@ Object {
     },
     Object {
       "name": "eslint-plugin-import",
+      "type": "build",
+    },
+    Object {
+      "name": "eslint-plugin-prettier",
       "type": "build",
     },
     Object {
@@ -389,6 +313,10 @@ Object {
       "name": "npm-check-updates",
       "type": "build",
       "version": "^16",
+    },
+    Object {
+      "name": "prettier",
+      "type": "build",
     },
     Object {
       "name": "projen",
@@ -415,6 +343,8 @@ Object {
     ".gitignore",
     ".npmignore",
     ".npmrc",
+    ".prettierignore",
+    ".prettierrc.json",
     ".projen/deps.json",
     ".projen/files.json",
     ".projen/tasks.json",
@@ -555,13 +485,13 @@ Object {
           "exec": "pnpm update npm-check-updates",
         },
         Object {
-          "exec": "npm-check-updates --upgrade --target=minor --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,npm-check-updates,projen,ts-jest,typescript",
+          "exec": "npm-check-updates --upgrade --target=minor --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,ts-jest,typescript",
         },
         Object {
           "exec": "pnpm i --no-frozen-lockfile",
         },
         Object {
-          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit npm-check-updates projen ts-jest typescript",
+          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen ts-jest typescript",
         },
         Object {
           "exec": "npx projen",
@@ -595,12 +525,15 @@ Object {
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",
+    "eslint-config-prettier": "*",
     "eslint-import-resolver-node": "*",
     "eslint-import-resolver-typescript": "*",
     "eslint-plugin-import": "*",
+    "eslint-plugin-prettier": "*",
     "jest": "*",
     "jest-junit": "^15",
     "npm-check-updates": "^16",
+    "prettier": "*",
     "projen": "*",
     "ts-jest": "*",
     "typescript": "*",

@@ -25,17 +25,20 @@ export class FractureApp extends TypeScriptProject {
 
     const projenOptions: TypeScriptProjectOptions = {
       name: options.name,
-      defaultReleaseBranch: "main",
+      defaultReleaseBranch: fracture.defaultReleaseBranch,
       parent: fracture,
-      packageManager: NodePackageManager.PNPM,
-      pnpmVersion: "8",
       outdir,
       eslintOptions: {
         dirs: ["src"],
         tsconfigPath: "./**/tsconfig.dev.json",
       },
       licensed: false,
+      prettier: true,
       projenrcTs: true,
+
+      // pnpm configs
+      packageManager: NodePackageManager.PNPM,
+      pnpmVersion: "8",
     };
 
     super(projenOptions);
