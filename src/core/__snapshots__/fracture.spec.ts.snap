@@ -155,10 +155,10 @@ exports[`validate generated project files .gitattributes 1`] = `
 /.gitattributes linguist-generated
 /.github/pull_request_template.md linguist-generated
 /.github/workflows/build.yml linguist-generated
-/.github/workflows/deploy-chore.yml linguist-generated
-/.github/workflows/deploy-feat.yml linguist-generated
-/.github/workflows/deploy-fix.yml linguist-generated
-/.github/workflows/deploy-prod.yml linguist-generated
+/.github/workflows/deploy-chore}.yml linguist-generated
+/.github/workflows/deploy-feature}.yml linguist-generated
+/.github/workflows/deploy-fix}.yml linguist-generated
+/.github/workflows/deploy-main}.yml linguist-generated
 /.github/workflows/pull-request-lint.yml linguist-generated
 /.github/workflows/release.yml linguist-generated
 /.github/workflows/upgrade-main.yml linguist-generated
@@ -538,10 +538,10 @@ junit.xml
 !/.eslintrc.json
 .turbo
 !/turbo.json
-!/.github/workflows/deploy-prod.yml
-!/.github/workflows/deploy-feat.yml
-!/.github/workflows/deploy-fix.yml
-!/.github/workflows/deploy-chore.yml
+!/.github/workflows/deploy-main}.yml
+!/.github/workflows/deploy-feature}.yml
+!/.github/workflows/deploy-fix}.yml
+!/.github/workflows/deploy-chore}.yml
 !/pnpm-workspace.yaml
 !/.vscode/settings.json
 !/.vscode/extensions.json
@@ -730,10 +730,10 @@ Object {
     ".gitattributes",
     ".github/pull_request_template.md",
     ".github/workflows/build.yml",
-    ".github/workflows/deploy-chore.yml",
-    ".github/workflows/deploy-feat.yml",
-    ".github/workflows/deploy-fix.yml",
-    ".github/workflows/deploy-prod.yml",
+    ".github/workflows/deploy-chore}.yml",
+    ".github/workflows/deploy-feature}.yml",
+    ".github/workflows/deploy-fix}.yml",
+    ".github/workflows/deploy-main}.yml",
     ".github/workflows/pull-request-lint.yml",
     ".github/workflows/release.yml",
     ".github/workflows/upgrade-main.yml",
@@ -1086,10 +1086,10 @@ Array [
   ".gitattributes",
   ".github/pull_request_template.md",
   ".github/workflows/build.yml",
-  ".github/workflows/deploy-chore.yml",
-  ".github/workflows/deploy-feat.yml",
-  ".github/workflows/deploy-fix.yml",
-  ".github/workflows/deploy-prod.yml",
+  ".github/workflows/deploy-chore}.yml",
+  ".github/workflows/deploy-feature}.yml",
+  ".github/workflows/deploy-fix}.yml",
+  ".github/workflows/deploy-main}.yml",
   ".github/workflows/pull-request-lint.yml",
   ".github/workflows/release.yml",
   ".github/workflows/upgrade-main.yml",
