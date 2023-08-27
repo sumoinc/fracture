@@ -73,7 +73,7 @@ export class Pipeline extends Component {
      **************************************************************************/
 
     this.branchName = options.branchName;
-    this.name = `deploy-${this.branchName}}`;
+    this.name = `deploy-${this.branchName}`;
     this.branchTriggerPatterns =
       options.branchName === fracture.defaultReleaseBranch
         ? [options.branchName]
