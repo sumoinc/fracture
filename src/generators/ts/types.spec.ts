@@ -9,7 +9,7 @@ beforeEach(() => {
 
 test("Smoke test", () => {
   new FractureService(fracture, { name: "foo" });
-  const content = synthFile(fracture, "services/foo/generated/ts/types.ts");
+  const content = synthFile(fracture, "services/foo/generated/types.ts");
   expect(content).toMatchSnapshot();
   // console.log(content);
 });
@@ -34,7 +34,8 @@ test("Resource formatting test", () => {
     ],
   });
 
-  const content = synthFile(fracture, "services/foo/generated/ts/types.ts");
+  const content = synthFile(fracture, "services/foo/generated/types.ts");
+  expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
   // console.log(content);
 });

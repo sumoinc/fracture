@@ -53,12 +53,27 @@ export class ServiceDeployTarget extends Component {
   /**
    * All deploy targets for the given pipeline
    */
-  public static byPipeline(
-    fracture: Fracture,
-    pipeline: Pipeline
-  ): ServiceDeployTarget[] {
+  public static byPipeline(pipeline: Pipeline): ServiceDeployTarget[] {
+    const fracture = pipeline.project as Fracture;
     const isDefined = (c: Component): c is ServiceDeployTarget =>
-      c instanceof ServiceDeployTarget && c.pipeline.name === pipeline.name;
+      c instanceof ServiceDeployTarget && c.pipeline === pipeline;
+    return fracture.components.filter(isDefined);
+  }
+  /**
+   * All deploy targets for the given service
+   */
+  public static byService(service: FractureService): ServiceDeployTarget[] {
+    const fracture = service.parent as Fracture;
+    const isDefined = (c: Component): c is ServiceDeployTarget =>
+      c instanceof ServiceDeployTarget && c.service === service;
+    return fracture.components.filter(isDefined);
+  }
+  /**
+   * Returns all service deploy targets
+   */
+  public static all(fracture: Fracture): ServiceDeployTarget[] {
+    const isDefined = (c: Component): c is ServiceDeployTarget =>
+      c instanceof ServiceDeployTarget;
     return fracture.components.filter(isDefined);
   }
   /**

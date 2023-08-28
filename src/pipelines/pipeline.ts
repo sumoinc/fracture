@@ -115,7 +115,7 @@ export class Pipeline extends Component {
     });
 
     // add deploy jobs to pipeline
-    ServiceDeployTarget.byPipeline(fracture, this).forEach((sdt) => {
+    ServiceDeployTarget.byPipeline(this).forEach((sdt) => {
       this.workflow.addPostBuildJob(sdt.deployJobName, {
         needs: sdt.needs,
         runsOn: ["ubuntu-latest"],

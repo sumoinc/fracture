@@ -11,8 +11,6 @@ import { Resource, ResourceOptions } from "./resource";
 import { Structure, StructureOptions } from "./structure";
 import { StructureAttributeType } from "./structure-attribute";
 import { DynamoTable } from "../dynamodb";
-import { GeneratedTypes } from "../generators";
-import { GeneratedCdkApp } from "../generators/ts/cdk-app";
 import {
   TypescriptStrategy,
   TypescriptStrategyOptions,
@@ -227,13 +225,6 @@ export class FractureService extends AwsCdkTypeScriptApp {
         this.addResource(resourceOption);
       });
     }
-
-    /***************************************************************************
-     * Typescript Generators
-     **************************************************************************/
-
-    new GeneratedTypes(this);
-    new GeneratedCdkApp(this);
   }
 
   public addResource(options: ResourceOptions) {
