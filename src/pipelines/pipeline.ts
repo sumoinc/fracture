@@ -1,7 +1,8 @@
 import { Component } from "projen";
 import { BuildWorkflow } from "projen/lib/build";
-import { Job, JobStep } from "projen/lib/github/workflows-model";
-import { SetRequired } from "type-fest";
+import { Job, JobPermission } from "projen/lib/github/workflows-model";
+import { ServiceDeployTarget } from "./service-deploy-target";
+import { FractureService } from "../core";
 import { Fracture } from "../core/fracture";
 
 export interface PipelineOptions {
@@ -100,11 +101,34 @@ export class Pipeline extends Component {
     });
   }
 
-  addPostBuildJob(job: SetRequired<Job, "name">): void {
-    this.workflow.addPostBuildJob(job.name, job);
-  }
+  preSynthesize(): void {
+    super.preSynthesize();
 
-  addPostBuildStep(step: JobStep): void {
-    this.workflow.addPostBuildSteps(step);
+    const fracture = this.project as Fracture;
+
+    // make sure we copy the cdk files over for each service.
+    FractureService.all(fracture).forEach((service) => {
+      this.workflow.addPostBuildSteps({
+        name: `Copy Service to Dist (${service.name})`,
+        run: `mkdir -p ${service.cdkOutDistDir} && cp -r ${service.cdkOutBuildDir}/* ${service.cdkOutDistDir}`,
+      });
+    });
+
+    // add deploy jobs to pipeline
+    ServiceDeployTarget.byPipeline(fracture, this).forEach((sdt) => {
+      this.workflow.addPostBuildJob(sdt.deployJobName, {
+        needs: sdt.needs,
+        runsOn: ["ubuntu-latest"],
+        permissions: {
+          contents: JobPermission.READ,
+        },
+        steps: [
+          {
+            name: "Deploy",
+            run: `npx aws-cdk@${sdt.service.cdkDeps.cdkVersion} deploy --no-rollback --app ${sdt.service.cdkOutDistDir} ${sdt.stackPattern}`,
+          },
+        ],
+      });
+    });
   }
 }

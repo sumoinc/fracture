@@ -57,7 +57,7 @@ export interface FractureServiceOptions
 
 export class FractureService extends AwsCdkTypeScriptApp {
   /**
-   * Returns an account by name, or undefined if it doesn't exist
+   * Returns a service by name, or undefined if it doesn't exist
    */
   public static byName(
     fracture: Fracture,
@@ -66,6 +66,14 @@ export class FractureService extends AwsCdkTypeScriptApp {
     const isDefined = (c: Project): c is FractureService =>
       c instanceof FractureService && c.name === name;
     return fracture.subprojects.find(isDefined);
+  }
+  /**
+   * Returns all services
+   */
+  public static all(fracture: Fracture): FractureService[] {
+    const isDefined = (c: Project): c is FractureService =>
+      c instanceof FractureService;
+    return fracture.subprojects.filter(isDefined);
   }
   /**
    * A name for the service.

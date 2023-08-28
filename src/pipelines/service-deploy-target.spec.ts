@@ -28,6 +28,43 @@ describe("success conditions", () => {
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
+
+  test("dependant deployments", () => {
+    const fracture = new Fracture();
+    const service = new FractureService(fracture, {
+      name: "my-service",
+    });
+    const usEast = new Environment(fracture, {
+      name: "us-east",
+      accountNumber: "123",
+      region: "us-east-1",
+    });
+    const usWest = new Environment(fracture, {
+      name: "us-west",
+      accountNumber: "123",
+      region: "us-west-2",
+    });
+    const deployTargetEast = new ServiceDeployTarget(fracture, {
+      branchName: "main",
+      environment: usEast,
+      service,
+    });
+    const deployTargetWest = new ServiceDeployTarget(fracture, {
+      branchName: "main",
+      environment: usWest,
+      service,
+    }).dependsOn(deployTargetEast);
+    expect(deployTargetEast).toBeTruthy();
+    expect(deployTargetWest).toBeTruthy();
+
+    const pipeline = Pipeline.byBranchName(fracture, "main");
+    const content = synthFile(
+      fracture,
+      `.github/workflows/${pipeline!.name}.yml`
+    );
+    expect(content).toMatchSnapshot();
+    console.log(content);
+  });
 });
 
 describe("failure conditions", () => {
