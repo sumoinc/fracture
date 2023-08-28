@@ -1,6 +1,6 @@
 import { Component } from "projen";
 import { BuildWorkflow } from "projen/lib/build";
-import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
+import { Job, JobStep } from "projen/lib/github/workflows-model";
 import { SetRequired } from "type-fest";
 import { Fracture } from "../core/fracture";
 
@@ -10,11 +10,6 @@ export interface PipelineOptions {
    */
   branchName: string;
 }
-
-export type PipelineJob = SetRequired<Partial<Job>, "name"> & {
-  steps: PipelineStep[];
-};
-export type PipelineStep = SetRequired<Partial<JobStep>, "name">;
 
 export class Pipeline extends Component {
   /**
@@ -49,7 +44,7 @@ export class Pipeline extends Component {
   /**
    * All jobs for this pipeline.
    */
-  public readonly jobs: PipelineJob[] = [];
+  public readonly jobs: Job[] = [];
   /**
    * Pipeline workflow
    */
@@ -105,33 +100,11 @@ export class Pipeline extends Component {
     });
   }
 
-  addPostBuildJob(job: PipelineJob): void {
-    this.workflow.addPostBuildJob(job.name, {
-      runsOn: ["ubuntu-latest"],
-      steps: job.steps,
-      permissions: {
-        contents: JobPermission.READ,
-      },
-    });
+  addPostBuildJob(job: SetRequired<Job, "name">): void {
+    this.workflow.addPostBuildJob(job.name, job);
   }
 
-  addPostBuildStep(step: PipelineStep): void {
+  addPostBuildStep(step: JobStep): void {
     this.workflow.addPostBuildSteps(step);
-  }
-
-  preSynthesize(): void {
-    const fracture = this.project as Fracture;
-
-    /*************************************************************************
-     * Post build steps
-     ************************************************************************/
-
-    // move outputs to the dist folder so they can be saved as one big artifact
-    fracture.services.forEach((service) => {
-      this.workflow.addPostBuildSteps({
-        name: `Copy Service to Dist (${service.name})`,
-        run: `mkdir -p ${service.cdkOutDistDir} && cp -r ${service.cdkOutBuildDir}/* ${service.cdkOutDistDir}`,
-      });
-    });
   }
 }

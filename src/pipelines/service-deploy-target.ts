@@ -166,7 +166,7 @@ export class ServiceDeployTarget extends Component {
     this.pipeline = options.pipeline!;
     this.service = options.service!;
 
-    // make surer we copy the cdk files over properly
+    // make sure we copy the cdk files over properly
     this.pipeline.addPostBuildStep({
       name: `Copy Service to Dist (${this.service.name})`,
       run: `mkdir -p ${this.service.cdkOutDistDir} && cp -r ${this.service.cdkOutBuildDir}/* ${this.service.cdkOutDistDir}`,
@@ -175,8 +175,9 @@ export class ServiceDeployTarget extends Component {
     // add deploy job to pipeline
     this.pipeline.addPostBuildJob({
       name: `deploy-${this.name}`,
+      runsOn: ["ubuntu-latest"],
       permissions: {
-        contents: JobPermission.WRITE,
+        contents: JobPermission.READ,
       },
       steps: [
         {

@@ -126,6 +126,7 @@ jobs:
           name: build-artifact
           path: dist
   deploy-service-one-main-us-east:
+    name: deploy-service-one-main-us-east
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -143,6 +144,7 @@ jobs:
       - name: Deploy
         run: npx aws-cdk@^2.93.0 deploy --no-rollback --app dist/services/service-one/cdk.out *-main-us-east
   deploy-service-two-main-us-east:
+    name: deploy-service-two-main-us-east
     needs: build
     runs-on: ubuntu-latest
     permissions:

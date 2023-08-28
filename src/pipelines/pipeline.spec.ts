@@ -47,7 +47,7 @@ describe("success conditions", () => {
       `.github/workflows/${pipeline!.name}.yml`
     );
     expect(content).toMatchSnapshot();
-    console.log(content);
+    // console.log(content);
   });
 });
 
