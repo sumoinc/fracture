@@ -70,6 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      id-token: write
     if: \\"! needs.build.outputs.self_mutation_happened\\"
     steps:
       - name: Download build artifacts
@@ -80,6 +81,11 @@ jobs:
       - name: Restore build artifact permissions
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::123:role/GitHubDeploymentOIDCRole
+          aws-region: us-east-1
       - name: Deploy
         run: npx aws-cdk@^2.93.0 deploy --no-rollback --app dist/services/my-service/cdk.out *-main-my-env
 "
@@ -155,6 +161,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      id-token: write
     if: \\"! needs.build.outputs.self_mutation_happened\\"
     steps:
       - name: Download build artifacts
@@ -165,6 +172,11 @@ jobs:
       - name: Restore build artifact permissions
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::123:role/GitHubDeploymentOIDCRole
+          aws-region: us-east-1
       - name: Deploy
         run: npx aws-cdk@^2.93.0 deploy --no-rollback --app dist/services/my-service/cdk.out *-main-us-east
   deploy-my-service-main-us-west:
@@ -174,6 +186,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      id-token: write
     if: \\"! needs.build.outputs.self_mutation_happened\\"
     steps:
       - name: Download build artifacts
@@ -184,6 +197,11 @@ jobs:
       - name: Restore build artifact permissions
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::123:role/GitHubDeploymentOIDCRole
+          aws-region: us-west-2
       - name: Deploy
         run: npx aws-cdk@^2.93.0 deploy --no-rollback --app dist/services/my-service/cdk.out *-main-us-west
 "
