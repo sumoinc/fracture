@@ -15,8 +15,6 @@ Array [
   "services/foo/cdk.json",
   "services/foo/package.json",
   "services/foo/README.md",
-  "services/foo/src/generated/main.ts",
-  "services/foo/src/generated/types.ts",
   "services/foo/src/main.ts",
   "services/foo/test/main.test.ts",
   "services/foo/tsconfig.dev.json",
@@ -174,8 +172,6 @@ exports[`validate generated project files services/foo/.gitattributes 1`] = `
 /cdk.json linguist-generated
 /package.json linguist-generated
 /pnpm-lock.yaml linguist-generated
-/src/generated/main.ts linguist-generated
-/src/generated/types.ts linguist-generated
 /tsconfig.dev.json linguist-generated
 /tsconfig.json linguist-generated"
 `;
@@ -230,8 +226,6 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
-!/src/generated/types.ts
-!/src/generated/main.ts
 "
 `;
 

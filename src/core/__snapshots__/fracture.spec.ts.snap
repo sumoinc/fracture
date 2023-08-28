@@ -1140,8 +1140,6 @@ Array [
   "services/test-service/generated/ts/lambda/appsync/update-test-resource.ts",
   "services/test-service/package.json",
   "services/test-service/README.md",
-  "services/test-service/src/generated/main.ts",
-  "services/test-service/src/generated/types.ts",
   "services/test-service/src/main.ts",
   "services/test-service/test/main.test.ts",
   "services/test-service/tsconfig.dev.json",
