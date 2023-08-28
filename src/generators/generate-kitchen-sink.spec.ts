@@ -1,4 +1,4 @@
-import { GenerateKitchenSink } from "./generate-kitcken-sink";
+import { GenerateKitchenSink } from "./generate-kitchen-sink";
 import { FractureService } from "../core";
 import { Fracture } from "../core/fracture";
 import { synthFiles } from "../util/test-util";

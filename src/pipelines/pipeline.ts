@@ -121,8 +121,17 @@ export class Pipeline extends Component {
         runsOn: ["ubuntu-latest"],
         permissions: {
           contents: JobPermission.READ,
+          idToken: JobPermission.WRITE,
         },
         steps: [
+          {
+            name: "Configure AWS Credentials",
+            uses: "aws-actions/configure-aws-credentials@v2",
+            with: {
+              "role-to-assume": `arn:aws:iam::${sdt.environment.accountNumber}:role/GitHubDeploymentOIDCRole`,
+              "aws-region": sdt.environment.region,
+            },
+          },
           {
             name: "Deploy",
             run: `npx aws-cdk@${sdt.service.cdkDeps.cdkVersion} deploy --no-rollback --app ${sdt.service.cdkOutDistDir} ${sdt.stackPattern}`,
