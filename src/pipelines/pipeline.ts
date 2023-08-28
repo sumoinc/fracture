@@ -1,7 +1,8 @@
 import { Component } from "projen";
 import { BuildWorkflow } from "projen/lib/build";
-import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
-import { SetRequired } from "type-fest";
+import { Job, JobPermission } from "projen/lib/github/workflows-model";
+import { ServiceDeployTarget } from "./service-deploy-target";
+import { FractureService } from "../core";
 import { Fracture } from "../core/fracture";
 
 export interface PipelineOptions {
@@ -10,11 +11,6 @@ export interface PipelineOptions {
    */
   branchName: string;
 }
-
-export type PipelineJob = SetRequired<Partial<Job>, "name"> & {
-  steps: PipelineStep[];
-};
-export type PipelineStep = SetRequired<Partial<JobStep>, "name">;
 
 export class Pipeline extends Component {
   /**
@@ -49,7 +45,7 @@ export class Pipeline extends Component {
   /**
    * All jobs for this pipeline.
    */
-  public readonly jobs: PipelineJob[] = [];
+  public readonly jobs: Job[] = [];
   /**
    * Pipeline workflow
    */
@@ -105,32 +101,42 @@ export class Pipeline extends Component {
     });
   }
 
-  addPostBuildJob(job: PipelineJob): void {
-    this.workflow.addPostBuildJob(job.name, {
-      runsOn: ["ubuntu-latest"],
-      steps: job.steps,
-      permissions: {
-        contents: JobPermission.READ,
-      },
-    });
-  }
-
-  addPostBuildStep(step: PipelineStep): void {
-    this.workflow.addPostBuildSteps(step);
-  }
-
   preSynthesize(): void {
+    super.preSynthesize();
+
     const fracture = this.project as Fracture;
 
-    /*************************************************************************
-     * Post build steps
-     ************************************************************************/
-
-    // move outputs to the dist folder so they can be saved as one big artifact
-    fracture.services.forEach((service) => {
+    // make sure we copy the cdk files over for each service.
+    FractureService.all(fracture).forEach((service) => {
       this.workflow.addPostBuildSteps({
         name: `Copy Service to Dist (${service.name})`,
         run: `mkdir -p ${service.cdkOutDistDir} && cp -r ${service.cdkOutBuildDir}/* ${service.cdkOutDistDir}`,
+      });
+    });
+
+    // add deploy jobs to pipeline
+    ServiceDeployTarget.byPipeline(this).forEach((sdt) => {
+      this.workflow.addPostBuildJob(sdt.deployJobName, {
+        needs: sdt.needs,
+        runsOn: ["ubuntu-latest"],
+        permissions: {
+          contents: JobPermission.READ,
+          idToken: JobPermission.WRITE,
+        },
+        steps: [
+          {
+            name: "Configure AWS Credentials",
+            uses: "aws-actions/configure-aws-credentials@v2",
+            with: {
+              "role-to-assume": `arn:aws:iam::${sdt.environment.accountNumber}:role/GitHubDeploymentOIDCRole`,
+              "aws-region": sdt.environment.region,
+            },
+          },
+          {
+            name: "Deploy",
+            run: `npx aws-cdk@${sdt.service.cdkDeps.cdkVersion} deploy --no-rollback --app ${sdt.service.cdkOutDistDir} ${sdt.stackPattern}`,
+          },
+        ],
       });
     });
   }
