@@ -67,7 +67,6 @@ project.addDeps(
   "@aws-sdk/util-dynamodb",
   "@faker-js/faker",
   "@types/aws-lambda",
-  "axios",
   "change-case",
   "projen",
   "type-fest",
