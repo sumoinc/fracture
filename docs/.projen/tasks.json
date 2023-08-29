@@ -32,6 +32,33 @@
         {
           "exec": "npx projen default",
           "cwd": ".."
+        },
+        {
+          "spawn": "docs:build"
+        }
+      ]
+    },
+    "docs:build": {
+      "name": "docs:build",
+      "steps": [
+        {
+          "exec": "pnpm vitepress build"
+        }
+      ]
+    },
+    "docs:dev": {
+      "name": "docs:dev",
+      "steps": [
+        {
+          "exec": "pnpm vitepress dev"
+        }
+      ]
+    },
+    "docs:preview": {
+      "name": "docs:preview",
+      "steps": [
+        {
+          "exec": "pnpm vitepress preview"
         }
       ]
     },
