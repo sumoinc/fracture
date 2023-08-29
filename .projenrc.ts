@@ -11,22 +11,23 @@ const project = new TypeScriptProject({
   name: "@sumoc/fracture",
   description: "The fracture library.",
   license: "MIT",
-  // repositoryUrl: repository,
   repository: repository,
   authorName,
-  // author: authorName,
   authorOrganization: true,
   copyrightOwner: authorName,
-  // authorAddress: authorAddress,
   authorEmail: authorAddress,
   releaseToNpm: true,
   devDeps: [],
   deps: [],
   peerDeps: [],
   projenrcTs: true,
+
+  // use prettier for linting
+  prettier: true,
+
+  // pnpm configs
   packageManager: NodePackageManager.PNPM,
   pnpmVersion: "8",
-  prettier: true,
 
   // send code coverage to codecov
   codeCov: true,
@@ -63,6 +64,12 @@ project.addDeps(
 );
 project.addDevDeps("@types/uuid");
 project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
+
+/*******************************************************************************
+ *
+ * Dogfooding for local development and documantation site.
+ *
+ ******************************************************************************/
 
 // configure vs code
 new VsCodeConfiguration(project);
