@@ -4,7 +4,7 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
-import { ValueOf } from "type-fest";
+import { SetRequired, ValueOf } from "type-fest";
 import { Account } from "./account";
 import { Environment, EnvironmentOptions } from "./environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
@@ -64,10 +64,29 @@ export interface FractureOptions extends Partial<TypeScriptProjectOptions> {
   turboRepoOptions?: TurboRepoOptions;
 }
 
+export type StoredFractureOptions = SetRequired<
+  FractureOptions,
+  | "name"
+  | "serviceRoot"
+  | "appRoot"
+  | "srcDir"
+  | "logging"
+  | "branchNames"
+  | "defaultReleaseBranch"
+  | "defaultAccountNumber"
+  | "defaultRegion"
+  | "turboRepoOptions"
+>;
+
 /**
  * The root of the entire application.
  */
 export class Fracture extends TypeScriptProject {
+  /**
+   * The options that fracture was initialized with. Useful for copying them
+   * into subprojects
+   */
+  public readonly options: StoredFractureOptions;
   /**
    * Root relative directory which contains all services.
    *
@@ -126,14 +145,20 @@ export class Fracture extends TypeScriptProject {
      * Projen Props
      **************************************************************************/
 
-    const defaultReleaseBranch = options.defaultReleaseBranch ?? "main";
-
-    const projenOptions: TypeScriptProjectOptions = {
+    const mergedOptions: StoredFractureOptions = {
       name: options.name ?? "fracture",
-      defaultReleaseBranch,
+      serviceRoot: options.serviceRoot ?? "services",
+      appRoot: options.appRoot ?? "apps",
+      srcDir: options.srcDir ?? "src",
       logging: options.logging ?? {
         level: LogLevel.OFF,
       },
+      defaultReleaseBranch: options.defaultReleaseBranch ?? "main",
+      branchNames: options.branchNames ?? ["main", "feature", "fix", "chore"],
+      defaultAccountNumber: options.defaultAccountNumber ?? "0000000000",
+      defaultRegion: options.defaultRegion ?? "us-east-1",
+      turboRepoOptions: options.turboRepoOptions ?? {},
+      ...options,
       prettier: true,
       projenrcTs: true,
       licensed: false,
@@ -151,37 +176,33 @@ export class Fracture extends TypeScriptProject {
       workflowPackageCache: true,
     };
 
-    super(projenOptions);
+    super({ ...mergedOptions });
+
+    // save in case subprojects need the original values
+    this.options = mergedOptions;
 
     /***************************************************************************
      * Props
      **************************************************************************/
 
-    this.serviceRoot = options.serviceRoot ?? "services";
-    this.appRoot = options.appRoot ?? "apps";
-    this.srcDir = options.srcDir ?? "src";
-    this.defaultReleaseBranch = defaultReleaseBranch;
-    this.defaultAccountNumber = options.defaultAccountNumber ?? "0000000000";
-    this.defaultRegion = options.defaultRegion ?? "us-east-1";
+    this.serviceRoot = mergedOptions.serviceRoot;
+    this.appRoot = mergedOptions.appRoot;
+    this.srcDir = mergedOptions.srcDir;
+    this.defaultReleaseBranch = mergedOptions.defaultReleaseBranch;
+    this.defaultAccountNumber = mergedOptions.defaultAccountNumber;
+    this.defaultRegion = mergedOptions.defaultRegion;
 
     /***************************************************************************
      * TUBOREPO
      **************************************************************************/
 
-    new TurboRepo(this, options.turboRepoOptions ?? {});
+    new TurboRepo(this, mergedOptions.turboRepoOptions);
 
     /***************************************************************************
      * BRANCH STRATEGY & PIPELINES
      **************************************************************************/
 
-    const branchNames = options.branchNames ?? [
-      "main",
-      "feature",
-      "fix",
-      "chore",
-    ];
-
-    branchNames.forEach((branchName) => {
+    mergedOptions.branchNames.forEach((branchName) => {
       this.addPipeline({
         branchName,
       });

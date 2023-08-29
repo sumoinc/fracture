@@ -124,6 +124,10 @@
       "type": "runtime"
     },
     {
+      "name": "axios",
+      "type": "runtime"
+    },
+    {
       "name": "change-case",
       "type": "runtime"
     },

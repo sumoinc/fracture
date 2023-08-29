@@ -1,6 +1,7 @@
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { VsCodeConfiguration } from "./src/projen/vscode";
+import { VitePressSite } from "./src/vitepress/vitepress-site";
 
 const authorName = "Cameron Childress";
 const authorAddress = "cameronc@sumoc.com";
@@ -41,6 +42,16 @@ const project = new TypeScriptProject({
     allowedUsernames: ["github-actions[bot]", "cameroncf"],
     label: "auto-approve",
   },
+
+  // needed to make axios work with jest
+  // see: https://stackoverflow.com/questions/73958968/cannot-use-import-statement-outside-a-module-with-axios
+  jestOptions: {
+    jestConfig: {
+      moduleNameMapper: {
+        axios: "axios/dist/node/axios.cjs",
+      },
+    },
+  },
 });
 
 // prevent example from being bundled with NPM
@@ -56,6 +67,7 @@ project.addDeps(
   "@aws-sdk/util-dynamodb",
   "@faker-js/faker",
   "@types/aws-lambda",
+  "axios",
   "change-case",
   "projen",
   "type-fest",
@@ -73,6 +85,8 @@ project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 
 // configure vs code
 new VsCodeConfiguration(project);
+
+new VitePressSite(project, { copyrightOwner: authorName });
 
 // generate
 project.synth();

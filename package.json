@@ -64,6 +64,7 @@
     "@aws-sdk/util-dynamodb": "^3.398.0",
     "@faker-js/faker": "^8.0.2",
     "@types/aws-lambda": "^8.10.119",
+    "axios": "^1.5.0",
     "change-case": "^4.1.2",
     "projen": "^0.72.28",
     "type-fest": "^2.19.0",
@@ -75,6 +76,9 @@
   "license": "MIT",
   "version": "0.0.0",
   "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    },
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",
       "<rootDir>/(test|src)/**/*(*.)@(spec|test).ts?(x)",
