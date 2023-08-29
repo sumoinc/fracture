@@ -58,6 +58,6 @@ describe("failure conditions", () => {
       new Pipeline(fracture, {
         branchName: "main",
       });
-    }).toThrow("Duplicate pipeline for branch name");
+    }).toThrow("Duplicate deployment pipeline for branch name");
   });
 });

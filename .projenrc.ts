@@ -23,6 +23,9 @@ const project = new TypeScriptProject({
   peerDeps: [],
   projenrcTs: true,
 
+  // use node 18
+  workflowNodeVersion: "18",
+
   // use prettier for linting
   prettier: true,
 

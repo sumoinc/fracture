@@ -54,3 +54,4 @@ junit.xml
 !/.eslintrc.json
 !/.vscode/settings.json
 !/.vscode/extensions.json
+!/.github/workflows/deploy.yml

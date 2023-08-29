@@ -32,9 +32,6 @@
         {
           "exec": "npx projen default",
           "cwd": ".."
-        },
-        {
-          "spawn": "docs:build"
         }
       ]
     },

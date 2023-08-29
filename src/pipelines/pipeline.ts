@@ -1,15 +1,19 @@
 import { Component } from "projen";
 import { BuildWorkflow } from "projen/lib/build";
-import { Job, JobPermission } from "projen/lib/github/workflows-model";
-import { ServiceDeployTarget } from "./service-deploy-target";
-import { FractureService } from "../core";
-import { Fracture } from "../core/fracture";
+import { Job } from "projen/lib/github/workflows-model";
+import { NodeProject } from "projen/lib/javascript";
 
 export interface PipelineOptions {
   /**
    * Branch that triggers this pipeline.
    */
   branchName: string;
+  /**
+   * What paths should trigger this pipeline?
+   *
+   * @default [] (all)
+   */
+  paths?: string[];
 }
 
 export class Pipeline extends Component {
@@ -17,12 +21,12 @@ export class Pipeline extends Component {
    * Returns a environment by name, or undefined if it doesn't exist
    */
   public static byBranchName(
-    fracture: Fracture,
+    project: NodeProject,
     branchName: string
   ): Pipeline | undefined {
     const isDefined = (c: Component): c is Pipeline =>
       c instanceof Pipeline && c.branchName === branchName;
-    return fracture.components.find(isDefined);
+    return project.components.find(isDefined);
   }
   /**
    * Branch that triggers this pipeline.
@@ -41,7 +45,7 @@ export class Pipeline extends Component {
    *
    * @default [] (all)
    */
-  public readonly pathTriggerPatterns: string[] = [];
+  public readonly paths: string[];
   /**
    * All jobs for this pipeline.
    */
@@ -51,18 +55,20 @@ export class Pipeline extends Component {
    */
   public readonly workflow: BuildWorkflow;
 
-  constructor(fracture: Fracture, options: PipelineOptions) {
+  constructor(project: NodeProject, options: PipelineOptions) {
     /***************************************************************************
      * Check Duplicates
      **************************************************************************/
 
     const branchName = options.branchName;
 
-    if (Pipeline.byBranchName(fracture, branchName)) {
-      throw new Error(`Duplicate pipeline for branch name "${branchName}".`);
+    if (Pipeline.byBranchName(project, branchName)) {
+      throw new Error(
+        `Duplicate deployment pipeline for branch name "${branchName}".`
+      );
     }
 
-    super(fracture);
+    super(project);
 
     /***************************************************************************
      * Props
@@ -70,10 +76,8 @@ export class Pipeline extends Component {
 
     this.branchName = options.branchName;
     this.name = `deploy-${this.branchName}`;
-    this.branchTriggerPatterns =
-      options.branchName === fracture.defaultReleaseBranch
-        ? [options.branchName]
-        : [`${options.branchName}/*`];
+    this.branchTriggerPatterns = [this.branchName];
+    this.paths = options.paths ?? [];
 
     /*************************************************************************
      * Create initial workflow
@@ -82,19 +86,19 @@ export class Pipeline extends Component {
     const workflowTriggers = {
       push: {
         branches: this.branchTriggerPatterns,
-        paths: this.pathTriggerPatterns,
+        paths: this.paths,
       },
       workflowDispatch: {}, // allow manual triggering
     };
 
-    const workFlowSetup = fracture.renderWorkflowSetup({
+    const workFlowSetup = project.renderWorkflowSetup({
       mutable: false,
     });
 
-    this.workflow = new BuildWorkflow(fracture, {
+    this.workflow = new BuildWorkflow(project, {
       name: this.name,
-      buildTask: fracture.buildTask,
-      artifactsDirectory: fracture.artifactsDirectory,
+      buildTask: project.buildTask,
+      artifactsDirectory: project.artifactsDirectory,
       mutableBuild: false,
       workflowTriggers,
       preBuildSteps: workFlowSetup,
@@ -104,17 +108,19 @@ export class Pipeline extends Component {
   preSynthesize(): void {
     super.preSynthesize();
 
-    const fracture = this.project as Fracture;
+    //const fracture = this.project as Fracture;
 
     // make sure we copy the cdk files over for each service.
+    /*
     FractureService.all(fracture).forEach((service) => {
       this.workflow.addPostBuildSteps({
         name: `Copy Service to Dist (${service.name})`,
         run: `mkdir -p ${service.cdkOutDistDir} && cp -r ${service.cdkOutBuildDir}/* ${service.cdkOutDistDir}`,
       });
     });
-
+    */
     // add deploy jobs to pipeline
+    /*
     ServiceDeployTarget.byPipeline(this).forEach((sdt) => {
       this.workflow.addPostBuildJob(sdt.deployJobName, {
         needs: sdt.needs,
@@ -139,5 +145,6 @@ export class Pipeline extends Component {
         ],
       });
     });
+    */
   }
 }
