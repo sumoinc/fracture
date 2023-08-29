@@ -14,8 +14,8 @@ test("Check for remote changes", async () => {
 
   await Promise.all(
     filesToScaffold.map(async (file) => {
-      const remoteFile = projectRoot + file;
-      const localPath = join(__dirname, file);
+      const remoteFile = join(projectRoot, "template", file);
+      const localPath = join(__dirname, "template", file);
       const content = await readFile(localPath, "utf8");
       const { data } = await axios.get(remoteFile);
 

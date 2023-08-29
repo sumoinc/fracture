@@ -1,3 +1,5 @@
+import { join } from "path";
+import { SampleFile } from "projen";
 import {
   NodePackageManager,
   NodeProject,
@@ -6,13 +8,13 @@ import {
 import { SetOptional } from "type-fest";
 
 export const filesToScaffold = [
-  "template/api-examples.md",
-  "template/index.md",
-  "template/markdown-examples.md",
-  "template/.vitepress/config.js",
-  "template/.vitepress/theme/index.js",
-  "template/.vitepress/theme/style.css",
-  "template/.vitepress/theme/Layout.vue",
+  "api-examples.md",
+  "index.md",
+  "markdown-examples.md",
+  ".vitepress/config.js",
+  ".vitepress/theme/index.js",
+  ".vitepress/theme/style.css",
+  ".vitepress/theme/Layout.vue",
 ];
 
 export class VitePressSite extends NodeProject {
@@ -28,7 +30,6 @@ export class VitePressSite extends NodeProject {
       outdir: "docs",
       defaultReleaseBranch: "main",
       license: options.license ?? "MIT",
-      copyrightOwner: options.copyrightOwner,
       prettier: options.prettier ?? true,
       packageManager: options.packageManager ?? NodePackageManager.PNPM,
       pnpmVersion: options.pnpmVersion ?? "8",
@@ -37,6 +38,7 @@ export class VitePressSite extends NodeProject {
     });
 
     this.addDevDeps("vitepress");
+    console.log(this.outdir);
 
     /**
      * !!! BIG CHEAT !!!
@@ -48,7 +50,10 @@ export class VitePressSite extends NodeProject {
      * https://github.com/vuejs/vitepress/tree/main/template
      *
      **/
-
-    console.log(this.outdir);
+    filesToScaffold.map((file) => {
+      new SampleFile(this, join("content", file), {
+        sourcePath: join(__dirname, "template", file),
+      });
+    });
   }
 }
