@@ -24,8 +24,8 @@ dependencies:
     specifier: ^4.1.2
     version: 4.1.2
   projen:
-    specifier: ^0.72.27
-    version: 0.72.27
+    specifier: ^0.72.28
+    version: 0.72.28
   type-fest:
     specifier: ^2.19.0
     version: 2.19.0
@@ -84,7 +84,7 @@ devDependencies:
     version: 15.0.0
   npm-check-updates:
     specifier: ^16
-    version: 16.13.1
+    version: 16.13.2
   prettier:
     specifier: ^2.8.8
     version: 2.8.8
@@ -5732,8 +5732,8 @@ packages:
       npm-normalize-package-bin: 3.0.1
     dev: true
 
-  /npm-check-updates@16.13.1:
-    resolution: {integrity: sha512-RIKBemiyAOEAUfzgYzDffLQwXI/Zo4CMSGHtup9fUoBpHqPNtD0pPFjpxDnt/sFpGiV5iANdE2Ck6xOxuQFfJg==}
+  /npm-check-updates@16.13.2:
+    resolution: {integrity: sha512-0pQI+k1y0JVwenB2gBc69tXFYfkckSVrNrlcn7TIrZfis4LnfdzakY/LYzZKt/lx37edN2isk3d2Zw4csptu/w==}
     engines: {node: '>=14.14'}
     hasBin: true
     dependencies:
@@ -6201,8 +6201,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen@0.72.27:
-    resolution: {integrity: sha512-tcUoXJXHumcTEaNv+1EJ9wE2E2dEhwnnVKXKbKAALv3uc5wqrSeqM4iyhYeAQeiCiAXpw/TJPFrQ/QVdjKe/ng==}
+  /projen@0.72.28:
+    resolution: {integrity: sha512-olnefNj+UZvRzm+vfAHbMmRz/2/b0OQdqY5YoZ+3Tx7u1kR3ubLr+loouWhSY5VB6PUBGWz5MvBUHg5uF0phjQ==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
