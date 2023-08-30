@@ -1,7 +1,7 @@
 import { FractureService } from "../../core/fracture-service";
 import { GeneratedTypescriptFile } from "../generated-typescript-file";
 
-export class GeneratedCdkApp extends GeneratedTypescriptFile {
+export class GenerateCdkApp extends GeneratedTypescriptFile {
   constructor(service: FractureService) {
     super(service, "main.ts");
   }

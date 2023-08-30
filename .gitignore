@@ -54,4 +54,6 @@ junit.xml
 !/.eslintrc.json
 !/.vscode/settings.json
 !/.vscode/extensions.json
-!/.github/workflows/deploy.yml
+.turbo
+!/turbo.json
+!/pnpm-workspace.yaml

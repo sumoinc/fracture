@@ -3,7 +3,7 @@ import { printNodes } from "./factories/print-nodes";
 import { FractureService } from "../../core/fracture-service";
 import { GeneratedTypescriptFile } from "../generated-typescript-file";
 
-export class GeneratedTypes extends GeneratedTypescriptFile {
+export class GenerateTypes extends GeneratedTypescriptFile {
   constructor(service: FractureService) {
     super(service, "types.ts");
   }

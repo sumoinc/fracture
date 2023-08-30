@@ -1,4 +1,4 @@
-import { GeneratedConfigurations } from "./configurations";
+import { GenerateConfigurations } from "./configurations";
 import { Fracture, FractureService } from "../../core";
 import { ServiceDeployTarget } from "../../workflows";
 import { synthFile } from "../../util/test-util";
@@ -11,7 +11,7 @@ test("Smoke test", () => {
     environmentName: "us-east",
     service,
   });
-  new GeneratedConfigurations(service);
+  new GenerateConfigurations(service);
 
   const content = synthFile(
     fracture,

@@ -91,7 +91,10 @@ project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 // configure vs code
 new VsCodeConfiguration(project);
 
-new VitePressSite(project);
+new VitePressSite(project, {
+  name: "docs",
+  defaultReleaseBranch: "main",
+});
 
 // generate
 project.synth();

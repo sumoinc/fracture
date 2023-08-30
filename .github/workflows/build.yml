@@ -35,9 +35,6 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           directory: coverage
-      - name: Build docs
-        run: npx projen build
-        working-directory: ./docs
       - name: Find mutations
         id: self_mutation
         run: |-

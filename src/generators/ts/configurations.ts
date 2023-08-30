@@ -2,7 +2,7 @@ import { FractureService } from "../../core/fracture-service";
 import { ServiceDeployTarget } from "../../workflows";
 import { GeneratedTypescriptFile } from "../generated-typescript-file";
 
-export class GeneratedConfigurations extends GeneratedTypescriptFile {
+export class GenerateConfigurations extends GeneratedTypescriptFile {
   constructor(service: FractureService) {
     super(service, "configurations.ts");
   }

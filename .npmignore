@@ -22,4 +22,5 @@ dist
 tsconfig.tsbuildinfo
 /.eslintrc.json
 /example-app
-docs
+.turbo
+turbo.json

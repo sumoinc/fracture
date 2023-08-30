@@ -88,6 +88,9 @@
       "steps": [
         {
           "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
+        },
+        {
+          "spawn": "turbo:eslint"
         }
       ]
     },
@@ -144,7 +147,12 @@
     },
     "post-compile": {
       "name": "post-compile",
-      "description": "Runs after successful compilation"
+      "description": "Runs after successful compilation",
+      "steps": [
+        {
+          "spawn": "synth:silent"
+        }
+      ]
     },
     "post-upgrade": {
       "name": "post-upgrade",
@@ -178,16 +186,30 @@
         }
       ]
     },
+    "synth": {
+      "name": "synth",
+      "description": "Synthesizes your cdk app into cdk.out",
+      "steps": [
+        {
+          "exec": "pnpm turbo synth"
+        }
+      ]
+    },
+    "synth:silent": {
+      "name": "synth:silent",
+      "description": "Synthesizes your cdk app into cdk.out",
+      "steps": [
+        {
+          "exec": "pnpm turbo synth:silent"
+        }
+      ]
+    },
     "test": {
       "name": "test",
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --updateSnapshot",
-          "receiveArgs": true
-        },
-        {
-          "spawn": "eslint"
+          "spawn": "turbo:test"
         }
       ]
     },
@@ -197,6 +219,53 @@
       "steps": [
         {
           "exec": "jest --watch"
+        }
+      ]
+    },
+    "turbo:deploy": {
+      "name": "turbo:deploy",
+      "description": "Deploys your CDK app to the AWS cloud",
+      "steps": [
+        {
+          "exec": "pnpm turbo deploy",
+          "receiveArgs": true
+        }
+      ]
+    },
+    "turbo:destroy": {
+      "name": "turbo:destroy",
+      "description": "Destroys your cdk app in the AWS cloud",
+      "steps": [
+        {
+          "exec": "pnpm turbo destroy",
+          "receiveArgs": true
+        }
+      ]
+    },
+    "turbo:diff": {
+      "name": "turbo:diff",
+      "description": "Diffs the currently deployed app against your code",
+      "steps": [
+        {
+          "exec": "pnpm turbo diff"
+        }
+      ]
+    },
+    "turbo:eslint": {
+      "name": "turbo:eslint",
+      "description": "Lint all repos",
+      "steps": [
+        {
+          "exec": "pnpm turbo eslint"
+        }
+      ]
+    },
+    "turbo:test": {
+      "name": "turbo:test",
+      "description": "Lint all repos",
+      "steps": [
+        {
+          "exec": "pnpm turbo test"
         }
       ]
     },
@@ -227,13 +296,13 @@
           "exec": "pnpm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --upgrade --target=minor --filter=@aws-sdk/smithy-client,@aws-sdk/types,@types/jest,@types/node,@types/uuid,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,typescript,@aws-sdk/client-dynamodb,@aws-sdk/lib-dynamodb,@aws-sdk/util-dynamodb,@faker-js/faker,@types/aws-lambda,change-case,type-fest,uuid"
+          "exec": "npm-check-updates --upgrade --target=minor --filter=@aws-sdk/smithy-client,@aws-sdk/types,@types/jest,@types/node,@types/uuid,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,turbo,typescript,@aws-sdk/client-dynamodb,@aws-sdk/lib-dynamodb,@aws-sdk/util-dynamodb,@faker-js/faker,@types/aws-lambda,change-case,type-fest,uuid"
         },
         {
           "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "pnpm update @aws-sdk/smithy-client @aws-sdk/types @types/jest @types/node @types/uuid @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node typescript @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @aws-sdk/util-dynamodb @faker-js/faker @types/aws-lambda change-case type-fest uuid"
+          "exec": "pnpm update @aws-sdk/smithy-client @aws-sdk/types @types/jest @types/node @types/uuid @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node turbo typescript @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @aws-sdk/util-dynamodb @faker-js/faker @types/aws-lambda change-case type-fest uuid"
         },
         {
           "exec": "npx projen"

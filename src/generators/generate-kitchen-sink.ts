@@ -1,7 +1,7 @@
 import { Component } from "projen";
-import { GeneratedTypes } from "./ts";
-import { GeneratedCdkApp } from "./ts/cdk-app";
-import { GeneratedConfigurations } from "./ts/configurations";
+import { GenerateTypes } from "./ts";
+import { GenerateCdkApp } from "./ts/cdk-app";
+import { GenerateConfigurations } from "./ts/configurations";
 import { Fracture, FractureService } from "../core";
 
 export class GenerateKitchenSink extends Component {
@@ -13,9 +13,9 @@ export class GenerateKitchenSink extends Component {
      **************************************************************************/
 
     FractureService.all(fracture).forEach((service) => {
-      new GeneratedTypes(service);
-      new GeneratedCdkApp(service);
-      new GeneratedConfigurations(service);
+      new GenerateTypes(service);
+      new GenerateCdkApp(service);
+      new GenerateConfigurations(service);
     });
   }
 }
