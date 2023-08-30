@@ -1,7 +1,7 @@
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { VsCodeConfiguration } from "./src/projen/vscode";
-import { VitePressSite } from "./src/vitepress/vitepress-site";
+import { VitePressSite } from "./src/sites/vitepress/vitepress-site";
 
 const authorName = "Cameron Childress";
 const authorAddress = "cameronc@sumoc.com";
@@ -60,6 +60,9 @@ const project = new TypeScriptProject({
 // prevent example from being bundled with NPM
 project.npmignore!.exclude("/example-app");
 
+// don't typecheck  templates
+project.tsconfig?.exclude?.push("src/sites/vitepress/template");
+
 // make sure inline tests work
 project.jest!.addTestMatch("<rootDir>/(test|src)/**/*.(spec|test).ts?(x)");
 
@@ -88,7 +91,7 @@ project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 // configure vs code
 new VsCodeConfiguration(project);
 
-new VitePressSite(project, { copyrightOwner: authorName });
+new VitePressSite(project);
 
 // generate
 project.synth();

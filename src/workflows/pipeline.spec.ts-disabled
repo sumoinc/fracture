@@ -1,4 +1,4 @@
-import { Pipeline } from "./pipeline";
+import { Pipeline } from "./pipeline.ts-disabled";
 import { ServiceDeployTarget } from "./jobs/deploy-job";
 import { Environment, FractureService } from "../core";
 import { Fracture } from "../core/fracture";

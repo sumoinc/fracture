@@ -1,6 +1,6 @@
 import { Component } from "projen";
 import { GitHub, GithubWorkflow } from "projen/lib/github";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { BuildJob } from "./jobs/build-job";
 import { DeployJob, DeployJobOptions } from "./jobs/deploy-job";
 import { WorkflowJob } from "./jobs/workflow-job";
@@ -154,7 +154,10 @@ export class Workflow extends Component {
    */
   public readonly otherJobs: Array<WorkflowJob> = [];
 
-  constructor(public readonly project: NodeProject, options: WorkflowOptions) {
+  constructor(
+    public readonly project: TypeScriptProject,
+    options: WorkflowOptions
+  ) {
     super(project);
 
     const github = GitHub.of(project);

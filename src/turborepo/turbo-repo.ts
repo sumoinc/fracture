@@ -1,49 +1,54 @@
-import { Component, JsonFile, Task } from "projen";
-import { Fracture } from "../core";
-
-export interface TurboRepoOptions {}
+import { Component, JsonFile, Task, YamlFile } from "projen";
+import { TypeScriptProject } from "projen/lib/typescript";
 
 export class TurboRepo extends Component {
   /**
-   * Returns the `TurboRepo` component of a project or `undefined` if the project
-   * does not have a TurboRepo component.
+   * Returns the `TurboRepo` component of a project or creates one if it
+   * doesn't exist yet. Singleton?
    */
-  public static of(fracture: Fracture): TurboRepo | undefined {
+  public static of(project: TypeScriptProject): TurboRepo {
     const isTurboRepo = (c: Component): c is TurboRepo =>
       c instanceof TurboRepo;
-    return fracture.components.find(isTurboRepo);
+    return project.components.find(isTurboRepo) ?? new TurboRepo(project);
   }
+
+  /**
+   * PNMP workspace file
+   */
+  public readonly workspaceRoots: Array<string> = [];
 
   /**
    * Linting Task.
    */
   public readonly lintTask: Task;
+
   /**
    * Test Task
    */
   public readonly testTask: Task;
+
   /**
    * Deploys your app.
    */
   public readonly deployTask: Task;
+
   /**
    * Destroys all the stacks.
    */
   public readonly destroyTask: Task;
+
   /**
    * Diff against production.
    */
   public readonly diffTask: Task;
 
-  // @ts-ignore
-  constructor(fracture: Fracture, options: TurboRepoOptions = {}) {
-    super(fracture);
+  constructor(project: TypeScriptProject) {
+    super(project);
 
-    fracture.addGitIgnore(".turbo");
-    fracture.npmignore!.exclude(".turbo");
-    fracture.npmignore!.exclude("turbo.json");
-
-    fracture.addDevDeps("turbo");
+    project.addGitIgnore(".turbo");
+    project.npmignore!.exclude(".turbo");
+    project.npmignore!.exclude("turbo.json");
+    project.addDevDeps("turbo");
 
     /***************************************************************************
      *
@@ -55,11 +60,11 @@ export class TurboRepo extends Component {
      *
      **************************************************************************/
 
-    this.lintTask = fracture.addTask("turbo:eslint", {
+    this.lintTask = project.addTask("turbo:eslint", {
       description: "Lint all repos",
       exec: "pnpm turbo eslint",
     });
-    fracture.defaultTask?.spawn(this.lintTask);
+    project.defaultTask?.spawn(this.lintTask);
 
     /***************************************************************************
      *
@@ -69,12 +74,12 @@ export class TurboRepo extends Component {
      *
      **************************************************************************/
 
-    this.testTask = fracture.addTask("turbo:test", {
+    this.testTask = project.addTask("turbo:test", {
       description: "Lint all repos",
       exec: "pnpm turbo test",
     });
-    fracture.testTask.reset();
-    fracture.testTask.spawn(this.testTask);
+    project.testTask.reset();
+    project.testTask.spawn(this.testTask);
 
     /***************************************************************************
      *
@@ -85,30 +90,30 @@ export class TurboRepo extends Component {
      *
      **************************************************************************/
 
-    fracture.addTask("synth", {
+    project.addTask("synth", {
       description: "Synthesizes your cdk app into cdk.out",
       exec: "pnpm turbo synth",
     });
 
-    const synthSilentTask = fracture.addTask("synth:silent", {
+    const synthSilentTask = project.addTask("synth:silent", {
       description: "Synthesizes your cdk app into cdk.out",
       exec: "pnpm turbo synth:silent",
     });
-    fracture.postCompileTask?.spawn(synthSilentTask);
+    project.postCompileTask?.spawn(synthSilentTask);
 
-    this.deployTask = fracture.addTask("turbo:deploy", {
+    this.deployTask = project.addTask("turbo:deploy", {
       description: "Deploys your CDK app to the AWS cloud",
       exec: "pnpm turbo deploy",
       receiveArgs: true,
     });
 
-    this.destroyTask = fracture.addTask("turbo:destroy", {
+    this.destroyTask = project.addTask("turbo:destroy", {
       description: "Destroys your cdk app in the AWS cloud",
       exec: "pnpm turbo destroy",
       receiveArgs: true,
     });
 
-    this.diffTask = fracture.addTask("turbo:diff", {
+    this.diffTask = project.addTask("turbo:diff", {
       description: "Diffs the currently deployed app against your code",
       exec: "pnpm turbo diff",
     });
@@ -147,6 +152,22 @@ export class TurboRepo extends Component {
             outputMode: "new-only",
           },
         },
+      },
+    });
+  }
+
+  addWorkspaceRoot(path: string) {
+    this.workspaceRoots.push(path);
+  }
+
+  preSynthesize(): void {
+    // workspace config file
+    new YamlFile(this.project, "pnpm-workspace.yaml", {
+      obj: {
+        // dedupe and loop
+        packages: [...new Set(this.workspaceRoots)].map((path) => {
+          return `${path}/*`;
+        }),
       },
     });
   }

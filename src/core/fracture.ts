@@ -10,10 +10,8 @@ import { Environment, EnvironmentOptions } from "./environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { FractureService, FractureServiceOptions } from "./fracture-service";
 import { REGION_IDENTITIER } from "./region";
-import { Pipeline, PipelineOptions } from "../workflows";
-import { PnpmWorkspace } from "../pnpm";
 import { VsCodeConfiguration } from "../projen";
-import { TurboRepo, TurboRepoOptions } from "../turborepo/turbo-repo";
+import { Pipeline, PipelineOptions } from "../workflows";
 
 export interface FractureOptions extends Partial<TypeScriptProjectOptions> {
   /**
@@ -56,12 +54,6 @@ export interface FractureOptions extends Partial<TypeScriptProjectOptions> {
    * @default us-east-1
    */
   defaultRegion?: ValueOf<typeof REGION_IDENTITIER>;
-  /**
-   * Options for using TurboRepo
-   *
-   * @default {}
-   */
-  turboRepoOptions?: TurboRepoOptions;
 }
 
 export type StoredFractureOptions = SetRequired<
@@ -75,7 +67,6 @@ export type StoredFractureOptions = SetRequired<
   | "defaultReleaseBranch"
   | "defaultAccountNumber"
   | "defaultRegion"
-  | "turboRepoOptions"
 >;
 
 /**
@@ -157,7 +148,6 @@ export class Fracture extends TypeScriptProject {
       branchNames: options.branchNames ?? ["main", "feature", "fix", "chore"],
       defaultAccountNumber: options.defaultAccountNumber ?? "0000000000",
       defaultRegion: options.defaultRegion ?? "us-east-1",
-      turboRepoOptions: options.turboRepoOptions ?? {},
       ...options,
       prettier: true,
       projenrcTs: true,
@@ -193,12 +183,6 @@ export class Fracture extends TypeScriptProject {
     this.defaultRegion = mergedOptions.defaultRegion;
 
     /***************************************************************************
-     * TUBOREPO
-     **************************************************************************/
-
-    new TurboRepo(this, mergedOptions.turboRepoOptions);
-
-    /***************************************************************************
      * BRANCH STRATEGY & PIPELINES
      **************************************************************************/
 
@@ -207,12 +191,6 @@ export class Fracture extends TypeScriptProject {
         branchName,
       });
     });
-
-    /***************************************************************************
-     * PNPM - enable workspaces
-     **************************************************************************/
-
-    new PnpmWorkspace(this);
 
     /***************************************************************************
      * VS CODE

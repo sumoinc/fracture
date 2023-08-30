@@ -1,10 +1,10 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { DeployJob } from "./deploy-job";
 import { Workflow } from "../workflow";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
@@ -24,7 +24,7 @@ describe("success conditions", () => {
   });
 
   test("Two deploys depend on each other", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
@@ -53,7 +53,7 @@ describe("success conditions", () => {
   });
 
   test("Deploy with artifacts", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });

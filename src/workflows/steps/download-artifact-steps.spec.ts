@@ -1,4 +1,4 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 
 import { renderDownloadArtifactSteps } from "./download-artifact-steps";
 import { DeployJob } from "../jobs/deploy-job";
@@ -6,7 +6,7 @@ import { Workflow } from "../workflow";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
@@ -25,7 +25,7 @@ describe("success conditions", () => {
   });
 
   test("With Deplopy Job", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });

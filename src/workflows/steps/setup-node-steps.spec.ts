@@ -1,10 +1,11 @@
-import { NodePackageManager, NodeProject } from "projen/lib/javascript";
+import { NodePackageManager } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { renderSetupNodeSteps } from "./setup-node-steps";
 import { Workflow } from "../workflow";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
@@ -18,7 +19,7 @@ describe("success conditions", () => {
   });
 
   test("With Yarn", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
       packageManager: NodePackageManager.YARN,
@@ -33,7 +34,7 @@ describe("success conditions", () => {
   });
 
   test("With Yarn 2", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
       packageManager: NodePackageManager.YARN2,
@@ -48,7 +49,7 @@ describe("success conditions", () => {
   });
 
   test("With PNPM", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
       packageManager: NodePackageManager.PNPM,
@@ -63,7 +64,7 @@ describe("success conditions", () => {
   });
 
   test("With NPM", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
       packageManager: NodePackageManager.NPM,

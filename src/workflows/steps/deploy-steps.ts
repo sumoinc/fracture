@@ -1,5 +1,4 @@
 import { JobStep } from "projen/lib/github/workflows-model";
-
 import { DeployJob } from "../jobs/deploy-job";
 
 export const renderDeploySteps = (deployJob: DeployJob): Array<JobStep> => {

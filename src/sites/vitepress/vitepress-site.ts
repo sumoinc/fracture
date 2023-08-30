@@ -1,12 +1,11 @@
 import { join } from "path";
 import { SampleFile } from "projen";
+import { NodeProjectOptions } from "projen/lib/javascript";
 import {
-  NodePackageManager,
-  NodeProject,
-  NodeProjectOptions,
-} from "projen/lib/javascript";
+  TypeScriptProject,
+  TypeScriptProjectOptions,
+} from "projen/lib/typescript";
 import { SetOptional } from "type-fest";
-import { DeploymentWorkflow } from "../workflows/deployment-workflow";
 
 export const filesToScaffold = [
   "api-examples.md",
@@ -18,23 +17,18 @@ export const filesToScaffold = [
   ".vitepress/theme/Layout.vue",
 ];
 
-export class VitePressSite extends NodeProject {
+export class VitePressSite extends TypeScriptProject {
   constructor(
-    parent: NodeProject,
+    parent: TypeScriptProject,
     options: SetOptional<
       NodeProjectOptions,
       "name" | "defaultReleaseBranch"
     > = {}
   ) {
-    const mergedOptions = {
+    const mergedOptions: TypeScriptProjectOptions = {
       name: "docs",
       outdir: "docs",
       defaultReleaseBranch: "main",
-      license: options.license ?? "MIT",
-      prettier: options.prettier ?? true,
-      packageManager: options.packageManager ?? NodePackageManager.PNPM,
-      pnpmVersion: options.pnpmVersion ?? "8",
-      workflowNodeVersion: options.workflowNodeVersion ?? "18",
       parent,
       ...options,
     };
@@ -46,7 +40,6 @@ export class VitePressSite extends NodeProject {
     this.addDevDeps("vitepress");
     this.addGitIgnore(".vitepress/dist");
     this.addGitIgnore(".vitepress/cache");
-    parent.npmignore?.exclude(mergedOptions.outdir);
 
     /**
      * !!! BIG CHEAT !!!
@@ -78,19 +71,15 @@ export class VitePressSite extends NodeProject {
       exec: "pnpm vitepress preview",
     });
 
-    // make sure we build docs as part of standard default build
+    // make sure we compile docs as part of standard default build
+    // parent.compileTask.spawn(this.buildTask);
+
+    /*
     parent.buildWorkflow?.addPostBuildSteps({
       name: `Build ${this.name}`,
       run: `npx projen build`,
       workingDirectory: `./${mergedOptions.outdir}`,
-    });
-
-    const workflow =
-      DeploymentWorkflow.of(parent) ?? new DeploymentWorkflow(parent, {});
-
-    if (workflow) {
-      console.log("workflow exists");
-    }
+    });*/
 
     /**
      * Make sure we have a deployment workflow on the default branch to deploy

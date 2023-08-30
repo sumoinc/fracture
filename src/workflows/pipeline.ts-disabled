@@ -1,7 +1,7 @@
 import { Component } from "projen";
 import { BuildWorkflow } from "projen/lib/build";
 import { Job } from "projen/lib/github/workflows-model";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 
 export interface PipelineOptions {
   /**
@@ -21,7 +21,7 @@ export class Pipeline extends Component {
    * Returns a environment by name, or undefined if it doesn't exist
    */
   public static byBranchName(
-    project: NodeProject,
+    project: TypeScriptProject,
     branchName: string
   ): Pipeline | undefined {
     const isDefined = (c: Component): c is Pipeline =>
@@ -55,7 +55,7 @@ export class Pipeline extends Component {
    */
   public readonly workflow: BuildWorkflow;
 
-  constructor(project: NodeProject, options: PipelineOptions) {
+  constructor(project: TypeScriptProject, options: PipelineOptions) {
     /***************************************************************************
      * Check Duplicates
      **************************************************************************/
