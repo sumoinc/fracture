@@ -7,7 +7,10 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const vitePressSite = new VitePressSite(project);
+    const vitePressSite = new VitePressSite(project, {
+      name: "docs",
+      defaultReleaseBranch: "main",
+    });
     expect(vitePressSite).toBeTruthy();
   });
 
@@ -16,9 +19,12 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const vitePressSite = new VitePressSite(project);
+    const vitePressSite = new VitePressSite(project, {
+      name: "docs",
+      defaultReleaseBranch: "main",
+    });
     expect(vitePressSite).toBeTruthy();
 
-    console.log(vitePressSite.buildTask.name);
+    // console.log(vitePressSite.buildTask.name);
   });
 });

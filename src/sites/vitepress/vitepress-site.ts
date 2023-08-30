@@ -1,11 +1,10 @@
 import { join } from "path";
 import { SampleFile } from "projen";
-import { NodeProjectOptions } from "projen/lib/javascript";
 import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
-import { SetOptional } from "type-fest";
+import { Site } from "../site";
 
 export const filesToScaffold = [
   "api-examples.md",
@@ -17,24 +16,10 @@ export const filesToScaffold = [
   ".vitepress/theme/Layout.vue",
 ];
 
-export class VitePressSite extends TypeScriptProject {
-  constructor(
-    parent: TypeScriptProject,
-    options: SetOptional<
-      NodeProjectOptions,
-      "name" | "defaultReleaseBranch"
-    > = {}
-  ) {
-    const mergedOptions: TypeScriptProjectOptions = {
-      name: "docs",
-      outdir: "docs",
-      defaultReleaseBranch: "main",
-      parent,
+export class VitePressSite extends Site {
+  constructor(parent: TypeScriptProject, options: TypeScriptProjectOptions) {
+    super(parent, {
       ...options,
-    };
-
-    super({
-      ...mergedOptions,
     });
 
     this.addDevDeps("vitepress");

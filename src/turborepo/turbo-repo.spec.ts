@@ -12,7 +12,7 @@ test("Smoke test", () => {
 });
 
 describe("validate generated project files", () => {
-  test.only("pnpm-workspace.yaml", () => {
+  test("pnpm-workspace.yaml", () => {
     const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
@@ -25,7 +25,7 @@ describe("validate generated project files", () => {
     //console.log(content);
   });
 
-  test.only(".projen/tasks.json", () => {
+  test(".projen/tasks.json", () => {
     const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
