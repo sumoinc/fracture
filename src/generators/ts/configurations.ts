@@ -1,5 +1,5 @@
 import { FractureService } from "../../core/fracture-service";
-import { ServiceDeployTarget } from "../../pipelines";
+import { ServiceDeployTarget } from "../../workflows";
 import { GeneratedTypescriptFile } from "../generated-typescript-file";
 
 export class GeneratedConfigurations extends GeneratedTypescriptFile {

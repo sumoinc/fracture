@@ -1,6 +1,6 @@
 import { GeneratedConfigurations } from "./configurations";
 import { Fracture, FractureService } from "../../core";
-import { ServiceDeployTarget } from "../../pipelines";
+import { ServiceDeployTarget } from "../../workflows";
 import { synthFile } from "../../util/test-util";
 
 test("Smoke test", () => {

@@ -39,6 +39,6 @@ describe("success conditions", () => {
     const content = synthFile(project, `.github/workflows/my-workflow.yml`);
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
-    console.log(content);
+    // console.log(content);
   });
 });

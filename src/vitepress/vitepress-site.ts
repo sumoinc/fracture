@@ -6,7 +6,7 @@ import {
   NodeProjectOptions,
 } from "projen/lib/javascript";
 import { SetOptional } from "type-fest";
-import { DeploymentWorkflow } from "../pipelines/deployment-workflow";
+import { DeploymentWorkflow } from "../workflows/deployment-workflow";
 
 export const filesToScaffold = [
   "api-examples.md",

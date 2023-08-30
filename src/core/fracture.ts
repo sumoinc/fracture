@@ -10,7 +10,7 @@ import { Environment, EnvironmentOptions } from "./environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { FractureService, FractureServiceOptions } from "./fracture-service";
 import { REGION_IDENTITIER } from "./region";
-import { Pipeline, PipelineOptions } from "../pipelines";
+import { Pipeline, PipelineOptions } from "../workflows";
 import { PnpmWorkspace } from "../pnpm";
 import { VsCodeConfiguration } from "../projen";
 import { TurboRepo, TurboRepoOptions } from "../turborepo/turbo-repo";
