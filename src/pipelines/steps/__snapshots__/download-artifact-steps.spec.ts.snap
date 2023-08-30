@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`success conditions Smoke test 1`] = `Array []`;
+
+exports[`success conditions With Deplopy Job 1`] = `
+Array [
+  Object {
+    "name": "Download build artifacts for \\"some/other/folder/cdk.out\\"",
+    "uses": "actions/download-artifact@v3",
+    "with": Object {
+      "name": "build-artifact-fd00321b",
+      "path": "some/other/folder/cdk.out",
+    },
+  },
+  Object {
+    "continueOnError": true,
+    "name": "Restore build artifact permissions for \\"some/other/folder/cdk.out\\"",
+    "run": "setfacl --restore=permissions-backup.acl",
+    "workingDirectory": "some/other/folder/cdk.out",
+  },
+]
+`;

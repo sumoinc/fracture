@@ -1,5 +1,5 @@
 import { Pipeline } from "./pipeline";
-import { ServiceDeployTarget } from "./service-deploy-target";
+import { ServiceDeployTarget } from "./jobs/deploy-job";
 import { Environment, FractureService } from "../core";
 import { Fracture } from "../core/fracture";
 import { synthFile } from "../util/test-util";

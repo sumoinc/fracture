@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`success conditions Deploy with artifacts 1`] = `
+Object {
+  "env": Object {
+    "CI": "true",
+  },
+  "if": "startsWith( github.ref, 'refs/heads/main' )",
+  "name": "Deploy Service Foo",
+  "needs": Array [
+    "build",
+  ],
+  "permissions": Object {
+    "contents": "read",
+  },
+  "runsOn": Array [
+    "ubuntu-latest",
+  ],
+  "steps": Array [
+    Object {
+      "name": "Download build artifacts for \\"foo\\"",
+      "uses": "actions/download-artifact@v3",
+      "with": Object {
+        "name": "build-artifact-acbd18db",
+        "path": "foo",
+      },
+    },
+    Object {
+      "continueOnError": true,
+      "name": "Restore build artifact permissions for \\"foo\\"",
+      "run": "setfacl --restore=permissions-backup.acl",
+      "workingDirectory": "foo",
+    },
+    Object {
+      "name": "Download build artifacts for \\"bar\\"",
+      "uses": "actions/download-artifact@v3",
+      "with": Object {
+        "name": "build-artifact-37b51d19",
+        "path": "bar",
+      },
+    },
+    Object {
+      "continueOnError": true,
+      "name": "Restore build artifact permissions for \\"bar\\"",
+      "run": "setfacl --restore=permissions-backup.acl",
+      "workingDirectory": "bar",
+    },
+    Object {
+      "name": "Setup Node.js",
+      "uses": "actions/setup-node@v3",
+      "with": Object {
+        "cache": "yarn",
+        "node-version": "latest",
+      },
+    },
+    Object {
+      "name": "cdk:deploy",
+      "run": "npx projen cdk:deploy",
+    },
+  ],
+}
+`;
+
+exports[`success conditions Smoke test 1`] = `
+Object {
+  "env": Object {
+    "CI": "true",
+  },
+  "if": "startsWith( github.ref, 'refs/heads/main' )",
+  "name": "Deploy main",
+  "needs": Array [
+    "build",
+  ],
+  "permissions": Object {
+    "contents": "read",
+  },
+  "runsOn": Array [
+    "ubuntu-latest",
+  ],
+  "steps": Array [
+    Object {
+      "name": "Setup Node.js",
+      "uses": "actions/setup-node@v3",
+      "with": Object {
+        "cache": "yarn",
+        "node-version": "latest",
+      },
+    },
+    Object {
+      "name": "cdk:deploy",
+      "run": "npx projen cdk:deploy",
+    },
+  ],
+}
+`;
+
+exports[`success conditions Two deploys depend on each other 1`] = `
+Object {
+  "env": Object {
+    "CI": "true",
+  },
+  "if": "startsWith( github.ref, 'refs/heads/main' )",
+  "name": "Deploy Service One",
+  "needs": Array [
+    "build",
+  ],
+  "permissions": Object {
+    "contents": "read",
+  },
+  "runsOn": Array [
+    "ubuntu-latest",
+  ],
+  "steps": Array [
+    Object {
+      "name": "Setup Node.js",
+      "uses": "actions/setup-node@v3",
+      "with": Object {
+        "cache": "yarn",
+        "node-version": "latest",
+      },
+    },
+    Object {
+      "name": "cdk:deploy",
+      "run": "npx projen cdk:deploy",
+    },
+  ],
+}
+`;
+
+exports[`success conditions Two deploys depend on each other 2`] = `
+Object {
+  "env": Object {
+    "CI": "true",
+  },
+  "if": "startsWith( github.ref, 'refs/heads/main' )",
+  "name": "Deploy Service Two",
+  "needs": Array [
+    "build",
+    "deploy-service-one",
+  ],
+  "permissions": Object {
+    "contents": "read",
+  },
+  "runsOn": Array [
+    "ubuntu-latest",
+  ],
+  "steps": Array [
+    Object {
+      "name": "Setup Node.js",
+      "uses": "actions/setup-node@v3",
+      "with": Object {
+        "cache": "yarn",
+        "node-version": "latest",
+      },
+    },
+    Object {
+      "name": "cdk:deploy",
+      "run": "npx projen cdk:deploy",
+    },
+  ],
+}
+`;

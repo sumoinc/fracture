@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`success conditions Smoke test 1`] = `Array []`;
+
+exports[`success conditions With Deploy Job 1`] = `
+Array [
+  Object {
+    "continueOnError": true,
+    "name": "Backup artifact permissions for \\"dist\\"",
+    "run": "getfacl -R . > permissions-backup.acl",
+    "workingDirectory": "dist",
+  },
+  Object {
+    "name": "Upload artifacts for \\"dist\\"",
+    "uses": "actions/upload-artifact@v3",
+    "with": Object {
+      "name": "build-artifact-2a6d07ee",
+      "path": "dist",
+    },
+  },
+  Object {
+    "continueOnError": true,
+    "name": "Backup artifact permissions for \\"some/other/folder\\"",
+    "run": "getfacl -R . > permissions-backup.acl",
+    "workingDirectory": "some/other/folder",
+  },
+  Object {
+    "name": "Upload artifacts for \\"some/other/folder\\"",
+    "uses": "actions/upload-artifact@v3",
+    "with": Object {
+      "name": "build-artifact-c1e9779c",
+      "path": "some/other/folder",
+    },
+  },
+]
+`;
+
+exports[`success conditions With Duplaicate paths 1`] = `
+Array [
+  Object {
+    "continueOnError": true,
+    "name": "Backup artifact permissions for \\"dist\\"",
+    "run": "getfacl -R . > permissions-backup.acl",
+    "workingDirectory": "dist",
+  },
+  Object {
+    "name": "Upload artifacts for \\"dist\\"",
+    "uses": "actions/upload-artifact@v3",
+    "with": Object {
+      "name": "build-artifact-2a6d07ee",
+      "path": "dist",
+    },
+  },
+]
+`;
