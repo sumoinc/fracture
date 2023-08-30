@@ -296,7 +296,7 @@ Object {
           "exec": "pnpm update npm-check-updates",
         },
         Object {
-          "exec": "npm-check-updates --upgrade --target=minor --filter=@types/node,jest,jest-junit,npm-check-updates,nuxt,projen",
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/node,jest,jest-junit,npm-check-updates,nuxt,projen",
         },
         Object {
           "exec": "pnpm i --no-frozen-lockfile",
