@@ -168,6 +168,11 @@ Object {
     "pre-compile": Object {
       "description": "Prepare the project for compilation",
       "name": "pre-compile",
+      "steps": Array [
+        Object {
+          "spawn": "turbo:build",
+        },
+      ],
     },
     "release": Object {
       "description": "Prepare a release from \\"main\\" branch",
@@ -233,6 +238,15 @@ Object {
       "steps": Array [
         Object {
           "exec": "jest --watch",
+        },
+      ],
+    },
+    "turbo:build": Object {
+      "description": "Lint all repos",
+      "name": "turbo:build",
+      "steps": Array [
+        Object {
+          "exec": "pnpm turbo build",
         },
       ],
     },

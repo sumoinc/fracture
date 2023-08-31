@@ -28,6 +28,9 @@ export class FractureProject extends NodeProject {
       pnpmVersion: parent.package.pnpmVersion,
       ...options,
     });
+
+    // don't package
+    this.packageTask.reset();
   }
 
   public deployToAws(environment: Environment) {

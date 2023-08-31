@@ -22,6 +22,7 @@
     "synth:silent": "npx projen synth:silent",
     "test": "npx projen test",
     "test:watch": "npx projen test:watch",
+    "turbo:build": "npx projen turbo:build",
     "turbo:eslint": "npx projen turbo:eslint",
     "turbo:test": "npx projen turbo:test",
     "unbump": "npx projen unbump",

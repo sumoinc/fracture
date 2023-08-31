@@ -35,18 +35,53 @@ export class TurboRepo extends Component {
 
     /***************************************************************************
      *
-     * LINTING
+     * DEFAULT TASK
      *
      * Make sure we lint across all workspaces, the default task runs when
      * "npx projen default" (aka: "pj") is run. Default is also the first
      * step in the full "npx projen build" command.
      *
      **************************************************************************/
-
     project.defaultTask?.spawn(
       project.addTask("turbo:eslint", {
         description: "Lint all repos",
         exec: "pnpm turbo eslint",
+      })
+    );
+
+    /***************************************************************************
+     *
+     * BUILD - Pre Compile
+     *
+     * Make sure all subprojects also build before the root project builds.
+     *
+     **************************************************************************/
+
+    project.preCompileTask?.spawn(
+      project.addTask("turbo:build", {
+        description: "Lint all repos",
+        exec: "pnpm turbo build",
+      })
+    );
+
+    /***************************************************************************
+     *
+     * SYNTH TASK - Post Compile
+     *
+     * We want to synth all workspaces and packages during the build task's
+     * postCompile step.
+     *
+     **************************************************************************/
+
+    project.addTask("synth", {
+      description: "Synthesizes your cdk app into cdk.out",
+      exec: "pnpm turbo synth",
+    });
+
+    project.postCompileTask?.spawn(
+      project.addTask("synth:silent", {
+        description: "Synthesizes your cdk app into cdk.out",
+        exec: "pnpm turbo synth:silent",
       })
     );
 
@@ -68,27 +103,6 @@ export class TurboRepo extends Component {
 
     /***************************************************************************
      *
-     * SYNTH TASK
-     *
-     * We want to synth all workspaces and packages during the build task's
-     * postComkpile step.
-     *
-     **************************************************************************/
-
-    project.addTask("synth", {
-      description: "Synthesizes your cdk app into cdk.out",
-      exec: "pnpm turbo synth",
-    });
-
-    project.postCompileTask?.spawn(
-      project.addTask("synth:silent", {
-        description: "Synthesizes your cdk app into cdk.out",
-        exec: "pnpm turbo synth:silent",
-      })
-    );
-
-    /***************************************************************************
-     *
      * DECLARE ROOT BUILDFILE
      *
      **************************************************************************/
@@ -96,6 +110,10 @@ export class TurboRepo extends Component {
       obj: {
         $schema: "https://turborepo.org/schema.json",
         pipeline: {
+          build: {
+            dependsOn: ["^build"],
+            cache: false,
+          },
           eslint: {
             dependsOn: ["^eslint"],
             cache: false,
