@@ -62,6 +62,10 @@ project.npmignore!.exclude("/sites");
 project.npmignore!.exclude("/apps");
 project.npmignore!.exclude("node_modules");
 project.npmignore!.exclude("/**/*.spec.*");
+project.npmignore!.exclude(".gitattributes");
+project.npmignore!.exclude(".prettierignore");
+project.npmignore!.exclude(".prettierrc.json");
+project.npmignore!.exclude(".projenrc.ts");
 
 // make sure inline tests work
 project.jest!.addTestMatch("<rootDir>/(test|src)/**/*.(spec|test).ts?(x)");

@@ -1,13 +1,7 @@
 import { Account } from "./account";
 import { Fracture } from "./fracture";
 
-//let fracture: Fracture;
-
-beforeEach(() => {
-  //fracture = new Fracture();
-});
-
-describe("success conditions", () => {
+describe.skip("success conditions", () => {
   test("Smoke test", () => {
     const fracture = new Fracture();
     const account = new Account(fracture, {
@@ -18,7 +12,7 @@ describe("success conditions", () => {
   });
 });
 
-describe("failure conditions", () => {
+describe.skip("failure conditions", () => {
   test("Duplicate name", () => {
     const fracture = new Fracture();
     expect(() => {

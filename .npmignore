@@ -25,5 +25,10 @@ tsconfig.tsbuildinfo
 /apps
 node_modules
 /**/*.spec.*
+.gitattributes
+.prettierignore
+.prettierrc.json
+.projenrc.ts
 .turbo
 turbo.json
+pnpm-workspace.yaml

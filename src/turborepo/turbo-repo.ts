@@ -48,6 +48,7 @@ export class TurboRepo extends Component {
     project.addGitIgnore(".turbo");
     project.npmignore!.exclude(".turbo");
     project.npmignore!.exclude("turbo.json");
+    project.npmignore!.exclude("pnpm-workspace.yaml");
     project.addDevDeps("turbo");
 
     /***************************************************************************
