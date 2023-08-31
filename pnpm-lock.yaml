@@ -109,10 +109,10 @@ importers:
         specifier: ^27.5.1
         version: 27.5.1(ts-node@10.9.1)
       jest-junit:
-        specifier: ^15
+        specifier: ^15.0.0
         version: 15.0.0
       npm-check-updates:
-        specifier: ^16
+        specifier: ^16.13.2
         version: 16.13.2
       prettier:
         specifier: ^2.8.8

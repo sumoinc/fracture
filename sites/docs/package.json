@@ -18,8 +18,8 @@
   },
   "devDependencies": {
     "jest": "^27.5.1",
-    "jest-junit": "^15",
-    "npm-check-updates": "^16",
+    "jest-junit": "^15.0.0",
+    "npm-check-updates": "^16.13.2",
     "prettier": "^2.8.8",
     "projen": "^0.73.3",
     "vitepress": "1.0.0-rc.10"
