@@ -1,6 +1,7 @@
 import { TypeScriptProject } from "projen/lib/typescript";
 import { Site } from "./site";
 import { Environment } from "../core";
+import { AuthProvider } from "../workflows/auth-provider";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
@@ -27,7 +28,15 @@ describe("success conditions", () => {
       name: "us-east",
       accountNumber: "0000000000",
     });
-    const deployment = site.deployToAws(usEast);
+    const deployTask = site.addTask(`cdk:deploy:foo`, {
+      description: `Deploy the foo`,
+      exec: `echo 'deploying foo'`,
+    });
+    const deployment = site.deployToAws({
+      branchPrefix: "feature",
+      deployTask,
+      authProvider: AuthProvider.fromEnvironment(root, usEast),
+    });
     expect(deployment).toBeTruthy();
   });
 });

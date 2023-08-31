@@ -3,6 +3,7 @@ import { Environment } from "./core";
 import { FractureProject } from "./fracture-project";
 import { Site } from "./sites/site";
 import { synthFile } from "./util/test-util";
+import { AuthProvider } from "./workflows/auth-provider";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
@@ -30,9 +31,16 @@ describe("success conditions", () => {
       name: "us-east",
       accountNumber: "0000000000",
     });
-    const deployment = site.deployToAws(usEast);
+    const deployTask = site.addTask(`cdk:deploy:foo`, {
+      description: `Deploy the foo`,
+      exec: `echo 'deploying foo'`,
+    });
+    const deployment = site.deployToAws({
+      branchPrefix: "feature",
+      deployTask,
+      authProvider: AuthProvider.fromEnvironment(root, usEast),
+    });
     expect(deployment).toBeTruthy();
-
     const content = synthFile(root, `.github/workflows/deployment.yml`);
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();

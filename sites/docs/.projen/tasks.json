@@ -21,6 +21,15 @@
         }
       ]
     },
+    "cdk:deploy:foo": {
+      "name": "cdk:deploy:foo",
+      "description": "Deploy the foo",
+      "steps": [
+        {
+          "exec": "echo 'deploying foo'"
+        }
+      ]
+    },
     "compile": {
       "name": "compile",
       "description": "Only compile"

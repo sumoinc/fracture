@@ -3,6 +3,7 @@ import { TypeScriptProject } from "projen/lib/typescript";
 import { Environment } from "./src/core/environment";
 import { VsCodeConfiguration } from "./src/projen/vscode";
 import { VitePressSite } from "./src/sites/vitepress/vitepress-site";
+import { AuthProvider } from "./src/workflows/auth-provider";
 
 const authorName = "Cameron Childress";
 const authorAddress = "cameronc@sumoc.com";
@@ -93,12 +94,21 @@ const site = new VitePressSite(project, {
 });
 
 // define environment for docs to deploy to
-site.deployToAws(
-  new Environment(project, {
-    name: "us-east",
-    accountNumber: "0000000000",
-  })
-);
+
+const usEast = new Environment(project, {
+  name: "us-east",
+  accountNumber: "0000000000",
+});
+
+const deployTask = site.addTask(`cdk:deploy:foo`, {
+  description: `Deploy the foo`,
+  exec: `echo 'deploying foo'`,
+});
+site.deployToAws({
+  branchPrefix: "feature",
+  deployTask,
+  authProvider: AuthProvider.fromEnvironment(project, usEast),
+});
 
 // generate
 project.synth();

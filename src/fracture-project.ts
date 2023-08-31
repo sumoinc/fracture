@@ -4,9 +4,8 @@ import {
   Prettier,
 } from "projen/lib/javascript";
 import { SetOptional, SetRequired } from "type-fest";
-import { Environment } from "./core";
-import { AuthProvider } from "./workflows/auth-provider";
 import { DeploymentWorkflow } from "./workflows/deployment-workflow";
+import { DeployJobOptions } from "./workflows/jobs";
 
 export type FractureProjectOptions = SetRequired<
   SetOptional<NodeProjectOptions, "defaultReleaseBranch">,
@@ -36,22 +35,8 @@ export class FractureProject extends NodeProject {
     this.defaultTask?.reset();
   }
 
-  public deployToAws(environment: Environment) {
+  public deployToAws(options: DeployJobOptions) {
     // add to deployment workflow
-    const deploymentWorkflow = DeploymentWorkflow.of(this.parent);
-
-    const deployTask = this.parent.addTask(`cdk:deploy:${this.name}`, {
-      description: `Deploy the ${this.name}`,
-      exec: `echo 'deploying ${this.name}'`,
-    });
-    const authProvider = AuthProvider.fromEnvironment(this.parent, environment);
-
-    deploymentWorkflow.addDeployJob({
-      deployTask,
-      authProvider,
-    });
-
-    // const deployWorkflow = DeploymentWorkflow.of(this.parent);
-    return true;
+    return DeploymentWorkflow.of(this.parent).addDeployJob(options);
   }
 }

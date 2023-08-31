@@ -7,7 +7,7 @@ name: deployment
 on:
   push:
     branches:
-      - main
+      - feature/*
 jobs:
   build:
     name: Build
@@ -29,8 +29,8 @@ jobs:
         run: yarn install --check-files --frozen-lockfile
       - name: build
         run: npx projen build
-  deploy-main:
-    name: Deploy main
+  deploy-feature:
+    name: Deploy feature
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -38,7 +38,7 @@ jobs:
       id-token: write
     env:
       CI: \\"true\\"
-    if: startsWith( github.ref, 'refs/heads/main' )
+    if: startsWith( github.ref, 'refs/heads/feature' )
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -51,7 +51,7 @@ jobs:
           role-to-assume: arn:aws:iam::0000000000:role/GitHubDeploymentOIDCRole
           aws-region: us-east-1
           role-duration-seconds: 900
-      - name: cdk:deploy:my-site
-        run: npx projen cdk:deploy:my-site
+      - name: cdk:deploy:foo
+        run: npx projen cdk:deploy:foo
 "
 `;
