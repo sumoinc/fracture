@@ -45,16 +45,6 @@ const project = new TypeScriptProject({
     allowedUsernames: ["github-actions[bot]", "cameroncf"],
     label: "auto-approve",
   },
-
-  // needed to make axios work with jest
-  // see: https://stackoverflow.com/questions/73958968/cannot-use-import-statement-outside-a-module-with-axios
-  jestOptions: {
-    jestConfig: {
-      moduleNameMapper: {
-        axios: "axios/dist/node/axios.cjs",
-      },
-    },
-  },
 });
 
 // prevent docs and tests from being bundled with NPM
