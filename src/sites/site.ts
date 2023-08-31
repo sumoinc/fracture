@@ -2,6 +2,7 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
+import { Environment } from "../core";
 import { TurboRepo } from "../turborepo";
 
 export class Site extends TypeScriptProject {
@@ -13,4 +14,6 @@ export class Site extends TypeScriptProject {
     // make sure sites is configured as a workspace
     TurboRepo.of(parent).addWorkspaceRoot("sites");
   }
+
+  public deployTo(environment: Environment) {}
 }

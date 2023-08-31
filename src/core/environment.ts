@@ -1,8 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { Account } from "./account";
-import { Fracture } from "./fracture";
 import { REGION_IDENTITIER } from "./region";
 
 export interface EnvironmentOptions {
@@ -11,15 +10,13 @@ export interface EnvironmentOptions {
    */
   name: string;
   /**
-   * Account for this environment.
-   */
-  account?: Account;
-  /**
    * Account number for this environment.
    */
-  accountNumber?: string;
+  accountNumber: string;
   /**
    * Region for this envirnoment.
+   *
+   * @default us-east-1
    */
   region?: ValueOf<typeof REGION_IDENTITIER>;
 }
@@ -29,12 +26,12 @@ export class Environment extends Component {
    * Returns a environment by name, or undefined if it doesn't exist
    */
   public static byName(
-    fracture: Fracture,
+    project: NodeProject,
     name: string
   ): Environment | undefined {
     const isDefined = (c: Component): c is Environment =>
       c instanceof Environment && c.name === name;
-    return fracture.components.find(isDefined);
+    return project.components.find(isDefined);
   }
   /**
    * Friendly name for environment
@@ -46,57 +43,33 @@ export class Environment extends Component {
   public readonly accountNumber: string;
   /**
    * Region for this envirnoment.
+   *
+   * @default us-east-1
    */
   public readonly region: ValueOf<typeof REGION_IDENTITIER>;
 
-  constructor(fracture: Fracture, options: EnvironmentOptions) {
-    /***************************************************************************
-     * Resolve optional inputs
-     **************************************************************************/
-
-    if (options.account && options.accountNumber) {
-      throw new Error(
-        `Only one of "account" or "accountNumber" can be provided.`
-      );
-    }
-
-    if (!options.account && !options.accountNumber) {
-      options.accountNumber = fracture.defaultAccountNumber;
-    }
-
-    if (options.accountNumber) {
-      options.account =
-        Account.byAccountNumber(fracture, options.accountNumber) ??
-        new Account(fracture, {
-          name: `account-${options.accountNumber}`,
-          accountNumber: options.accountNumber,
-        });
-    }
-
+  constructor(
+    public readonly project: NodeProject,
+    options: EnvironmentOptions
+  ) {
     /***************************************************************************
      * Check Duplicates
      **************************************************************************/
 
     const name = paramCase(options.name);
 
-    if (Environment.byName(fracture, name)) {
+    if (Environment.byName(project, name)) {
       throw new Error(`Duplicate environment name "${name}".`);
     }
 
-    super(fracture);
+    super(project);
 
     /***************************************************************************
      * Set Props
      **************************************************************************/
 
     this.name = name;
-    this.accountNumber = options.account!.accountNumber;
-    this.region = options.region ?? fracture.defaultRegion;
-
-    /***************************************************************************
-     * Add to Fracture
-     **************************************************************************/
-
-    fracture.environments.push(this);
+    this.accountNumber = options.accountNumber;
+    this.region = options.region ?? "us-east-1";
   }
 }

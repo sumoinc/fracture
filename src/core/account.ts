@@ -1,37 +1,43 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { Fracture } from "./fracture";
+import { NodeProject } from "projen/lib/javascript";
 
 export interface AccountOptions {
   /**
    * Friendly name for account
    */
-  name: string;
+  name?: string;
   /**
    * Account Number for this account
    */
-  accountNumber?: string;
+  accountNumber: string;
 }
 
 export class Account extends Component {
   /**
    * Returns an account by name, or undefined if it doesn't exist
    */
-  public static byName(fracture: Fracture, name: string): Account | undefined {
+  public static byName(
+    project: NodeProject,
+    name: string
+  ): Account | undefined {
     const isDefined = (c: Component): c is Account =>
       c instanceof Account && c.name === name;
-    return fracture.components.find(isDefined);
+    return project.components.find(isDefined);
   }
   /**
    * Returns an account by number, or undefined if it doesn't exist
    */
   public static byAccountNumber(
-    fracture: Fracture,
+    project: NodeProject,
     accountNumber: string
   ): Account | undefined {
     const isDefined = (c: Component): c is Account =>
       c instanceof Account && c.accountNumber === accountNumber;
-    return fracture.components.find(isDefined);
+    return (
+      project.components.find(isDefined) ??
+      new Account(project, { accountNumber })
+    );
   }
   /**
    * Friendly name for account
@@ -42,23 +48,19 @@ export class Account extends Component {
    */
   public readonly accountNumber: string;
 
-  constructor(fracture: Fracture, options: AccountOptions) {
+  constructor(public readonly project: NodeProject, options: AccountOptions) {
     /***************************************************************************
      * Check Duplicates
      **************************************************************************/
 
-    const name = paramCase(options.name);
-    const accountNumber =
-      options.accountNumber ?? fracture.defaultAccountNumber;
+    const accountNumber = options.accountNumber;
+    const name = paramCase(`account-${accountNumber}`);
 
-    if (Account.byName(fracture, name)) {
-      throw new Error(`Duplicate account name "${name}".`);
-    }
-    if (Account.byAccountNumber(fracture, accountNumber)) {
+    if (Account.byAccountNumber(project, accountNumber)) {
       throw new Error(`Duplicate account number "${accountNumber}".`);
     }
 
-    super(fracture);
+    super(project);
 
     /***************************************************************************
      * Set Props
@@ -66,11 +68,5 @@ export class Account extends Component {
 
     this.name = name;
     this.accountNumber = accountNumber;
-
-    /***************************************************************************
-     * Add to Fracture
-     **************************************************************************/
-
-    fracture.accounts.push(this);
   }
 }

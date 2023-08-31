@@ -1,45 +1,25 @@
-import { Account } from "./account";
+import { NodeProject } from "projen/lib/javascript";
 import { Environment } from "./environment";
-import { Fracture } from "./fracture";
 
 describe("success conditions", () => {
-  test("using account", () => {
-    const fracture = new Fracture();
-    const account = new Account(fracture, {
-      name: "foo",
-      accountNumber: "123",
+  test("Smoke Test", () => {
+    const project = new NodeProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
     });
-    const environment = new Environment(fracture, {
+    const environment = new Environment(project, {
       name: "foo",
-      account,
-      region: "us-east-1",
+      accountNumber: "0000000000",
     });
     expect(environment).toBeTruthy();
   });
-  test("uses default accountNumber and region", () => {
-    const fracture = new Fracture();
-    const environment = new Environment(fracture, {
-      name: "foo",
+
+  test("using region", () => {
+    const project = new NodeProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
     });
-    expect(environment.accountNumber).toBe(fracture.defaultAccountNumber);
-    expect(environment.region).toBe(fracture.defaultRegion);
-  });
-  test("using undefined account", () => {
-    const fracture = new Fracture();
-    const environment = new Environment(fracture, {
-      name: "foo",
-      accountNumber: "123",
-      region: "us-east-1",
-    });
-    expect(environment).toBeTruthy();
-  });
-  test("using existing account number", () => {
-    const fracture = new Fracture();
-    new Account(fracture, {
-      name: "foo",
-      accountNumber: "123",
-    });
-    const environment = new Environment(fracture, {
+    const environment = new Environment(project, {
       name: "foo",
       accountNumber: "123",
       region: "us-east-1",
@@ -50,14 +30,17 @@ describe("success conditions", () => {
 
 describe("failure conditions", () => {
   test("Duplicate name", () => {
-    const fracture = new Fracture();
+    const project = new NodeProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
+    });
     expect(() => {
-      new Environment(fracture, {
+      new Environment(project, {
         name: "foo",
         accountNumber: "123",
         region: "us-east-1",
       });
-      new Environment(fracture, {
+      new Environment(project, {
         name: "foo",
         accountNumber: "123",
         region: "us-east-1",

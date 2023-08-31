@@ -11,7 +11,6 @@ import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { FractureService, FractureServiceOptions } from "./fracture-service";
 import { REGION_IDENTITIER } from "./region";
 import { VsCodeConfiguration } from "../projen";
-import { Pipeline, PipelineOptions } from "../workflows";
 
 export interface FractureOptions extends Partial<TypeScriptProjectOptions> {
   /**
@@ -122,10 +121,7 @@ export class Fracture extends TypeScriptProject {
    * All apps in this project.
    */
   public readonly apps: Array<FractureApp> = [];
-  /**
-   * Deployment Pipelines
-   */
-  public readonly pipelines: Array<Pipeline> = [];
+
   /**
    * Deployment Environments
    */
@@ -186,11 +182,13 @@ export class Fracture extends TypeScriptProject {
      * BRANCH STRATEGY & PIPELINES
      **************************************************************************/
 
+    /*
     mergedOptions.branchNames.forEach((branchName) => {
       this.addPipeline({
         branchName,
       });
     });
+    */
 
     /***************************************************************************
      * VS CODE
@@ -215,11 +213,6 @@ export class Fracture extends TypeScriptProject {
     const service = new FractureService(this, options);
     this.services.push(service);
     return service;
-  }
-  public addPipeline(options: PipelineOptions) {
-    const pipeline = new Pipeline(this, options);
-    this.pipelines.push(pipeline);
-    return pipeline;
   }
 
   public addEnvironment(options: EnvironmentOptions) {

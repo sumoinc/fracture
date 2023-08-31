@@ -1,5 +1,6 @@
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
+import { Environment } from "./src/core/environment";
 import { VsCodeConfiguration } from "./src/projen/vscode";
 import { VitePressSite } from "./src/sites/vitepress/vitepress-site";
 
@@ -98,6 +99,11 @@ new VitePressSite(project, {
 });
 
 // define environment for docs to deploy to
+new Environment(project, {
+  name: "us-east",
+  accountNumber: "0000000000",
+  region: "us-east-1",
+});
 
 // generate
 project.synth();
