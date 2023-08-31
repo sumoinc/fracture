@@ -5,3 +5,4 @@ export * from "./projen";
 export * from "./workflows";
 export * from "./turborepo";
 export * from "./util";
+export * from "./workflows";
