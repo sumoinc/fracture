@@ -1,9 +1,9 @@
 import { paramCase } from "change-case";
 import { Task } from "projen";
 import { Job, JobPermission } from "projen/lib/github/workflows-model";
-import { SetOptional, ValueOf } from "type-fest";
+import { SetOptional } from "type-fest";
 import { WorkflowJob, WorkflowJobOptions } from "./workflow-job";
-import { REGION_IDENTITIER } from "../../core";
+import { AuthProvider } from "../auth-provider";
 import { renderDeploySteps } from "../steps/deploy-steps";
 import { renderDownloadArtifactSteps } from "../steps/download-artifact-steps";
 import { renderSetupNodeSteps } from "../steps/setup-node-steps";
@@ -31,13 +31,9 @@ export interface DeployJobOptions
   readonly deployTask: Task;
 
   /**
-   * AWS OIDC Credentials, if deploying to AWS
+   * Authprovider for this deployment
    */
-  readonly awsOidcCredentials?: {
-    roleToAssume: string;
-    awsRegion: ValueOf<typeof REGION_IDENTITIER>;
-    roleDurationSeconds: number;
-  };
+  readonly authProvider: AuthProvider;
 }
 
 export class DeployJob extends WorkflowJob {
@@ -61,13 +57,9 @@ export class DeployJob extends WorkflowJob {
   readonly deployTask: Task;
 
   /**
-   * AWS OIDC Credentials, if deploying to AWS
+   * Authprovider for this deployment
    */
-  readonly awsOidcCredentials?: {
-    roleToAssume: string;
-    awsRegion: ValueOf<typeof REGION_IDENTITIER>;
-    roleDurationSeconds: number;
-  };
+  readonly authProvider: AuthProvider;
 
   constructor(public readonly workflow: Workflow, options: DeployJobOptions) {
     const branchPattern = options.branchPattern ?? "main";
@@ -84,7 +76,7 @@ export class DeployJob extends WorkflowJob {
     this.branchPattern = branchPattern;
     this.needs = [workflow.buildJob.jobId, ...(options.needs ?? [])];
     this.deployTask = options.deployTask;
-    this.awsOidcCredentials = options.awsOidcCredentials;
+    this.authProvider = options.authProvider;
 
     // make sure build stores these
     workflow.buildJob.artifactDirectories.push(...this.artifactDirectories);
@@ -105,7 +97,7 @@ export class DeployJob extends WorkflowJob {
       },
       permissions: {
         contents: JobPermission.READ,
-        ...(this.awsOidcCredentials
+        ...(this.authProvider.authProviderType === "GITHUB_OIDC"
           ? {
               idToken: JobPermission.WRITE,
             }

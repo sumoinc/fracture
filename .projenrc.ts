@@ -12,7 +12,6 @@ const project = new TypeScriptProject({
   defaultReleaseBranch: "main",
   name: "@sumoc/fracture",
   description: "The fracture library.",
-  license: "MIT",
   repository: repository,
   authorName,
   authorOrganization: true,

@@ -1,6 +1,7 @@
 import { TypeScriptProject } from "projen/lib/typescript";
 import { BuildJob } from "./build-job";
 import { DeployJob } from "./deploy-job";
+import { AuthProvider, AuthProviderType } from "../auth-provider";
 import { Workflow } from "../workflow";
 
 describe("success conditions", () => {
@@ -30,9 +31,18 @@ describe("success conditions", () => {
       description: "Deploy the service",
       exec: "echo 'deploying'",
     });
+    const authProvider = new AuthProvider(project, {
+      authProviderType: AuthProviderType.GITHUB_OIDC,
+      credentialsOidc: {
+        roleToAssume: "foo",
+        roleDurationSeconds: 900,
+        awsRegion: "us-east-1",
+      },
+    });
     new DeployJob(workflow, {
       artifactDirectories: ["dist", "some/other/folder"],
       deployTask,
+      authProvider,
     });
     expect(workflow.buildJob).toBeTruthy();
     expect(workflow.buildJob.render()).toMatchSnapshot();

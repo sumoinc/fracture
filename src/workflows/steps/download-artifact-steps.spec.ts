@@ -1,6 +1,7 @@
 import { TypeScriptProject } from "projen/lib/typescript";
 
 import { renderDownloadArtifactSteps } from "./download-artifact-steps";
+import { AuthProvider, AuthProviderType } from "../auth-provider";
 import { DeployJob } from "../jobs/deploy-job";
 import { Workflow } from "../workflow";
 
@@ -17,7 +18,15 @@ describe("success conditions", () => {
       description: "Deploy the service",
       exec: "echo 'deploying'",
     });
-    const deployJob = new DeployJob(workflow, { deployTask });
+    const authProvider = new AuthProvider(project, {
+      authProviderType: AuthProviderType.GITHUB_OIDC,
+      credentialsOidc: {
+        roleToAssume: "foo",
+        roleDurationSeconds: 900,
+        awsRegion: "us-east-1",
+      },
+    });
+    const deployJob = new DeployJob(workflow, { deployTask, authProvider });
     const artifactSteps = renderDownloadArtifactSteps(deployJob);
     expect(artifactSteps).toBeTruthy();
     expect(artifactSteps).toMatchSnapshot();
@@ -36,9 +45,18 @@ describe("success conditions", () => {
       description: "Deploy the service",
       exec: "echo 'deploying'",
     });
+    const authProvider = new AuthProvider(project, {
+      authProviderType: AuthProviderType.GITHUB_OIDC,
+      credentialsOidc: {
+        roleToAssume: "foo",
+        roleDurationSeconds: 900,
+        awsRegion: "us-east-1",
+      },
+    });
     const deployJob = new DeployJob(workflow, {
       artifactDirectories: ["some/other/folder/cdk.out"],
       deployTask,
+      authProvider,
     });
     const artifactSteps = renderDownloadArtifactSteps(deployJob);
     expect(artifactSteps).toBeTruthy();

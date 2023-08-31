@@ -24,7 +24,6 @@ describe("success conditions", () => {
       defaultReleaseBranch: "main",
     });
     expect(vitePressSite).toBeTruthy();
-
     // console.log(vitePressSite.buildTask.name);
   });
 });

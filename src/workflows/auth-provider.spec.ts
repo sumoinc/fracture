@@ -11,7 +11,7 @@ describe("success conditions", () => {
       authProviderType: AuthProviderType.GITHUB_OIDC,
       credentialsOidc: {
         roleToAssume: "foo",
-        roleDurationSeconds: 100,
+        roleDurationSeconds: 900,
         awsRegion: "us-east-1",
       },
     });

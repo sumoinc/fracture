@@ -1,27 +1,33 @@
+import { join } from "path";
 import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
 import { Environment } from "../core";
+import { Settings } from "../core/fracture-settings";
+import { FractureProject } from "../fracture-project";
 import { TurboRepo } from "../turborepo";
-import { DeploymentWorkflow } from "../workflows/deployment-workflow";
 
-export class Site extends NodeProject {
+export class Site extends FractureProject {
   constructor(
     public readonly parent: NodeProject,
     options: NodeProjectOptions
   ) {
-    super({
-      parent,
-      ...options,
-    });
+    // grab settings from parent project
+    const { appRoot } = Settings.of(parent);
 
     // make sure sites is configured as a workspace
-    TurboRepo.of(parent).addWorkspaceRoot("sites");
+    TurboRepo.of(parent).addWorkspaceRoot(appRoot);
+
+    super(parent, {
+      outdir: join(appRoot, options.name),
+      ...options,
+    });
   }
 
-  public deployTo(environment: Environment) {
-    if (!this.parent) {
-      throw new Error("Site must have a parent project");
-    }
+  public deployToAws(environment: Environment) {
+    console.log(environment.name);
 
-    const deployWorkflow = DeploymentWorkflow.of(this.parent);
+    // build hosting app / stacks
+
+    // const deployWorkflow = DeploymentWorkflow.of(this.parent);
+    return true;
   }
 }

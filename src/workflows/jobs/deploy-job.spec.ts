@@ -1,5 +1,6 @@
 import { TypeScriptProject } from "projen/lib/typescript";
 import { DeployJob } from "./deploy-job";
+import { AuthProvider, AuthProviderType } from "../auth-provider";
 import { Workflow } from "../workflow";
 
 describe("success conditions", () => {
@@ -15,8 +16,17 @@ describe("success conditions", () => {
       description: "Deploy the service",
       exec: "echo 'deploying'",
     });
+    const authProvider = new AuthProvider(project, {
+      authProviderType: AuthProviderType.GITHUB_OIDC,
+      credentialsOidc: {
+        roleToAssume: "foo",
+        roleDurationSeconds: 900,
+        awsRegion: "us-east-1",
+      },
+    });
     const deployJob = new DeployJob(workflow, {
       deployTask,
+      authProvider,
     });
     expect(deployJob).toBeTruthy();
     expect(deployJob.render()).toMatchSnapshot();
@@ -35,13 +45,23 @@ describe("success conditions", () => {
       description: "Deploy the service",
       exec: "echo 'deploying'",
     });
+    const authProvider = new AuthProvider(project, {
+      authProviderType: AuthProviderType.GITHUB_OIDC,
+      credentialsOidc: {
+        roleToAssume: "foo",
+        roleDurationSeconds: 900,
+        awsRegion: "us-east-1",
+      },
+    });
     const deployJobOne = new DeployJob(workflow, {
       name: "Deploy Service One",
       deployTask,
+      authProvider,
     });
     const deployJobTwo = new DeployJob(workflow, {
       name: "Deploy Service Two",
       deployTask,
+      authProvider,
     });
     deployJobTwo.dependsOn(deployJobOne);
     expect(deployJobOne).toBeTruthy();
@@ -64,10 +84,19 @@ describe("success conditions", () => {
       description: "Deploy the service",
       exec: "echo 'deploying'",
     });
+    const authProvider = new AuthProvider(project, {
+      authProviderType: AuthProviderType.GITHUB_OIDC,
+      credentialsOidc: {
+        roleToAssume: "foo",
+        roleDurationSeconds: 900,
+        awsRegion: "us-east-1",
+      },
+    });
     const deployJob = new DeployJob(workflow, {
       name: "Deploy Service Foo",
       artifactDirectories: ["foo", "bar"],
       deployTask,
+      authProvider,
     });
     expect(deployJob).toBeTruthy();
     expect(deployJob.render()).toMatchSnapshot();

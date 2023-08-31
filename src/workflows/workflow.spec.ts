@@ -1,4 +1,5 @@
 import { TypeScriptProject } from "projen/lib/typescript";
+import { AuthProvider, AuthProviderType } from "./auth-provider";
 import { Workflow } from "./workflow";
 import { synthFile } from "../util/test-util";
 
@@ -26,15 +27,19 @@ describe("success conditions", () => {
       description: "Deploy the service",
       exec: "echo 'deploying'",
     });
+    const authProvider = new AuthProvider(project, {
+      authProviderType: AuthProviderType.GITHUB_OIDC,
+      credentialsOidc: {
+        roleToAssume: "foo",
+        roleDurationSeconds: 900,
+        awsRegion: "us-east-1",
+      },
+    });
     workflow.addDeployJob({
       name: "Deploy Service Foo",
       artifactDirectories: ["foo"],
       deployTask,
-      awsOidcCredentials: {
-        roleToAssume: "foo",
-        awsRegion: "us-east-1",
-        roleDurationSeconds: 900,
-      },
+      authProvider,
     });
     const content = synthFile(project, `.github/workflows/my-workflow.yml`);
     expect(content).toBeTruthy();
