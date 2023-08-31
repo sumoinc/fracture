@@ -96,9 +96,6 @@ Object {
         Object {
           "exec": "node .projenrc.js",
         },
-        Object {
-          "spawn": "turbo:eslint",
-        },
       ],
     },
     "eject": Object {
@@ -155,11 +152,6 @@ Object {
     "post-compile": Object {
       "description": "Runs after successful compilation",
       "name": "post-compile",
-      "steps": Array [
-        Object {
-          "spawn": "synth:silent",
-        },
-      ],
     },
     "post-upgrade": Object {
       "description": "Runs after upgrading dependencies",
@@ -168,11 +160,6 @@ Object {
     "pre-compile": Object {
       "description": "Prepare the project for compilation",
       "name": "pre-compile",
-      "steps": Array [
-        Object {
-          "spawn": "turbo:build",
-        },
-      ],
     },
     "release": Object {
       "description": "Prepare a release from \\"main\\" branch",
@@ -198,24 +185,6 @@ Object {
         },
       ],
     },
-    "synth": Object {
-      "description": "Synthesizes your cdk app into cdk.out",
-      "name": "synth",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo synth",
-        },
-      ],
-    },
-    "synth:silent": Object {
-      "description": "Synthesizes your cdk app into cdk.out",
-      "name": "synth:silent",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo synth:silent",
-        },
-      ],
-    },
     "test": Object {
       "description": "Run tests",
       "name": "test",
@@ -227,9 +196,6 @@ Object {
         Object {
           "spawn": "eslint",
         },
-        Object {
-          "spawn": "turbo:test",
-        },
       ],
     },
     "test:watch": Object {
@@ -238,33 +204,6 @@ Object {
       "steps": Array [
         Object {
           "exec": "jest --watch",
-        },
-      ],
-    },
-    "turbo:build": Object {
-      "description": "Lint all repos",
-      "name": "turbo:build",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo build",
-        },
-      ],
-    },
-    "turbo:eslint": Object {
-      "description": "Lint all repos",
-      "name": "turbo:eslint",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo eslint",
-        },
-      ],
-    },
-    "turbo:test": Object {
-      "description": "Lint all repos",
-      "name": "turbo:test",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo test",
         },
       ],
     },
