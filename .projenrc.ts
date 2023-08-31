@@ -15,7 +15,7 @@ const project = new TypeScriptProject({
   repository: repository,
   authorName,
   authorOrganization: true,
-  copyrightOwner: authorName,
+  // copyrightOwner: authorName,
   authorEmail: authorAddress,
   releaseToNpm: true,
   devDeps: [],
