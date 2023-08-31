@@ -1,12 +1,12 @@
 import { Component, JsonFile, Task, YamlFile } from "projen";
-import { TypeScriptProject } from "projen/lib/typescript";
+import { NodeProject } from "projen/lib/javascript";
 
 export class TurboRepo extends Component {
   /**
    * Returns the `TurboRepo` component of a project or creates one if it
    * doesn't exist yet. Singleton?
    */
-  public static of(project: TypeScriptProject): TurboRepo {
+  public static of(project: NodeProject): TurboRepo {
     const isTurboRepo = (c: Component): c is TurboRepo =>
       c instanceof TurboRepo;
     return project.components.find(isTurboRepo) ?? new TurboRepo(project);
@@ -42,7 +42,7 @@ export class TurboRepo extends Component {
    */
   public readonly diffTask: Task;
 
-  constructor(project: TypeScriptProject) {
+  constructor(public readonly project: NodeProject) {
     super(project);
 
     project.addGitIgnore(".turbo");

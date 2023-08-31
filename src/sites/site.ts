@@ -1,13 +1,15 @@
-import {
-  TypeScriptProject,
-  TypeScriptProjectOptions,
-} from "projen/lib/typescript";
+import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
 import { Environment } from "../core";
 import { TurboRepo } from "../turborepo";
+import { DeploymentWorkflow } from "../workflows/deployment-workflow";
 
-export class Site extends TypeScriptProject {
-  constructor(parent: TypeScriptProject, options: TypeScriptProjectOptions) {
+export class Site extends NodeProject {
+  constructor(
+    public readonly parent: NodeProject,
+    options: NodeProjectOptions
+  ) {
     super({
+      parent,
       ...options,
     });
 
@@ -15,5 +17,11 @@ export class Site extends TypeScriptProject {
     TurboRepo.of(parent).addWorkspaceRoot("sites");
   }
 
-  public deployTo(environment: Environment) {}
+  public deployTo(environment: Environment) {
+    if (!this.parent) {
+      throw new Error("Site must have a parent project");
+    }
+
+    const deployWorkflow = DeploymentWorkflow.of(this.parent);
+  }
 }
