@@ -157,6 +157,9 @@
       "steps": [
         {
           "spawn": "synth:silent"
+        },
+        {
+          "spawn": "site:build"
         }
       ]
     },
@@ -189,6 +192,15 @@
         },
         {
           "exec": "git diff --ignore-space-at-eol --exit-code"
+        }
+      ]
+    },
+    "site:build": {
+      "name": "site:build",
+      "description": "Synthesizes your cdk app into cdk.out",
+      "steps": [
+        {
+          "exec": "pnpm turbo site:build"
         }
       ]
     },
@@ -237,7 +249,7 @@
     },
     "turbo:test": {
       "name": "turbo:test",
-      "description": "Test all subprojects",
+      "description": "Test subprojects",
       "steps": [
         {
           "exec": "pnpm turbo test"
@@ -271,7 +283,7 @@
           "exec": "pnpm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --upgrade --target=minor --filter=@aws-sdk/smithy-client,@aws-sdk/types,@types/jest,@types/node,@types/uuid,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,turbo,typescript,@aws-sdk/client-dynamodb,@aws-sdk/lib-dynamodb,@aws-sdk/util-dynamodb,@faker-js/faker,@types/aws-lambda,change-case,type-fest,uuid"
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-sdk/smithy-client,@aws-sdk/types,@types/jest,@types/node,@types/uuid,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,turbo,typescript,@aws-sdk/client-dynamodb,@aws-sdk/lib-dynamodb,@aws-sdk/util-dynamodb,@faker-js/faker,@types/aws-lambda,change-case,type-fest,uuid"
         },
         {
           "exec": "pnpm i --no-frozen-lockfile"

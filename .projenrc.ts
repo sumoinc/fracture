@@ -93,7 +93,6 @@ const site = new VitePressSite(project, {
 });
 
 // define environment for docs to deploy to
-
 site.deployToAws(
   new Environment(project, {
     name: "us-east",

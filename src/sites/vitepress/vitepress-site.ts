@@ -46,18 +46,15 @@ export class VitePressSite extends Site {
      * Add some shortcut commends that vitepress devs will expect to exist.
      */
     // add commands to run vitepress
-    this.addTask("docs:dev", {
+    this.addTask("site:dev", {
       exec: "pnpm vitepress dev",
     });
-    this.addTask("docs:preview", {
+    this.addTask("site:preview", {
       exec: "pnpm vitepress preview",
     });
-    // make sure build runs during a full build as well
-    this.preCompileTask.spawn(
-      this.addTask("docs:build", {
-        exec: "pnpm vitepress build",
-      })
-    );
+    this.addTask("site:build", {
+      exec: "pnpm vitepress build",
+    });
 
     // make sure we compile docs as part of standard default build
     // parent.compileTask.spawn(this.buildTask);

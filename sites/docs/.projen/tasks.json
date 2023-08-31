@@ -29,30 +29,6 @@
       "name": "default",
       "description": "Synthesize project files"
     },
-    "docs:build": {
-      "name": "docs:build",
-      "steps": [
-        {
-          "exec": "pnpm vitepress build"
-        }
-      ]
-    },
-    "docs:dev": {
-      "name": "docs:dev",
-      "steps": [
-        {
-          "exec": "pnpm vitepress dev"
-        }
-      ]
-    },
-    "docs:preview": {
-      "name": "docs:preview",
-      "steps": [
-        {
-          "exec": "pnpm vitepress preview"
-        }
-      ]
-    },
     "install": {
       "name": "install",
       "description": "Install project dependencies and update lockfile (non-frozen)",
@@ -85,10 +61,29 @@
     },
     "pre-compile": {
       "name": "pre-compile",
-      "description": "Prepare the project for compilation",
+      "description": "Prepare the project for compilation"
+    },
+    "site:build": {
+      "name": "site:build",
       "steps": [
         {
-          "spawn": "docs:build"
+          "exec": "pnpm vitepress build"
+        }
+      ]
+    },
+    "site:dev": {
+      "name": "site:dev",
+      "steps": [
+        {
+          "exec": "pnpm vitepress dev"
+        }
+      ]
+    },
+    "site:preview": {
+      "name": "site:preview",
+      "steps": [
+        {
+          "exec": "pnpm vitepress preview"
         }
       ]
     },
@@ -122,7 +117,7 @@
           "exec": "pnpm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --upgrade --target=minor --filter=jest,jest-junit,npm-check-updates,prettier,projen,vitepress"
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=jest,jest-junit,npm-check-updates,prettier,projen,vitepress"
         },
         {
           "exec": "pnpm i --no-frozen-lockfile"

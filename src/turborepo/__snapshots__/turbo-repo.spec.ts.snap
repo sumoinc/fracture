@@ -152,6 +152,14 @@ Object {
     "post-compile": Object {
       "description": "Runs after successful compilation",
       "name": "post-compile",
+      "steps": Array [
+        Object {
+          "spawn": "synth:silent",
+        },
+        Object {
+          "spawn": "site:build",
+        },
+      ],
     },
     "post-upgrade": Object {
       "description": "Runs after upgrading dependencies",
@@ -185,6 +193,33 @@ Object {
         },
       ],
     },
+    "site:build": Object {
+      "description": "Synthesizes your cdk app into cdk.out",
+      "name": "site:build",
+      "steps": Array [
+        Object {
+          "exec": "pnpm turbo site:build",
+        },
+      ],
+    },
+    "synth": Object {
+      "description": "Synthesizes your cdk app into cdk.out",
+      "name": "synth",
+      "steps": Array [
+        Object {
+          "exec": "pnpm turbo synth",
+        },
+      ],
+    },
+    "synth:silent": Object {
+      "description": "Synthesizes your cdk app into cdk.out",
+      "name": "synth:silent",
+      "steps": Array [
+        Object {
+          "exec": "pnpm turbo synth:silent",
+        },
+      ],
+    },
     "test": Object {
       "description": "Run tests",
       "name": "test",
@@ -211,7 +246,7 @@ Object {
       ],
     },
     "turbo:test": Object {
-      "description": "Lint all repos",
+      "description": "Test subprojects",
       "name": "turbo:test",
       "steps": Array [
         Object {
@@ -246,7 +281,7 @@ Object {
           "exec": "yarn upgrade npm-check-updates",
         },
         Object {
-          "exec": "npm-check-updates --upgrade --target=minor --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,npm-check-updates,projen,standard-version,ts-jest,turbo,typescript",
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,npm-check-updates,projen,standard-version,ts-jest,turbo,typescript",
         },
         Object {
           "exec": "yarn install --check-files",

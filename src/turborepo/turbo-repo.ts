@@ -60,24 +60,7 @@ export class TurboRepo extends Component {
 
     /***************************************************************************
      *
-     * Pre Compile
-     *
-     * Make sure any subprojects
-     *
-     **************************************************************************/
-
-    /*
-    project.preCompileTask?.spawn(
-      project.addTask("turbo:build", {
-        description: "Lint all repos",
-        exec: "pnpm turbo build",
-      })
-    );
-    */
-
-    /***************************************************************************
-     *
-     * SYNTH TASK - Post Compile
+     * SYNTH TASK
      *
      * We want to synth all workspaces and packages during the build task's
      * postCompile step.
@@ -98,9 +81,24 @@ export class TurboRepo extends Component {
 
     /***************************************************************************
      *
+     * SITE BUILD TASK
+     *
+     * Look for any sites that need to be built.
+     *
+     **************************************************************************/
+
+    project.postCompileTask?.spawn(
+      project.addTask("site:build", {
+        description: "Synthesizes your cdk app into cdk.out",
+        exec: "pnpm turbo site:build",
+      })
+    );
+
+    /***************************************************************************
+     *
      * TESTING
      *
-     * Runs test on subprojects once the root upgrade task finishes.
+     * Runs test on subprojects once the root test task finishes.
      *
      **************************************************************************/
 
@@ -116,27 +114,17 @@ export class TurboRepo extends Component {
 
     /***************************************************************************
      *
-     * UPGRADE
-     *
-     * Runs upgrade on subprojects once the root upgrade task finishes.
-     *
-     **************************************************************************/
-
-    const upgradeTask = project.tasks.tryFind("upgrade");
-    if (upgradeTask) {
-      upgradeTask.spawn(
-        project.addTask("turbo:upgrade", {
-          description: "Upgrade subprojects",
-          exec: "pnpm turbo upgrade",
-        })
-      );
-    }
-
-    /***************************************************************************
-     *
      * DECLARE ROOT BUILDFILE
      *
      **************************************************************************/
+  }
+
+  addWorkspaceRoot(path: string) {
+    this.workspaceRoots.push(path);
+  }
+
+  preSynthesize(): void {
+    // turbo config file
     new JsonFile(this.project, "turbo.json", {
       obj: {
         $schema: "https://turborepo.org/schema.json",
@@ -144,6 +132,11 @@ export class TurboRepo extends Component {
           eslint: {
             dependsOn: ["^eslint"],
             cache: false,
+          },
+          ["site:build"]: {
+            dependsOn: ["^site:build"],
+            outputs: [".vitepress/dist/**"],
+            outputMode: "new-only",
           },
           synth: {
             dependsOn: ["^synth"],
@@ -160,20 +153,10 @@ export class TurboRepo extends Component {
             outputs: ["coverage**", "test-reports/**", "**/__snapshots__/**"],
             outputMode: "new-only",
           },
-          upgrade: {
-            dependsOn: ["^upgrade"],
-            cache: false,
-          },
         },
       },
     });
-  }
 
-  addWorkspaceRoot(path: string) {
-    this.workspaceRoots.push(path);
-  }
-
-  preSynthesize(): void {
     // workspace config file
     new YamlFile(this.project, "pnpm-workspace.yaml", {
       obj: {
