@@ -27,13 +27,7 @@
     },
     "default": {
       "name": "default",
-      "description": "Synthesize project files",
-      "steps": [
-        {
-          "exec": "npx projen default",
-          "cwd": "../.."
-        }
-      ]
+      "description": "Synthesize project files"
     },
     "docs:build": {
       "name": "docs:build",

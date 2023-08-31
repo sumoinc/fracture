@@ -196,6 +196,9 @@ Object {
         Object {
           "spawn": "eslint",
         },
+        Object {
+          "spawn": "turbo:test",
+        },
       ],
     },
     "test:watch": Object {
@@ -204,6 +207,15 @@ Object {
       "steps": Array [
         Object {
           "exec": "jest --watch",
+        },
+      ],
+    },
+    "turbo:test": Object {
+      "description": "Lint all repos",
+      "name": "turbo:test",
+      "steps": Array [
+        Object {
+          "exec": "pnpm turbo test",
         },
       ],
     },

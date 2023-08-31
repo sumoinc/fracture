@@ -41,6 +41,15 @@
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
     },
+    "cdk:deploy:docs": {
+      "name": "cdk:deploy:docs",
+      "description": "Deploy the docs",
+      "steps": [
+        {
+          "exec": "echo 'deploying docs'"
+        }
+      ]
+    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",
@@ -144,7 +153,12 @@
     },
     "post-compile": {
       "name": "post-compile",
-      "description": "Runs after successful compilation"
+      "description": "Runs after successful compilation",
+      "steps": [
+        {
+          "spawn": "synth:silent"
+        }
+      ]
     },
     "post-upgrade": {
       "name": "post-upgrade",
@@ -178,6 +192,24 @@
         }
       ]
     },
+    "synth": {
+      "name": "synth",
+      "description": "Synthesizes your cdk app into cdk.out",
+      "steps": [
+        {
+          "exec": "pnpm turbo synth"
+        }
+      ]
+    },
+    "synth:silent": {
+      "name": "synth:silent",
+      "description": "Synthesizes your cdk app into cdk.out",
+      "steps": [
+        {
+          "exec": "pnpm turbo synth:silent"
+        }
+      ]
+    },
     "test": {
       "name": "test",
       "description": "Run tests",
@@ -188,6 +220,9 @@
         },
         {
           "spawn": "eslint"
+        },
+        {
+          "spawn": "turbo:test"
         }
       ]
     },
@@ -197,6 +232,15 @@
       "steps": [
         {
           "exec": "jest --watch"
+        }
+      ]
+    },
+    "turbo:test": {
+      "name": "turbo:test",
+      "description": "Test all subprojects",
+      "steps": [
+        {
+          "exec": "pnpm turbo test"
         }
       ]
     },

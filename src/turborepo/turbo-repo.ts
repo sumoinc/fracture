@@ -60,9 +60,9 @@ export class TurboRepo extends Component {
 
     /***************************************************************************
      *
-     * BUILD - Pre Compile
+     * Pre Compile
      *
-     * Make sure all subprojects also build before the root project builds.
+     * Make sure any subprojects
      *
      **************************************************************************/
 
@@ -84,7 +84,6 @@ export class TurboRepo extends Component {
      *
      **************************************************************************/
 
-    /*
     project.addTask("synth", {
       description: "Synthesizes your cdk app into cdk.out",
       exec: "pnpm turbo synth",
@@ -96,24 +95,43 @@ export class TurboRepo extends Component {
         exec: "pnpm turbo synth:silent",
       })
     );
-    */
 
     /***************************************************************************
      *
      * TESTING
      *
-     * This runs turbo:test after the default root test finishes running. This
-     * is annoying but in most cases the root project won't have any tests anyway.
+     * Runs test on subprojects once the root upgrade task finishes.
+     *
+     **************************************************************************/
+
+    const testTask = project.tasks.tryFind("test");
+    if (testTask) {
+      testTask.spawn(
+        project.addTask("turbo:test", {
+          description: "Test all subprojects",
+          exec: "pnpm turbo test",
+        })
+      );
+    }
+
+    /***************************************************************************
+     *
+     * UPGRADE
+     *
+     * Runs upgrade on subprojects once the root upgrade task finishes.
      *
      **************************************************************************/
 
     /*
-    project.testTask.spawn(
-      project.addTask("turbo:test", {
-        description: "Lint all repos",
-        exec: "pnpm turbo test",
-      })
-    );
+    const upgradeTask = project.tasks.tryFind("upgrade");
+    if (upgradeTask) {
+      upgradeTask.spawn(
+        project.addTask("turbo:upgrade", {
+          description: "Upgrade All subprojects",
+          exec: "pnpm turbo test",
+        })
+      );
+    }
     */
 
     /***************************************************************************
@@ -125,10 +143,6 @@ export class TurboRepo extends Component {
       obj: {
         $schema: "https://turborepo.org/schema.json",
         pipeline: {
-          build: {
-            dependsOn: ["^build"],
-            cache: false,
-          },
           eslint: {
             dependsOn: ["^eslint"],
             cache: false,
@@ -147,6 +161,10 @@ export class TurboRepo extends Component {
             dependsOn: ["^test"],
             outputs: ["coverage**", "test-reports/**", "**/__snapshots__/**"],
             outputMode: "new-only",
+          },
+          upgrade: {
+            dependsOn: ["^upgrade"],
+            cache: false,
           },
         },
       },

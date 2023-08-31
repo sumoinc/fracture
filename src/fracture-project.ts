@@ -31,6 +31,9 @@ export class FractureProject extends NodeProject {
 
     // don't package
     this.packageTask.reset();
+    // don't allow default to run in subprojects, otherwise it runs root and
+    // causes unwanted recusion.
+    this.defaultTask?.reset();
   }
 
   public deployToAws(environment: Environment) {

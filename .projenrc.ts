@@ -87,17 +87,19 @@ new VsCodeConfiguration(project);
 
 // build out documentation site
 
-new VitePressSite(project, {
+const site = new VitePressSite(project, {
   name: "docs",
   defaultReleaseBranch: "main",
 });
 
 // define environment for docs to deploy to
-new Environment(project, {
-  name: "us-east",
-  accountNumber: "0000000000",
-  region: "us-east-1",
-});
+
+site.deployToAws(
+  new Environment(project, {
+    name: "us-east",
+    accountNumber: "0000000000",
+  })
+);
 
 // generate
 project.synth();
