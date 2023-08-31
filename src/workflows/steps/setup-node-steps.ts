@@ -2,7 +2,10 @@ import { JobStep } from "projen/lib/github/workflows-model";
 import { NodePackageManager } from "projen/lib/javascript";
 import { Workflow } from "../workflow";
 
-export const renderSetupNodeSteps = (workflow: Workflow): Array<JobStep> => {
+export const renderSetupNodeSteps = (
+  workflow: Workflow,
+  options: { packageCache: boolean } = { packageCache: true }
+): Array<JobStep> => {
   const steps: Array<JobStep> = [];
 
   // yarn and pnpm are already preinstalled, but pnpm is not
@@ -30,7 +33,7 @@ export const renderSetupNodeSteps = (workflow: Workflow): Array<JobStep> => {
     uses: "actions/setup-node@v3",
     with: {
       "node-version": workflow.nodeVersion,
-      ...(workflow.packageCache
+      ...(options.packageCache
         ? {
             cache,
           }

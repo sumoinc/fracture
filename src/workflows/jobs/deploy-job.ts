@@ -108,7 +108,7 @@ export class DeployJob extends WorkflowJob {
       },
       steps: [
         ...renderDownloadArtifactSteps(this),
-        ...renderSetupNodeSteps(this.workflow),
+        ...renderSetupNodeSteps(this.workflow, { packageCache: false }),
         ...renderDeploySteps(this),
       ],
     };
