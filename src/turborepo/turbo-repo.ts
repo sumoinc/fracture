@@ -42,12 +42,15 @@ export class TurboRepo extends Component {
      * step in the full "npx projen build" command.
      *
      **************************************************************************/
-    project.defaultTask?.spawn(
-      project.addTask("turbo:eslint", {
+
+    /**
+     * project.addTask("turbo:eslint", {
         description: "Lint all repos",
         exec: "pnpm turbo eslint",
       })
-    );
+     */
+
+    //project.defaultTask?.spawn("eslint");
 
     /***************************************************************************
      *
@@ -57,12 +60,14 @@ export class TurboRepo extends Component {
      *
      **************************************************************************/
 
+    /*
     project.preCompileTask?.spawn(
       project.addTask("turbo:build", {
         description: "Lint all repos",
         exec: "pnpm turbo build",
       })
     );
+    */
 
     /***************************************************************************
      *
@@ -73,6 +78,7 @@ export class TurboRepo extends Component {
      *
      **************************************************************************/
 
+    /*
     project.addTask("synth", {
       description: "Synthesizes your cdk app into cdk.out",
       exec: "pnpm turbo synth",
@@ -84,6 +90,7 @@ export class TurboRepo extends Component {
         exec: "pnpm turbo synth:silent",
       })
     );
+    */
 
     /***************************************************************************
      *
@@ -94,12 +101,14 @@ export class TurboRepo extends Component {
      *
      **************************************************************************/
 
+    /*
     project.testTask.spawn(
       project.addTask("turbo:test", {
         description: "Lint all repos",
         exec: "pnpm turbo test",
       })
     );
+    */
 
     /***************************************************************************
      *
