@@ -108,7 +108,7 @@ export class TurboRepo extends Component {
     if (testTask) {
       testTask.spawn(
         project.addTask("turbo:test", {
-          description: "Test all subprojects",
+          description: "Test subprojects",
           exec: "pnpm turbo test",
         })
       );
@@ -122,17 +122,15 @@ export class TurboRepo extends Component {
      *
      **************************************************************************/
 
-    /*
     const upgradeTask = project.tasks.tryFind("upgrade");
     if (upgradeTask) {
       upgradeTask.spawn(
         project.addTask("turbo:upgrade", {
-          description: "Upgrade All subprojects",
-          exec: "pnpm turbo test",
+          description: "Upgrade subprojects",
+          exec: "pnpm turbo upgrade",
         })
       );
     }
-    */
 
     /***************************************************************************
      *
