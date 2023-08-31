@@ -4,6 +4,7 @@ import { NodeProject } from "projen/lib/javascript";
 import { BuildJob } from "./jobs/build-job";
 import { DeployJob, DeployJobOptions } from "./jobs/deploy-job";
 import { WorkflowJob } from "./jobs/workflow-job";
+import { Settings } from "../core/fracture-settings";
 
 /**
  * Name of the permission back up file to include in the build artifact
@@ -154,6 +155,11 @@ export class Workflow extends Component {
    */
   public readonly otherJobs: Array<WorkflowJob> = [];
 
+  /**
+   * Branch patterns that trigger this qworkflow on push.
+   */
+  readonly pushTriggers: Array<string> = [];
+
   constructor(public readonly project: NodeProject, options: WorkflowOptions) {
     super(project);
 
@@ -187,6 +193,15 @@ export class Workflow extends Component {
     return job;
   }
 
+  addPushTrigger(branchPrefix: string): void {
+    const settings = Settings.of(this.project);
+    const branchPattern =
+      branchPrefix === settings.defaultReleaseBranch
+        ? settings.defaultReleaseBranch
+        : `${branchPrefix}/*`;
+    this.pushTriggers.push(branchPattern);
+  }
+
   preSynthesize(): void {
     // add the build job to the workflow
     this.workflow.addJob(this.buildJob.jobId, this.buildJob.render());
@@ -194,5 +209,7 @@ export class Workflow extends Component {
     this.otherJobs.forEach((job) => {
       this.workflow.addJob(job.jobId, job.render());
     });
+    // render the push triggers
+    this.workflow.on({ push: { branches: [...new Set(this.pushTriggers)] } });
   }
 }

@@ -124,7 +124,7 @@ export class TurboRepo extends Component {
   }
 
   preSynthesize(): void {
-    // turbo config file
+    // turbo config file, run everything for now, might limit what runs later
     new JsonFile(this.project, "turbo.json", {
       obj: {
         $schema: "https://turborepo.org/schema.json",

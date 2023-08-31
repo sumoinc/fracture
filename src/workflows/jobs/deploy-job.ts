@@ -16,7 +16,7 @@ export interface DeployJobOptions
    *
    * @default main
    */
-  readonly branchPattern?: string;
+  readonly branchPrefix?: string;
 
   /**
    * Jobs that must complete before this one may run
@@ -42,7 +42,7 @@ export class DeployJob extends WorkflowJob {
    *
    * @default main
    */
-  readonly branchPattern: string;
+  readonly branchPrefix: string;
 
   /**
    * Jobs that must complete before this one may run
@@ -62,8 +62,8 @@ export class DeployJob extends WorkflowJob {
   readonly authProvider: AuthProvider;
 
   constructor(public readonly workflow: Workflow, options: DeployJobOptions) {
-    const branchPattern = options.branchPattern ?? "main";
-    const name = options.name ?? `Deploy ${branchPattern}`;
+    const branchPrefix = options.branchPrefix ?? "main";
+    const name = options.name ?? `Deploy ${branchPrefix}`;
     const jobId = options.jobId ?? paramCase(name);
 
     super(workflow, {
@@ -73,10 +73,13 @@ export class DeployJob extends WorkflowJob {
     });
 
     // defaults
-    this.branchPattern = branchPattern;
+    this.branchPrefix = branchPrefix;
     this.needs = [workflow.buildJob.jobId, ...(options.needs ?? [])];
     this.deployTask = options.deployTask;
     this.authProvider = options.authProvider;
+
+    // add branch pattern this as a trigger
+    workflow.addPushTrigger(this.branchPrefix);
 
     // make sure build stores these
     workflow.buildJob.artifactDirectories.push(...this.artifactDirectories);
@@ -91,7 +94,7 @@ export class DeployJob extends WorkflowJob {
       name: this.name,
       runsOn: this.workflow.defaultRunners,
       needs: this.needs,
-      if: `startsWith( github.ref, 'refs/heads/${this.branchPattern}' )`,
+      if: `startsWith( github.ref, 'refs/heads/${this.branchPrefix}' )`,
       env: {
         CI: "true",
       },

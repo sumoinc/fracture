@@ -14,6 +14,13 @@ export interface SettingsOptions {
   readonly name?: string;
 
   /**
+   * The default releast branch for this project and it's subprojects.
+   *
+   * @default "main"
+   */
+  readonly defaultReleaseBranch?: string;
+
+  /**
    * The default regiun for this project. Used in many places such as defining environments and OIDC roles.
    *
    * @default "us-east-1"
@@ -76,6 +83,13 @@ export class Settings extends Component {
   public readonly name: string;
 
   /**
+   * The default releast branch for this project and it's subprojects.
+   *
+   * @default "main"
+   */
+  readonly defaultReleaseBranch: string;
+
+  /**
    * The default regiun for this project. Used in many places such as defining environments and OIDC roles.
    *
    * @default "us-east-1"
@@ -127,6 +141,7 @@ export class Settings extends Component {
 
     // defaults
     this.name = options.name ?? "fracture";
+    this.defaultReleaseBranch = options.defaultReleaseBranch ?? "main";
     this.defaultRegion = options.defaultRegion ?? "us-east-1";
     this.appRoot = options.appRoot ?? "apps";
     this.siteRoot = options.siteRoot ?? "sites";
