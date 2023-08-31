@@ -57,11 +57,11 @@ const project = new TypeScriptProject({
   },
 });
 
-// prevent example from being bundled with NPM
-project.npmignore!.exclude("/example-app");
-
-// don't typecheck  templates
-project.tsconfig?.exclude?.push("src/sites/vitepress/template");
+// prevent docs and tests from being bundled with NPM
+project.npmignore!.exclude("/sites");
+project.npmignore!.exclude("/apps");
+project.npmignore!.exclude("node_modules");
+project.npmignore!.exclude("/**/*.spec.*");
 
 // make sure inline tests work
 project.jest!.addTestMatch("<rootDir>/(test|src)/**/*.(spec|test).ts?(x)");
@@ -92,6 +92,7 @@ project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 new VsCodeConfiguration(project);
 
 // build out documentation site
+
 new VitePressSite(project, {
   name: "docs",
   defaultReleaseBranch: "main",

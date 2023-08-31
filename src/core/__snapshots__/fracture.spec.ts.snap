@@ -155,10 +155,6 @@ exports[`validate generated project files .gitattributes 1`] = `
 /.gitattributes linguist-generated
 /.github/pull_request_template.md linguist-generated
 /.github/workflows/build.yml linguist-generated
-/.github/workflows/deploy-chore.yml linguist-generated
-/.github/workflows/deploy-feature.yml linguist-generated
-/.github/workflows/deploy-fix.yml linguist-generated
-/.github/workflows/deploy-main.yml linguist-generated
 /.github/workflows/pull-request-lint.yml linguist-generated
 /.github/workflows/release.yml linguist-generated
 /.github/workflows/upgrade-main.yml linguist-generated
@@ -176,10 +172,8 @@ exports[`validate generated project files .gitattributes 1`] = `
 /.vscode/settings.json linguist-generated
 /package.json linguist-generated
 /pnpm-lock.yaml linguist-generated
-/pnpm-workspace.yaml linguist-generated
 /tsconfig.dev.json linguist-generated
-/tsconfig.json linguist-generated
-/turbo.json linguist-generated"
+/tsconfig.json linguist-generated"
 `;
 
 exports[`validate generated project files .github/pull_request_template.md 1`] = `"Fixes #"`;
@@ -536,13 +530,6 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
-.turbo
-!/turbo.json
-!/.github/workflows/deploy-main.yml
-!/.github/workflows/deploy-feature.yml
-!/.github/workflows/deploy-fix.yml
-!/.github/workflows/deploy-chore.yml
-!/pnpm-workspace.yaml
 !/.vscode/settings.json
 !/.vscode/extensions.json
 "
@@ -582,6 +569,7 @@ exports[`validate generated project files .npmignore 1`] = `
 /test-reports/
 junit.xml
 /coverage/
+permissions-backup.acl
 /dist/changelog.md
 /dist/version.txt
 /.mergify.yml
@@ -599,9 +587,6 @@ dist
 /.projenrc.js
 tsconfig.tsbuildinfo
 /.eslintrc.json
-.turbo
-turbo.json
-permissions-backup.acl
 "
 `;
 
@@ -707,10 +692,6 @@ Object {
       "type": "build",
     },
     Object {
-      "name": "turbo",
-      "type": "build",
-    },
-    Object {
       "name": "typescript",
       "type": "build",
     },
@@ -730,10 +711,6 @@ Object {
     ".gitattributes",
     ".github/pull_request_template.md",
     ".github/workflows/build.yml",
-    ".github/workflows/deploy-chore.yml",
-    ".github/workflows/deploy-feature.yml",
-    ".github/workflows/deploy-fix.yml",
-    ".github/workflows/deploy-main.yml",
     ".github/workflows/pull-request-lint.yml",
     ".github/workflows/release.yml",
     ".github/workflows/upgrade-main.yml",
@@ -748,10 +725,8 @@ Object {
     ".projen/tasks.json",
     ".vscode/extensions.json",
     ".vscode/settings.json",
-    "pnpm-workspace.yaml",
     "tsconfig.dev.json",
     "tsconfig.json",
-    "turbo.json",
   ],
 }
 `;
@@ -852,9 +827,6 @@ Object {
         Object {
           "exec": "ts-node --project tsconfig.dev.json .projenrc.ts",
         },
-        Object {
-          "spawn": "turbo:eslint",
-        },
       ],
     },
     "eject": Object {
@@ -903,11 +875,6 @@ Object {
     "post-compile": Object {
       "description": "Runs after successful compilation",
       "name": "post-compile",
-      "steps": Array [
-        Object {
-          "spawn": "synth:silent",
-        },
-      ],
     },
     "post-upgrade": Object {
       "description": "Runs after upgrading dependencies",
@@ -941,30 +908,16 @@ Object {
         },
       ],
     },
-    "synth": Object {
-      "description": "Synthesizes your cdk app into cdk.out",
-      "name": "synth",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo synth",
-        },
-      ],
-    },
-    "synth:silent": Object {
-      "description": "Synthesizes your cdk app into cdk.out",
-      "name": "synth:silent",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo synth:silent",
-        },
-      ],
-    },
     "test": Object {
       "description": "Run tests",
       "name": "test",
       "steps": Array [
         Object {
-          "spawn": "turbo:test",
+          "exec": "jest --passWithNoTests --updateSnapshot",
+          "receiveArgs": true,
+        },
+        Object {
+          "spawn": "eslint",
         },
       ],
     },
@@ -974,53 +927,6 @@ Object {
       "steps": Array [
         Object {
           "exec": "jest --watch",
-        },
-      ],
-    },
-    "turbo:deploy": Object {
-      "description": "Deploys your CDK app to the AWS cloud",
-      "name": "turbo:deploy",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo deploy",
-          "receiveArgs": true,
-        },
-      ],
-    },
-    "turbo:destroy": Object {
-      "description": "Destroys your cdk app in the AWS cloud",
-      "name": "turbo:destroy",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo destroy",
-          "receiveArgs": true,
-        },
-      ],
-    },
-    "turbo:diff": Object {
-      "description": "Diffs the currently deployed app against your code",
-      "name": "turbo:diff",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo diff",
-        },
-      ],
-    },
-    "turbo:eslint": Object {
-      "description": "Lint all repos",
-      "name": "turbo:eslint",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo eslint",
-        },
-      ],
-    },
-    "turbo:test": Object {
-      "description": "Lint all repos",
-      "name": "turbo:test",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo test",
         },
       ],
     },
@@ -1051,13 +957,13 @@ Object {
           "exec": "pnpm update npm-check-updates",
         },
         Object {
-          "exec": "npm-check-updates --upgrade --target=minor --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,turbo,typescript,@sumoc/fracture",
+          "exec": "npm-check-updates --upgrade --target=minor --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,typescript,@sumoc/fracture",
         },
         Object {
           "exec": "pnpm i --no-frozen-lockfile",
         },
         Object {
-          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node turbo typescript @sumoc/fracture",
+          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node typescript @sumoc/fracture",
         },
         Object {
           "exec": "npx projen",
@@ -1086,10 +992,6 @@ Array [
   ".gitattributes",
   ".github/pull_request_template.md",
   ".github/workflows/build.yml",
-  ".github/workflows/deploy-chore.yml",
-  ".github/workflows/deploy-feature.yml",
-  ".github/workflows/deploy-fix.yml",
-  ".github/workflows/deploy-main.yml",
   ".github/workflows/pull-request-lint.yml",
   ".github/workflows/release.yml",
   ".github/workflows/upgrade-main.yml",
@@ -1105,7 +1007,6 @@ Array [
   ".vscode/extensions.json",
   ".vscode/settings.json",
   "package.json",
-  "pnpm-workspace.yaml",
   "README.md",
   "services/test-service/.eslintrc.json",
   "services/test-service/.gitattributes",
@@ -1148,7 +1049,6 @@ Array [
   "test/hello.test.ts",
   "tsconfig.dev.json",
   "tsconfig.json",
-  "turbo.json",
 ]
 `;
 
@@ -1179,7 +1079,6 @@ Object {
     "standard-version": "^9",
     "ts-jest": "*",
     "ts-node": "*",
-    "turbo": "*",
     "typescript": "*",
   },
   "jest": Object {
@@ -1240,15 +1139,8 @@ Object {
     "pre-compile": "npx projen pre-compile",
     "projen": "npx projen",
     "release": "npx projen release",
-    "synth": "npx projen synth",
-    "synth:silent": "npx projen synth:silent",
     "test": "npx projen test",
     "test:watch": "npx projen test:watch",
-    "turbo:deploy": "npx projen turbo:deploy",
-    "turbo:destroy": "npx projen turbo:destroy",
-    "turbo:diff": "npx projen turbo:diff",
-    "turbo:eslint": "npx projen turbo:eslint",
-    "turbo:test": "npx projen turbo:test",
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "watch": "npx projen watch",
@@ -1350,56 +1242,4 @@ Object {
 }
 `;
 
-exports[`validate generated project files turbo.json 1`] = `
-Object {
-  "$schema": "https://turborepo.org/schema.json",
-  "//": "~~ Generated by projen. To modify, edit .projenrc.ts and run \\"npx projen\\".",
-  "pipeline": Object {
-    "compile": Object {
-      "dependsOn": Array [
-        "^compile",
-      ],
-      "outputMode": "new-only",
-      "outputs": Array [
-        "dist/**",
-        "lib/**",
-      ],
-    },
-    "eslint": Object {
-      "cache": false,
-      "dependsOn": Array [
-        "^eslint",
-      ],
-    },
-    "synth": Object {
-      "dependsOn": Array [
-        "^synth",
-      ],
-      "outputMode": "new-only",
-      "outputs": Array [
-        "cdk-out/**",
-      ],
-    },
-    "synth:silent": Object {
-      "dependsOn": Array [
-        "^synth:silent",
-      ],
-      "outputMode": "new-only",
-      "outputs": Array [
-        "cdk-out/**",
-      ],
-    },
-    "test": Object {
-      "dependsOn": Array [
-        "^test",
-      ],
-      "outputMode": "new-only",
-      "outputs": Array [
-        "coverage**",
-        "test-reports/**",
-        "**/__snapshots__/**",
-      ],
-    },
-  },
-}
-`;
+exports[`validate generated project files turbo.json 1`] = `undefined`;

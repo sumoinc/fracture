@@ -11,14 +11,14 @@ export class Site extends FractureProject {
     options: NodeProjectOptions
   ) {
     // grab settings from parent project
-    const { appRoot } = Settings.of(parent);
+    const { siteRoot } = Settings.of(parent);
 
     // make sure sites is configured as a workspace
-    TurboRepo.of(parent).addWorkspaceRoot(appRoot);
+    TurboRepo.of(parent).addWorkspaceRoot(siteRoot);
 
     super(parent, {
-      outdir: join(appRoot, options.name),
       ...options,
+      outdir: join(siteRoot, options.name),
     });
   }
 

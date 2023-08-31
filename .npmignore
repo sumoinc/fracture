@@ -21,6 +21,9 @@ dist
 /.projenrc.js
 tsconfig.tsbuildinfo
 /.eslintrc.json
-/example-app
+/sites
+/apps
+node_modules
+/**/*.spec.*
 .turbo
 turbo.json

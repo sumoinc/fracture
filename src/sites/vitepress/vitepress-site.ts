@@ -19,7 +19,6 @@ export const filesToScaffold = [
 export class VitePressSite extends Site {
   constructor(parent: TypeScriptProject, options: TypeScriptProjectOptions) {
     super(parent, {
-      outdir: options.name,
       ...options,
     });
 
