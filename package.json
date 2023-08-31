@@ -61,7 +61,7 @@
   },
   "peerDependencies": {
     "@aws-sdk/smithy-client": "^3.370.0",
-    "@aws-sdk/types": "^3.378.0"
+    "@aws-sdk/types": "^3.398.0"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.398.0",
