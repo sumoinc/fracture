@@ -1,7 +1,7 @@
 import { Component } from "projen";
 import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { REGION_IDENTITIER } from "../core";
+import { Environment, REGION_IDENTITIER } from "../core";
 
 /**
  * Options for authorizing requests to a AWS CodeArtifact npm repository.
@@ -69,6 +69,24 @@ export interface AuthProviderOptions {
 }
 
 export class AuthProvider extends Component {
+  /**
+   * Returns AuthCredentials for a supplied envidonment
+   */
+  public static fromEnvironment(
+    project: NodeProject,
+    environment: Environment
+  ): AuthProvider {
+    return new AuthProvider(project, {
+      authProviderType: environment.authProviderType,
+      credentialsOidc: {
+        roleToAssume: `arn:aws:iam::${environment.accountNumber}:role/${environment.gitHubDeploymentOIDCRoleName}`,
+        roleDurationSeconds:
+          environment.gitHubDeploymentOIDCRoleDurationSeconds,
+        awsRegion: environment.region,
+      },
+    });
+  }
+
   /**
    * Type of auth provider to use.
    */

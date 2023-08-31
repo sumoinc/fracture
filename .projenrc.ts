@@ -58,14 +58,14 @@ const project = new TypeScriptProject({
 });
 
 // prevent docs and tests from being bundled with NPM
-project.npmignore!.exclude("/sites");
-project.npmignore!.exclude("/apps");
-project.npmignore!.exclude("node_modules");
-project.npmignore!.exclude("/**/*.spec.*");
-project.npmignore!.exclude(".gitattributes");
-project.npmignore!.exclude(".prettierignore");
-project.npmignore!.exclude(".prettierrc.json");
-project.npmignore!.exclude(".projenrc.ts");
+project.addPackageIgnore("/sites");
+project.addPackageIgnore("/apps");
+project.addPackageIgnore("node_modules");
+project.addPackageIgnore("/**/*.spec.*");
+project.addPackageIgnore(".gitattributes");
+project.addPackageIgnore(".prettierignore");
+project.addPackageIgnore(".prettierrc.json");
+project.addPackageIgnore(".projenrc.ts");
 
 // make sure inline tests work
 project.jest!.addTestMatch("<rootDir>/(test|src)/**/*.(spec|test).ts?(x)");

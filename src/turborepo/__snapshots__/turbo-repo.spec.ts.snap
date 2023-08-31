@@ -216,6 +216,13 @@ Object {
       "name": "test",
       "steps": Array [
         Object {
+          "exec": "jest --passWithNoTests --updateSnapshot",
+          "receiveArgs": true,
+        },
+        Object {
+          "spawn": "eslint",
+        },
+        Object {
           "spawn": "turbo:test",
         },
       ],

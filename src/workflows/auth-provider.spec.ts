@@ -1,5 +1,6 @@
 import { NodeProject } from "projen/lib/javascript";
 import { AuthProvider, AuthProviderType } from "./auth-provider";
+import { Environment } from "../core";
 
 describe("success conditions", () => {
   test("Smoke test OIDC", () => {
@@ -30,6 +31,19 @@ describe("success conditions", () => {
         accessKeyIdSecret: "bar",
       },
     });
+    expect(authProvider).toBeTruthy();
+  });
+
+  test("From Environment", () => {
+    const project = new NodeProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
+    });
+    const usEast = new Environment(project, {
+      name: "us-east",
+      accountNumber: "0000000000",
+    });
+    const authProvider = AuthProvider.fromEnvironment(project, usEast);
     expect(authProvider).toBeTruthy();
   });
 });

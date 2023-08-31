@@ -45,10 +45,17 @@ export class TurboRepo extends Component {
   constructor(public readonly project: NodeProject) {
     super(project);
 
+    // ignore and don't package the cache directory
     project.addGitIgnore(".turbo");
-    project.npmignore!.exclude(".turbo");
-    project.npmignore!.exclude("turbo.json");
-    project.npmignore!.exclude("pnpm-workspace.yaml");
+    project.addPackageIgnore(".turbo");
+
+    // don't package turbo files
+    project.addPackageIgnore("turbo.json");
+
+    // don't package pnpm's workspace file
+    project.addPackageIgnore("pnpm-workspace.yaml");
+
+    // turbo should be a dependancy
     project.addDevDeps("turbo");
 
     /***************************************************************************
@@ -72,15 +79,19 @@ export class TurboRepo extends Component {
      * TESTING
      *
      * Replace the testing step with our own step that runs turbo test.
+     * This will run tests in the root workspace and all other subprojects.
      *
      **************************************************************************/
 
+    /*
     this.testTask = project.addTask("turbo:test", {
       description: "Lint all repos",
       exec: "pnpm turbo test",
     });
+    */
     project.testTask.reset();
-    project.testTask.spawn(this.testTask);
+    //project.testTask.reset();
+    project.testTask.exec("pnpm turbo test");
 
     /***************************************************************************
      *
@@ -149,7 +160,7 @@ export class TurboRepo extends Component {
           },
           test: {
             dependsOn: ["^test"],
-            outputs: ["coverage**", "test-reports/**", "**/__snapshots__/**"],
+            outputs: ["coverage**", "test-reports/**", "**/ __snapshots__ /**"],
             outputMode: "new-only",
           },
         },
