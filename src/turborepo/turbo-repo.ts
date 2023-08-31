@@ -1,4 +1,4 @@
-import { Component, JsonFile, Task, YamlFile } from "projen";
+import { Component, JsonFile, YamlFile } from "projen";
 import { NodeProject } from "projen/lib/javascript";
 
 export class TurboRepo extends Component {
@@ -16,31 +16,6 @@ export class TurboRepo extends Component {
    * PNMP workspace file
    */
   public readonly workspaceRoots: Array<string> = [];
-
-  /**
-   * Linting Task.
-   */
-  public readonly lintTask: Task;
-
-  /**
-   * Test Task
-   */
-  public readonly testTask: Task;
-
-  /**
-   * Deploys your app.
-   */
-  public readonly deployTask: Task;
-
-  /**
-   * Destroys all the stacks.
-   */
-  public readonly destroyTask: Task;
-
-  /**
-   * Diff against production.
-   */
-  public readonly diffTask: Task;
 
   constructor(public readonly project: NodeProject) {
     super(project);
@@ -68,30 +43,28 @@ export class TurboRepo extends Component {
      *
      **************************************************************************/
 
-    this.lintTask = project.addTask("turbo:eslint", {
-      description: "Lint all repos",
-      exec: "pnpm turbo eslint",
-    });
-    project.defaultTask?.spawn(this.lintTask);
+    project.defaultTask?.spawn(
+      project.addTask("turbo:eslint", {
+        description: "Lint all repos",
+        exec: "pnpm turbo eslint",
+      })
+    );
 
     /***************************************************************************
      *
      * TESTING
      *
-     * Replace the testing step with our own step that runs turbo test.
-     * This will run tests in the root workspace and all other subprojects.
+     * This runs turbo:test after the default root test finishes running. This
+     * is annoying but in most cases the root project won't have any tests anyway.
      *
      **************************************************************************/
 
-    /*
-    this.testTask = project.addTask("turbo:test", {
-      description: "Lint all repos",
-      exec: "pnpm turbo test",
-    });
-    */
-    project.testTask.reset();
-    //project.testTask.reset();
-    project.testTask.exec("pnpm turbo test");
+    project.testTask.spawn(
+      project.addTask("turbo:test", {
+        description: "Lint all repos",
+        exec: "pnpm turbo test",
+      })
+    );
 
     /***************************************************************************
      *
@@ -107,28 +80,12 @@ export class TurboRepo extends Component {
       exec: "pnpm turbo synth",
     });
 
-    const synthSilentTask = project.addTask("synth:silent", {
-      description: "Synthesizes your cdk app into cdk.out",
-      exec: "pnpm turbo synth:silent",
-    });
-    project.postCompileTask?.spawn(synthSilentTask);
-
-    this.deployTask = project.addTask("turbo:deploy", {
-      description: "Deploys your CDK app to the AWS cloud",
-      exec: "pnpm turbo deploy",
-      receiveArgs: true,
-    });
-
-    this.destroyTask = project.addTask("turbo:destroy", {
-      description: "Destroys your cdk app in the AWS cloud",
-      exec: "pnpm turbo destroy",
-      receiveArgs: true,
-    });
-
-    this.diffTask = project.addTask("turbo:diff", {
-      description: "Diffs the currently deployed app against your code",
-      exec: "pnpm turbo diff",
-    });
+    project.postCompileTask?.spawn(
+      project.addTask("synth:silent", {
+        description: "Synthesizes your cdk app into cdk.out",
+        exec: "pnpm turbo synth:silent",
+      })
+    );
 
     /***************************************************************************
      *
@@ -139,11 +96,6 @@ export class TurboRepo extends Component {
       obj: {
         $schema: "https://turborepo.org/schema.json",
         pipeline: {
-          compile: {
-            dependsOn: ["^compile"],
-            outputs: ["dist/**", "lib/**"],
-            outputMode: "new-only",
-          },
           eslint: {
             dependsOn: ["^eslint"],
             cache: false,
@@ -160,7 +112,7 @@ export class TurboRepo extends Component {
           },
           test: {
             dependsOn: ["^test"],
-            outputs: ["coverage**", "test-reports/**", "**/ __snapshots__ /**"],
+            outputs: ["coverage**", "test-reports/**", "**/__snapshots__/**"],
             outputMode: "new-only",
           },
         },

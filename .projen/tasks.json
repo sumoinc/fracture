@@ -209,6 +209,13 @@
       "description": "Run tests",
       "steps": [
         {
+          "exec": "jest --passWithNoTests --updateSnapshot",
+          "receiveArgs": true
+        },
+        {
+          "spawn": "eslint"
+        },
+        {
           "spawn": "turbo:test"
         }
       ]
@@ -219,35 +226,6 @@
       "steps": [
         {
           "exec": "jest --watch"
-        }
-      ]
-    },
-    "turbo:deploy": {
-      "name": "turbo:deploy",
-      "description": "Deploys your CDK app to the AWS cloud",
-      "steps": [
-        {
-          "exec": "pnpm turbo deploy",
-          "receiveArgs": true
-        }
-      ]
-    },
-    "turbo:destroy": {
-      "name": "turbo:destroy",
-      "description": "Destroys your cdk app in the AWS cloud",
-      "steps": [
-        {
-          "exec": "pnpm turbo destroy",
-          "receiveArgs": true
-        }
-      ]
-    },
-    "turbo:diff": {
-      "name": "turbo:diff",
-      "description": "Diffs the currently deployed app against your code",
-      "steps": [
-        {
-          "exec": "pnpm turbo diff"
         }
       ]
     },

@@ -236,35 +236,6 @@ Object {
         },
       ],
     },
-    "turbo:deploy": Object {
-      "description": "Deploys your CDK app to the AWS cloud",
-      "name": "turbo:deploy",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo deploy",
-          "receiveArgs": true,
-        },
-      ],
-    },
-    "turbo:destroy": Object {
-      "description": "Destroys your cdk app in the AWS cloud",
-      "name": "turbo:destroy",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo destroy",
-          "receiveArgs": true,
-        },
-      ],
-    },
-    "turbo:diff": Object {
-      "description": "Diffs the currently deployed app against your code",
-      "name": "turbo:diff",
-      "steps": Array [
-        Object {
-          "exec": "pnpm turbo diff",
-        },
-      ],
-    },
     "turbo:eslint": Object {
       "description": "Lint all repos",
       "name": "turbo:eslint",
