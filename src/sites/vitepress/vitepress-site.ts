@@ -5,6 +5,7 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
+import { SetOptional } from "type-fest";
 import { Settings } from "../../core/fracture-settings";
 import { DeployOptions } from "../../fracture-project";
 import { DeploymentWorkflow } from "../../workflows/deployment-workflow";
@@ -20,9 +21,17 @@ export const filesToScaffold = [
   ".vitepress/theme/Layout.vue",
 ];
 
+export type VitePressSiteOptions = SetOptional<
+  TypeScriptProjectOptions,
+  "defaultReleaseBranch"
+>;
+
 export class VitePressSite extends Site {
-  constructor(parent: TypeScriptProject, options: TypeScriptProjectOptions) {
+  constructor(parent: TypeScriptProject, options: VitePressSiteOptions) {
+    const { defaultReleaseBranch } = Settings.of(parent);
+
     super(parent, {
+      defaultReleaseBranch,
       ...options,
     });
 
