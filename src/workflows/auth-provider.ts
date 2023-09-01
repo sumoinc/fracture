@@ -8,17 +8,22 @@ import { AwsRegion, AwsEnvironment } from "../environments/aws-environment";
  */
 export const AuthProviderType = {
   /**
-   * Fixed credentials provided via Github secrets.
+   * Use fixed credentials provided via Github secrets.
    */
   AWS_ACCESS_AND_SECRET_KEY_PAIR: "AWS_ACCESS_AND_SECRET_KEY_PAIR",
 
   /**
-   * Ephemeral credentials provided via Github's OIDC integration with an IAM role.
+   * Use ephemeral credentials provided via Github's OIDC integration with an IAM role.
    * See:
    * https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html
    * https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
    */
   AWS_GITHUB_OIDC: "AWS_GITHUB_OIDC",
+
+  /**
+   * Use A Netlify Token and Site Id.
+   */
+  NETLIFY_TOKEN: "NETLIFY_TOKEN",
 } as const;
 
 export interface AwsCredentialsOidc {
