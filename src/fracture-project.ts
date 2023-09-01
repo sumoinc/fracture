@@ -4,13 +4,29 @@ import {
   Prettier,
 } from "projen/lib/javascript";
 import { SetOptional, SetRequired } from "type-fest";
-import { DeploymentWorkflow } from "./workflows/deployment-workflow";
-import { DeployJobOptions } from "./workflows/jobs";
+import { Environment } from "./environments";
 
 export type FractureProjectOptions = SetRequired<
   SetOptional<NodeProjectOptions, "defaultReleaseBranch">,
   "outdir"
 >;
+
+/**
+ * Used by subclasses to specify deploy location(s) for each project
+ */
+export interface DeployOptions {
+  /**
+   * The branch prefix this deployment is targeting.
+   *
+   * @default - defaultReleaseBranch found in Settings()
+   */
+  readonly branchPrefix?: string;
+
+  /**
+   * Environemnt to deploy into.
+   */
+  readonly environment: Environment;
+}
 
 export class FractureProject extends NodeProject {
   constructor(
@@ -33,10 +49,5 @@ export class FractureProject extends NodeProject {
     // don't allow default to run in subprojects, otherwise it runs root and
     // causes unwanted recusion.
     this.defaultTask?.reset();
-  }
-
-  public deployToAws(options: DeployJobOptions) {
-    // add to deployment workflow
-    return DeploymentWorkflow.of(this.parent).addDeployJob(options);
   }
 }

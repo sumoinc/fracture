@@ -1,7 +1,7 @@
 import { Component } from "projen";
 import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { Environment, REGION_IDENTITIER } from "../environments";
+import { AwsRegion, AwsEnvironment } from "../environments/aws-environment";
 
 /**
  * Options for authorizing requests to a AWS CodeArtifact npm repository.
@@ -10,7 +10,7 @@ export const AuthProviderType = {
   /**
    * Fixed credentials provided via Github secrets.
    */
-  ACCESS_AND_SECRET_KEY_PAIR: "ACCESS_AND_SECRET_KEY_PAIR",
+  AWS_ACCESS_AND_SECRET_KEY_PAIR: "AWS_ACCESS_AND_SECRET_KEY_PAIR",
 
   /**
    * Ephemeral credentials provided via Github's OIDC integration with an IAM role.
@@ -18,10 +18,10 @@ export const AuthProviderType = {
    * https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html
    * https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
    */
-  GITHUB_OIDC: "GITHUB_OIDC",
+  AWS_GITHUB_OIDC: "AWS_GITHUB_OIDC",
 } as const;
 
-export interface CredentialsOidc {
+export interface AwsCredentialsOidc {
   /**
    * The ARN of the role for OIDC to assume at AWS.
    */
@@ -30,7 +30,7 @@ export interface CredentialsOidc {
   /**
    *  The region of the role for OIDC to assume at AWS.
    **/
-  readonly awsRegion: ValueOf<typeof REGION_IDENTITIER>;
+  readonly awsRegion: ValueOf<typeof AwsRegion>;
 
   /**
    * The duration of the role session in seconds.
@@ -38,10 +38,9 @@ export interface CredentialsOidc {
   readonly roleDurationSeconds: number;
 }
 
-export interface CredentialsSecretKeyPair {
+export interface AwsCredentialsSecretKeyPair {
   /**
    * GitHub secret name which contains secret access key.
-   *
    */
   readonly accessKeyIdSecret?: string;
 
@@ -58,31 +57,31 @@ export interface AuthProviderOptions {
   readonly authProviderType: ValueOf<typeof AuthProviderType>;
 
   /**
-   * If GITHUB_OIDC, values for the OIDC credentials.
+   * If AWS_GITHUB_OIDC, values for the OIDC credentials.
    */
-  readonly credentialsOidc?: CredentialsOidc;
+  readonly awsCredentialsOidc?: AwsCredentialsOidc;
 
   /**
-   * If ACCESS_AND_SECRET_KEY_PAIR, values for the key pais
+   * If AWS_ACCESS_AND_SECRET_KEY_PAIR, values for the key pais
    */
-  readonly credentialsSecretKeyPair?: CredentialsSecretKeyPair;
+  readonly awsCredentialsSecretKeyPair?: AwsCredentialsSecretKeyPair;
 }
 
 export class AuthProvider extends Component {
   /**
    * Returns AuthCredentials for a supplied envidonment
    */
-  public static fromEnvironment(
+  public static fromAwsEnvironment(
     project: NodeProject,
-    environment: Environment
+    awsEnvironment: AwsEnvironment
   ): AuthProvider {
     return new AuthProvider(project, {
-      authProviderType: environment.authProviderType,
-      credentialsOidc: {
-        roleToAssume: `arn:aws:iam::${environment.accountNumber}:role/${environment.gitHubDeploymentOIDCRoleName}`,
+      authProviderType: awsEnvironment.authProviderType,
+      awsCredentialsOidc: {
+        roleToAssume: `arn:aws:iam::${awsEnvironment.accountNumber}:role/${awsEnvironment.gitHubDeploymentOIDCRoleName}`,
         roleDurationSeconds:
-          environment.gitHubDeploymentOIDCRoleDurationSeconds,
-        awsRegion: environment.region,
+          awsEnvironment.gitHubDeploymentOIDCRoleDurationSeconds,
+        awsRegion: awsEnvironment.region,
       },
     });
   }
@@ -93,14 +92,14 @@ export class AuthProvider extends Component {
   public readonly authProviderType: ValueOf<typeof AuthProviderType>;
 
   /**
-   * If GITHUB_OIDC, values for the OIDC credentials.
+   * If AWS_GITHUB_OIDC, values for the OIDC credentials.
    */
-  public readonly credentialsOidc?: CredentialsOidc;
+  public readonly awsCredentialsOidc?: AwsCredentialsOidc;
 
   /**
-   * If ACCESS_AND_SECRET_KEY_PAIR, values for the key pais
+   * If AWS_ACCESS_AND_SECRET_KEY_PAIR, values for the key pais
    */
-  public readonly credentialsSecretKeyPair?: CredentialsSecretKeyPair;
+  public readonly awsCredentialsSecretKeyPair?: AwsCredentialsSecretKeyPair;
 
   constructor(
     public readonly project: NodeProject,
@@ -110,24 +109,23 @@ export class AuthProvider extends Component {
 
     // props
     this.authProviderType = options.authProviderType;
-    this.credentialsOidc = options.credentialsOidc;
-    this.credentialsSecretKeyPair = options.credentialsSecretKeyPair;
+    this.awsCredentialsOidc = options.awsCredentialsOidc;
+    this.awsCredentialsSecretKeyPair = options.awsCredentialsSecretKeyPair;
 
     if (
-      this.authProviderType === AuthProviderType.GITHUB_OIDC &&
-      !this.credentialsOidc
+      this.authProviderType === AuthProviderType.AWS_GITHUB_OIDC &&
+      !this.awsCredentialsOidc
     ) {
       throw new Error(
-        "credentialsOidc must be provided when authProviderType is GITHUB_OIDC"
+        "awsCredentialsOidc must be provided when authProviderType is GITHUB_OIDC"
       );
     }
 
     if (
-      this.authProviderType === AuthProviderType.ACCESS_AND_SECRET_KEY_PAIR &&
-      !this.credentialsSecretKeyPair
+      this.authProviderType === AuthProviderType.AWS_ACCESS_AND_SECRET_KEY_PAIR
     ) {
       throw new Error(
-        "credentialsSecretKeyPair must be provided when authProviderType is ACCESS_AND_SECRET_KEY_PAIR"
+        "authProviderType of AWS_ACCESS_AND_SECRET_KEY_PAIR not yet suported"
       );
     }
   }

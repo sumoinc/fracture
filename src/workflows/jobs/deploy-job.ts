@@ -100,7 +100,7 @@ export class DeployJob extends WorkflowJob {
       },
       permissions: {
         contents: JobPermission.READ,
-        ...(this.authProvider.authProviderType === "GITHUB_OIDC"
+        ...(this.authProvider.authProviderType === "AWS_GITHUB_OIDC"
           ? {
               idToken: JobPermission.WRITE,
             }

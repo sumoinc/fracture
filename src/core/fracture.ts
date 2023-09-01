@@ -9,7 +9,7 @@ import { Account } from "./account";
 import { Environment, EnvironmentOptions } from "../environments/environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { FractureService, FractureServiceOptions } from "./fracture-service";
-import { REGION_IDENTITIER } from "../environments/region";
+import { AwsRegion } from "../environments/aws-environment";
 import { VsCodeConfiguration } from "../projen";
 
 export interface FractureOptions extends Partial<TypeScriptProjectOptions> {
@@ -52,7 +52,7 @@ export interface FractureOptions extends Partial<TypeScriptProjectOptions> {
    * Default region  for environments.
    * @default us-east-1
    */
-  defaultRegion?: ValueOf<typeof REGION_IDENTITIER>;
+  defaultRegion?: ValueOf<typeof AwsRegion>;
 }
 
 export type StoredFractureOptions = SetRequired<
@@ -108,7 +108,7 @@ export class Fracture extends TypeScriptProject {
    * Default region  for environments.
    * @default us-east-1
    */
-  public readonly defaultRegion: ValueOf<typeof REGION_IDENTITIER>;
+  public readonly defaultRegion: ValueOf<typeof AwsRegion>;
   /**
    * All services in this project.
    */

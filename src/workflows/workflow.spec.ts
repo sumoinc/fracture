@@ -28,8 +28,8 @@ describe("success conditions", () => {
       exec: "echo 'deploying'",
     });
     const authProvider = new AuthProvider(project, {
-      authProviderType: AuthProviderType.GITHUB_OIDC,
-      credentialsOidc: {
+      authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
+      awsCredentialsOidc: {
         roleToAssume: "foo",
         roleDurationSeconds: 900,
         awsRegion: "us-east-1",

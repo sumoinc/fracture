@@ -4,6 +4,8 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
+import { DeployOptions } from "../../fracture-project";
+import { DeploymentWorkflow } from "../../workflows/deployment-workflow";
 import { Site } from "../site";
 
 export const filesToScaffold = [
@@ -146,5 +148,18 @@ export class VitePressSite extends Site {
       },
     });
     */
+  }
+
+  public deploy(options: DeployOptions) {
+    const deployTask = this.parent.addTask(`cdk:deploy:foo`, {
+      description: `Deploy the foo`,
+      exec: `echo 'deploying foo'`,
+    });
+    // add to deployment workflow
+    return DeploymentWorkflow.of(this.parent).addDeployJob({
+      ...options,
+      deployTask,
+      authProvider: options.environment.authProvider,
+    });
   }
 }

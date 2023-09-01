@@ -5,15 +5,16 @@ export const renderDeploySteps = (deployJob: DeployJob): Array<JobStep> => {
   const steps: Array<JobStep> = [];
 
   // if deploying top AWS, configure credentials
-  if (deployJob.authProvider.credentialsOidc) {
+  if (deployJob.authProvider.awsCredentialsOidc) {
     steps.push({
       name: "Configure AWS Credentials",
       uses: "aws-actions/configure-aws-credentials@v2",
       with: {
-        "role-to-assume": deployJob.authProvider.credentialsOidc.roleToAssume,
-        "aws-region": deployJob.authProvider.credentialsOidc.awsRegion,
+        "role-to-assume":
+          deployJob.authProvider.awsCredentialsOidc.roleToAssume,
+        "aws-region": deployJob.authProvider.awsCredentialsOidc.awsRegion,
         "role-duration-seconds":
-          deployJob.authProvider.credentialsOidc.roleDurationSeconds,
+          deployJob.authProvider.awsCredentialsOidc.roleDurationSeconds,
       },
     });
   }

@@ -1,7 +1,7 @@
 import { Component } from "projen";
 import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { REGION_IDENTITIER } from "../environments/region";
+import { AwsRegion } from "../environments/aws-environment";
 import { AuthProviderType } from "../workflows/auth-provider";
 
 export interface SettingsOptions {
@@ -21,12 +21,12 @@ export interface SettingsOptions {
   readonly defaultReleaseBranch?: string;
 
   /**
-   * The default regiun for this project. Used in many places such as defining environments and OIDC roles.
+   * The default region for this project. Used in many places such as defining environments and OIDC roles.
    *
    * @default "us-east-1"
    *
    **/
-  readonly defaultRegion?: ValueOf<typeof REGION_IDENTITIER>;
+  readonly defaultRegion?: ValueOf<typeof AwsRegion>;
 
   /**
    * Root workspace for app subprojects
@@ -45,7 +45,7 @@ export interface SettingsOptions {
   /**
    * Type of auth provider to use.
    *
-   * @default AuthProviderType.GITHUB_OIDC
+   * @default AuthProviderType.AWS_GITHUB_OIDC
    */
   readonly authProviderType?: ValueOf<typeof AuthProviderType>;
 
@@ -95,7 +95,7 @@ export class Settings extends Component {
    * @default "us-east-1"
    *
    **/
-  public readonly defaultRegion: ValueOf<typeof REGION_IDENTITIER>;
+  public readonly defaultRegion: ValueOf<typeof AwsRegion>;
 
   /**
    * Root workspace for app subprojects
@@ -114,7 +114,7 @@ export class Settings extends Component {
   /**
    * Type of auth provider to use.
    *
-   * @default AuthProviderType.GITHUB_OIDC
+   * @default AuthProviderType.AWS_GITHUB_OIDC
    */
   public readonly authProviderType: ValueOf<typeof AuthProviderType>;
 
@@ -146,7 +146,7 @@ export class Settings extends Component {
     this.appRoot = options.appRoot ?? "apps";
     this.siteRoot = options.siteRoot ?? "sites";
     this.authProviderType =
-      options.authProviderType ?? AuthProviderType.GITHUB_OIDC;
+      options.authProviderType ?? AuthProviderType.AWS_GITHUB_OIDC;
     this.gitHubDeploymentOIDCRoleName =
       options.gitHubDeploymentOIDCRoleName ?? "GitHubDeploymentOIDCRole";
     this.gitHubDeploymentOIDCRoleDurationSeconds =
