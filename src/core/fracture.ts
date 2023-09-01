@@ -6,10 +6,10 @@ import {
 } from "projen/lib/typescript";
 import { SetRequired, ValueOf } from "type-fest";
 import { Account } from "./account";
-import { Environment, EnvironmentOptions } from "../environments/environment";
 import { FractureApp, FractureAppOptions } from "./fracture-app";
 import { FractureService, FractureServiceOptions } from "./fracture-service";
 import { AwsRegion } from "../environments/aws-environment";
+import { Environment, EnvironmentOptions } from "../environments/environment";
 import { VsCodeConfiguration } from "../projen";
 
 export interface FractureOptions extends Partial<TypeScriptProjectOptions> {

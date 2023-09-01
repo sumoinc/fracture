@@ -8,6 +8,7 @@
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",
+    "cdk:deploy:foo": "npx projen cdk:deploy:foo",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",

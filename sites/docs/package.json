@@ -2,7 +2,6 @@
   "name": "docs",
   "scripts": {
     "build": "npx projen build",
-    "cdk:deploy:foo": "npx projen cdk:deploy:foo",
     "compile": "npx projen compile",
     "default": "npx projen default",
     "package": "npx projen package",

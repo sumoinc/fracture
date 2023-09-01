@@ -1,9 +1,8 @@
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
-import { Environment } from "./src/core/environment";
+import { AwsEnvironment } from "./src/environments";
 import { VsCodeConfiguration } from "./src/projen/vscode";
 import { VitePressSite } from "./src/sites/vitepress/vitepress-site";
-import { AuthProvider } from "./src/workflows/auth-provider";
 
 const authorName = "Cameron Childress";
 const authorAddress = "cameronc@sumoc.com";
@@ -94,20 +93,15 @@ const site = new VitePressSite(project, {
 });
 
 // define environment for docs to deploy to
-
-const usEast = new Environment(project, {
+const usEast = new AwsEnvironment(project, {
   name: "us-east",
-  accountNumber: "0000000000",
+  accountNumber: "726654216209",
 });
 
-const deployTask = site.addTask(`cdk:deploy:foo`, {
-  description: `Deploy the foo`,
-  exec: `echo 'deploying foo'`,
-});
-site.deployToAws({
+// deployment target for docs
+site.deploy({
   branchPrefix: "feature",
-  deployTask,
-  authProvider: AuthProvider.fromEnvironment(project, usEast),
+  environment: usEast,
 });
 
 // generate
