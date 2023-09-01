@@ -1,3 +1,4 @@
+import { JobStep } from "projen/lib/github/workflows-model";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { renderDeploySteps } from "./deploy-steps";
 import { AuthProvider, AuthProviderType } from "../auth-provider";
@@ -13,10 +14,12 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const deployTask = project.addTask("cdk:deploy", {
-      description: "Deploy the service",
-      exec: "echo 'deploying'",
-    });
+    const deploySteps: Array<JobStep> = [
+      {
+        name: "Say foo",
+        run: "echo 'foo'",
+      },
+    ];
     const authProvider = new AuthProvider(project, {
       authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
       awsCredentialsOidc: {
@@ -27,13 +30,13 @@ describe("success conditions", () => {
     });
     const deployJob = new DeployJob(workflow, {
       artifactDirectories: ["some/other/folder/cdk.out"],
-      deployTask,
+      deploySteps,
       authProvider,
     });
-    const deploySteps = renderDeploySteps(deployJob);
-    expect(deploySteps).toBeTruthy();
-    expect(deploySteps).toMatchSnapshot();
-    // console.log(buildSteps);
+    const outputSteps = renderDeploySteps(deployJob);
+    expect(outputSteps).toBeTruthy();
+    expect(outputSteps).toMatchSnapshot();
+    // console.log(outputSteps);
   });
 
   test("With OIDC Configuration test", () => {
@@ -44,10 +47,12 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const deployTask = project.addTask("cdk:deploy", {
-      description: "Deploy the service",
-      exec: "echo 'deploying'",
-    });
+    const deploySteps: Array<JobStep> = [
+      {
+        name: "Say foo",
+        run: "echo 'foo'",
+      },
+    ];
     const authProvider = new AuthProvider(project, {
       authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
       awsCredentialsOidc: {
@@ -58,12 +63,12 @@ describe("success conditions", () => {
     });
     const deployJob = new DeployJob(workflow, {
       artifactDirectories: ["some/other/folder/cdk.out"],
-      deployTask,
+      deploySteps,
       authProvider,
     });
-    const deploySteps = renderDeploySteps(deployJob);
-    expect(deploySteps).toBeTruthy();
-    expect(deploySteps).toMatchSnapshot();
-    // console.log(deploySteps);
+    const outputSteps = renderDeploySteps(deployJob);
+    expect(outputSteps).toBeTruthy();
+    expect(outputSteps).toMatchSnapshot();
+    // console.log(outputSteps);
   });
 });

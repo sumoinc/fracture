@@ -41,15 +41,6 @@
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
     },
-    "cdk:deploy:foo": {
-      "name": "cdk:deploy:foo",
-      "description": "Deploy the foo",
-      "steps": [
-        {
-          "exec": "echo 'deploying foo'"
-        }
-      ]
-    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",

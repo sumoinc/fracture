@@ -1,9 +1,16 @@
+import { JobStep } from "projen/lib/github/workflows-model";
 import { TypeScriptProject } from "projen/lib/typescript";
-
 import { renderDownloadArtifactSteps } from "./download-artifact-steps";
 import { AuthProvider, AuthProviderType } from "../auth-provider";
 import { DeployJob } from "../jobs/deploy-job";
 import { Workflow } from "../workflow";
+
+const deploySteps: Array<JobStep> = [
+  {
+    name: "Say foo",
+    run: "echo 'foo'",
+  },
+];
 
 describe("success conditions", () => {
   test("Smoke test", () => {
@@ -14,10 +21,6 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const deployTask = project.addTask("cdk:deploy", {
-      description: "Deploy the service",
-      exec: "echo 'deploying'",
-    });
     const authProvider = new AuthProvider(project, {
       authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
       awsCredentialsOidc: {
@@ -26,7 +29,7 @@ describe("success conditions", () => {
         awsRegion: "us-east-1",
       },
     });
-    const deployJob = new DeployJob(workflow, { deployTask, authProvider });
+    const deployJob = new DeployJob(workflow, { deploySteps, authProvider });
     const artifactSteps = renderDownloadArtifactSteps(deployJob);
     expect(artifactSteps).toBeTruthy();
     expect(artifactSteps).toMatchSnapshot();
@@ -41,10 +44,6 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const deployTask = project.addTask("cdk:deploy", {
-      description: "Deploy the service",
-      exec: "echo 'deploying'",
-    });
     const authProvider = new AuthProvider(project, {
       authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
       awsCredentialsOidc: {
@@ -55,7 +54,7 @@ describe("success conditions", () => {
     });
     const deployJob = new DeployJob(workflow, {
       artifactDirectories: ["some/other/folder/cdk.out"],
-      deployTask,
+      deploySteps,
       authProvider,
     });
     const artifactSteps = renderDownloadArtifactSteps(deployJob);

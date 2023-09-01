@@ -63,8 +63,8 @@ Object {
       },
     },
     Object {
-      "name": "cdk:deploy",
-      "run": "npx projen cdk:deploy",
+      "name": "Say foo",
+      "run": "echo 'foo'",
     },
   ],
 }
@@ -105,8 +105,8 @@ Object {
       },
     },
     Object {
-      "name": "cdk:deploy",
-      "run": "npx projen cdk:deploy",
+      "name": "Say foo",
+      "run": "echo 'foo'",
     },
   ],
 }
@@ -147,8 +147,8 @@ Object {
       },
     },
     Object {
-      "name": "cdk:deploy",
-      "run": "npx projen cdk:deploy",
+      "name": "Say foo",
+      "run": "echo 'foo'",
     },
   ],
 }
@@ -190,8 +190,8 @@ Object {
       },
     },
     Object {
-      "name": "cdk:deploy",
-      "run": "npx projen cdk:deploy",
+      "name": "Say foo",
+      "run": "echo 'foo'",
     },
   ],
 }

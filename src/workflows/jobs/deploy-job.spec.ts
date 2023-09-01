@@ -1,3 +1,4 @@
+import { JobStep } from "projen/lib/github/workflows-model";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { DeployJob } from "./deploy-job";
 import { AuthProvider, AuthProviderType } from "../auth-provider";
@@ -12,10 +13,12 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const deployTask = project.addTask("cdk:deploy", {
-      description: "Deploy the service",
-      exec: "echo 'deploying'",
-    });
+    const deploySteps: Array<JobStep> = [
+      {
+        name: "Say foo",
+        run: "echo 'foo'",
+      },
+    ];
     const authProvider = new AuthProvider(project, {
       authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
       awsCredentialsOidc: {
@@ -25,7 +28,7 @@ describe("success conditions", () => {
       },
     });
     const deployJob = new DeployJob(workflow, {
-      deployTask,
+      deploySteps,
       authProvider,
     });
     expect(deployJob).toBeTruthy();
@@ -41,10 +44,12 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const deployTask = project.addTask("cdk:deploy", {
-      description: "Deploy the service",
-      exec: "echo 'deploying'",
-    });
+    const deploySteps: Array<JobStep> = [
+      {
+        name: "Say foo",
+        run: "echo 'foo'",
+      },
+    ];
     const authProvider = new AuthProvider(project, {
       authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
       awsCredentialsOidc: {
@@ -55,12 +60,12 @@ describe("success conditions", () => {
     });
     const deployJobOne = new DeployJob(workflow, {
       name: "Deploy Service One",
-      deployTask,
+      deploySteps,
       authProvider,
     });
     const deployJobTwo = new DeployJob(workflow, {
       name: "Deploy Service Two",
-      deployTask,
+      deploySteps,
       authProvider,
     });
     deployJobTwo.dependsOn(deployJobOne);
@@ -80,10 +85,12 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const deployTask = project.addTask("cdk:deploy", {
-      description: "Deploy the service",
-      exec: "echo 'deploying'",
-    });
+    const deploySteps: Array<JobStep> = [
+      {
+        name: "Say foo",
+        run: "echo 'foo'",
+      },
+    ];
     const authProvider = new AuthProvider(project, {
       authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
       awsCredentialsOidc: {
@@ -95,7 +102,7 @@ describe("success conditions", () => {
     const deployJob = new DeployJob(workflow, {
       name: "Deploy Service Foo",
       artifactDirectories: ["foo", "bar"],
-      deployTask,
+      deploySteps,
       authProvider,
     });
     expect(deployJob).toBeTruthy();

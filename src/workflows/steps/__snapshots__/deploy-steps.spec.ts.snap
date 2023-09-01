@@ -12,8 +12,8 @@ Array [
     },
   },
   Object {
-    "name": "cdk:deploy",
-    "run": "npx projen cdk:deploy",
+    "name": "Say foo",
+    "run": "echo 'foo'",
   },
 ]
 `;
@@ -30,8 +30,8 @@ Array [
     },
   },
   Object {
-    "name": "cdk:deploy",
-    "run": "npx projen cdk:deploy",
+    "name": "Say foo",
+    "run": "echo 'foo'",
   },
 ]
 `;

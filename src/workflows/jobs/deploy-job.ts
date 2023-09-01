@@ -1,6 +1,5 @@
 import { paramCase } from "change-case";
-import { Task } from "projen";
-import { Job, JobPermission } from "projen/lib/github/workflows-model";
+import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
 import { SetOptional } from "type-fest";
 import { WorkflowJob, WorkflowJobOptions } from "./workflow-job";
 import { AuthProvider } from "../auth-provider";
@@ -26,9 +25,9 @@ export interface DeployJobOptions
   readonly needs?: Array<string>;
 
   /**
-   * Projen Task that runs the deploy
+   * Step definition(s) that conduct the deployment
    */
-  readonly deployTask: Task;
+  readonly deploySteps: Array<JobStep>;
 
   /**
    * Authprovider for this deployment
@@ -52,9 +51,9 @@ export class DeployJob extends WorkflowJob {
   readonly needs: Array<string>;
 
   /**
-   * Projen Task that runs the deploy
+   * Step definition(s) that conduct the deployment
    */
-  readonly deployTask: Task;
+  readonly deploySteps: Array<JobStep>;
 
   /**
    * Authprovider for this deployment
@@ -75,7 +74,7 @@ export class DeployJob extends WorkflowJob {
     // defaults
     this.branchPrefix = branchPrefix;
     this.needs = [workflow.buildJob.jobId, ...(options.needs ?? [])];
-    this.deployTask = options.deployTask;
+    this.deploySteps = options.deploySteps;
     this.authProvider = options.authProvider;
 
     // add branch pattern this as a trigger

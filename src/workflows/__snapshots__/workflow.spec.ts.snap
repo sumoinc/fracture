@@ -99,7 +99,7 @@ jobs:
           role-to-assume: foo
           aws-region: us-east-1
           role-duration-seconds: 900
-      - name: cdk:deploy
-        run: npx projen cdk:deploy
+      - name: Say foo
+        run: echo 'foo'
 "
 `;

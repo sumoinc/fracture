@@ -1,9 +1,11 @@
 import { join } from "path";
 import { SampleFile } from "projen";
+import { JobStep } from "projen/lib/github/workflows-model";
 import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
+import { Settings } from "../../core/fracture-settings";
 import { DeployOptions } from "../../fracture-project";
 import { DeploymentWorkflow } from "../../workflows/deployment-workflow";
 import { Site } from "../site";
@@ -24,6 +26,11 @@ export class VitePressSite extends Site {
       ...options,
     });
 
+    // where are ther artifacts for this project going to be stored?
+    const { siteRoot } = Settings.of(parent);
+    this.artifactDirectories.push(join(siteRoot, this.name, ".vitepress/dist"));
+
+    // ignore a few vitepress specific things
     this.addDevDeps("vitepress");
     this.addGitIgnore(".vitepress/dist");
     this.addGitIgnore(".vitepress/cache");
@@ -57,109 +64,21 @@ export class VitePressSite extends Site {
     this.addTask("site:build", {
       exec: "pnpm vitepress build",
     });
-
-    // make sure we compile docs as part of standard default build
-    // parent.compileTask.spawn(this.buildTask);
-
-    /*
-    parent.buildWorkflow?.addPostBuildSteps({
-      name: `Build ${this.name}`,
-      run: `npx projen build`,
-      workingDirectory: `./${mergedOptions.outdir}`,
-    });*/
-
-    /**
-     * Make sure we have a deployment workflow on the default branch to deploy
-     * this site.
-     */
-
-    // const deployWorkflow =
-    //   Pipeline.byBranchName(parent, mergedOptions.defaultReleaseBranch) ??
-    //   new Pipeline(parent, { branchName: mergedOptions.defaultReleaseBranch });
-    // deployWorkflow.paths.push(mergedOptions.outdir);
-
-    // const vpArtifactName = `vp-${this.name}-artifact`;
-
-    // // add vitepress output as an artifact
-    // deployWorkflow.workflow.addPostBuildSteps({
-    //   name: `Upload ${this.name} artifact`,
-    //   uses: "actions/upload-artifact@v3",
-    //   with: {
-    //     name: vpArtifactName,
-    //     path: join(mergedOptions.outdir, ".vitepress/dist"),
-    //   },
-    // });
-
-    // deployWorkflow.workflow.addPostBuildJob(`deploy-${this.name}`, {
-    //   runsOn: ["ubuntu-latest"],
-    //   permissions: {
-    //     contents: JobPermission.READ,
-    //     idToken: JobPermission.WRITE,
-    //   },
-    //   steps: [
-    //     {
-    //       name: "Download build artifacts",
-    //       uses: "actions/download-artifact@v3",
-    //       with: {
-    //         name: vpArtifactName,
-    //         path: join(mergedOptions.outdir, ".vitepress/dist"),
-    //       },
-    //     },
-    //     /*
-    //       {
-    //         name: "Configure AWS Credentials",
-    //         uses: "aws-actions/configure-aws-credentials@v2",
-    //         with: {
-    //           "role-to-assume": `arn:aws:iam::${sdt.environment.accountNumber}:role/GitHubDeploymentOIDCRole`,
-    //           "aws-region": sdt.environment.region,
-    //         },
-    //       },
-    //       */
-    //     {
-    //       name: "Deploy",
-    //       //run: `npx aws-cdk@${sdt.service.cdkDeps.cdkVersion} deploy --no-rollback --app ${sdt.service.cdkOutDistDir} ${sdt.stackPattern}`,
-    //     },
-    //   ],
-    // });
-
-    /*
-    parent.release?.addJobs({
-      bar: {
-        needs: ["foo"],
-        runsOn: ["ubuntu-latest"],
-        permissions: {
-          contents: JobPermission.READ,
-          idToken: JobPermission.WRITE,
-        },
-        steps: [
-          {
-            name: "Configure AWS Credentials",
-            uses: "aws-actions/configure-aws-credentials@v2",
-            with: {
-              "role-to-assume": `arn:aws:iam::${sdt.environment.accountNumber}:role/GitHubDeploymentOIDCRole`,
-              "aws-region": sdt.environment.region,
-            },
-          },
-          {
-            name: "Deploy",
-            //run: `npx aws-cdk@${sdt.service.cdkDeps.cdkVersion} deploy --no-rollback --app ${sdt.service.cdkOutDistDir} ${sdt.stackPattern}`,
-          },
-        ],
-      },
-    });
-    */
   }
 
   public deploy(options: DeployOptions) {
-    const deployTask = this.parent.addTask(`cdk:deploy:foo`, {
-      description: `Deploy the foo`,
-      exec: `echo 'deploying foo'`,
-    });
+    const deploySteps: Array<JobStep> = [
+      {
+        name: "Deploy the foo",
+        run: "echo 'deploying foo'",
+      },
+    ];
     // add to deployment workflow
     return DeploymentWorkflow.of(this.parent).addDeployJob({
       ...options,
-      deployTask,
+      deploySteps,
       authProvider: options.environment.authProvider,
+      artifactDirectories: this.artifactDirectories,
     });
   }
 }

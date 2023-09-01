@@ -1,8 +1,16 @@
+import { JobStep } from "projen/lib/github/workflows-model";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { BuildJob } from "./build-job";
 import { DeployJob } from "./deploy-job";
 import { AuthProvider, AuthProviderType } from "../auth-provider";
 import { Workflow } from "../workflow";
+
+const deploySteps: Array<JobStep> = [
+  {
+    name: "Say foo",
+    run: "echo 'foo'",
+  },
+];
 
 describe("success conditions", () => {
   test("Smoke test", () => {
@@ -27,10 +35,6 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const deployTask = project.addTask("cdk:deploy", {
-      description: "Deploy the service",
-      exec: "echo 'deploying'",
-    });
     const authProvider = new AuthProvider(project, {
       authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
       awsCredentialsOidc: {
@@ -41,7 +45,7 @@ describe("success conditions", () => {
     });
     new DeployJob(workflow, {
       artifactDirectories: ["dist", "some/other/folder"],
-      deployTask,
+      deploySteps,
       authProvider,
     });
     expect(workflow.buildJob).toBeTruthy();

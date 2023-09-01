@@ -1,7 +1,15 @@
+import { JobStep } from "projen/lib/github/workflows-model";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { AuthProvider, AuthProviderType } from "./auth-provider";
 import { Workflow } from "./workflow";
 import { synthFile } from "../util/test-util";
+
+const deploySteps: Array<JobStep> = [
+  {
+    name: "Say foo",
+    run: "echo 'foo'",
+  },
+];
 
 describe("success conditions", () => {
   test("Smoke test", () => {
@@ -23,10 +31,6 @@ describe("success conditions", () => {
       defaultReleaseBranch: "main",
     });
     const workflow = new Workflow(project, { name: "my-workflow" });
-    const deployTask = project.addTask("cdk:deploy", {
-      description: "Deploy the service",
-      exec: "echo 'deploying'",
-    });
     const authProvider = new AuthProvider(project, {
       authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
       awsCredentialsOidc: {
@@ -38,7 +42,7 @@ describe("success conditions", () => {
     workflow.addDeployJob({
       name: "Deploy Service Foo",
       artifactDirectories: ["foo"],
-      deployTask,
+      deploySteps,
       authProvider,
     });
     const content = synthFile(project, `.github/workflows/my-workflow.yml`);

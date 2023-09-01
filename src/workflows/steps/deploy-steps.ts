@@ -19,9 +19,8 @@ export const renderDeploySteps = (deployJob: DeployJob): Array<JobStep> => {
     });
   }
 
-  steps.push({
-    name: deployJob.deployTask.name,
-    run: deployJob.workflow.github.project.runTaskCommand(deployJob.deployTask),
+  deployJob.deploySteps.forEach((step) => {
+    steps.push(step);
   });
 
   return steps;
