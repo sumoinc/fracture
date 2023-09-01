@@ -1,6 +1,6 @@
 import { NodeProject } from "projen/lib/javascript";
 import { AuthProvider, AuthProviderType } from "./auth-provider";
-import { Environment } from "../core";
+import { Environment } from "../environments";
 
 describe("success conditions", () => {
   test("Smoke test OIDC", () => {

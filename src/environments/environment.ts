@@ -2,7 +2,7 @@ import { paramCase } from "change-case";
 import { Component } from "projen";
 import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { Settings } from "./fracture-settings";
+import { Settings } from "../core/fracture-settings";
 import { REGION_IDENTITIER } from "./region";
 import { AuthProviderType } from "../workflows/auth-provider";
 

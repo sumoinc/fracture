@@ -1,7 +1,7 @@
 import { Component } from "projen";
 import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { REGION_IDENTITIER } from "./region";
+import { REGION_IDENTITIER } from "../environments/region";
 import { AuthProviderType } from "../workflows/auth-provider";
 
 export interface SettingsOptions {

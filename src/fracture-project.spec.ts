@@ -1,5 +1,5 @@
 import { NodeProject } from "projen/lib/javascript";
-import { Environment } from "./core";
+import { Environment } from "./environments";
 import { FractureProject } from "./fracture-project";
 import { Site } from "./sites/site";
 import { synthFile } from "./util/test-util";

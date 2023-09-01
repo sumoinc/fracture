@@ -1,7 +1,7 @@
 import { Component } from "projen";
 import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { Environment, REGION_IDENTITIER } from "../core";
+import { Environment, REGION_IDENTITIER } from "../environments";
 
 /**
  * Options for authorizing requests to a AWS CodeArtifact npm repository.

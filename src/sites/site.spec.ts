@@ -1,6 +1,6 @@
 import { TypeScriptProject } from "projen/lib/typescript";
 import { Site } from "./site";
-import { Environment } from "../core";
+import { Environment } from "../environments";
 import { AuthProvider } from "../workflows/auth-provider";
 
 describe("success conditions", () => {
