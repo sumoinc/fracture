@@ -10,11 +10,23 @@ export interface NetlifyEnvironmentOptions extends EnvironmentOptions {
   readonly authTokenSecretName?: string;
 
   /**
-   * Github Secret name for the NETLIFY_SITE_ID
+   * Github Secret name for the NETLIFY_SITE_ID. Ignored if siteId is provided.
    *
    * @default NETLIFY_SITE_ID
    */
   readonly siteIdSecretName?: string;
+
+  /**
+   * Site Id for netlify site.
+   */
+  readonly siteId?: string;
+
+  /**
+   * The directory to deploy to Netlify.
+   *
+   * @default dist
+   */
+  readonly deployDir?: string;
 }
 
 export class NetlifyEnvironment extends Environment {
@@ -23,14 +35,26 @@ export class NetlifyEnvironment extends Environment {
    *
    * @default NETLIFY_AUTH_TOKEN
    */
-  readonly authTokenSecretName: string;
+  public readonly authTokenSecretName: string;
 
   /**
-   * Github Secret name for the NETLIFY_SITE_ID
+   * Github Secret name for the NETLIFY_SITE_ID. Ignored if siteId is provided.
    *
    * @default NETLIFY_SITE_ID
    */
-  readonly siteIdSecretName: string;
+  public readonly siteIdSecretName: string;
+
+  /**
+   * Site Id for netlify site.
+   */
+  public readonly siteId?: string;
+
+  /**
+   * The directory to deploy to Netlify.
+   *
+   * @default dist
+   */
+  public deployDir: string;
 
   constructor(
     public readonly project: NodeProject,
@@ -42,6 +66,8 @@ export class NetlifyEnvironment extends Environment {
     this.authTokenSecretName =
       options.authTokenSecretName ?? "NETLIFY_AUTH_TOKEN";
     this.siteIdSecretName = options.siteIdSecretName ?? "NETLIFY_SITE_ID";
+    this.siteId = options.siteId;
+    this.deployDir = options.deployDir ?? "dist";
   }
 
   /*

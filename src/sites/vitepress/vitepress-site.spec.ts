@@ -1,3 +1,4 @@
+import { NodeProject } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { VitePressSite } from "./vitepress-site";
 import { AwsEnvironment } from "../../environments";
@@ -18,7 +19,7 @@ describe("success conditions", () => {
 
   test("With deploy", () => {
     // root project options
-    const project = new TypeScriptProject({
+    const project = new NodeProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });

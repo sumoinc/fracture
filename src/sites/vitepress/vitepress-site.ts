@@ -1,12 +1,10 @@
 import { join } from "path";
 import { SampleFile } from "projen";
 import { JobStep } from "projen/lib/github/workflows-model";
-import {
-  TypeScriptProject,
-  TypeScriptProjectOptions,
-} from "projen/lib/typescript";
+import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
 import { SetOptional } from "type-fest";
 import { Settings } from "../../core/fracture-settings";
+import { NetlifyEnvironment } from "../../environments/netlify-environment";
 import { DeployOptions } from "../../fracture-project";
 import { TurboRepo } from "../../turborepo";
 import { DeploymentWorkflow } from "../../workflows/deployment-workflow";
@@ -23,12 +21,15 @@ export const filesToScaffold = [
 ];
 
 export type VitePressSiteOptions = SetOptional<
-  TypeScriptProjectOptions,
+  NodeProjectOptions,
   "defaultReleaseBranch"
 >;
 
 export class VitePressSite extends Site {
-  constructor(parent: TypeScriptProject, options: VitePressSiteOptions) {
+  constructor(
+    public readonly parent: NodeProject,
+    options: VitePressSiteOptions
+  ) {
     const { defaultReleaseBranch } = Settings.of(parent);
 
     super(parent, {
@@ -104,6 +105,12 @@ export class VitePressSite extends Site {
         run: "echo 'deploying foo'",
       },
     ];
+
+    // set deploy directory, if needed
+    if (options.environment instanceof NetlifyEnvironment) {
+      options.environment.deployDir = ".vitepress/dist";
+    }
+
     // add to deployment workflow
     return DeploymentWorkflow.of(this.parent).addDeployJob({
       ...options,
