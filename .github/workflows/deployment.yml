@@ -45,7 +45,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write
     env:
       CI: "true"
     if: startsWith( github.ref, 'refs/heads/feature' )
@@ -67,11 +66,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: latest
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+      - name: Deploy to Netlify
+        uses: netlify/actions/cli@master
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: e69db060-d613-414c-9964-4a5a5e0e32ea
         with:
-          role-to-assume: arn:aws:iam::726654216209:role/GitHubDeploymentOIDCRole
-          aws-region: us-east-1
-          role-duration-seconds: 900
+          args: deploy --dir=.vitepress/dist --prod
       - name: Deploy the foo
         run: echo 'deploying foo'

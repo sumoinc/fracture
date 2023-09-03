@@ -1,6 +1,6 @@
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
-import { AwsEnvironment } from "./src/environments";
+import { NetlifyEnvironment } from "./src/environments/netlify-environment";
 import { VsCodeConfiguration } from "./src/projen/vscode";
 import { VitePressSite } from "./src/sites/vitepress/vitepress-site";
 
@@ -91,15 +91,15 @@ const site = new VitePressSite(project, {
 });
 
 // define environment for docs to deploy to
-const usEast = new AwsEnvironment(project, {
-  name: "us-east",
-  accountNumber: "726654216209",
+const netlify = new NetlifyEnvironment(project, {
+  name: "netlify",
+  siteId: "e69db060-d613-414c-9964-4a5a5e0e32ea",
 });
 
 // deployment target for docs
 site.deploy({
   branchPrefix: "feature",
-  environment: usEast,
+  environment: netlify,
 });
 
 // generate

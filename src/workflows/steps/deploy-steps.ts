@@ -34,12 +34,12 @@ export const renderDeploySteps = (deployJob: DeployJob): Array<JobStep> => {
       },
       env: {
         NETLIFY_AUTH_TOKEN:
-          "${{ secrets." + deployJob.environment.authTokenSecretName + "}}",
+          "${{ secrets." + deployJob.environment.authTokenSecretName + " }}",
         ...(deployJob.environment.siteId
           ? { NETLIFY_SITE_ID: deployJob.environment.siteId }
           : {
               NETLIFY_SITE_ID:
-                "${{ secrets." + deployJob.environment.siteIdSecretName + "}}",
+                "${{ secrets." + deployJob.environment.siteIdSecretName + " }}",
             }),
       },
     });
