@@ -25,6 +25,28 @@ describe("validate generated project files", () => {
     //console.log(content);
   });
 
+  test("turbo.json", () => {
+    const project = new TypeScriptProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
+    });
+    const turboRepo = TurboRepo.of(project);
+    turboRepo.taskSets.push({
+      name: "docs",
+      buildTask: {
+        "docs:build": {
+          outputs: [".vitepress/dist/**"],
+        },
+      },
+      testTask: {
+        "docs:test": {},
+      },
+    });
+    const content = synthFile(project, "turbo.json");
+    expect(content).toMatchSnapshot();
+    // console.log(JSON.stringify(content, null, 2));
+  });
+
   test(".projen/tasks.json", () => {
     const project = new TypeScriptProject({
       name: "my-project",

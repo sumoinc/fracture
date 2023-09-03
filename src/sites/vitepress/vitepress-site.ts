@@ -8,6 +8,7 @@ import {
 import { SetOptional } from "type-fest";
 import { Settings } from "../../core/fracture-settings";
 import { DeployOptions } from "../../fracture-project";
+import { TurboRepo } from "../../turborepo";
 import { DeploymentWorkflow } from "../../workflows/deployment-workflow";
 import { Site } from "../site";
 
@@ -63,15 +64,36 @@ export class VitePressSite extends Site {
     /***
      * Add some shortcut commends that vitepress devs will expect to exist.
      */
-    // add commands to run vitepress
-    this.addTask("site:dev", {
+    // add commands to run vitepress.
+    this.addTask("docs:dev", {
       exec: "pnpm vitepress dev",
     });
-    this.addTask("site:preview", {
+    this.addTask("docs:preview", {
       exec: "pnpm vitepress preview",
     });
-    this.addTask("site:build", {
+    this.addTask("docs:build", {
       exec: "pnpm vitepress build",
+    });
+    this.addTask("docs:test", {
+      exec: "echo 'docs:test does nothing yet'",
+    });
+
+    /**
+     * Add build tasks to turbo's pipeline.
+     */
+    const turbo = TurboRepo.of(parent);
+    turbo.taskSets.push({
+      name: this.name,
+      buildTask: {
+        "docs:build": {
+          outputs: [".vitepress/dist/**"],
+        },
+      },
+      testTask: {
+        "docs:test": {
+          cache: true,
+        },
+      },
     });
   }
 

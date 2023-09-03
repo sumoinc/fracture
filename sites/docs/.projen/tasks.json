@@ -29,6 +29,38 @@
       "name": "default",
       "description": "Synthesize project files"
     },
+    "docs:build": {
+      "name": "docs:build",
+      "steps": [
+        {
+          "exec": "pnpm vitepress build"
+        }
+      ]
+    },
+    "docs:dev": {
+      "name": "docs:dev",
+      "steps": [
+        {
+          "exec": "pnpm vitepress dev"
+        }
+      ]
+    },
+    "docs:preview": {
+      "name": "docs:preview",
+      "steps": [
+        {
+          "exec": "pnpm vitepress preview"
+        }
+      ]
+    },
+    "docs:test": {
+      "name": "docs:test",
+      "steps": [
+        {
+          "exec": "echo 'docs:test does nothing yet'"
+        }
+      ]
+    },
     "install": {
       "name": "install",
       "description": "Install project dependencies and update lockfile (non-frozen)",
@@ -62,30 +94,6 @@
     "pre-compile": {
       "name": "pre-compile",
       "description": "Prepare the project for compilation"
-    },
-    "site:build": {
-      "name": "site:build",
-      "steps": [
-        {
-          "exec": "pnpm vitepress build"
-        }
-      ]
-    },
-    "site:dev": {
-      "name": "site:dev",
-      "steps": [
-        {
-          "exec": "pnpm vitepress dev"
-        }
-      ]
-    },
-    "site:preview": {
-      "name": "site:preview",
-      "steps": [
-        {
-          "exec": "pnpm vitepress preview"
-        }
-      ]
     },
     "test": {
       "name": "test",

@@ -1,5 +1,38 @@
 import { Component, JsonFile, YamlFile } from "projen";
 import { NodeProject } from "projen/lib/javascript";
+import { ValueOf } from "type-fest";
+
+export const TurboOutputModeType = {
+  FULL: "full",
+  HASH_ONLY: "hash-only",
+  NEW_ONLY: "new-only",
+  ERRORS_ONLY: "errors-only",
+  NONE: "none",
+} as const;
+
+export type TurboTask = {
+  cache?: boolean;
+  dependsOn?: Array<string>;
+  dotEnv?: Array<string>;
+  env?: Array<string>;
+  inputs?: Array<string>;
+  outputs?: Array<string>;
+  outputMode?: ValueOf<typeof TurboOutputModeType>;
+  passThroughEnv?: Array<string>;
+  persistent?: boolean;
+};
+
+/**
+ * The build and test task that should be run for each subproject.
+ */
+export type TurboTaskSet = {
+  /**
+   * Name found in sub-project's package file.
+   */
+  name: string;
+  buildTask: Record<string, TurboTask>;
+  testTask: Record<string, TurboTask>;
+};
 
 export class TurboRepo extends Component {
   /**
@@ -13,9 +46,14 @@ export class TurboRepo extends Component {
   }
 
   /**
-   * PNMP workspace file
+   * PNMP workspace file roots
    */
   public readonly workspaceRoots: Array<string> = [];
+
+  /**
+   * Task definitions for each subproject
+   */
+  public readonly taskSets: Array<TurboTaskSet> = [];
 
   constructor(public readonly project: NodeProject) {
     super(project);
@@ -60,63 +98,23 @@ export class TurboRepo extends Component {
 
     /***************************************************************************
      *
-     * SYNTH TASK
+     * BUILD & TEST SUB PROJECTS
      *
-     * We want to synth all workspaces and packages during the build task's
-     * postCompile step.
+     * This is a little bit of build pipeline inception. Projen has it's own
+     * task dependancy graph for it's pipelines, but we want to tie into the
+     * added speed Turborepo gives us in a monorapo.
      *
-     **************************************************************************/
-
-    project.addTask("synth", {
-      description: "Synthesizes your cdk app into cdk.out",
-      exec: "pnpm turbo synth",
-    });
-
-    project.postCompileTask?.spawn(
-      project.addTask("synth:silent", {
-        description: "Synthesizes your cdk app into cdk.out",
-        exec: "pnpm turbo synth:silent",
-      })
-    );
-
-    /***************************************************************************
-     *
-     * SITE BUILD TASK
-     *
-     * Look for any sites that need to be built.
+     * The task created here runs after "npx projen build" finishes. but before
+     * self mutation checks.
      *
      **************************************************************************/
 
     project.postCompileTask?.spawn(
-      project.addTask("site:build", {
-        description: "Synthesizes your cdk app into cdk.out",
-        exec: "pnpm turbo site:build",
+      project.addTask("turbo:build", {
+        description: "Builds all subprojects",
+        exec: "pnpm turbo turbo:build",
       })
     );
-
-    /***************************************************************************
-     *
-     * TESTING
-     *
-     * Runs test on subprojects once the root test task finishes.
-     *
-     **************************************************************************/
-
-    const testTask = project.tasks.tryFind("test");
-    if (testTask) {
-      testTask.spawn(
-        project.addTask("turbo:test", {
-          description: "Test subprojects",
-          exec: "pnpm turbo test",
-        })
-      );
-    }
-
-    /***************************************************************************
-     *
-     * DECLARE ROOT BUILDFILE
-     *
-     **************************************************************************/
   }
 
   addWorkspaceRoot(path: string) {
@@ -124,6 +122,33 @@ export class TurboRepo extends Component {
   }
 
   preSynthesize(): void {
+    // build tasks for sub projects
+    const tasks = this.taskSets.reduce((acc, taskSet) => {
+      // script names
+      const buildScript = Object.keys(taskSet.buildTask).join();
+      const testScript = Object.keys(taskSet.testTask).join();
+
+      // set build defaults
+      acc[`${taskSet.name}#${buildScript}`] = {
+        outputMode: "new-only",
+        cache: true,
+        ...taskSet.buildTask[buildScript],
+      };
+
+      // set test defaults, add build as dependancy
+      acc[`${taskSet.name}#${testScript}`] = {
+        outputMode: "new-only",
+        cache: true,
+        ...taskSet.testTask,
+        dependsOn: [
+          `${taskSet.name}#${buildScript}`,
+          ...(taskSet.testTask[testScript].dependsOn ?? []),
+        ],
+      };
+
+      return acc;
+    }, {} as Record<string, TurboTask>);
+
     // turbo config file, run everything for now, might limit what runs later
     new JsonFile(this.project, "turbo.json", {
       obj: {
@@ -133,26 +158,32 @@ export class TurboRepo extends Component {
             dependsOn: ["^eslint"],
             cache: false,
           },
-          ["site:build"]: {
-            dependsOn: ["^site:build"],
-            outputs: [".vitepress/dist/**"],
+          ["turbo:build"]: {
+            dependsOn: Object.keys(tasks),
             outputMode: "new-only",
           },
-          synth: {
-            dependsOn: ["^synth"],
-            outputs: ["cdk-out/**"],
-            outputMode: "new-only",
-          },
-          ["synth:silent"]: {
-            dependsOn: ["^synth:silent"],
-            outputs: ["cdk-out/**"],
-            outputMode: "new-only",
-          },
-          test: {
-            dependsOn: ["^test"],
-            outputs: ["coverage**", "test-reports/**", "**/__snapshots__/**"],
-            outputMode: "new-only",
-          },
+          ...tasks,
+
+          // ["site:build"]: {
+          //   dependsOn: ["^site:build"],
+          //   outputs: [".vitepress/dist/**"],
+          //   outputMode: "new-only",
+          // },
+          // synth: {
+          //   dependsOn: ["^synth"],
+          //   outputs: ["cdk-out/**"],
+          //   outputMode: "new-only",
+          // },
+          // ["synth:silent"]: {
+          //   dependsOn: ["^synth:silent"],
+          //   outputs: ["cdk-out/**"],
+          //   outputMode: "new-only",
+          // },
+          // test: {
+          //   dependsOn: ["^test"],
+          //   outputs: ["coverage**", "test-reports/**", "**/__snapshots__/**"],
+          //   outputMode: "new-only",
+          // },
         },
       },
     });

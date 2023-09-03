@@ -147,10 +147,7 @@
       "description": "Runs after successful compilation",
       "steps": [
         {
-          "spawn": "synth:silent"
-        },
-        {
-          "spawn": "site:build"
+          "spawn": "turbo:build"
         }
       ]
     },
@@ -186,33 +183,6 @@
         }
       ]
     },
-    "site:build": {
-      "name": "site:build",
-      "description": "Synthesizes your cdk app into cdk.out",
-      "steps": [
-        {
-          "exec": "pnpm turbo site:build"
-        }
-      ]
-    },
-    "synth": {
-      "name": "synth",
-      "description": "Synthesizes your cdk app into cdk.out",
-      "steps": [
-        {
-          "exec": "pnpm turbo synth"
-        }
-      ]
-    },
-    "synth:silent": {
-      "name": "synth:silent",
-      "description": "Synthesizes your cdk app into cdk.out",
-      "steps": [
-        {
-          "exec": "pnpm turbo synth:silent"
-        }
-      ]
-    },
     "test": {
       "name": "test",
       "description": "Run tests",
@@ -223,9 +193,6 @@
         },
         {
           "spawn": "eslint"
-        },
-        {
-          "spawn": "turbo:test"
         }
       ]
     },
@@ -238,12 +205,12 @@
         }
       ]
     },
-    "turbo:test": {
-      "name": "turbo:test",
-      "description": "Test subprojects",
+    "turbo:build": {
+      "name": "turbo:build",
+      "description": "Builds all subprojects",
       "steps": [
         {
-          "exec": "pnpm turbo test"
+          "exec": "pnpm turbo turbo:build"
         }
       ]
     },

@@ -1,8 +1,5 @@
 import { NodeProject } from "projen/lib/javascript";
-import { ValueOf } from "type-fest";
 import { Environment, EnvironmentOptions } from "./environment";
-import { Settings } from "../core/fracture-settings";
-import { AuthProvider, AuthProviderType } from "../workflows/auth-provider";
 
 export interface NetlifyEnvironmentOptions extends EnvironmentOptions {
   /**
