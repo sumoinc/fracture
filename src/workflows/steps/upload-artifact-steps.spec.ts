@@ -1,7 +1,7 @@
 import { JobStep } from "projen/lib/github/workflows-model";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { renderUploadArtifactSteps } from "./upload-artifact-steps";
-import { AuthProvider, AuthProviderType } from "../auth-provider";
+import { Environment } from "../../environments";
 import { DeployJob } from "../jobs/deploy-job";
 import { Workflow } from "../workflow";
 
@@ -35,18 +35,13 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const authProvider = new AuthProvider(project, {
-      authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
-      awsCredentialsOidc: {
-        roleToAssume: "foo",
-        roleDurationSeconds: 900,
-        awsRegion: "us-east-1",
-      },
+    const environment = new Environment(project, {
+      name: "my-environment",
     });
     new DeployJob(workflow, {
       artifactDirectories: ["dist", "some/other/folder"],
       deploySteps,
-      authProvider,
+      environment,
     });
     const artifactSteps = renderUploadArtifactSteps(workflow.buildJob);
     expect(artifactSteps).toBeTruthy();
@@ -62,18 +57,13 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const authProvider = new AuthProvider(project, {
-      authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
-      awsCredentialsOidc: {
-        roleToAssume: "foo",
-        roleDurationSeconds: 900,
-        awsRegion: "us-east-1",
-      },
+    const environment = new Environment(project, {
+      name: "my-environment",
     });
     new DeployJob(workflow, {
       artifactDirectories: ["dist", "dist"],
       deploySteps,
-      authProvider,
+      environment,
     });
     const artifactSteps = renderUploadArtifactSteps(workflow.buildJob);
     expect(artifactSteps).toBeTruthy();

@@ -1,8 +1,11 @@
 import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { Environment, EnvironmentOptions } from "./environment";
+import {
+  AuthProviderType,
+  Environment,
+  EnvironmentOptions,
+} from "./environment";
 import { Settings } from "../core/fracture-settings";
-import { AuthProvider, AuthProviderType } from "../workflows/auth-provider";
 
 export const AwsRegion = {
   US_EAST_1: "us-east-1",
@@ -89,7 +92,6 @@ export class AwsEnvironment extends Environment {
     // grab some core defaults
     const {
       defaultRegion,
-      authProviderType,
       gitHubDeploymentOIDCRoleName,
       gitHubDeploymentOIDCRoleDurationSeconds,
     } = Settings.of(project);
@@ -97,7 +99,8 @@ export class AwsEnvironment extends Environment {
     // defaults
     this.accountNumber = options.accountNumber;
     this.region = options.region ?? defaultRegion;
-    this.authProviderType = options.authProviderType ?? authProviderType;
+    this.authProviderType =
+      options.authProviderType ?? AuthProviderType.AWS_GITHUB_OIDC;
     this.gitHubDeploymentOIDCRoleName =
       options.gitHubDeploymentOIDCRoleName ?? gitHubDeploymentOIDCRoleName;
     this.gitHubDeploymentOIDCRoleDurationSeconds =
@@ -105,7 +108,7 @@ export class AwsEnvironment extends Environment {
       gitHubDeploymentOIDCRoleDurationSeconds;
   }
 
-  public get authProvider(): AuthProvider {
-    return AuthProvider.fromAwsEnvironment(this.project, this);
-  }
+  // public get authProvider(): AuthProvider {
+  //   return AuthProvider.fromAwsEnvironment(this.project, this);
+  // }
 }

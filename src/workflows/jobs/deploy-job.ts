@@ -2,7 +2,7 @@ import { paramCase } from "change-case";
 import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
 import { SetOptional } from "type-fest";
 import { WorkflowJob, WorkflowJobOptions } from "./workflow-job";
-import { AuthProvider } from "../auth-provider";
+import { Environment } from "../../environments";
 import { renderDeploySteps } from "../steps/deploy-steps";
 import { renderDownloadArtifactSteps } from "../steps/download-artifact-steps";
 import { renderSetupNodeSteps } from "../steps/setup-node-steps";
@@ -30,9 +30,9 @@ export interface DeployJobOptions
   readonly deploySteps: Array<JobStep>;
 
   /**
-   * Authprovider for this deployment
+   * Environment deploying to.
    */
-  readonly authProvider: AuthProvider;
+  readonly environment: Environment;
 }
 
 export class DeployJob extends WorkflowJob {
@@ -56,9 +56,9 @@ export class DeployJob extends WorkflowJob {
   readonly deploySteps: Array<JobStep>;
 
   /**
-   * Authprovider for this deployment
+   * Environment deploying to.
    */
-  readonly authProvider: AuthProvider;
+  readonly environment: Environment;
 
   constructor(public readonly workflow: Workflow, options: DeployJobOptions) {
     const branchPrefix = options.branchPrefix ?? "main";
@@ -75,12 +75,12 @@ export class DeployJob extends WorkflowJob {
     this.branchPrefix = branchPrefix;
     this.needs = [workflow.buildJob.jobId, ...(options.needs ?? [])];
     this.deploySteps = options.deploySteps;
-    this.authProvider = options.authProvider;
+    this.environment = options.environment;
 
-    // add branch pattern this as a trigger
+    // add this branch pattern as a trigger for the workflow
     workflow.addPushTrigger(this.branchPrefix);
 
-    // make sure build stores these
+    // make sure build step will store the artifacts we need
     workflow.buildJob.artifactDirectories.push(...this.artifactDirectories);
   }
 
@@ -99,7 +99,7 @@ export class DeployJob extends WorkflowJob {
       },
       permissions: {
         contents: JobPermission.READ,
-        ...(this.authProvider.authProviderType === "AWS_GITHUB_OIDC"
+        ...(this.environment.authProviderType === "AWS_GITHUB_OIDC"
           ? {
               idToken: JobPermission.WRITE,
             }

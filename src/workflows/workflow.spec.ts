@@ -1,7 +1,7 @@
 import { JobStep } from "projen/lib/github/workflows-model";
 import { TypeScriptProject } from "projen/lib/typescript";
-import { AuthProvider, AuthProviderType } from "./auth-provider";
 import { Workflow } from "./workflow";
+import { AwsEnvironment } from "../environments";
 import { synthFile } from "../util/test-util";
 
 const deploySteps: Array<JobStep> = [
@@ -31,19 +31,15 @@ describe("success conditions", () => {
       defaultReleaseBranch: "main",
     });
     const workflow = new Workflow(project, { name: "my-workflow" });
-    const authProvider = new AuthProvider(project, {
-      authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
-      awsCredentialsOidc: {
-        roleToAssume: "foo",
-        roleDurationSeconds: 900,
-        awsRegion: "us-east-1",
-      },
+    const environment = new AwsEnvironment(project, {
+      name: "my-environment",
+      accountNumber: "0000000000",
     });
     workflow.addDeployJob({
       name: "Deploy Service Foo",
       artifactDirectories: ["foo"],
       deploySteps,
-      authProvider,
+      environment,
     });
     const content = synthFile(project, `.github/workflows/my-workflow.yml`);
     expect(content).toBeTruthy();

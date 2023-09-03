@@ -59,7 +59,7 @@ Object {
       "with": Object {
         "aws-region": "us-east-1",
         "role-duration-seconds": 900,
-        "role-to-assume": "foo",
+        "role-to-assume": "arn:aws:iam::0000000000:role/GitHubDeploymentOIDCRole",
       },
     },
     Object {
@@ -101,7 +101,7 @@ Object {
       "with": Object {
         "aws-region": "us-east-1",
         "role-duration-seconds": 900,
-        "role-to-assume": "foo",
+        "role-to-assume": "arn:aws:iam::0000000000:role/GitHubDeploymentOIDCRole",
       },
     },
     Object {
@@ -143,7 +143,7 @@ Object {
       "with": Object {
         "aws-region": "us-east-1",
         "role-duration-seconds": 900,
-        "role-to-assume": "foo",
+        "role-to-assume": "arn:aws:iam::0000000000:role/GitHubDeploymentOIDCRole",
       },
     },
     Object {
@@ -186,7 +186,7 @@ Object {
       "with": Object {
         "aws-region": "us-east-1",
         "role-duration-seconds": 900,
-        "role-to-assume": "foo",
+        "role-to-assume": "arn:aws:iam::0000000000:role/GitHubDeploymentOIDCRole",
       },
     },
     Object {

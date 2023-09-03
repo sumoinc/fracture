@@ -1,7 +1,7 @@
 import { JobStep } from "projen/lib/github/workflows-model";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { DeployJob } from "./deploy-job";
-import { AuthProvider, AuthProviderType } from "../auth-provider";
+import { AwsEnvironment } from "../../environments";
 import { Workflow } from "../workflow";
 
 describe("success conditions", () => {
@@ -19,17 +19,13 @@ describe("success conditions", () => {
         run: "echo 'foo'",
       },
     ];
-    const authProvider = new AuthProvider(project, {
-      authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
-      awsCredentialsOidc: {
-        roleToAssume: "foo",
-        roleDurationSeconds: 900,
-        awsRegion: "us-east-1",
-      },
+    const environment = new AwsEnvironment(project, {
+      name: "my-environment",
+      accountNumber: "0000000000",
     });
     const deployJob = new DeployJob(workflow, {
       deploySteps,
-      authProvider,
+      environment,
     });
     expect(deployJob).toBeTruthy();
     expect(deployJob.render()).toMatchSnapshot();
@@ -50,23 +46,19 @@ describe("success conditions", () => {
         run: "echo 'foo'",
       },
     ];
-    const authProvider = new AuthProvider(project, {
-      authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
-      awsCredentialsOidc: {
-        roleToAssume: "foo",
-        roleDurationSeconds: 900,
-        awsRegion: "us-east-1",
-      },
+    const environment = new AwsEnvironment(project, {
+      name: "my-environment",
+      accountNumber: "0000000000",
     });
     const deployJobOne = new DeployJob(workflow, {
       name: "Deploy Service One",
       deploySteps,
-      authProvider,
+      environment,
     });
     const deployJobTwo = new DeployJob(workflow, {
       name: "Deploy Service Two",
       deploySteps,
-      authProvider,
+      environment,
     });
     deployJobTwo.dependsOn(deployJobOne);
     expect(deployJobOne).toBeTruthy();
@@ -91,19 +83,15 @@ describe("success conditions", () => {
         run: "echo 'foo'",
       },
     ];
-    const authProvider = new AuthProvider(project, {
-      authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
-      awsCredentialsOidc: {
-        roleToAssume: "foo",
-        roleDurationSeconds: 900,
-        awsRegion: "us-east-1",
-      },
+    const environment = new AwsEnvironment(project, {
+      name: "my-environment",
+      accountNumber: "0000000000",
     });
     const deployJob = new DeployJob(workflow, {
       name: "Deploy Service Foo",
       artifactDirectories: ["foo", "bar"],
       deploySteps,
-      authProvider,
+      environment,
     });
     expect(deployJob).toBeTruthy();
     expect(deployJob.render()).toMatchSnapshot();

@@ -108,7 +108,6 @@ export class VitePressSite extends Site {
     return DeploymentWorkflow.of(this.parent).addDeployJob({
       ...options,
       deploySteps,
-      authProvider: options.environment.authProvider,
       artifactDirectories: this.artifactDirectories,
     });
   }

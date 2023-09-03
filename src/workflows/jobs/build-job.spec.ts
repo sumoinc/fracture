@@ -2,7 +2,7 @@ import { JobStep } from "projen/lib/github/workflows-model";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { BuildJob } from "./build-job";
 import { DeployJob } from "./deploy-job";
-import { AuthProvider, AuthProviderType } from "../auth-provider";
+import { AwsEnvironment } from "../../environments";
 import { Workflow } from "../workflow";
 
 const deploySteps: Array<JobStep> = [
@@ -35,18 +35,14 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const authProvider = new AuthProvider(project, {
-      authProviderType: AuthProviderType.AWS_GITHUB_OIDC,
-      awsCredentialsOidc: {
-        roleToAssume: "foo",
-        roleDurationSeconds: 900,
-        awsRegion: "us-east-1",
-      },
+    const environment = new AwsEnvironment(project, {
+      name: "my-environment",
+      accountNumber: "0000000000",
     });
     new DeployJob(workflow, {
       artifactDirectories: ["dist", "some/other/folder"],
       deploySteps,
-      authProvider,
+      environment,
     });
     expect(workflow.buildJob).toBeTruthy();
     expect(workflow.buildJob.render()).toMatchSnapshot();

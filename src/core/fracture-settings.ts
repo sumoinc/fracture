@@ -2,7 +2,6 @@ import { Component } from "projen";
 import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
 import { AwsRegion } from "../environments/aws-environment";
-import { AuthProviderType } from "../workflows/auth-provider";
 
 export interface SettingsOptions {
   /**
@@ -41,13 +40,6 @@ export interface SettingsOptions {
    * @default "sites"
    */
   readonly siteRoot?: string;
-
-  /**
-   * Type of auth provider to use.
-   *
-   * @default AuthProviderType.AWS_GITHUB_OIDC
-   */
-  readonly authProviderType?: ValueOf<typeof AuthProviderType>;
 
   /**
    * The role name that shuld ber used when constructing the OIDC role's ARN.
@@ -112,18 +104,10 @@ export class Settings extends Component {
   public readonly siteRoot: string;
 
   /**
-   * Type of auth provider to use.
-   *
-   * @default AuthProviderType.AWS_GITHUB_OIDC
-   */
-  public readonly authProviderType: ValueOf<typeof AuthProviderType>;
-
-  /**
    * The role name that shuld ber used when constructing the OIDC role's ARN.
    *
    * @default GitHubDeploymentOIDCRole
    */
-
   public readonly gitHubDeploymentOIDCRoleName: string;
 
   /**
@@ -145,8 +129,6 @@ export class Settings extends Component {
     this.defaultRegion = options.defaultRegion ?? "us-east-1";
     this.appRoot = options.appRoot ?? "apps";
     this.siteRoot = options.siteRoot ?? "sites";
-    this.authProviderType =
-      options.authProviderType ?? AuthProviderType.AWS_GITHUB_OIDC;
     this.gitHubDeploymentOIDCRoleName =
       options.gitHubDeploymentOIDCRoleName ?? "GitHubDeploymentOIDCRole";
     this.gitHubDeploymentOIDCRoleDurationSeconds =

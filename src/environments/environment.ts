@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { NodeProject } from "projen/lib/javascript";
-import { AuthProvider } from "../workflows/auth-provider";
+import { ValueOf } from "type-fest";
 
 export const EnvironmentType = {
   AWS: "AWS",
@@ -9,11 +9,39 @@ export const EnvironmentType = {
   VERCEL: "VERCEL",
 } as const;
 
+/**
+ * Options for authorizing requests to a AWS CodeArtifact npm repository.
+ */
+export const AuthProviderType = {
+  /**
+   * Use fixed credentials provided via Github secrets.
+   */
+  AWS_ACCESS_AND_SECRET_KEY_PAIR: "AWS_ACCESS_AND_SECRET_KEY_PAIR",
+
+  /**
+   * Use ephemeral credentials provided via Github's OIDC integration with an IAM role.
+   * See:
+   * https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html
+   * https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+   */
+  AWS_GITHUB_OIDC: "AWS_GITHUB_OIDC",
+
+  /**
+   * Use A Netlify Token and Site Id.
+   */
+  NETLIFY_TOKEN: "NETLIFY_TOKEN",
+} as const;
+
 export interface EnvironmentOptions {
   /**
    * Friendly name for environment
    */
   readonly name: string;
+
+  /**
+   * Type of authprovider to use in this environment.
+   */
+  readonly authProviderType?: ValueOf<typeof AuthProviderType>;
 }
 
 export class Environment extends Component {
@@ -34,6 +62,11 @@ export class Environment extends Component {
    */
   public readonly name: string;
 
+  /**
+   * Type of authprovider to use in this environment.
+   */
+  readonly authProviderType?: ValueOf<typeof AuthProviderType>;
+
   constructor(
     public readonly project: NodeProject,
     options: EnvironmentOptions
@@ -51,9 +84,5 @@ export class Environment extends Component {
     super(project);
 
     this.name = options.name;
-  }
-
-  public get authProvider(): AuthProvider {
-    throw new Error("Not implemented, override in subclass.");
   }
 }
