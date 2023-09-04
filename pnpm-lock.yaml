@@ -24,8 +24,8 @@ dependencies:
     specifier: ^4.1.2
     version: 4.1.2
   projen:
-    specifier: ^0.73.5
-    version: 0.73.5
+    specifier: ^0.73.6
+    version: 0.73.6
   type-fest:
     specifier: ^2.19.0
     version: 2.19.0
@@ -6204,8 +6204,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /projen@0.73.5:
-    resolution: {integrity: sha512-Hf87jQp04iQHAytrj26tdhv144h4HdzbTObf0t8hXTlvy/hKr/U2bTVS8ZE/N9NcAtvDKgxy9xn8j+svLazywA==}
+  /projen@0.73.6:
+    resolution: {integrity: sha512-ZXQ5KVuMGQY8iBhA93GKhnP2TMOjZPjSdeHdwolFajQkJtcKKGTBD7dF1yNRnb0aS12oEu78EZVPNFG+vW9C/w==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
