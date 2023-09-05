@@ -1,15 +1,21 @@
 import { join } from "path";
 import { TextFile, TextFileOptions } from "projen";
-import { FractureService } from "../core/fracture-service";
+import { NodeProject } from "projen/lib/javascript";
+import { Settings } from "../settings";
 
 export type GeneratedFileOptions = TextFileOptions;
 
 export class GeneratedFile extends TextFile {
   constructor(
-    service: FractureService,
+    public readonly project: NodeProject,
     filePath: string,
-    options: GeneratedFileOptions = { readonly: false }
+    options: GeneratedFileOptions = {}
   ) {
-    super(service, join(service.srcdir, "generated", filePath), options);
+    const settings = Settings.of(project);
+
+    super(project, join(settings.srcDirectory, "generated", filePath), {
+      readonly: false,
+      ...options,
+    });
   }
 }

@@ -1,15 +1,15 @@
+import { NodeProject } from "projen/lib/javascript";
 import { GeneratedFile, GeneratedFileOptions } from "./generated-file";
-import { FractureService } from "../core/fracture-service";
 
 export type GeneratedTypescriptFileOptions = GeneratedFileOptions;
 
 export class GeneratedTypescriptFile extends GeneratedFile {
   constructor(
-    service: FractureService,
+    public readonly project: NodeProject,
     filePath: string,
-    options: GeneratedTypescriptFileOptions = { readonly: false }
+    options: GeneratedTypescriptFileOptions = {}
   ) {
-    super(service, filePath, options);
+    super(project, filePath, options);
   }
 
   preSynthesize() {

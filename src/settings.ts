@@ -43,6 +43,13 @@ export interface SettingsOptions {
    * @default "sites"
    */
   readonly siteRoot?: string;
+
+  /**
+   * Source code directory for this project.
+   *
+   * @default "src"
+   */
+  readonly srcDirectory?: string;
 }
 
 export class Settings extends Component {
@@ -85,6 +92,13 @@ export class Settings extends Component {
   public readonly siteRoot: string;
 
   /**
+   * Source code directory for this project.
+   *
+   * @default "src"
+   */
+  public readonly srcDirectory: string;
+
+  /**
    * Defaults for AWS environments.
    */
   public readonly defaultAwsEnviromentOptions: Required<
@@ -108,6 +122,7 @@ export class Settings extends Component {
     this.defaultReleaseBranch = options.defaultReleaseBranch ?? "main";
     this.appRoot = options.appRoot ?? "apps";
     this.siteRoot = options.siteRoot ?? "sites";
+    this.srcDirectory = options.srcDirectory ?? "src";
 
     // defaults for AWS
     this.defaultAwsEnviromentOptions = {

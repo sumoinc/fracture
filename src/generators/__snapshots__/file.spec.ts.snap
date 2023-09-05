@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`success conditions Smoke test 1`] = `
+Array [
+  ".gitattributes",
+  ".github/pull_request_template.md",
+  ".github/workflows/build.yml",
+  ".github/workflows/pull-request-lint.yml",
+  ".github/workflows/release.yml",
+  ".github/workflows/upgrade-main.yml",
+  ".gitignore",
+  ".mergify.yml",
+  ".npmignore",
+  ".projen/deps.json",
+  ".projen/files.json",
+  ".projen/tasks.json",
+  "LICENSE",
+  "package.json",
+  "README.md",
+  "src/generated/foo.txt",
+]
+`;
