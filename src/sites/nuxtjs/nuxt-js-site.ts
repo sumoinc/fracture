@@ -2,7 +2,7 @@ import { join } from "path";
 import { JsonFile, SampleDir, SourceCode } from "projen";
 import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
 import { SetOptional } from "type-fest";
-import { Settings } from "../../fracture-settings";
+import { Settings } from "../../settings";
 import { Site } from "../site";
 
 export type NuxtJsSiteOptions = SetOptional<

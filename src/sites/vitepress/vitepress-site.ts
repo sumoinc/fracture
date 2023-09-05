@@ -3,7 +3,7 @@ import { SampleFile } from "projen";
 import { JobStep } from "projen/lib/github/workflows-model";
 import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
 import { SetOptional } from "type-fest";
-import { Settings } from "../../fracture-settings";
+import { Settings } from "../../settings";
 import { DeployOptions } from "../../fracture-project";
 import { TurboRepo } from "../../turborepo";
 import { Workflow } from "../../workflows/workflow";

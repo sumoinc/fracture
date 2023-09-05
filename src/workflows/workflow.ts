@@ -4,7 +4,7 @@ import { NodeProject } from "projen/lib/javascript";
 import { BuildJob } from "./jobs/build-job";
 import { DeployJob, DeployJobOptions } from "./jobs/deploy-job";
 import { WorkflowJob } from "./jobs/workflow-job";
-import { Settings } from "../fracture-settings";
+import { Settings } from "../settings";
 
 /**
  * Name of the permission back up file to include in the build artifact

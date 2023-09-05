@@ -5,7 +5,7 @@ import {
   Environment,
   EnvironmentOptions,
 } from "./environment";
-import { Settings } from "../fracture-settings";
+import { Settings } from "../settings";
 
 export const AwsRegion = {
   US_EAST_1: "us-east-1",
