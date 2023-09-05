@@ -90,7 +90,9 @@ const site = new VitePressSite(project, {
   name: "docs",
 });
 
-// define environment for docs to deploy to
+/**
+ * NETLIFY DEPLOYMENT TARGET
+ */
 const netlify = new NetlifyEnvironment(project, {
   name: "netlify",
   siteId: "e69db060-d613-414c-9964-4a5a5e0e32ea",
