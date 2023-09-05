@@ -1,1 +1,1 @@
-export * from "./nuxt-js-app";
+export * from "./nuxt-js-site";

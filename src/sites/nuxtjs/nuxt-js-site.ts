@@ -1,34 +1,29 @@
 import { join } from "path";
-import { paramCase } from "change-case";
 import { JsonFile, SampleDir, SourceCode } from "projen";
-import {
-  NodePackageManager,
-  NodeProject,
+import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
+import { SetOptional } from "type-fest";
+import { Settings } from "../../core/fracture-settings";
+import { Site } from "../site";
+
+export type NuxtJsSiteOptions = SetOptional<
   NodeProjectOptions,
-} from "projen/lib/javascript";
-import { Fracture } from "../../core";
+  "defaultReleaseBranch"
+>;
 
-export interface NuxtJsAppOptions extends Partial<NodeProjectOptions> {
-  /**
-   * Name for the app. This also becomes the directory where the app is created.
-   */
-  name: string;
-}
-
-export class NuxtJsApp extends NodeProject {
+export class NuxtJsSite extends Site {
   /**
    * Name for the app. This also becomes the directory where the app is created.
    */
   public readonly name: string;
 
-  constructor(fracture: Fracture, options: NuxtJsAppOptions) {
+  constructor(public readonly parent: NodeProject, options: NuxtJsSiteOptions) {
     /***************************************************************************
      * Projen Props
      **************************************************************************/
 
     // ensure name is param-cased for outdir
-    const outdir = join(fracture.appRoot, paramCase(options.name));
-
+    // const outdir = join(fracture.appRoot, paramCase(options.name));
+    /*
     const projenOptions: NodeProjectOptions = {
       name: options.name,
       defaultReleaseBranch: "main",
@@ -38,8 +33,15 @@ export class NuxtJsApp extends NodeProject {
       outdir,
       licensed: false,
     };
+    */
 
-    super(projenOptions);
+    const { defaultReleaseBranch, siteRoot } = Settings.of(parent);
+
+    super(parent, {
+      defaultReleaseBranch,
+      ...options,
+      artifactsDirectory: join(siteRoot, options.name, ".vitepress/dist"),
+    });
 
     /***************************************************************************
      * PROPS
