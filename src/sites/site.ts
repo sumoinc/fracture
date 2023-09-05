@@ -1,6 +1,6 @@
 import { join } from "path";
 import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
-import { Settings } from "../core/fracture-settings";
+import { Settings } from "../fracture-settings";
 import { FractureProject } from "../fracture-project";
 import { TurboRepo } from "../turborepo";
 

@@ -1,7 +1,7 @@
 import { Component } from "projen";
 import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { AwsRegion } from "../environments/aws-environment";
+import { AwsRegion } from "./environments/aws-environment";
 
 export interface SettingsOptions {
   /**
