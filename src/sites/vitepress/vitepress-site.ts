@@ -4,7 +4,6 @@ import { JobStep } from "projen/lib/github/workflows-model";
 import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
 import { SetOptional } from "type-fest";
 import { Settings } from "../../core/fracture-settings";
-import { NetlifyEnvironment } from "../../environments/netlify-environment";
 import { DeployOptions } from "../../fracture-project";
 import { TurboRepo } from "../../turborepo";
 import { DeploymentWorkflow } from "../../workflows/deployment-workflow";
@@ -37,9 +36,11 @@ export class VitePressSite extends Site {
       ...options,
     });
 
-    // where are ther artifacts for this project going to be stored?
+    // where are the distribution and other artifacts for this project going to
+    // be stored?
     const { siteRoot } = Settings.of(parent);
-    this.artifactDirectories.push(join(siteRoot, this.name, ".vitepress/dist"));
+    this.distDirectory = join(siteRoot, this.name, ".vitepress/dist");
+    this.artifactDirectories.push(this.distDirectory);
 
     // ignore a few vitepress specific things
     this.addDevDeps("vitepress");
@@ -107,9 +108,9 @@ export class VitePressSite extends Site {
     ];
 
     // set deploy directory, if needed
-    if (options.environment instanceof NetlifyEnvironment) {
-      options.environment.deployDir = ".vitepress/dist";
-    }
+    //if (options.environment instanceof NetlifyEnvironment) {
+    options.environment.deployDir = this.distDirectory;
+    // }
 
     // add to deployment workflow
     return DeploymentWorkflow.of(this.parent).addDeployJob({

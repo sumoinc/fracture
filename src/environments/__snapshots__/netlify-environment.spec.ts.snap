@@ -67,7 +67,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: \${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: bar
         with:
-          args: deploy --dir=.vitepress/dist --prod
+          args: deploy --dir=sites/docs/.vitepress/dist --prod
       - name: Deploy the foo
         run: echo 'deploying foo'
 "

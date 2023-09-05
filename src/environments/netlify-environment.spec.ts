@@ -11,7 +11,6 @@ describe("success conditions", () => {
     });
     const environment = new NetlifyEnvironment(project, {
       name: "foo",
-      deployDir: "baz",
     });
     expect(environment).toBeTruthy();
   });

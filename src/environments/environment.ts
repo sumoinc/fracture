@@ -67,6 +67,12 @@ export class Environment extends Component {
    */
   readonly authProviderType?: ValueOf<typeof AuthProviderType>;
 
+  /**
+   * The directory to deploy. This is typically set by the site or service
+   * type, for example Vitepress, AWS, or NuxtJs
+   */
+  public deployDir?: string;
+
   constructor(
     public readonly project: NodeProject,
     options: EnvironmentOptions

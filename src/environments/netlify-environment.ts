@@ -20,13 +20,6 @@ export interface NetlifyEnvironmentOptions extends EnvironmentOptions {
    * Site Id for netlify site.
    */
   readonly siteId?: string;
-
-  /**
-   * The directory to deploy to Netlify.
-   *
-   * @default dist
-   */
-  readonly deployDir?: string;
 }
 
 export class NetlifyEnvironment extends Environment {
@@ -49,13 +42,6 @@ export class NetlifyEnvironment extends Environment {
    */
   public readonly siteId?: string;
 
-  /**
-   * The directory to deploy to Netlify.
-   *
-   * @default dist
-   */
-  public deployDir: string;
-
   constructor(
     public readonly project: NodeProject,
     options: NetlifyEnvironmentOptions
@@ -67,12 +53,5 @@ export class NetlifyEnvironment extends Environment {
       options.authTokenSecretName ?? "NETLIFY_AUTH_TOKEN";
     this.siteIdSecretName = options.siteIdSecretName ?? "NETLIFY_SITE_ID";
     this.siteId = options.siteId;
-    this.deployDir = options.deployDir ?? "dist";
   }
-
-  /*
-  public get authProvider(): AuthProvider {
-    return AuthProvider.fromNetlifyEnvironment(this.project, this);
-  }
-  */
 }
