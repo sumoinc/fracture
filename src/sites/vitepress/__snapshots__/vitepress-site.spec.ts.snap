@@ -45,6 +45,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    concurrency: deploy-us-east
     env:
       CI: \\"true\\"
     if: startsWith( github.ref, 'refs/heads/feature' )

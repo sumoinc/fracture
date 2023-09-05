@@ -44,6 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    concurrency: deploy-foo
     env:
       CI: \\"true\\"
     if: startsWith( github.ref, 'refs/heads/feature' )

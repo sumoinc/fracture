@@ -93,6 +93,7 @@ export class DeployJob extends WorkflowJob {
       name: this.name,
       runsOn: this.workflow.defaultRunners,
       needs: this.needs,
+      concurrency: `deploy-${this.environment.name}`,
       if: `startsWith( github.ref, 'refs/heads/${this.branchPrefix}' )`,
       env: {
         CI: "true",

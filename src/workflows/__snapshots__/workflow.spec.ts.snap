@@ -76,6 +76,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    concurrency: deploy-my-environment
     env:
       CI: \\"true\\"
     if: startsWith( github.ref, 'refs/heads/main' )

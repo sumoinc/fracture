@@ -2,6 +2,7 @@
 
 exports[`success conditions Deploy with artifacts 1`] = `
 Object {
+  "concurrency": "deploy-my-environment",
   "env": Object {
     "CI": "true",
   },
@@ -72,6 +73,7 @@ Object {
 
 exports[`success conditions Smoke test 1`] = `
 Object {
+  "concurrency": "deploy-my-environment",
   "env": Object {
     "CI": "true",
   },
@@ -114,6 +116,7 @@ Object {
 
 exports[`success conditions Two deploys depend on each other 1`] = `
 Object {
+  "concurrency": "deploy-my-environment",
   "env": Object {
     "CI": "true",
   },
@@ -156,6 +159,7 @@ Object {
 
 exports[`success conditions Two deploys depend on each other 2`] = `
 Object {
+  "concurrency": "deploy-my-environment",
   "env": Object {
     "CI": "true",
   },
