@@ -1,8 +1,15 @@
 import { JobStep } from "projen/lib/github/workflows-model";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { renderDeploySteps } from "./deploy-steps";
-import { Environment } from "../../environments";
+import { AwsEnvironment } from "../../environments";
 import { DeployJob } from "../jobs/deploy-job";
+
+const deploySteps: Array<JobStep> = [
+  {
+    name: "Say foo",
+    run: "echo 'foo'",
+  },
+];
 
 describe("success conditions", () => {
   test("Smoke test", () => {
@@ -10,14 +17,9 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const deploySteps: Array<JobStep> = [
-      {
-        name: "Say foo",
-        run: "echo 'foo'",
-      },
-    ];
-    const environment = new Environment(project, {
+    const environment = new AwsEnvironment(project, {
       name: "my-environment",
+      accountNumber: "000000000000",
     });
     const deployJob = new DeployJob(project, {
       deploySteps,
@@ -35,14 +37,9 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const deploySteps: Array<JobStep> = [
-      {
-        name: "Say foo",
-        run: "echo 'foo'",
-      },
-    ];
-    const environment = new Environment(project, {
+    const environment = new AwsEnvironment(project, {
       name: "my-environment",
+      accountNumber: "000000000000",
     });
     const deployJob = new DeployJob(project, {
       deploySteps,

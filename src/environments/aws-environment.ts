@@ -1,10 +1,6 @@
 import { NodeProject } from "projen/lib/javascript";
-import { ValueOf } from "type-fest";
-import {
-  AuthProviderType,
-  Environment,
-  EnvironmentOptions,
-} from "./environment";
+import { SetOptional, ValueOf } from "type-fest";
+import { Environment, EnvironmentOptions } from "./environment";
 import { Settings } from "../settings";
 
 export const AwsRegion = {
@@ -14,7 +10,8 @@ export const AwsRegion = {
   US_WEST_2: "us-west-2",
 } as const;
 
-export interface AwsEnvironmentOptions extends EnvironmentOptions {
+export interface AwsEnvironmentOptions
+  extends SetOptional<EnvironmentOptions, "authProviderType"> {
   /**
    * Account number for this environment.
    */
@@ -26,13 +23,6 @@ export interface AwsEnvironmentOptions extends EnvironmentOptions {
    * @default - uses default from Settings()
    */
   readonly region?: ValueOf<typeof AwsRegion>;
-
-  /**
-   * Type of auth provider to use in this environment
-   *
-   * @default - uses default from Settings()
-   */
-  readonly authProviderType?: ValueOf<typeof AuthProviderType>;
 
   /**
    * The role name that shuld ber used when constructing the OIDC role's ARN.
@@ -63,14 +53,7 @@ export class AwsEnvironment extends Environment {
   public readonly region: ValueOf<typeof AwsRegion>;
 
   /**
-   * Type of auth provider to use in this environment
-   *
-   * @default - uses default from Settings()
-   */
-  readonly authProviderType: ValueOf<typeof AuthProviderType>;
-
-  /**
-   * The role name that shuld ber used when constructing the OIDC role's ARN.
+   * The role name that should be used when constructing the OIDC role's ARN.
    *
    * @default - uses default from Settings()
    */
@@ -87,28 +70,24 @@ export class AwsEnvironment extends Environment {
     public readonly project: NodeProject,
     options: AwsEnvironmentOptions
   ) {
-    super(project, options);
-
-    // grab some core defaults
+    // grab some default settings
     const {
-      defaultRegion,
+      region,
+      authProviderType,
       gitHubDeploymentOIDCRoleName,
       gitHubDeploymentOIDCRoleDurationSeconds,
-    } = Settings.of(project);
+    } = Settings.of(project).defaultAwsEnviromentOptions;
+
+    super(project, { authProviderType, ...options });
 
     // defaults
     this.accountNumber = options.accountNumber;
-    this.region = options.region ?? defaultRegion;
-    this.authProviderType =
-      options.authProviderType ?? AuthProviderType.AWS_GITHUB_OIDC;
+    this.region = options.region ?? region;
+    //this.authProviderType = options.authProviderType ?? authProviderType;
     this.gitHubDeploymentOIDCRoleName =
       options.gitHubDeploymentOIDCRoleName ?? gitHubDeploymentOIDCRoleName;
     this.gitHubDeploymentOIDCRoleDurationSeconds =
       options.gitHubDeploymentOIDCRoleDurationSeconds ??
       gitHubDeploymentOIDCRoleDurationSeconds;
   }
-
-  // public get authProvider(): AuthProvider {
-  //   return AuthProvider.fromAwsEnvironment(this.project, this);
-  // }
 }

@@ -30,6 +30,11 @@ export const AuthProviderType = {
    * Use A Netlify Token and Site Id.
    */
   NETLIFY_TOKEN: "NETLIFY_TOKEN",
+
+  /**
+   * No authprovider. Used for local development and testing
+   */
+  NONE: "NONE",
 } as const;
 
 export interface EnvironmentOptions {
@@ -65,7 +70,7 @@ export class Environment extends Component {
   /**
    * Type of authprovider to use in this environment.
    */
-  readonly authProviderType?: ValueOf<typeof AuthProviderType>;
+  readonly authProviderType: ValueOf<typeof AuthProviderType>;
 
   constructor(
     public readonly project: NodeProject,
@@ -84,5 +89,6 @@ export class Environment extends Component {
     super(project);
 
     this.name = options.name;
+    this.authProviderType = options.authProviderType ?? AuthProviderType.NONE;
   }
 }

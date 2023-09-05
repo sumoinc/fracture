@@ -3,11 +3,11 @@ import { App } from "./app";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
-    const root = new TypeScriptProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const app = new App(root, {
+    const app = new App(project, {
       name: "my-app",
       defaultReleaseBranch: "main",
     });

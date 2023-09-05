@@ -1,7 +1,13 @@
 import { NodeProject } from "projen/lib/javascript";
-import { Environment, EnvironmentOptions } from "./environment";
+import { SetOptional } from "type-fest";
+import {
+  AuthProviderType,
+  Environment,
+  EnvironmentOptions,
+} from "./environment";
 
-export interface NetlifyEnvironmentOptions extends EnvironmentOptions {
+export interface NetlifyEnvironmentOptions
+  extends SetOptional<EnvironmentOptions, "authProviderType"> {
   /**
    * Github Secret name for the NETLIFY_AUTH_TOKEN
    *
@@ -46,7 +52,10 @@ export class NetlifyEnvironment extends Environment {
     public readonly project: NodeProject,
     options: NetlifyEnvironmentOptions
   ) {
-    super(project, options);
+    super(project, {
+      authProviderType: AuthProviderType.NETLIFY_TOKEN,
+      ...options,
+    });
 
     // defaults
     this.authTokenSecretName =

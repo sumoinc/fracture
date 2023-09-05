@@ -1,15 +1,24 @@
 import { JobStep } from "projen/lib/github/workflows-model";
-import { AwsEnvironment } from "../../environments";
+import { AuthProviderType, AwsEnvironment } from "../../environments";
 import { NetlifyEnvironment } from "../../environments/netlify-environment";
 import { DeployJob } from "../jobs/deploy-job";
 
 export const renderDeploySteps = (deployJob: DeployJob): Array<JobStep> => {
   const steps: Array<JobStep> = [];
 
-  // AWS deployment types
+  // no authprovider!
+  if (deployJob.environment.authProviderType === AuthProviderType.NONE) {
+    throw new Error(
+      `No auth provider specified for environment "${deployJob.environment.name}".`
+    );
+  }
 
+  // AWS deployment types
   if (deployJob.environment instanceof AwsEnvironment) {
-    if (deployJob.environment.authProviderType === "AWS_GITHUB_OIDC") {
+    if (
+      deployJob.environment.authProviderType ===
+      AuthProviderType.AWS_GITHUB_OIDC
+    ) {
       steps.push({
         name: "Configure AWS Credentials",
         uses: "aws-actions/configure-aws-credentials@v2",
@@ -24,7 +33,6 @@ export const renderDeploySteps = (deployJob: DeployJob): Array<JobStep> => {
   }
 
   // Netlify deployment types
-
   if (deployJob.environment instanceof NetlifyEnvironment) {
     steps.push({
       name: "Deploy to Netlify",

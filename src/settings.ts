@@ -1,7 +1,10 @@
 import { Component } from "projen";
 import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { AwsRegion } from "./environments/aws-environment";
+import {
+  AwsEnvironmentOptions,
+  AwsRegion,
+} from "./environments/aws-environment";
 
 export interface SettingsOptions {
   /**
@@ -40,20 +43,6 @@ export interface SettingsOptions {
    * @default "sites"
    */
   readonly siteRoot?: string;
-
-  /**
-   * The role name that shuld ber used when constructing the OIDC role's ARN.
-   *
-   * @default GitHubDeploymentOIDCRole
-   */
-  readonly gitHubDeploymentOIDCRoleName?: string;
-
-  /**
-   * The duration of the role session in seconds.
-   *
-   * @default 900
-   */
-  readonly gitHubDeploymentOIDCRoleDurationSeconds?: number;
 }
 
 export class Settings extends Component {
@@ -82,14 +71,6 @@ export class Settings extends Component {
   readonly defaultReleaseBranch: string;
 
   /**
-   * The default regiun for this project. Used in many places such as defining environments and OIDC roles.
-   *
-   * @default "us-east-1"
-   *
-   **/
-  public readonly defaultRegion: ValueOf<typeof AwsRegion>;
-
-  /**
    * Root workspace for app subprojects
    *
    * @default "apps"
@@ -104,18 +85,17 @@ export class Settings extends Component {
   public readonly siteRoot: string;
 
   /**
-   * The role name that shuld ber used when constructing the OIDC role's ARN.
-   *
-   * @default GitHubDeploymentOIDCRole
+   * Defaults for AWS environments.
    */
-  public readonly gitHubDeploymentOIDCRoleName: string;
-
-  /**
-   * The duration of the role session in seconds.
-   *
-   * @default 900
-   */
-  public readonly gitHubDeploymentOIDCRoleDurationSeconds: number;
+  public readonly defaultAwsEnviromentOptions: Required<
+    Pick<
+      AwsEnvironmentOptions,
+      | "region"
+      | "authProviderType"
+      | "gitHubDeploymentOIDCRoleName"
+      | "gitHubDeploymentOIDCRoleDurationSeconds"
+    >
+  >;
 
   constructor(
     public readonly root: NodeProject,
@@ -126,13 +106,16 @@ export class Settings extends Component {
     // defaults
     this.name = options.name ?? "fracture";
     this.defaultReleaseBranch = options.defaultReleaseBranch ?? "main";
-    this.defaultRegion = options.defaultRegion ?? "us-east-1";
     this.appRoot = options.appRoot ?? "apps";
     this.siteRoot = options.siteRoot ?? "sites";
-    this.gitHubDeploymentOIDCRoleName =
-      options.gitHubDeploymentOIDCRoleName ?? "GitHubDeploymentOIDCRole";
-    this.gitHubDeploymentOIDCRoleDurationSeconds =
-      options.gitHubDeploymentOIDCRoleDurationSeconds ?? 900;
+
+    // defaults for AWS
+    this.defaultAwsEnviromentOptions = {
+      region: "us-east-1",
+      authProviderType: "AWS_GITHUB_OIDC",
+      gitHubDeploymentOIDCRoleName: "GitHubDeploymentOIDCRole",
+      gitHubDeploymentOIDCRoleDurationSeconds: 900,
+    };
 
     return this;
   }
