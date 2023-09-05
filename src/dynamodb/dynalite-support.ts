@@ -1,25 +1,26 @@
+import { NodeProject } from "projen/lib/javascript";
 import { DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi } from "./dynamo-gsi";
-import { Fracture, FractureService } from "../core";
+import { DynamoTable } from "./dynamo-table";
 import { TypeScriptSource } from "../generators/ts/source";
 
-export const addDynaliteSupport = (service: FractureService) => {
+export const addDynaliteSupport = (project: NodeProject) => {
   // add setup to the jest config
-  service.jest!.addSetupFile("./setupBeforeEnv.ts");
+  project.jest!.addSetupFile("./setupBeforeEnv.ts");
 
   // build root level config (jest-dynalite-config.js) file
-  new DynaliteConfig(service);
+  new DynaliteConfig(project);
 
   // setup file to allow jest to run tests against dynalite
-  new DynaliteJestSupport(service);
+  new DynaliteJestSupport(project);
 };
 
 export class DynaliteConfig extends TypeScriptSource {
-  constructor(service: FractureService) {
-    super(service, "jest-dynalite-config.js");
+  constructor(public readonly project: NodeProject) {
+    super(project, "jest-dynalite-config.js");
 
     // add dynalite
-    service.addDeps("jest-dynalite");
+    project.addDeps("jest-dynalite");
     // dynalite wants this specific peer version for marshalling
     //service.addPeerDeps("aws-sdk@^2.1336.0");
 
@@ -30,11 +31,10 @@ export class DynaliteConfig extends TypeScriptSource {
   synthesize() {
     super.synthesize();
 
-    const service = this.project as FractureService;
-    const fracture = service.parent as Fracture;
-    const { gsi, keyGsi } = service.dynamoTable;
+    const table = DynamoTable.of(this.project);
+    const { gsi, keyGsi } = table;
     const otherGsi = gsi.filter((g: DynamoGsi) => g.name !== keyGsi.name);
-    const serviceIndex = fracture.services.indexOf(service);
+    const serviceIndex = 1;
     const allAttributes = gsi.reduce((acc, g) => {
       if (acc.indexOf(g.pk) === -1) {
         acc.push(g.pk);
@@ -48,7 +48,7 @@ export class DynaliteConfig extends TypeScriptSource {
     const config = {
       tables: [
         {
-          TableName: service.dynamoTable.name,
+          TableName: table.name,
           KeySchema: [
             {
               AttributeName: keyGsi.pk.name,
@@ -105,8 +105,8 @@ export class DynaliteConfig extends TypeScriptSource {
 }
 
 export class DynaliteJestSupport extends TypeScriptSource {
-  constructor(service: FractureService) {
-    super(service, "setupBeforeEnv.ts");
+  constructor(project: NodeProject) {
+    super(project, "setupBeforeEnv.ts");
 
     this.line(`import { setup } from "jest-dynalite";`);
     this.line("");

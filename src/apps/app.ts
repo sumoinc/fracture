@@ -1,7 +1,7 @@
 import { join } from "path";
 import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
-import { Settings } from "../settings";
 import { FractureProject } from "../fracture-project";
+import { Settings } from "../settings";
 import { TurboRepo } from "../turborepo";
 
 export class App extends FractureProject {

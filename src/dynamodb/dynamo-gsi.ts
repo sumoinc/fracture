@@ -1,8 +1,8 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
 import { DynamoAttribute } from "./dynamo-attribute";
-import { FractureService } from "../core";
 
 export const DynamoGsiType = {
   /**
@@ -56,8 +56,8 @@ export class DynamoGsi extends Component {
    */
   public readonly type?: ValueOf<typeof DynamoGsiType>;
 
-  constructor(service: FractureService, options: DynamoGsiOptions) {
-    super(service);
+  constructor(public readonly project: NodeProject, options: DynamoGsiOptions) {
+    super(project);
 
     /***************************************************************************
      * Props

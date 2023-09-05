@@ -93,14 +93,10 @@
     ],
     "coverageDirectory": "coverage",
     "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "src/dynamodb",
-      "src/generators"
+      "/node_modules/"
     ],
     "testPathIgnorePatterns": [
-      "/node_modules/",
-      "src/dynamodb",
-      "src/generators"
+      "/node_modules/"
     ],
     "watchPathIgnorePatterns": [
       "/node_modules/"

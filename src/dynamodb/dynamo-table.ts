@@ -1,8 +1,8 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { NodeProject } from "projen/lib/javascript";
 import { AttributeType, DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi, DynamoGsiOptions, DynamoGsiType } from "./dynamo-gsi";
-import { FractureService } from "../core";
 
 export interface DynamoTableOptions {
   /**
@@ -31,6 +31,19 @@ export interface DynamoTableOptions {
 
 export class DynamoTable extends Component {
   /**
+   * Returns the dynamo table for a project or creates one if it
+   * doesn't exist yet. Singleton?
+   */
+  public static of(project: NodeProject): DynamoTable {
+    const isDefined = (c: Component): c is DynamoTable =>
+      c instanceof DynamoTable;
+    return (
+      project.components.find(isDefined) ??
+      new DynamoTable(project, { name: `${project.name}-table` })
+    );
+  }
+
+  /**
    * Name for the table.
    */
   public readonly name: string;
@@ -41,8 +54,11 @@ export class DynamoTable extends Component {
   public readonly lookupGsi: DynamoGsi;
   public readonly gsi: DynamoGsi[] = [];
 
-  constructor(service: FractureService, options: DynamoTableOptions) {
-    super(service);
+  constructor(
+    public readonly project: NodeProject,
+    options: DynamoTableOptions
+  ) {
+    super(project);
 
     /***************************************************************************
      * Props
@@ -52,17 +68,17 @@ export class DynamoTable extends Component {
     const pkName = options.pkName ?? "pk";
     const skName = options.skName ?? "sk";
     const lookupName = options.idxName ?? "idx";
-    this.pk = new DynamoAttribute(service, {
+    this.pk = new DynamoAttribute(project, {
       name: pkName,
       attributeType: AttributeType.STRING,
       keyType: "HASH",
     });
-    this.sk = new DynamoAttribute(service, {
+    this.sk = new DynamoAttribute(project, {
       name: skName,
       attributeType: AttributeType.STRING,
       keyType: "RANGE",
     });
-    this.idx = new DynamoAttribute(service, {
+    this.idx = new DynamoAttribute(project, {
       name: lookupName,
     });
 
@@ -91,52 +107,8 @@ export class DynamoTable extends Component {
   }
 
   public addGsi(options: DynamoGsiOptions) {
-    const service = this.project as FractureService;
-    const gsi = new DynamoGsi(service, options);
+    const gsi = new DynamoGsi(this.project, options);
     this.gsi.push(gsi);
     return gsi;
   }
-
-  // public get attrributeNames(): string[] {
-  //   return this.dynamoGsi.reduce((acc, gsi) => {
-  //     if (acc.indexOf(gsi.pkName) === -1) {
-  //       acc.push(gsi.pkName);
-  //     }
-  //     if (acc.indexOf(gsi.skName) === -1) {
-  //       acc.push(gsi.skName);
-  //     }
-  //     return acc;
-  //   }, [] as string[]);
-  // }
-
-  // public get keyDynamoGsi(): DynamoGsi {
-  //   let dynamoGsi = this.dynamoGsi.find((g) => g.isKeyGsi);
-
-  //   // create the key GSI
-  //   if (!dynamoGsi) {
-  //     dynamoGsi = new DynamoGsi(this, {
-  //       pkName: this.pkName,
-  //       skName: this.skName,
-  //       type: DYNAMO_GSI_TYPE.KEY,
-  //     });
-  //   }
-
-  //   return dynamoGsi;
-  // }
-
-  // public get lookupDynamoGsi(): DynamoGsi {
-  //   let dynamoGsi = this.dynamoGsi.find((g) => g.isLookupGsi);
-
-  //   // create the key GSI
-  //   if (!dynamoGsi) {
-  //     dynamoGsi = new DynamoGsi(this, {
-  //       name: "lookup",
-  //       pkName: "sk",
-  //       skName: "idx",
-  //       type: DYNAMO_GSI_TYPE.LOOKUP,
-  //     });
-  //   }
-
-  //   return dynamoGsi;
-  // }
 }

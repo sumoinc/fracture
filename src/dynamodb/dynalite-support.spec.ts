@@ -1,27 +1,26 @@
+import { NodeProject } from "projen/lib/javascript";
 import { addDynaliteSupport } from "./dynalite-support";
-import { Fracture, FractureService } from "../core";
 import { synthFile } from "../util/test-util";
 
-let fracture: Fracture;
-
-beforeEach(() => {
-  fracture = new Fracture();
+test("Smoke test config", () => {
+  const project = new NodeProject({
+    name: "my-project",
+    defaultReleaseBranch: "main",
+  });
+  addDynaliteSupport(project);
+  const content = synthFile(project, "jest-dynalite-config.js");
+  expect(content).toBeTruthy();
+  expect(content).toMatchSnapshot();
 });
 
-test("Smoke test cnofig", () => {
-  const service = new FractureService(fracture, { name: "test" });
-  addDynaliteSupport(service);
-  const configContent = synthFile(
-    fracture,
-    "services/test/jest-dynalite-config.js"
-  );
-  expect(configContent).toMatchSnapshot();
-});
-
-test("Smoke test jext", () => {
-  const service = new FractureService(fracture, { name: "test" });
-  addDynaliteSupport(service);
-  const jestContent = synthFile(fracture, "services/test/setupBeforeEnv.ts");
-  expect(jestContent).toMatchSnapshot();
+test("Smoke test jest", () => {
+  const project = new NodeProject({
+    name: "my-project",
+    defaultReleaseBranch: "main",
+  });
+  addDynaliteSupport(project);
+  const content = synthFile(project, "setupBeforeEnv.ts");
+  expect(content).toBeTruthy();
+  expect(content).toMatchSnapshot();
   // console.log(jestContent);
 });

@@ -77,10 +77,10 @@ project.addDevDeps("@types/uuid");
 project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 
 // temp ignores
-project.jest?.addIgnorePattern("src/dynamodb");
-project.jest?.addIgnorePattern("src/generators");
-project.tsconfig?.addExclude("src/dynamodb");
-project.tsconfig?.addExclude("src/generators");
+// project.jest?.addIgnorePattern("/src/dynamodb/**/*.ts");
+// project.jest?.addIgnorePattern("/src/generators/**/*.ts");
+// project.tsconfig?.addExclude("src/dynamodb/**/*.ts");
+// project.tsconfig?.addExclude("src/generators/**/*.ts");
 
 /*******************************************************************************
  *

@@ -1,14 +1,11 @@
+import { NodeProject } from "projen/lib/javascript";
 import { DynamoTable } from "./dynamo-table";
-import { Fracture, FractureService } from "../core";
-
-let service: FractureService;
-
-beforeEach(() => {
-  const fracture = new Fracture();
-  service = new FractureService(fracture, { name: "test" });
-});
 
 test("Smoke test", () => {
-  const table = new DynamoTable(service, { name: "foo" });
+  const project = new NodeProject({
+    name: "my-project",
+    defaultReleaseBranch: "main",
+  });
+  const table = new DynamoTable(project, { name: "foo" });
   expect(table).toBeTruthy();
 });
