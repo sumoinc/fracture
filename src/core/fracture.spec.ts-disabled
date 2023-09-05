@@ -1,4 +1,4 @@
-import { Fracture } from "./fracture";
+import { Fracture } from "./fracture.ts-disabled";
 import { synthFile, synthFiles } from "../util/test-util";
 
 let fracture: Fracture;

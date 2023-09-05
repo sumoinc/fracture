@@ -6,7 +6,7 @@ import { SetOptional } from "type-fest";
 import { Settings } from "../../core/fracture-settings";
 import { DeployOptions } from "../../fracture-project";
 import { TurboRepo } from "../../turborepo";
-import { DeploymentWorkflow } from "../../workflows/deployment-workflow";
+import { Workflow } from "../../workflows/workflow";
 import { Site } from "../site";
 
 export const filesToScaffold = [
@@ -29,18 +29,15 @@ export class VitePressSite extends Site {
     public readonly parent: NodeProject,
     options: VitePressSiteOptions
   ) {
-    const { defaultReleaseBranch } = Settings.of(parent);
+    const { defaultReleaseBranch, siteRoot } = Settings.of(parent);
 
     super(parent, {
       defaultReleaseBranch,
       ...options,
+      artifactsDirectory: join(siteRoot, options.name, ".vitepress/dist"),
     });
 
-    // where are the distribution and other artifacts for this project going to
-    // be stored?
-    const { siteRoot } = Settings.of(parent);
-    this.distDirectory = join(siteRoot, this.name, ".vitepress/dist");
-    this.artifactDirectories.push(this.distDirectory);
+    //this.artifactDirectories.push(this.distDirectory);
 
     // ignore a few vitepress specific things
     this.addDevDeps("vitepress");
@@ -107,16 +104,11 @@ export class VitePressSite extends Site {
       },
     ];
 
-    // set deploy directory, if needed
-    //if (options.environment instanceof NetlifyEnvironment) {
-    options.environment.deployDir = this.distDirectory;
-    // }
-
     // add to deployment workflow
-    return DeploymentWorkflow.of(this.parent).addDeployJob({
+    return Workflow.deployment(this.parent).addDeployJob({
       ...options,
       deploySteps,
-      artifactDirectories: this.artifactDirectories,
+      artifactsDirectory: this.artifactsDirectory,
     });
   }
 }

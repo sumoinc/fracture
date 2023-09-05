@@ -1,6 +1,6 @@
 import { NuxtJsApp } from "./nuxt-js-app";
-import { Fracture } from "../core";
-import { synthFile, synthFiles } from "../util/test-util";
+import { Fracture } from "../../core";
+import { synthFile, synthFiles } from "../../util/test-util";
 
 let fracture: Fracture;
 let app: NuxtJsApp;

@@ -1,6 +1,6 @@
-import { Fracture } from "./fracture";
+import { Fracture } from "./fracture.ts-disabled";
 import { FractureService } from "./fracture-service";
-import { Operation } from "./operation";
+import { ResourceAttribute } from "./resource-attribute";
 
 let service: FractureService;
 
@@ -10,9 +10,6 @@ beforeEach(() => {
 });
 
 test("Smoke test", () => {
-  const operation = new Operation(service, {
-    name: "save-user",
-    dynamoGsi: service.dynamoTable.keyGsi,
-  });
-  expect(operation).toBeTruthy();
+  const resource = new ResourceAttribute(service, { name: "foo" });
+  expect(resource).toBeTruthy();
 });

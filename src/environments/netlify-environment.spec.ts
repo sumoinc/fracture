@@ -31,6 +31,7 @@ describe("success conditions", () => {
       name: "docs",
       defaultReleaseBranch: "main",
     });
+
     vitePressSite.deploy({
       branchPrefix: "feature",
       environment,

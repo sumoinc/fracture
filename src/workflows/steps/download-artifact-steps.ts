@@ -1,40 +1,37 @@
 import crypto from "crypto";
 import { JobStep } from "projen/lib/github/workflows-model";
-import { WorkflowJob } from "../jobs/workflow-job";
+import { DeployJob } from "../jobs";
 import { PERMISSION_BACKUP_FILE } from "../workflow";
 
 export const renderDownloadArtifactSteps = (
-  job: WorkflowJob
+  deployJob: DeployJob
 ): Array<JobStep> => {
   const steps: Array<JobStep> = [];
 
-  // dedupe and loop
-  [...new Set(job.artifactDirectories)].forEach((artifactDirectory) => {
-    // hash the name of the artifact directory to avoid collisions
-    let hash = crypto
-      .createHash("md5")
-      .update(artifactDirectory)
-      .digest("hex")
-      .substring(0, 8);
+  // hash the name of the artifact directory to avoid collisions
+  let hash = crypto
+    .createHash("md5")
+    .update(deployJob.artifactsDirectory)
+    .digest("hex")
+    .substring(0, 8);
 
-    // add artifact upload steps
-    steps.push(
-      {
-        name: `Download build artifacts for "${artifactDirectory}"`,
-        uses: "actions/download-artifact@v3",
-        with: {
-          name: `build-artifact-${hash}`,
-          path: artifactDirectory,
-        },
+  // add artifact upload steps
+  steps.push(
+    {
+      name: `Download build artifacts for "${deployJob.artifactsDirectory}"`,
+      uses: "actions/download-artifact@v3",
+      with: {
+        name: `build-artifact-${hash}`,
+        path: deployJob.artifactsDirectory,
       },
-      {
-        name: `Restore build artifact permissions for "${artifactDirectory}"`,
-        continueOnError: true,
-        run: `setfacl --restore=${PERMISSION_BACKUP_FILE}`,
-        workingDirectory: artifactDirectory,
-      }
-    );
-  });
+    },
+    {
+      name: `Restore build artifact permissions for "${deployJob.artifactsDirectory}"`,
+      continueOnError: true,
+      run: `setfacl --restore=${PERMISSION_BACKUP_FILE}`,
+      workingDirectory: deployJob.artifactsDirectory,
+    }
+  );
 
   return steps;
 };

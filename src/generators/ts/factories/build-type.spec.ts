@@ -1,8 +1,8 @@
 import { buildType } from "./build-type";
 import { printNodes } from "./print-nodes";
 import { Fracture, FractureService } from "../../../core";
-import { Structure } from "../../../core/structure";
-import { StructureAttributeType } from "../../../core/structure-attribute";
+import { Structure } from "../../../core/structure.ts-disabled";
+import { StructureAttributeType } from "../../../core/structure-attribute.ts-disabled";
 
 let fracture: Fracture;
 let service: FractureService;

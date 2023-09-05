@@ -5,11 +5,6 @@ import { FractureProject } from "../fracture-project";
 import { TurboRepo } from "../turborepo";
 
 export class Site extends FractureProject {
-  /**
-   * The directory containing distributable assets for this site.
-   */
-  public distDirectory: string;
-
   constructor(
     public readonly parent: NodeProject,
     options: NodeProjectOptions
@@ -27,8 +22,5 @@ export class Site extends FractureProject {
       ...options,
       outdir,
     });
-
-    // this will be wrong in many cases but setting it just so there is some default.
-    this.distDirectory = join(outdir, "dist");
   }
 }

@@ -30,7 +30,7 @@ export const renderDeploySteps = (deployJob: DeployJob): Array<JobStep> => {
       name: "Deploy to Netlify",
       uses: "netlify/actions/cli@master",
       with: {
-        args: `deploy --dir=${deployJob.environment.deployDir} --prod`,
+        args: `deploy --dir=${deployJob.artifactsDirectory} --prod`,
       },
       env: {
         NETLIFY_AUTH_TOKEN:

@@ -1,7 +1,7 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from "typescript";
 import { buildTypeProperies } from "./build-type-attribute";
 import { FractureService } from "../../../core";
-import { Structure } from "../../../core/structure";
+import { Structure } from "../../../core/structure.ts-disabled";
 import { TypescriptStrategy } from "../strategy";
 
 /**

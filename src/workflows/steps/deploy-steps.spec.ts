@@ -3,16 +3,12 @@ import { TypeScriptProject } from "projen/lib/typescript";
 import { renderDeploySteps } from "./deploy-steps";
 import { Environment } from "../../environments";
 import { DeployJob } from "../jobs/deploy-job";
-import { Workflow } from "../workflow";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
     const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
-    });
-    const workflow = new Workflow(project, {
-      name: "my-workflow",
     });
     const deploySteps: Array<JobStep> = [
       {
@@ -23,10 +19,10 @@ describe("success conditions", () => {
     const environment = new Environment(project, {
       name: "my-environment",
     });
-    const deployJob = new DeployJob(workflow, {
-      artifactDirectories: ["some/other/folder/cdk.out"],
+    const deployJob = new DeployJob(project, {
       deploySteps,
       environment,
+      artifactsDirectory: "foo",
     });
     const outputSteps = renderDeploySteps(deployJob);
     expect(outputSteps).toBeTruthy();
@@ -39,9 +35,6 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const workflow = new Workflow(project, {
-      name: "my-workflow",
-    });
     const deploySteps: Array<JobStep> = [
       {
         name: "Say foo",
@@ -51,10 +44,10 @@ describe("success conditions", () => {
     const environment = new Environment(project, {
       name: "my-environment",
     });
-    const deployJob = new DeployJob(workflow, {
-      artifactDirectories: ["some/other/folder/cdk.out"],
+    const deployJob = new DeployJob(project, {
       deploySteps,
       environment,
+      artifactsDirectory: "foo",
     });
     const outputSteps = renderDeploySteps(deployJob);
     expect(outputSteps).toBeTruthy();

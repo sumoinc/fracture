@@ -4,7 +4,7 @@ import { FractureService } from "./fracture-service";
 import {
   StructureAttribute,
   StructureAttributeOptions,
-} from "./structure-attribute";
+} from "./structure-attribute.ts-disabled";
 
 /******************************************************************************
  * TYPES

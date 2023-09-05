@@ -1,13 +1,15 @@
 import crypto from "crypto";
 import { JobStep } from "projen/lib/github/workflows-model";
-import { WorkflowJob } from "../jobs/workflow-job";
+import { BuildJob } from "../jobs";
 import { PERMISSION_BACKUP_FILE } from "../workflow";
 
-export const renderUploadArtifactSteps = (job: WorkflowJob): Array<JobStep> => {
+export const renderUploadArtifactSteps = (
+  buildJob: BuildJob
+): Array<JobStep> => {
   const steps: Array<JobStep> = [];
 
   // dedupe and loop
-  [...new Set(job.artifactDirectories)].forEach((artifactDirectory) => {
+  [...new Set(buildJob.artifactDirectories)].forEach((artifactDirectory) => {
     // hash the name of the artifact directory to avoid collisions
     let hash = crypto
       .createHash("md5")

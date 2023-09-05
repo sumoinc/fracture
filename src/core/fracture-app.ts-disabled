@@ -5,7 +5,7 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
-import { Fracture } from "./fracture";
+import { Fracture } from "./fracture.ts-disabled";
 
 export interface FractureAppOptions extends Partial<TypeScriptProjectOptions> {
   /**

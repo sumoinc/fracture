@@ -6,7 +6,7 @@ import {
   AwsCdkTypeScriptAppOptions,
 } from "projen/lib/awscdk";
 import { NodePackageManager } from "projen/lib/javascript";
-import { Fracture } from "./fracture";
+import { Fracture } from "./fracture.ts-disabled";
 import { Resource, ResourceOptions } from "./resource";
 import { Structure, StructureOptions } from "./structure";
 import { StructureAttributeType } from "./structure-attribute";

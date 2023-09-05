@@ -1,5 +1,6 @@
 import { paramCase } from "change-case";
 import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
+import { NodeProject } from "projen/lib/javascript";
 import { SetOptional } from "type-fest";
 import { WorkflowJob, WorkflowJobOptions } from "./workflow-job";
 import { Environment } from "../../environments";
@@ -33,6 +34,12 @@ export interface DeployJobOptions
    * Environment deploying to.
    */
   readonly environment: Environment;
+
+  /**
+   * Directory that was preserved for this project in order to deploy
+   * properly in deploy step.
+   */
+  readonly artifactsDirectory: string;
 }
 
 export class DeployJob extends WorkflowJob {
@@ -41,47 +48,60 @@ export class DeployJob extends WorkflowJob {
    *
    * @default main
    */
-  readonly branchPrefix: string;
+  public readonly branchPrefix: string;
 
   /**
    * Jobs that must complete before this one may run
    *
    * @default - the build job
    */
-  readonly needs: Array<string>;
+  public readonly needs: Array<string>;
 
   /**
    * Step definition(s) that conduct the deployment
    */
-  readonly deploySteps: Array<JobStep>;
+  public readonly deploySteps: Array<JobStep>;
 
   /**
    * Environment deploying to.
    */
-  readonly environment: Environment;
+  public readonly environment: Environment;
 
-  constructor(public readonly workflow: Workflow, options: DeployJobOptions) {
+  /**
+   * Directory that was preserved for this project in order to deploy
+   * properly in deploy step.
+   */
+  public readonly artifactsDirectory: string;
+
+  /**
+   * Workflow for deployment
+   */
+  readonly workflow: Workflow;
+
+  constructor(public readonly project: NodeProject, options: DeployJobOptions) {
     const branchPrefix = options.branchPrefix ?? "main";
     const name = options.name ?? `Deploy ${branchPrefix}`;
     const jobId = options.jobId ?? paramCase(name);
 
-    super(workflow, {
+    super(project, {
       jobId,
       name,
       ...options,
     });
 
     // defaults
+    this.workflow = Workflow.deployment(project);
     this.branchPrefix = branchPrefix;
-    this.needs = [workflow.buildJob.jobId, ...(options.needs ?? [])];
+    this.needs = [this.workflow.buildJob.jobId, ...(options.needs ?? [])];
     this.deploySteps = options.deploySteps;
     this.environment = options.environment;
+    this.artifactsDirectory = options.artifactsDirectory;
 
     // add this branch pattern as a trigger for the workflow
-    workflow.addPushTrigger(this.branchPrefix);
+    this.workflow.addPushTrigger(this.branchPrefix);
 
     // make sure build step will store the artifacts we need
-    workflow.buildJob.artifactDirectories.push(...this.artifactDirectories);
+    this.workflow.buildJob.artifactDirectories.push(this.artifactsDirectory);
   }
 
   dependsOn = (job: WorkflowJob): void => {
@@ -108,7 +128,10 @@ export class DeployJob extends WorkflowJob {
       },
       steps: [
         ...renderDownloadArtifactSteps(this),
-        ...renderSetupNodeSteps(this.workflow, { packageCache: false }),
+        ...renderSetupNodeSteps(this.workflow, {
+          packageCache: false,
+          setupPnpm: false,
+        }),
         ...renderDeploySteps(this),
       ],
     };

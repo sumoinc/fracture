@@ -1,4 +1,5 @@
 import { Job, JobPermission } from "projen/lib/github/workflows-model";
+import { NodeProject } from "projen/lib/javascript";
 import { SetOptional } from "type-fest";
 import { WorkflowJob, WorkflowJobOptions } from "./workflow-job";
 import { renderBuildSteps } from "../steps/build-steps";
@@ -6,18 +7,33 @@ import { renderUploadArtifactSteps } from "../steps/upload-artifact-steps";
 import { Workflow } from "../workflow";
 
 export interface BuildJobOptions
-  extends SetOptional<WorkflowJobOptions, "jobId" | "name"> {}
+  extends SetOptional<WorkflowJobOptions, "jobId" | "name"> {
+  /**
+   * Workflow for build
+   */
+  readonly workflow: Workflow;
+}
 
 export class BuildJob extends WorkflowJob {
-  constructor(
-    public readonly workflow: Workflow,
-    options: BuildJobOptions = {}
-  ) {
-    super(workflow, {
+  /**
+   * Workflow for build
+   */
+  public readonly workflow: Workflow;
+
+  /**
+   * Names of a directories that include build artifacts.
+   */
+  public readonly artifactDirectories: Array<string> = [];
+
+  constructor(public readonly project: NodeProject, options: BuildJobOptions) {
+    super(project, {
       jobId: "build",
       name: "Build",
       ...options,
     });
+
+    // defaults
+    this.workflow = options.workflow;
   }
 
   render = (): Job => {

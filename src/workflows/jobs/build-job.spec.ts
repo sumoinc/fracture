@@ -21,7 +21,7 @@ describe("success conditions", () => {
     const workflow = new Workflow(project, {
       name: "my-workflow",
     });
-    const buildJob = new BuildJob(workflow);
+    const buildJob = new BuildJob(project, { workflow });
     expect(buildJob).toBeTruthy();
     expect(buildJob.render()).toMatchSnapshot();
     // console.log(buildJob.render());
@@ -32,20 +32,22 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const workflow = new Workflow(project, {
-      name: "my-workflow",
-    });
     const environment = new AwsEnvironment(project, {
       name: "my-environment",
       accountNumber: "0000000000",
     });
-    new DeployJob(workflow, {
-      artifactDirectories: ["dist", "some/other/folder"],
+    new DeployJob(project, {
       deploySteps,
       environment,
+      artifactsDirectory: "foo",
     });
-    expect(workflow.buildJob).toBeTruthy();
-    expect(workflow.buildJob.render()).toMatchSnapshot();
+    const deployJob = new DeployJob(project, {
+      deploySteps,
+      environment,
+      artifactsDirectory: "bar",
+    });
+    expect(deployJob.workflow.buildJob).toBeTruthy();
+    expect(deployJob.workflow.buildJob.render()).toMatchSnapshot();
     // console.log(JSON.stringify(workflow.buildJob.render(), null, 2));
   });
 });

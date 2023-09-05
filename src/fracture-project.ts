@@ -29,12 +29,6 @@ export interface DeployOptions {
 }
 
 export class FractureProject extends NodeProject {
-  /**
-   * Directories that need to be preserved for this project in order to deploy
-   * properly in deploy steps.
-   */
-  public readonly artifactDirectories: Array<string> = [];
-
   constructor(
     public readonly parent: NodeProject,
     options: FractureProjectOptions

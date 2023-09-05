@@ -6,7 +6,7 @@ import {
   NodeProject,
   NodeProjectOptions,
 } from "projen/lib/javascript";
-import { Fracture } from "../core";
+import { Fracture } from "../../core";
 
 export interface NuxtJsAppOptions extends Partial<NodeProjectOptions> {
   /**

@@ -69,6 +69,22 @@ export interface WorkflowOptions {
 
 export class Workflow extends Component {
   /**
+   * Returns the deployment workflow for a project or creates one if it
+   * doesn't exist yet. Singleton?
+   */
+  public static deployment(project: NodeProject): Workflow {
+    const isDefined = (c: Component): c is Workflow =>
+      c instanceof Workflow && c.name === "deployment";
+    if (project.components.find(isDefined)) {
+      return project.components.find(isDefined) as Workflow;
+    } else {
+      return new BuildJob(project, {
+        workflow: new Workflow(project, { name: "deployment" }),
+      }).workflow;
+    }
+  }
+
+  /**
    * Name of the file (e.g. "deploy" becomes "deploy.yml").
    */
   public readonly name: string;
@@ -184,11 +200,11 @@ export class Workflow extends Component {
     this.workflow = new GithubWorkflow(github, this.name);
 
     // render the build steps
-    this.buildJob = new BuildJob(this);
+    this.buildJob = new BuildJob(project, { workflow: this });
   }
 
   addDeployJob(options: DeployJobOptions): DeployJob {
-    const job = new DeployJob(this, { ...options });
+    const job = new DeployJob(this.project, { ...options });
     this.otherJobs.push(job);
     return job;
   }

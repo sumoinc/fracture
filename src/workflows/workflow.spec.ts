@@ -30,18 +30,17 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const workflow = new Workflow(project, { name: "my-workflow" });
     const environment = new AwsEnvironment(project, {
       name: "my-environment",
       accountNumber: "0000000000",
     });
-    workflow.addDeployJob({
+    Workflow.deployment(project).addDeployJob({
       name: "Deploy Service Foo",
-      artifactDirectories: ["foo"],
+      artifactsDirectory: "foo",
       deploySteps,
       environment,
     });
-    const content = synthFile(project, `.github/workflows/my-workflow.yml`);
+    const content = synthFile(project, `.github/workflows/deployment.yml`);
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(content);

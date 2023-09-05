@@ -2,7 +2,6 @@ import { JobStep } from "projen/lib/github/workflows-model";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { renderUploadArtifactSteps } from "./upload-artifact-steps";
 import { Environment } from "../../environments";
-import { DeployJob } from "../jobs/deploy-job";
 import { Workflow } from "../workflow";
 
 const deploySteps: Array<JobStep> = [
@@ -18,9 +17,7 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const workflow = new Workflow(project, {
-      name: "my-workflow",
-    });
+    const workflow = Workflow.deployment(project);
     const artifactSteps = renderUploadArtifactSteps(workflow.buildJob);
     expect(artifactSteps).toBeTruthy();
     expect(artifactSteps).toMatchSnapshot();
@@ -32,38 +29,14 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const workflow = new Workflow(project, {
-      name: "my-workflow",
-    });
     const environment = new Environment(project, {
       name: "my-environment",
     });
-    new DeployJob(workflow, {
-      artifactDirectories: ["dist", "some/other/folder"],
+    const workflow = Workflow.deployment(project);
+    workflow.addDeployJob({
       deploySteps,
       environment,
-    });
-    const artifactSteps = renderUploadArtifactSteps(workflow.buildJob);
-    expect(artifactSteps).toBeTruthy();
-    expect(artifactSteps).toMatchSnapshot();
-    // console.log(artifactSteps);
-  });
-
-  test("With Duplaicate paths", () => {
-    const project = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    const workflow = new Workflow(project, {
-      name: "my-workflow",
-    });
-    const environment = new Environment(project, {
-      name: "my-environment",
-    });
-    new DeployJob(workflow, {
-      artifactDirectories: ["dist", "dist"],
-      deploySteps,
-      environment,
+      artifactsDirectory: "foo",
     });
     const artifactSteps = renderUploadArtifactSteps(workflow.buildJob);
     expect(artifactSteps).toBeTruthy();

@@ -1,6 +1,6 @@
 import { TextFile, TextFileOptions } from "projen";
 import { FractureService } from "../../core/fracture-service";
-import { Operation } from "../../core/operation";
+import { Operation } from "../../core/operation.ts-disabled";
 
 export class TypescriptLambdaAppsyncHandler extends TextFile {
   constructor(

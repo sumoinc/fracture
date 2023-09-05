@@ -1,6 +1,6 @@
 import { Component } from "projen";
 import { Job } from "projen/lib/github/workflows-model";
-import { Workflow } from "../workflow";
+import { NodeProject } from "projen/lib/javascript";
 
 export interface WorkflowJobOptions {
   /**
@@ -11,10 +11,6 @@ export interface WorkflowJobOptions {
    * Job's name
    */
   readonly name: string;
-  /**
-   * Names of a directories that include build artifacts.
-   */
-  readonly artifactDirectories?: Array<string>;
 }
 
 export class WorkflowJob extends Component {
@@ -27,18 +23,15 @@ export class WorkflowJob extends Component {
    */
   public readonly name: string;
 
-  /**
-   * Names of a directories that include build artifacts.
-   */
-  readonly artifactDirectories: Array<string>;
-
-  constructor(public readonly workflow: Workflow, options: WorkflowJobOptions) {
-    super(workflow.project);
+  constructor(
+    public readonly project: NodeProject,
+    options: WorkflowJobOptions
+  ) {
+    super(project);
 
     //defaults
     this.jobId = options.jobId;
     this.name = options.name;
-    this.artifactDirectories = options.artifactDirectories ?? [];
   }
 
   render = (): Job => {

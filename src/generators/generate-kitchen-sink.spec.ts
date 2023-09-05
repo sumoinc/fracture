@@ -1,6 +1,6 @@
 import { GenerateKitchenSink } from "./generate-kitchen-sink";
 import { FractureService } from "../core";
-import { Fracture } from "../core/fracture";
+import { Fracture } from "../core/fracture.ts-disabled";
 import { synthFiles } from "../util/test-util";
 
 describe("success conditions", () => {

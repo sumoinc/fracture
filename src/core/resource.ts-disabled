@@ -2,7 +2,7 @@ import { join } from "path";
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { FractureService } from "./fracture-service";
-import { Operation, OperationOptions } from "./operation";
+import { Operation, OperationOptions } from "./operation.ts-disabled";
 import {
   IdentifierType,
   ManagementType,
@@ -10,7 +10,7 @@ import {
   ResourceAttributeGenerator,
   ResourceAttributeOptions,
   VisabilityType,
-} from "./resource-attribute";
+} from "./resource-attribute.ts-disabled";
 import { Structure, StructureOptions } from "./structure";
 import { TypescriptCommand } from "../generators/ts/command";
 import { TypescriptLambdaApiGatewayConstruct } from "../generators/ts/lambda-api-gateway-construct";

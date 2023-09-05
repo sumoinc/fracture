@@ -1,5 +1,5 @@
 import { DynamoAttribute } from "./dynamo-attribute";
-import { Fracture } from "../core/fracture";
+import { Fracture } from "../core/fracture.ts-disabled";
 import { FractureService } from "../core/fracture-service";
 
 let service: FractureService;

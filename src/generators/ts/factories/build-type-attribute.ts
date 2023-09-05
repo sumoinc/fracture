@@ -3,7 +3,7 @@ import { FractureService } from "../../../core";
 import {
   StructureAttribute,
   StructureAttributeType,
-} from "../../../core/structure-attribute";
+} from "../../../core/structure-attribute.ts-disabled";
 import { TypescriptStrategy } from "../strategy";
 
 /**

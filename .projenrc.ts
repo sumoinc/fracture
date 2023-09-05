@@ -76,6 +76,12 @@ project.addDeps(
 project.addDevDeps("@types/uuid");
 project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 
+// temp ignores
+project.jest?.addIgnorePattern("src/dynamodb");
+project.jest?.addIgnorePattern("src/generators");
+project.tsconfig?.addExclude("src/dynamodb");
+project.tsconfig?.addExclude("src/generators");
+
 /*******************************************************************************
  *
  * Dogfooding for local development and documantation site.
@@ -90,10 +96,10 @@ const site = new VitePressSite(project, {
   name: "docs",
 });
 
-/**
+/*******************************************************************************
  * NETLIFY DEPLOYMENT TARGET
- */
-const netlify = new NetlifyEnvironment(project, {
+ ******************************************************************************/
+const netlifyTarget = new NetlifyEnvironment(project, {
   name: "netlify",
   siteId: "e69db060-d613-414c-9964-4a5a5e0e32ea",
 });
@@ -101,8 +107,19 @@ const netlify = new NetlifyEnvironment(project, {
 // deployment target for docs
 site.deploy({
   branchPrefix: "feature",
-  environment: netlify,
+  environment: netlifyTarget,
 });
+
+/*******************************************************************************
+ * AWS DEPLOYMENT TARGET
+ ******************************************************************************/
+
+/*
+const awsTarget = new AwsEnvironment(project, {
+  name: "hosting",
+  accountNumber: "726654216209",
+});
+*/
 
 // generate
 project.synth();

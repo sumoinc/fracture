@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`success conditions Deploy with artifacts 1`] = `
+exports[`success conditions Smoke test 1`] = `
 Object {
   "concurrency": "deploy-my-environment",
   "env": Object {
     "CI": "true",
   },
   "if": "startsWith( github.ref, 'refs/heads/main' )",
-  "name": "Deploy Service Foo",
+  "name": "Deploy main",
   "needs": Array [
     "build",
   ],
@@ -33,63 +33,6 @@ Object {
       "run": "setfacl --restore=permissions-backup.acl",
       "workingDirectory": "foo",
     },
-    Object {
-      "name": "Download build artifacts for \\"bar\\"",
-      "uses": "actions/download-artifact@v3",
-      "with": Object {
-        "name": "build-artifact-37b51d19",
-        "path": "bar",
-      },
-    },
-    Object {
-      "continueOnError": true,
-      "name": "Restore build artifact permissions for \\"bar\\"",
-      "run": "setfacl --restore=permissions-backup.acl",
-      "workingDirectory": "bar",
-    },
-    Object {
-      "name": "Setup Node.js",
-      "uses": "actions/setup-node@v3",
-      "with": Object {
-        "node-version": "latest",
-      },
-    },
-    Object {
-      "name": "Configure AWS Credentials",
-      "uses": "aws-actions/configure-aws-credentials@v2",
-      "with": Object {
-        "aws-region": "us-east-1",
-        "role-duration-seconds": 900,
-        "role-to-assume": "arn:aws:iam::0000000000:role/GitHubDeploymentOIDCRole",
-      },
-    },
-    Object {
-      "name": "Say foo",
-      "run": "echo 'foo'",
-    },
-  ],
-}
-`;
-
-exports[`success conditions Smoke test 1`] = `
-Object {
-  "concurrency": "deploy-my-environment",
-  "env": Object {
-    "CI": "true",
-  },
-  "if": "startsWith( github.ref, 'refs/heads/main' )",
-  "name": "Deploy main",
-  "needs": Array [
-    "build",
-  ],
-  "permissions": Object {
-    "contents": "read",
-    "idToken": "write",
-  },
-  "runsOn": Array [
-    "ubuntu-latest",
-  ],
-  "steps": Array [
     Object {
       "name": "Setup Node.js",
       "uses": "actions/setup-node@v3",
@@ -134,6 +77,20 @@ Object {
   ],
   "steps": Array [
     Object {
+      "name": "Download build artifacts for \\"foo\\"",
+      "uses": "actions/download-artifact@v3",
+      "with": Object {
+        "name": "build-artifact-acbd18db",
+        "path": "foo",
+      },
+    },
+    Object {
+      "continueOnError": true,
+      "name": "Restore build artifact permissions for \\"foo\\"",
+      "run": "setfacl --restore=permissions-backup.acl",
+      "workingDirectory": "foo",
+    },
+    Object {
       "name": "Setup Node.js",
       "uses": "actions/setup-node@v3",
       "with": Object {
@@ -177,6 +134,20 @@ Object {
     "ubuntu-latest",
   ],
   "steps": Array [
+    Object {
+      "name": "Download build artifacts for \\"bar\\"",
+      "uses": "actions/download-artifact@v3",
+      "with": Object {
+        "name": "build-artifact-37b51d19",
+        "path": "bar",
+      },
+    },
+    Object {
+      "continueOnError": true,
+      "name": "Restore build artifact permissions for \\"bar\\"",
+      "run": "setfacl --restore=permissions-backup.acl",
+      "workingDirectory": "bar",
+    },
     Object {
       "name": "Setup Node.js",
       "uses": "actions/setup-node@v3",

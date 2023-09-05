@@ -4,12 +4,18 @@ import { Workflow } from "../workflow";
 
 export const renderSetupNodeSteps = (
   workflow: Workflow,
-  options: { packageCache: boolean } = { packageCache: true }
+  options: { packageCache: boolean; setupPnpm: boolean } = {
+    packageCache: true,
+    setupPnpm: true,
+  }
 ): Array<JobStep> => {
   const steps: Array<JobStep> = [];
 
   // yarn and pnpm are already preinstalled, but pnpm is not
-  if (workflow.project.package.packageManager === NodePackageManager.PNPM) {
+  if (
+    options.setupPnpm &&
+    workflow.project.package.packageManager === NodePackageManager.PNPM
+  ) {
     steps.push({
       name: "Setup pnpm",
       uses: "pnpm/action-setup@v2.2.4",

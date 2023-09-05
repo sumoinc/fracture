@@ -3,7 +3,6 @@ import { TypeScriptProject } from "projen/lib/typescript";
 import { renderDownloadArtifactSteps } from "./download-artifact-steps";
 import { Environment } from "../../environments";
 import { DeployJob } from "../jobs/deploy-job";
-import { Workflow } from "../workflow";
 
 const deploySteps: Array<JobStep> = [
   {
@@ -18,13 +17,14 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const workflow = new Workflow(project, {
-      name: "my-workflow",
-    });
     const environment = new Environment(project, {
       name: "my-environment",
     });
-    const deployJob = new DeployJob(workflow, { deploySteps, environment });
+    const deployJob = new DeployJob(project, {
+      deploySteps,
+      environment,
+      artifactsDirectory: "foo",
+    });
     const artifactSteps = renderDownloadArtifactSteps(deployJob);
     expect(artifactSteps).toBeTruthy();
     expect(artifactSteps).toMatchSnapshot();
@@ -36,16 +36,13 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const workflow = new Workflow(project, {
-      name: "my-workflow",
-    });
     const environment = new Environment(project, {
       name: "my-environment",
     });
-    const deployJob = new DeployJob(workflow, {
-      artifactDirectories: ["some/other/folder/cdk.out"],
+    const deployJob = new DeployJob(project, {
       deploySteps,
       environment,
+      artifactsDirectory: "foo",
     });
     const artifactSteps = renderDownloadArtifactSteps(deployJob);
     expect(artifactSteps).toBeTruthy();
