@@ -92,8 +92,6 @@ export class TurboRepo extends Component {
       );
     }
 
-    //project.defaultTask?.spawn("eslint");
-
     /***************************************************************************
      *
      * BUILD & TEST SUB PROJECTS
