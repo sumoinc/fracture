@@ -1,8 +1,8 @@
 import { Service } from "../../services/service";
 import { GeneratedTypescriptFile } from "../generated-typescript-file";
 
-export class ApiGateway extends GeneratedTypescriptFile {
+export class HttpApi extends GeneratedTypescriptFile {
   constructor(public readonly project: Service) {
-    super(project, "api/api-gateway.ts");
+    super(project, "api-gateway/http-api.ts");
   }
 }

@@ -1,6 +1,11 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { Operation, OperationOptions } from "./operation";
+import {
+  Operation,
+  OperationOptions,
+  OperationSubType,
+  OperationType,
+} from "./operation";
 import {
   IdentifierType,
   ManagementType,
@@ -143,24 +148,32 @@ export class Resource extends Component {
     this.createOperation = this.addOperation({
       name: `create-${this.name}`,
       dynamoGsi: DynamoTable.of(this.project).keyGsi,
+      operationType: OperationType.MUTATION,
+      operationSubType: OperationSubType.CREATE_ONE,
     });
 
     // Read
     this.readOperation = this.addOperation({
       name: `get-${this.name}`,
       dynamoGsi: DynamoTable.of(this.project).keyGsi,
+      operationType: OperationType.QUERY,
+      operationSubType: OperationSubType.READ_ONE,
     });
 
     // Update
     this.updateOperation = this.addOperation({
       name: `update-${this.name}`,
       dynamoGsi: DynamoTable.of(this.project).keyGsi,
+      operationType: OperationType.MUTATION,
+      operationSubType: OperationSubType.UPDATE_ONE,
     });
 
     // Delete
     this.deleteOperation = this.addOperation({
       name: `delete-${this.name}`,
       dynamoGsi: DynamoTable.of(this.project).keyGsi,
+      operationType: OperationType.MUTATION,
+      operationSubType: OperationSubType.DELETE_ONE,
     });
 
     /***************************************************************************

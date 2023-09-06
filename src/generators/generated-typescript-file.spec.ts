@@ -17,3 +17,18 @@ describe("success conditions", () => {
     //console.log(content);
   });
 });
+
+describe("Failure Conditions", () => {
+  test("Wrong file extension", () => {
+    const project = new NodeProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
+    });
+
+    expect(() => {
+      new GeneratedTypescriptFile(project, "foo.wrong").addLine(
+        "Hello, World!"
+      );
+    }).toThrow("extension");
+  });
+});

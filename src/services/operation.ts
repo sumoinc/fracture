@@ -1,5 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
 import { Service } from "./service";
 import { Structure, StructureOptions } from "./structure";
@@ -52,6 +53,14 @@ export type OperationOptions = {
 };
 
 export class Operation extends Component {
+  /**
+   * Returns all structures for service
+   */
+  public static all(project: NodeProject): Array<Operation> {
+    const isDefined = (c: Component): c is Operation => c instanceof Operation;
+    return project.components.filter(isDefined);
+  }
+
   /**
    * Name for this operation.
    */

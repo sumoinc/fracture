@@ -10,6 +10,11 @@ export class GeneratedTypescriptFile extends GeneratedFile {
     options: GeneratedTypescriptFileOptions = {}
   ) {
     super(project, filePath, options);
+
+    // ensure proper file exstension
+    if (filePath.split(".").pop() !== "ts") {
+      throw new Error("GeneratedTypescriptFile must have a .ts extension");
+    }
   }
 
   preSynthesize() {

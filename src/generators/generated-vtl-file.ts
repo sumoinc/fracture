@@ -10,6 +10,11 @@ export class GeneratedVtlFile extends GeneratedFile {
     options: GeneratedVtlFileOptions = {}
   ) {
     super(project, filePath, options);
+
+    // ensure proper file exstension
+    if (filePath.split(".").pop() !== "vtl") {
+      throw new Error("GeneratedVtlFile must have a .vtl extension");
+    }
   }
 
   preSynthesize() {

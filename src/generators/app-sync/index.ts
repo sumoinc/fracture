@@ -1,1 +1,1 @@
-export * from "./app-sync";
+export * from "./graphql-api";

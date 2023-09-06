@@ -1,5 +1,6 @@
 import { Component } from "projen";
-//import { ApiGateway } from "./api-gateway";
+import { HttpApi, RestApi } from "./api-gateway/";
+import { GraphqlApi } from "./app-sync";
 import { Types } from "./ts";
 import { Service } from "../services/service";
 
@@ -7,12 +8,12 @@ export class KitchenSink extends Component {
   constructor(public readonly project: Service) {
     super(project);
 
-    /***************************************************************************
-     * Typescript Service Generators
-     **************************************************************************/
-
+    // Base Typescript Types
     new Types(project);
 
-    //new ApiGateway(project);
+    // Various API types
+    new RestApi(project);
+    new HttpApi(project);
+    new GraphqlApi(project);
   }
 }
