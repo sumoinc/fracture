@@ -73,6 +73,11 @@ project.addDeps(
   "typescript",
   "uuid"
 );
+
+// support for appsynd js resolvers and linting
+project.addDevDeps("@aws-appsync/utils");
+project.addDevDeps("@aws-appsync/eslint-plugin");
+
 project.addDevDeps("@types/uuid");
 project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 

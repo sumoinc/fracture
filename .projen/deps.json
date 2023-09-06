@@ -1,6 +1,14 @@
 {
   "dependencies": [
     {
+      "name": "@aws-appsync/eslint-plugin",
+      "type": "build"
+    },
+    {
+      "name": "@aws-appsync/utils",
+      "type": "build"
+    },
+    {
       "name": "@aws-sdk/smithy-client",
       "type": "build"
     },
