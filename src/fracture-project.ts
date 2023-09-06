@@ -10,24 +10,6 @@ export type FractureProjectOptions = SetRequired<
   SetOptional<NodeProjectOptions, "defaultReleaseBranch">,
   "outdir"
 >;
-
-/**
- * Used by subclasses to specify deploy location(s) for each project
- */
-export interface DeployOptions {
-  /**
-   * The branch prefix this deployment is targeting.
-   *
-   * @default - defaultReleaseBranch found in Settings()
-   */
-  readonly branchPrefix?: string;
-
-  /**
-   * Environemnt to deploy into.
-   */
-  readonly environment: Environment;
-}
-
 export class FractureProject extends NodeProject {
   constructor(
     public readonly parent: NodeProject,

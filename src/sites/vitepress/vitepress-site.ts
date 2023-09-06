@@ -3,9 +3,9 @@ import { SampleFile } from "projen";
 import { JobStep } from "projen/lib/github/workflows-model";
 import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
 import { SetOptional } from "type-fest";
-import { DeployOptions } from "../../fracture-project";
 import { Settings } from "../../settings";
 import { TurboRepo } from "../../turborepo";
+import { DeployJobOptions } from "../../workflows";
 import { Workflow } from "../../workflows/workflow";
 import { Site } from "../site";
 
@@ -96,7 +96,9 @@ export class VitePressSite extends Site {
     });
   }
 
-  public deploy(options: DeployOptions) {
+  public deploy(
+    options: Pick<DeployJobOptions, "branchPrefix" | "environment">
+  ) {
     const deploySteps: Array<JobStep> = [
       {
         name: "Deploy the foo",
