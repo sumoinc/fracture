@@ -19,6 +19,8 @@
 /src/api-gateway/rest-api.ts linguist-generated
 /src/app-sync/graphql-api.ts linguist-generated
 /src/app-sync/resolvers/ts/create-widget.ts linguist-generated
+/src/app-sync/resolvers/ts/delete-widget.ts linguist-generated
+/src/app-sync/resolvers/ts/get-widget.ts linguist-generated
 /src/app-sync/resolvers/ts/update-widget.ts linguist-generated
 /src/types.ts linguist-generated
 /tsconfig.dev.json linguist-generated

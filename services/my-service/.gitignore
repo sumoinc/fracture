@@ -53,4 +53,6 @@ junit.xml
 !/src/api-gateway/http-api.ts
 !/src/app-sync/graphql-api.ts
 !/src/app-sync/resolvers/ts/create-widget.ts
+!/src/app-sync/resolvers/ts/get-widget.ts
 !/src/app-sync/resolvers/ts/update-widget.ts
+!/src/app-sync/resolvers/ts/delete-widget.ts
