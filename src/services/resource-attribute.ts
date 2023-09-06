@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { ValueOf } from "type-fest";
-import { FractureService } from "./fracture-service";
+import { Service } from "./service";
 
 /**
  * Each Attribute has a type that is used to determine how we will construct other generated code.
@@ -392,8 +392,11 @@ export class ResourceAttribute extends Component {
    */
   public readonly deleteGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
 
-  constructor(service: FractureService, options: ResourceAttributeOptions) {
-    super(service);
+  constructor(
+    public readonly project: Service,
+    options: ResourceAttributeOptions
+  ) {
+    super(project);
 
     /***************************************************************************
      * Props

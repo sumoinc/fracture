@@ -1,8 +1,8 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { ValueOf } from "type-fest";
-import { FractureService } from "./fracture-service";
-import { ResourceAttributeType } from "./resource-attribute.ts-disabled";
+import { ResourceAttributeType } from "./resource-attribute";
+import { Service } from "./service";
 
 export const StructureAttributeType = {
   ...ResourceAttributeType,
@@ -78,8 +78,11 @@ export class StructureAttribute extends Component {
    */
   public readonly required: boolean;
 
-  constructor(service: FractureService, options: StructureAttributeOptions) {
-    super(service);
+  constructor(
+    public readonly project: Service,
+    options: StructureAttributeOptions
+  ) {
+    super(project);
 
     /***************************************************************************
      * Props

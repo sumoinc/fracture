@@ -38,6 +38,13 @@ export interface SettingsOptions {
   readonly appRoot?: string;
 
   /**
+   * Root workspace for app services
+   *
+   * @default "services"
+   */
+  readonly serviceRoot?: string;
+
+  /**
    * Root workspace for site subprojects
    *
    * @default "sites"
@@ -50,6 +57,13 @@ export interface SettingsOptions {
    * @default "src"
    */
   readonly srcDirectory?: string;
+
+  /**
+   * Default version of the CDK to use for this project and it's subprojects.
+   *
+   * @default "2.94.0"
+   */
+  readonly defaultCdkVersion?: string;
 }
 
 export class Settings extends Component {
@@ -85,6 +99,13 @@ export class Settings extends Component {
   public readonly appRoot: string;
 
   /**
+   * Root workspace for app services
+   *
+   * @default "services"
+   */
+  readonly serviceRoot: string;
+
+  /**
    * Root workspace for site subprojects
    *
    * @default "sites"
@@ -97,6 +118,13 @@ export class Settings extends Component {
    * @default "src"
    */
   public readonly srcDirectory: string;
+
+  /**
+   * Default version of the CDK to use for this project and it's subprojects.
+   *
+   * @default "2.94.0"
+   */
+  readonly defaultCdkVersion: string;
 
   /**
    * Defaults for AWS environments.
@@ -121,8 +149,10 @@ export class Settings extends Component {
     this.name = options.name ?? "fracture";
     this.defaultReleaseBranch = options.defaultReleaseBranch ?? "main";
     this.appRoot = options.appRoot ?? "apps";
+    this.serviceRoot = options.serviceRoot ?? "services";
     this.siteRoot = options.siteRoot ?? "sites";
     this.srcDirectory = options.srcDirectory ?? "src";
+    this.defaultCdkVersion = options.defaultCdkVersion ?? "2.94.0";
 
     // defaults for AWS
     this.defaultAwsEnviromentOptions = {

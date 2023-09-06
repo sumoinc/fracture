@@ -1,10 +1,10 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { FractureService } from "./fracture-service";
+import { Service } from "./service.js";
 import {
   StructureAttribute,
   StructureAttributeOptions,
-} from "./structure-attribute.ts-disabled";
+} from "./structure-attribute";
 
 /******************************************************************************
  * TYPES
@@ -61,8 +61,8 @@ export class Structure extends Component {
    */
   public attributes: StructureAttribute[] = [];
 
-  constructor(service: FractureService, options: StructureOptions) {
-    super(service);
+  constructor(public readonly project: Service, options: StructureOptions) {
+    super(project);
 
     /***************************************************************************
      * Props
@@ -101,8 +101,7 @@ export class Structure extends Component {
   }
 
   public addAttribute(options: StructureAttributeOptions) {
-    const service = this.project as FractureService;
-    const attribute = new StructureAttribute(service, options);
+    const attribute = new StructureAttribute(this.project, options);
     this.attributes.push(attribute);
     return attribute;
   }
