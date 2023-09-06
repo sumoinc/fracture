@@ -34,6 +34,10 @@ export const fractureProjectOptions = (
     prettier: parent.prettier && parent.prettier instanceof Prettier,
     packageManager: parent.package.packageManager,
     pnpmVersion: parent.package.pnpmVersion,
+    eslintOptions: {
+      dirs: ["src"],
+      tsconfigPath: "./**/tsconfig.dev.json",
+    },
     ...options,
   };
 };

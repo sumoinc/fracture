@@ -1,11 +1,10 @@
 import { Context, DynamoDBPutItemRequest, util } from "@aws-appsync/utils";
 
-export function request(
-  ctx: Context<any>,
-): DynamoDBPutItemRequest {
-}
+export function request(ctx: Context<any>): DynamoDBPutItemRequest {}
 
-export function response(ctx: Context<MutationCreatePostArgs, object, object, object, Post>) {
+export function response(
+  ctx: Context<MutationCreatePostArgs, object, object, object, Post>
+) {
   return ctx.result;
 }
 

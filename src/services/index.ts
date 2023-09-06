@@ -1,2 +1,1 @@
-export * from "./nuxtjs";
-export * from "./vitepress";
+export * from "./data-service";

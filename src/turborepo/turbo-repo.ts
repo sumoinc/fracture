@@ -81,18 +81,16 @@ export class TurboRepo extends Component {
      *
      **************************************************************************/
 
-    /*
     const eslint = project.tasks.tryFind("eslint");
     if (eslint) {
       project.defaultTask?.spawn(eslint);
-    }*/
-
-    /**
-     * project.addTask("turbo:eslint", {
-        description: "Lint all repos",
-        exec: "pnpm turbo eslint",
-      })
-     */
+      project.defaultTask?.spawn(
+        project.addTask("turbo:eslint", {
+          description: "Lint all repos",
+          exec: "pnpm turbo eslint",
+        })
+      );
+    }
 
     //project.defaultTask?.spawn("eslint");
 

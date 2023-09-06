@@ -44,6 +44,8 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
+    "@aws-appsync/eslint-plugin": "^1.2.6",
+    "@aws-appsync/utils": "^1.3.1",
     "aws-cdk-lib": "^2.94.0",
     "constructs": "^10.0.5"
   },

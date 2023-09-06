@@ -88,6 +88,14 @@
       "type": "build"
     },
     {
+      "name": "@aws-appsync/eslint-plugin",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-appsync/utils",
+      "type": "runtime"
+    },
+    {
       "name": "aws-cdk-lib",
       "version": "^2.94.0",
       "type": "runtime"

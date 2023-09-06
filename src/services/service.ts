@@ -41,5 +41,9 @@ export class Service extends AwsCdkTypeScriptApp {
 
     // init some common things we need here
     fractureProjectInit(this);
+
+    // appsync js support
+    this.addDeps("@aws-appsync/utils");
+    this.addDeps("@aws-appsync/eslint-plugin");
   }
 }
