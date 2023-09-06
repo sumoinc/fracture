@@ -364,67 +364,22 @@ export class Resource extends Component {
       // if user visible it might be an input or output
       if (attribute.visibility === VisabilityType.USER_VISIBLE) {
         // all outputs get everything visible
-        this.createOperation.outputStructure.addAttribute({
-          name: attribute.name,
-          type: attribute.type,
-          comments: attribute.comments,
-          required: true,
-        });
-        this.readOperation.outputStructure.addAttribute({
-          name: attribute.name,
-          type: attribute.type,
-          comments: attribute.comments,
-          required: true,
-        });
-        this.updateOperation.outputStructure.addAttribute({
-          name: attribute.name,
-          type: attribute.type,
-          comments: attribute.comments,
-          required: true,
-        });
-        this.deleteOperation.outputStructure.addAttribute({
-          name: attribute.name,
-          type: attribute.type,
-          comments: attribute.comments,
-          required: true,
-        });
+        this.createOperation.addOutputAttribute(attribute);
+        this.readOperation.addOutputAttribute(attribute);
+        this.updateOperation.addOutputAttribute(attribute);
+        this.deleteOperation.addOutputAttribute(attribute);
 
         // create / update / delete need identifiers
         if (attribute.identifier === IdentifierType.PRIMARY) {
-          this.readOperation.inputStructure.addAttribute({
-            name: attribute.name,
-            type: attribute.type,
-            comments: attribute.comments,
-            required: true,
-          });
-          this.updateOperation.inputStructure.addAttribute({
-            name: attribute.name,
-            type: attribute.type,
-            comments: attribute.comments,
-            required: true,
-          });
-          this.deleteOperation.inputStructure.addAttribute({
-            name: attribute.name,
-            type: attribute.type,
-            comments: attribute.comments,
-            required: true,
-          });
+          this.readOperation.addInputAttribute(attribute);
+          this.updateOperation.addInputAttribute(attribute);
+          this.deleteOperation.addInputAttribute(attribute);
         }
 
         // create/update get all user managed
         if (attribute.management === ManagementType.USER_MANAGED) {
-          this.createOperation.inputStructure.addAttribute({
-            name: attribute.name,
-            type: attribute.type,
-            comments: attribute.comments,
-            required: true,
-          });
-          this.updateOperation.inputStructure.addAttribute({
-            name: attribute.name,
-            type: attribute.type,
-            comments: attribute.comments,
-            required: true,
-          });
+          this.createOperation.addInputAttribute(attribute);
+          this.updateOperation.addInputAttribute(attribute);
         }
       }
     }); // and loop attributes

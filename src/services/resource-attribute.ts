@@ -168,6 +168,7 @@ export type ResourceAttributeOptions = {
    * @example 'phone-number'
    */
   name: string;
+
   /**
    * Brief name used when storing data to save space.
    *
@@ -175,139 +176,83 @@ export type ResourceAttributeOptions = {
    * @default AttributeOptions.name
    */
   shortName?: string;
+
   /**
    * Comment lines to add to the Resource.
    *
    * @default []
    */
   comments?: Array<string>;
+
   /**
    * What is the type for tis attribute?
    *
    * @default ResourceAttributeType.STRING
    */
   type?: ValueOf<typeof ResourceAttributeType>;
+
   /**
    * Is this managed by the end user or the system?
    *
    * @default ManagementType.USER_MANAGED
    */
   management?: ValueOf<typeof ManagementType>;
+
   /**
    * Is this value visible to the end user?
    *
    * @default VisabilityType.USER_VISIBLE
    */
   visibility?: ValueOf<typeof VisabilityType>;
+
   /**
    * Is this value an identifier for this resource?
    *
    * @default IdentifierType.NONE
    */
   identifier?: ValueOf<typeof IdentifierType>;
+
   /**
    * The separator to use when composing this attribute from other attributes.
    *
    * @default: '#'
    */
   compositionsSeperator?: string;
+
   /**
    * The generator to use for all operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
   generator?: ValueOf<typeof ResourceAttributeGenerator>;
+
   /**
    * The generator to use for create operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
   createGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+
   /**
    * The generator to use for read operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
   readGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+
   /**
    * The generator to use for update operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
   updateGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+
   /**
    * The generator to use for delete operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
   deleteGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
-  /**
-   * The type for this attribute.
-   * @default ResourceAttributeType.STRING
-   */
-  // type?: ValueOf<typeof ResourceAttributeType>;
-  /**
-   * Is this attribute required for all mutations?
-   * @default false
-   */
-  // isRequired?: boolean;
-  /**
-   * Is this attribute publically accessible / visible?
-   * @default true
-   */
-  // isPublic?: boolean;
-  /**
-   * Is this attribute expected to be managed exclusively by the system?
-   * AKA: no outside inputs?
-   *
-   * @default false
-   */
-  // isSystem?: boolean;
-
-  /**
-   * What operations do we generate this attribute on?
-   * @default false
-   */
-  // generateOn?: ValueOf<typeof OPERATION_SUB_TYPE>[];
-  /**
-   * What operations do we generate this attribute on?
-   * @default false
-   */
-  // defaultOn?: OperationDefault[];
-  /**
-   * What operations do we output this attribute on?
-   * @default false
-   */
-  // outputOn?: ValueOf<typeof OPERATION_SUB_TYPE>[];
-  /**
-   * Validations to run when creating this attribute.
-   * @default []
-   */
-  // createValidations?: ValueOf<typeof ValidationRule>[];
-  /**
-   * Validations to run when reading data
-   * @default []
-   */
-  // readValidations?: ValueOf<typeof ValidationRule>[];
-  /**
-   * Validations to run when updating this attribute.
-   * @default []
-   */
-  // updateValidations?: ValueOf<typeof ValidationRule>[];
-  /**
-   * Validations to run when deleting this attribute.
-   * @default []
-   */
-  // deleteValidations?: ValueOf<typeof ValidationRule>[];
-  /**
-   * Validations to run when importing external records.
-   * @default []
-   */
-  // importValidations?: ValueOf<typeof ValidationRule>[];
-  /**
-   * Position this attribute should occupy when sorted.
-   */
-  // sortPosition?: number;
 };
 
 export class ResourceAttribute extends Component {

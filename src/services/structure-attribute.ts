@@ -17,12 +17,14 @@ export type StructureAttributeOptions = {
    * @example 'phone-number'
    */
   name: string;
+
   /**
    * Type for this structure attribute.
    *
    * @default StructureAttributeType.STRING
    */
   type?: ValueOf<typeof StructureAttributeType>;
+
   /**
    * Type parameter for this structure attribute.
    *
@@ -30,12 +32,14 @@ export type StructureAttributeOptions = {
    * @example 'T' for MyType<T> generic
    */
   typeParameter?: string;
+
   /**
    * Comment lines to add to the Resource.
    *
    * @default []
    */
-  comments?: string[];
+  comments?: Array<string>;
+
   /**
    * Is this attribute required?
    *

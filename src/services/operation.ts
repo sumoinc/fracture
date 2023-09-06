@@ -2,6 +2,7 @@ import { paramCase } from "change-case";
 import { Component } from "projen";
 import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
+import { ResourceAttribute } from "./resource-attribute";
 import { Service } from "./service";
 import { Structure, StructureOptions } from "./structure";
 import { StructureAttributeOptions } from "./structure-attribute";
@@ -120,6 +121,32 @@ export class Operation extends Component {
     const structure = new Structure(this.project, options);
     this.structures.push(structure);
     return structure;
+  }
+
+  public addInputAttribute(
+    attribute: ResourceAttribute,
+    options: Partial<StructureAttributeOptions> = {}
+  ) {
+    return this.inputStructure.addAttribute({
+      name: attribute.name,
+      type: attribute.type,
+      comments: attribute.comments,
+      required: true,
+      ...options,
+    });
+  }
+
+  public addOutputAttribute(
+    attribute: ResourceAttribute,
+    options: Partial<StructureAttributeOptions> = {}
+  ) {
+    return this.outputStructure.addAttribute({
+      name: attribute.name,
+      type: attribute.type,
+      comments: attribute.comments,
+      required: true,
+      ...options,
+    });
   }
 
   /**
