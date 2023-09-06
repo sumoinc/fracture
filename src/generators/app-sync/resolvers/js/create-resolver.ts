@@ -9,6 +9,21 @@ export class CreateResaolver extends GeneratedTypescriptFile {
   ) {
     super(project, `app-sync/resolvers/ts/${operation.name}.ts`);
 
+    [
+      `import { Context, DynamoDBPutItemRequest, util } from "@aws-appsync/utils";`,
+      ``,
+      `export function request(`,
+      `  ctx: Context<any>,`,
+      `): DynamoDBPutItemRequest {`,
+      `}`,
+      ``,
+      `export function response(ctx: Context<MutationCreatePostArgs, object, object, object, Post>) {`,
+      `  return ctx.result;`,
+      `}`,
+      ``,
+    ].forEach((line) => this.addLine(line));
+
+    // "@aws-appsync/utils"
     //console.log("operation inputs:", operation.inputStructure.attributes);
     //console.log("operation outputs:", operation.outputStructure.attributes);
 
