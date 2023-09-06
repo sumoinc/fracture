@@ -1,24 +1,24 @@
+import { NodeProject } from "projen/lib/javascript";
 import { GenerateConfigurations } from "./configurations";
-import { Fracture, FractureService } from "../../core";
+import { DataService } from "../../services/data-service";
 import { synthFile } from "../../util/test-util";
 
 test("Smoke test", () => {
-  const fracture = new Fracture();
-  const service = new FractureService(fracture, { name: "my-service" });
-  /*
-  new ServiceDeployTarget(fracture, {
-    branchName: "main",
-    environmentName: "us-east",
-    service,
-  });
-  */
+  const service = testService();
   new GenerateConfigurations(service);
 
-  const content = synthFile(
-    fracture,
-    "services/my-service/src/generated/configurations.ts"
-  );
+  const content = synthFile(service, "src/configurations.ts");
   expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
-  //console.log(content);
+  // console.log(content);
 });
+
+const testService = () => {
+  const project = new NodeProject({
+    name: "my-project",
+    defaultReleaseBranch: "main",
+  });
+  return new DataService(project, {
+    name: "foo",
+  });
+};

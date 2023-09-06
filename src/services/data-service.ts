@@ -1,24 +1,30 @@
 import { Project } from "projen";
 import { NodeProject } from "projen/lib/javascript";
+import { Resource, ResourceOptions } from "./resource";
 import { Service, ServiceOptions } from "./service";
-import { DynamoTable } from "../dynamodb";
+import { Structure, StructureOptions } from "./structure";
+import { StructureAttributeType } from "./structure-attribute";
+import { DynamoTable, DynamoTableOptions } from "../dynamodb";
 import { TypescriptStrategy } from "../generators/ts/strategy";
 
 export interface DataServiceOptions extends ServiceOptions {
   /**
-   * A name for the service
+   * Options for the dynamo table.
+   *
+   * @default - fracture defaults
    */
-  //name: string;
+  readonly dynamoTableOptions?: DynamoTableOptions;
+  /**
+   * Options for resources to add when initializing the service.
+   */
+  readonly resourceOptions?: Array<ResourceOptions>;
   /**
    * Typescript strategy options
    *
    * @default fracture defaults
    */
   //typescriptStrategyOptions?: TypescriptStrategyOptions;
-  /**
-   * Options for resources to add when initializing the service.
-   */
-  //resourceOptions?: Array<ResourceOptions>;
+
   // srcDir?: string;
   /**
    * Logging options
@@ -52,6 +58,7 @@ export class DataService extends Service {
       c instanceof DataService && c.name === name;
     return project.subprojects.find(isDefined);
   }
+
   /**
    * Returns all services
    */
@@ -60,6 +67,7 @@ export class DataService extends Service {
       c instanceof DataService;
     return project.subprojects.filter(isDefined);
   }
+
   /**
    * A name for the service.
    */
@@ -75,14 +83,14 @@ export class DataService extends Service {
   /**
    * Table defnition for the table that supports this service.
    */
-  public readonly dynamoTable: DynamoTable;
+  // public readonly dynamoTable: DynamoTable;
   /**
    * All structures for this service.
    */
   // public structures: Array<Structure> = [];
-  // public readonly errorStructure: Structure;
-  // public readonly responseStructure: Structure;
-  // public readonly listResponseStructure: Structure;
+  public readonly errorStructure: Structure;
+  public readonly responseStructure: Structure;
+  public readonly listResponseStructure: Structure;
   /**
    * Output directory for CDK artifacts (cdk.out)
    */
@@ -109,12 +117,14 @@ export class DataService extends Service {
      * Dynamo Configuration
      **************************************************************************/
 
-    this.dynamoTable = new DynamoTable(this, { name: this.name });
+    if (options.dynamoTableOptions) {
+      new DynamoTable(this, options.dynamoTableOptions);
+    }
 
     /***************************************************************************
-     * Initialize standard structures
+     * Initialize standard default structure shapes
      **************************************************************************/
-    /*
+
     this.errorStructure = this.addStructure({
       name: `error`,
       attributeOptions: [
@@ -177,30 +187,23 @@ export class DataService extends Service {
         },
       ],
     });
-    */
 
     /***************************************************************************
      * Resources based on options
      **************************************************************************/
-    /*
+
     if (options.resourceOptions) {
       options.resourceOptions.forEach((resourceOption) => {
         this.addResource(resourceOption);
       });
     }
-    */
   }
-  /*
+
   public addResource(options: ResourceOptions) {
-    const resource = new Resource(this, options);
-    this.resources.push(resource);
-    return resource;
+    return new Resource(this, options);
   }
 
   public addStructure(options: StructureOptions) {
-    const structure = new Structure(this, options);
-    this.structures.push(structure);
-    return structure;
+    return new Structure(this, options);
   }
-  */
 }

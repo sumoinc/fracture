@@ -13,7 +13,7 @@ export class GeneratedFile extends TextFile {
   ) {
     const settings = Settings.of(project);
 
-    super(project, join(settings.srcDirectory, "generated", filePath), {
+    super(project, join(settings.srcDirectory, filePath), {
       readonly: false,
       ...options,
     });

@@ -76,12 +76,6 @@ project.addDeps(
 project.addDevDeps("@types/uuid");
 project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 
-// temp ignores
-// project.jest?.addIgnorePattern("/src/dynamodb/**/*.ts");
-// project.jest?.addIgnorePattern("/src/generators/**/*.ts");
-// project.tsconfig?.addExclude("src/dynamodb/**/*.ts");
-// project.tsconfig?.addExclude("src/generators/**/*.ts");
-
 /*******************************************************************************
  *
  * Dogfooding for local development and documantation site.

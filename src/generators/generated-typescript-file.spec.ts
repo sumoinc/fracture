@@ -11,7 +11,7 @@ describe("success conditions", () => {
 
     new GeneratedTypescriptFile(project, "foo.ts").addLine("Hello, World!");
 
-    const content = synthFile(project, "src/generated/foo.ts");
+    const content = synthFile(project, "src/foo.ts");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     //console.log(content);

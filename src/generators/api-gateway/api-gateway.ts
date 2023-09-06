@@ -1,8 +1,8 @@
-import { Component } from "projen";
-import { Fracture } from "../../core";
+import { Service } from "../../services/service";
+import { GeneratedTypescriptFile } from "../generated-typescript-file";
 
-export class ApiGateway extends Component {
-  constructor(fracture: Fracture) {
-    super(fracture);
+export class ApiGateway extends GeneratedTypescriptFile {
+  constructor(public readonly project: Service) {
+    super(project, "api/api-gateway.ts");
   }
 }

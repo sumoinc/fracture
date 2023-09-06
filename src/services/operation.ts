@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { ValueOf } from "type-fest";
-import { FractureService } from "./fracture-service";
+import { Service } from "./service";
 import { Structure, StructureOptions } from "./structure";
 import { StructureAttributeOptions } from "./structure-attribute";
 import { DynamoGsi } from "../dynamodb";
@@ -78,8 +78,8 @@ export class Operation extends Component {
    */
   public structures: Array<Structure> = [];
 
-  constructor(service: FractureService, options: OperationOptions) {
-    super(service);
+  constructor(public readonly project: Service, options: OperationOptions) {
+    super(project);
 
     /***************************************************************************
      * Props
@@ -108,8 +108,7 @@ export class Operation extends Component {
   }
 
   public addStructure(options: StructureOptions) {
-    const service = this.project as FractureService;
-    const structure = new Structure(service, options);
+    const structure = new Structure(this.project, options);
     this.structures.push(structure);
     return structure;
   }

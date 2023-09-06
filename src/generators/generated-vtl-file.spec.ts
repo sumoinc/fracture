@@ -9,9 +9,9 @@ describe("success conditions", () => {
       defaultReleaseBranch: "main",
     });
 
-    new GeneratedTypescriptFile(project, "foo.ts").addLine("Hello, World!");
+    new GeneratedTypescriptFile(project, "foo.vtl").addLine("Hello, World!");
 
-    const content = synthFile(project, "src/generated/foo.ts");
+    const content = synthFile(project, "src/foo.vtl");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     //console.log(content);

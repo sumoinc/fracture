@@ -1,7 +1,7 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from "typescript";
 import { buildTypeProperies } from "./build-type-attribute";
-import { FractureService } from "../../../core";
-import { Structure } from "../../../core/structure.ts-disabled";
+import { Service } from "../../../services/service";
+import { Structure } from "../../../services/structure";
 import { TypescriptStrategy } from "../strategy";
 
 /**
@@ -11,8 +11,8 @@ export const buildTypes = ({
   service,
   structures,
 }: {
-  service: FractureService;
-  structures: Structure[];
+  service: Service;
+  structures: Array<Structure>;
 }) => {
   return structures.map((structure) => {
     return buildType({
@@ -29,7 +29,7 @@ export const buildType = ({
   service,
   structure,
 }: {
-  service: FractureService;
+  service: Service;
   structure: Structure;
 }) => {
   /***************************************************************************

@@ -1,9 +1,9 @@
-import { FractureService } from "../../core/fracture-service";
+import { Service } from "../../services/service";
 import { GeneratedTypescriptFile } from "../generated-typescript-file";
 
 export class GenerateCdkApp extends GeneratedTypescriptFile {
-  constructor(service: FractureService) {
-    super(service, "main.ts");
+  constructor(public readonly project: Service) {
+    super(project, "main.ts");
   }
 
   preSynthesize(): void {

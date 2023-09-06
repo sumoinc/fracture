@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Success conditions Synth files match 1`] = `
+Array [
+  ".eslintrc.json",
+  ".gitattributes",
+  ".gitignore",
+  ".npmignore",
+  ".projen/deps.json",
+  ".projen/files.json",
+  ".projen/tasks.json",
+  "cdk.json",
+  "LICENSE",
+  "package.json",
+  "README.md",
+  "src/main.ts",
+  "src/types.ts",
+  "test/main.test.ts",
+  "tsconfig.dev.json",
+  "tsconfig.json",
+]
+`;

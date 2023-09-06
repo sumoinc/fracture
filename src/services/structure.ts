@@ -1,5 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { NodeProject } from "projen/lib/javascript/node-project.js";
 import { Service } from "./service.js";
 import {
   StructureAttribute,
@@ -39,6 +40,14 @@ export type StructureOptions = {
  *****************************************************************************/
 
 export class Structure extends Component {
+  /**
+   * Returns all structures for service
+   */
+  public static all(project: NodeProject): Structure[] {
+    const isDefined = (c: Component): c is Structure => c instanceof Structure;
+    return project.components.filter(isDefined);
+  }
+
   /**
    *  Name for the structure.
    */

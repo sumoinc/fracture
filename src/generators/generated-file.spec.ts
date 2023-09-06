@@ -11,7 +11,7 @@ describe("success conditions", () => {
 
     new GeneratedFile(project, "foo.txt").addLine("Hello, World!");
 
-    const content = synthFile(project, "src/generated/foo.txt");
+    const content = synthFile(project, "src/foo.txt");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     //console.log(content);

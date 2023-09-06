@@ -1,8 +1,6 @@
-import { join } from "path";
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { FractureService } from "./fracture-service";
-import { Operation, OperationOptions } from "./operation.ts-disabled";
+import { Operation, OperationOptions } from "./operation";
 import {
   IdentifierType,
   ManagementType,
@@ -10,14 +8,10 @@ import {
   ResourceAttributeGenerator,
   ResourceAttributeOptions,
   VisabilityType,
-} from "./resource-attribute.ts-disabled";
+} from "./resource-attribute";
+import { Service } from "./service";
 import { Structure, StructureOptions } from "./structure";
-import { TypescriptCommand } from "../generators/ts/command";
-import { TypescriptLambdaApiGatewayConstruct } from "../generators/ts/lambda-api-gateway-construct";
-import { TypescriptLambdaApiGatewayHandler } from "../generators/ts/lambda-api-gateway-handler";
-import { TypescriptLambdaAppsyncConstruct } from "../generators/ts/lambda-appsync-construct";
-import { TypescriptLambdaAppsyncHandler } from "../generators/ts/lambda-appsync-handler";
-import { TypescriptStrategy } from "../generators/ts/strategy";
+import { DynamoTable } from "../dynamodb";
 
 export interface ResourceOptions {
   /**
@@ -113,8 +107,8 @@ export class Resource extends Component {
    */
   public operations: Operation[] = [];
 
-  constructor(service: FractureService, options: ResourceOptions) {
-    super(service);
+  constructor(public readonly project: Service, options: ResourceOptions) {
+    super(project);
 
     /***************************************************************************
      * Props
@@ -148,25 +142,25 @@ export class Resource extends Component {
     // Create
     this.createOperation = this.addOperation({
       name: `create-${this.name}`,
-      dynamoGsi: service.dynamoTable.keyGsi,
+      dynamoGsi: DynamoTable.of(this.project).keyGsi,
     });
 
     // Read
     this.readOperation = this.addOperation({
       name: `get-${this.name}`,
-      dynamoGsi: service.dynamoTable.keyGsi,
+      dynamoGsi: DynamoTable.of(this.project).keyGsi,
     });
 
     // Update
     this.updateOperation = this.addOperation({
       name: `update-${this.name}`,
-      dynamoGsi: service.dynamoTable.keyGsi,
+      dynamoGsi: DynamoTable.of(this.project).keyGsi,
     });
 
     // Delete
     this.deleteOperation = this.addOperation({
       name: `delete-${this.name}`,
-      dynamoGsi: service.dynamoTable.keyGsi,
+      dynamoGsi: DynamoTable.of(this.project).keyGsi,
     });
 
     /***************************************************************************
@@ -174,14 +168,14 @@ export class Resource extends Component {
      **************************************************************************/
 
     this.pk = this.addAttribute({
-      name: service.dynamoTable.pk.name,
+      name: DynamoTable.of(this.project).pk.name,
       comments: [`Partition Key for this record.`],
       management: ManagementType.SYSTEM_MANAGED,
       visibility: VisabilityType.HIDDEN,
       generator: ResourceAttributeGenerator.COMPOSITION,
     });
     this.sk = this.addAttribute({
-      name: service.dynamoTable.sk.name,
+      name: DynamoTable.of(this.project).sk.name,
       comments: [`Sort Key for this record.`],
       management: ManagementType.SYSTEM_MANAGED,
       visibility: VisabilityType.HIDDEN,
@@ -193,7 +187,7 @@ export class Resource extends Component {
      **************************************************************************/
 
     this.idx = this.addAttribute({
-      name: service.dynamoTable.idx.name,
+      name: DynamoTable.of(this.project).idx.name,
       comments: [`Lookup value for this record.`],
       management: ManagementType.SYSTEM_MANAGED,
       visibility: VisabilityType.HIDDEN,
@@ -294,23 +288,20 @@ export class Resource extends Component {
    * Also manages some data structures used in code generation.
    */
   public addAttribute(options: ResourceAttributeOptions) {
-    const service = this.project as FractureService;
-    const attribute = new ResourceAttribute(service, options);
+    const attribute = new ResourceAttribute(this.project, options);
     this.attributes.push(attribute);
 
     return attribute;
   }
 
   public addStructure(options: StructureOptions) {
-    const service = this.project as FractureService;
-    const structure = new Structure(service, options);
+    const structure = new Structure(this.project, options);
     this.structures.push(structure);
     return structure;
   }
 
   public addOperation(options: OperationOptions) {
-    const service = this.project as FractureService;
-    const operation = new Operation(service, options);
+    const operation = new Operation(this.project, options);
     this.operations.push(operation);
     return operation;
   }
@@ -325,8 +316,6 @@ export class Resource extends Component {
    ****************************************************************************/
   preSynthesize(): void {
     super.preSynthesize();
-
-    const service = this.project as FractureService;
 
     /***************************************************************************
      * Loop attributes & build data structures
@@ -431,7 +420,8 @@ export class Resource extends Component {
      * Typescript Generators
      **************************************************************************/
 
-    const strategy = TypescriptStrategy.of(service);
+    /*
+    const strategy = TypescriptStrategy.of(this.project);
 
     if (!strategy) {
       throw new Error(`No TypescriptStrategy defined at the service level.`);
@@ -449,20 +439,24 @@ export class Resource extends Component {
       };
 
       // command
-      new TypescriptCommand(service, join(comamndRoot, format("command")), {
-        operation,
-      });
+      new TypescriptCommand(
+        this.project,
+        join(comamndRoot, format("command")),
+        {
+          operation,
+        }
+      );
 
       // api gateway support
       new TypescriptLambdaApiGatewayConstruct(
-        service,
+        this.project,
         join(apiGatewayRoot, format("")),
         {
           operation,
         }
       );
       new TypescriptLambdaApiGatewayHandler(
-        service,
+        this.project,
         join(apiGatewayRoot, "handlers", format("")),
         {
           operation,
@@ -471,19 +465,20 @@ export class Resource extends Component {
 
       // appsync support
       new TypescriptLambdaAppsyncConstruct(
-        service,
+        this.project,
         join(appsyncRoot, format("")),
         {
           operation,
         }
       );
       new TypescriptLambdaAppsyncHandler(
-        service,
+        this.project,
         join(appsyncRoot, "handlers", format("")),
         {
           operation,
         }
       );
     });
+    */
   }
 }
