@@ -17,6 +17,8 @@ Array [
   "src/api-gateway/rest-api.ts",
   "src/app-sync/graphql-api.ts",
   "src/app-sync/resolvers/ts/create-bar.ts",
+  "src/app-sync/resolvers/ts/delete-bar.ts",
+  "src/app-sync/resolvers/ts/get-bar.ts",
   "src/app-sync/resolvers/ts/update-bar.ts",
   "src/main.ts",
   "src/types.ts",

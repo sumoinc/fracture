@@ -96,6 +96,12 @@ Object {
         Object {
           "exec": "node .projenrc.js",
         },
+        Object {
+          "spawn": "eslint",
+        },
+        Object {
+          "spawn": "turbo:eslint",
+        },
       ],
     },
     "eject": Object {
@@ -218,6 +224,15 @@ Object {
       "steps": Array [
         Object {
           "exec": "pnpm turbo turbo:build",
+        },
+      ],
+    },
+    "turbo:eslint": Object {
+      "description": "Lint all repos",
+      "name": "turbo:eslint",
+      "steps": Array [
+        Object {
+          "exec": "pnpm turbo eslint",
         },
       ],
     },
