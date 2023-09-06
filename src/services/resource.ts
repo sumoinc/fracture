@@ -304,6 +304,55 @@ export class Resource extends Component {
     const attribute = new ResourceAttribute(this.project, options);
     this.attributes.push(attribute);
 
+    /***************************************************************************
+     * Update data structures
+     **************************************************************************/
+
+    // if user visible, add to public data structure
+    if (attribute.visibility === VisabilityType.USER_VISIBLE) {
+      this.publicDataStructure.addAttribute({
+        name: attribute.name,
+        type: attribute.type,
+        comments: attribute.comments,
+        required: true,
+      });
+    }
+
+    // everything goes into private data structure
+    this.privateDataStructure.addAttribute({
+      name: attribute.shortName,
+      type: attribute.type,
+      comments: attribute.comments,
+      required: true,
+    });
+
+    /***************************************************************************
+     * Operation inputs / outputs
+     **************************************************************************/
+
+    // if user visible it might be an input or output
+    if (attribute.visibility === VisabilityType.USER_VISIBLE) {
+      // all outputs get everything visible
+      this.createOperation.addOutputAttribute(attribute);
+      this.readOperation.addOutputAttribute(attribute);
+      this.updateOperation.addOutputAttribute(attribute);
+      this.deleteOperation.addOutputAttribute(attribute);
+
+      // read / update / delete need identifiers
+      if (attribute.identifier === IdentifierType.PRIMARY) {
+        this.createOperation.addInputAttribute(attribute);
+        this.readOperation.addInputAttribute(attribute);
+        this.updateOperation.addInputAttribute(attribute);
+        this.deleteOperation.addInputAttribute(attribute);
+      }
+
+      // create / update get all user managed
+      if (attribute.management === ManagementType.USER_MANAGED) {
+        this.createOperation.addInputAttribute(attribute);
+        this.updateOperation.addInputAttribute(attribute);
+      }
+    }
+
     return attribute;
   }
 
@@ -334,55 +383,7 @@ export class Resource extends Component {
      * Loop attributes & build data structures
      **************************************************************************/
 
-    this.attributes.forEach((attribute) => {
-      /***************************************************************************
-       * Update data structures
-       **************************************************************************/
-
-      // if user visible, add to public data structure
-      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-        this.publicDataStructure.addAttribute({
-          name: attribute.name,
-          type: attribute.type,
-          comments: attribute.comments,
-          required: true,
-        });
-      }
-
-      // everything goes into private data structure
-      this.privateDataStructure.addAttribute({
-        name: attribute.shortName,
-        type: attribute.type,
-        comments: attribute.comments,
-        required: true,
-      });
-
-      /***************************************************************************
-       * Operation inputs / outputs
-       **************************************************************************/
-
-      // if user visible it might be an input or output
-      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-        // all outputs get everything visible
-        this.createOperation.addOutputAttribute(attribute);
-        this.readOperation.addOutputAttribute(attribute);
-        this.updateOperation.addOutputAttribute(attribute);
-        this.deleteOperation.addOutputAttribute(attribute);
-
-        // create / update / delete need identifiers
-        if (attribute.identifier === IdentifierType.PRIMARY) {
-          this.readOperation.addInputAttribute(attribute);
-          this.updateOperation.addInputAttribute(attribute);
-          this.deleteOperation.addInputAttribute(attribute);
-        }
-
-        // create/update get all user managed
-        if (attribute.management === ManagementType.USER_MANAGED) {
-          this.createOperation.addInputAttribute(attribute);
-          this.updateOperation.addInputAttribute(attribute);
-        }
-      }
-    }); // and loop attributes
+    // this.attributes.forEach((attribute) => {}); // and loop attributes
 
     /***************************************************************************
      * Typescript Generators

@@ -1,18 +1,22 @@
 import { NodeProject } from "projen/lib/javascript";
-import { VtlReadResponse } from "./read-response";
-import { DataService } from "../../../services/data-service";
-import { synthFile } from "../../../util/test-util";
+import { ReadResolver } from "./read-resolver";
+import { DataService } from "../../../../services/data-service";
+import { synthFile } from "../../../../util/test-util";
 
 describe("Success Conditions", () => {
   test("Smoke test", () => {
     const service = testService();
+
     const resource = service.addResource({
       name: "bar",
     });
 
-    new VtlReadResponse(service, { operation: resource.readOperation });
+    new ReadResolver(service, { operation: resource.updateOperation });
 
-    const content = synthFile(service, "src/app-sync/vtl/get-bar-response.vtl");
+    const content = synthFile(
+      service,
+      "src/app-sync/resolvers/ts/update-bar.ts"
+    );
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     //console.log(content);

@@ -495,12 +495,6 @@ Object {
     "default": Object {
       "description": "Synthesize project files",
       "name": "default",
-      "steps": Array [
-        Object {
-          "cwd": "../..",
-          "exec": "npx projen default",
-        },
-      ],
     },
     "deploy": Object {
       "description": "Deploys your CDK app to the AWS cloud",

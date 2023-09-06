@@ -5,7 +5,10 @@ import {
 } from "projen/lib/awscdk";
 import { NodeProject } from "projen/lib/javascript";
 import { SetRequired } from "type-fest";
-import { fractureProjectOptions } from "../fracture-project";
+import {
+  fractureProjectInit,
+  fractureProjectOptions,
+} from "../fracture-project";
 import { Settings } from "../settings";
 import { TurboRepo } from "../turborepo";
 
@@ -35,5 +38,8 @@ export class Service extends AwsCdkTypeScriptApp {
       parent,
       artifactsDirectory: join(outdir, "cdk.out"),
     });
+
+    // init some common things we need here
+    fractureProjectInit(this);
   }
 }

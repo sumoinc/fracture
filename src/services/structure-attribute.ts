@@ -1,7 +1,10 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { ValueOf } from "type-fest";
-import { ResourceAttributeType } from "./resource-attribute";
+import {
+  ResourceAttributeGenerator,
+  ResourceAttributeType,
+} from "./resource-attribute";
 import { Service } from "./service";
 
 export const StructureAttributeType = {
@@ -17,6 +20,14 @@ export type StructureAttributeOptions = {
    * @example 'phone-number'
    */
   name: string;
+
+  /**
+   * Brief name used when storing data to save space.
+   *
+   * @example 'pn'
+   * @default StructureAttributeOptions.name
+   */
+  shortName?: string;
 
   /**
    * Type for this structure attribute.
@@ -46,6 +57,13 @@ export type StructureAttributeOptions = {
    * @default true
    */
   required?: boolean;
+
+  /**
+   * The generator to use for the associated operation, if any
+   *
+   * @default ResourceAttributeGenerator.NONE
+   */
+  generator?: ValueOf<typeof ResourceAttributeGenerator>;
 };
 
 export class StructureAttribute extends Component {
@@ -55,12 +73,22 @@ export class StructureAttribute extends Component {
    * @example 'phone-number'
    */
   public readonly name: string;
+
+  /**
+   * Brief name used when storing data to save space.
+   *
+   * @example 'pn'
+   * @default StructureAttributeOptions.name
+   */
+  public readonly shortName: string;
+
   /**
    * Type for this structure attribute.
    *
    * @default StructureAttributeType.STRING
    */
-  type: ValueOf<typeof StructureAttributeType>;
+  public readonly type: ValueOf<typeof StructureAttributeType>;
+
   /**
    * Type parameter for this structure attribute.
    *
@@ -68,6 +96,7 @@ export class StructureAttribute extends Component {
    * @example 'T' for MyType<T> generic
    */
   public readonly typeParameter?: string;
+
   /**
    * Comment lines to add to the Resource.
    *
@@ -82,6 +111,13 @@ export class StructureAttribute extends Component {
    */
   public readonly required: boolean;
 
+  /**
+   * The generator to use for the associated operation, if any
+   *
+   * @default ResourceAttributeGenerator.NONE
+   */
+  public readonly generator: ValueOf<typeof ResourceAttributeGenerator>;
+
   constructor(
     public readonly project: Service,
     options: StructureAttributeOptions
@@ -93,10 +129,12 @@ export class StructureAttribute extends Component {
      **************************************************************************/
 
     this.name = paramCase(options.name);
+    this.shortName = options.shortName ?? this.name;
     this.type = options.type ?? StructureAttributeType.STRING;
     this.typeParameter = options.typeParameter ?? "any";
     this.comments = options.comments ?? [];
     this.required = options.required ?? true;
+    this.generator = options.generator ?? ResourceAttributeGenerator.NONE;
 
     return this;
   }

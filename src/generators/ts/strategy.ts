@@ -40,12 +40,14 @@ export type TypescriptStrategyOptions = {
 export class TypescriptStrategy extends Component {
   /**
    * Returns the `TypescriptStrategy` component for the service or
-   * undefined if the service does not have a TypescriptStrategy component.
+   * creates one if the service does not have a TypescriptStrategy component.
    */
-  public static of(project: NodeProject): TypescriptStrategy | undefined {
+  public static of(project: NodeProject): TypescriptStrategy {
     const isDefined = (c: Component): c is TypescriptStrategy =>
       c instanceof TypescriptStrategy;
-    return project.components.find(isDefined);
+    return (
+      project.components.find(isDefined) ?? new TypescriptStrategy(project)
+    );
   }
 
   public readonly attributeName: ValueOf<typeof NamingStrategyType>;

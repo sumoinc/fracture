@@ -1,7 +1,7 @@
 import { NodeProject } from "projen/lib/javascript";
-import { VtlCreateResponse } from "./create-response";
-import { DataService } from "../../../services/data-service";
-import { synthFile } from "../../../util/test-util";
+import { CreateResaolver } from "./create-resolver";
+import { DataService } from "../../../../services/data-service";
+import { synthFile } from "../../../../util/test-util";
 
 describe("Success Conditions", () => {
   test("Smoke test", () => {
@@ -9,17 +9,23 @@ describe("Success Conditions", () => {
 
     const resource = service.addResource({
       name: "bar",
+      attributeOptions: [
+        {
+          name: "first-name",
+          shortName: "fn",
+        },
+      ],
     });
 
-    new VtlCreateResponse(service, { operation: resource.createOperation });
+    new CreateResaolver(service, { operation: resource.createOperation });
 
     const content = synthFile(
       service,
-      "src/app-sync/vtl/create-bar-response.vtl"
+      "src/app-sync/resolvers/ts/create-bar.ts"
     );
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
-    //console.log(content);
+    console.log(content);
   });
 });
 

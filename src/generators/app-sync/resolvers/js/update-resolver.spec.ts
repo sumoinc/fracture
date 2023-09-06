@@ -1,7 +1,7 @@
 import { NodeProject } from "projen/lib/javascript";
-import { VtlUpdateResponse } from "./update-response";
-import { DataService } from "../../../services/data-service";
-import { synthFile } from "../../../util/test-util";
+import { UpdateResolver } from "./update-resolver";
+import { DataService } from "../../../../services/data-service";
+import { synthFile } from "../../../../util/test-util";
 
 describe("Success Conditions", () => {
   test("Smoke test", () => {
@@ -11,11 +11,11 @@ describe("Success Conditions", () => {
       name: "bar",
     });
 
-    new VtlUpdateResponse(service, { operation: resource.updateOperation });
+    new UpdateResolver(service, { operation: resource.updateOperation });
 
     const content = synthFile(
       service,
-      "src/app-sync/vtl/update-bar-response.vtl"
+      "src/app-sync/resolvers/ts/update-bar.ts"
     );
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();

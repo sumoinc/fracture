@@ -1,5 +1,6 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from "typescript";
 import { buildTypeProperies } from "./build-type-attribute";
+import { ResourceAttributeGenerator } from "../../../services/resource-attribute";
 import { Service } from "../../../services/service";
 import { Structure } from "../../../services/structure";
 import { TypescriptStrategy } from "../strategy";
@@ -61,7 +62,10 @@ export const buildType = ({
   // build properties for this type
   const properties = buildTypeProperies({
     service,
-    attributes: structure.attributes,
+    attributes: structure.attributes.filter((attribute) => {
+      // exclude generated types, these are not public
+      return attribute.generator === ResourceAttributeGenerator.NONE;
+    }),
   });
 
   // define the type
