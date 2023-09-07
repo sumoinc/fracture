@@ -2,23 +2,27 @@
 
 exports[`validate generated project files Detect new files 1`] = `
 Array [
+  "sites/docs/.eslintrc.json",
   "sites/docs/.gitattributes",
   "sites/docs/.gitignore",
   "sites/docs/.npmignore",
   "sites/docs/.npmrc",
+  "sites/docs/.prettierignore",
+  "sites/docs/.prettierrc.json",
   "sites/docs/.projen/deps.json",
   "sites/docs/.projen/files.json",
   "sites/docs/.projen/tasks.json",
   "sites/docs/conponents/README.md",
   "sites/docs/layouts/default.vue",
-  "sites/docs/LICENSE",
   "sites/docs/nuxt.config.ts",
   "sites/docs/package.json",
   "sites/docs/pages/index.vue",
   "sites/docs/plugins/README.md",
   "sites/docs/public/README.md",
   "sites/docs/README.md",
-  "sites/docs/server/tsconfig.json",
+  "sites/docs/src/index.ts",
+  "sites/docs/test/hello.test.ts",
+  "sites/docs/tsconfig.dev.json",
   "sites/docs/tsconfig.json",
 ]
 `;

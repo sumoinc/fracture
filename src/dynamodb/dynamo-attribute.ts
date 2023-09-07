@@ -1,6 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
 
 export const AttributeType = {
@@ -55,7 +55,7 @@ export class DynamoAttribute extends Component {
   public readonly keyType: ValueOf<typeof KeyType>;
 
   constructor(
-    public readonly project: NodeProject,
+    public readonly project: TypeScriptProject,
     options: DynamoAttributeOptions
   ) {
     super(project);

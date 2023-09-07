@@ -3,11 +3,12 @@ import { Site } from "./site";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
-    const root = new TypeScriptProject({
+    const parent = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const site = new Site(root, {
+    const site = new Site({
+      parent,
       name: "my-project",
       defaultReleaseBranch: "main",
     });

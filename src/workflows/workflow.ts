@@ -1,6 +1,6 @@
 import { Component } from "projen";
 import { GitHub, GithubWorkflow } from "projen/lib/github";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { BuildJob } from "./jobs/build-job";
 import { DeployJob, DeployJobOptions } from "./jobs/deploy-job";
 import { WorkflowJob } from "./jobs/workflow-job";
@@ -72,7 +72,7 @@ export class Workflow extends Component {
    * Returns the deploy workflow for a project or creates one if it
    * doesn't exist yet. Singleton?
    */
-  public static deploy(project: NodeProject): Workflow {
+  public static deploy(project: TypeScriptProject): Workflow {
     const isDefined = (c: Component): c is Workflow =>
       c instanceof Workflow && c.name === "deploy";
     if (project.components.find(isDefined)) {
@@ -176,7 +176,10 @@ export class Workflow extends Component {
    */
   readonly pushTriggers: Array<string> = [];
 
-  constructor(public readonly project: NodeProject, options: WorkflowOptions) {
+  constructor(
+    public readonly project: TypeScriptProject,
+    options: WorkflowOptions
+  ) {
     super(project);
 
     const github = GitHub.of(project);

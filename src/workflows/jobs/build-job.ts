@@ -1,5 +1,5 @@
 import { Job, JobPermission } from "projen/lib/github/workflows-model";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { SetOptional } from "type-fest";
 import { WorkflowJob, WorkflowJobOptions } from "./workflow-job";
 import { renderBuildSteps } from "../steps/build-steps";
@@ -25,7 +25,10 @@ export class BuildJob extends WorkflowJob {
    */
   public readonly artifactDirectories: Array<string> = [];
 
-  constructor(public readonly project: NodeProject, options: BuildJobOptions) {
+  constructor(
+    public readonly project: TypeScriptProject,
+    options: BuildJobOptions
+  ) {
     super(project, {
       jobId: "build",
       name: "Build",

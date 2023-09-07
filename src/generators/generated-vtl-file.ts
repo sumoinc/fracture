@@ -1,11 +1,11 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { GeneratedFile, GeneratedFileOptions } from "./generated-file";
 
 export type GeneratedVtlFileOptions = GeneratedFileOptions;
 
 export class GeneratedVtlFile extends GeneratedFile {
   constructor(
-    public readonly project: NodeProject,
+    public readonly project: TypeScriptProject,
     filePath: string,
     options: GeneratedVtlFileOptions = {}
   ) {

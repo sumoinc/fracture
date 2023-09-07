@@ -1,13 +1,13 @@
 import { join } from "path";
 import { TextFile, TextFileOptions } from "projen";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { Settings } from "../settings";
 
 export type GeneratedFileOptions = TextFileOptions;
 
 export class GeneratedFile extends TextFile {
   constructor(
-    public readonly project: NodeProject,
+    public readonly project: TypeScriptProject,
     filePath: string,
     options: GeneratedFileOptions = {}
   ) {

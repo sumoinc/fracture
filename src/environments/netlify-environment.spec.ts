@@ -1,11 +1,11 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { NetlifyEnvironment } from "./netlify-environment";
 import { VitePressSite } from "../sites/vitepress/vitepress-site";
 import { synthFile } from "../util/test-util";
 
 describe("success conditions", () => {
   test("Smoke Test", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
@@ -16,18 +16,19 @@ describe("success conditions", () => {
   });
 
   test("with siteid", () => {
-    const project = new NodeProject({
+    const parent = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const environment = new NetlifyEnvironment(project, {
+    const environment = new NetlifyEnvironment(parent, {
       name: "foo",
       siteId: "bar",
     });
     expect(environment).toBeTruthy();
 
     // site options
-    const vitePressSite = new VitePressSite(project, {
+    const vitePressSite = new VitePressSite({
+      parent,
       name: "docs",
       defaultReleaseBranch: "main",
     });
@@ -37,7 +38,7 @@ describe("success conditions", () => {
       environment,
     });
 
-    const content = synthFile(project, `.github/workflows/deploy.yml`);
+    const content = synthFile(parent, `.github/workflows/deploy.yml`);
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(content);

@@ -1,4 +1,4 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { GenerateConfigurations } from "./configurations";
 import { DataService } from "../../services/data-service";
 import { synthFile } from "../../util/test-util";
@@ -14,11 +14,11 @@ test("Smoke test", () => {
 });
 
 const testService = () => {
-  const project = new NodeProject({
-    name: "my-project",
-    defaultReleaseBranch: "main",
-  });
-  return new DataService(project, {
+  return new DataService({
+    parent: new TypeScriptProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
+    }),
     name: "foo",
   });
 };

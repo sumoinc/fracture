@@ -1,6 +1,6 @@
 import { paramCase } from "change-case";
 import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { SetOptional } from "type-fest";
 import { WorkflowJob, WorkflowJobOptions } from "./workflow-job";
 import { Environment } from "../../environments";
@@ -78,7 +78,10 @@ export class DeployJob extends WorkflowJob {
    */
   readonly workflow: Workflow;
 
-  constructor(public readonly project: NodeProject, options: DeployJobOptions) {
+  constructor(
+    public readonly project: TypeScriptProject,
+    options: DeployJobOptions
+  ) {
     const branchPrefix = options.branchPrefix ?? "main";
     const name = options.name ?? `Deploy ${branchPrefix}`;
     const jobId = options.jobId ?? paramCase(name);

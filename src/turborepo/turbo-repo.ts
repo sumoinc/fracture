@@ -1,5 +1,5 @@
 import { Component, JsonFile, YamlFile } from "projen";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
 
 export const TurboOutputModeType = {
@@ -39,7 +39,7 @@ export class TurboRepo extends Component {
    * Returns the `TurboRepo` component of a project or creates one if it
    * doesn't exist yet. Singleton?
    */
-  public static of(project: NodeProject): TurboRepo {
+  public static of(project: TypeScriptProject): TurboRepo {
     const isTurboRepo = (c: Component): c is TurboRepo =>
       c instanceof TurboRepo;
     return project.components.find(isTurboRepo) ?? new TurboRepo(project);
@@ -55,7 +55,7 @@ export class TurboRepo extends Component {
    */
   public readonly taskSets: Array<TurboTaskSet> = [];
 
-  constructor(public readonly project: NodeProject) {
+  constructor(public readonly project: TypeScriptProject) {
     super(project);
 
     // ignore and don't package the cache directory

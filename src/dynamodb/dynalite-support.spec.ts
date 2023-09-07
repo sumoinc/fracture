@@ -1,9 +1,9 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { addDynaliteSupport } from "./dynalite-support";
 import { synthFile } from "../util/test-util";
 
 test("Smoke test config", () => {
-  const project = new NodeProject({
+  const project = new TypeScriptProject({
     name: "my-project",
     defaultReleaseBranch: "main",
   });
@@ -14,7 +14,7 @@ test("Smoke test config", () => {
 });
 
 test("Smoke test jest", () => {
-  const project = new NodeProject({
+  const project = new TypeScriptProject({
     name: "my-project",
     defaultReleaseBranch: "main",
   });

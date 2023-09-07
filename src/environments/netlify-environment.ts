@@ -1,4 +1,4 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { SetOptional } from "type-fest";
 import {
   AuthProviderType,
@@ -49,7 +49,7 @@ export class NetlifyEnvironment extends Environment {
   public readonly siteId?: string;
 
   constructor(
-    public readonly project: NodeProject,
+    public readonly project: TypeScriptProject,
     options: NetlifyEnvironmentOptions
   ) {
     super(project, {

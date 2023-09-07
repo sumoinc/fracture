@@ -6,11 +6,13 @@ Array [
   "services/foo/.gitattributes",
   "services/foo/.gitignore",
   "services/foo/.npmignore",
+  "services/foo/.npmrc",
+  "services/foo/.prettierignore",
+  "services/foo/.prettierrc.json",
   "services/foo/.projen/deps.json",
   "services/foo/.projen/files.json",
   "services/foo/.projen/tasks.json",
   "services/foo/cdk.json",
-  "services/foo/LICENSE",
   "services/foo/package.json",
   "services/foo/README.md",
   "services/foo/src/main.ts",
@@ -28,6 +30,8 @@ Object {
   },
   "extends": Array [
     "plugin:import/typescript",
+    "prettier",
+    "plugin:prettier/recommended",
   ],
   "ignorePatterns": Array [
     "*.js",
@@ -46,16 +50,10 @@ Object {
   "plugins": Array [
     "@typescript-eslint",
     "import",
+    "prettier",
   ],
   "root": true,
   "rules": Object {
-    "@typescript-eslint/indent": Array [
-      "error",
-      2,
-    ],
-    "@typescript-eslint/member-delimiter-style": Array [
-      "error",
-    ],
     "@typescript-eslint/member-ordering": Array [
       "error",
       Object {
@@ -83,37 +81,6 @@ Object {
     ],
     "@typescript-eslint/return-await": Array [
       "error",
-    ],
-    "array-bracket-newline": Array [
-      "error",
-      "consistent",
-    ],
-    "array-bracket-spacing": Array [
-      "error",
-      "never",
-    ],
-    "brace-style": Array [
-      "error",
-      "1tbs",
-      Object {
-        "allowSingleLine": true,
-      },
-    ],
-    "comma-dangle": Array [
-      "error",
-      "always-multiline",
-    ],
-    "comma-spacing": Array [
-      "error",
-      Object {
-        "after": true,
-        "before": false,
-      },
-    ],
-    "curly": Array [
-      "error",
-      "multi-line",
-      "consistent",
     ],
     "dot-notation": Array [
       "error",
@@ -145,37 +112,14 @@ Object {
         ],
       },
     ],
-    "indent": Array [
-      "off",
-    ],
     "key-spacing": Array [
       "error",
-    ],
-    "keyword-spacing": Array [
-      "error",
-    ],
-    "max-len": Array [
-      "error",
-      Object {
-        "code": 150,
-        "ignoreComments": true,
-        "ignoreRegExpLiterals": true,
-        "ignoreStrings": true,
-        "ignoreTemplateLiterals": true,
-        "ignoreUrls": true,
-      },
     ],
     "no-bitwise": Array [
       "error",
     ],
     "no-duplicate-imports": Array [
       "error",
-    ],
-    "no-multi-spaces": Array [
-      "error",
-      Object {
-        "ignoreEOLComments": false,
-      },
     ],
     "no-multiple-empty-lines": Array [
       "error",
@@ -189,39 +133,7 @@ Object {
     "no-trailing-spaces": Array [
       "error",
     ],
-    "object-curly-newline": Array [
-      "error",
-      Object {
-        "consistent": true,
-        "multiline": true,
-      },
-    ],
-    "object-curly-spacing": Array [
-      "error",
-      "always",
-    ],
-    "object-property-newline": Array [
-      "error",
-      Object {
-        "allowAllPropertiesOnSameLine": true,
-      },
-    ],
-    "quote-props": Array [
-      "error",
-      "consistent-as-needed",
-    ],
-    "quotes": Array [
-      "error",
-      "single",
-      Object {
-        "avoidEscape": true,
-      },
-    ],
-    "semi": Array [
-      "error",
-      "always",
-    ],
-    "space-before-blocks": Array [
+    "prettier/prettier": Array [
       "error",
     ],
   },
@@ -251,16 +163,17 @@ exports[`validate generated project files services/foo/.gitattributes 1`] = `
 /.gitignore linguist-generated
 /.npmignore linguist-generated
 /.npmrc linguist-generated
+/.prettierignore linguist-generated
+/.prettierrc.json linguist-generated
 /.projen/** linguist-generated
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated
 /.projen/tasks.json linguist-generated
 /cdk.json linguist-generated
-/LICENSE linguist-generated
 /package.json linguist-generated
+/pnpm-lock.yaml linguist-generated
 /tsconfig.dev.json linguist-generated
-/tsconfig.json linguist-generated
-/yarn.lock linguist-generated"
+/tsconfig.json linguist-generated"
 `;
 
 exports[`validate generated project files services/foo/.gitignore 1`] = `
@@ -270,7 +183,6 @@ exports[`validate generated project files services/foo/.gitignore 1`] = `
 !/.projen/deps.json
 !/.projen/files.json
 !/package.json
-!/LICENSE
 !/.npmignore
 logs
 *.log
@@ -299,6 +211,8 @@ jspm_packages/
 /test-reports/
 junit.xml
 /coverage/
+!/.prettierignore
+!/.prettierrc.json
 !/.npmrc
 !/test/
 !/tsconfig.json
@@ -376,6 +290,10 @@ Object {
       "type": "build",
     },
     Object {
+      "name": "eslint-config-prettier",
+      "type": "build",
+    },
+    Object {
       "name": "eslint-import-resolver-node",
       "type": "build",
     },
@@ -385,6 +303,10 @@ Object {
     },
     Object {
       "name": "eslint-plugin-import",
+      "type": "build",
+    },
+    Object {
+      "name": "eslint-plugin-prettier",
       "type": "build",
     },
     Object {
@@ -405,6 +327,10 @@ Object {
       "name": "npm-check-updates",
       "type": "build",
       "version": "^16",
+    },
+    Object {
+      "name": "prettier",
+      "type": "build",
     },
     Object {
       "name": "projen",
@@ -453,11 +379,12 @@ Object {
     ".gitignore",
     ".npmignore",
     ".npmrc",
+    ".prettierignore",
+    ".prettierrc.json",
     ".projen/deps.json",
     ".projen/files.json",
     ".projen/tasks.json",
     "cdk.json",
-    "LICENSE",
     "tsconfig.dev.json",
     "tsconfig.json",
   ],
@@ -468,7 +395,7 @@ exports[`validate generated project files services/foo/.projen/tasks.json 1`] = 
 Object {
   "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \\"npx projen\\".",
   "env": Object {
-    "PATH": "$(npx -c \\"node --print process.env.PATH\\")",
+    "PATH": "$(pnpm -c exec \\"node --print process.env.PATH\\")",
   },
   "tasks": Object {
     "build": Object {
@@ -547,7 +474,7 @@ Object {
       "name": "install",
       "steps": Array [
         Object {
-          "exec": "yarn install --check-files",
+          "exec": "pnpm i --no-frozen-lockfile",
         },
       ],
     },
@@ -556,7 +483,7 @@ Object {
       "name": "install:ci",
       "steps": Array [
         Object {
-          "exec": "yarn install --check-files --frozen-lockfile",
+          "exec": "pnpm i --frozen-lockfile",
         },
       ],
     },
@@ -629,16 +556,16 @@ Object {
       "name": "upgrade",
       "steps": Array [
         Object {
-          "exec": "yarn upgrade npm-check-updates",
+          "exec": "pnpm update npm-check-updates",
         },
         Object {
-          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,aws-cdk,esbuild,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-junit,npm-check-updates,projen,ts-jest,ts-node,typescript,@aws-appsync/eslint-plugin,@aws-appsync/utils,aws-cdk-lib,constructs",
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,aws-cdk,esbuild,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,ts-jest,ts-node,typescript,@aws-appsync/eslint-plugin,@aws-appsync/utils,aws-cdk-lib,constructs",
         },
         Object {
-          "exec": "yarn install --check-files",
+          "exec": "pnpm i --no-frozen-lockfile",
         },
         Object {
-          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk esbuild eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit npm-check-updates projen ts-jest ts-node typescript @aws-appsync/eslint-plugin @aws-appsync/utils aws-cdk-lib constructs",
+          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk esbuild eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen ts-jest ts-node typescript @aws-appsync/eslint-plugin @aws-appsync/utils aws-cdk-lib constructs",
         },
         Object {
           "exec": "npx projen",
@@ -683,12 +610,15 @@ Object {
     "aws-cdk": "^2.94.0",
     "esbuild": "*",
     "eslint": "^8",
+    "eslint-config-prettier": "*",
     "eslint-import-resolver-node": "*",
     "eslint-import-resolver-typescript": "*",
     "eslint-plugin-import": "*",
+    "eslint-plugin-prettier": "*",
     "jest": "*",
     "jest-junit": "^15",
     "npm-check-updates": "^16",
+    "prettier": "*",
     "projen": "*",
     "ts-jest": "*",
     "ts-node": "*",
@@ -734,8 +664,9 @@ Object {
       "/node_modules/",
     ],
   },
-  "license": "Apache-2.0",
+  "license": "UNLICENSED",
   "name": "foo",
+  "pnpm": Object {},
   "scripts": Object {
     "build": "npx projen build",
     "bundle": "npx projen bundle",

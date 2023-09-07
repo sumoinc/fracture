@@ -1,9 +1,9 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { AwsEnvironment } from "./aws-environment";
 
 describe("success conditions", () => {
   test("Smoke Test", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
@@ -15,7 +15,7 @@ describe("success conditions", () => {
   });
 
   test("using region", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
@@ -30,7 +30,7 @@ describe("success conditions", () => {
 
 describe("failure conditions", () => {
   test("Duplicate name", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });

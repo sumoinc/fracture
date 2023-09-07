@@ -1,4 +1,3 @@
-import { NodeProject } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { VitePressSite } from "./vitepress-site";
 import { AwsEnvironment } from "../../environments";
@@ -6,11 +5,12 @@ import { synthFile } from "../../util/test-util";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
-    const project = new TypeScriptProject({
+    const parent = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const vitePressSite = new VitePressSite(project, {
+    const vitePressSite = new VitePressSite({
+      parent,
       name: "docs",
       defaultReleaseBranch: "main",
     });
@@ -19,17 +19,18 @@ describe("success conditions", () => {
 
   test("With deploy", () => {
     // root project options
-    const project = new NodeProject({
+    const parent = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const usEast = new AwsEnvironment(project, {
+    const usEast = new AwsEnvironment(parent, {
       name: "us-east",
       accountNumber: "0000000000",
     });
 
     // site options
-    const vitePressSite = new VitePressSite(project, {
+    const vitePressSite = new VitePressSite({
+      parent,
       name: "docs",
       defaultReleaseBranch: "main",
     });
@@ -41,7 +42,7 @@ describe("success conditions", () => {
     expect(deployment).toBeTruthy();
     // console.log(vitePressSite.buildTask.name);
 
-    const content = synthFile(project, `.github/workflows/deploy.yml`);
+    const content = synthFile(parent, `.github/workflows/deploy.yml`);
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(content);

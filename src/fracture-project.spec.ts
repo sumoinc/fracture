@@ -1,32 +1,40 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { FractureProject } from "./fracture-project";
 import { synthFile } from "./util/test-util";
 
-describe("success conditions", () => {
-  test("Smoke test", () => {
-    const project = new NodeProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
+describe("Success conditions", () => {
+  test("No parent", () => {
+    const fractureProject = new FractureProject({
+      name: "my-sub-project",
     });
-    const fractureProject = new FractureProject(project, {
+    expect(fractureProject).toBeTruthy();
+  });
+
+  test("With Parent", () => {
+    const parent = new FractureProject({
+      name: "my-project",
+    });
+    const subProject = new FractureProject({
+      parent,
       name: "my-sub-project",
       outdir: "sites/foo",
     });
-    expect(fractureProject).toBeTruthy();
+    expect(subProject).toBeTruthy();
   });
 });
 
 test("apps/test/.projen/deps.json", () => {
-  const project = new NodeProject({
+  const parent = new TypeScriptProject({
     name: "my-project",
     defaultReleaseBranch: "main",
   });
-  new FractureProject(project, {
+  new FractureProject({
+    parent,
     name: "my-sub-project",
     outdir: "sites/foo",
   });
 
-  const content = synthFile(project, "sites/foo/.projen/tasks.json") as any;
+  const content = synthFile(parent, "sites/foo/.projen/tasks.json") as any;
   expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
   // these tasks should be reset with undefined steps in all Fracture sub-projects

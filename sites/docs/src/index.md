@@ -3,23 +3,23 @@
 layout: home
 
 hero:
-  name: "My Awesome Project"
-  text: "A VitePress Site"
-  tagline: My great project tagline
+  name: "Fracture Framework"
+  text: "A Projen Booster"
+  tagline: Still Experimental
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Examples
+      link: /examples/
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Documentation
+      link: /docs/
 
 features:
-  - title: Feature AA
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Static Websites
+    details: Build and maintain static websites using tools like Vitepress and NuxtJS
+    link: /docs/sites/
+  - title: AWS Services
+    details: Automate data services and APIs on AWS.
+    link: /docs/services/
 ---
 

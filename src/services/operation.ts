@@ -1,6 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
 import {
   ResourceAttribute,
@@ -60,7 +60,7 @@ export class Operation extends Component {
   /**
    * Returns all structures for service
    */
-  public static all(project: NodeProject): Array<Operation> {
+  public static all(project: TypeScriptProject): Array<Operation> {
     const isDefined = (c: Component): c is Operation => c instanceof Operation;
     return project.components.filter(isDefined);
   }

@@ -97,7 +97,8 @@ project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 new VsCodeConfiguration(project);
 
 // build out documentation site
-const site = new VitePressSite(project, {
+const site = new VitePressSite({
+  parent: project,
   name: "docs",
 });
 
@@ -119,7 +120,8 @@ site.deploy({
  * AWS SERVICE
  ******************************************************************************/
 
-const service = new DataService(project, {
+const service = new DataService({
+  parent: project,
   name: "my-service",
   resourceOptions: [
     {

@@ -1,6 +1,6 @@
 import { camelCase, paramCase, pascalCase } from "change-case";
 import { Component } from "projen";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
 
 export const NamingStrategyType = {
@@ -42,7 +42,7 @@ export class TypescriptStrategy extends Component {
    * Returns the `TypescriptStrategy` component for the service or
    * creates one if the service does not have a TypescriptStrategy component.
    */
-  public static of(project: NodeProject): TypescriptStrategy {
+  public static of(project: TypeScriptProject): TypescriptStrategy {
     const isDefined = (c: Component): c is TypescriptStrategy =>
       c instanceof TypescriptStrategy;
     return (
@@ -60,7 +60,7 @@ export class TypescriptStrategy extends Component {
   public readonly typeName: ValueOf<typeof NamingStrategyType>;
 
   constructor(
-    public readonly project: NodeProject,
+    public readonly project: TypeScriptProject,
     options: TypescriptStrategyOptions = {}
   ) {
     super(project);

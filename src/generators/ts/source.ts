@@ -1,6 +1,5 @@
 import { dirname, join, relative, sep } from "path";
 import { SourceCode, SourceCodeOptions } from "projen";
-import { NodeProject } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { TypescriptStrategy } from "./strategy";
 
@@ -25,7 +24,7 @@ export class TypeScriptSource extends SourceCode {
   public readonly strategy: TypescriptStrategy;
 
   constructor(
-    project: NodeProject,
+    project: TypeScriptProject,
     filePath: string,
     options?: TypeScriptSourceOptions
   ) {

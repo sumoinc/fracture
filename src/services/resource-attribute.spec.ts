@@ -1,4 +1,4 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { DataService } from "./data-service";
 import { ResourceAttribute } from "./resource-attribute";
 
@@ -7,13 +7,12 @@ test("Smoke test", () => {
   const att = new ResourceAttribute(service, { name: "bar" });
   expect(att).toBeTruthy();
 });
-
 const testService = () => {
-  const project = new NodeProject({
-    name: "my-project",
-    defaultReleaseBranch: "main",
-  });
-  return new DataService(project, {
+  return new DataService({
+    parent: new TypeScriptProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
+    }),
     name: "foo",
   });
 };

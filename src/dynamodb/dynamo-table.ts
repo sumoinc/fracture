@@ -1,6 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { AttributeType, DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi, DynamoGsiOptions, DynamoGsiType } from "./dynamo-gsi";
 
@@ -34,7 +34,7 @@ export class DynamoTable extends Component {
    * Returns the dynamo table for a project or creates one if it
    * doesn't exist yet. Singleton?
    */
-  public static of(project: NodeProject): DynamoTable {
+  public static of(project: TypeScriptProject): DynamoTable {
     const isDefined = (c: Component): c is DynamoTable =>
       c instanceof DynamoTable;
     return (
@@ -55,7 +55,7 @@ export class DynamoTable extends Component {
   public readonly gsi: DynamoGsi[] = [];
 
   constructor(
-    public readonly project: NodeProject,
+    public readonly project: TypeScriptProject,
     options: DynamoTableOptions
   ) {
     super(project);
