@@ -8,9 +8,23 @@ import { SetOptional, SetRequired } from "type-fest";
 export type FractureProjectOptions = SetRequired<
   SetOptional<NodeProjectOptions, "defaultReleaseBranch">,
   "outdir"
->;
+> & {
+  /**
+   * Release branch for this project.
+   *
+   * @default - fracture default
+   */
+  releaseBranch?: string;
+};
 
 export class FractureProject extends NodeProject {
+  /**
+   * Release branch for this project.
+   *
+   * @default - fracture default
+   */
+  releaseBranch?: string;
+
   constructor(
     public readonly parent: NodeProject,
     options: FractureProjectOptions
