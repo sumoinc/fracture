@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`success conditions Smoke test 1`] = `
+Array [
+  Object {
+    "name": "Configure AWS Credentials",
+    "uses": "aws-actions/configure-aws-credentials@v2",
+    "with": Object {
+      "aws-region": "us-east-1",
+      "role-duration-seconds": 900,
+      "role-to-assume": "arn:aws:iam::000000000000:role/GitHubDeploymentOIDCRole",
+    },
+  },
+  Object {
+    "name": "Say foo",
+    "run": "echo 'foo'",
+  },
+]
+`;
+
+exports[`success conditions With OIDC Configuration test 1`] = `
+Array [
+  Object {
+    "name": "Configure AWS Credentials",
+    "uses": "aws-actions/configure-aws-credentials@v2",
+    "with": Object {
+      "aws-region": "us-east-1",
+      "role-duration-seconds": 900,
+      "role-to-assume": "arn:aws:iam::000000000000:role/GitHubDeploymentOIDCRole",
+    },
+  },
+  Object {
+    "name": "Say foo",
+    "run": "echo 'foo'",
+  },
+]
+`;

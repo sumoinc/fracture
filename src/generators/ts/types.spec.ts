@@ -1,22 +1,14 @@
-import { GeneratedTypes } from "./types";
-import { Fracture, FractureService } from "../../core";
+import { NodeProject } from "projen/lib/javascript";
+import { Types } from "./types";
+import { DataService } from "../../services/data-service";
 import { synthFile } from "../../util/test-util";
 
-test("Smoke test", () => {
-  const fracture = new Fracture();
-  new GeneratedTypes(new FractureService(fracture, { name: "my-service" }));
-  const content = synthFile(
-    fracture,
-    "services/my-service/src/generated/types.ts"
-  );
-  expect(content).toBeTruthy();
-  expect(content).toMatchSnapshot();
-  // console.log(content);
-});
-
 test("Resource formatting test", () => {
-  const fracture = new Fracture();
-  const service = new FractureService(fracture, {
+  const project = new NodeProject({
+    name: "my-project",
+    defaultReleaseBranch: "main",
+  });
+  const service = new DataService(project, {
     name: "foo",
     resourceOptions: [
       {
@@ -34,9 +26,9 @@ test("Resource formatting test", () => {
       },
     ],
   });
-  new GeneratedTypes(service);
+  new Types(service);
 
-  const content = synthFile(fracture, "services/foo/src/generated/types.ts");
+  const content = synthFile(service, "src/types.ts");
   expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
   // console.log(content);

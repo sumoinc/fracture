@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`validate generated project files Detect new files 1`] = `
+Array [
+  "sites/docs/.gitattributes",
+  "sites/docs/.gitignore",
+  "sites/docs/.npmignore",
+  "sites/docs/.npmrc",
+  "sites/docs/.projen/deps.json",
+  "sites/docs/.projen/files.json",
+  "sites/docs/.projen/tasks.json",
+  "sites/docs/conponents/README.md",
+  "sites/docs/layouts/default.vue",
+  "sites/docs/LICENSE",
+  "sites/docs/nuxt.config.ts",
+  "sites/docs/package.json",
+  "sites/docs/pages/index.vue",
+  "sites/docs/plugins/README.md",
+  "sites/docs/public/README.md",
+  "sites/docs/README.md",
+  "sites/docs/server/tsconfig.json",
+  "sites/docs/tsconfig.json",
+]
+`;
+
+exports[`validate generated project files apps/test/.gitignore 1`] = `undefined`;
+
+exports[`validate generated project files apps/test/.npmrc 1`] = `undefined`;
+
+exports[`validate generated project files apps/test/.projen/deps.json 1`] = `undefined`;
+
+exports[`validate generated project files apps/test/.projen/files.json 1`] = `undefined`;
+
+exports[`validate generated project files apps/test/.projen/tasks.json 1`] = `undefined`;
+
+exports[`validate generated project files apps/test/nuxt.config.ts 1`] = `undefined`;
+
+exports[`validate generated project files apps/test/package.json 1`] = `undefined`;
+
+exports[`validate generated project files apps/test/server/tsconfig.json 1`] = `undefined`;
+
+exports[`validate generated project files apps/test/tsconfig.json 1`] = `undefined`;

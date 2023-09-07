@@ -1,61 +1,84 @@
 import { camelCase, paramCase, pascalCase } from "change-case";
 import { Component } from "projen";
+import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { FractureService } from "../../core";
-import { NAMING_STRATEGY_TYPE } from "../../core/naming-strategies/naming-strategy";
+
+export const NamingStrategyType = {
+  /**
+   * PascalCase
+   */
+  PASCAL_CASE: "pascalCase",
+  /**
+   * camelCase
+   */
+  CAMEL_CASE: "camelCase",
+  /**
+   * snake_case
+   */
+  SNAKE_CASE: "snakeCase",
+  /**
+   * param-case
+   */
+  PARAM_CASE: "paramCase",
+  /**
+   * CONSTANT_CASE
+   */
+  CONSTANT_CASE: "constantCase",
+} as const;
 
 export type TypescriptStrategyOptions = {
-  attributeName?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  className?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  enumName?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  fileName?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  functionName?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  functionParameterName?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  interfaceName?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  typeName?: ValueOf<typeof NAMING_STRATEGY_TYPE>;
+  attributeName?: ValueOf<typeof NamingStrategyType>;
+  className?: ValueOf<typeof NamingStrategyType>;
+  enumName?: ValueOf<typeof NamingStrategyType>;
+  fileName?: ValueOf<typeof NamingStrategyType>;
+  functionName?: ValueOf<typeof NamingStrategyType>;
+  functionParameterName?: ValueOf<typeof NamingStrategyType>;
+  interfaceName?: ValueOf<typeof NamingStrategyType>;
+  typeName?: ValueOf<typeof NamingStrategyType>;
 };
 
 export class TypescriptStrategy extends Component {
   /**
    * Returns the `TypescriptStrategy` component for the service or
-   * undefined if the service does not have a TypescriptStrategy component.
+   * creates one if the service does not have a TypescriptStrategy component.
    */
-  public static of(service: FractureService): TypescriptStrategy | undefined {
-    const isTypescriptStrategy = (c: Component): c is TypescriptStrategy =>
+  public static of(project: NodeProject): TypescriptStrategy {
+    const isDefined = (c: Component): c is TypescriptStrategy =>
       c instanceof TypescriptStrategy;
-    return service.components.find(isTypescriptStrategy);
+    return (
+      project.components.find(isDefined) ?? new TypescriptStrategy(project)
+    );
   }
 
-  public readonly attributeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  public readonly className: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  public readonly enumName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  public readonly fileName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  public readonly functionName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  public readonly functionParameterName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  public readonly interfaceName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
-  public readonly typeName: ValueOf<typeof NAMING_STRATEGY_TYPE>;
+  public readonly attributeName: ValueOf<typeof NamingStrategyType>;
+  public readonly className: ValueOf<typeof NamingStrategyType>;
+  public readonly enumName: ValueOf<typeof NamingStrategyType>;
+  public readonly fileName: ValueOf<typeof NamingStrategyType>;
+  public readonly functionName: ValueOf<typeof NamingStrategyType>;
+  public readonly functionParameterName: ValueOf<typeof NamingStrategyType>;
+  public readonly interfaceName: ValueOf<typeof NamingStrategyType>;
+  public readonly typeName: ValueOf<typeof NamingStrategyType>;
 
   constructor(
-    service: FractureService,
+    public readonly project: NodeProject,
     options: TypescriptStrategyOptions = {}
   ) {
-    super(service);
+    super(project);
 
     /***************************************************************************
      * PROPS
      **************************************************************************/
 
-    this.attributeName =
-      options.attributeName ?? NAMING_STRATEGY_TYPE.CAMEL_CASE;
-    this.className = options.className ?? NAMING_STRATEGY_TYPE.PASCAL_CASE;
-    this.enumName = options.enumName ?? NAMING_STRATEGY_TYPE.PASCAL_CASE;
-    this.fileName = options.fileName ?? NAMING_STRATEGY_TYPE.PARAM_CASE;
-    this.functionName = options.functionName ?? NAMING_STRATEGY_TYPE.CAMEL_CASE;
+    this.attributeName = options.attributeName ?? NamingStrategyType.CAMEL_CASE;
+    this.className = options.className ?? NamingStrategyType.PASCAL_CASE;
+    this.enumName = options.enumName ?? NamingStrategyType.PASCAL_CASE;
+    this.fileName = options.fileName ?? NamingStrategyType.PARAM_CASE;
+    this.functionName = options.functionName ?? NamingStrategyType.CAMEL_CASE;
     this.functionParameterName =
-      options.functionParameterName ?? NAMING_STRATEGY_TYPE.CAMEL_CASE;
+      options.functionParameterName ?? NamingStrategyType.CAMEL_CASE;
     this.interfaceName =
-      options.interfaceName ?? NAMING_STRATEGY_TYPE.PASCAL_CASE;
-    this.typeName = options.typeName ?? NAMING_STRATEGY_TYPE.PASCAL_CASE;
+      options.interfaceName ?? NamingStrategyType.PASCAL_CASE;
+    this.typeName = options.typeName ?? NamingStrategyType.PASCAL_CASE;
   }
 
   public formatAttributeName(s: string) {
@@ -91,13 +114,13 @@ export class TypescriptStrategy extends Component {
   }
 }
 
-const format = (s: string, ns: ValueOf<typeof NAMING_STRATEGY_TYPE>) => {
+const format = (s: string, ns: ValueOf<typeof NamingStrategyType>) => {
   switch (ns) {
-    case NAMING_STRATEGY_TYPE.CAMEL_CASE:
+    case NamingStrategyType.CAMEL_CASE:
       return camelCase(s);
-    case NAMING_STRATEGY_TYPE.PARAM_CASE:
+    case NamingStrategyType.PARAM_CASE:
       return paramCase(s);
-    case NAMING_STRATEGY_TYPE.PASCAL_CASE:
+    case NamingStrategyType.PASCAL_CASE:
       return pascalCase(s);
     default:
       throw new Error(`Invalid naming strategy ${ns}`);

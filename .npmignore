@@ -21,4 +21,14 @@ dist
 /.projenrc.js
 tsconfig.tsbuildinfo
 /.eslintrc.json
-/example-app
+/sites
+/apps
+node_modules
+/**/*.spec.*
+.gitattributes
+.prettierignore
+.prettierrc.json
+.projenrc.ts
+.turbo
+turbo.json
+pnpm-workspace.yaml

@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { NodeProject } from "projen/lib/javascript";
 import { ValueOf } from "type-fest";
-import { FractureService } from "../core";
 
 export const AttributeType = {
   STRING: "S",
@@ -54,8 +54,11 @@ export class DynamoAttribute extends Component {
    */
   public readonly keyType: ValueOf<typeof KeyType>;
 
-  constructor(service: FractureService, options: DynamoAttributeOptions) {
-    super(service);
+  constructor(
+    public readonly project: NodeProject,
+    options: DynamoAttributeOptions
+  ) {
+    super(project);
 
     /***************************************************************************
      * Props

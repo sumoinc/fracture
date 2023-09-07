@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`success conditions Smoke test 1`] = `
+Array [
+  Object {
+    "name": "Setup Node.js",
+    "uses": "actions/setup-node@v3",
+    "with": Object {
+      "cache": "yarn",
+      "node-version": "latest",
+    },
+  },
+]
+`;
+
+exports[`success conditions With NPM 1`] = `
+Array [
+  Object {
+    "name": "Setup Node.js",
+    "uses": "actions/setup-node@v3",
+    "with": Object {
+      "cache": "npm",
+      "node-version": "latest",
+    },
+  },
+]
+`;
+
+exports[`success conditions With PNPM 1`] = `
+Array [
+  Object {
+    "name": "Setup pnpm",
+    "uses": "pnpm/action-setup@v2.2.4",
+    "with": Object {
+      "version": "8",
+    },
+  },
+  Object {
+    "name": "Setup Node.js",
+    "uses": "actions/setup-node@v3",
+    "with": Object {
+      "cache": "pnpm",
+      "node-version": "latest",
+    },
+  },
+]
+`;
+
+exports[`success conditions With Yarn 1`] = `
+Array [
+  Object {
+    "name": "Setup Node.js",
+    "uses": "actions/setup-node@v3",
+    "with": Object {
+      "cache": "yarn",
+      "node-version": "latest",
+    },
+  },
+]
+`;
+
+exports[`success conditions With Yarn 2 1`] = `
+Array [
+  Object {
+    "name": "Setup Node.js",
+    "uses": "actions/setup-node@v3",
+    "with": Object {
+      "cache": "yarn",
+      "node-version": "latest",
+    },
+  },
+]
+`;

@@ -1,17 +1,16 @@
+import { NodeProject } from "projen/lib/javascript";
 import { DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi } from "./dynamo-gsi";
-import { Fracture, FractureService } from "../core";
-
-let service: FractureService;
-
-beforeEach(() => {
-  const fracture = new Fracture();
-  service = new FractureService(fracture, { name: "test" });
-});
 
 test("Smoke test", () => {
-  const pk = new DynamoAttribute(service, { name: "pk" });
-  const sk = new DynamoAttribute(service, { name: "sk" });
-  const gsi = new DynamoGsi(service, { name: "foo", pk, sk });
+  const project = new NodeProject({
+    name: "my-project",
+    defaultReleaseBranch: "main",
+  });
+  const gsi = new DynamoGsi(project, {
+    name: "foo",
+    pk: new DynamoAttribute(project, { name: "pk" }),
+    sk: new DynamoAttribute(project, { name: "sk" }),
+  });
   expect(gsi).toBeTruthy();
 });

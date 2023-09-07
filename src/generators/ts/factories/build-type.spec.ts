@@ -1,18 +1,12 @@
+import { NodeProject } from "projen/lib/javascript";
 import { buildType } from "./build-type";
 import { printNodes } from "./print-nodes";
-import { Fracture, FractureService } from "../../../core";
-import { Structure } from "../../../core/structure";
-import { StructureAttributeType } from "../../../core/structure-attribute";
-
-let fracture: Fracture;
-let service: FractureService;
-
-beforeEach(() => {
-  fracture = new Fracture();
-  service = new FractureService(fracture, { name: "foo" });
-});
+import { DataService } from "../../../services/data-service";
+import { Structure } from "../../../services/structure";
+import { StructureAttributeType } from "../../../services/structure-attribute";
 
 test("Smoke test", () => {
+  const service = testService();
   const structure = new Structure(service, {
     name: "MyType",
   });
@@ -22,6 +16,7 @@ test("Smoke test", () => {
 });
 
 test("Generic and type param support", () => {
+  const service = testService();
   const structure = new Structure(service, {
     name: "MyType",
     typeParameter: "T",
@@ -47,6 +42,7 @@ test("Generic and type param support", () => {
 });
 
 test("Optional and Required work", () => {
+  const service = testService();
   const structure = new Structure(service, {
     name: "MyType",
     attributeOptions: [
@@ -66,6 +62,7 @@ test("Optional and Required work", () => {
 });
 
 test("All attribute types should match snapshot", () => {
+  const service = testService();
   const attributeOptions = Object.entries(StructureAttributeType).map(
     ([key, value]) => {
       return { name: key, type: value };
@@ -82,3 +79,13 @@ test("All attribute types should match snapshot", () => {
 
   // console.log(content);
 });
+
+const testService = () => {
+  const project = new NodeProject({
+    name: "my-project",
+    defaultReleaseBranch: "main",
+  });
+  return new DataService(project, {
+    name: "foo",
+  });
+};

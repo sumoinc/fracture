@@ -88,6 +88,12 @@
       "steps": [
         {
           "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
+        },
+        {
+          "spawn": "eslint"
+        },
+        {
+          "spawn": "turbo:eslint"
         }
       ]
     },
@@ -144,7 +150,12 @@
     },
     "post-compile": {
       "name": "post-compile",
-      "description": "Runs after successful compilation"
+      "description": "Runs after successful compilation",
+      "steps": [
+        {
+          "spawn": "turbo:build"
+        }
+      ]
     },
     "post-upgrade": {
       "name": "post-upgrade",
@@ -200,6 +211,24 @@
         }
       ]
     },
+    "turbo:build": {
+      "name": "turbo:build",
+      "description": "Builds all subprojects",
+      "steps": [
+        {
+          "exec": "pnpm turbo turbo:build"
+        }
+      ]
+    },
+    "turbo:eslint": {
+      "name": "turbo:eslint",
+      "description": "Lint all repos",
+      "steps": [
+        {
+          "exec": "pnpm turbo eslint"
+        }
+      ]
+    },
     "unbump": {
       "name": "unbump",
       "description": "Restores version to 0.0.0",
@@ -227,13 +256,13 @@
           "exec": "pnpm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-sdk/smithy-client,@aws-sdk/types,@types/jest,@types/node,@types/uuid,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,typescript,@aws-sdk/client-dynamodb,@aws-sdk/lib-dynamodb,@aws-sdk/util-dynamodb,@faker-js/faker,@types/aws-lambda,change-case,type-fest,uuid"
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-sdk/smithy-client,@aws-sdk/types,@types/jest,@types/node,@types/uuid,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,turbo,typescript,@aws-sdk/client-dynamodb,@aws-sdk/lib-dynamodb,@aws-sdk/util-dynamodb,@faker-js/faker,@types/aws-lambda,change-case,type-fest,uuid"
         },
         {
           "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "pnpm update @aws-sdk/smithy-client @aws-sdk/types @types/jest @types/node @types/uuid @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node typescript @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @aws-sdk/util-dynamodb @faker-js/faker @types/aws-lambda change-case type-fest uuid"
+          "exec": "pnpm update @aws-sdk/smithy-client @aws-sdk/types @types/jest @types/node @types/uuid @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node turbo typescript @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @aws-sdk/util-dynamodb @faker-js/faker @types/aws-lambda change-case type-fest uuid"
         },
         {
           "exec": "npx projen"

@@ -1,7 +1,8 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from "typescript";
 import { buildTypeProperies } from "./build-type-attribute";
-import { FractureService } from "../../../core";
-import { Structure } from "../../../core/structure";
+import { ResourceAttributeGenerator } from "../../../services/resource-attribute";
+import { Service } from "../../../services/service";
+import { Structure } from "../../../services/structure";
 import { TypescriptStrategy } from "../strategy";
 
 /**
@@ -11,8 +12,8 @@ export const buildTypes = ({
   service,
   structures,
 }: {
-  service: FractureService;
-  structures: Structure[];
+  service: Service;
+  structures: Array<Structure>;
 }) => {
   return structures.map((structure) => {
     return buildType({
@@ -29,7 +30,7 @@ export const buildType = ({
   service,
   structure,
 }: {
-  service: FractureService;
+  service: Service;
   structure: Structure;
 }) => {
   /***************************************************************************
@@ -61,7 +62,10 @@ export const buildType = ({
   // build properties for this type
   const properties = buildTypeProperies({
     service,
-    attributes: structure.attributes,
+    attributes: structure.attributes.filter((attribute) => {
+      // exclude generated types, these are not public
+      return attribute.generator === ResourceAttributeGenerator.NONE;
+    }),
   });
 
   // define the type

@@ -1,9 +1,9 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from "typescript";
-import { FractureService } from "../../../core";
+import { Service } from "../../../services/service";
 import {
   StructureAttribute,
   StructureAttributeType,
-} from "../../../core/structure-attribute";
+} from "../../../services/structure-attribute";
 import { TypescriptStrategy } from "../strategy";
 
 /**
@@ -13,8 +13,8 @@ export const buildTypeProperies = ({
   service,
   attributes,
 }: {
-  service: FractureService;
-  attributes: StructureAttribute[];
+  service: Service;
+  attributes: Array<StructureAttribute>;
 }) => {
   return factory.createTypeLiteralNode(
     attributes.map((attribute) => {
@@ -33,7 +33,7 @@ export const buildTypeProperty = ({
   service,
   attribute,
 }: {
-  service: FractureService;
+  service: Service;
   attribute: StructureAttribute;
 }) => {
   /***************************************************************************
