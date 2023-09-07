@@ -112,7 +112,7 @@ const netlifyTarget = new NetlifyEnvironment(project, {
 
 // deployment target for docs
 site.deploy({
-  branchPrefix: "feature",
+  branchPrefix: "main",
   environment: netlifyTarget,
 });
 
