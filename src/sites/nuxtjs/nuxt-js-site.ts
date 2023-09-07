@@ -1,5 +1,5 @@
 import { paramCase } from "change-case";
-import { JsonFile, SampleDir, SourceCode } from "projen";
+import { JsonFile, SampleDir, SampleFile } from "projen";
 import { Site, SiteOptions } from "../site";
 
 export type NuxtJsSiteOptions = SiteOptions;
@@ -46,13 +46,14 @@ export class NuxtJsSite extends Site {
      * nuxt.config.ts
      **************************************************************************/
 
-    const nuxtConfig = new SourceCode(this, "nuxt.config.ts", {
-      readonly: false,
+    new SampleFile(this, "nuxt.config.ts", {
+      contents: [
+        `export default defineNuxtConfig({`,
+        `  devtools: { enabled: true },`,
+        `});`,
+        ``,
+      ].join("\n"),
     });
-    nuxtConfig.line(`export default defineNuxtConfig({`);
-    nuxtConfig.line(`  devtools: { enabled: true },`);
-    nuxtConfig.line(`});`);
-
     // make sure typescript sees it
     this.tsconfigDev.addInclude("nuxt.config.ts");
 
