@@ -10,9 +10,9 @@ import { Workflow } from "../../workflows/workflow";
 import { Site } from "../site";
 
 export const filesToScaffold = [
-  "api-examples.md",
-  "index.md",
-  "markdown-examples.md",
+  "src/api-examples.md",
+  "src/index.md",
+  "src/markdown-examples.md",
   ".vitepress/config.mts",
   ".vitepress/theme/index.ts",
   ".vitepress/theme/style.css",

@@ -1,4 +1,7 @@
-import { NodePackageManager } from "projen/lib/javascript";
+import {
+  NodePackageManager,
+  UpgradeDependenciesSchedule,
+} from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { NetlifyEnvironment } from "./src/environments/netlify-environment";
 import { KitchenSink } from "./src/generators/kitchen-sink";
@@ -46,6 +49,12 @@ const project = new TypeScriptProject({
      */
     allowedUsernames: ["github-actions[bot]", "cameroncf"],
     label: "auto-approve",
+  },
+
+  depsUpgradeOptions: {
+    workflowOptions: {
+      schedule: UpgradeDependenciesSchedule.expressions(["0 6 * * *"]),
+    },
   },
 });
 
