@@ -4,6 +4,7 @@ import {
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
 import { SetOptional, SetRequired } from "type-fest";
+import { VsCodeConfiguration } from "./projen";
 
 export interface FractureProjectOptions
   extends SetOptional<TypeScriptProjectOptions, "defaultReleaseBranch"> {
@@ -51,15 +52,6 @@ export const fractureProjectOptions = (options: FractureProjectOptions) => {
   }
 
   /**
-   * These opinionated settings that will always be applied to all projects.
-   */
-  const forcedOptions: Partial<FractureProjectOptions> = {
-    prettier: true,
-    packageManager: NodePackageManager.PNPM,
-    pnpmVersion: "8",
-  };
-
-  /**
    * No parent - Use projen's defaults
    */
   if (!options.parent) {
@@ -67,12 +59,17 @@ export const fractureProjectOptions = (options: FractureProjectOptions) => {
       // avoids annoying projen requirement
       defaultReleaseBranch: options.defaultReleaseBranch ?? "main",
       ...options,
-      ...forcedOptions,
+      prettier: true,
+      packageManager: NodePackageManager.PNPM,
+      pnpmVersion: "8",
+      projenrcTs: true,
+      deps: ["@sumoc/fracture"],
+      package: false,
     };
   }
 
   /**
-   * Parent was supplied, inherit certain settings
+   * Parent was supplied, inherit certain settings, force others
    */
   return {
     // avoids annoying projen requirement
@@ -85,7 +82,9 @@ export const fractureProjectOptions = (options: FractureProjectOptions) => {
       tsconfigPath: "./**/tsconfig.dev.json",
     },
     ...options,
-    ...forcedOptions,
+    prettier: true,
+    packageManager: NodePackageManager.PNPM,
+    pnpmVersion: "8",
   };
 };
 
@@ -96,5 +95,11 @@ export const fractureProjectInit = (project: TypeScriptProject) => {
   // causes unwanted recusion.
   if (project.parent) {
     project.defaultTask?.reset();
+  }
+
+  // de certain things if this is root project
+  if (!project.parent) {
+    // init vscode
+    new VsCodeConfiguration(project);
   }
 };
