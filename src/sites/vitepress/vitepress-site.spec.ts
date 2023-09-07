@@ -1,16 +1,15 @@
 import { TypeScriptProject } from "projen/lib/typescript";
 import { VitePressSite } from "./vitepress-site";
 import { AwsEnvironment } from "../../environments";
+import { FractureProject } from "../../fracture-project";
 import { synthFile } from "../../util/test-util";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
-    const parent = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
     const vitePressSite = new VitePressSite({
-      parent,
+      parent: new FractureProject({
+        name: "my-project",
+      }),
       name: "docs",
       defaultReleaseBranch: "main",
     });

@@ -94,5 +94,7 @@ export const fractureProjectInit = (project: TypeScriptProject) => {
   project.packageTask.reset();
   // don't allow default to run in subprojects, otherwise it runs root and
   // causes unwanted recusion.
-  project.defaultTask?.reset();
+  if (project.parent) {
+    project.defaultTask?.reset();
+  }
 };
