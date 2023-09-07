@@ -1,5 +1,5 @@
 import { paramCase } from "change-case";
-import { SampleDir, SourceCode } from "projen";
+import { JsonFile, SampleDir, SourceCode } from "projen";
 import { Site, SiteOptions } from "../site";
 
 export type NuxtJsSiteOptions = SiteOptions;
@@ -7,6 +7,8 @@ export type NuxtJsSiteOptions = SiteOptions;
 export class NuxtJsSite extends Site {
   constructor(options: NuxtJsSiteOptions) {
     super({
+      // nuxt will supply it's own config
+      disableTsconfig: true,
       ...options,
       name: paramCase(options.name),
       artifactsDirectory: "dist",
@@ -51,10 +53,9 @@ export class NuxtJsSite extends Site {
 
     /***************************************************************************
      * tsconfig.json
-     * server.tsconfig.json
+     * server/tsconfig.json
      **************************************************************************/
 
-    /* 2023-09-07 - removing during refactoring
     new JsonFile(this, "tsconfig.json", {
       // https://nuxt.com/docs/guide/concepts/typescript
       obj: { extends: "./.nuxt/tsconfig.json" },
@@ -63,7 +64,6 @@ export class NuxtJsSite extends Site {
     new JsonFile(this, "server/tsconfig.json", {
       obj: { extends: "../.nuxt/tsconfig.server.json" },
     });
-    */
 
     /***************************************************************************
      * package.json
