@@ -90,7 +90,7 @@ export class DeployJob extends WorkflowJob {
     });
 
     // defaults
-    this.workflow = Workflow.deployment(project);
+    this.workflow = Workflow.deploy(project);
     this.branchPrefix = branchPrefix;
     this.needs = [this.workflow.buildJob.jobId, ...(options.needs ?? [])];
     this.deploySteps = options.deploySteps;

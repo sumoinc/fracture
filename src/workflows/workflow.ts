@@ -69,17 +69,17 @@ export interface WorkflowOptions {
 
 export class Workflow extends Component {
   /**
-   * Returns the deployment workflow for a project or creates one if it
+   * Returns the deploy workflow for a project or creates one if it
    * doesn't exist yet. Singleton?
    */
-  public static deployment(project: NodeProject): Workflow {
+  public static deploy(project: NodeProject): Workflow {
     const isDefined = (c: Component): c is Workflow =>
-      c instanceof Workflow && c.name === "deployment";
+      c instanceof Workflow && c.name === "deploy";
     if (project.components.find(isDefined)) {
       return project.components.find(isDefined) as Workflow;
     } else {
       return new BuildJob(project, {
-        workflow: new Workflow(project, { name: "deployment" }),
+        workflow: new Workflow(project, { name: "deploy" }),
       }).workflow;
     }
   }

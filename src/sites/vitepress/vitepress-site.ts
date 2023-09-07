@@ -107,7 +107,7 @@ export class VitePressSite extends Site {
     ];
 
     // add to deployment workflow
-    return Workflow.deployment(this.parent).addDeployJob({
+    return Workflow.deploy(this.parent).addDeployJob({
       ...options,
       deploySteps,
       artifactsDirectory: this.artifactsDirectory,

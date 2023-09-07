@@ -41,7 +41,7 @@ describe("success conditions", () => {
     expect(deployment).toBeTruthy();
     // console.log(vitePressSite.buildTask.name);
 
-    const content = synthFile(project, `.github/workflows/deployment.yml`);
+    const content = synthFile(project, `.github/workflows/deploy.yml`);
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(content);

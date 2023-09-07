@@ -34,13 +34,13 @@ describe("success conditions", () => {
       name: "my-environment",
       accountNumber: "0000000000",
     });
-    Workflow.deployment(project).addDeployJob({
+    Workflow.deploy(project).addDeployJob({
       name: "Deploy Service Foo",
       artifactsDirectory: "foo",
       deploySteps,
       environment,
     });
-    const content = synthFile(project, `.github/workflows/deployment.yml`);
+    const content = synthFile(project, `.github/workflows/deploy.yml`);
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(content);
