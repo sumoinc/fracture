@@ -46,10 +46,15 @@ export class NuxtJsSite extends Site {
      * nuxt.config.ts
      **************************************************************************/
 
-    const nuxtConfig = new SourceCode(this, "nuxt.config.ts");
+    const nuxtConfig = new SourceCode(this, "nuxt.config.ts", {
+      readonly: false,
+    });
     nuxtConfig.line(`export default defineNuxtConfig({`);
     nuxtConfig.line(`  devtools: { enabled: true },`);
     nuxtConfig.line(`});`);
+
+    // make sure typescript sees it
+    this.tsconfigDev.addInclude("nuxt.config.ts");
 
     /***************************************************************************
      * tsconfig.json
