@@ -20,6 +20,7 @@ Array [
   "sites/docs/plugins/README.md",
   "sites/docs/public/README.md",
   "sites/docs/README.md",
+  "sites/docs/server/tsconfig.json",
   "sites/docs/src/index.ts",
   "sites/docs/test/hello.test.ts",
   "sites/docs/tsconfig.dev.json",
