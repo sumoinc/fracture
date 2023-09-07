@@ -1,49 +1,61 @@
----
-outline: deep
----
+# Fracture Framework Examples
 
-# Runtime API Examples
+Some basic examples are below. More will be added in future.
 
-This page demonstrates usage of some of the runtime APIs provided by VitePress.
+## The Root Project
 
-The main `useData()` API can be used to access site, theme, and page data for the current page. It works in both `.md` and `.vue` files:
+To get started and create the root of the monorepo only take three lines.
 
-```md
-<script setup>
-import { useData } from 'vitepress'
-
-const { theme, page, frontmatter } = useData()
-</script>
-
-## Results
-
-### Theme Data
-<pre>{{ theme }}</pre>
-
-### Page Data
-<pre>{{ page }}</pre>
-
-### Page Frontmatter
-<pre>{{ frontmatter }}</pre>
+```js
+const parent = new FractureProject({
+  name: "my-project",
+});
 ```
 
-<script setup>
-import { useData } from 'vitepress'
+`FractureProject()` extends projen's `TypeScriptProject()`, so any options that you can pass into `TypeScriptProject()` can also be given to `FractureProject()`, with a few exceptions:
 
-const { site, theme, page, frontmatter } = useData()
-</script>
+1. `defaultReleaseBranch` is optional, defaults to "main".
+1. Package Management for the monorepo is done using PNPM 8. You cannot override this.
+1. Linting with Prettier is active and cannot be disabled.
 
-## Results
 
-### Theme Data
-<pre>{{ theme }}</pre>
+## Static Site
 
-### Page Data
-<pre>{{ page }}</pre>
+Bootstrapping a static site is only a few more lines of code. Here's an example to generate a VitePress based documentation subproject (like this one).
 
-### Page Frontmatter
-<pre>{{ frontmatter }}</pre>
+```js
+// root monorepo project
+const parent = new FractureProject({
+  name: "my-project",
+});
 
-## More
+// build documentation site
+const site = new VitePressSite({
+  parent,
+  name: "docs",
+});
+```
 
-Check out the documentation for the [full list of runtime APIs](https://vitepress.dev/reference/runtime-api#usedata).
+## Deployment
+
+You can easily configure deployment for your static site wth a few more lines of code. 
+The following example deploys the static site to Netlify when a push to the main branch occurs.
+
+```js
+// build documentation site
+const site = new VitePressSite({
+  parent: new FractureProject({
+    name: "my-project",
+  });
+  name: "docs",
+});
+
+// deployment target for docs
+site.deploy({
+  branchPrefix: "main",
+  environment: new NetlifyEnvironment(site.parent, {
+    name: "netlify",
+    siteId: "00000000-1111-2222-3333-444444444444",
+  }),
+});
+```

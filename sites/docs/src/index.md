@@ -8,11 +8,11 @@ hero:
   tagline: Still Experimental
   actions:
     - theme: brand
-      text: Examples
-      link: /examples/
-    - theme: alt
       text: Documentation
       link: /docs/
+  #   - theme: alt
+  #     text: Examples
+  #     link: /examples/
 
 features:
   - title: Static Websites

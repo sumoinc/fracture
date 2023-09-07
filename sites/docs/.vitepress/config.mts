@@ -9,7 +9,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: "Home", link: "/" },
-      { text: "Examples", link: "/examples/" },
+      /*{ text: "Examples", link: "/examples/" },*/
       { text: "Docs", link: "/docs/" },
     ],
 
@@ -17,15 +17,19 @@ export default defineConfig({
       "/docs/": [
         {
           text: "Fracture Basics",
-          items: [{ text: "What is Fracture?", link: "/docs/about" }],
+          items: [{ text: "What is Fracture?", link: "/docs/" }],
+        },
+        {
+          text: "Deployments Sites",
+          items: [{ text: "Overview", link: "/docs/deployments/" }],
         },
         {
           text: "Data Services",
-          items: [{ text: "Intro", link: "/docs/" }],
+          items: [{ text: "Overview", link: "/docs/services/" }],
         },
         {
           text: "Static Sites",
-          items: [{ text: "Intro", link: "/docs/" }],
+          items: [{ text: "Intro", link: "/docs/sites/" }],
         },
       ],
     },
