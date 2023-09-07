@@ -1,4 +1,4 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { KitchenSink } from "./kitchen-sink";
 import { DataService } from "../services/data-service";
 import { synthFiles } from "../util/test-util";
@@ -20,11 +20,11 @@ describe("Success conditions", () => {
 });
 
 const testService = () => {
-  const project = new NodeProject({
-    name: "my-project",
-    defaultReleaseBranch: "main",
-  });
-  return new DataService(project, {
+  return new DataService({
+    parent: new TypeScriptProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
+    }),
     name: "foo",
   });
 };

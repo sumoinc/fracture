@@ -1,10 +1,10 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi } from "./dynamo-gsi";
 import { DynamoTable } from "./dynamo-table";
 import { TypeScriptSource } from "../generators/ts/source";
 
-export const addDynaliteSupport = (project: NodeProject) => {
+export const addDynaliteSupport = (project: TypeScriptProject) => {
   // add setup to the jest config
   project.jest!.addSetupFile("./setupBeforeEnv.ts");
 
@@ -16,7 +16,7 @@ export const addDynaliteSupport = (project: NodeProject) => {
 };
 
 export class DynaliteConfig extends TypeScriptSource {
-  constructor(public readonly project: NodeProject) {
+  constructor(public readonly project: TypeScriptProject) {
     super(project, "jest-dynalite-config.js");
 
     // add dynalite
@@ -105,7 +105,7 @@ export class DynaliteConfig extends TypeScriptSource {
 }
 
 export class DynaliteJestSupport extends TypeScriptSource {
-  constructor(project: NodeProject) {
+  constructor(project: TypeScriptProject) {
     super(project, "setupBeforeEnv.ts");
 
     this.line(`import { setup } from "jest-dynalite";`);

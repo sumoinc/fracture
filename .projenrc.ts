@@ -1,4 +1,7 @@
-import { NodePackageManager } from "projen/lib/javascript";
+import {
+  NodePackageManager,
+  UpgradeDependenciesSchedule,
+} from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { NetlifyEnvironment } from "./src/environments/netlify-environment";
 import { KitchenSink } from "./src/generators/kitchen-sink";
@@ -47,6 +50,12 @@ const project = new TypeScriptProject({
     allowedUsernames: ["github-actions[bot]", "cameroncf"],
     label: "auto-approve",
   },
+
+  depsUpgradeOptions: {
+    workflowOptions: {
+      schedule: UpgradeDependenciesSchedule.expressions(["0 6 * * *"]),
+    },
+  },
 });
 
 // prevent docs and tests from being bundled with NPM
@@ -88,7 +97,8 @@ project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
 new VsCodeConfiguration(project);
 
 // build out documentation site
-const site = new VitePressSite(project, {
+const site = new VitePressSite({
+  parent: project,
   name: "docs",
 });
 
@@ -102,7 +112,7 @@ const netlifyTarget = new NetlifyEnvironment(project, {
 
 // deployment target for docs
 site.deploy({
-  branchPrefix: "feature",
+  branchPrefix: "main",
   environment: netlifyTarget,
 });
 
@@ -110,7 +120,8 @@ site.deploy({
  * AWS SERVICE
  ******************************************************************************/
 
-const service = new DataService(project, {
+const service = new DataService({
+  parent: project,
   name: "my-service",
   resourceOptions: [
     {

@@ -1,5 +1,5 @@
 import { Component } from "projen";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
 import {
   AwsEnvironmentOptions,
@@ -71,9 +71,9 @@ export class Settings extends Component {
    * Returns the deployment workflow for a project or creates one if it
    * doesn't exist yet. Singleton?
    */
-  public static of(root: NodeProject): Settings {
+  public static of(parent: TypeScriptProject): Settings {
     const isDefined = (c: Component): c is Settings => c instanceof Settings;
-    return root.components.find(isDefined) ?? new Settings(root);
+    return parent.components.find(isDefined) ?? new Settings(parent);
   }
 
   /**
@@ -140,7 +140,7 @@ export class Settings extends Component {
   >;
 
   constructor(
-    public readonly root: NodeProject,
+    public readonly root: TypeScriptProject,
     options: SettingsOptions = {}
   ) {
     super(root);

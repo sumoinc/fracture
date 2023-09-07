@@ -1,4 +1,4 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { buildType } from "./build-type";
 import { printNodes } from "./print-nodes";
 import { DataService } from "../../../services/data-service";
@@ -81,11 +81,11 @@ test("All attribute types should match snapshot", () => {
 });
 
 const testService = () => {
-  const project = new NodeProject({
-    name: "my-project",
-    defaultReleaseBranch: "main",
-  });
-  return new DataService(project, {
+  return new DataService({
+    parent: new TypeScriptProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
+    }),
     name: "foo",
   });
 };

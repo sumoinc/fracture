@@ -1,10 +1,10 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { GeneratedTypescriptFile } from "./generated-typescript-file";
 import { synthFile } from "../util/test-util";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });
@@ -20,7 +20,7 @@ describe("success conditions", () => {
 
 describe("Failure Conditions", () => {
   test("Wrong file extension", () => {
-    const project = new NodeProject({
+    const project = new TypeScriptProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     });

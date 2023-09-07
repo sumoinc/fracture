@@ -17,7 +17,7 @@ describe("success conditions", () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     });
-    const workflow = Workflow.deployment(project);
+    const workflow = Workflow.deploy(project);
     const artifactSteps = renderUploadArtifactSteps(workflow.buildJob);
     expect(artifactSteps).toBeTruthy();
     expect(artifactSteps).toMatchSnapshot();
@@ -32,7 +32,7 @@ describe("success conditions", () => {
     const environment = new Environment(project, {
       name: "my-environment",
     });
-    const workflow = Workflow.deployment(project);
+    const workflow = Workflow.deploy(project);
     workflow.addDeployJob({
       deploySteps,
       environment,

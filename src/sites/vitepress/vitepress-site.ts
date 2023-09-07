@@ -1,40 +1,28 @@
 import { join } from "path";
 import { SampleFile } from "projen";
 import { JobStep } from "projen/lib/github/workflows-model";
-import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
-import { SetOptional } from "type-fest";
-import { Settings } from "../../settings";
 import { TurboRepo } from "../../turborepo";
 import { DeployJobOptions } from "../../workflows";
 import { Workflow } from "../../workflows/workflow";
-import { Site } from "../site";
+import { Site, SiteOptions } from "../site";
 
 export const filesToScaffold = [
-  "api-examples.md",
-  "index.md",
-  "markdown-examples.md",
+  "src/api-examples.md",
+  "src/index.md",
+  "src/markdown-examples.md",
   ".vitepress/config.mts",
   ".vitepress/theme/index.ts",
   ".vitepress/theme/style.css",
   ".vitepress/theme/Layout.vue",
 ];
 
-export type VitePressSiteOptions = SetOptional<
-  NodeProjectOptions,
-  "defaultReleaseBranch"
->;
+export type VitePressSiteOptions = SiteOptions;
 
 export class VitePressSite extends Site {
-  constructor(
-    public readonly parent: NodeProject,
-    options: VitePressSiteOptions
-  ) {
-    const { defaultReleaseBranch, siteRoot } = Settings.of(parent);
-
-    super(parent, {
-      defaultReleaseBranch,
+  constructor(options: VitePressSiteOptions) {
+    super({
       ...options,
-      artifactsDirectory: join(siteRoot, options.name, ".vitepress/dist"),
+      artifactsDirectory: ".vitepress/dist",
     });
 
     //this.artifactDirectories.push(this.distDirectory);
@@ -80,7 +68,7 @@ export class VitePressSite extends Site {
     /**
      * Add build tasks to turbo's pipeline.
      */
-    const turbo = TurboRepo.of(parent);
+    const turbo = TurboRepo.of(this.parent);
     turbo.taskSets.push({
       name: this.name,
       buildTask: {
@@ -107,7 +95,7 @@ export class VitePressSite extends Site {
     ];
 
     // add to deployment workflow
-    return Workflow.deployment(this.parent).addDeployJob({
+    return Workflow.deploy(this.parent).addDeployJob({
       ...options,
       deploySteps,
       artifactsDirectory: this.artifactsDirectory,

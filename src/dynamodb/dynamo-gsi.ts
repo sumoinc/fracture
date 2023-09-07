@@ -1,6 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
 import { DynamoAttribute } from "./dynamo-attribute";
 
@@ -56,7 +56,10 @@ export class DynamoGsi extends Component {
    */
   public readonly type?: ValueOf<typeof DynamoGsiType>;
 
-  constructor(public readonly project: NodeProject, options: DynamoGsiOptions) {
+  constructor(
+    public readonly project: TypeScriptProject,
+    options: DynamoGsiOptions
+  ) {
     super(project);
 
     /***************************************************************************

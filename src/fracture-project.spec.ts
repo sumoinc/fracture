@@ -1,36 +1,61 @@
-import { NodeProject } from "projen/lib/javascript";
-import { FractureProject } from "./fracture-project";
+import { TypeScriptProject } from "projen/lib/typescript";
+import { FractureProject, FractureSubProject } from "./fracture-project";
 import { synthFile } from "./util/test-util";
 
-describe("success conditions", () => {
-  test("Smoke test", () => {
-    const project = new NodeProject({
+describe("Success conditions", () => {
+  test("No parent", () => {
+    const fractureProject = new FractureProject({
       name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    const fractureProject = new FractureProject(project, {
-      name: "my-sub-project",
-      outdir: "sites/foo",
     });
     expect(fractureProject).toBeTruthy();
   });
+
+  test("With Parent", () => {
+    const parent = new FractureProject({
+      name: "my-project",
+    });
+    const subProject = new FractureProject({
+      parent,
+      name: "my-sub-project",
+      outdir: "sites/foo",
+    });
+    expect(subProject).toBeTruthy();
+  });
 });
 
-test("apps/test/.projen/deps.json", () => {
-  const project = new NodeProject({
+test("sites/foo/.projen/deps.json", () => {
+  const parent = new TypeScriptProject({
     name: "my-project",
     defaultReleaseBranch: "main",
   });
-  new FractureProject(project, {
+  new FractureSubProject({
+    parent,
     name: "my-sub-project",
     outdir: "sites/foo",
   });
 
-  const content = synthFile(project, "sites/foo/.projen/tasks.json") as any;
+  const content = synthFile(parent, "sites/foo/.projen/tasks.json") as any;
   expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
   // these tasks should be reset with undefined steps in all Fracture sub-projects
   expect(content.tasks.default.steps).toBeUndefined();
   expect(content.tasks.package.steps).toBeUndefined();
   //console.log(JSON.stringify(content.tasks.default, null, 2));
+});
+
+test("sites/foo/package.json", () => {
+  const parent = new TypeScriptProject({
+    name: "my-project",
+    defaultReleaseBranch: "main",
+  });
+  new FractureSubProject({
+    parent,
+    name: "my-sub-project",
+    outdir: "sites/foo",
+  });
+
+  const content = synthFile(parent, "sites/foo/package.json") as any;
+  expect(content).toBeTruthy();
+  expect(content).toMatchSnapshot();
+  //console.log(JSON.stringify(content, null, 2));
 });

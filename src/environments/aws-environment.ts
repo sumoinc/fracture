@@ -1,4 +1,4 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { SetOptional, ValueOf } from "type-fest";
 import { Environment, EnvironmentOptions } from "./environment";
 import { Settings } from "../settings";
@@ -67,7 +67,7 @@ export class AwsEnvironment extends Environment {
   readonly gitHubDeploymentOIDCRoleDurationSeconds: number;
 
   constructor(
-    public readonly project: NodeProject,
+    public readonly project: TypeScriptProject,
     options: AwsEnvironmentOptions
   ) {
     // grab some default settings

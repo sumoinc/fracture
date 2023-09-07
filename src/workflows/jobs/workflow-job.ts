@@ -1,6 +1,6 @@
 import { Component } from "projen";
 import { Job } from "projen/lib/github/workflows-model";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 
 export interface WorkflowJobOptions {
   /**
@@ -24,7 +24,7 @@ export class WorkflowJob extends Component {
   public readonly name: string;
 
   constructor(
-    public readonly project: NodeProject,
+    public readonly project: TypeScriptProject,
     options: WorkflowJobOptions
   ) {
     super(project);

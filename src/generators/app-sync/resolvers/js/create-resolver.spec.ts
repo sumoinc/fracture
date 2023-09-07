@@ -1,4 +1,4 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { CreateResaolver } from "./create-resolver";
 import { DataService } from "../../../../services/data-service";
 import { synthFile } from "../../../../util/test-util";
@@ -24,17 +24,17 @@ describe("Success Conditions", () => {
       "src/app-sync/resolvers/ts/create-bar.ts"
     );
     expect(content).toBeTruthy();
-    //expect(content).toMatchSnapshot();
-    console.log(content);
+    expect(content).toMatchSnapshot();
+    //console.log(content);
   });
 });
 
 const testService = () => {
-  const project = new NodeProject({
-    name: "my-project",
-    defaultReleaseBranch: "main",
-  });
-  return new DataService(project, {
+  return new DataService({
+    parent: new TypeScriptProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
+    }),
     name: "foo",
   });
 };

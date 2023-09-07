@@ -1,9 +1,9 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi } from "./dynamo-gsi";
 
 test("Smoke test", () => {
-  const project = new NodeProject({
+  const project = new TypeScriptProject({
     name: "my-project",
     defaultReleaseBranch: "main",
   });

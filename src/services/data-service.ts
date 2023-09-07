@@ -1,5 +1,5 @@
 import { Project } from "projen";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { Resource, ResourceOptions } from "./resource";
 import { Service, ServiceOptions } from "./service";
 import { Structure, StructureOptions } from "./structure";
@@ -51,7 +51,7 @@ export class DataService extends Service {
    * Returns a service by name, or undefined if it doesn't exist
    */
   public static byName(
-    project: NodeProject,
+    project: TypeScriptProject,
     name: string
   ): DataService | undefined {
     const isDefined = (c: Project): c is DataService =>
@@ -62,7 +62,7 @@ export class DataService extends Service {
   /**
    * Returns all services
    */
-  public static all(project: NodeProject): DataService[] {
+  public static all(project: TypeScriptProject): DataService[] {
     const isDefined = (c: Project): c is DataService =>
       c instanceof DataService;
     return project.subprojects.filter(isDefined);
@@ -100,11 +100,8 @@ export class DataService extends Service {
    */
   // public readonly cdkOutDistDir: string;
 
-  constructor(
-    public readonly parent: NodeProject,
-    options: DataServiceOptions
-  ) {
-    super(parent, options);
+  constructor(options: DataServiceOptions) {
+    super(options);
 
     /***************************************************************************
      * Props

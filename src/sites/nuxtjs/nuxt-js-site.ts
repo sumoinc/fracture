@@ -1,53 +1,16 @@
-import { join } from "path";
-import { JsonFile, SampleDir, SourceCode } from "projen";
-import { NodeProject, NodeProjectOptions } from "projen/lib/javascript";
-import { SetOptional } from "type-fest";
-import { Settings } from "../../settings";
-import { Site } from "../site";
+import { paramCase } from "change-case";
+import { SampleDir, SourceCode } from "projen";
+import { Site, SiteOptions } from "../site";
 
-export type NuxtJsSiteOptions = SetOptional<
-  NodeProjectOptions,
-  "defaultReleaseBranch"
->;
+export type NuxtJsSiteOptions = SiteOptions;
 
 export class NuxtJsSite extends Site {
-  /**
-   * Name for the app. This also becomes the directory where the app is created.
-   */
-  public readonly name: string;
-
-  constructor(public readonly parent: NodeProject, options: NuxtJsSiteOptions) {
-    /***************************************************************************
-     * Projen Props
-     **************************************************************************/
-
-    // ensure name is param-cased for outdir
-    // const outdir = join(fracture.appRoot, paramCase(options.name));
-    /*
-    const projenOptions: NodeProjectOptions = {
-      name: options.name,
-      defaultReleaseBranch: "main",
-      parent: fracture,
-      packageManager: NodePackageManager.PNPM,
-      pnpmVersion: "8",
-      outdir,
-      licensed: false,
-    };
-    */
-
-    const { defaultReleaseBranch, siteRoot } = Settings.of(parent);
-
-    super(parent, {
-      defaultReleaseBranch,
+  constructor(options: NuxtJsSiteOptions) {
+    super({
       ...options,
-      artifactsDirectory: join(siteRoot, options.name, ".vitepress/dist"),
+      name: paramCase(options.name),
+      artifactsDirectory: "dist",
     });
-
-    /***************************************************************************
-     * PROPS
-     **************************************************************************/
-
-    this.name = options.name;
 
     /***************************************************************************
      * .gitignore
@@ -91,6 +54,7 @@ export class NuxtJsSite extends Site {
      * server.tsconfig.json
      **************************************************************************/
 
+    /* 2023-09-07 - removing during refactoring
     new JsonFile(this, "tsconfig.json", {
       // https://nuxt.com/docs/guide/concepts/typescript
       obj: { extends: "./.nuxt/tsconfig.json" },
@@ -99,6 +63,7 @@ export class NuxtJsSite extends Site {
     new JsonFile(this, "server/tsconfig.json", {
       obj: { extends: "../.nuxt/tsconfig.server.json" },
     });
+    */
 
     /***************************************************************************
      * package.json

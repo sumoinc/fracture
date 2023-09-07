@@ -1,14 +1,15 @@
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { Types } from "./types";
 import { DataService } from "../../services/data-service";
 import { synthFile } from "../../util/test-util";
 
 test("Resource formatting test", () => {
-  const project = new NodeProject({
+  const parent = new TypeScriptProject({
     name: "my-project",
     defaultReleaseBranch: "main",
   });
-  const service = new DataService(project, {
+  const service = new DataService({
+    parent,
     name: "foo",
     resourceOptions: [
       {

@@ -1,6 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
-import { NodeProject } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
 
 export const EnvironmentType = {
@@ -54,7 +54,7 @@ export class Environment extends Component {
    * Returns a environment by name, or undefined if it doesn't exist
    */
   public static byName(
-    project: NodeProject,
+    project: TypeScriptProject,
     name: string
   ): Environment | undefined {
     const isDefined = (c: Component): c is Environment =>
@@ -73,7 +73,7 @@ export class Environment extends Component {
   readonly authProviderType: ValueOf<typeof AuthProviderType>;
 
   constructor(
-    public readonly project: NodeProject,
+    public readonly project: TypeScriptProject,
     options: EnvironmentOptions
   ) {
     /***************************************************************************

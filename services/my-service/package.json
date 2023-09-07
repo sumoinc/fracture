@@ -50,7 +50,7 @@
     "constructs": "^10.0.5"
   },
   "pnpm": {},
-  "license": "Apache-2.0",
+  "license": "UNLICENSED",
   "version": "0.0.0",
   "jest": {
     "testMatch": [

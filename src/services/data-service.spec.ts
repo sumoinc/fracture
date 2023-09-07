@@ -1,17 +1,10 @@
-import { NodeProject } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { DataService } from "./data-service";
 import { synthFile, synthFiles } from "../util/test-util";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
-    const project = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    const service = new DataService(project, {
-      name: "my-project",
-    });
+    const service = testService();
     expect(service).toBeTruthy();
   });
 });
@@ -127,11 +120,11 @@ describe("validate generated project files", () => {
 });
 
 const testService = () => {
-  const project = new NodeProject({
-    name: "my-project",
-    defaultReleaseBranch: "main",
-  });
-  return new DataService(project, {
+  return new DataService({
+    parent: new TypeScriptProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
+    }),
     name: "foo",
   });
 };
