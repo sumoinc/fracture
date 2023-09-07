@@ -59,3 +59,19 @@ test("sites/foo/package.json", () => {
   expect(content).toMatchSnapshot();
   //console.log(JSON.stringify(content, null, 2));
 });
+
+test("package.json", () => {
+  const parent = new FractureProject({
+    name: "my-project",
+  });
+  new FractureSubProject({
+    parent,
+    name: "my-sub-project",
+    outdir: "sites/foo",
+  });
+
+  const content = synthFile(parent, "package.json") as any;
+  expect(content).toBeTruthy();
+  expect(content).toMatchSnapshot();
+  //console.log(JSON.stringify(content, null, 2));
+});
