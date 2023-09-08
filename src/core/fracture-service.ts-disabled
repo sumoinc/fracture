@@ -9,7 +9,6 @@ import { NodePackageManager } from "projen/lib/javascript";
 import { Fracture } from "./fracture.ts-disabled";
 import { Resource, ResourceOptions } from "./resource";
 import { Structure, StructureOptions } from "./structure";
-import { StructureAttributeType } from "./structure-attribute";
 import { DynamoTable } from "../dynamodb";
 import {
   TypescriptStrategy,
@@ -158,7 +157,7 @@ export class FractureService extends AwsCdkTypeScriptApp {
       attributeOptions: [
         {
           name: `code`,
-          type: StructureAttributeType.INT,
+          type: ResourceAttributeType.INT,
         },
         {
           name: `source`,
@@ -178,18 +177,18 @@ export class FractureService extends AwsCdkTypeScriptApp {
       attributeOptions: [
         {
           name: `data`,
-          type: StructureAttributeType.CUSTOM,
+          type: ResourceAttributeType.CUSTOM,
           typeParameter: `T`,
           required: false,
         },
         {
           name: `errors`,
-          type: StructureAttributeType.ARRAY,
+          type: ResourceAttributeType.ARRAY,
           typeParameter: `error`,
         },
         {
           name: `status`,
-          type: StructureAttributeType.INT,
+          type: ResourceAttributeType.INT,
         },
       ],
     });
@@ -200,18 +199,18 @@ export class FractureService extends AwsCdkTypeScriptApp {
       attributeOptions: [
         {
           name: `data`,
-          type: StructureAttributeType.ARRAY,
+          type: ResourceAttributeType.ARRAY,
           typeParameter: `T`,
           required: false,
         },
         {
           name: `errors`,
-          type: StructureAttributeType.ARRAY,
+          type: ResourceAttributeType.ARRAY,
           typeParameter: `error`,
         },
         {
           name: `status`,
-          type: StructureAttributeType.INT,
+          type: ResourceAttributeType.INT,
         },
       ],
     });

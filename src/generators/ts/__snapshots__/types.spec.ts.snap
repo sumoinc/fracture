@@ -22,7 +22,10 @@ export type ListResponse<T> = {
     status: number;
 };
 
-export type UserData = {
+/**
+ * Public facing data structure for this record.
+*/
+export type User = {
     /**
      * Identifier for this record.
     */
@@ -47,7 +50,11 @@ export type UserData = {
     lastName: string;
 };
 
-export type InternalUserData = {
+/**
+ * Private data structure for this record.
+ * Used internally in Dynamo, SQS and other native services.
+*/
+export type UserData = {
     /**
      * Partition Key for this record.
     */

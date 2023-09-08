@@ -1,9 +1,9 @@
 import { TypeScriptProject } from "projen/lib/typescript";
 import { buildType } from "./build-type";
 import { printNodes } from "./print-nodes";
+import { ResourceAttributeType } from "../../../services";
 import { DataService } from "../../../services/data-service";
 import { Structure } from "../../../services/structure";
-import { StructureAttributeType } from "../../../services/structure-attribute";
 
 test("Smoke test", () => {
   const service = testService();
@@ -24,14 +24,14 @@ test("Generic and type param support", () => {
       {
         name: "arrayType",
         required: true,
-        type: StructureAttributeType.ARRAY,
-        typeParameter: "T",
+        type: ResourceAttributeType.ARRAY,
+        typeParameter: "t",
       },
       {
         name: "customType",
         required: true,
-        type: StructureAttributeType.CUSTOM,
-        typeParameter: "CustomValue",
+        type: ResourceAttributeType.MAP,
+        typeParameter: "map-value",
       },
     ],
   });
@@ -63,7 +63,7 @@ test("Optional and Required work", () => {
 
 test("All attribute types should match snapshot", () => {
   const service = testService();
-  const attributeOptions = Object.entries(StructureAttributeType).map(
+  const attributeOptions = Object.entries(ResourceAttributeType).map(
     ([key, value]) => {
       return { name: key, type: value };
     }

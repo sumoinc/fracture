@@ -133,11 +133,16 @@ export class Resource extends Component {
      **************************************************************************/
 
     this.publicDataStructure = this.addStructure({
-      name: `${this.name}-data`,
+      name: `${this.name}`,
+      comments: [`Public facing data structure for this record.`],
     });
 
     this.privateDataStructure = this.addStructure({
-      name: `internal-${this.name}-data`,
+      name: `${this.name}-data`,
+      comments: [
+        `Private data structure for this record.`,
+        `Used internally in Dynamo, SQS and other native services.`,
+      ],
     });
 
     /***************************************************************************

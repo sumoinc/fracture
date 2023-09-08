@@ -161,6 +161,7 @@ export class Operation extends Component {
       name: attribute.name,
       shortName: attribute.shortName,
       type: attribute.type,
+      typeParameter: attribute.typeParameter,
       comments: attribute.comments,
       required: true,
       ...options,
