@@ -19,7 +19,10 @@ export type ListResponse<T> = {
   status: number;
 };
 
-export type WidgetData = {
+/**
+ * Public facing data structure for this record.
+ */
+export type Widget = {
   /**
    * Identifier for this record.
    */
@@ -43,7 +46,11 @@ export type WidgetData = {
   name: string;
 };
 
-export type InternalWidgetData = {
+/**
+ * Private data structure for this record.
+ * Used internally in Dynamo, SQS and other native services.
+ */
+export type WidgetData = {
   /**
    * Partition Key for this record.
    */

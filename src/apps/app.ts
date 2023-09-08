@@ -38,8 +38,14 @@ export class App extends AwsCdkTypeScriptApp {
     // make sure services is configured as a workspace
     TurboRepo.of(options.parent).addWorkspaceRoot(appRoot);
 
+    // strip org scopes from folder structure, if given
+    const subdir =
+      options.name.split("/").length === 2
+        ? options.name.split("/")[1]
+        : options.name;
+
     // set up the outdir
-    const outdir = join(appRoot, options.name);
+    const outdir = join(appRoot, subdir);
 
     super({
       cdkVersion: defaultCdkVersion,
