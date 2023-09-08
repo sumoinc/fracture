@@ -1,7 +1,7 @@
-import { TypeScriptProject } from "projen/lib/typescript";
 import { DataService } from "./data-service";
 import { Resource } from "./resource";
 import { ResourceAttribute, ResourceAttributeType } from "./resource-attribute";
+import { FractureProject } from "../fracture-project";
 import { Types } from "../generators";
 import { synthFile } from "../util/test-util";
 
@@ -49,9 +49,51 @@ test("Attribute Relationships", () => {
   //console.log(content);
 });
 
+test("Attribute Relationships", () => {
+  const service = testService();
+  const cal = new Resource(service, {
+    name: "calendar",
+    attributeOptions: [
+      {
+        name: "name",
+        shortName: "n",
+      },
+      {
+        name: "description",
+        shortName: "d",
+      },
+    ],
+  });
+
+  const evt = new Resource(service, {
+    name: "calendar-event",
+    attributeOptions: [
+      {
+        name: "name",
+      },
+    ],
+  });
+
+  cal.addAttribute({
+    name: "events",
+    type: ResourceAttributeType.ARRAY,
+    typeParameter: evt,
+  });
+
+  expect(cal).toBeTruthy();
+  expect(evt).toBeTruthy();
+
+  // type should look right in ts outputs
+  new Types(service);
+  const content = synthFile(service, "src/types.ts");
+  expect(content).toBeTruthy();
+  expect(content).toMatchSnapshot();
+  //console.log(content);
+});
+
 const testService = () => {
   return new DataService({
-    parent: new TypeScriptProject({
+    parent: new FractureProject({
       name: "my-project",
       defaultReleaseBranch: "main",
     }),

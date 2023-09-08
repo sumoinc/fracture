@@ -318,6 +318,7 @@ export class Resource extends Component {
       this.publicDataStructure.addAttribute({
         name: attribute.name,
         type: attribute.type,
+        typeParameter: attribute.typeParameter,
         comments: attribute.comments,
         required: true,
       });
@@ -327,6 +328,7 @@ export class Resource extends Component {
     this.privateDataStructure.addAttribute({
       name: attribute.shortName,
       type: attribute.type,
+      typeParameter: attribute.typeParameter,
       comments: attribute.comments,
       required: true,
     });

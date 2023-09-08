@@ -2,6 +2,7 @@ export * from "./apps";
 export * from "./dynamodb";
 export * from "./environments";
 export * from "./fracture-project";
+export * from "./generators";
 export * from "./projen";
 export * from "./services";
 export * from "./settings";
