@@ -1,9 +1,7 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from "typescript";
+import { ResourceAttributeType } from "../../../services";
 import { Service } from "../../../services/service";
-import {
-  StructureAttribute,
-  StructureAttributeType,
-} from "../../../services/structure-attribute";
+import { StructureAttribute } from "../../../services/structure-attribute";
 import { TypescriptStrategy } from "../strategy";
 
 /**
@@ -57,27 +55,27 @@ export const buildTypeProperty = ({
     };
 
     switch (type) {
-      case StructureAttributeType.GUID:
-      case StructureAttributeType.STRING:
-      case StructureAttributeType.EMAIL:
-      case StructureAttributeType.PHONE:
-      case StructureAttributeType.URL:
-      case StructureAttributeType.DATE:
-      case StructureAttributeType.TIME:
-      case StructureAttributeType.DATE_TIME:
-      case StructureAttributeType.JSON:
-      case StructureAttributeType.IPADDRESS:
+      case ResourceAttributeType.GUID:
+      case ResourceAttributeType.STRING:
+      case ResourceAttributeType.EMAIL:
+      case ResourceAttributeType.PHONE:
+      case ResourceAttributeType.URL:
+      case ResourceAttributeType.DATE:
+      case ResourceAttributeType.TIME:
+      case ResourceAttributeType.DATE_TIME:
+      case ResourceAttributeType.JSON:
+      case ResourceAttributeType.IPADDRESS:
         return factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
-      case StructureAttributeType.INT:
-      case StructureAttributeType.FLOAT:
-      case StructureAttributeType.TIMESTAMP:
-      case StructureAttributeType.COUNT:
-      case StructureAttributeType.AVERAGE:
-      case StructureAttributeType.SUM:
+      case ResourceAttributeType.INT:
+      case ResourceAttributeType.FLOAT:
+      case ResourceAttributeType.TIMESTAMP:
+      case ResourceAttributeType.COUNT:
+      case ResourceAttributeType.AVERAGE:
+      case ResourceAttributeType.SUM:
         return factory.createKeywordTypeNode(SyntaxKind.NumberKeyword);
-      case StructureAttributeType.BOOLEAN:
+      case ResourceAttributeType.BOOLEAN:
         return factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword);
-      case StructureAttributeType.ARRAY:
+      case ResourceAttributeType.ARRAY:
         return factory.createTypeReferenceNode(
           factory.createIdentifier("Array"),
           typeParameter === "any"
@@ -91,7 +89,18 @@ export const buildTypeProperty = ({
                 ),
               ]
         );
-      case StructureAttributeType.CUSTOM:
+      case ResourceAttributeType.MAP: // todo
+        return factory.createTypeReferenceNode(
+          factory.createIdentifier("Record"),
+          [
+            factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+            factory.createTypeReferenceNode(
+              factory.createIdentifier(strategy.formatTypeName(typeParameter)),
+              undefined
+            ),
+          ]
+        );
+      case ResourceAttributeType.ANY:
         return typeParameter === "any"
           ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
           : factory.createTypeReferenceNode(
@@ -100,8 +109,19 @@ export const buildTypeProperty = ({
             );
 
       default:
-        throw new Error(`Unknown attribute type: ${type}`);
+      // do nothing by default
     }
+
+    // if it's a resource type, use the resource name
+    if (typeof type === "string") {
+      return factory.createTypeReferenceNode(
+        factory.createIdentifier(strategy.formatTypeName(type)),
+        undefined
+      );
+    }
+
+    // if we get to here, something is broken.
+    throw new Error(`Unknown attribute type: ${type}`);
   };
 
   /***************************************************************************

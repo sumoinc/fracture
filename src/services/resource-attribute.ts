@@ -1,6 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { ValueOf } from "type-fest";
+import { Resource } from "./resource";
 import { Service } from "./service";
 
 /**
@@ -104,6 +105,14 @@ export const ResourceAttributeType = {
   IPADDRESS: "IPAddress",
   /*****************************************************************************
    *
+   *  RELATIONSHIP TYPES
+   *
+   ****************************************************************************/
+  ARRAY: "Array",
+  MAP: "Map",
+  ANY: "Any",
+  /*****************************************************************************
+   *
    *  FRACTURE TYPES
    *
    *  Special types used by Fracture. That are currently used primarily to store values calculated based on other
@@ -189,7 +198,16 @@ export type ResourceAttributeOptions = {
    *
    * @default ResourceAttributeType.STRING
    */
-  type?: ValueOf<typeof ResourceAttributeType>;
+  type?: ValueOf<typeof ResourceAttributeType> | Resource;
+
+  /**
+   * Type parameter for this structure attribute.
+   *
+   * @default any
+   * @example 'T' for MyType<T> generic
+   * @example 'Foo' for Array<Foo>
+   */
+  typeParameter?: string | Resource;
 
   /**
    * Is this managed by the end user or the system?
@@ -262,6 +280,7 @@ export class ResourceAttribute extends Component {
    * @example 'phone-number'
    */
   public readonly name: string;
+
   /**
    * Brief name used when storing data to save space.
    *
@@ -269,36 +288,51 @@ export class ResourceAttribute extends Component {
    * @default AttributeOptions.name
    */
   public readonly shortName: string;
+
   /**
    * Comment lines to add to the Resource.
    *
    * @default []
    */
   public comments: Array<string>;
+
   /**
    * What is the type for tis attribute?
    *
    * @default ResourceAttributeType.STRING
    */
-  public readonly type: ValueOf<typeof ResourceAttributeType>;
+  public readonly type: ValueOf<typeof ResourceAttributeType> | string;
+
+  /**
+   * Type parameter for this structure attribute.
+   *
+   * @default any
+   * @example 'T' for MyType<T> generic
+   * @example 'Foo' for Array<Foo>
+   */
+  public readonly typeParameter: string;
+
   /**
    * Is this managed by the end user or the system?
    *
    * @default ManagementType.USER_MANAGED
    */
   public readonly management: ValueOf<typeof ManagementType>;
+
   /**
    * Is this value visible to the end user?
    *
    * @default VisabilityType.USER_VISIBLE
    */
   public readonly visibility: ValueOf<typeof VisabilityType>;
+
   /**
    * Is this value an identifier for this resource?
    *
    * @default IdentifierType.NONE
    */
   public readonly identifier: ValueOf<typeof IdentifierType>;
+
   /**
    * Is this attribute value composed of other attribute values?
    * If so they are stored in this array.
@@ -306,30 +340,35 @@ export class ResourceAttribute extends Component {
    * @default[]
    */
   public readonly compositionSources: Array<ResourceAttribute> = [];
+
   /**
    * The separator to use when composing this attribute from other attributes.
    *
    * @default: '#'
    */
   public readonly compositionsSeperator: string;
+
   /**
    * The generator to use for create operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
   public readonly createGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+
   /**
    * The generator to use for read operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
   public readonly readGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+
   /**
    * The generator to use for update operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
   public readonly updateGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+
   /**
    * The generator to use for delete operations
    *
@@ -352,7 +391,18 @@ export class ResourceAttribute extends Component {
       ? paramCase(options.shortName)
       : this.name;
     this.comments = options.comments ?? [];
-    this.type = options.type ?? ResourceAttributeType.STRING;
+    this.type =
+      options.type instanceof Resource
+        ? options.type.name
+        : !options.type
+        ? ResourceAttributeType.STRING
+        : options.type;
+    this.typeParameter =
+      options.typeParameter instanceof Resource
+        ? options.typeParameter.name
+        : !options.typeParameter
+        ? "any"
+        : options.typeParameter;
     this.management = options.management ?? ManagementType.USER_MANAGED;
     this.visibility = options.visibility ?? VisabilityType.USER_VISIBLE;
     this.identifier = options.identifier ?? IdentifierType.NONE;

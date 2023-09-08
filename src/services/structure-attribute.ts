@@ -7,12 +7,6 @@ import {
 } from "./resource-attribute";
 import { Service } from "./service";
 
-export const StructureAttributeType = {
-  ...ResourceAttributeType,
-  ARRAY: "Array",
-  CUSTOM: "Custom",
-} as const;
-
 export type StructureAttributeOptions = {
   /**
    * Full long name for this attribute.
@@ -32,9 +26,9 @@ export type StructureAttributeOptions = {
   /**
    * Type for this structure attribute.
    *
-   * @default StructureAttributeType.STRING
+   * @default ResourceAttributeType.STRING
    */
-  type?: ValueOf<typeof StructureAttributeType>;
+  type?: ValueOf<typeof ResourceAttributeType> | string;
 
   /**
    * Type parameter for this structure attribute.
@@ -85,9 +79,9 @@ export class StructureAttribute extends Component {
   /**
    * Type for this structure attribute.
    *
-   * @default StructureAttributeType.STRING
+   * @default ResourceAttributeType.STRING
    */
-  public readonly type: ValueOf<typeof StructureAttributeType>;
+  public readonly type: ValueOf<typeof ResourceAttributeType> | string;
 
   /**
    * Type parameter for this structure attribute.
@@ -130,7 +124,7 @@ export class StructureAttribute extends Component {
 
     this.name = paramCase(options.name);
     this.shortName = options.shortName ?? this.name;
-    this.type = options.type ?? StructureAttributeType.STRING;
+    this.type = options.type ?? ResourceAttributeType.STRING;
     this.typeParameter = options.typeParameter ?? "any";
     this.comments = options.comments ?? [];
     this.required = options.required ?? true;

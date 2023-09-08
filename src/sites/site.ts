@@ -21,8 +21,14 @@ export class Site extends FractureSubProject {
     // make sure sites is configured as a workspace
     TurboRepo.of(options.parent).addWorkspaceRoot(siteRoot);
 
+    // strip org scopes from folder structure, if given
+    const subdir =
+      options.name.split("/").length === 2
+        ? options.name.split("/")[1]
+        : options.name;
+
     // set up the outdir
-    const outdir = join(siteRoot, options.name);
+    const outdir = join(siteRoot, subdir);
     const artifactsDirectory = join(
       outdir,
       options.artifactsDirectory ?? "dist"

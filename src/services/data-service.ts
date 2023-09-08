@@ -1,9 +1,9 @@
 import { Project } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { Resource, ResourceOptions } from "./resource";
+import { ResourceAttributeType } from "./resource-attribute";
 import { Service, ServiceOptions } from "./service";
 import { Structure, StructureOptions } from "./structure";
-import { StructureAttributeType } from "./structure-attribute";
 import { DynamoTable, DynamoTableOptions } from "../dynamodb";
 import { TypescriptStrategy } from "../generators/ts/strategy";
 
@@ -127,7 +127,7 @@ export class DataService extends Service {
       attributeOptions: [
         {
           name: `code`,
-          type: StructureAttributeType.INT,
+          type: ResourceAttributeType.INT,
         },
         {
           name: `source`,
@@ -147,18 +147,17 @@ export class DataService extends Service {
       attributeOptions: [
         {
           name: `data`,
-          type: StructureAttributeType.CUSTOM,
-          typeParameter: `T`,
+          type: "T",
           required: false,
         },
         {
           name: `errors`,
-          type: StructureAttributeType.ARRAY,
+          type: ResourceAttributeType.ARRAY,
           typeParameter: `error`,
         },
         {
           name: `status`,
-          type: StructureAttributeType.INT,
+          type: ResourceAttributeType.INT,
         },
       ],
     });
@@ -169,18 +168,18 @@ export class DataService extends Service {
       attributeOptions: [
         {
           name: `data`,
-          type: StructureAttributeType.ARRAY,
+          type: ResourceAttributeType.ARRAY,
           typeParameter: `T`,
           required: false,
         },
         {
           name: `errors`,
-          type: StructureAttributeType.ARRAY,
+          type: ResourceAttributeType.ARRAY,
           typeParameter: `error`,
         },
         {
           name: `status`,
-          type: StructureAttributeType.INT,
+          type: ResourceAttributeType.INT,
         },
       ],
     });
