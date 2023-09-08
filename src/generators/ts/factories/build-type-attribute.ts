@@ -53,7 +53,6 @@ export const buildTypeProperty = ({
       typeParameter: "any",
       ...attribute,
     };
-
     switch (type) {
       case ResourceAttributeType.GUID:
       case ResourceAttributeType.STRING:
