@@ -27,8 +27,8 @@ importers:
         specifier: ^4.1.2
         version: 4.1.2
       projen:
-        specifier: ^0.73.12
-        version: 0.73.12
+        specifier: ^0.73.15
+        version: 0.73.15
       type-fest:
         specifier: ^2.19.0
         version: 2.19.0
@@ -8065,8 +8065,8 @@ packages:
       - yaml
       - yargs
 
-  /projen@0.73.12:
-    resolution: {integrity: sha512-aSc93EWXe1KMeVSIWrZH6qm/JOBrtVTblV9LMB+rNCSkUZ2mafVMEFaQfWP4ZTcEQeXMFwFMZvdq5nxHXNqj1w==}
+  /projen@0.73.15:
+    resolution: {integrity: sha512-mSQAXPi/VIIn0PB+gEAT4xegoRCbDZV6lfeSTFbR2weLUs84nq6xNMgmMowDtFk2VNXdX0fA20UFqiD1HI4/VQ==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
