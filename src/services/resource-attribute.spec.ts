@@ -56,11 +56,11 @@ test("Attribute Relationships", () => {
     attributeOptions: [
       {
         name: "name",
-        shortName: "n",
+        shortName: "nn",
       },
       {
         name: "description",
-        shortName: "d",
+        shortName: "ds",
       },
     ],
   });
@@ -70,12 +70,14 @@ test("Attribute Relationships", () => {
     attributeOptions: [
       {
         name: "name",
+        shortName: "nn",
       },
     ],
   });
 
   cal.addAttribute({
     name: "events",
+    shortName: "ev",
     type: ResourceAttributeType.ARRAY,
     typeParameter: evt,
   });
