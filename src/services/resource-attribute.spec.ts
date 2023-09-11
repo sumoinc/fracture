@@ -1,18 +1,16 @@
-import { DataService } from "./data-service";
 import { Resource } from "./resource";
 import { ResourceAttribute, ResourceAttributeType } from "./resource-attribute";
-import { FractureProject } from "../fracture-project";
 import { Types } from "../generators";
-import { synthFile } from "../util/test-util";
+import { synthFile, testDataService } from "../util/test-util";
 
 test("Smoke test", () => {
-  const service = testService();
+  const service = testDataService();
   const att = new ResourceAttribute(service, { name: "bar" });
   expect(att).toBeTruthy();
 });
 
 test("Attribute Relationships", () => {
-  const service = testService();
+  const service = testDataService();
 
   // address for user
   const address = new Resource(service, { name: "address" });
@@ -50,7 +48,7 @@ test("Attribute Relationships", () => {
 });
 
 test("Attribute Relationships", () => {
-  const service = testService();
+  const service = testDataService();
   const cal = new Resource(service, {
     name: "calendar",
     attributeOptions: [
@@ -92,13 +90,3 @@ test("Attribute Relationships", () => {
   expect(content).toMatchSnapshot();
   //console.log(content);
 });
-
-const testService = () => {
-  return new DataService({
-    parent: new FractureProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    }),
-    name: "foo",
-  });
-};

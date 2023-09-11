@@ -1,5 +1,7 @@
 import { Project } from "projen";
 import { synthSnapshot } from "projen/lib/util/synth";
+import { FractureProject } from "../fracture-project";
+import { DataService } from "../services";
 
 export const TEST_ACCOUNT_ONE = "000000000000";
 export const TEST_ORG_ONE = "org-123456";
@@ -40,4 +42,17 @@ export const synthFile = (project: Project, filepath: string): string => {
   }
 
   return files[filepath];
+};
+
+/**
+ * Builds a simple data service as a test harness
+ */
+export const testDataService = () => {
+  return new DataService({
+    parent: new FractureProject({
+      name: "my-project",
+      defaultReleaseBranch: "main",
+    }),
+    name: "foo",
+  });
 };

@@ -1,19 +1,8 @@
-import { TypeScriptProject } from "projen/lib/typescript";
-import { DataService } from "./data-service";
 import { Structure } from "./structure";
+import { testDataService } from "../util/test-util";
 
 test("Smoke test", () => {
-  const service = testService();
+  const service = testDataService();
   const structure = new Structure(service, { name: "bar" });
   expect(structure).toBeTruthy();
 });
-
-const testService = () => {
-  return new DataService({
-    parent: new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    }),
-    name: "foo",
-  });
-};

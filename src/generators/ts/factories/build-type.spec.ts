@@ -1,12 +1,11 @@
-import { TypeScriptProject } from "projen/lib/typescript";
 import { buildType } from "./build-type";
 import { printNodes } from "./print-nodes";
 import { ResourceAttributeType } from "../../../services";
-import { DataService } from "../../../services/data-service";
 import { Structure } from "../../../services/structure";
+import { testDataService } from "../../../util/test-util";
 
 test("Smoke test", () => {
-  const service = testService();
+  const service = testDataService();
   const structure = new Structure(service, {
     name: "MyType",
   });
@@ -16,7 +15,7 @@ test("Smoke test", () => {
 });
 
 test("Generic and type param support", () => {
-  const service = testService();
+  const service = testDataService();
   const structure = new Structure(service, {
     name: "MyType",
     typeParameter: "T",
@@ -42,7 +41,7 @@ test("Generic and type param support", () => {
 });
 
 test("Optional and Required work", () => {
-  const service = testService();
+  const service = testDataService();
   const structure = new Structure(service, {
     name: "MyType",
     attributeOptions: [
@@ -62,7 +61,7 @@ test("Optional and Required work", () => {
 });
 
 test("All attribute types should match snapshot", () => {
-  const service = testService();
+  const service = testDataService();
   const attributeOptions = Object.entries(ResourceAttributeType).map(
     ([key, value]) => {
       return { name: key, type: value };
@@ -79,13 +78,3 @@ test("All attribute types should match snapshot", () => {
 
   // console.log(content);
 });
-
-const testService = () => {
-  return new DataService({
-    parent: new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    }),
-    name: "foo",
-  });
-};

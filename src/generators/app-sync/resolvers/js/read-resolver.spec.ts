@@ -1,11 +1,9 @@
-import { TypeScriptProject } from "projen/lib/typescript";
 import { ReadResolver } from "./read-resolver";
-import { DataService } from "../../../../services/data-service";
-import { synthFile } from "../../../../util/test-util";
+import { synthFile, testDataService } from "../../../../util/test-util";
 
 describe("Success Conditions", () => {
   test("Smoke test", () => {
-    const service = testService();
+    const service = testDataService();
 
     const resource = service.addResource({
       name: "bar",
@@ -22,13 +20,3 @@ describe("Success Conditions", () => {
     //console.log(content);
   });
 });
-
-const testService = () => {
-  return new DataService({
-    parent: new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    }),
-    name: "foo",
-  });
-};
