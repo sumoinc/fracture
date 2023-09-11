@@ -1,5 +1,6 @@
+import { Structure } from "./structure";
 import { StructureAttribute } from "./structure-attribute";
-import { testStructure } from "../util/test-util";
+import { testDataService, testStructure } from "../util/test-util";
 
 describe("success conditions", () => {
   test("Smoke test without helper", () => {
@@ -46,6 +47,25 @@ describe("failure conditions", () => {
     expect(() => {
       structure.addAttribute({
         name: "foo-attr",
+      });
+    }).toThrow();
+  });
+
+  test("Duplicate attributes not allowed - using attribute args", () => {
+    const service = testDataService();
+
+    expect(() => {
+      new Structure(service, {
+        name: "MyType",
+        typeParameter: "T",
+        attributeOptions: [
+          {
+            name: "foo",
+          },
+          {
+            name: "foo",
+          },
+        ],
       });
     }).toThrow();
   });

@@ -125,7 +125,6 @@ export class Structure extends Component {
       structure: this,
       ...options,
     });
-    this.attributes.push(attribute);
     return attribute;
   }
 

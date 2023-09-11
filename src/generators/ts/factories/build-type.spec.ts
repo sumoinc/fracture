@@ -2,16 +2,15 @@ import { buildType } from "./build-type";
 import { printNodes } from "./print-nodes";
 import { ResourceAttributeType } from "../../../services";
 import { Structure } from "../../../services/structure";
-import { testDataService } from "../../../util/test-util";
+import { testDataService, testStructure } from "../../../util/test-util";
 
 test("Smoke test", () => {
-  const service = testDataService();
-  const structure = new Structure(service, {
-    name: "MyType",
-  });
-  const type = buildType({ service, structure });
+  const structure = testStructure();
+  const type = buildType({ service: structure.service, structure });
   const content = printNodes([type]);
+  expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
+  //console.log(content);
 });
 
 test("Generic and type param support", () => {
@@ -34,10 +33,13 @@ test("Generic and type param support", () => {
       },
     ],
   });
+  console.log(structure.attributes.length);
+
   const type = buildType({ service, structure });
   const content = printNodes([type]);
+  expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
-  // console.log(content);
+  console.log(content);
 });
 
 test("Optional and Required work", () => {
