@@ -12,7 +12,7 @@ Array [
   "sites/docs/.projen/deps.json",
   "sites/docs/.projen/files.json",
   "sites/docs/.projen/tasks.json",
-  "sites/docs/conponents/README.md",
+  "sites/docs/components/README.md",
   "sites/docs/layouts/default.vue",
   "sites/docs/nuxt.config.ts",
   "sites/docs/package.json",

@@ -192,6 +192,13 @@ export type ResourceAttributeOptions = {
   readonly shortName?: string;
 
   /**
+   * Is this attribute required?
+   *
+   * @default true
+   */
+  readonly required?: boolean;
+
+  /**
    * Comment lines to add to the Resource.
    *
    * @default []
@@ -324,6 +331,13 @@ export class ResourceAttribute extends Component {
   public readonly shortName: string;
 
   /**
+   * Is this attribute required?
+   *
+   * @default true
+   */
+  public readonly required: boolean;
+
+  /**
    * Comment lines to add to the Resource.
    *
    * @default []
@@ -425,6 +439,7 @@ export class ResourceAttribute extends Component {
     this.shortName = options.shortName
       ? paramCase(options.shortName)
       : this.name;
+    this.required = options.required ?? true;
     this.comments = options.comments ?? [];
     this.type =
       options.type instanceof Resource

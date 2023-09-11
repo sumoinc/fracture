@@ -43,6 +43,28 @@ export class NuxtJsSite extends Site {
     this.npmrc.addConfig("shamefully-hoist", "true");
 
     /***************************************************************************
+     * tsconfig.dev.json
+     **************************************************************************/
+
+    // nuxt fixes
+    this.tsconfigDev.addInclude("components/**/*.vue");
+    this.tsconfigDev.addInclude("components/**/*.ts");
+    this.tsconfigDev.addInclude("model/**/*.vue");
+    this.tsconfigDev.addInclude("model/**/*.ts");
+    this.tsconfigDev.addInclude("pages/**/*.vue");
+    this.tsconfigDev.addInclude("pages/**/*.ts");
+    this.tsconfigDev.addInclude("plugins/**/*.vue");
+    this.tsconfigDev.addInclude("plugins/**/*.ts");
+
+    /***************************************************************************
+     * jest configs
+     **************************************************************************/
+
+    this.jest!.addTestMatch(
+      "<rootDir>/(components|layouts|model|pages|plugins)/**/*(*.)@(spec|test).ts?(x)"
+    );
+
+    /***************************************************************************
      * nuxt.config.ts
      **************************************************************************/
 
@@ -77,9 +99,13 @@ export class NuxtJsSite extends Site {
 
     this.addDevDeps(
       "@nuxt/devtools@latest",
+      "@nuxtjs/tailwindcss",
       "@types/node@^18.17.3",
-      "nuxt@^3.6.5"
+      "nuxt@^3.6.5",
+      "tailwindcss"
     );
+
+    this.addDeps("@heroicons/vue", "@headlessui/vue");
 
     // nuxt build
     this.addTask("nuxt:build").exec("nuxt build");
@@ -108,7 +134,7 @@ export class NuxtJsSite extends Site {
       `</template>`,
     ].join("\n");
 
-    new SampleDir(this, "conponents", {
+    new SampleDir(this, "components", {
       files: {
         "README.md": "add components here",
       },
