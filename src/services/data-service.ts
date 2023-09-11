@@ -18,7 +18,7 @@ export interface DataServiceOptions extends ServiceOptions {
   /**
    * Options for resources to add when initializing the service.
    */
-  readonly resourceOptions?: Array<ResourceOptions>;
+  readonly resourceOptions?: Array<Omit<ResourceOptions, "service">>;
 }
 
 export class DataService extends Service {
@@ -52,6 +52,11 @@ export class DataService extends Service {
    * Defines typescript naming conventions for this service.
    */
   public readonly typescriptStrategy: TypescriptStrategy;
+
+  /**
+   * All structures for this service.
+   */
+  public readonly structures: Structure[] = [];
 
   /**
    * The standard generic error structure for this resource type.

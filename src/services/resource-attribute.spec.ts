@@ -1,36 +1,67 @@
 import { Resource } from "./resource";
 import { ResourceAttribute, ResourceAttributeType } from "./resource-attribute";
 import { Types } from "../generators";
-import { synthFile, testDataService } from "../util/test-util";
+import { synthFile, testDataService, testResource } from "../util/test-util";
 
 describe("success conditions", () => {
-  test("Smoke test", () => {
-    const service = testDataService();
-    const att = new ResourceAttribute(service, { name: "bar" });
+  test("Smoke test without helper", () => {
+    const resource = testResource();
+    const att = new ResourceAttribute(resource.service, {
+      name: "bar",
+      resource,
+    });
+    // exists
     expect(att).toBeTruthy();
+    // also contained in resource array
+    expect(
+      resource.attributes.findIndex((a) => {
+        return a.name === att.name;
+      })
+    ).toBeGreaterThanOrEqual(0);
+  });
+
+  test("Smoke test with helper", () => {
+    const resource = testResource();
+    const att = resource.addAttribute({
+      name: "bar",
+    });
+    // exists
+    expect(att).toBeTruthy();
+    // also contained in resource array
+    expect(
+      resource.attributes.findIndex((a) => {
+        return a.name === att.name;
+      })
+    ).toBeGreaterThanOrEqual(0);
   });
 
   test("Attribute Relationships", () => {
     const service = testDataService();
 
-    // address for user
+    // address
     const address = new Resource(service, { name: "address" });
     address.addAttribute({ name: "street" });
     address.addAttribute({ name: "city" });
 
-    // user has many addresses
+    // user
     const user = new Resource(service, { name: "user" });
     user.addAttribute({ name: "first-name" });
     user.addAttribute({ name: "last-name" });
+
+    // user has a simgle primary address
     user.addAttribute({
-      name: "primaryAddress",
+      name: "primary-address",
       type: address,
     });
+
+    // user has multiple addresses
     user.addAttribute({
       name: "addresses",
       type: ResourceAttributeType.ARRAY,
       typeParameter: address,
     });
+
+    // user has a map of addresses
     user.addAttribute({
       name: "address-map",
       type: ResourceAttributeType.MAP,
@@ -47,48 +78,20 @@ describe("success conditions", () => {
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
+});
 
-  test("Attribute Relationships", () => {
-    const service = testDataService();
-    const cal = new Resource(service, {
-      name: "calendar",
-      attributeOptions: [
-        {
-          name: "name",
-          shortName: "nn",
-        },
-        {
-          name: "description",
-          shortName: "ds",
-        },
-      ],
+describe("failure conditions", () => {
+  test("Duplicate attributes not allowed", () => {
+    const resource = testResource();
+
+    resource.addAttribute({
+      name: "foo-attr",
     });
 
-    const evt = new Resource(service, {
-      name: "calendar-event",
-      attributeOptions: [
-        {
-          name: "name",
-          shortName: "nn",
-        },
-      ],
-    });
-
-    cal.addAttribute({
-      name: "events",
-      shortName: "ev",
-      type: ResourceAttributeType.ARRAY,
-      typeParameter: evt,
-    });
-
-    expect(cal).toBeTruthy();
-    expect(evt).toBeTruthy();
-
-    // type should look right in ts outputs
-    new Types(service);
-    const content = synthFile(service, "src/types.ts");
-    expect(content).toBeTruthy();
-    expect(content).toMatchSnapshot();
-    //console.log(content);
+    expect(() => {
+      resource.addAttribute({
+        name: "foo-attr",
+      });
+    }).toThrow();
   });
 });

@@ -1,12 +1,37 @@
 import { Operation } from "./operation";
-import { DynamoTable } from "../dynamodb";
-import { testDataService } from "../util/test-util";
+import { testResource } from "../util/test-util";
 
-test("Smoke test", () => {
-  const service = testDataService();
-  const operation = new Operation(service, {
-    name: "save-user",
-    dynamoGsi: DynamoTable.of(service).keyGsi,
+describe("success conditions", () => {
+  test("Smoke test without helper", () => {
+    const resource = testResource();
+    const operation = new Operation(resource.service, {
+      name: "save-user",
+      resource,
+    });
+
+    // exists
+    expect(operation).toBeTruthy();
+    // also contained in array
+    expect(
+      resource.operations.findIndex((o) => {
+        return o.name === o.name;
+      })
+    ).toBeGreaterThanOrEqual(0);
   });
-  expect(operation).toBeTruthy();
+
+  test("Smoke test with  helper", () => {
+    const resource = testResource();
+    const operation = resource.addOperation({
+      name: "save-user",
+    });
+
+    // exists
+    expect(operation).toBeTruthy();
+    // also contained in array
+    expect(
+      resource.operations.findIndex((o) => {
+        return o.name === o.name;
+      })
+    ).toBeGreaterThanOrEqual(0);
+  });
 });

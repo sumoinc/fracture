@@ -172,11 +172,16 @@ export const VisabilityType = {
 
 export type ResourceAttributeOptions = {
   /**
+   * The resource this attribute belongs to
+   */
+  readonly resource: Resource;
+
+  /**
    * Full long name for this attribute.
    *
    * @example 'phone-number'
    */
-  name: string;
+  readonly name: string;
 
   /**
    * Brief name used when storing data to save space.
@@ -184,21 +189,21 @@ export type ResourceAttributeOptions = {
    * @example 'pn'
    * @default AttributeOptions.name
    */
-  shortName?: string;
+  readonly shortName?: string;
 
   /**
    * Comment lines to add to the Resource.
    *
    * @default []
    */
-  comments?: Array<string>;
+  readonly comments?: Array<string>;
 
   /**
    * What is the type for tis attribute?
    *
    * @default ResourceAttributeType.STRING
    */
-  type?: ValueOf<typeof ResourceAttributeType> | Resource;
+  readonly type?: ValueOf<typeof ResourceAttributeType> | Resource;
 
   /**
    * Type parameter for this structure attribute.
@@ -207,73 +212,90 @@ export type ResourceAttributeOptions = {
    * @example 'T' for MyType<T> generic
    * @example 'Foo' for Array<Foo>
    */
-  typeParameter?: string | Resource;
+  readonly typeParameter?: string | Resource;
 
   /**
    * Is this managed by the end user or the system?
    *
    * @default ManagementType.USER_MANAGED
    */
-  management?: ValueOf<typeof ManagementType>;
+  readonly management?: ValueOf<typeof ManagementType>;
 
   /**
    * Is this value visible to the end user?
    *
    * @default VisabilityType.USER_VISIBLE
    */
-  visibility?: ValueOf<typeof VisabilityType>;
+  readonly visibility?: ValueOf<typeof VisabilityType>;
 
   /**
    * Is this value an identifier for this resource?
    *
    * @default IdentifierType.NONE
    */
-  identifier?: ValueOf<typeof IdentifierType>;
+  readonly identifier?: ValueOf<typeof IdentifierType>;
 
   /**
    * The separator to use when composing this attribute from other attributes.
    *
-   * @default: '#'
+   * @default '#'
    */
-  compositionsSeperator?: string;
+  readonly compositionsSeperator?: string;
 
   /**
    * The generator to use for all operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  generator?: ValueOf<typeof ResourceAttributeGenerator>;
+  readonly generator?: ValueOf<typeof ResourceAttributeGenerator>;
 
   /**
    * The generator to use for create operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  createGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  readonly createGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
 
   /**
    * The generator to use for read operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  readGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  readonly readGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
 
   /**
    * The generator to use for update operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  updateGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  readonly updateGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
 
   /**
    * The generator to use for delete operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  deleteGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  readonly deleteGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
 };
 
 export class ResourceAttribute extends Component {
+  /**
+   * Returns an attribute by name, or undefined if it doesn't exist
+   */
+  public static byName(
+    resource: Resource,
+    name: string
+  ): ResourceAttribute | undefined {
+    const isDefined = (c: Component): c is ResourceAttribute =>
+      c instanceof ResourceAttribute && c.name === name;
+    return resource.attributes.find(isDefined);
+  }
+
+  /**
+   * The resource this attribute belongs to
+   */
+  public readonly resource: Resource;
+
   /**
    * Full long name for this attribute.
    *
@@ -386,6 +408,7 @@ export class ResourceAttribute extends Component {
      * Props
      **************************************************************************/
 
+    this.resource = options.resource;
     this.name = paramCase(options.name);
     this.shortName = options.shortName
       ? paramCase(options.shortName)
@@ -418,6 +441,18 @@ export class ResourceAttribute extends Component {
     this.readGenerator = options.readGenerator ?? defaultGenerator;
     this.updateGenerator = options.updateGenerator ?? defaultGenerator;
     this.deleteGenerator = options.deleteGenerator ?? defaultGenerator;
+
+    /***************************************************************************
+     * Add to Resource
+     **************************************************************************/
+
+    if (ResourceAttribute.byName(this.resource, this.name)) {
+      throw new Error(
+        `Resource "${this.resource.name}" already has an attribute named "${this.name}"`
+      );
+    }
+
+    this.resource.attributes.push(this);
 
     return this;
   }

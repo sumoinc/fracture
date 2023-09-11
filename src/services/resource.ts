@@ -1,5 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { DataService } from "./data-service";
 import {
   Operation,
   OperationOptions,
@@ -14,7 +15,6 @@ import {
   ResourceAttributeOptions,
   VisabilityType,
 } from "./resource-attribute";
-import { Service } from "./service";
 import { Structure, StructureOptions } from "./structure";
 import { DynamoTable } from "../dynamodb";
 
@@ -23,23 +23,27 @@ export interface ResourceOptions {
    *  Name for the Resource.
    */
   name: string;
+
   /**
    * Short name for the Resource.
    */
   shortName?: string;
+
   /**
    * Plural name for the Resource.
    */
   pluralName?: string;
+
   /**
    * Comment lines to add to the Resource.
    * @default []
    */
   comments?: string[];
+
   /**
    * Options for attributes to add when initializing the resource.
    */
-  attributeOptions?: ResourceAttributeOptions[];
+  attributeOptions?: Omit<ResourceAttributeOptions, "resource">[];
 }
 
 export class Resource extends Component {
@@ -47,14 +51,17 @@ export class Resource extends Component {
    *  Name for the Resource.
    */
   public readonly name: string;
+
   /**
    * Short name for the Resource.
    */
   public readonly shortName: string;
+
   /**
    * Plural name for the Resource.
    */
   public readonly pluralName: string;
+
   /**
    * Comment lines to add to the Resource.
    *
@@ -66,14 +73,17 @@ export class Resource extends Component {
    * Primary key for this resource.
    */
   public pk: ResourceAttribute;
+
   /**
    * Sort key for this resource.
    */
   public sk: ResourceAttribute;
+
   /**
    * Lookup key for this resource.
    */
   public idx: ResourceAttribute;
+
   /**
    * Id key for this resource.
    */
@@ -83,15 +93,18 @@ export class Resource extends Component {
   public dateCreated: ResourceAttribute;
   public dateModified: ResourceAttribute;
   public dateDeleted: ResourceAttribute;
+
   /**
-   * All attributes in this resource.
+   * All attributes for this resource.
    */
   public attributes: ResourceAttribute[] = [];
+
   /**
    * Public facing data structure using full attributes names.
    * Excludes hidden attributes.
    */
   public publicDataStructure: Structure;
+
   /**
    * Entire private data structure using shortnames.
    * Includes all attributes, including hidden ones.
@@ -99,6 +112,7 @@ export class Resource extends Component {
    * used within internal messaging like SQS and EventBus.
    */
   public privateDataStructure: Structure;
+
   /**
    * All structures for this resource.
    */
@@ -107,12 +121,13 @@ export class Resource extends Component {
   public readOperation: Operation;
   public updateOperation: Operation;
   public deleteOperation: Operation;
+
   /**
    * All operations for this resource.
    */
   public operations: Operation[] = [];
 
-  constructor(public readonly project: Service, options: ResourceOptions) {
+  constructor(public readonly project: DataService, options: ResourceOptions) {
     super(project);
 
     /***************************************************************************
@@ -305,9 +320,11 @@ export class Resource extends Component {
    * Adds an attribute to this resource.
    * Also manages some data structures used in code generation.
    */
-  public addAttribute(options: ResourceAttributeOptions) {
-    const attribute = new ResourceAttribute(this.project, options);
-    this.attributes.push(attribute);
+  public addAttribute(options: Omit<ResourceAttributeOptions, "resource">) {
+    const attribute = new ResourceAttribute(this.project, {
+      resource: this,
+      ...options,
+    });
 
     /***************************************************************************
      * Update data structures
@@ -363,15 +380,24 @@ export class Resource extends Component {
     return attribute;
   }
 
-  public addStructure(options: StructureOptions) {
-    const structure = new Structure(this.project, options);
+  public addStructure(options: Omit<StructureOptions, "resource">) {
+    const structure = new Structure(this.service, {
+      ...options,
+    });
     this.structures.push(structure);
     return structure;
   }
 
-  public addOperation(options: OperationOptions) {
-    const operation = new Operation(this.project, options);
+  public addOperation(options: Omit<OperationOptions, "resource">) {
+    const operation = new Operation(this.project, {
+      resource: this,
+      ...options,
+    });
     this.operations.push(operation);
     return operation;
+  }
+
+  public get service() {
+    return this.project;
   }
 }

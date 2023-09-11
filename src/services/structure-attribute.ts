@@ -6,14 +6,20 @@ import {
   ResourceAttributeType,
 } from "./resource-attribute";
 import { Service } from "./service";
+import { Structure } from "./structure";
 
 export type StructureAttributeOptions = {
+  /**
+   * The structure this attribute belongs to.
+   */
+  readonly structure: Structure;
+
   /**
    * Full long name for this attribute.
    *
    * @example 'phone-number'
    */
-  name: string;
+  readonly name: string;
 
   /**
    * Brief name used when storing data to save space.
@@ -21,14 +27,14 @@ export type StructureAttributeOptions = {
    * @example 'pn'
    * @default StructureAttributeOptions.name
    */
-  shortName?: string;
+  readonly shortName?: string;
 
   /**
    * Type for this structure attribute.
    *
    * @default ResourceAttributeType.STRING
    */
-  type?: ValueOf<typeof ResourceAttributeType> | string;
+  readonly type?: ValueOf<typeof ResourceAttributeType> | string;
 
   /**
    * Type parameter for this structure attribute.
@@ -36,31 +42,48 @@ export type StructureAttributeOptions = {
    * @default any
    * @example 'T' for MyType<T> generic
    */
-  typeParameter?: string;
+  readonly typeParameter?: string;
 
   /**
    * Comment lines to add to the Resource.
    *
    * @default []
    */
-  comments?: Array<string>;
+  readonly comments?: Array<string>;
 
   /**
    * Is this attribute required?
    *
    * @default true
    */
-  required?: boolean;
+  readonly required?: boolean;
 
   /**
    * The generator to use for the associated operation, if any
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  generator?: ValueOf<typeof ResourceAttributeGenerator>;
+  readonly generator?: ValueOf<typeof ResourceAttributeGenerator>;
 };
 
 export class StructureAttribute extends Component {
+  /**
+   * Returns a structure by name, or undefined if it doesn't exist
+   */
+  public static byName(
+    structure: Structure,
+    name: string
+  ): StructureAttribute | undefined {
+    const isDefined = (c: Component): c is StructureAttribute =>
+      c instanceof StructureAttribute && c.name === name;
+    return structure.attributes.find(isDefined);
+  }
+
+  /**
+   * The structure this attribute belongs to.
+   */
+  readonly structure: Structure;
+
   /**
    * Full long name for this attribute.
    *
@@ -122,6 +145,7 @@ export class StructureAttribute extends Component {
      * Props
      **************************************************************************/
 
+    this.structure = options.structure;
     this.name = paramCase(options.name);
     this.shortName = options.shortName ?? this.name;
     this.type = options.type ?? ResourceAttributeType.STRING;
@@ -129,6 +153,18 @@ export class StructureAttribute extends Component {
     this.comments = options.comments ?? [];
     this.required = options.required ?? true;
     this.generator = options.generator ?? ResourceAttributeGenerator.NONE;
+
+    /***************************************************************************
+     * Add to Structure
+     **************************************************************************/
+
+    if (StructureAttribute.byName(this.structure, this.name)) {
+      throw new Error(
+        `Resource "${this.structure.name}" already has an attribute named "${this.name}"`
+      );
+    }
+
+    this.structure.attributes.push(this);
 
     return this;
   }

@@ -1,7 +1,7 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript/typescript.js";
-import { Service } from "./service.js";
+import { DataService } from "./data-service.js";
 import {
   StructureAttribute,
   StructureAttributeOptions,
@@ -16,6 +16,7 @@ export type StructureOptions = {
    *  Name for the structure.
    */
   name: string;
+
   /**
    * Type parameter for this structure type.
    *
@@ -23,16 +24,18 @@ export type StructureOptions = {
    * @example 'T' for MyType<T> generic
    */
   typeParameter?: string;
+
   /**
    * Comment lines to add to the Structure.
    *
    * @default []
    */
   comments?: string[];
+
   /**
    * Options for attributes to add when initializing the structure.
    */
-  attributeOptions?: StructureAttributeOptions[];
+  attributeOptions?: Omit<StructureAttributeOptions, "structure">[];
 };
 
 /******************************************************************************
@@ -40,6 +43,18 @@ export type StructureOptions = {
  *****************************************************************************/
 
 export class Structure extends Component {
+  /**
+   * Returns a structure by name, or undefined if it doesn't exist
+   */
+  public static byName(
+    service: DataService,
+    name: string
+  ): Structure | undefined {
+    const isDefined = (c: Component): c is Structure =>
+      c instanceof Structure && c.name === name;
+    return service.structures.find(isDefined);
+  }
+
   /**
    * Returns all structures for service
    */
@@ -68,9 +83,9 @@ export class Structure extends Component {
   /**
    * All attributes in this structure.
    */
-  public attributes: StructureAttribute[] = [];
+  public readonly attributes: StructureAttribute[] = [];
 
-  constructor(public readonly project: Service, options: StructureOptions) {
+  constructor(public readonly project: DataService, options: StructureOptions) {
     super(project);
 
     /***************************************************************************
@@ -88,19 +103,33 @@ export class Structure extends Component {
     }
 
     /***************************************************************************
-     *
-     * GENERATORS
-     *
+     * Add to Service
      **************************************************************************/
 
-    //this.ts = new TypescriptStructure(this);
+    if (Structure.byName(this.service, this.name)) {
+      throw new Error(
+        `Resource "${this.service.name}" already has a structure named "${this.name}"`
+      );
+    }
+
+    this.service.structures.push(this);
 
     return this;
   }
 
-  public addAttribute(options: StructureAttributeOptions) {
-    const attribute = new StructureAttribute(this.project, options);
+  /**
+   * Add a single structure attribute to the structure.
+   */
+  public addAttribute(options: Omit<StructureAttributeOptions, "structure">) {
+    const attribute = new StructureAttribute(this.project, {
+      structure: this,
+      ...options,
+    });
     this.attributes.push(attribute);
     return attribute;
+  }
+
+  public get service() {
+    return this.project;
   }
 }

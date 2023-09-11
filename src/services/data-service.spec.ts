@@ -17,100 +17,100 @@ describe("validate generated project files", () => {
     // console.log(JSON.stringify(fileList, null, 2));
   });
 
-  test("services/foo/.eslintrc.json", () => {
+  test("services/my-service/.eslintrc.json", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/.eslintrc.json");
+    const content = synthFile(parent, "services/my-service/.eslintrc.json");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/.gitattributes", () => {
+  test("services/my-service/.gitattributes", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/.gitattributes");
+    const content = synthFile(parent, "services/my-service/.gitattributes");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/.gitignore", () => {
+  test("services/my-service/.gitignore", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/.gitignore");
+    const content = synthFile(parent, "services/my-service/.gitignore");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/.npmignore", () => {
+  test("services/my-service/.npmignore", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/.npmignore");
+    const content = synthFile(parent, "services/my-service/.npmignore");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test.skip("services/foo/.npmrc", () => {
+  test.skip("services/my-service/.npmrc", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/.npmrc");
+    const content = synthFile(parent, "services/my-service/.npmrc");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/.projen/deps.json", () => {
+  test("services/my-service/.projen/deps.json", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/.projen/deps.json");
+    const content = synthFile(parent, "services/my-service/.projen/deps.json");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/.projen/files.json", () => {
+  test("services/my-service/.projen/files.json", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/.projen/files.json");
+    const content = synthFile(parent, "services/my-service/.projen/files.json");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/.projen/tasks.json", () => {
+  test("services/my-service/.projen/tasks.json", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/.projen/tasks.json");
+    const content = synthFile(parent, "services/my-service/.projen/tasks.json");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/package.json", () => {
+  test("services/my-service/package.json", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/package.json");
+    const content = synthFile(parent, "services/my-service/package.json");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/README.md", () => {
+  test("services/my-service/README.md", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/README.md");
+    const content = synthFile(parent, "services/my-service/README.md");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/src/main.ts", () => {
+  test("services/my-service/src/main.ts", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/src/main.ts");
+    const content = synthFile(parent, "services/my-service/src/main.ts");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/test/main.test.ts", () => {
+  test("services/my-service/test/main.test.ts", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/test/main.test.ts");
+    const content = synthFile(parent, "services/my-service/test/main.test.ts");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/tsconfig.dev.json", () => {
+  test("services/my-service/tsconfig.dev.json", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/tsconfig.dev.json");
+    const content = synthFile(parent, "services/my-service/tsconfig.dev.json");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("services/foo/tsconfig.json", () => {
+  test("services/my-service/tsconfig.json", () => {
     const parent = testDataService().parent;
-    const content = synthFile(parent, "services/foo/tsconfig.json");
+    const content = synthFile(parent, "services/my-service/tsconfig.json");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));

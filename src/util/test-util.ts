@@ -1,7 +1,13 @@
 import { Project } from "projen";
 import { synthSnapshot } from "projen/lib/util/synth";
 import { FractureProject } from "../fracture-project";
-import { DataService } from "../services";
+import {
+  DataService,
+  Operation,
+  Resource,
+  ResourceAttribute,
+  Structure,
+} from "../services";
 
 export const TEST_ACCOUNT_ONE = "000000000000";
 export const TEST_ORG_ONE = "org-123456";
@@ -53,6 +59,40 @@ export const testDataService = () => {
       name: "my-project",
       defaultReleaseBranch: "main",
     }),
-    name: "foo",
+    name: "my-service",
   });
+};
+
+/**
+ * Build a simple resource to test with
+ */
+export const testResource = () => {
+  return new Resource(testDataService(), { name: "my-resource" });
+};
+
+/**
+ * Build a simple resource attribute to test with
+ */
+export const testResourceAttribute = () => {
+  const resource = testResource();
+  return new ResourceAttribute(resource.service, {
+    name: "my-attr",
+    resource,
+  });
+};
+
+/**
+ * Build a simple structure to test with
+ */
+export const testStructure = () => {
+  const service = testDataService();
+  return new Structure(service, { name: "my-structure" });
+};
+
+/**
+ * Build a simple operation to test with
+ */
+export const testOperation = () => {
+  const resource = testResource();
+  return new Operation(resource.service, { name: "my-operation", resource });
 };

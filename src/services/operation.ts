@@ -2,14 +2,15 @@ import { paramCase } from "change-case";
 import { Component } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
+import { DataService } from "./data-service";
+import { Resource } from "./resource";
 import {
   ResourceAttribute,
   ResourceAttributeGenerator,
 } from "./resource-attribute";
-import { Service } from "./service";
 import { Structure, StructureOptions } from "./structure";
 import { StructureAttributeOptions } from "./structure-attribute";
-import { DynamoGsi } from "../dynamodb";
+import { DynamoGsi, DynamoTable } from "../dynamodb";
 
 /******************************************************************************
  * TYPES
@@ -34,26 +35,36 @@ export const OperationSubType = {
 
 export type OperationOptions = {
   /**
+   *  Resource this structure belongs to.
+   */
+  readonly resource: Resource;
+
+  /**
    * Name for this operation.
    */
-  name: string;
+  readonly name: string;
+
   /**
    * Global secondary index used in this operation. This might also be the
    * primary PK and SK index.
+   *
+   * @default - keyGsi (aka: no index)
    */
-  dynamoGsi: DynamoGsi;
+  readonly dynamoGsi?: DynamoGsi;
+
   /**
    * What (generic) type of operation is this?
    * Default: query
    */
-  operationType?: ValueOf<typeof OperationType>;
+  readonly operationType?: ValueOf<typeof OperationType>;
+
   /**
    * What (more specific) specific type of operation is this?
    * Default: list
    */
-  operationSubType?: ValueOf<typeof OperationSubType>;
-  inputAttributeOptions?: Array<StructureAttributeOptions>;
-  outputAttributeOptions?: Array<StructureAttributeOptions>;
+  readonly operationSubType?: ValueOf<typeof OperationSubType>;
+  readonly inputAttributeOptions?: Array<StructureAttributeOptions>;
+  readonly outputAttributeOptions?: Array<StructureAttributeOptions>;
 };
 
 export class Operation extends Component {
@@ -66,19 +77,29 @@ export class Operation extends Component {
   }
 
   /**
+   *  Resource this structure belongs to.
+   */
+  public readonly resource: Resource;
+
+  /**
    * Name for this operation.
    */
   public readonly name: string;
+
   /**
    * Global secondary index used in this operation. This might also be the
    * primary PK and SK index.
+   *
+   *  @default - keyGsi (aka: no index)
    */
   public readonly dynamoGsi: DynamoGsi;
+
   /**
    * What (generic) type of operation is this?
    * Default: query
    */
   public readonly operationType: ValueOf<typeof OperationType>;
+
   /**
    * What (more specific) specific type of operation is this?
    * Default: list
@@ -86,21 +107,24 @@ export class Operation extends Component {
   public readonly operationSubType: ValueOf<typeof OperationSubType>;
   public readonly inputStructure: Structure;
   public readonly outputStructure: Structure;
+
   /**
    * All structures for this resource.
    */
   public structures: Array<Structure> = [];
 
-  constructor(public readonly project: Service, options: OperationOptions) {
+  constructor(public readonly project: DataService, options: OperationOptions) {
     super(project);
 
     /***************************************************************************
      * Props
      **************************************************************************/
 
+    this.resource = options.resource;
     this.name = paramCase(options.name);
-    this.dynamoGsi = options.dynamoGsi;
-    this.operationSubType = options.operationSubType || OperationSubType.LIST;
+    (this.dynamoGsi = options.dynamoGsi || DynamoTable.of(this.service).keyGsi),
+      (this.operationSubType =
+        options.operationSubType || OperationSubType.LIST);
     this.operationType = options.operationType || OperationType.QUERY;
 
     /***************************************************************************
@@ -167,5 +191,9 @@ export class Operation extends Component {
       required: true,
       ...options,
     });
+  }
+
+  public get service() {
+    return this.project;
   }
 }

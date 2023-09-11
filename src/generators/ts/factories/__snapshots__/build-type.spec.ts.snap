@@ -3,24 +3,44 @@
 exports[`All attribute types should match snapshot 1`] = `
 "export type MyType = {
     guid: string;
+    guid: string;
+    string: string;
     string: string;
     int: number;
+    int: number;
+    float: number;
     float: number;
     boolean: boolean;
+    boolean: boolean;
+    date: string;
     date: string;
     time: string;
+    time: string;
+    dateTime: string;
     dateTime: string;
     timestamp: number;
+    timestamp: number;
+    email: string;
     email: string;
     json: string;
+    json: string;
+    phone: string;
     phone: string;
     url: string;
+    url: string;
+    ipaddress: string;
     ipaddress: string;
     array: Array<any>;
+    array: Array<any>;
+    map: Record<string, Any>;
     map: Record<string, Any>;
     any: any;
+    any: any;
+    count: number;
     count: number;
     average: number;
+    average: number;
+    sum: number;
     sum: number;
 };
 "
@@ -29,6 +49,8 @@ exports[`All attribute types should match snapshot 1`] = `
 exports[`Generic and type param support 1`] = `
 "export type MyType<T> = {
     arrayType: Array<T>;
+    arrayType: Array<T>;
+    customType: Record<string, MapValue>;
     customType: Record<string, MapValue>;
 };
 "
@@ -37,6 +59,8 @@ exports[`Generic and type param support 1`] = `
 exports[`Optional and Required work 1`] = `
 "export type MyType = {
     shouldBeRequired: string;
+    shouldBeRequired: string;
+    shouldBeOptional?: string;
     shouldBeOptional?: string;
 };
 "
