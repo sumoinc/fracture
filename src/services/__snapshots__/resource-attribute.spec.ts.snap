@@ -10,6 +10,10 @@ export type Error = {
     detail: string;
 };
 
+export type Request<T> = {
+    input?: T;
+};
+
 export type Response<T> = {
     data?: T;
     errors: Array<Error>;
@@ -460,6 +464,10 @@ export type Error = {
     detail: string;
 };
 
+export type Request<T> = {
+    input?: T;
+};
+
 export type Response<T> = {
     data?: T;
     errors: Array<Error>;
@@ -542,9 +550,9 @@ export type CalendarData = {
      * The timestamp representing when this record was marked as deleted.
     */
     dt: string;
-    n: string;
-    d: string;
-    events: Array<CalendarEvent>;
+    nn: string;
+    ds: string;
+    ev: Array<CalendarEvent>;
 };
 
 export type CreateCalendarInput = {
@@ -749,7 +757,7 @@ export type CalendarEventData = {
      * The timestamp representing when this record was marked as deleted.
     */
     dt: string;
-    name: string;
+    nn: string;
 };
 
 export type CreateCalendarEventInput = {

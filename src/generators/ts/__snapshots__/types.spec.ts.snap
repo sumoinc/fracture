@@ -10,6 +10,10 @@ export type Error = {
     detail: string;
 };
 
+export type Request<T> = {
+    input?: T;
+};
+
 export type Response<T> = {
     data?: T;
     errors: Array<Error>;

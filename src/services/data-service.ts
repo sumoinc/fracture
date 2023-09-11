@@ -14,36 +14,11 @@ export interface DataServiceOptions extends ServiceOptions {
    * @default - fracture defaults
    */
   readonly dynamoTableOptions?: DynamoTableOptions;
+
   /**
    * Options for resources to add when initializing the service.
    */
   readonly resourceOptions?: Array<ResourceOptions>;
-  /**
-   * Typescript strategy options
-   *
-   * @default fracture defaults
-   */
-  //typescriptStrategyOptions?: TypescriptStrategyOptions;
-
-  // srcDir?: string;
-  /**
-   * Logging options
-   * @default LogLevel.INFO
-   */
-  //logging?: LoggerOptions;
-  /**
-   * Versioned.
-   * @default false
-   */
-  //isVersioned?: boolean;
-  /**
-   * The naming strategy to use for generated code.
-   */
-  // namingStrategy?: NamingStrategy;
-  /**
-   * The audit strategy to use for generated code.
-   */
-  //auditStrategy?: AuditStrategy;
 }
 
 export class DataService extends Service {
@@ -72,33 +47,31 @@ export class DataService extends Service {
    * A name for the service.
    */
   public readonly name: string;
+
   /**
    * Defines typescript naming conventions for this service.
    */
   public readonly typescriptStrategy: TypescriptStrategy;
+
   /**
-   * All resourcers in this service.
+   * The standard generic error structure for this resource type.
    */
-  //public resources: Array<Resource> = [];
-  /**
-   * Table defnition for the table that supports this service.
-   */
-  // public readonly dynamoTable: DynamoTable;
-  /**
-   * All structures for this service.
-   */
-  // public structures: Array<Structure> = [];
   public readonly errorStructure: Structure;
+
+  /**
+   * The standard generic request structure for this resource type.
+   */
+  public readonly requestStructure: Structure;
+
+  /**
+   * The standard response structure for this resource type.
+   */
   public readonly responseStructure: Structure;
+
+  /**
+   * The standard generic list response structure for this resource type.
+   */
   public readonly listResponseStructure: Structure;
-  /**
-   * Output directory for CDK artifacts (cdk.out)
-   */
-  //public readonly cdkOutBuildDir: string;
-  /**
-   * Where deployable artifacts are stored in pipeline runs
-   */
-  // public readonly cdkOutDistDir: string;
 
   constructor(options: DataServiceOptions) {
     super(options);
@@ -137,6 +110,18 @@ export class DataService extends Service {
         },
         {
           name: `detail`,
+        },
+      ],
+    });
+
+    this.requestStructure = this.addStructure({
+      name: `request`,
+      typeParameter: `T`,
+      attributeOptions: [
+        {
+          name: `input`,
+          type: "T",
+          required: false,
         },
       ],
     });
