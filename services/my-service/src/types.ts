@@ -7,10 +7,23 @@ export type Error = {
   detail: string;
 };
 
+export type Request<T> = {
+  input?: T;
+};
+
 export type Response<T> = {
   data?: T;
   errors: Array<Error>;
   status: number;
+};
+
+export type ListRequest<T> = {
+  /**
+   * A search string to filter the list by.
+   * Will match starting string in index text. Case insensitive.
+   */
+  indexTerm: string;
+  nextToken: string;
 };
 
 export type ListResponse<T> = {
