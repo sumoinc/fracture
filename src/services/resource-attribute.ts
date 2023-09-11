@@ -292,6 +292,18 @@ export class ResourceAttribute extends Component {
   }
 
   /**
+   * Returns an attribute by it's shortname, or undefined if it doesn't exist
+   */
+  public static byShortName(
+    resource: Resource,
+    shortName: string
+  ): ResourceAttribute | undefined {
+    const isDefined = (c: Component): c is ResourceAttribute =>
+      c instanceof ResourceAttribute && c.shortName === shortName;
+    return resource.attributes.find(isDefined);
+  }
+
+  /**
    * The resource this attribute belongs to
    */
   public readonly resource: Resource;
@@ -449,6 +461,12 @@ export class ResourceAttribute extends Component {
     if (ResourceAttribute.byName(this.resource, this.name)) {
       throw new Error(
         `Resource "${this.resource.name}" already has an attribute named "${this.name}"`
+      );
+    }
+
+    if (ResourceAttribute.byShortName(this.resource, this.shortName)) {
+      throw new Error(
+        `Resource "${this.resource.name}" already has an attribute with a shortname of "${this.shortName}"`
       );
     }
 

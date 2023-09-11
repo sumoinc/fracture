@@ -81,7 +81,7 @@ describe("success conditions", () => {
 });
 
 describe("failure conditions", () => {
-  test("Duplicate attributes not allowed", () => {
+  test("Duplicate attribute names not allowed", () => {
     const resource = testResource();
 
     resource.addAttribute({
@@ -93,5 +93,21 @@ describe("failure conditions", () => {
         name: "foo-attr",
       });
     }).toThrow();
+  });
+
+  test("Duplicate attribute short names not allowed", () => {
+    const resource = testResource();
+
+    resource.addAttribute({
+      name: "foo-attr",
+      shortName: "foo",
+    });
+
+    expect(() => {
+      resource.addAttribute({
+        name: "foo-other",
+        shortName: "foo",
+      });
+    }).toThrow("shortname of");
   });
 });
