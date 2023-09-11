@@ -33,13 +33,12 @@ test("Generic and type param support", () => {
       },
     ],
   });
-  console.log(structure.attributes.length);
 
   const type = buildType({ service, structure });
   const content = printNodes([type]);
   expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
-  console.log(content);
+  //console.log(content);
 });
 
 test("Optional and Required work", () => {
@@ -59,6 +58,7 @@ test("Optional and Required work", () => {
   });
   const type = buildType({ service, structure });
   const content = printNodes([type]);
+  expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
 });
 
@@ -76,6 +76,7 @@ test("All attribute types should match snapshot", () => {
 
   const type = buildType({ service, structure });
   const content = printNodes([type]);
+  expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
 
   // console.log(content);

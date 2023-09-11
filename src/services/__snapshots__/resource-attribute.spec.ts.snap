@@ -5,26 +5,18 @@ exports[`success conditions Attribute Relationships 1`] = `
 
 export type Error = {
     code: number;
-    code: number;
-    source: string;
     source: string;
     message: string;
-    message: string;
-    detail: string;
     detail: string;
 };
 
 export type Request<T> = {
     input?: T;
-    input?: T;
 };
 
 export type Response<T> = {
     data?: T;
-    data?: T;
     errors: Array<Error>;
-    errors: Array<Error>;
-    status: number;
     status: number;
 };
 
@@ -34,21 +26,12 @@ export type ListRequest<T> = {
      * Will match starting string in index text. Case insensitive.
     */
     indexTerm: string;
-    /**
-     * A search string to filter the list by.
-     * Will match starting string in index text. Case insensitive.
-    */
-    indexTerm: string;
-    nextToken: string;
     nextToken: string;
 };
 
 export type ListResponse<T> = {
     data?: Array<T>;
-    data?: Array<T>;
     errors: Array<Error>;
-    errors: Array<Error>;
-    status: number;
     status: number;
 };
 
@@ -61,21 +44,9 @@ export type Address = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     type: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
     /**
      * Version for record.
     */
@@ -85,20 +56,10 @@ export type Address = {
     */
     createdTimestamp: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     modifiedTimestamp: string;
     street: string;
-    street: string;
-    city: string;
     city: string;
 };
 
@@ -112,21 +73,9 @@ export type AddressData = {
     */
     pk: string;
     /**
-     * Partition Key for this record.
-    */
-    pk: string;
-    /**
      * Sort Key for this record.
     */
     sk: string;
-    /**
-     * Sort Key for this record.
-    */
-    sk: string;
-    /**
-     * Lookup value for this record.
-    */
-    idx: string;
     /**
      * Lookup value for this record.
     */
@@ -136,21 +85,9 @@ export type AddressData = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     t: string;
-    /**
-     * Type of record.
-    */
-    t: string;
-    /**
-     * Version for record.
-    */
-    v: string;
     /**
      * Version for record.
     */
@@ -160,14 +97,6 @@ export type AddressData = {
     */
     ct: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    ct: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    mt: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     mt: string;
@@ -175,20 +104,12 @@ export type AddressData = {
      * The timestamp representing when this record was marked as deleted.
     */
     dt: string;
-    /**
-     * The timestamp representing when this record was marked as deleted.
-    */
-    dt: string;
     street: string;
-    street: string;
-    city: string;
     city: string;
 };
 
 export type CreateAddressInput = {
     street: string;
-    street: string;
-    city: string;
     city: string;
 };
 
@@ -198,21 +119,9 @@ export type CreateAddressOutput = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     type: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
     /**
      * Version for record.
     */
@@ -222,28 +131,14 @@ export type CreateAddressOutput = {
     */
     createdTimestamp: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     modifiedTimestamp: string;
     street: string;
-    street: string;
-    city: string;
     city: string;
 };
 
 export type GetAddressInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
     /**
      * Identifier for this record.
     */
@@ -256,21 +151,9 @@ export type GetAddressOutput = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     type: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
     /**
      * Version for record.
     */
@@ -280,20 +163,10 @@ export type GetAddressOutput = {
     */
     createdTimestamp: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     modifiedTimestamp: string;
     street: string;
-    street: string;
-    city: string;
     city: string;
 };
 
@@ -302,13 +175,7 @@ export type UpdateAddressInput = {
      * Identifier for this record.
     */
     id: string;
-    /**
-     * Identifier for this record.
-    */
-    id: string;
     street: string;
-    street: string;
-    city: string;
     city: string;
 };
 
@@ -318,21 +185,9 @@ export type UpdateAddressOutput = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     type: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
     /**
      * Version for record.
     */
@@ -342,28 +197,14 @@ export type UpdateAddressOutput = {
     */
     createdTimestamp: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     modifiedTimestamp: string;
     street: string;
-    street: string;
-    city: string;
     city: string;
 };
 
 export type DeleteAddressInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
     /**
      * Identifier for this record.
     */
@@ -376,21 +217,9 @@ export type DeleteAddressOutput = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     type: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
     /**
      * Version for record.
     */
@@ -400,20 +229,10 @@ export type DeleteAddressOutput = {
     */
     createdTimestamp: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     modifiedTimestamp: string;
     street: string;
-    street: string;
-    city: string;
     city: string;
 };
 
@@ -426,21 +245,9 @@ export type User = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     type: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
     /**
      * Version for record.
     */
@@ -450,26 +257,13 @@ export type User = {
     */
     createdTimestamp: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     modifiedTimestamp: string;
     firstName: string;
-    firstName: string;
-    lastName: string;
     lastName: string;
     primaryAddress: Address;
-    primaryAddress: Address;
     addresses: Array<Address>;
-    addresses: Array<Address>;
-    addressMap: Record<string, Address>;
     addressMap: Record<string, Address>;
 };
 
@@ -483,21 +277,9 @@ export type UserData = {
     */
     pk: string;
     /**
-     * Partition Key for this record.
-    */
-    pk: string;
-    /**
      * Sort Key for this record.
     */
     sk: string;
-    /**
-     * Sort Key for this record.
-    */
-    sk: string;
-    /**
-     * Lookup value for this record.
-    */
-    idx: string;
     /**
      * Lookup value for this record.
     */
@@ -507,21 +289,9 @@ export type UserData = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     t: string;
-    /**
-     * Type of record.
-    */
-    t: string;
-    /**
-     * Version for record.
-    */
-    v: string;
     /**
      * Version for record.
     */
@@ -531,14 +301,6 @@ export type UserData = {
     */
     ct: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    ct: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    mt: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     mt: string;
@@ -546,32 +308,18 @@ export type UserData = {
      * The timestamp representing when this record was marked as deleted.
     */
     dt: string;
-    /**
-     * The timestamp representing when this record was marked as deleted.
-    */
-    dt: string;
-    firstName: string;
     firstName: string;
     lastName: string;
-    lastName: string;
-    primaryAddress: Address;
     primaryAddress: Address;
     addresses: Array<Address>;
-    addresses: Array<Address>;
-    addressMap: Record<string, Address>;
     addressMap: Record<string, Address>;
 };
 
 export type CreateUserInput = {
     firstName: string;
-    firstName: string;
-    lastName: string;
     lastName: string;
     primaryAddress: Address;
-    primaryAddress: Address;
     addresses: Array<Address>;
-    addresses: Array<Address>;
-    addressMap: Record<string, Address>;
     addressMap: Record<string, Address>;
 };
 
@@ -581,21 +329,9 @@ export type CreateUserOutput = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     type: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
     /**
      * Version for record.
     */
@@ -605,34 +341,17 @@ export type CreateUserOutput = {
     */
     createdTimestamp: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     modifiedTimestamp: string;
     firstName: string;
-    firstName: string;
-    lastName: string;
     lastName: string;
     primaryAddress: Address;
-    primaryAddress: Address;
     addresses: Array<Address>;
-    addresses: Array<Address>;
-    addressMap: Record<string, Address>;
     addressMap: Record<string, Address>;
 };
 
 export type GetUserInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
     /**
      * Identifier for this record.
     */
@@ -645,21 +364,9 @@ export type GetUserOutput = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     type: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
     /**
      * Version for record.
     */
@@ -669,26 +376,13 @@ export type GetUserOutput = {
     */
     createdTimestamp: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     modifiedTimestamp: string;
     firstName: string;
-    firstName: string;
-    lastName: string;
     lastName: string;
     primaryAddress: Address;
-    primaryAddress: Address;
     addresses: Array<Address>;
-    addresses: Array<Address>;
-    addressMap: Record<string, Address>;
     addressMap: Record<string, Address>;
 };
 
@@ -697,19 +391,10 @@ export type UpdateUserInput = {
      * Identifier for this record.
     */
     id: string;
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    firstName: string;
     firstName: string;
     lastName: string;
-    lastName: string;
-    primaryAddress: Address;
     primaryAddress: Address;
     addresses: Array<Address>;
-    addresses: Array<Address>;
-    addressMap: Record<string, Address>;
     addressMap: Record<string, Address>;
 };
 
@@ -719,21 +404,9 @@ export type UpdateUserOutput = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     type: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
     /**
      * Version for record.
     */
@@ -743,34 +416,17 @@ export type UpdateUserOutput = {
     */
     createdTimestamp: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     modifiedTimestamp: string;
     firstName: string;
-    firstName: string;
-    lastName: string;
     lastName: string;
     primaryAddress: Address;
-    primaryAddress: Address;
     addresses: Array<Address>;
-    addresses: Array<Address>;
-    addressMap: Record<string, Address>;
     addressMap: Record<string, Address>;
 };
 
 export type DeleteUserInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
     /**
      * Identifier for this record.
     */
@@ -783,21 +439,9 @@ export type DeleteUserOutput = {
     */
     id: string;
     /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
      * Type of record.
     */
     type: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
     /**
      * Version for record.
     */
@@ -807,26 +451,13 @@ export type DeleteUserOutput = {
     */
     createdTimestamp: string;
     /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
      * The timestamp representing when this record was last modified.
     */
     modifiedTimestamp: string;
     firstName: string;
-    firstName: string;
-    lastName: string;
     lastName: string;
     primaryAddress: Address;
-    primaryAddress: Address;
     addresses: Array<Address>;
-    addresses: Array<Address>;
-    addressMap: Record<string, Address>;
     addressMap: Record<string, Address>;
 };
 "
