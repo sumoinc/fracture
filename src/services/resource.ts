@@ -337,7 +337,7 @@ export class Resource extends Component {
         type: attribute.type,
         typeParameter: attribute.typeParameter,
         comments: attribute.comments,
-        required: true,
+        required: attribute.required,
       });
     }
 
@@ -347,7 +347,7 @@ export class Resource extends Component {
       type: attribute.type,
       typeParameter: attribute.typeParameter,
       comments: attribute.comments,
-      required: true,
+      required: attribute.required,
     });
 
     /***************************************************************************

@@ -172,7 +172,7 @@ export class Operation extends Component {
       type: attribute.type,
       typeParameter: attribute.typeParameter,
       comments: attribute.comments,
-      required: true,
+      required: attribute.required,
       generator,
       ...options,
     });
@@ -188,7 +188,7 @@ export class Operation extends Component {
       type: attribute.type,
       typeParameter: attribute.typeParameter,
       comments: attribute.comments,
-      required: true,
+      required: attribute.required,
       ...options,
     });
   }
