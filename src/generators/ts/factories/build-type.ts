@@ -58,7 +58,6 @@ export const buildType = ({
         ),
       ]
     : undefined;
-
   // build properties for this type
   const properties = buildTypeProperies({
     service,

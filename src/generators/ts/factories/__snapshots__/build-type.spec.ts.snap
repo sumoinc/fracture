@@ -43,6 +43,6 @@ exports[`Optional and Required work 1`] = `
 `;
 
 exports[`Smoke test 1`] = `
-"export type MyType = {};
+"export type MyStructure = {};
 "
 `;

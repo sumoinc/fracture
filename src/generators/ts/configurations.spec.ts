@@ -1,10 +1,8 @@
-import { TypeScriptProject } from "projen/lib/typescript";
 import { GenerateConfigurations } from "./configurations";
-import { DataService } from "../../services/data-service";
-import { synthFile } from "../../util/test-util";
+import { synthFile, testDataService } from "../../util/test-util";
 
 test("Smoke test", () => {
-  const service = testService();
+  const service = testDataService();
   new GenerateConfigurations(service);
 
   const content = synthFile(service, "src/configurations.ts");
@@ -12,13 +10,3 @@ test("Smoke test", () => {
   expect(content).toMatchSnapshot();
   // console.log(content);
 });
-
-const testService = () => {
-  return new DataService({
-    parent: new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    }),
-    name: "foo",
-  });
-};

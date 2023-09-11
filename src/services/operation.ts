@@ -2,14 +2,15 @@ import { paramCase } from "change-case";
 import { Component } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
+import { DataService } from "./data-service";
+import { Resource } from "./resource";
 import {
   ResourceAttribute,
   ResourceAttributeGenerator,
 } from "./resource-attribute";
-import { Service } from "./service";
 import { Structure, StructureOptions } from "./structure";
 import { StructureAttributeOptions } from "./structure-attribute";
-import { DynamoGsi } from "../dynamodb";
+import { DynamoGsi, DynamoTable } from "../dynamodb";
 
 /******************************************************************************
  * TYPES
@@ -34,26 +35,36 @@ export const OperationSubType = {
 
 export type OperationOptions = {
   /**
+   *  Resource this structure belongs to.
+   */
+  readonly resource: Resource;
+
+  /**
    * Name for this operation.
    */
-  name: string;
+  readonly name: string;
+
   /**
    * Global secondary index used in this operation. This might also be the
    * primary PK and SK index.
+   *
+   * @default - keyGsi (aka: no index)
    */
-  dynamoGsi: DynamoGsi;
+  readonly dynamoGsi?: DynamoGsi;
+
   /**
    * What (generic) type of operation is this?
    * Default: query
    */
-  operationType?: ValueOf<typeof OperationType>;
+  readonly operationType?: ValueOf<typeof OperationType>;
+
   /**
    * What (more specific) specific type of operation is this?
    * Default: list
    */
-  operationSubType?: ValueOf<typeof OperationSubType>;
-  inputAttributeOptions?: Array<StructureAttributeOptions>;
-  outputAttributeOptions?: Array<StructureAttributeOptions>;
+  readonly operationSubType?: ValueOf<typeof OperationSubType>;
+  readonly inputAttributeOptions?: Array<StructureAttributeOptions>;
+  readonly outputAttributeOptions?: Array<StructureAttributeOptions>;
 };
 
 export class Operation extends Component {
@@ -66,19 +77,29 @@ export class Operation extends Component {
   }
 
   /**
+   *  Resource this structure belongs to.
+   */
+  public readonly resource: Resource;
+
+  /**
    * Name for this operation.
    */
   public readonly name: string;
+
   /**
    * Global secondary index used in this operation. This might also be the
    * primary PK and SK index.
+   *
+   *  @default - keyGsi (aka: no index)
    */
   public readonly dynamoGsi: DynamoGsi;
+
   /**
    * What (generic) type of operation is this?
    * Default: query
    */
   public readonly operationType: ValueOf<typeof OperationType>;
+
   /**
    * What (more specific) specific type of operation is this?
    * Default: list
@@ -86,21 +107,24 @@ export class Operation extends Component {
   public readonly operationSubType: ValueOf<typeof OperationSubType>;
   public readonly inputStructure: Structure;
   public readonly outputStructure: Structure;
+
   /**
    * All structures for this resource.
    */
   public structures: Array<Structure> = [];
 
-  constructor(public readonly project: Service, options: OperationOptions) {
+  constructor(public readonly project: DataService, options: OperationOptions) {
     super(project);
 
     /***************************************************************************
      * Props
      **************************************************************************/
 
+    this.resource = options.resource;
     this.name = paramCase(options.name);
-    this.dynamoGsi = options.dynamoGsi;
-    this.operationSubType = options.operationSubType || OperationSubType.LIST;
+    (this.dynamoGsi = options.dynamoGsi || DynamoTable.of(this.service).keyGsi),
+      (this.operationSubType =
+        options.operationSubType || OperationSubType.LIST);
     this.operationType = options.operationType || OperationType.QUERY;
 
     /***************************************************************************
@@ -169,108 +193,7 @@ export class Operation extends Component {
     });
   }
 
-  /**
-   * Operation name, based on the naming strategy
-   */
-  /*
-  public get name() {
-    const resourceName =
-      this.operationSubType === OPERATION_SUB_TYPE.LIST
-        ? this.resource.pluralName
-        : this.resource.name;
-    const prefix =
-      this.service.namingStrategy.operations.prefixes[this.operationSubType];
-    const suffix =
-      this.service.namingStrategy.operations.suffixes[this.operationSubType];
-
-    return [prefix, resourceName, suffix]
-      .filter((part) => part.length > 0)
-      .join("-");
+  public get service() {
+    return this.project;
   }
-  */
-
-  // public get operationType() {
-  //   return this.options.operationType;
-  // }
-
-  // public get operationSubType() {
-  //   return this.options.operationSubType;
-  // }
-
-  // public get isWrite(): boolean {
-  //   return this.isCreate || this.isUpdate || this.isImport;
-  // }
-
-  // public get isCreate(): boolean {
-  //   return this.operationSubType === OPERATION_SUB_TYPE.CREATE_ONE;
-  // }
-
-  // public get isRead(): boolean {
-  //   return this.operationSubType === OPERATION_SUB_TYPE.READ_ONE;
-  // }
-
-  // public get isUpdate(): boolean {
-  //   return this.operationSubType === OPERATION_SUB_TYPE.UPDATE_ONE;
-  // }
-
-  // public get isDelete(): boolean {
-  //   return this.operationSubType === OPERATION_SUB_TYPE.DELETE_ONE;
-  // }
-
-  // public get isImport(): boolean {
-  //   return this.operationSubType === OPERATION_SUB_TYPE.IMPORT_ONE;
-  // }
-
-  /***************************************************************************
-   *
-   * INPUT / OUTPUT STRUCTURES
-   *
-   * We lazy load these since all the attributes may not exist on the resource
-   * when this component is initially created.
-   *
-   **************************************************************************/
-
-  // public get inputStructure(): Structure {
-  //   if (!this._inputStructure) {
-  //     this._inputStructure = new Structure(this.resource, {
-  //       type: STRUCTURE_TYPE.INPUT,
-  //       operation: this,
-  //     });
-  //   }
-  //   return this._inputStructure;
-  // }
-
-  // public get outputStructure(): Structure {
-  //   if (!this._outputStructure) {
-  //     this._outputStructure = new Structure(this.resource, {
-  //       type: STRUCTURE_TYPE.OUTPUT,
-  //       operation: this,
-  //     });
-  //   }
-  //   return this._outputStructure;
-  // }
-
-  // public get resource(): Resource {
-  //   return this.accessPattern.resource;
-  // }
-
-  /*
-  public get service(): Service {
-    return this.resource.service;
-  }
-  */
-
-  /*****************************************************************************
-   *
-   *  TYPESCRIPT HELPERS
-   *
-   ****************************************************************************/
-
-  /*
-  public get tsResponseTypeName() {
-    return this.operationSubType === OPERATION_SUB_TYPE.LIST
-      ? this.service.tsLlistResponseTypeName
-      : this.service.tsResponseTypeName;
-  }
-  */
 }

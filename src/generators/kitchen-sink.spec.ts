@@ -1,11 +1,9 @@
-import { TypeScriptProject } from "projen/lib/typescript";
 import { KitchenSink } from "./kitchen-sink";
-import { DataService } from "../services/data-service";
-import { synthFiles } from "../util/test-util";
+import { synthFiles, testDataService } from "../util/test-util";
 
 describe("Success conditions", () => {
   test("Synth files match", () => {
-    const service = testService();
+    const service = testDataService();
     service.addResource({
       name: "bar",
     });
@@ -18,13 +16,3 @@ describe("Success conditions", () => {
     // console.log(JSON.stringify(fileList, null, 2));
   });
 });
-
-const testService = () => {
-  return new DataService({
-    parent: new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    }),
-    name: "foo",
-  });
-};

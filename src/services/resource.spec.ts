@@ -1,26 +1,29 @@
-import { TypeScriptProject } from "projen/lib/typescript";
-import { DataService } from "./data-service";
 import { Resource } from "./resource";
+import { testDataService } from "../util/test-util";
 
-test("Smoke test", () => {
-  const service = testService();
-  const resource = new Resource(service, { name: "foo" });
-  expect(resource).toBeTruthy();
-});
-
-test("Able to add attribute", () => {
-  const service = testService();
-  const resource = new Resource(service, { name: "foo" });
-  const attribute = resource.addAttribute({ name: "bar" });
-  expect(attribute).toBeTruthy();
-});
-
-const testService = () => {
-  return new DataService({
-    parent: new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    }),
-    name: "foo",
+describe("success conditions", () => {
+  test("Smoke test", () => {
+    const service = testDataService();
+    const resource = new Resource(service, { name: "foo" });
+    expect(resource).toBeTruthy();
   });
-};
+
+  test("Able to add attribute", () => {
+    const service = testDataService();
+    const resource = new Resource(service, { name: "foo" });
+    const attribute = resource.addAttribute({ name: "bar" });
+    expect(attribute).toBeTruthy();
+  });
+});
+
+describe("failure conditions", () => {
+  test("Duplicate resources not allowed", () => {
+    const service = testDataService();
+
+    new Resource(service, { name: "foo" });
+
+    expect(() => {
+      new Resource(service, { name: "foo" });
+    }).toThrow();
+  });
+});

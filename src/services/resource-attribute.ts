@@ -172,11 +172,16 @@ export const VisabilityType = {
 
 export type ResourceAttributeOptions = {
   /**
+   * The resource this attribute belongs to
+   */
+  readonly resource: Resource;
+
+  /**
    * Full long name for this attribute.
    *
    * @example 'phone-number'
    */
-  name: string;
+  readonly name: string;
 
   /**
    * Brief name used when storing data to save space.
@@ -184,21 +189,21 @@ export type ResourceAttributeOptions = {
    * @example 'pn'
    * @default AttributeOptions.name
    */
-  shortName?: string;
+  readonly shortName?: string;
 
   /**
    * Comment lines to add to the Resource.
    *
    * @default []
    */
-  comments?: Array<string>;
+  readonly comments?: Array<string>;
 
   /**
    * What is the type for tis attribute?
    *
    * @default ResourceAttributeType.STRING
    */
-  type?: ValueOf<typeof ResourceAttributeType> | Resource;
+  readonly type?: ValueOf<typeof ResourceAttributeType> | Resource;
 
   /**
    * Type parameter for this structure attribute.
@@ -207,73 +212,102 @@ export type ResourceAttributeOptions = {
    * @example 'T' for MyType<T> generic
    * @example 'Foo' for Array<Foo>
    */
-  typeParameter?: string | Resource;
+  readonly typeParameter?: string | Resource;
 
   /**
    * Is this managed by the end user or the system?
    *
    * @default ManagementType.USER_MANAGED
    */
-  management?: ValueOf<typeof ManagementType>;
+  readonly management?: ValueOf<typeof ManagementType>;
 
   /**
    * Is this value visible to the end user?
    *
    * @default VisabilityType.USER_VISIBLE
    */
-  visibility?: ValueOf<typeof VisabilityType>;
+  readonly visibility?: ValueOf<typeof VisabilityType>;
 
   /**
    * Is this value an identifier for this resource?
    *
    * @default IdentifierType.NONE
    */
-  identifier?: ValueOf<typeof IdentifierType>;
+  readonly identifier?: ValueOf<typeof IdentifierType>;
 
   /**
    * The separator to use when composing this attribute from other attributes.
    *
-   * @default: '#'
+   * @default '#'
    */
-  compositionsSeperator?: string;
+  readonly compositionsSeperator?: string;
 
   /**
    * The generator to use for all operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  generator?: ValueOf<typeof ResourceAttributeGenerator>;
+  readonly generator?: ValueOf<typeof ResourceAttributeGenerator>;
 
   /**
    * The generator to use for create operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  createGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  readonly createGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
 
   /**
    * The generator to use for read operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  readGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  readonly readGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
 
   /**
    * The generator to use for update operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  updateGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  readonly updateGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
 
   /**
    * The generator to use for delete operations
    *
    * @default ResourceAttributeGenerator.NONE
    */
-  deleteGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
+  readonly deleteGenerator?: ValueOf<typeof ResourceAttributeGenerator>;
 };
 
 export class ResourceAttribute extends Component {
+  /**
+   * Returns an attribute by name, or undefined if it doesn't exist
+   */
+  public static byName(
+    resource: Resource,
+    name: string
+  ): ResourceAttribute | undefined {
+    const isDefined = (c: Component): c is ResourceAttribute =>
+      c instanceof ResourceAttribute && c.name === name;
+    return resource.attributes.find(isDefined);
+  }
+
+  /**
+   * Returns an attribute by it's shortname, or undefined if it doesn't exist
+   */
+  public static byShortName(
+    resource: Resource,
+    shortName: string
+  ): ResourceAttribute | undefined {
+    const isDefined = (c: Component): c is ResourceAttribute =>
+      c instanceof ResourceAttribute && c.shortName === shortName;
+    return resource.attributes.find(isDefined);
+  }
+
+  /**
+   * The resource this attribute belongs to
+   */
+  public readonly resource: Resource;
+
   /**
    * Full long name for this attribute.
    *
@@ -386,6 +420,7 @@ export class ResourceAttribute extends Component {
      * Props
      **************************************************************************/
 
+    this.resource = options.resource;
     this.name = paramCase(options.name);
     this.shortName = options.shortName
       ? paramCase(options.shortName)
@@ -419,6 +454,24 @@ export class ResourceAttribute extends Component {
     this.updateGenerator = options.updateGenerator ?? defaultGenerator;
     this.deleteGenerator = options.deleteGenerator ?? defaultGenerator;
 
+    /***************************************************************************
+     * Add to Resource
+     **************************************************************************/
+
+    if (ResourceAttribute.byName(this.resource, this.name)) {
+      throw new Error(
+        `Resource "${this.resource.name}" already has an attribute named "${this.name}"`
+      );
+    }
+
+    if (ResourceAttribute.byShortName(this.resource, this.shortName)) {
+      throw new Error(
+        `Resource "${this.resource.name}" already has an attribute with a shortname of "${this.shortName}"`
+      );
+    }
+
+    this.resource.attributes.push(this);
+
     return this;
   }
 
@@ -430,416 +483,4 @@ export class ResourceAttribute extends Component {
     }
     this.compositionSources.push(a);
   }
-
-  /***************************************************************************
-     *
-     * DEFAULT OPTIONS
-     *
-     * Pull our service defaults, add a default comment if none are otherwise
-     * given, and establish a default keyAccessPattern for storing data in
-     * DynamoDB.
-     *
-
-    **************************************************************************/
-
-  /*s
-    const defaultOptions: Partial<ResourceAttributeOptions> = {
-      comments: [`A ${options.name}.`],
-      type: ResourceAttributeType.STRING,
-      isRequired: false,
-      isPublic: true,
-      isSystem: false,
-      generator: ResourceAttributeGenerator.NONE,
-      generateOn: [],
-      defaultOn: [],
-      outputOn: [],
-      createValidations: [],
-      readValidations: [],
-      updateValidations: [],
-      deleteValidations: [],
-      importValidations: [],
-      sortPosition: resource.attributes.length,
-      compositionsSeperator: resource.options.compositionsSeperator,
-    };
-    */
-
-  /***************************************************************************
-   *
-   * INIT RESOURCE
-   *
-   **************************************************************************/
-
-  // if it's not generated, we need to validate type
-  // if (!this.isGenerated) {
-  //   this.options.createValidations.push(ValidationRule.TYPE);
-  //   this.options.readValidations.push(ValidationRule.TYPE);
-  //   this.options.updateValidations.push(ValidationRule.TYPE);
-  //   this.options.deleteValidations.push(ValidationRule.TYPE);
-  //   this.options.importValidations.push(ValidationRule.TYPE);
-  // }
-
-  // // if it's required, we need to validate as resuired
-  // if (this.options.isRequired) {
-  //   this.options.createValidations.unshift(ValidationRule.REQUIRED);
-  //   this.options.readValidations.unshift(ValidationRule.REQUIRED);
-  //   this.options.updateValidations.unshift(ValidationRule.REQUIRED);
-  //   this.options.deleteValidations.unshift(ValidationRule.REQUIRED);
-  //   this.options.importValidations.unshift(ValidationRule.REQUIRED);
-  // }
-
-  // // decorate comments as needed type
-  // if (this.options.type === ResourceAttributeType.GUID) {
-  //   this.options.comments.push(`@type A GUID string.`);
-  // }
-
-  // it's generated
-  // if (this.isGenerated) {
-  //   this.options.comments.push(
-  //     `@readonly This attribute is managed automatically by the system.`
-  //   );
-  // }
-
-  /***************************************************************************
-   *
-   * GENERATORS
-   *
-   **************************************************************************/
-
-  // this.ts = new TypescriptResourceAttribute(this);
-
-  /*****************************************************************************
-   *
-   * ACCESSORS
-   *
-   ****************************************************************************/
-
-  // public get isRequired(): boolean {
-  //   return this.options.isRequired;
-  // }
-
-  // public get name(): string {
-  //   return this.options.name;
-  // }
-
-  // public get shortName(): string {
-  //   return this.options.shortName;
-  // }
-
-  // public get comments(): string[] {
-  //   return this.options.comments;
-  // }
-
-  // public get type(): ValueOf<typeof ResourceAttributeType> {
-  //   return this.options.type;
-  // }
-
-  // public get isSystem(): boolean {
-  //   return this.options.isSystem;
-  // }
-
-  // public get sortPosition(): number {
-  //   const boost = this.isAccessPatternKey ? 1000 : 0;
-  //   return this.options.sortPosition + boost;
-  // }
-
-  // public get generateOn(): ValueOf<typeof OPERATION_SUB_TYPE>[] {
-  //   return this.options.generateOn;
-  // }
-
-  // public get defaultOn(): OperationDefault[] {
-  //   return this.options.defaultOn;
-  // }
-
-  // public get outputOn(): ValueOf<typeof OPERATION_SUB_TYPE>[] {
-  //   return this.options.outputOn;
-  // }
-
-  // public get compositionsSeperator() {
-  //   return this.options.compositionsSeperator;
-  // }
-
-  // /*****************************************************************************
-  //  *
-  //  * PK and SK HELPERS
-  //  *
-  //  ****************************************************************************/
-
-  // /**
-  //  * Is involved in PK or SK in any way
-  //  */
-  // public get isKeyPart(): boolean {
-  //   return (
-  //     this.isPartitionKey ||
-  //     this.isSortKey ||
-  //     this.isPartitionKeySource ||
-  //     this.isSortKeySource
-  //   );
-  // }
-
-  // public get isPartitionKey(): boolean {
-  //   return this.resource.partitionKey === this;
-  // }
-
-  // public get isSortKey(): boolean {
-  //   return this.resource.sortKey === this;
-  // }
-
-  // /**
-  //  * Is this key park of an access pattern?
-  //  */
-  // public get isAccessPatternKey(): boolean {
-  //   return this.resource.accessPatterns.some((accessPattern) => {
-  //     return (
-  //       accessPattern.pkAttribute.name === this.name ||
-  //       accessPattern.skAttribute.name === this.name
-  //     );
-  //   });
-  // }
-
-  // /**
-  //  * Is this attribute a pk or sk? If so, it's required in all operations
-  //  */
-  // public get isRequiredAccessPatternKey(): boolean {
-  //   return this.isPartitionKey || this.isSortKey;
-  // }
-
-  // /**
-  //  * All other access pattern keys that are not the pk or sk are optional.
-  //  * Is Access Pattern Key
-  //  * Is not the SK or SK
-  //  */
-  // public get isOptionalAccessPatternKey(): boolean {
-  //   return !this.isRequiredAccessPatternKey;
-  // }
-
-  // /*****************************************************************************
-  //  *
-  //  *  PUBLIC vs PRIVATE
-  //  *
-  //  ****************************************************************************/
-
-  // public get isPublic(): boolean {
-  //   return this.options.isPublic;
-  // }
-
-  // public get isPrivate(): boolean {
-  //   return !this.isPublic;
-  // }
-
-  // /*****************************************************************************
-  //  *
-  //  *  ACCESS PATTERN HELPERS
-  //  *
-  //  ****************************************************************************/
-
-  // public get isPartitionKeySource(): boolean {
-  //   return this.keyAccessPattern.pkAttribute.compositionSources.some(
-  //     (source) => {
-  //       return source.name === this.name;
-  //     }
-  //   );
-  // }
-
-  // public get isSortKeySource(): boolean {
-  //   return this.keyAccessPattern.skAttribute.compositionSources.some(
-  //     (source) => {
-  //       return source.name === this.name;
-  //     }
-  //   );
-  // }
-
-  // public get keyAccessPattern(): AccessPattern {
-  //   return this.resource.keyAccessPattern;
-  // }
-
-  // public get lookupAccessPattern(): AccessPattern {
-  //   return this.resource.lookupAccessPattern;
-  // }
-
-  // /*****************************************************************************
-  //  *
-  //  *  GENERATOR HELPERS
-  //  *
-  //  ****************************************************************************/
-
-  // public get isGenerated(): boolean {
-  //   return this.generator !== ResourceAttributeGenerator.NONE;
-  // }
-
-  // public get generator(): ValueOf<typeof ResourceAttributeGenerator> {
-  //   return this.options.generator;
-  // }
-
-  // public isGeneratedOn(operation?: Operation): boolean {
-  //   if (!operation) {
-  //     return false;
-  //   }
-
-  //   return this.generateOn.some((g) => g === operation.operationSubType);
-  // }
-
-  // /*****************************************************************************
-  //  *
-  //  *  DEFAULT HELPERS
-  //  *
-  //  ****************************************************************************/
-
-  // public hasDefaultFor(operation?: Operation): boolean {
-  //   if (!operation) {
-  //     return false;
-  //   }
-  //   return this.defaultOn.some(
-  //     (d) => d.operationSubType === operation.operationSubType
-  //   );
-  // }
-
-  // public defaultFor(operation?: Operation): string {
-  //   if (!operation || !this.hasDefaultFor(operation)) {
-  //     return "";
-  //   }
-
-  //   const foundDefault = this.defaultOn.find(
-  //     (g) => g.operationSubType === operation.operationSubType
-  //   );
-
-  //   return foundDefault ? foundDefault.default : "";
-  // }
-
-  // /*****************************************************************************
-  //  *
-  //  *  OUTPUT HELPERS
-  //  *
-  //  ****************************************************************************/
-
-  // public isOutputOn(operation?: Operation): boolean {
-  //   if (this.outputOn.length === 0 || !operation) {
-  //     return true;
-  //   }
-  //   return this.outputOn.some((g) => g === operation.operationSubType);
-  // }
-
-  // public get isData(): boolean {
-  //   return this.generator === ResourceAttributeGenerator.NONE;
-  // }
-
-  // public get isAutoIncrementGenerator(): boolean {
-  //   return (
-  //     this.isGenerated &&
-  //     this.generator === ResourceAttributeGenerator.AUTO_INCREMENT
-  //   );
-  // }
-
-  // public get isGuidGenerator(): boolean {
-  //   return (
-  //     this.isGenerated && this.generator === ResourceAttributeGenerator.GUID
-  //   );
-  // }
-
-  // public get isDateTimeGenerator(): boolean {
-  //   return (
-  //     this.isGenerated &&
-  //     this.generator === ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP
-  //   );
-  // }
-
-  // public get isTypeGenerator(): boolean {
-  //   return (
-  //     this.isGenerated && this.generator === ResourceAttributeGenerator.TYPE
-  //   );
-  // }
-
-  // public get isVersionGenerator(): boolean {
-  //   return (
-  //     this.isGenerated &&
-  //     this.generator === ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP
-  //   );
-  // }
-
-  // public get isComposableGenerator(): boolean {
-  //   return (
-  //     this.isGenerated &&
-  //     this.generator === ResourceAttributeGenerator.COMPOSITION
-  //   );
-  // }
-
-  // /*****************************************************************************
-  //  *
-  //  *  TYPESCRIPT HELPERS
-  //  *
-  //  ****************************************************************************/
-
-  // public get tsAttributeName() {
-  //   return formatStringByNamingStrategy(
-  //     this.name,
-  //     this.resource.namingStrategy.ts.attributeName
-  //   );
-  // }
-
-  // public get tsAttributeShortName() {
-  //   return formatStringByNamingStrategy(
-  //     this.shortName,
-  //     this.resource.namingStrategy.ts.attributeName
-  //   );
-  // }
-
-  // public get tsRequired() {
-  //   return this.isRequired ? "" : "?";
-  // }
-
-  // public get tsType() {
-  //   switch (this.type) {
-  //     case ResourceAttributeType.GUID:
-  //     case ResourceAttributeType.STRING:
-  //     case ResourceAttributeType.EMAIL:
-  //     case ResourceAttributeType.PHONE:
-  //     case ResourceAttributeType.URL:
-  //     case ResourceAttributeType.DATE:
-  //     case ResourceAttributeType.TIME:
-  //     case ResourceAttributeType.DATE_TIME:
-  //     case ResourceAttributeType.JSON:
-  //     case ResourceAttributeType.IPADDRESS:
-  //       return "string";
-  //     case ResourceAttributeType.INT:
-  //     case ResourceAttributeType.FLOAT:
-  //     case ResourceAttributeType.TIMESTAMP:
-  //     case ResourceAttributeType.COUNT:
-  //     case ResourceAttributeType.AVERAGE:
-  //     case ResourceAttributeType.SUM:
-  //       return "number";
-  //     case ResourceAttributeType.BOOLEAN:
-  //       return "boolean";
-  //     default:
-  //       throw new Error(`Unknown attribute type: ${this.type}`);
-  //   }
-  // }
-
-  // public getTsGenerationSource(operation: Operation) {
-  //   const generator = this.generator;
-  //   switch (generator) {
-  //     case ResourceAttributeGenerator.NONE:
-  //       throw new Error("No generator! Did you call isGenerated first?");
-  //     case ResourceAttributeGenerator.GUID:
-  //       return "uuidv4()";
-  //     case ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP:
-  //       return "new Date().toISOString()";
-  //     case ResourceAttributeGenerator.TYPE:
-  //       return `"${this.resource.name}"`;
-  //     case ResourceAttributeGenerator.VERSION_DATE_TIME_STAMP:
-  //       if (this.hasDefaultFor(operation)) {
-  //         return `"${this.defaultFor(operation).toLowerCase()}"`;
-  //       } else {
-  //         return "new Date().toISOString()";
-  //       }
-  //     case ResourceAttributeGenerator.COMPOSITION:
-  //       return this.compositionSources.length === 0
-  //         ? undefined
-  //         : this.compositionSources
-  //             .map((s) => {
-  //               return `${s.shortName}.toLowerCase()`;
-  //             })
-  //             .join(` + "${this.compositionsSeperator}" + `);
-  //     default:
-  //       throw new Error(`Unknown generator: ${generator}`);
-  //   }
-  // }
 }

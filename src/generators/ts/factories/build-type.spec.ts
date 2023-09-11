@@ -1,22 +1,20 @@
-import { TypeScriptProject } from "projen/lib/typescript";
 import { buildType } from "./build-type";
 import { printNodes } from "./print-nodes";
 import { ResourceAttributeType } from "../../../services";
-import { DataService } from "../../../services/data-service";
 import { Structure } from "../../../services/structure";
+import { testDataService, testStructure } from "../../../util/test-util";
 
 test("Smoke test", () => {
-  const service = testService();
-  const structure = new Structure(service, {
-    name: "MyType",
-  });
-  const type = buildType({ service, structure });
+  const structure = testStructure();
+  const type = buildType({ service: structure.service, structure });
   const content = printNodes([type]);
+  expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
+  //console.log(content);
 });
 
 test("Generic and type param support", () => {
-  const service = testService();
+  const service = testDataService();
   const structure = new Structure(service, {
     name: "MyType",
     typeParameter: "T",
@@ -35,14 +33,16 @@ test("Generic and type param support", () => {
       },
     ],
   });
+
   const type = buildType({ service, structure });
   const content = printNodes([type]);
+  expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
-  // console.log(content);
+  //console.log(content);
 });
 
 test("Optional and Required work", () => {
-  const service = testService();
+  const service = testDataService();
   const structure = new Structure(service, {
     name: "MyType",
     attributeOptions: [
@@ -58,11 +58,12 @@ test("Optional and Required work", () => {
   });
   const type = buildType({ service, structure });
   const content = printNodes([type]);
+  expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
 });
 
 test("All attribute types should match snapshot", () => {
-  const service = testService();
+  const service = testDataService();
   const attributeOptions = Object.entries(ResourceAttributeType).map(
     ([key, value]) => {
       return { name: key, type: value };
@@ -75,17 +76,8 @@ test("All attribute types should match snapshot", () => {
 
   const type = buildType({ service, structure });
   const content = printNodes([type]);
+  expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
 
   // console.log(content);
 });
-
-const testService = () => {
-  return new DataService({
-    parent: new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    }),
-    name: "foo",
-  });
-};
