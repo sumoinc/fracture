@@ -64,9 +64,14 @@ export class DataService extends Service {
   public readonly requestStructure: Structure;
 
   /**
-   * The standard response structure for this resource type.
+   * The standard generic response structure for this resource type.
    */
   public readonly responseStructure: Structure;
+
+  /**
+   * The standard generic list request structure for this resource type.
+   */
+  public readonly listRequestStructure: Structure;
 
   /**
    * The standard generic list response structure for this resource type.
@@ -143,6 +148,25 @@ export class DataService extends Service {
         {
           name: `status`,
           type: ResourceAttributeType.INT,
+        },
+      ],
+    });
+
+    this.listRequestStructure = this.addStructure({
+      name: `list-request`,
+      typeParameter: `T`,
+      attributeOptions: [
+        {
+          name: `indexTerm`,
+          comments: [
+            `A search string to filter the list by. `,
+            `Will match starting string in index text. Case insensitive.`,
+          ],
+          type: ResourceAttributeType.STRING,
+        },
+        {
+          name: `nextToken`,
+          type: ResourceAttributeType.STRING,
         },
       ],
     });
