@@ -56,6 +56,19 @@ describe("success conditions", () => {
   });
 });
 
+test("Able to override relationship names related array", () => {
+  const service = testDataService();
+  const fooResource = new Resource(service, { name: "foo" });
+  const barResource = new Resource(service, { name: "bar" });
+  fooResource.addArrayOf(barResource, { name: "bazzes", shortName: "z" });
+
+  new Types(service);
+  const content = synthFile(service, "src/types.ts");
+  expect(content).toBeTruthy();
+  expect(content).toMatchSnapshot();
+  //console.log(content);
+});
+
 describe("failure conditions", () => {
   test("Duplicate resources not allowed", () => {
     const service = testDataService();

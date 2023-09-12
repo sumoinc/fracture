@@ -403,33 +403,45 @@ export class Resource extends Component {
     return operation;
   }
 
-  public addArrayOf(resource: Resource) {
+  public addArrayOf(
+    resource: Resource,
+    options: Partial<ResourceAttributeOptions> = {}
+  ) {
     const attribute = this.addAttribute({
       name: resource.pluralName,
       shortName: `${resource.shortName}s`,
       type: ResourceAttributeType.ARRAY,
       typeParameter: resource.name,
       comments: [`Array of ${resource.name} records.`],
+      ...options,
     });
     return attribute;
   }
 
-  public addMapOf(resource: Resource) {
+  public addMapOf(
+    resource: Resource,
+    options: Partial<ResourceAttributeOptions> = {}
+  ) {
     const attribute = this.addAttribute({
       name: resource.pluralName,
       shortName: `${resource.shortName}s`,
       type: ResourceAttributeType.MAP,
       typeParameter: resource.name,
       comments: [`Map of ${resource.name} records.`],
+      ...options,
     });
     return attribute;
   }
 
-  public addOneOf(resource: Resource) {
+  public addOneOf(
+    resource: Resource,
+    options: Partial<ResourceAttributeOptions> = {}
+  ) {
     const attribute = this.addAttribute({
       name: resource.name,
       shortName: resource.shortName,
       type: resource,
+      ...options,
     });
     return attribute;
   }
