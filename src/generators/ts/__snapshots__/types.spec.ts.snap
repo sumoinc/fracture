@@ -108,10 +108,7 @@ export type UserData = {
     ln: string;
 };
 
-export type CreateUserInput = {
-    firstName: string;
-    lastName: string;
-};
+export type CreateUserInput = {};
 
 export type CreateUserOutput = {
     /**
@@ -175,8 +172,6 @@ export type UpdateUserInput = {
      * Identifier for this record.
     */
     id: string;
-    firstName: string;
-    lastName: string;
 };
 
 export type UpdateUserOutput = {

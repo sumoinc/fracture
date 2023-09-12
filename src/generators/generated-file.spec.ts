@@ -1,17 +1,12 @@
-import { TypeScriptProject } from "projen/lib/typescript";
 import { GeneratedFile } from "./generated-file";
-import { synthFile } from "../util/test-util";
+import { synthFile, testDataService } from "../util/test-util";
 
-describe("success conditions", () => {
+describe("Success conditions", () => {
   test("Smoke test", () => {
-    const project = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
+    const service = testDataService();
+    new GeneratedFile(service, "foo.txt").addLine("Hello, World!");
 
-    new GeneratedFile(project, "foo.txt").addLine("Hello, World!");
-
-    const content = synthFile(project, "src/foo.txt");
+    const content = synthFile(service, "src/foo.txt");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
     //console.log(content);
