@@ -4,9 +4,7 @@ import {
 } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { NetlifyEnvironment } from "./src/environments/netlify-environment";
-import { KitchenSink } from "./src/generators/kitchen-sink";
 import { VsCodeConfiguration } from "./src/projen/vscode";
-import { DataService } from "./src/services/data-service";
 import { VitePressSite } from "./src/sites/vitepress/vitepress-site";
 
 const authorName = "Cameron Childress";
