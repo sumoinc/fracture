@@ -120,6 +120,7 @@ site.deploy({
  * AWS SERVICE
  ******************************************************************************/
 
+/*
 const service = new DataService({
   parent: project,
   name: "my-service",
@@ -135,9 +136,9 @@ const service = new DataService({
     },
   ],
 });
-
+*/
 // kitchen sink test / demo
-new KitchenSink(service);
+// new KitchenSink(service);
 
 /*
 const awsTarget = new AwsEnvironment(project, {
