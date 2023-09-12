@@ -1,5 +1,6 @@
 import { Resource } from "./resource";
-import { testDataService } from "../util/test-util";
+import { Types } from "../generators";
+import { synthFile, testDataService } from "../util/test-util";
 
 describe("success conditions", () => {
   test("Smoke test", () => {
@@ -13,6 +14,45 @@ describe("success conditions", () => {
     const resource = new Resource(service, { name: "foo" });
     const attribute = resource.addAttribute({ name: "bar" });
     expect(attribute).toBeTruthy();
+  });
+
+  test("Able to add related array", () => {
+    const service = testDataService();
+    const fooResource = new Resource(service, { name: "foo" });
+    const barResource = new Resource(service, { name: "bar" });
+    fooResource.addArrayOf(barResource);
+
+    new Types(service);
+    const content = synthFile(service, "src/types.ts");
+    expect(content).toBeTruthy();
+    expect(content).toMatchSnapshot();
+    //console.log(content);
+  });
+
+  test("Able to add related map", () => {
+    const service = testDataService();
+    const fooResource = new Resource(service, { name: "foo" });
+    const barResource = new Resource(service, { name: "bar" });
+    fooResource.addMapOf(barResource);
+
+    new Types(service);
+    const content = synthFile(service, "src/types.ts");
+    expect(content).toBeTruthy();
+    expect(content).toMatchSnapshot();
+    // console.log(content);
+  });
+
+  test("Able to add related resource", () => {
+    const service = testDataService();
+    const fooResource = new Resource(service, { name: "foo" });
+    const barResource = new Resource(service, { name: "bar" });
+    fooResource.addOneOf(barResource);
+
+    new Types(service);
+    const content = synthFile(service, "src/types.ts");
+    expect(content).toBeTruthy();
+    expect(content).toMatchSnapshot();
+    //console.log(content);
   });
 });
 

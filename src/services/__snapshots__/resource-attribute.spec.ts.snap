@@ -108,10 +108,7 @@ export type AddressData = {
     city: string;
 };
 
-export type CreateAddressInput = {
-    street: string;
-    city: string;
-};
+export type CreateAddressInput = {};
 
 export type CreateAddressOutput = {
     /**
@@ -175,8 +172,6 @@ export type UpdateAddressInput = {
      * Identifier for this record.
     */
     id: string;
-    street: string;
-    city: string;
 };
 
 export type UpdateAddressOutput = {
@@ -315,13 +310,7 @@ export type UserData = {
     addressMap: Record<string, Address>;
 };
 
-export type CreateUserInput = {
-    firstName: string;
-    lastName: string;
-    primaryAddress: Address;
-    addresses: Array<Address>;
-    addressMap: Record<string, Address>;
-};
+export type CreateUserInput = {};
 
 export type CreateUserOutput = {
     /**
@@ -391,11 +380,6 @@ export type UpdateUserInput = {
      * Identifier for this record.
     */
     id: string;
-    firstName: string;
-    lastName: string;
-    primaryAddress: Address;
-    addresses: Array<Address>;
-    addressMap: Record<string, Address>;
 };
 
 export type UpdateUserOutput = {

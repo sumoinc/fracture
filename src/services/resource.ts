@@ -13,6 +13,7 @@ import {
   ResourceAttribute,
   ResourceAttributeGenerator,
   ResourceAttributeOptions,
+  ResourceAttributeType,
   VisabilityType,
 } from "./resource-attribute";
 import { Structure, StructureOptions } from "./structure";
@@ -371,7 +372,12 @@ export class Resource extends Component {
       }
 
       // create / update get all user managed
-      if (attribute.management === ManagementType.USER_MANAGED) {
+      if (
+        attribute.management === ManagementType.USER_MANAGED &&
+        attribute.type !== ResourceAttributeType.ARRAY &&
+        attribute.type !== ResourceAttributeType.MAP &&
+        attribute.type === typeof ResourceAttributeType
+      ) {
         this.createOperation.addInputAttribute(attribute);
         this.updateOperation.addInputAttribute(attribute);
       }
@@ -395,6 +401,37 @@ export class Resource extends Component {
     });
     this.operations.push(operation);
     return operation;
+  }
+
+  public addArrayOf(resource: Resource) {
+    const attribute = this.addAttribute({
+      name: resource.pluralName,
+      shortName: `${resource.shortName}s`,
+      type: ResourceAttributeType.ARRAY,
+      typeParameter: resource.name,
+      comments: [`Array of ${resource.name} records.`],
+    });
+    return attribute;
+  }
+
+  public addMapOf(resource: Resource) {
+    const attribute = this.addAttribute({
+      name: resource.pluralName,
+      shortName: `${resource.shortName}s`,
+      type: ResourceAttributeType.MAP,
+      typeParameter: resource.name,
+      comments: [`Map of ${resource.name} records.`],
+    });
+    return attribute;
+  }
+
+  public addOneOf(resource: Resource) {
+    const attribute = this.addAttribute({
+      name: resource.name,
+      shortName: resource.shortName,
+      type: resource,
+    });
+    return attribute;
   }
 
   public get service() {
