@@ -59,14 +59,14 @@
   },
   "peerDependencies": {
     "@aws-sdk/smithy-client": "^3.370.0",
-    "@aws-sdk/types": "^3.408.0"
+    "@aws-sdk/types": "^3.410.0"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.409.0",
-    "@aws-sdk/lib-dynamodb": "^3.409.0",
-    "@aws-sdk/util-dynamodb": "^3.409.0",
+    "@aws-sdk/client-dynamodb": "^3.410.0",
+    "@aws-sdk/lib-dynamodb": "^3.410.0",
+    "@aws-sdk/util-dynamodb": "^3.410.0",
     "@faker-js/faker": "^8.0.2",
-    "@types/aws-lambda": "^8.10.119",
+    "@types/aws-lambda": "^8.10.120",
     "change-case": "^4.1.2",
     "projen": "^0.73.15",
     "type-fest": "^2.19.0",
