@@ -8,6 +8,7 @@ import {
   ResourceAttribute,
   Structure,
 } from "../services";
+import { NuxtJsSite } from "../sites";
 
 export const TEST_ACCOUNT_ONE = "000000000000";
 export const TEST_ORG_ONE = "org-123456";
@@ -57,7 +58,6 @@ export const testDataService = () => {
   return new DataService({
     parent: new FractureProject({
       name: "my-project",
-      defaultReleaseBranch: "main",
     }),
     name: "my-service",
   });
@@ -95,4 +95,16 @@ export const testStructure = () => {
 export const testOperation = () => {
   const resource = testResource();
   return new Operation(resource.service, { name: "my-operation", resource });
+};
+
+/**
+ * Build a nuxt site to test with
+ */
+export const testNuxtJsSite = () => {
+  return new NuxtJsSite({
+    parent: new FractureProject({
+      name: "my-project",
+    }),
+    name: "my-site",
+  });
 };
