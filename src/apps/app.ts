@@ -62,6 +62,25 @@ export class App extends AwsCdkTypeScriptApp {
 
     // init some common things we need here
     fractureProjectInit(this);
+
+    /**
+     * Add build tasks to turbo's pipeline.
+     */
+    const turbo = TurboRepo.of(this.parent);
+    turbo.taskSets.push({
+      name: this.name,
+      buildTask: {
+        "synth:silent": {
+          cache: true,
+          outputs: ["cdk.out"],
+        },
+      },
+      testTask: {
+        test: {
+          cache: true,
+        },
+      },
+    });
   }
 
   public deploy(
