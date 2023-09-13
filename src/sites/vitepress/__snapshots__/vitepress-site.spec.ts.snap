@@ -1514,9 +1514,6 @@ Object {
       "dependsOn": Array [
         "my-site#docs:build",
       ],
-      "docs:test": Object {
-        "cache": true,
-      },
       "outputMode": "new-only",
     },
     "turbo:build": Object {

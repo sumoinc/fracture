@@ -903,8 +903,17 @@ Object {
         "^eslint",
       ],
     },
+    "my-site#nuxt:generate": Object {
+      "cache": true,
+      "outputMode": "new-only",
+      "outputs": Array [
+        "dist/**",
+      ],
+    },
     "turbo:build": Object {
-      "dependsOn": Array [],
+      "dependsOn": Array [
+        "my-site#nuxt:generate",
+      ],
       "outputMode": "new-only",
     },
   },

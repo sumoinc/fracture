@@ -75,7 +75,7 @@ describe("validate generated project files", () => {
     const content = synthFile(testNuxtJsSite().parent, "turbo.json");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
-    console.log(JSON.stringify(content, null, 2));
+    //console.log(JSON.stringify(content, null, 2));
   });
 
   test(".github/workflows/deploy.yml", () => {
