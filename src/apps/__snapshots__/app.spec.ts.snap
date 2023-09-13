@@ -211,8 +211,25 @@ Object {
         "^eslint",
       ],
     },
+    "my-app#synth:silent": Object {
+      "cache": true,
+      "outputMode": "new-only",
+      "outputs": Array [
+        "cdk.out",
+      ],
+    },
+    "my-app#test": Object {
+      "cache": true,
+      "dependsOn": Array [
+        "my-app#synth:silent",
+      ],
+      "outputMode": "new-only",
+    },
     "turbo:build": Object {
-      "dependsOn": Array [],
+      "dependsOn": Array [
+        "my-app#synth:silent",
+        "my-app#test",
+      ],
       "outputMode": "new-only",
     },
   },

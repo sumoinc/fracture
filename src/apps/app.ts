@@ -66,7 +66,6 @@ export class App extends AwsCdkTypeScriptApp {
     /**
      * Add build tasks to turbo's pipeline.
      */
-    /*
     const turbo = TurboRepo.of(this.parent);
     turbo.taskSets.push({
       name: this.name,
@@ -81,7 +80,7 @@ export class App extends AwsCdkTypeScriptApp {
           cache: true,
         },
       },
-    });*/
+    });
   }
 
   public deploy(
