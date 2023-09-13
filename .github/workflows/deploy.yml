@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency: build
     env:
       CI: "true"
     steps:
@@ -39,13 +40,13 @@ jobs:
         with:
           name: build-artifact-7a1a4772
           path: sites/docs/.vitepress/dist
-  deploy-main:
-    name: Deploy main
+  deploy-docs-main-netlify:
+    name: Deploy docs main netlify
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    concurrency: deploy-netlify
+    concurrency: deploy-docs-main-netlify
     env:
       CI: "true"
     if: startsWith( github.ref, 'refs/heads/main' )

@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency: build
     env:
       CI: \\"true\\"
     steps:
@@ -49,7 +50,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    concurrency: deploy-us-east
+    concurrency: deploy-my-site-feature-us-east
     env:
       CI: \\"true\\"
     if: startsWith( github.ref, 'refs/heads/feature' )

@@ -46,6 +46,7 @@ export class BuildJob extends WorkflowJob {
       env: {
         CI: "true",
       },
+      concurrency: this.jobId,
       permissions: {
         contents: JobPermission.WRITE,
       },

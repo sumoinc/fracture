@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency: build
     env:
       CI: \\"true\\"
     steps:
@@ -45,6 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency: build
     env:
       CI: \\"true\\"
     steps:
@@ -76,7 +78,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    concurrency: deploy-my-environment
+    concurrency: deploy-my-app-main-my-environment
     env:
       CI: \\"true\\"
     if: startsWith( github.ref, 'refs/heads/main' )

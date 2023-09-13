@@ -2,6 +2,7 @@
 
 exports[`success conditions Smoke test 1`] = `
 Object {
+  "concurrency": "build",
   "env": Object {
     "CI": "true",
   },
@@ -40,6 +41,7 @@ Object {
 
 exports[`success conditions With two Deploy artifacts 1`] = `
 Object {
+  "concurrency": "build",
   "env": Object {
     "CI": "true",
   },
