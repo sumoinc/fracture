@@ -145,33 +145,6 @@ export class TurboRepo extends Component {
         });
       }
 
-      /*
-      const buildTask = taskSet.buildTask ?? [];
-      const testTask = taskSet.testTask ?? [];
-
-      // script names
-      const buildScript = Object.keys(buildTask).join();
-      const testScript = Object.keys(testTask).join();
-
-      // set build defaults
-      acc[`${taskSet.name}#${buildScript}`] = {
-        outputMode: "new-only",
-        cache: true,
-        //...buildTask[buildScript],
-      };
-
-      // set test defaults, add build as dependancy
-      acc[`${taskSet.name}#${testScript}`] = {
-        outputMode: "new-only",
-        cache: true,
-        ...taskSet.testTask,
-        dependsOn: [
-          `${taskSet.name}#${buildScript}`,
-          //...(testTask[testScript].dependsOn ?? []),
-        ],
-      };
-      */
-
       return { ...acc, ...derivedTasks };
     }, {} as Record<string, TurboTask>);
 
@@ -189,27 +162,6 @@ export class TurboRepo extends Component {
             outputMode: "new-only",
           },
           ...tasks,
-
-          // ["site:build"]: {
-          //   dependsOn: ["^site:build"],
-          //   outputs: [".vitepress/dist/**"],
-          //   outputMode: "new-only",
-          // },
-          // synth: {
-          //   dependsOn: ["^synth"],
-          //   outputs: ["cdk-out/**"],
-          //   outputMode: "new-only",
-          // },
-          // ["synth:silent"]: {
-          //   dependsOn: ["^synth:silent"],
-          //   outputs: ["cdk-out/**"],
-          //   outputMode: "new-only",
-          // },
-          // test: {
-          //   dependsOn: ["^test"],
-          //   outputs: ["coverage**", "test-reports/**", "**/__snapshots__/**"],
-          //   outputMode: "new-only",
-          // },
         },
       },
     });
