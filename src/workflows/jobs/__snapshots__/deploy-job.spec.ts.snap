@@ -7,7 +7,7 @@ Object {
     "CI": "true",
   },
   "if": "startsWith( github.ref, 'refs/heads/main' )",
-  "name": "Deploy my-app from main branch to my-environment environment",
+  "name": "Deploy my-app main my-environment",
   "needs": Array [
     "build",
   ],
@@ -64,7 +64,7 @@ Object {
     "CI": "true",
   },
   "if": "startsWith( github.ref, 'refs/heads/main' )",
-  "name": "Deploy App One from main branch to my-environment environment",
+  "name": "Deploy App One main my-environment",
   "needs": Array [
     "build",
   ],
@@ -121,10 +121,10 @@ Object {
     "CI": "true",
   },
   "if": "startsWith( github.ref, 'refs/heads/main' )",
-  "name": "Deploy App Two from main branch to my-environment environment",
+  "name": "Deploy App Two main my-environment",
   "needs": Array [
     "build",
-    "deploy-app-one-from-main-branch-to-my-environment-environment",
+    "deploy-app-one-main-my-environment",
   ],
   "permissions": Object {
     "contents": "read",

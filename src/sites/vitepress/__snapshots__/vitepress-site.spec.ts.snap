@@ -195,8 +195,8 @@ jobs:
         with:
           name: build-artifact-e3157ffc
           path: sites/my-site/.vitepress/dist
-  deploy-my-site-from-feature-branch-to-us-east-environment:
-    name: Deploy my-site from feature branch to us-east environment
+  deploy-my-site-feature-us-east:
+    name: Deploy my-site feature us-east
     needs: build
     runs-on: ubuntu-latest
     permissions:

@@ -89,7 +89,7 @@ export class DeployJob extends WorkflowJob {
     options: DeployJobOptions
   ) {
     const branchPrefix = options.branchPrefix ?? "main";
-    const name = `Deploy ${options.appName} from ${branchPrefix} branch to ${options.environment.name} environment`;
+    const name = `Deploy ${options.appName} ${branchPrefix} ${options.environment.name}`;
     const jobId = options.jobId ?? paramCase(name);
 
     super(project, {

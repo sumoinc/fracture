@@ -67,14 +67,17 @@ export class App extends AwsCdkTypeScriptApp {
   public deploy(
     options: Pick<DeployJobOptions, "branchPrefix" | "environment">
   ) {
+    const branchPrefix = options.branchPrefix ?? "main";
     // add to deployment workflow
     return Workflow.deploy(this.parent).addDeployJob({
       ...options,
+      branchPrefix,
       appName: this.name,
       deploySteps: [
         {
           name: "deploy",
-          run: `cdk deploy --require-approval never`,
+          run: `npx aws-cdk deploy --require-approval never --app ${this.artifactsDirectory} *-${branchPrefix}-${options.environment.name}`,
+          // inlineScript: $(PACKAGE_MANAGER.PACKAGE_MANAGER_TYPE) cdk deploy --require-approval never --app 'cdk.out/${{ parameters.target_environment }}' ${{ parameters.cdk_stack_names }}
         },
       ],
       artifactsDirectory: this.artifactsDirectory,
