@@ -83,6 +83,6 @@ describe("validate generated project files", () => {
     const content = synthFile(nuxtSite.parent, `.github/workflows/deploy.yml`);
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
-    console.log(content);
+    //console.log(content);
   });
 });

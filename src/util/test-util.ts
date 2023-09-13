@@ -8,7 +8,7 @@ import {
   ResourceAttribute,
   Structure,
 } from "../services";
-import { NuxtJsSite } from "../sites";
+import { NuxtJsSite, VitePressSite } from "../sites";
 
 export const TEST_ACCOUNT_ONE = "000000000000";
 export const TEST_ORG_ONE = "org-123456";
@@ -102,6 +102,18 @@ export const testOperation = () => {
  */
 export const testNuxtJsSite = () => {
   return new NuxtJsSite({
+    parent: new FractureProject({
+      name: "my-project",
+    }),
+    name: "my-site",
+  });
+};
+
+/**
+ * Build a vitepress site to test with
+ */
+export const testVitePressSite = () => {
+  return new VitePressSite({
     parent: new FractureProject({
       name: "my-project",
     }),
