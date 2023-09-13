@@ -30,8 +30,8 @@ export type TurboTaskSet = {
    * Name found in sub-project's package file.
    */
   name: string;
-  buildTask: Record<string, TurboTask>;
-  testTask: Record<string, TurboTask>;
+  buildTask?: Record<string, TurboTask>;
+  testTask?: Record<string, TurboTask>;
 };
 
 export class TurboRepo extends Component {
@@ -118,17 +118,46 @@ export class TurboRepo extends Component {
   }
 
   preSynthesize(): void {
-    // build tasks for sub projects
     const tasks = this.taskSets.reduce((acc, taskSet) => {
+      // derived tasks built in this loop
+      const derivedTasks: Record<string, TurboTask> = {};
+
+      // build tasks for sub projects, if given
+      if (taskSet.buildTask) {
+        Object.entries(taskSet.buildTask).forEach(([script, task]) => {
+          derivedTasks[`${taskSet.name}#${script}`] = {
+            outputMode: "new-only",
+            cache: true,
+            ...task,
+          };
+        });
+      }
+      // test tasks for sub projects, if given
+      if (taskSet.testTask) {
+        const buildTasks = Object.keys(derivedTasks);
+        Object.entries(taskSet.testTask).forEach(([script, task]) => {
+          derivedTasks[`${taskSet.name}#${script}`] = {
+            outputMode: "new-only",
+            cache: true,
+            ...task,
+            dependsOn: [...buildTasks, ...(task.dependsOn ?? [])],
+          };
+        });
+      }
+
+      /*
+      const buildTask = taskSet.buildTask ?? [];
+      const testTask = taskSet.testTask ?? [];
+
       // script names
-      const buildScript = Object.keys(taskSet.buildTask).join();
-      const testScript = Object.keys(taskSet.testTask).join();
+      const buildScript = Object.keys(buildTask).join();
+      const testScript = Object.keys(testTask).join();
 
       // set build defaults
       acc[`${taskSet.name}#${buildScript}`] = {
         outputMode: "new-only",
         cache: true,
-        ...taskSet.buildTask[buildScript],
+        //...buildTask[buildScript],
       };
 
       // set test defaults, add build as dependancy
@@ -138,11 +167,12 @@ export class TurboRepo extends Component {
         ...taskSet.testTask,
         dependsOn: [
           `${taskSet.name}#${buildScript}`,
-          ...(taskSet.testTask[testScript].dependsOn ?? []),
+          //...(testTask[testScript].dependsOn ?? []),
         ],
       };
+      */
 
-      return acc;
+      return { ...acc, ...derivedTasks };
     }, {} as Record<string, TurboTask>);
 
     // turbo config file, run everything for now, might limit what runs later

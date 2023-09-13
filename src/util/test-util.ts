@@ -54,11 +54,18 @@ export const synthFile = (project: Project, filepath: string): string => {
 /**
  * Builds a simple data service as a test harness
  */
+export const testFractureProject = () => {
+  return new FractureProject({
+    name: "my-project",
+  });
+};
+
+/**
+ * Builds a simple data service as a test harness
+ */
 export const testDataService = () => {
   return new DataService({
-    parent: new FractureProject({
-      name: "my-project",
-    }),
+    parent: testFractureProject(),
     name: "my-service",
   });
 };
@@ -102,9 +109,7 @@ export const testOperation = () => {
  */
 export const testNuxtJsSite = () => {
   return new NuxtJsSite({
-    parent: new FractureProject({
-      name: "my-project",
-    }),
+    parent: testFractureProject(),
     name: "my-site",
   });
 };
@@ -114,9 +119,7 @@ export const testNuxtJsSite = () => {
  */
 export const testVitePressSite = () => {
   return new VitePressSite({
-    parent: new FractureProject({
-      name: "my-project",
-    }),
+    parent: testFractureProject(),
     name: "my-site",
   });
 };

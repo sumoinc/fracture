@@ -1,5 +1,6 @@
 import { paramCase } from "change-case";
 import { JsonFile, SampleDir, SampleFile } from "projen";
+import { TurboRepo } from "../../turborepo";
 import { DeployJobOptions, Workflow } from "../../workflows";
 import { Site, SiteOptions } from "../site";
 
@@ -108,12 +109,25 @@ export class NuxtJsSite extends Site {
 
     this.addDeps("@heroicons/vue", "@headlessui/vue");
 
-    // nuxt build
+    // add nuxt tasks
     this.addTask("nuxt:build").exec("nuxt build");
     this.addTask("nuxt:dev").exec("nuxt dev");
     this.addTask("nuxt:generate").exec("nuxt generate");
     this.addTask("nuxt:preview").exec("nuxt preview");
     this.addTask("nuxt:postinstall").exec("nuxt prepare");
+
+    /**
+     * Add build tasks to turbo's pipeline.
+     */
+    const turbo = TurboRepo.of(this.parent);
+    turbo.taskSets.push({
+      name: this.name,
+      buildTask: {
+        "nuxt:generate": {
+          outputs: ["dist/**"],
+        },
+      },
+    });
 
     /***************************************************************************
      * Initial Files

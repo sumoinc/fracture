@@ -64,6 +64,20 @@ describe("validate generated project files", () => {
     //console.log(content);
   });
 
+  test(".projen/tasks.json", () => {
+    const content = synthFile(testNuxtJsSite().parent, ".projen/tasks.json");
+    expect(content).toBeTruthy();
+    expect(content).toMatchSnapshot();
+    //console.log(JSON.stringify(content, null, 2));
+  });
+
+  test("turbo.json", () => {
+    const content = synthFile(testNuxtJsSite().parent, "turbo.json");
+    expect(content).toBeTruthy();
+    expect(content).toMatchSnapshot();
+    console.log(JSON.stringify(content, null, 2));
+  });
+
   test(".github/workflows/deploy.yml", () => {
     const nuxtSite = testNuxtJsSite();
     const usEast = new AwsEnvironment(nuxtSite.parent, {
