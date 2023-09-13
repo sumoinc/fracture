@@ -92,11 +92,10 @@ describe("validate generated project files", () => {
     });
     expect(nuxtSite).toBeTruthy();
     expect(deployment).toBeTruthy();
-    // console.log(vitePressSite.buildTask.name);
 
     const content = synthFile(nuxtSite.parent, `.github/workflows/deploy.yml`);
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
-    //console.log(content);
+    // console.log(content);
   });
 });
