@@ -1,5 +1,6 @@
 import { Project } from "projen";
 import { synthSnapshot } from "projen/lib/util/synth";
+import { App } from "../apps";
 import { FractureProject } from "../fracture-project";
 import {
   DataService,
@@ -57,6 +58,16 @@ export const synthFile = (project: Project, filepath: string): string => {
 export const testFractureProject = () => {
   return new FractureProject({
     name: "my-project",
+  });
+};
+
+/**
+ * Builds a simple data service as a test harness
+ */
+export const testApp = () => {
+  return new App({
+    parent: testFractureProject(),
+    name: "my-app",
   });
 };
 

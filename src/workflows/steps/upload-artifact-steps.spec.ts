@@ -34,6 +34,7 @@ describe("success conditions", () => {
     });
     const workflow = Workflow.deploy(project);
     workflow.addDeployJob({
+      appName: "my-app",
       deploySteps,
       environment,
       artifactsDirectory: "foo",

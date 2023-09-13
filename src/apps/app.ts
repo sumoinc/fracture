@@ -13,6 +13,7 @@ import {
 } from "../fracture-project";
 import { Settings } from "../settings";
 import { TurboRepo } from "../turborepo";
+import { DeployJobOptions, Workflow } from "../workflows";
 
 export type AppOptions = Omit<
   SetRequired<Partial<AwsCdkTypeScriptAppOptions>, "name">,
@@ -61,5 +62,22 @@ export class App extends AwsCdkTypeScriptApp {
 
     // init some common things we need here
     fractureProjectInit(this);
+  }
+
+  public deploy(
+    options: Pick<DeployJobOptions, "branchPrefix" | "environment">
+  ) {
+    // add to deployment workflow
+    return Workflow.deploy(this.parent).addDeployJob({
+      ...options,
+      appName: this.name,
+      deploySteps: [
+        {
+          name: "deploy",
+          run: `cdk deploy --require-approval never`,
+        },
+      ],
+      artifactsDirectory: this.artifactsDirectory,
+    });
   }
 }

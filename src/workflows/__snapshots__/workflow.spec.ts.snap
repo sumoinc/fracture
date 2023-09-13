@@ -69,8 +69,8 @@ jobs:
         with:
           name: build-artifact-acbd18db
           path: foo
-  deploy-service-foo:
-    name: Deploy Service Foo
+  deploy-my-app-from-main-branch-to-my-environment-environment:
+    name: Deploy my-app from main branch to my-environment environment
     needs: build
     runs-on: ubuntu-latest
     permissions:

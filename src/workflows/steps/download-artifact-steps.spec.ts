@@ -21,6 +21,7 @@ describe("success conditions", () => {
       name: "my-environment",
     });
     const deployJob = new DeployJob(project, {
+      appName: "my-app",
       deploySteps,
       environment,
       artifactsDirectory: "foo",
@@ -40,6 +41,7 @@ describe("success conditions", () => {
       name: "my-environment",
     });
     const deployJob = new DeployJob(project, {
+      appName: "my-app",
       deploySteps,
       environment,
       artifactsDirectory: "foo",

@@ -12,6 +12,12 @@ import { Workflow } from "../workflow";
 export interface DeployJobOptions
   extends SetOptional<WorkflowJobOptions, "jobId" | "name"> {
   /**
+   * How to identify the app being deployed
+   *
+   */
+  readonly appName: string;
+
+  /**
    * The branch pattern this deployment is targeting.
    *
    * @default main
@@ -83,7 +89,7 @@ export class DeployJob extends WorkflowJob {
     options: DeployJobOptions
   ) {
     const branchPrefix = options.branchPrefix ?? "main";
-    const name = options.name ?? `Deploy ${branchPrefix}`;
+    const name = `Deploy ${options.appName} from ${branchPrefix} branch to ${options.environment.name} environment`;
     const jobId = options.jobId ?? paramCase(name);
 
     super(project, {

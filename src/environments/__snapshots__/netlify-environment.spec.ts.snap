@@ -38,8 +38,8 @@ jobs:
         with:
           name: build-artifact-7a1a4772
           path: sites/docs/.vitepress/dist
-  deploy-feature:
-    name: Deploy feature
+  deploy-docs-from-feature-branch-to-foo-environment:
+    name: Deploy docs from feature branch to foo environment
     needs: build
     runs-on: ubuntu-latest
     permissions:

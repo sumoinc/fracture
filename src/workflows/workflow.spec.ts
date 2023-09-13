@@ -35,7 +35,7 @@ describe("success conditions", () => {
       accountNumber: "0000000000",
     });
     Workflow.deploy(project).addDeployJob({
-      name: "Deploy Service Foo",
+      appName: "my-app",
       artifactsDirectory: "foo",
       deploySteps,
       environment,
