@@ -1,5 +1,6 @@
 import { Project } from "projen";
 import { synthSnapshot } from "projen/lib/util/synth";
+import { App } from "../apps";
 import { FractureProject } from "../fracture-project";
 import {
   DataService,
@@ -8,7 +9,7 @@ import {
   ResourceAttribute,
   Structure,
 } from "../services";
-import { NuxtJsSite } from "../sites";
+import { NuxtJsSite, VitePressSite } from "../sites";
 
 export const TEST_ACCOUNT_ONE = "000000000000";
 export const TEST_ORG_ONE = "org-123456";
@@ -23,7 +24,7 @@ export const TEST_REGION_ONE = "us-east-1";
  * @param filepath
  * @returns collection of files starting with supplied filepath
  */
-export const synthFiles = (project: Project, filepath: string): any => {
+export const synthFiles = (project: Project, filepath: string = ""): any => {
   const snapshot = synthSnapshot(project);
   // console.log(Object.keys(snapshot));
   const filtered = Object.keys(snapshot)
@@ -54,11 +55,28 @@ export const synthFile = (project: Project, filepath: string): string => {
 /**
  * Builds a simple data service as a test harness
  */
+export const testFractureProject = () => {
+  return new FractureProject({
+    name: "my-project",
+  });
+};
+
+/**
+ * Builds a simple data service as a test harness
+ */
+export const testApp = () => {
+  return new App({
+    parent: testFractureProject(),
+    name: "my-app",
+  });
+};
+
+/**
+ * Builds a simple data service as a test harness
+ */
 export const testDataService = () => {
   return new DataService({
-    parent: new FractureProject({
-      name: "my-project",
-    }),
+    parent: testFractureProject(),
     name: "my-service",
   });
 };
@@ -102,9 +120,17 @@ export const testOperation = () => {
  */
 export const testNuxtJsSite = () => {
   return new NuxtJsSite({
-    parent: new FractureProject({
-      name: "my-project",
-    }),
+    parent: testFractureProject(),
+    name: "my-site",
+  });
+};
+
+/**
+ * Build a vitepress site to test with
+ */
+export const testVitePressSite = () => {
+  return new VitePressSite({
+    parent: testFractureProject(),
     name: "my-site",
   });
 };

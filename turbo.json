@@ -24,9 +24,6 @@
     "docs#docs:test": {
       "outputMode": "new-only",
       "cache": true,
-      "docs:test": {
-        "cache": true
-      },
       "dependsOn": [
         "docs#docs:build"
       ]

@@ -37,11 +37,13 @@ describe("success conditions", () => {
       accountNumber: "0000000000",
     });
     new DeployJob(project, {
+      appName: "App One",
       deploySteps,
       environment,
       artifactsDirectory: "foo",
     });
     const deployJob = new DeployJob(project, {
+      appName: "App One",
       deploySteps,
       environment,
       artifactsDirectory: "bar",

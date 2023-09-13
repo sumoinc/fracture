@@ -1,6 +1,5 @@
 import { join } from "path";
 import { SampleFile } from "projen";
-import { JobStep } from "projen/lib/github/workflows-model";
 import { TurboRepo } from "../../turborepo";
 import { DeployJobOptions } from "../../workflows";
 import { Workflow } from "../../workflows/workflow";
@@ -87,17 +86,11 @@ export class VitePressSite extends Site {
   public deploy(
     options: Pick<DeployJobOptions, "branchPrefix" | "environment">
   ) {
-    const deploySteps: Array<JobStep> = [
-      {
-        name: "Deploy the foo",
-        run: "echo 'deploying foo'",
-      },
-    ];
-
     // add to deployment workflow
     return Workflow.deploy(this.parent).addDeployJob({
       ...options,
-      deploySteps,
+      appName: this.name,
+      deploySteps: [],
       artifactsDirectory: this.artifactsDirectory,
     });
   }

@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency: build
     env:
       CI: \\"true\\"
     steps:
@@ -45,6 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency: build
     env:
       CI: \\"true\\"
     steps:
@@ -69,14 +71,14 @@ jobs:
         with:
           name: build-artifact-acbd18db
           path: foo
-  deploy-service-foo:
-    name: Deploy Service Foo
+  deploy-my-app-main-my-environment:
+    name: Deploy my-app main my-environment
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
-    concurrency: deploy-my-environment
+    concurrency: deploy-my-app-main-my-environment
     env:
       CI: \\"true\\"
     if: startsWith( github.ref, 'refs/heads/main' )
