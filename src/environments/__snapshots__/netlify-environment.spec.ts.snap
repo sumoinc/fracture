@@ -69,7 +69,5 @@ jobs:
           NETLIFY_SITE_ID: bar
         with:
           args: deploy --dir=sites/docs/.vitepress/dist --prod
-      - name: Deploy the foo
-        run: echo 'deploying foo'
 "
 `;

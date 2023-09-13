@@ -70,5 +70,3 @@ jobs:
           NETLIFY_SITE_ID: e69db060-d613-414c-9964-4a5a5e0e32ea
         with:
           args: deploy --dir=sites/docs/.vitepress/dist --prod
-      - name: Deploy the foo
-        run: echo 'deploying foo'

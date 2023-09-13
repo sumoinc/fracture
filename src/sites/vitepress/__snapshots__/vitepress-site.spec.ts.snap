@@ -69,7 +69,5 @@ jobs:
           role-to-assume: arn:aws:iam::0000000000:role/GitHubDeploymentOIDCRole
           aws-region: us-east-1
           role-duration-seconds: 900
-      - name: Deploy the foo
-        run: echo 'deploying foo'
 "
 `;
