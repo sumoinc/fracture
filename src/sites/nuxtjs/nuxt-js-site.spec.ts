@@ -18,57 +18,48 @@ describe("validate generated project files", () => {
   });
 
   test(".gitignore", () => {
-    const nuxtSite = testNuxtJsSite();
-    const content = synthFile(nuxtSite, ".gitignore");
+    const content = synthFile(testNuxtJsSite(), ".gitignore");
     expect(content).toMatchSnapshot();
     // console.log(content);
   });
 
   test(".npmrc", () => {
-    const nuxtSite = testNuxtJsSite();
-    const content = synthFile(nuxtSite, ".npmrc");
+    const content = synthFile(testNuxtJsSite(), ".npmrc");
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
   test(".projen/deps.json", () => {
-    const nuxtSite = testNuxtJsSite();
-    const content = synthFile(nuxtSite, ".projen/deps.json");
+    const content = synthFile(testNuxtJsSite(), ".projen/deps.json");
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
   test(".projen/files.json", () => {
-    const nuxtSite = testNuxtJsSite();
-    const content = synthFile(nuxtSite, ".projen/files.json");
+    const content = synthFile(testNuxtJsSite(), ".projen/files.json");
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
   test(".projen/tasks.json", () => {
-    const nuxtSite = testNuxtJsSite();
-    const content = synthFile(nuxtSite, ".projen/tasks.json");
+    const content = synthFile(testNuxtJsSite(), ".projen/tasks.json");
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
   test("nuxt.config.ts", () => {
-    const nuxtSite = testNuxtJsSite();
-    const content = synthFile(nuxtSite, "nuxt.config.ts");
+    const content = synthFile(testNuxtJsSite(), "nuxt.config.ts");
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
   test("package.json", () => {
-    const nuxtSite = testNuxtJsSite();
-    const content = synthFile(nuxtSite, "package.json");
+    const content = synthFile(testNuxtJsSite(), "package.json");
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
   test("tsconfig.json", () => {
-    const nuxtSite = testNuxtJsSite();
-    const content = synthFile(nuxtSite, "tsconfig.json");
+    const content = synthFile(testNuxtJsSite(), "tsconfig.json");
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
   test("server/tsconfig.json", () => {
-    const nuxtSite = testNuxtJsSite();
-    const content = synthFile(nuxtSite, "server/tsconfig.json");
+    const content = synthFile(testNuxtJsSite(), "server/tsconfig.json");
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
