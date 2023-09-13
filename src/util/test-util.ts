@@ -23,7 +23,7 @@ export const TEST_REGION_ONE = "us-east-1";
  * @param filepath
  * @returns collection of files starting with supplied filepath
  */
-export const synthFiles = (project: Project, filepath: string): any => {
+export const synthFiles = (project: Project, filepath: string = ""): any => {
   const snapshot = synthSnapshot(project);
   // console.log(Object.keys(snapshot));
   const filtered = Object.keys(snapshot)

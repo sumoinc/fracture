@@ -1,151 +1,97 @@
-import { TypeScriptProject } from "projen/lib/typescript";
-import { NuxtJsSite } from "./nuxt-js-site";
-import { synthFile, synthFiles } from "../../util/test-util";
+import { AwsEnvironment } from "../../environments";
+import { synthFile, synthFiles, testNuxtJsSite } from "../../util/test-util";
 
-test("Smoke test", () => {
-  const parent = new TypeScriptProject({
-    name: "my-project",
-    defaultReleaseBranch: "main",
+describe("success conditions", () => {
+  test("Smoke test", () => {
+    const nuxtSite = testNuxtJsSite();
+    expect(nuxtSite).toBeTruthy();
   });
-  const vitePressSite = new NuxtJsSite({
-    parent,
-    name: "docs",
-  });
-  expect(vitePressSite).toBeTruthy();
 });
 
 describe("validate generated project files", () => {
   test("Detect new files", () => {
-    const parent = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    new NuxtJsSite({
-      parent,
-      name: "docs",
-    });
-    const content = synthFiles(parent, "sites");
+    const nuxtSite = testNuxtJsSite();
+    const content = synthFiles(nuxtSite);
     const fileList = Object.keys(content);
     expect(fileList).toMatchSnapshot();
     //console.log(JSON.stringify(fileList, null, 2));
   });
 
-  test("apps/test/.gitignore", () => {
-    const parent = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    new NuxtJsSite({
-      parent,
-      name: "docs",
-    });
-    const content = synthFile(parent, "apps/test/.gitignore");
+  test(".gitignore", () => {
+    const nuxtSite = testNuxtJsSite();
+    const content = synthFile(nuxtSite, ".gitignore");
     expect(content).toMatchSnapshot();
     // console.log(content);
   });
 
-  test("apps/test/.npmrc", () => {
-    const parent = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    new NuxtJsSite({
-      parent,
-      name: "docs",
-    });
-    const content = synthFile(parent, "apps/test/.npmrc");
+  test(".npmrc", () => {
+    const nuxtSite = testNuxtJsSite();
+    const content = synthFile(nuxtSite, ".npmrc");
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
-  test("apps/test/.projen/deps.json", () => {
-    const parent = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    new NuxtJsSite({
-      parent,
-      name: "docs",
-    });
-    const content = synthFile(parent, "apps/test/.projen/deps.json");
+  test(".projen/deps.json", () => {
+    const nuxtSite = testNuxtJsSite();
+    const content = synthFile(nuxtSite, ".projen/deps.json");
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("apps/test/.projen/files.json", () => {
-    const parent = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    new NuxtJsSite({
-      parent,
-      name: "docs",
-    });
-    const content = synthFile(parent, "apps/test/.projen/files.json");
+  test(".projen/files.json", () => {
+    const nuxtSite = testNuxtJsSite();
+    const content = synthFile(nuxtSite, ".projen/files.json");
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("apps/test/.projen/tasks.json", () => {
-    const parent = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    new NuxtJsSite({
-      parent,
-      name: "docs",
-    });
-    const content = synthFile(parent, "apps/test/.projen/tasks.json");
+  test(".projen/tasks.json", () => {
+    const nuxtSite = testNuxtJsSite();
+    const content = synthFile(nuxtSite, ".projen/tasks.json");
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-  test("apps/test/nuxt.config.ts", () => {
-    const parent = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    new NuxtJsSite({
-      parent,
-      name: "docs",
-    });
-    const content = synthFile(parent, "apps/test/nuxt.config.ts");
+  test("nuxt.config.ts", () => {
+    const nuxtSite = testNuxtJsSite();
+    const content = synthFile(nuxtSite, "nuxt.config.ts");
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
-  test("apps/test/package.json", () => {
-    const parent = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    new NuxtJsSite({
-      parent,
-      name: "docs",
-    });
-    const content = synthFile(parent, "apps/test/package.json");
+  test("package.json", () => {
+    const nuxtSite = testNuxtJsSite();
+    const content = synthFile(nuxtSite, "package.json");
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
-  test("apps/test/tsconfig.json", () => {
-    const parent = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    new NuxtJsSite({
-      parent,
-      name: "docs",
-    });
-    const content = synthFile(parent, "apps/test/tsconfig.json");
+  test("tsconfig.json", () => {
+    const nuxtSite = testNuxtJsSite();
+    const content = synthFile(nuxtSite, "tsconfig.json");
     expect(content).toMatchSnapshot();
     //console.log(content);
   });
-  test("apps/test/server/tsconfig.json", () => {
-    const parent = new TypeScriptProject({
-      name: "my-project",
-      defaultReleaseBranch: "main",
-    });
-    new NuxtJsSite({
-      parent,
-      name: "docs",
-    });
-    const content = synthFile(parent, "apps/test/server/tsconfig.json");
+  test("server/tsconfig.json", () => {
+    const nuxtSite = testNuxtJsSite();
+    const content = synthFile(nuxtSite, "server/tsconfig.json");
     expect(content).toMatchSnapshot();
     //console.log(content);
+  });
+
+  test(".github/workflows/deploy.yml", () => {
+    const nuxtSite = testNuxtJsSite();
+    const usEast = new AwsEnvironment(nuxtSite.parent, {
+      name: "us-east",
+      accountNumber: "0000000000",
+    });
+
+    // site options
+    const deployment = nuxtSite.deploy({
+      branchPrefix: "feature",
+      environment: usEast,
+    });
+    expect(nuxtSite).toBeTruthy();
+    expect(deployment).toBeTruthy();
+    // console.log(vitePressSite.buildTask.name);
+
+    const content = synthFile(nuxtSite.parent, `.github/workflows/deploy.yml`);
+    expect(content).toBeTruthy();
+    expect(content).toMatchSnapshot();
+    console.log(content);
   });
 });

@@ -1,5 +1,6 @@
 import { paramCase } from "change-case";
 import { JsonFile, SampleDir, SampleFile } from "projen";
+import { DeployJobOptions, Workflow } from "../../workflows";
 import { Site, SiteOptions } from "../site";
 
 export type NuxtJsSiteOptions = SiteOptions;
@@ -162,6 +163,17 @@ export class NuxtJsSite extends Site {
       files: {
         "README.md": "add public files here",
       },
+    });
+  }
+
+  public deploy(
+    options: Pick<DeployJobOptions, "branchPrefix" | "environment">
+  ) {
+    // add to deployment workflow
+    return Workflow.deploy(this.parent).addDeployJob({
+      ...options,
+      deploySteps: [],
+      artifactsDirectory: this.artifactsDirectory,
     });
   }
 }
