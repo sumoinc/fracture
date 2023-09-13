@@ -17,6 +17,13 @@ describe("validate generated project files", () => {
     //console.log(JSON.stringify(content, null, 2));
   });
 
+  test("turbo.json", () => {
+    const content = synthFile(testApp().parent, "turbo.json");
+    expect(content).toBeTruthy();
+    expect(content).toMatchSnapshot();
+    console.log(JSON.stringify(content, null, 2));
+  });
+
   test(".github/workflows/deploy.yml", () => {
     const appOne = testApp();
     const appTwo = new App({ parent: appOne.parent, name: "my-other-app" });
