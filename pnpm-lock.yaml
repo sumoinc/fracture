@@ -21,14 +21,14 @@ importers:
         specifier: ^8.0.2
         version: 8.0.2
       '@types/aws-lambda':
-        specifier: ^8.10.120
-        version: 8.10.120
+        specifier: ^8.10.121
+        version: 8.10.121
       change-case:
         specifier: ^4.1.2
         version: 4.1.2
       projen:
-        specifier: ^0.73.17
-        version: 0.73.17
+        specifier: ^0.73.19
+        version: 0.73.19
       type-fest:
         specifier: ^2.19.0
         version: 2.19.0
@@ -86,7 +86,7 @@ importers:
         version: 15.0.0
       npm-check-updates:
         specifier: ^16
-        version: 16.14.0
+        version: 16.14.2
       prettier:
         specifier: ^2.8.8
         version: 2.8.8
@@ -2762,8 +2762,8 @@ packages:
       minimatch: 9.0.3
     dev: true
 
-  /@types/aws-lambda@8.10.120:
-    resolution: {integrity: sha512-ReLUWj/2EYNx7qs17bkBkgSmr0jB1GGTRyorhHJmq8nqlWxEyWyto1GFsGTGdbLI0cAj1AcbBAA1oZYUQEqZng==}
+  /@types/aws-lambda@8.10.121:
+    resolution: {integrity: sha512-Y/jsUwO18HuC0a39BuMQkSOd/kMGATh/h5LNksw8FlTafbQ3Ge3578ZoT8w8gSOsWl2qH1p/SS/R61vc0X5jIQ==}
     dev: false
 
   /@types/babel__core@7.20.1:
@@ -7131,8 +7131,8 @@ packages:
       - supports-color
     dev: true
 
-  /npm-check-updates@16.14.0:
-    resolution: {integrity: sha512-0R4S0qsx2FhuSiIYloHc7RQwfZpzO4jdL3rUoYwbOkx5fBc9u77GHHS0FlXYpczHR/kPYmmB/CRkFElOofVeSg==}
+  /npm-check-updates@16.14.2:
+    resolution: {integrity: sha512-7zLXG5h4ZyAHxSKDRs864ugVPM40EpKDwInwZMvCRMJ+h2oyVlAKB69XuBKB4qnur+KR+yj5ndXIIDKZYzUX8A==}
     engines: {node: '>=14.14'}
     hasBin: true
     dependencies:
@@ -7645,8 +7645,8 @@ packages:
       - yaml
       - yargs
 
-  /projen@0.73.17:
-    resolution: {integrity: sha512-rGrwyl+O000K6mtK3U72y/CT4x4NdtPKfJuWG1iNW21GV6Sq2Got7dWucBl12dLviJ4aEeMGC7Hpx/I3vJCosA==}
+  /projen@0.73.19:
+    resolution: {integrity: sha512-Y4VyrzJQ9Q2dMfXrgiFiK8PpGAuYlMCCO9FsKghz5O/zXZQBLjkLevOc8pdIs0Ura/MxS9cckAkeGeiI/0Q0gw==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
