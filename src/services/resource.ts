@@ -1,5 +1,6 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { DataService } from "./data-service";
 import {
   Operation,
@@ -23,31 +24,46 @@ export interface ResourceOptions {
   /**
    *  Name for the Resource.
    */
-  name: string;
+  readonly name: string;
 
   /**
    * Short name for the Resource.
    */
-  shortName?: string;
+  readonly shortName?: string;
 
   /**
    * Plural name for the Resource.
    */
-  pluralName?: string;
+  readonly pluralName?: string;
 
   /**
    * Comment lines to add to the Resource.
    * @default []
    */
-  comments?: string[];
+  readonly comments?: string[];
+
+  /**
+   * Add tenant identifier to this resource.
+   *
+   * @default - uses service setting
+   */
+  readonly tenantEnabled?: boolean;
 
   /**
    * Options for attributes to add when initializing the resource.
    */
-  attributeOptions?: Omit<ResourceAttributeOptions, "resource">[];
+  readonly attributeOptions?: Array<Omit<ResourceAttributeOptions, "resource">>;
 }
 
 export class Resource extends Component {
+  /**
+   * Returns all resourcesa for service
+   */
+  public static all(project: TypeScriptProject): Array<Resource> {
+    const isDefined = (c: Component): c is Resource => c instanceof Resource;
+    return project.components.filter(isDefined);
+  }
+
   /**
    *  Name for the Resource.
    */
@@ -68,7 +84,14 @@ export class Resource extends Component {
    *
    * @default []
    */
-  public comments: string[];
+  public readonly comments: string[];
+
+  /**
+   * Add tenant identifier to this resource.
+   *
+   * @default - uses service setting
+   */
+  readonly tenantEnabled: boolean;
 
   /**
    * Primary key for this resource.
@@ -143,6 +166,7 @@ export class Resource extends Component {
       ? paramCase(options.pluralName)
       : options.name + "s";
     this.comments = options.comments ?? [];
+    this.tenantEnabled = options.tenantEnabled ?? project.tenantEnabled;
 
     /***************************************************************************
      * Initialize data structures
@@ -229,6 +253,20 @@ export class Resource extends Component {
       compositionsSeperator: " ",
     });
 
+    // if tenant tracking is on, add it to pk and sk
+    if (this.tenantEnabled) {
+      const tenant = this.addAttribute({
+        name: "tenant-id",
+        shortName: "tid",
+        comments: [`Tenant identifier for this record.`],
+        management: ManagementType.SYSTEM_MANAGED,
+        visibility: VisabilityType.HIDDEN,
+        generator: ResourceAttributeGenerator.TENANT,
+      });
+      this.pk.addCompositionSource(tenant);
+      this.sk.addCompositionSource(tenant);
+    }
+
     /***************************************************************************
      * Identifier Attribute
      **************************************************************************/
@@ -241,7 +279,7 @@ export class Resource extends Component {
       identifier: IdentifierType.PRIMARY,
       createGenerator: ResourceAttributeGenerator.GUID,
     });
-    this.sk.addCompositionSource(this.id);
+    this.pk.addCompositionSource(this.id);
 
     /***************************************************************************
      * Type Attribute
@@ -448,5 +486,17 @@ export class Resource extends Component {
 
   public get service() {
     return this.project;
+  }
+
+  /***************************************************************************
+   * Configuration export for this resource
+   **************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      name: this.name,
+      shortName: this.shortName,
+      attributes: this.attributes.map((a) => a.config()),
+    };
   }
 }

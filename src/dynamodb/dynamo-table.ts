@@ -111,4 +111,20 @@ export class DynamoTable extends Component {
     this.gsi.push(gsi);
     return gsi;
   }
+
+  /***************************************************************************
+   * Configuration export for this table
+   **************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      name: this.name,
+      pk: this.pk.config(),
+      sk: this.sk.config(),
+      idx: this.idx.config(),
+      keyGsi: this.keyGsi.config(),
+      lookupGsi: this.lookupGsi.config(),
+      gsi: this.gsi.map((gsi) => gsi.config()),
+    };
+  }
 }
