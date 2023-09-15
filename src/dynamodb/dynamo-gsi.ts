@@ -71,4 +71,17 @@ export class DynamoGsi extends Component {
     this.sk = options.sk;
     this.type = options.type ?? DynamoGsiType.SECONDARY;
   }
+
+  /***************************************************************************
+   * Configuration export for this gsi
+   **************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      name: this.name,
+      pk: this.pk.config(),
+      sk: this.sk.config(),
+      type: this.type,
+    };
+  }
 }

@@ -65,4 +65,8 @@ export class Service extends AwsCdkTypeScriptApp {
     this.addDeps("@aws-appsync/utils");
     this.addDeps("@aws-appsync/eslint-plugin");
   }
+
+  config(): Record<string, any> {
+    return {};
+  }
 }

@@ -135,6 +135,10 @@ export const ResourceAttributeGenerator = {
    * Composed of other attributes
    */
   COMPOSITION: "Composition",
+  /**
+   * Genrated based on Tenant ID from SaaS Identity
+   */
+  TENANT: "Tenant",
 } as const;
 
 export const ManagementType = {
@@ -497,5 +501,29 @@ export class ResourceAttribute extends Component {
       );
     }
     this.compositionSources.push(a);
+  }
+
+  /***************************************************************************
+   * Configuration export for this attribute
+   **************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      name: this.name,
+      shortName: this.shortName,
+      required: this.required,
+      comments: this.comments,
+      type: this.type,
+      typeParameter: this.typeParameter,
+      management: this.management,
+      visibility: this.visibility,
+      identifier: this.identifier,
+      compositionSources: this.compositionSources.map((a) => a.name),
+      compositionsSeperator: this.compositionsSeperator,
+      createGenerator: this.createGenerator,
+      readGenerator: this.readGenerator,
+      updateGenerator: this.updateGenerator,
+      deleteGenerator: this.deleteGenerator,
+    };
   }
 }

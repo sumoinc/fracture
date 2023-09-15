@@ -69,4 +69,16 @@ export class DynamoAttribute extends Component {
     this.keyType = options.keyType ?? KeyType.NONE;
     return this;
   }
+
+  /***************************************************************************
+   * Configuration export for this attribute
+   **************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      name: this.name,
+      attributeType: this.attributeType,
+      keyType: this.keyType,
+    };
+  }
 }

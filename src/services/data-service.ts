@@ -19,6 +19,13 @@ export interface DataServiceOptions extends ServiceOptions {
    * Options for resources to add when initializing the service.
    */
   readonly resourceOptions?: Array<Omit<ResourceOptions, "service">>;
+
+  /**
+   * Add tenant identifier to all resources.
+   *
+   * @default - false
+   */
+  readonly tenantEnabled?: boolean;
 }
 
 export class DataService extends Service {
@@ -47,6 +54,13 @@ export class DataService extends Service {
    * A name for the service.
    */
   public readonly name: string;
+
+  /**
+   * Add tenant identifier to all resources.
+   *
+   * @default - false
+   */
+  public readonly tenantEnabled: boolean;
 
   /**
    * Defines typescript naming conventions for this service.
@@ -91,6 +105,7 @@ export class DataService extends Service {
      **************************************************************************/
 
     this.name = options.name;
+    this.tenantEnabled = options.tenantEnabled ?? false;
     this.typescriptStrategy = new TypescriptStrategy(this);
 
     /***************************************************************************
@@ -215,5 +230,19 @@ export class DataService extends Service {
 
   public addStructure(options: StructureOptions) {
     return new Structure(this, options);
+  }
+
+  /***************************************************************************
+   * Configuration export for this service
+   **************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      ...super.config,
+      name: this.name,
+      tenantEnabled: this.tenantEnabled,
+      resources: Resource.all(this).map((r) => r.config()),
+      dynamo: DynamoTable.of(this).config(),
+    };
   }
 }

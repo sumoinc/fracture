@@ -1,3 +1,3 @@
 export * from "./cdk-app";
-export * from "./configurations";
+export * from "./configuration";
 export * from "./types";
