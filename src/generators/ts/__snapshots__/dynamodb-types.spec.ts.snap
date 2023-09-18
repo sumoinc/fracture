@@ -116,76 +116,76 @@ export type MyResourceMarshalled = {
      * Partition Key for this record.
     */
     pk: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Sort Key for this record.
     */
     sk: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Lookup value for this record.
     */
     idx: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Identifier for this record.
     */
     id: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Type of record.
     */
     t: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Version for record.
     */
     v: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was created.
     */
     ct: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was last modified.
     */
     mt: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was marked as deleted.
     */
     dt: {
-        \\"S\\": string;
+        S: string;
     };
     fn: {
-        \\"S\\": string;
+        S: string;
     };
     ln: {
-        \\"S\\": string;
+        S: string;
     };
     ht: {
-        \\"N\\": number;
+        N: number;
     };
     if: {
-        \\"BOOL\\": boolean;
+        BOOL: boolean;
     };
     od: {
         \\"M\\": DougMarshalled;
     };
     ad: {
-        \\"L\\": Array<DougMarshalled>;
+        L: Array<Partial<DougMarshalled>>;
     };
     md: {
-        \\"M\\": Record<string, DougMarshalled>;
+        M: Record<string, Partial<DougMarshalled>>;
     };
 };
 
@@ -197,58 +197,58 @@ export type DougMarshalled = {
      * Partition Key for this record.
     */
     pk: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Sort Key for this record.
     */
     sk: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Lookup value for this record.
     */
     idx: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Identifier for this record.
     */
     id: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Type of record.
     */
     t: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Version for record.
     */
     v: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was created.
     */
     ct: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was last modified.
     */
     mt: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was marked as deleted.
     */
     dt: {
-        \\"S\\": string;
+        S: string;
     };
     name: {
-        \\"S\\": string;
+        S: string;
     };
 };
 
@@ -257,55 +257,55 @@ export type CreateMyResourceInputMarshalled = {
      * Partition Key for this record.
     */
     pk: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Sort Key for this record.
     */
     sk: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Lookup value for this record.
     */
     idx: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Identifier for this record.
     */
     id: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Type of record.
     */
     t: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Version for record.
     */
     v: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was created.
     */
     ct: {
-        \\"S\\": string;
+        S: string;
     };
     fn: {
-        \\"S\\": string;
+        S: string;
     };
     ln: {
-        \\"S\\": string;
+        S: string;
     };
     ht: {
-        \\"N\\": number;
+        N: number;
     };
     if: {
-        \\"BOOL\\": boolean;
+        BOOL: boolean;
     };
     od: {
         \\"M\\": DougMarshalled;
@@ -357,8 +357,8 @@ export type MyResourceUnmarshalled = {
     ht: number;
     if: boolean;
     od: Doug;
-    ad: Array<DougUnmarshalled>;
-    md: Record<string, DougUnmarshalled>;
+    ad: Array<Partial<DougUnmarshalled>>;
+    md: Record<Partial<DougUnmarshalled>>;
 };
 
 /**
@@ -550,76 +550,76 @@ export type MyResourceMarshalled = {
      * Partition Key for this record.
     */
     pk: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Sort Key for this record.
     */
     sk: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Lookup value for this record.
     */
     idx: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Identifier for this record.
     */
     id: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Type of record.
     */
     t: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Version for record.
     */
     v: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was created.
     */
     ct: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was last modified.
     */
     mt: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was marked as deleted.
     */
     dt: {
-        \\"S\\": string;
+        S: string;
     };
     fn: {
-        \\"S\\": string;
+        S: string;
     };
     ln: {
-        \\"S\\": string;
+        S: string;
     };
     ht: {
-        \\"N\\": number;
+        N: number;
     };
     if: {
-        \\"BOOL\\": boolean;
+        BOOL: boolean;
     };
     od: {
         \\"M\\": DougMarshalled;
     };
     ad: {
-        \\"L\\": Array<DougMarshalled>;
+        L: Array<Partial<DougMarshalled>>;
     };
     md: {
-        \\"M\\": Record<string, DougMarshalled>;
+        M: Record<string, Partial<DougMarshalled>>;
     };
 };
 
@@ -631,58 +631,58 @@ export type DougMarshalled = {
      * Partition Key for this record.
     */
     pk: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Sort Key for this record.
     */
     sk: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Lookup value for this record.
     */
     idx: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Identifier for this record.
     */
     id: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Type of record.
     */
     t: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * Version for record.
     */
     v: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was created.
     */
     ct: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was last modified.
     */
     mt: {
-        \\"S\\": string;
+        S: string;
     };
     /**
      * The timestamp representing when this record was marked as deleted.
     */
     dt: {
-        \\"S\\": string;
+        S: string;
     };
     name: {
-        \\"S\\": string;
+        S: string;
     };
 };
 
@@ -731,8 +731,8 @@ export type MyResourceUnmarshalled = {
     ht: number;
     if: boolean;
     od: Doug;
-    ad: Array<DougUnmarshalled>;
-    md: Record<string, DougUnmarshalled>;
+    ad: Array<Partial<DougUnmarshalled>>;
+    md: Record<Partial<DougUnmarshalled>>;
 };
 
 /**

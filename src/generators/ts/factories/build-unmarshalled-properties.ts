@@ -68,10 +68,15 @@ export const buildUnmarshalledProperty = ({
           factory.createIdentifier("Array"),
           [
             factory.createTypeReferenceNode(
-              factory.createIdentifier(
-                strategy.formatTypeName(`${typeParameter}-unmarshalled`)
-              ),
-              undefined
+              factory.createIdentifier("Partial"),
+              [
+                factory.createTypeReferenceNode(
+                  factory.createIdentifier(
+                    strategy.formatTypeName(`${typeParameter}-unmarshalled`)
+                  ),
+                  undefined
+                ),
+              ]
             ),
           ]
         );
@@ -82,12 +87,16 @@ export const buildUnmarshalledProperty = ({
         return factory.createTypeReferenceNode(
           factory.createIdentifier("Record"),
           [
-            factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
             factory.createTypeReferenceNode(
-              factory.createIdentifier(
-                strategy.formatTypeName(`${typeParameter}-unmarshalled`)
-              ),
-              undefined
+              factory.createIdentifier("Partial"),
+              [
+                factory.createTypeReferenceNode(
+                  factory.createIdentifier(
+                    strategy.formatTypeName(`${typeParameter}-unmarshalled`)
+                  ),
+                  undefined
+                ),
+              ]
             ),
           ]
         );
