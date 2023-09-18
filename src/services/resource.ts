@@ -300,27 +300,10 @@ export class Resource extends Component {
    * Also manages some data structures used in code generation.
    */
   public addAttribute(options: Omit<ResourceAttributeOptions, "resource">) {
-    const attribute = new ResourceAttribute(this.project, {
+    return new ResourceAttribute(this.project, {
       resource: this,
       ...options,
     });
-
-    // /***************************************************************************
-    //  * Update data structures
-    //  **************************************************************************/
-
-    // if user visible, add to public data structure
-    if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-      this.dataStructure.addAttribute({
-        name: attribute.name,
-        type: attribute.type,
-        typeParameter: attribute.typeParameter,
-        comments: attribute.comments,
-        required: attribute.required,
-      });
-    }
-
-    return attribute;
   }
 
   public addStructure(options: Omit<StructureOptions, "resource">) {

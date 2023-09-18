@@ -489,6 +489,22 @@ export class ResourceAttribute extends Component {
 
     this.resource.attributes.push(this);
 
+    /***************************************************************************
+     * Update primary resource structures
+     **************************************************************************/
+
+    // if user visible, add to public data structure
+    if (this.visibility === VisabilityType.USER_VISIBLE) {
+      this.resource.dataStructure.addAttribute({
+        name: this.name,
+        shortName: this.shortName,
+        type: this.type,
+        typeParameter: this.typeParameter,
+        comments: this.comments,
+        required: this.required,
+      });
+    }
+
     return this;
   }
 

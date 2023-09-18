@@ -368,7 +368,7 @@ export const configurations = {
           },
           {
             \\"name\\": \\"type\\",
-            \\"shortName\\": \\"type\\",
+            \\"shortName\\": \\"t\\",
             \\"type\\": \\"String\\",
             \\"comments\\": [
               \\"Type of record.\\"
@@ -378,7 +378,7 @@ export const configurations = {
           },
           {
             \\"name\\": \\"version\\",
-            \\"shortName\\": \\"version\\",
+            \\"shortName\\": \\"v\\",
             \\"type\\": \\"String\\",
             \\"comments\\": [
               \\"Version for record.\\"
@@ -388,7 +388,7 @@ export const configurations = {
           },
           {
             \\"name\\": \\"created-timestamp\\",
-            \\"shortName\\": \\"created-timestamp\\",
+            \\"shortName\\": \\"ct\\",
             \\"type\\": \\"String\\",
             \\"comments\\": [
               \\"The timestamp representing when this record was created.\\"
@@ -398,7 +398,7 @@ export const configurations = {
           },
           {
             \\"name\\": \\"modified-timestamp\\",
-            \\"shortName\\": \\"modified-timestamp\\",
+            \\"shortName\\": \\"mt\\",
             \\"type\\": \\"String\\",
             \\"comments\\": [
               \\"The timestamp representing when this record was last modified.\\"
@@ -722,7 +722,7 @@ export const configurations = {
           },
           {
             \\"name\\": \\"type\\",
-            \\"shortName\\": \\"type\\",
+            \\"shortName\\": \\"t\\",
             \\"type\\": \\"String\\",
             \\"comments\\": [
               \\"Type of record.\\"
@@ -732,7 +732,7 @@ export const configurations = {
           },
           {
             \\"name\\": \\"version\\",
-            \\"shortName\\": \\"version\\",
+            \\"shortName\\": \\"v\\",
             \\"type\\": \\"String\\",
             \\"comments\\": [
               \\"Version for record.\\"
@@ -742,7 +742,7 @@ export const configurations = {
           },
           {
             \\"name\\": \\"created-timestamp\\",
-            \\"shortName\\": \\"created-timestamp\\",
+            \\"shortName\\": \\"ct\\",
             \\"type\\": \\"String\\",
             \\"comments\\": [
               \\"The timestamp representing when this record was created.\\"
@@ -752,7 +752,7 @@ export const configurations = {
           },
           {
             \\"name\\": \\"modified-timestamp\\",
-            \\"shortName\\": \\"modified-timestamp\\",
+            \\"shortName\\": \\"mt\\",
             \\"type\\": \\"String\\",
             \\"comments\\": [
               \\"The timestamp representing when this record was last modified.\\"
