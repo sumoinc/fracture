@@ -355,7 +355,44 @@ export const configurations = {
         \\"comments\\": [
           \\"Public facing data structure for this record.\\"
         ],
+        \\"persistant\\": true,
         \\"attributes\\": [
+          {
+            \\"name\\": \\"pk\\",
+            \\"shortName\\": \\"pk\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Partition Key for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"sk\\",
+            \\"shortName\\": \\"sk\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Sort Key for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"lookup\\",
+            \\"shortName\\": \\"idx\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Lookup value for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
           {
             \\"name\\": \\"id\\",
             \\"shortName\\": \\"id\\",
@@ -412,6 +449,18 @@ export const configurations = {
             \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"The timestamp representing when this record was last modified.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"deleted-timestamp\\",
+            \\"shortName\\": \\"dt\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was marked as deleted.\\"
             ],
             \\"required\\": true,
             \\"generator\\": \\"None\\"
@@ -721,7 +770,56 @@ export const configurations = {
         \\"comments\\": [
           \\"Public facing data structure for this record.\\"
         ],
+        \\"persistant\\": true,
         \\"attributes\\": [
+          {
+            \\"name\\": \\"pk\\",
+            \\"shortName\\": \\"pk\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Partition Key for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"sk\\",
+            \\"shortName\\": \\"sk\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Sort Key for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"lookup\\",
+            \\"shortName\\": \\"idx\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Lookup value for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"tenant-id\\",
+            \\"shortName\\": \\"tid\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Tenant identifier for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
           {
             \\"name\\": \\"id\\",
             \\"shortName\\": \\"id\\",
@@ -778,6 +876,18 @@ export const configurations = {
             \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"The timestamp representing when this record was last modified.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"deleted-timestamp\\",
+            \\"shortName\\": \\"dt\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was marked as deleted.\\"
             ],
             \\"required\\": true,
             \\"generator\\": \\"None\\"

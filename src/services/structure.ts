@@ -159,6 +159,7 @@ export class Structure extends Component {
       name: this.name,
       typeParameter: this.typeParameter,
       comments: this.comments,
+      persistant: this.persistant,
       attributes: this.attributes.map((attribute) => attribute.config()),
     };
   }

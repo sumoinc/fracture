@@ -554,6 +554,45 @@ Object {
     "attributes": Array [
       Object {
         "comments": Array [
+          "Partition Key for this record.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "pk",
+        "required": true,
+        "shortName": "pk",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "HIDDEN",
+      },
+      Object {
+        "comments": Array [
+          "Sort Key for this record.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "sk",
+        "required": true,
+        "shortName": "sk",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "HIDDEN",
+      },
+      Object {
+        "comments": Array [
+          "Lookup value for this record.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "lookup",
+        "required": true,
+        "shortName": "idx",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "HIDDEN",
+      },
+      Object {
+        "comments": Array [
           "Identifier for this record.",
         ],
         "generator": "None",
@@ -617,11 +656,25 @@ Object {
         "typeParameter": undefined,
         "visibility": "USER_VISIBLE",
       },
+      Object {
+        "comments": Array [
+          "The timestamp representing when this record was marked as deleted.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "deleted-timestamp",
+        "required": true,
+        "shortName": "dt",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "HIDDEN",
+      },
     ],
     "comments": Array [
       "Public facing data structure for this record.",
     ],
     "name": "foo",
+    "persistant": true,
     "typeParameter": undefined,
   },
   "dynamoTable": Object {

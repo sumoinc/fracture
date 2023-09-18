@@ -4,6 +4,7 @@ exports[`crud operations Create Operation 1`] = `
 "{
   \\"name\\": \\"create-my-resource-input\\",
   \\"comments\\": [],
+  \\"persistant\\": true,
   \\"attributes\\": [
     {
       \\"name\\": \\"pk\\",
@@ -130,6 +131,7 @@ exports[`crud operations Delete Operation 1`] = `
 "{
   \\"name\\": \\"get-my-resource-input\\",
   \\"comments\\": [],
+  \\"persistant\\": true,
   \\"attributes\\": [
     {
       \\"name\\": \\"id\\",
@@ -164,6 +166,7 @@ exports[`crud operations Read Operation 1`] = `
 "{
   \\"name\\": \\"get-my-resource-input\\",
   \\"comments\\": [],
+  \\"persistant\\": true,
   \\"attributes\\": [
     {
       \\"name\\": \\"id\\",
@@ -198,6 +201,7 @@ exports[`crud operations Update Operation 1`] = `
 "{
   \\"name\\": \\"get-my-resource-input\\",
   \\"comments\\": [],
+  \\"persistant\\": true,
   \\"attributes\\": [
     {
       \\"name\\": \\"id\\",
