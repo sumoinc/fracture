@@ -395,7 +395,7 @@ export class Operation extends Component {
   public config(): Record<string, any> {
     return {
       name: this.name,
-      dynamoGsi: this.dynamoGsi,
+      dynamoGsi: this.dynamoGsi.config(),
       operationType: this.operationType,
       operationSubType: this.operationSubType,
       inputStructure: this.inputStructure.config(),

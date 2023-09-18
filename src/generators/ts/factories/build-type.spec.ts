@@ -71,8 +71,7 @@ test("All attribute types should match snapshot", () => {
         type: value,
         typeParameter:
           value === ResourceAttributeType.ARRAY ||
-          value === ResourceAttributeType.MAP ||
-          value === ResourceAttributeType.ANY
+          value === ResourceAttributeType.MAP
             ? "any"
             : undefined,
       };

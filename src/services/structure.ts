@@ -36,6 +36,13 @@ export type StructureOptions = {
    * Options for attributes to add when initializing the structure.
    */
   attributeOptions?: Omit<StructureAttributeOptions, "structure">[];
+
+  /**
+   * Do we persist this structure tot he database?
+   *
+   * @default true
+   */
+  persistant?: boolean;
 };
 
 /******************************************************************************
@@ -67,6 +74,7 @@ export class Structure extends Component {
    *  Name for the structure.
    */
   public readonly name: string;
+
   /**
    * Type parameter for this structure type.
    *
@@ -74,16 +82,25 @@ export class Structure extends Component {
    * @example 'T' for MyType<T> generic
    */
   public readonly typeParameter?: string;
+
   /**
    * Comment lines to add to the Structure.
    *
    * @default []
    */
   public readonly comments: string[];
+
   /**
    * All attributes in this structure.
    */
   public readonly attributes: StructureAttribute[] = [];
+
+  /**
+   * Do we persist this structure tot he database?
+   *
+   * @default true
+   */
+  public readonly persistant: boolean;
 
   constructor(public readonly project: DataService, options: StructureOptions) {
     super(project);
@@ -95,6 +112,7 @@ export class Structure extends Component {
     this.name = paramCase(options.name);
     this.typeParameter = options.typeParameter;
     this.comments = options.comments ?? [];
+    this.persistant = options.persistant ?? true;
 
     if (options.attributeOptions) {
       options.attributeOptions.forEach((attributeOption) => {

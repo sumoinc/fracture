@@ -1,13 +1,13 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from "typescript";
-import { ResourceAttributeType } from "../../../services";
+import { JsType, jsType } from "./util";
 import { Service } from "../../../services/service";
 import { StructureAttribute } from "../../../services/structure-attribute";
 import { TypescriptStrategy } from "../strategy";
 
 /**
- * Turns and array of StructureAttributes into Typescript properties.
+ * Turns an array of StructureAttributes into Typescript properties.
  */
-export const buildTypeProperies = ({
+export const buildMarshalledProperies = ({
   service,
   attributes,
 }: {
@@ -16,7 +16,7 @@ export const buildTypeProperies = ({
 }) => {
   return factory.createTypeLiteralNode(
     attributes.map((attribute) => {
-      return buildTypeProperty({
+      return buildMarshalledProperty({
         service,
         attribute,
       });
@@ -27,7 +27,7 @@ export const buildTypeProperies = ({
 /**
  * Turns one StructureAttribute into a Typescript property.
  */
-export const buildTypeProperty = ({
+export const buildMarshalledProperty = ({
   service,
   attribute,
 }: {
@@ -53,63 +53,58 @@ export const buildTypeProperty = ({
       typeParameter: "any",
       ...attribute,
     };
-    switch (type) {
-      case ResourceAttributeType.GUID:
-      case ResourceAttributeType.STRING:
-      case ResourceAttributeType.EMAIL:
-      case ResourceAttributeType.PHONE:
-      case ResourceAttributeType.URL:
-      case ResourceAttributeType.DATE:
-      case ResourceAttributeType.TIME:
-      case ResourceAttributeType.DATE_TIME:
-      case ResourceAttributeType.JSON:
-      case ResourceAttributeType.IPADDRESS:
-        return factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
-      case ResourceAttributeType.INT:
-      case ResourceAttributeType.FLOAT:
-      case ResourceAttributeType.TIMESTAMP:
-      case ResourceAttributeType.COUNT:
-      case ResourceAttributeType.AVERAGE:
-      case ResourceAttributeType.SUM:
-        return factory.createKeywordTypeNode(SyntaxKind.NumberKeyword);
-      case ResourceAttributeType.BOOLEAN:
-        return factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword);
-      case ResourceAttributeType.ARRAY:
+    switch (jsType(type)) {
+      case JsType.STRING:
+        return factory.createTypeLiteralNode([
+          factory.createPropertySignature(
+            undefined,
+            factory.createStringLiteral("S"),
+            undefined,
+            factory.createKeywordTypeNode(SyntaxKind.StringKeyword)
+          ),
+        ]);
+      case JsType.NUMBER:
+        return factory.createTypeLiteralNode([
+          factory.createPropertySignature(
+            undefined,
+            factory.createStringLiteral("N"),
+            undefined,
+            factory.createKeywordTypeNode(SyntaxKind.NumberKeyword)
+          ),
+        ]);
+      case JsType.BOOLEAN:
+        return factory.createTypeLiteralNode([
+          factory.createPropertySignature(
+            undefined,
+            factory.createStringLiteral("BOOL"),
+            undefined,
+            factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword)
+          ),
+        ]);
+      case JsType.ARRAY:
         if (!typeParameter) {
           throw new Error("Array type must have a type parameter");
         }
-        return factory.createTypeReferenceNode(
-          factory.createIdentifier("Array"),
-          [
-            factory.createTypeReferenceNode(
-              factory.createIdentifier(strategy.formatTypeName(typeParameter)),
-              undefined
-            ),
-          ]
-        );
-      case ResourceAttributeType.MAP:
+        return factory.createTypeLiteralNode([
+          factory.createPropertySignature(
+            undefined,
+            factory.createStringLiteral("L"),
+            undefined,
+            factory.createKeywordTypeNode(SyntaxKind.StringKeyword)
+          ),
+        ]);
+      case JsType.MAP:
         if (!typeParameter) {
           throw new Error("Map type must have a type parameter");
         }
-        return factory.createTypeReferenceNode(
-          factory.createIdentifier("Record"),
-          [
-            factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-            factory.createTypeReferenceNode(
-              factory.createIdentifier(strategy.formatTypeName(typeParameter)),
-              undefined
-            ),
-          ]
-        );
-      case ResourceAttributeType.ANY:
-        if (!typeParameter) {
-          throw new Error("Any type must have a type parameter");
-        }
-        return factory.createTypeReferenceNode(
-          factory.createIdentifier(strategy.formatTypeName(typeParameter)),
-          undefined
-        );
-
+        return factory.createTypeLiteralNode([
+          factory.createPropertySignature(
+            undefined,
+            factory.createStringLiteral("M"),
+            undefined,
+            factory.createKeywordTypeNode(SyntaxKind.StringKeyword)
+          ),
+        ]);
       default:
       // do nothing by default
     }
@@ -138,7 +133,7 @@ export const buildTypeProperty = ({
   // define the property
   const prop = factory.createPropertySignature(
     undefined,
-    factory.createIdentifier(strategy.formatAttributeName(attribute.name)),
+    factory.createIdentifier(strategy.formatAttributeName(attribute.shortName)),
     required,
     buildTypePropertyType()
   );
