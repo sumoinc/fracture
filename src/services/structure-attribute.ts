@@ -11,8 +11,10 @@ import { Structure } from "./structure";
 export type StructureAttributeOptions = {
   /**
    * The structure this attribute belongs to.
+   *
+   * @default undefined
    */
-  readonly structure: Structure;
+  readonly structure?: Structure;
 
   /**
    * Full long name for this attribute.
@@ -81,8 +83,10 @@ export class StructureAttribute extends Component {
 
   /**
    * The structure this attribute belongs to.
+   *
+   * @default undefined
    */
-  readonly structure: Structure;
+  readonly structure?: Structure;
 
   /**
    * Full long name for this attribute.
@@ -158,13 +162,14 @@ export class StructureAttribute extends Component {
      * Add to Structure
      **************************************************************************/
 
-    if (StructureAttribute.byName(this.structure, this.name)) {
-      throw new Error(
-        `Resource "${this.structure.name}" already has an attribute named "${this.name}"`
-      );
+    if (this.structure) {
+      if (StructureAttribute.byName(this.structure, this.name)) {
+        throw new Error(
+          `Resource "${this.structure.name}" already has an attribute named "${this.name}"`
+        );
+      }
+      this.structure.attributes.push(this);
     }
-
-    this.structure.attributes.push(this);
 
     return this;
   }

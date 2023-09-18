@@ -47,13 +47,13 @@ describe("crud operations", () => {
     ).toMatchSnapshot();
 
     // proper output
-    expect(operation?.outputStructure).toBeTruthy();
+    expect(operation?.outputAttribute).toBeTruthy();
     expect(
-      JSON.stringify(operation?.outputStructure.config(), null, 2)
+      JSON.stringify(operation?.outputAttribute.config(), null, 2)
     ).toMatchSnapshot();
 
     //console.log(operation?.inputStructure.config());
-    //console.log(operation?.outputStructure.config());
+    //console.log(operation?.outputAttribute.config());
   });
 
   test("Read Operation", () => {
@@ -66,13 +66,13 @@ describe("crud operations", () => {
     ).toMatchSnapshot();
 
     // proper output
-    expect(operation?.outputStructure).toBeTruthy();
+    expect(operation?.outputAttribute).toBeTruthy();
     expect(
-      JSON.stringify(operation?.outputStructure.config(), null, 2)
+      JSON.stringify(operation?.outputAttribute.config(), null, 2)
     ).toMatchSnapshot();
 
     //console.log(operation?.inputStructure.config());
-    //console.log(operation?.outputStructure.config());
+    //console.log(operation?.outputAttribute.config());
   });
 
   test("Update Operation", () => {
@@ -85,13 +85,13 @@ describe("crud operations", () => {
     ).toMatchSnapshot();
 
     // proper output
-    expect(operation?.outputStructure).toBeTruthy();
+    expect(operation?.outputAttribute).toBeTruthy();
     expect(
-      JSON.stringify(operation?.outputStructure.config(), null, 2)
+      JSON.stringify(operation?.outputAttribute.config(), null, 2)
     ).toMatchSnapshot();
 
     // console.log(operation?.inputStructure.config());
-    // console.log(operation?.outputStructure.config());
+    // console.log(operation?.outputAttribute.config());
   });
 
   test("Delete Operation", () => {
@@ -104,13 +104,13 @@ describe("crud operations", () => {
     ).toMatchSnapshot();
 
     // proper output
-    expect(operation?.outputStructure).toBeTruthy();
+    expect(operation?.outputAttribute).toBeTruthy();
     expect(
-      JSON.stringify(operation?.outputStructure.config(), null, 2)
+      JSON.stringify(operation?.outputAttribute.config(), null, 2)
     ).toMatchSnapshot();
 
     // console.log(operation?.inputStructure.config());
-    // console.log(operation?.outputStructure.config());
+    // console.log(operation?.outputAttribute.config());
   });
 });
 

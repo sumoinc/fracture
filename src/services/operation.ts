@@ -10,10 +10,12 @@ import {
   ResourceAttribute,
   ResourceAttributeGenerator,
   ResourceAttributeType,
-  VisabilityType,
 } from "./resource-attribute";
 import { Structure, StructureOptions } from "./structure";
-import { StructureAttributeOptions } from "./structure-attribute";
+import {
+  StructureAttribute,
+  StructureAttributeOptions,
+} from "./structure-attribute";
 import { DynamoGsi, DynamoTable } from "../dynamodb";
 
 /******************************************************************************
@@ -68,7 +70,7 @@ export type OperationOptions = {
    */
   readonly operationSubType?: ValueOf<typeof OperationSubType>;
   readonly inputAttributeOptions?: Array<StructureAttributeOptions>;
-  readonly outputAttributeOptions?: Array<StructureAttributeOptions>;
+  //readonly outputAttributeOptions?: Array<StructureAttributeOptions>;
 };
 
 export class Operation extends Component {
@@ -130,12 +132,6 @@ export class Operation extends Component {
       ) {
         o.addInputAttribute(attribute);
       }
-
-      // output includes anything visible
-      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-        // all outputs get everything visible
-        o.addOutputAttribute(attribute);
-      }
     });
 
     return o;
@@ -170,12 +166,6 @@ export class Operation extends Component {
       // all identifiers are required
       if (attribute.identifier === IdentifierType.PRIMARY) {
         o.addInputAttribute(attribute);
-      }
-
-      // output includes anything visible
-      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-        // all outputs get everything visible
-        o.addOutputAttribute(attribute);
       }
     });
 
@@ -222,12 +212,6 @@ export class Operation extends Component {
           required: false,
         });
       }
-
-      // output includes anything visible
-      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-        // all outputs get everything visible
-        o.addOutputAttribute(attribute);
-      }
     });
 
     return o;
@@ -262,12 +246,6 @@ export class Operation extends Component {
       // all identifiers are required
       if (attribute.identifier === IdentifierType.PRIMARY) {
         o.addInputAttribute(attribute);
-      }
-
-      // output includes anything visible
-      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-        // all outputs get everything visible
-        o.addOutputAttribute(attribute);
       }
     });
 
@@ -304,7 +282,7 @@ export class Operation extends Component {
    */
   public readonly operationSubType: ValueOf<typeof OperationSubType>;
   public readonly inputStructure: Structure;
-  public readonly outputStructure: Structure;
+  public readonly outputAttribute: StructureAttribute;
 
   /**
    * All structures for this resource.
@@ -334,10 +312,19 @@ export class Operation extends Component {
       attributeOptions: options.inputAttributeOptions ?? [],
     });
 
+    this.outputAttribute = new StructureAttribute(this.project, {
+      name: this.resource.name,
+      shortName: this.resource.shortName,
+      type: this.resource.name,
+    });
+
+    /*
     this.outputStructure = this.addStructure({
       name: `${this.name}-output`,
       attributeOptions: options.outputAttributeOptions ?? [],
     });
+
+    */
 
     /***************************************************************************
      * Add to Resource
@@ -388,21 +375,6 @@ export class Operation extends Component {
     });
   }
 
-  public addOutputAttribute(
-    attribute: ResourceAttribute,
-    options: Partial<StructureAttributeOptions> = {}
-  ) {
-    return this.outputStructure.addAttribute({
-      name: attribute.name,
-      shortName: attribute.shortName,
-      type: attribute.type,
-      typeParameter: attribute.typeParameter,
-      comments: attribute.comments,
-      required: attribute.required,
-      ...options,
-    });
-  }
-
   public get service() {
     return this.project;
   }
@@ -418,7 +390,7 @@ export class Operation extends Component {
       operationType: this.operationType,
       operationSubType: this.operationSubType,
       inputStructure: this.inputStructure.config(),
-      outputStructure: this.outputStructure.config(),
+      outputAttribute: this.outputAttribute.config(),
     };
   }
 }

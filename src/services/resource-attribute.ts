@@ -493,7 +493,7 @@ export class ResourceAttribute extends Component {
      * Update primary resource structures
      **************************************************************************/
 
-    // if user visible, add to public data structure
+    // if visible, add to public data structure
     if (this.visibility === VisabilityType.USER_VISIBLE) {
       this.resource.dataStructure.addAttribute({
         name: this.name,
