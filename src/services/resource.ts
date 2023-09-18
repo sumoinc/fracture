@@ -122,15 +122,7 @@ export class Resource extends Component {
    * Public facing data structure using full attributes names.
    * Excludes hidden attributes.
    */
-  public publicDataStructure: Structure;
-
-  /**
-   * Entire private data structure using shortnames.
-   * Includes all attributes, including hidden ones.
-   * This data shape is that unmarchalled data in dynamo looks like and can be
-   * used within internal messaging like SQS and EventBus.
-   */
-  public privateDataStructure: Structure;
+  public dataStructure: Structure;
 
   /**
    * All structures for this resource.
@@ -163,54 +155,10 @@ export class Resource extends Component {
      * Initialize data structures
      **************************************************************************/
 
-    this.publicDataStructure = this.addStructure({
+    this.dataStructure = this.addStructure({
       name: `${this.name}`,
       comments: [`Public facing data structure for this record.`],
     });
-
-    this.privateDataStructure = this.addStructure({
-      name: `${this.name}-data`,
-      comments: [
-        `Private data structure for this record.`,
-        `Used internally in Dynamo, SQS and other native services.`,
-      ],
-    });
-
-    /***************************************************************************
-     * Operations
-     **************************************************************************/
-
-    // Create
-    // this.createOperation = this.addOperation({
-    //   name: `create-${this.name}`,
-    //   dynamoGsi: DynamoTable.of(this.project).keyGsi,
-    //   operationType: OperationType.MUTATION,
-    //   operationSubType: OperationSubType.CREATE_ONE,
-    // });
-
-    // // Read
-    // this.readOperation = this.addOperation({
-    //   name: `get-${this.name}`,
-    //   dynamoGsi: DynamoTable.of(this.project).keyGsi,
-    //   operationType: OperationType.QUERY,
-    //   operationSubType: OperationSubType.READ_ONE,
-    // });
-
-    // // Update
-    // this.updateOperation = this.addOperation({
-    //   name: `update-${this.name}`,
-    //   dynamoGsi: DynamoTable.of(this.project).keyGsi,
-    //   operationType: OperationType.MUTATION,
-    //   operationSubType: OperationSubType.UPDATE_ONE,
-    // });
-
-    // // Delete
-    // this.deleteOperation = this.addOperation({
-    //   name: `delete-${this.name}`,
-    //   dynamoGsi: DynamoTable.of(this.project).keyGsi,
-    //   operationType: OperationType.MUTATION,
-    //   operationSubType: OperationSubType.DELETE_ONE,
-    // });
 
     /***************************************************************************
      * PArtition and Sort Key
@@ -363,7 +311,7 @@ export class Resource extends Component {
 
     // if user visible, add to public data structure
     if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-      this.publicDataStructure.addAttribute({
+      this.dataStructure.addAttribute({
         name: attribute.name,
         type: attribute.type,
         typeParameter: attribute.typeParameter,
@@ -371,47 +319,6 @@ export class Resource extends Component {
         required: attribute.required,
       });
     }
-
-    // // everything goes into private data structure
-    // this.privateDataStructure.addAttribute({
-    //   name: attribute.shortName,
-    //   type: attribute.type,
-    //   typeParameter: attribute.typeParameter,
-    //   comments: attribute.comments,
-    //   required: attribute.required,
-    // });
-
-    // /***************************************************************************
-    //  * Operation inputs / outputs
-    //  **************************************************************************/
-
-    // // if user visible it might be an input or output
-    // if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-    //   // all outputs get everything visible
-    //   this.createOperation.addOutputAttribute(attribute);
-    //   this.readOperation.addOutputAttribute(attribute);
-    //   this.updateOperation.addOutputAttribute(attribute);
-    //   this.deleteOperation.addOutputAttribute(attribute);
-
-    //   // read / update / delete need identifiers
-    //   if (attribute.identifier === IdentifierType.PRIMARY) {
-    //     this.createOperation.addInputAttribute(attribute);
-    //     this.readOperation.addInputAttribute(attribute);
-    //     this.updateOperation.addInputAttribute(attribute);
-    //     this.deleteOperation.addInputAttribute(attribute);
-    //   }
-
-    //   // create / update get all user managed
-    //   if (
-    //     attribute.management === ManagementType.USER_MANAGED &&
-    //     attribute.type !== ResourceAttributeType.ARRAY &&
-    //     attribute.type !== ResourceAttributeType.MAP &&
-    //     attribute.type === typeof ResourceAttributeType
-    //   ) {
-    //     this.createOperation.addInputAttribute(attribute);
-    //     this.updateOperation.addInputAttribute(attribute);
-    //   }
-    // }
 
     return attribute;
   }
@@ -488,7 +395,12 @@ export class Resource extends Component {
     return {
       name: this.name,
       shortName: this.shortName,
+      pluralName: this.pluralName,
+      comments: this.comments,
+      tenantEnabled: this.tenantEnabled,
+      dynamoTable: DynamoTable.of(this.project).config(),
       attributes: this.attributes.map((a) => a.config()),
+      dataStructure: this.dataStructure.config(),
     };
   }
 }

@@ -96,17 +96,15 @@ export class Operation extends Component {
    * Adds a create operation to the provided resource or returns existing
    * operation, if it exists
    */
-  public static create(
-    resource: Resource,
-    name?: string
-  ): Operation | undefined {
+  public static create(resource: Resource, name?: string): Operation {
     // does one exist al;ready?
     const isDefined = (c: Component): c is Operation =>
       c instanceof Operation &&
       c.operationSubType === OperationSubType.CREATE_ONE &&
       c.name === name;
-    if (resource.operations.find(isDefined)) {
-      return resource.operations.find(isDefined);
+    const foundOperation = resource.operations.find(isDefined);
+    if (foundOperation) {
+      return foundOperation;
     }
 
     // create one, then return it
@@ -147,14 +145,15 @@ export class Operation extends Component {
    * Adds a read operation to the provided resource or returns existing
    * operation, if it exists
    */
-  public static read(resource: Resource, name?: string): Operation | undefined {
+  public static read(resource: Resource, name?: string): Operation {
     // does one exist al;ready?
     const isDefined = (c: Component): c is Operation =>
       c instanceof Operation &&
       c.operationSubType === OperationSubType.READ_ONE &&
       c.name === name;
-    if (resource.operations.find(isDefined)) {
-      return resource.operations.find(isDefined);
+    const foundOperation = resource.operations.find(isDefined);
+    if (foundOperation) {
+      return foundOperation;
     }
 
     // create one, then return it
@@ -187,17 +186,15 @@ export class Operation extends Component {
    * Adds a update operation to the provided resource or returns existing
    * operation, if it exists
    */
-  public static update(
-    resource: Resource,
-    name?: string
-  ): Operation | undefined {
+  public static update(resource: Resource, name?: string): Operation {
     // does one exist al;ready?
     const isDefined = (c: Component): c is Operation =>
       c instanceof Operation &&
       c.operationSubType === OperationSubType.UPDATE_ONE &&
       c.name === name;
-    if (resource.operations.find(isDefined)) {
-      return resource.operations.find(isDefined);
+    const foundOperation = resource.operations.find(isDefined);
+    if (foundOperation) {
+      return foundOperation;
     }
 
     // create one, then return it
@@ -240,17 +237,15 @@ export class Operation extends Component {
    * Adds a delete operation to the provided resource or returns existing
    * operation, if it exists
    */
-  public static delete(
-    resource: Resource,
-    name?: string
-  ): Operation | undefined {
+  public static delete(resource: Resource, name?: string): Operation {
     // does one exist al;ready?
     const isDefined = (c: Component): c is Operation =>
       c instanceof Operation &&
       c.operationSubType === OperationSubType.DELETE_ONE &&
       c.name === name;
-    if (resource.operations.find(isDefined)) {
-      return resource.operations.find(isDefined);
+    const foundOperation = resource.operations.find(isDefined);
+    if (foundOperation) {
+      return foundOperation;
     }
 
     // create one, then return it
