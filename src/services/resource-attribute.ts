@@ -500,6 +500,8 @@ export class ResourceAttribute extends Component {
         shortName: this.shortName,
         type: this.type,
         typeParameter: this.typeParameter,
+        management: this.management,
+        visibility: this.visibility,
         comments: this.comments,
         required: this.required,
       });

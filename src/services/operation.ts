@@ -10,6 +10,7 @@ import {
   ResourceAttribute,
   ResourceAttributeGenerator,
   ResourceAttributeType,
+  VisabilityType,
 } from "./resource-attribute";
 import { Structure, StructureOptions } from "./structure";
 import {
@@ -120,10 +121,14 @@ export class Operation extends Component {
     });
 
     resource.attributes.forEach((attribute) => {
-      // all identifiers are required
-      if (attribute.identifier === IdentifierType.PRIMARY) {
+      // anything generated on create
+      if (
+        attribute.createGenerator &&
+        attribute.createGenerator !== ResourceAttributeGenerator.NONE
+      ) {
         o.addInputAttribute(attribute);
       }
+
       // add all user namaged attributes
       if (
         attribute.management === ManagementType.USER_MANAGED &&
@@ -316,6 +321,8 @@ export class Operation extends Component {
       name: this.resource.name,
       shortName: this.resource.shortName,
       type: this.resource.name,
+      management: ManagementType.SYSTEM_MANAGED,
+      visibility: VisabilityType.USER_VISIBLE,
     });
 
     /*
@@ -368,6 +375,8 @@ export class Operation extends Component {
       shortName: attribute.shortName,
       type: attribute.type,
       typeParameter: attribute.typeParameter,
+      management: attribute.management,
+      visibility: attribute.visibility,
       comments: attribute.comments,
       required: attribute.required,
       generator,

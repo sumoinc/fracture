@@ -360,6 +360,8 @@ export const configurations = {
             \\"name\\": \\"id\\",
             \\"shortName\\": \\"id\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"Identifier for this record.\\"
             ],
@@ -370,6 +372,8 @@ export const configurations = {
             \\"name\\": \\"type\\",
             \\"shortName\\": \\"t\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"Type of record.\\"
             ],
@@ -380,6 +384,8 @@ export const configurations = {
             \\"name\\": \\"version\\",
             \\"shortName\\": \\"v\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"Version for record.\\"
             ],
@@ -390,6 +396,8 @@ export const configurations = {
             \\"name\\": \\"created-timestamp\\",
             \\"shortName\\": \\"ct\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"The timestamp representing when this record was created.\\"
             ],
@@ -400,6 +408,8 @@ export const configurations = {
             \\"name\\": \\"modified-timestamp\\",
             \\"shortName\\": \\"mt\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"The timestamp representing when this record was last modified.\\"
             ],
@@ -410,6 +420,8 @@ export const configurations = {
             \\"name\\": \\"name\\",
             \\"shortName\\": \\"name\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"USER_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [],
             \\"required\\": true,
             \\"generator\\": \\"None\\"
@@ -714,6 +726,8 @@ export const configurations = {
             \\"name\\": \\"id\\",
             \\"shortName\\": \\"id\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"Identifier for this record.\\"
             ],
@@ -724,6 +738,8 @@ export const configurations = {
             \\"name\\": \\"type\\",
             \\"shortName\\": \\"t\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"Type of record.\\"
             ],
@@ -734,6 +750,8 @@ export const configurations = {
             \\"name\\": \\"version\\",
             \\"shortName\\": \\"v\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"Version for record.\\"
             ],
@@ -744,6 +762,8 @@ export const configurations = {
             \\"name\\": \\"created-timestamp\\",
             \\"shortName\\": \\"ct\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"The timestamp representing when this record was created.\\"
             ],
@@ -754,6 +774,8 @@ export const configurations = {
             \\"name\\": \\"modified-timestamp\\",
             \\"shortName\\": \\"mt\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [
               \\"The timestamp representing when this record was last modified.\\"
             ],
@@ -764,6 +786,8 @@ export const configurations = {
             \\"name\\": \\"name\\",
             \\"shortName\\": \\"name\\",
             \\"type\\": \\"String\\",
+            \\"management\\": \\"USER_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
             \\"comments\\": [],
             \\"required\\": true,
             \\"generator\\": \\"None\\"

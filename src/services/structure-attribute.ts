@@ -2,8 +2,10 @@ import { paramCase } from "change-case";
 import { Component } from "projen";
 import { ValueOf } from "type-fest";
 import {
+  ManagementType,
   ResourceAttributeGenerator,
   ResourceAttributeType,
+  VisabilityType,
 } from "./resource-attribute";
 import { Service } from "./service";
 import { Structure } from "./structure";
@@ -45,6 +47,20 @@ export type StructureAttributeOptions = {
    * @example 'T' for MyType<T> generic
    */
   readonly typeParameter?: string;
+
+  /**
+   * Is this managed by the end user or the system?
+   *
+   * @default ManagementType.SYSTEM_MANAGED
+   */
+  readonly management?: ValueOf<typeof ManagementType>;
+
+  /**
+   * Is this value visible to the end user?
+   *
+   * @default VisabilityType.USER_VISIBLE
+   */
+  readonly visibility?: ValueOf<typeof VisabilityType>;
 
   /**
    * Comment lines to add to the Resource.
@@ -119,6 +135,16 @@ export class StructureAttribute extends Component {
   public readonly typeParameter?: string;
 
   /**
+   * Is this managed by the end user or the system?
+   */
+  public readonly management: ValueOf<typeof ManagementType>;
+
+  /**
+   * Is this value visible to the end user?
+   */
+  public readonly visibility: ValueOf<typeof VisabilityType>;
+
+  /**
    * Comment lines to add to the Resource.
    *
    * @default []
@@ -154,6 +180,8 @@ export class StructureAttribute extends Component {
     this.shortName = options.shortName ?? this.name;
     this.type = options.type ?? ResourceAttributeType.STRING;
     this.typeParameter = options.typeParameter;
+    this.management = options.management ?? ManagementType.SYSTEM_MANAGED;
+    this.visibility = options.visibility ?? VisabilityType.USER_VISIBLE;
     this.comments = options.comments ?? [];
     this.required = options.required ?? true;
     this.generator = options.generator ?? ResourceAttributeGenerator.NONE;
@@ -184,6 +212,8 @@ export class StructureAttribute extends Component {
       shortName: this.shortName,
       type: this.type,
       typeParameter: this.typeParameter,
+      management: this.management,
+      visibility: this.visibility,
       comments: this.comments,
       required: this.required,
       generator: this.generator,
