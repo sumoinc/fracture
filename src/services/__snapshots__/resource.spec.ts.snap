@@ -66,12 +66,6 @@ export type Foo = {
 };
 
 /**
- * Private data structure for this record.
- * Used internally in Dynamo, SQS and other native services.
-*/
-export type FooData = {};
-
-/**
  * Public facing data structure for this record.
 */
 export type Bar = {
@@ -96,12 +90,6 @@ export type Bar = {
     */
     modifiedTimestamp: string;
 };
-
-/**
- * Private data structure for this record.
- * Used internally in Dynamo, SQS and other native services.
-*/
-export type BarData = {};
 "
 `;
 
@@ -171,12 +159,6 @@ export type Foo = {
 };
 
 /**
- * Private data structure for this record.
- * Used internally in Dynamo, SQS and other native services.
-*/
-export type FooData = {};
-
-/**
  * Public facing data structure for this record.
 */
 export type Bar = {
@@ -201,12 +183,6 @@ export type Bar = {
     */
     modifiedTimestamp: string;
 };
-
-/**
- * Private data structure for this record.
- * Used internally in Dynamo, SQS and other native services.
-*/
-export type BarData = {};
 "
 `;
 
@@ -276,12 +252,6 @@ export type Foo = {
 };
 
 /**
- * Private data structure for this record.
- * Used internally in Dynamo, SQS and other native services.
-*/
-export type FooData = {};
-
-/**
  * Public facing data structure for this record.
 */
 export type Bar = {
@@ -306,12 +276,6 @@ export type Bar = {
     */
     modifiedTimestamp: string;
 };
-
-/**
- * Private data structure for this record.
- * Used internally in Dynamo, SQS and other native services.
-*/
-export type BarData = {};
 "
 `;
 
@@ -378,12 +342,6 @@ export type Foo = {
 };
 
 /**
- * Private data structure for this record.
- * Used internally in Dynamo, SQS and other native services.
-*/
-export type FooData = {};
-
-/**
  * Public facing data structure for this record.
 */
 export type Bar = {
@@ -408,11 +366,396 @@ export type Bar = {
     */
     modifiedTimestamp: string;
 };
-
-/**
- * Private data structure for this record.
- * Used internally in Dynamo, SQS and other native services.
-*/
-export type BarData = {};
 "
+`;
+
+exports[`success conditions Smoke test 1`] = `
+Object {
+  "attributes": Array [
+    Object {
+      "comments": Array [
+        "Partition Key for this record.",
+      ],
+      "compositionSources": Array [
+        "id",
+      ],
+      "compositionsSeperator": "#",
+      "createGenerator": "Composition",
+      "deleteGenerator": "Composition",
+      "identifier": "NONE",
+      "management": "SYSTEM_MANAGED",
+      "name": "pk",
+      "readGenerator": "Composition",
+      "required": true,
+      "shortName": "pk",
+      "type": "String",
+      "typeParameter": undefined,
+      "updateGenerator": "Composition",
+      "visibility": "HIDDEN",
+    },
+    Object {
+      "comments": Array [
+        "Sort Key for this record.",
+      ],
+      "compositionSources": Array [
+        "type",
+        "version",
+      ],
+      "compositionsSeperator": "#",
+      "createGenerator": "Composition",
+      "deleteGenerator": "Composition",
+      "identifier": "NONE",
+      "management": "SYSTEM_MANAGED",
+      "name": "sk",
+      "readGenerator": "Composition",
+      "required": true,
+      "shortName": "sk",
+      "type": "String",
+      "typeParameter": undefined,
+      "updateGenerator": "Composition",
+      "visibility": "HIDDEN",
+    },
+    Object {
+      "comments": Array [
+        "Lookup value for this record.",
+      ],
+      "compositionSources": Array [],
+      "compositionsSeperator": " ",
+      "createGenerator": "Composition",
+      "deleteGenerator": "Composition",
+      "identifier": "NONE",
+      "management": "SYSTEM_MANAGED",
+      "name": "lookup",
+      "readGenerator": "Composition",
+      "required": true,
+      "shortName": "idx",
+      "type": "String",
+      "typeParameter": undefined,
+      "updateGenerator": "Composition",
+      "visibility": "HIDDEN",
+    },
+    Object {
+      "comments": Array [
+        "Identifier for this record.",
+      ],
+      "compositionSources": Array [],
+      "compositionsSeperator": "#",
+      "createGenerator": "Guid",
+      "deleteGenerator": "None",
+      "identifier": "PRIMARY",
+      "management": "SYSTEM_MANAGED",
+      "name": "id",
+      "readGenerator": "None",
+      "required": true,
+      "shortName": "id",
+      "type": "String",
+      "typeParameter": undefined,
+      "updateGenerator": "None",
+      "visibility": "USER_VISIBLE",
+    },
+    Object {
+      "comments": Array [
+        "Type of record.",
+      ],
+      "compositionSources": Array [],
+      "compositionsSeperator": "#",
+      "createGenerator": "Type",
+      "deleteGenerator": "None",
+      "identifier": "NONE",
+      "management": "SYSTEM_MANAGED",
+      "name": "type",
+      "readGenerator": "None",
+      "required": true,
+      "shortName": "t",
+      "type": "String",
+      "typeParameter": undefined,
+      "updateGenerator": "None",
+      "visibility": "USER_VISIBLE",
+    },
+    Object {
+      "comments": Array [
+        "Version for record.",
+      ],
+      "compositionSources": Array [],
+      "compositionsSeperator": "#",
+      "createGenerator": "VersionDateTimeStamp",
+      "deleteGenerator": "None",
+      "identifier": "NONE",
+      "management": "SYSTEM_MANAGED",
+      "name": "version",
+      "readGenerator": "None",
+      "required": true,
+      "shortName": "v",
+      "type": "String",
+      "typeParameter": undefined,
+      "updateGenerator": "None",
+      "visibility": "USER_VISIBLE",
+    },
+    Object {
+      "comments": Array [
+        "The timestamp representing when this record was created.",
+      ],
+      "compositionSources": Array [],
+      "compositionsSeperator": "#",
+      "createGenerator": "CurrentDateTimeStamp",
+      "deleteGenerator": "None",
+      "identifier": "NONE",
+      "management": "SYSTEM_MANAGED",
+      "name": "created-timestamp",
+      "readGenerator": "None",
+      "required": true,
+      "shortName": "ct",
+      "type": "String",
+      "typeParameter": undefined,
+      "updateGenerator": "CurrentDateTimeStamp",
+      "visibility": "USER_VISIBLE",
+    },
+    Object {
+      "comments": Array [
+        "The timestamp representing when this record was last modified.",
+      ],
+      "compositionSources": Array [],
+      "compositionsSeperator": "#",
+      "createGenerator": "None",
+      "deleteGenerator": "None",
+      "identifier": "NONE",
+      "management": "SYSTEM_MANAGED",
+      "name": "modified-timestamp",
+      "readGenerator": "None",
+      "required": true,
+      "shortName": "mt",
+      "type": "String",
+      "typeParameter": undefined,
+      "updateGenerator": "CurrentDateTimeStamp",
+      "visibility": "USER_VISIBLE",
+    },
+    Object {
+      "comments": Array [
+        "The timestamp representing when this record was marked as deleted.",
+      ],
+      "compositionSources": Array [],
+      "compositionsSeperator": "#",
+      "createGenerator": "None",
+      "deleteGenerator": "CurrentDateTimeStamp",
+      "identifier": "NONE",
+      "management": "SYSTEM_MANAGED",
+      "name": "deleted-timestamp",
+      "readGenerator": "None",
+      "required": true,
+      "shortName": "dt",
+      "type": "String",
+      "typeParameter": undefined,
+      "updateGenerator": "None",
+      "visibility": "HIDDEN",
+    },
+  ],
+  "comments": Array [],
+  "dataStructure": Object {
+    "attributes": Array [
+      Object {
+        "comments": Array [
+          "Partition Key for this record.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "pk",
+        "required": true,
+        "shortName": "pk",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "HIDDEN",
+      },
+      Object {
+        "comments": Array [
+          "Sort Key for this record.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "sk",
+        "required": true,
+        "shortName": "sk",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "HIDDEN",
+      },
+      Object {
+        "comments": Array [
+          "Lookup value for this record.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "lookup",
+        "required": true,
+        "shortName": "idx",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "HIDDEN",
+      },
+      Object {
+        "comments": Array [
+          "Identifier for this record.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "id",
+        "required": true,
+        "shortName": "id",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "USER_VISIBLE",
+      },
+      Object {
+        "comments": Array [
+          "Type of record.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "type",
+        "required": true,
+        "shortName": "t",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "USER_VISIBLE",
+      },
+      Object {
+        "comments": Array [
+          "Version for record.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "version",
+        "required": true,
+        "shortName": "v",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "USER_VISIBLE",
+      },
+      Object {
+        "comments": Array [
+          "The timestamp representing when this record was created.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "created-timestamp",
+        "required": true,
+        "shortName": "ct",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "USER_VISIBLE",
+      },
+      Object {
+        "comments": Array [
+          "The timestamp representing when this record was last modified.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "modified-timestamp",
+        "required": true,
+        "shortName": "mt",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "USER_VISIBLE",
+      },
+      Object {
+        "comments": Array [
+          "The timestamp representing when this record was marked as deleted.",
+        ],
+        "generator": "None",
+        "management": "SYSTEM_MANAGED",
+        "name": "deleted-timestamp",
+        "required": true,
+        "shortName": "dt",
+        "type": "String",
+        "typeParameter": undefined,
+        "visibility": "HIDDEN",
+      },
+    ],
+    "comments": Array [
+      "Public facing data structure for this record.",
+    ],
+    "name": "foo",
+    "persistant": true,
+    "typeParameter": undefined,
+  },
+  "dynamoTable": Object {
+    "gsi": Array [
+      Object {
+        "name": "key",
+        "pk": Object {
+          "attributeType": "S",
+          "keyType": "HASH",
+          "name": "pk",
+        },
+        "sk": Object {
+          "attributeType": "S",
+          "keyType": "RANGE",
+          "name": "sk",
+        },
+        "type": "PRIMARY",
+      },
+      Object {
+        "name": "loookup",
+        "pk": Object {
+          "attributeType": "S",
+          "keyType": "RANGE",
+          "name": "sk",
+        },
+        "sk": Object {
+          "attributeType": "S",
+          "keyType": "NONE",
+          "name": "idx",
+        },
+        "type": "SECONDARY",
+      },
+    ],
+    "idx": Object {
+      "attributeType": "S",
+      "keyType": "NONE",
+      "name": "idx",
+    },
+    "keyGsi": Object {
+      "name": "key",
+      "pk": Object {
+        "attributeType": "S",
+        "keyType": "HASH",
+        "name": "pk",
+      },
+      "sk": Object {
+        "attributeType": "S",
+        "keyType": "RANGE",
+        "name": "sk",
+      },
+      "type": "PRIMARY",
+    },
+    "lookupGsi": Object {
+      "name": "loookup",
+      "pk": Object {
+        "attributeType": "S",
+        "keyType": "RANGE",
+        "name": "sk",
+      },
+      "sk": Object {
+        "attributeType": "S",
+        "keyType": "NONE",
+        "name": "idx",
+      },
+      "type": "SECONDARY",
+    },
+    "name": "my-service-table",
+    "pk": Object {
+      "attributeType": "S",
+      "keyType": "HASH",
+      "name": "pk",
+    },
+    "sk": Object {
+      "attributeType": "S",
+      "keyType": "RANGE",
+      "name": "sk",
+    },
+  },
+  "name": "foo",
+  "pluralName": "foos",
+  "shortName": "foo",
+  "tenantEnabled": false,
+}
 `;

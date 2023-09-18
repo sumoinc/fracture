@@ -123,6 +123,7 @@ export class DataService extends Service {
 
     this.errorStructure = this.addStructure({
       name: `error`,
+      persistant: false,
       attributeOptions: [
         {
           name: `code`,
@@ -143,6 +144,7 @@ export class DataService extends Service {
     this.requestStructure = this.addStructure({
       name: `request`,
       typeParameter: `T`,
+      persistant: false,
       attributeOptions: [
         {
           name: `input`,
@@ -155,6 +157,7 @@ export class DataService extends Service {
     this.responseStructure = this.addStructure({
       name: `response`,
       typeParameter: `T`,
+      persistant: false,
       attributeOptions: [
         {
           name: `data`,
@@ -176,6 +179,7 @@ export class DataService extends Service {
     this.listRequestStructure = this.addStructure({
       name: `list-request`,
       typeParameter: `T`,
+      persistant: false,
       attributeOptions: [
         {
           name: `indexTerm`,
@@ -195,6 +199,7 @@ export class DataService extends Service {
     this.listResponseStructure = this.addStructure({
       name: `list-response`,
       typeParameter: `T`,
+      persistant: false,
       attributeOptions: [
         {
           name: `data`,

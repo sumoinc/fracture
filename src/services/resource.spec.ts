@@ -7,6 +7,7 @@ describe("success conditions", () => {
     const service = testDataService();
     const resource = new Resource(service, { name: "foo" });
     expect(resource).toBeTruthy();
+    expect(resource.config()).toMatchSnapshot();
   });
 
   test("Able to add attribute", () => {

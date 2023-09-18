@@ -110,7 +110,6 @@ export const ResourceAttributeType = {
    ****************************************************************************/
   ARRAY: "Array",
   MAP: "Map",
-  ANY: "Any",
   /*****************************************************************************
    *
    *  FRACTURE TYPES
@@ -488,6 +487,24 @@ export class ResourceAttribute extends Component {
     }
 
     this.resource.attributes.push(this);
+
+    /***************************************************************************
+     * Update primary resource structures
+     **************************************************************************/
+
+    // if visible, add to public data structure
+    //if (this.visibility === VisabilityType.USER_VISIBLE) {
+    this.resource.dataStructure.addAttribute({
+      name: this.name,
+      shortName: this.shortName,
+      type: this.type,
+      typeParameter: this.typeParameter,
+      management: this.management,
+      visibility: this.visibility,
+      comments: this.comments,
+      required: this.required,
+    });
+    //}
 
     return this;
   }

@@ -13,7 +13,10 @@ import {
   VisabilityType,
 } from "./resource-attribute";
 import { Structure, StructureOptions } from "./structure";
-import { StructureAttributeOptions } from "./structure-attribute";
+import {
+  StructureAttribute,
+  StructureAttributeOptions,
+} from "./structure-attribute";
 import { DynamoGsi, DynamoTable } from "../dynamodb";
 
 /******************************************************************************
@@ -68,7 +71,7 @@ export type OperationOptions = {
    */
   readonly operationSubType?: ValueOf<typeof OperationSubType>;
   readonly inputAttributeOptions?: Array<StructureAttributeOptions>;
-  readonly outputAttributeOptions?: Array<StructureAttributeOptions>;
+  //readonly outputAttributeOptions?: Array<StructureAttributeOptions>;
 };
 
 export class Operation extends Component {
@@ -96,17 +99,15 @@ export class Operation extends Component {
    * Adds a create operation to the provided resource or returns existing
    * operation, if it exists
    */
-  public static create(
-    resource: Resource,
-    name?: string
-  ): Operation | undefined {
+  public static create(resource: Resource, name?: string): Operation {
     // does one exist al;ready?
     const isDefined = (c: Component): c is Operation =>
       c instanceof Operation &&
       c.operationSubType === OperationSubType.CREATE_ONE &&
       c.name === name;
-    if (resource.operations.find(isDefined)) {
-      return resource.operations.find(isDefined);
+    const foundOperation = resource.operations.find(isDefined);
+    if (foundOperation) {
+      return foundOperation;
     }
 
     // create one, then return it
@@ -120,10 +121,14 @@ export class Operation extends Component {
     });
 
     resource.attributes.forEach((attribute) => {
-      // all identifiers are required
-      if (attribute.identifier === IdentifierType.PRIMARY) {
+      // anything generated on create
+      if (
+        attribute.createGenerator &&
+        attribute.createGenerator !== ResourceAttributeGenerator.NONE
+      ) {
         o.addInputAttribute(attribute);
       }
+
       // add all user namaged attributes
       if (
         attribute.management === ManagementType.USER_MANAGED &&
@@ -131,12 +136,6 @@ export class Operation extends Component {
         attribute.type !== ResourceAttributeType.MAP
       ) {
         o.addInputAttribute(attribute);
-      }
-
-      // output includes anything visible
-      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-        // all outputs get everything visible
-        o.addOutputAttribute(attribute);
       }
     });
 
@@ -147,14 +146,15 @@ export class Operation extends Component {
    * Adds a read operation to the provided resource or returns existing
    * operation, if it exists
    */
-  public static read(resource: Resource, name?: string): Operation | undefined {
+  public static read(resource: Resource, name?: string): Operation {
     // does one exist al;ready?
     const isDefined = (c: Component): c is Operation =>
       c instanceof Operation &&
       c.operationSubType === OperationSubType.READ_ONE &&
       c.name === name;
-    if (resource.operations.find(isDefined)) {
-      return resource.operations.find(isDefined);
+    const foundOperation = resource.operations.find(isDefined);
+    if (foundOperation) {
+      return foundOperation;
     }
 
     // create one, then return it
@@ -172,12 +172,6 @@ export class Operation extends Component {
       if (attribute.identifier === IdentifierType.PRIMARY) {
         o.addInputAttribute(attribute);
       }
-
-      // output includes anything visible
-      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-        // all outputs get everything visible
-        o.addOutputAttribute(attribute);
-      }
     });
 
     return o;
@@ -187,17 +181,15 @@ export class Operation extends Component {
    * Adds a update operation to the provided resource or returns existing
    * operation, if it exists
    */
-  public static update(
-    resource: Resource,
-    name?: string
-  ): Operation | undefined {
+  public static update(resource: Resource, name?: string): Operation {
     // does one exist al;ready?
     const isDefined = (c: Component): c is Operation =>
       c instanceof Operation &&
       c.operationSubType === OperationSubType.UPDATE_ONE &&
       c.name === name;
-    if (resource.operations.find(isDefined)) {
-      return resource.operations.find(isDefined);
+    const foundOperation = resource.operations.find(isDefined);
+    if (foundOperation) {
+      return foundOperation;
     }
 
     // create one, then return it
@@ -225,12 +217,6 @@ export class Operation extends Component {
           required: false,
         });
       }
-
-      // output includes anything visible
-      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-        // all outputs get everything visible
-        o.addOutputAttribute(attribute);
-      }
     });
 
     return o;
@@ -240,17 +226,15 @@ export class Operation extends Component {
    * Adds a delete operation to the provided resource or returns existing
    * operation, if it exists
    */
-  public static delete(
-    resource: Resource,
-    name?: string
-  ): Operation | undefined {
+  public static delete(resource: Resource, name?: string): Operation {
     // does one exist al;ready?
     const isDefined = (c: Component): c is Operation =>
       c instanceof Operation &&
       c.operationSubType === OperationSubType.DELETE_ONE &&
       c.name === name;
-    if (resource.operations.find(isDefined)) {
-      return resource.operations.find(isDefined);
+    const foundOperation = resource.operations.find(isDefined);
+    if (foundOperation) {
+      return foundOperation;
     }
 
     // create one, then return it
@@ -267,12 +251,6 @@ export class Operation extends Component {
       // all identifiers are required
       if (attribute.identifier === IdentifierType.PRIMARY) {
         o.addInputAttribute(attribute);
-      }
-
-      // output includes anything visible
-      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-        // all outputs get everything visible
-        o.addOutputAttribute(attribute);
       }
     });
 
@@ -309,7 +287,7 @@ export class Operation extends Component {
    */
   public readonly operationSubType: ValueOf<typeof OperationSubType>;
   public readonly inputStructure: Structure;
-  public readonly outputStructure: Structure;
+  public readonly outputAttribute: StructureAttribute;
 
   /**
    * All structures for this resource.
@@ -339,10 +317,21 @@ export class Operation extends Component {
       attributeOptions: options.inputAttributeOptions ?? [],
     });
 
+    this.outputAttribute = new StructureAttribute(this.project, {
+      name: this.resource.name,
+      shortName: this.resource.shortName,
+      type: this.resource.name,
+      management: ManagementType.SYSTEM_MANAGED,
+      visibility: VisabilityType.USER_VISIBLE,
+    });
+
+    /*
     this.outputStructure = this.addStructure({
       name: `${this.name}-output`,
       attributeOptions: options.outputAttributeOptions ?? [],
     });
+
+    */
 
     /***************************************************************************
      * Add to Resource
@@ -386,24 +375,11 @@ export class Operation extends Component {
       shortName: attribute.shortName,
       type: attribute.type,
       typeParameter: attribute.typeParameter,
+      management: attribute.management,
+      visibility: attribute.visibility,
       comments: attribute.comments,
       required: attribute.required,
       generator,
-      ...options,
-    });
-  }
-
-  public addOutputAttribute(
-    attribute: ResourceAttribute,
-    options: Partial<StructureAttributeOptions> = {}
-  ) {
-    return this.outputStructure.addAttribute({
-      name: attribute.name,
-      shortName: attribute.shortName,
-      type: attribute.type,
-      typeParameter: attribute.typeParameter,
-      comments: attribute.comments,
-      required: attribute.required,
       ...options,
     });
   }
@@ -419,11 +395,11 @@ export class Operation extends Component {
   public config(): Record<string, any> {
     return {
       name: this.name,
-      dynamoGsi: this.dynamoGsi,
+      dynamoGsi: this.dynamoGsi.config(),
       operationType: this.operationType,
       operationSubType: this.operationSubType,
       inputStructure: this.inputStructure.config(),
-      outputStructure: this.outputStructure.config(),
+      outputAttribute: this.outputAttribute.config(),
     };
   }
 }

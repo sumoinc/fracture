@@ -1,9 +1,5 @@
 import { SyntaxKind, addSyntheticLeadingComment, factory } from "typescript";
-import { buildProperies } from "./build-properties";
-import {
-  ResourceAttributeGenerator,
-  VisabilityType,
-} from "../../../services/resource-attribute";
+import { buildMarshalledProperies } from "./build-marshalled-properties";
 import { Service } from "../../../services/service";
 import { Structure } from "../../../services/structure";
 import { TypescriptStrategy } from "../strategy";
@@ -11,7 +7,7 @@ import { TypescriptStrategy } from "../strategy";
 /**
  * Turns and array of Structures into Typescript types.
  */
-export const buildTypes = ({
+export const buildMarshalledTypes = ({
   service,
   structures,
 }: {
@@ -19,7 +15,7 @@ export const buildTypes = ({
   structures: Array<Structure>;
 }) => {
   return structures.map((structure) => {
-    return buildType({
+    return buildMarshalledType({
       service,
       structure,
     });
@@ -27,9 +23,9 @@ export const buildTypes = ({
 };
 
 /**
- * Turns one Structure into a Typescript type.
+ * Turns one Structure into a native dynamo shape.
  */
-export const buildType = ({
+export const buildMarshalledType = ({
   service,
   structure,
 }: {
@@ -61,22 +57,19 @@ export const buildType = ({
         ),
       ]
     : undefined;
+
   // build properties for this type
-  const properties = buildProperies({
+  const properties = buildMarshalledProperies({
     service,
-    attributes: structure.attributes.filter((attribute) => {
-      // exclude generated types, these are not public
-      return (
-        attribute.generator === ResourceAttributeGenerator.NONE &&
-        attribute.visibility === VisabilityType.USER_VISIBLE
-      );
-    }),
+    attributes: structure.attributes,
   });
 
   // define the type
   const type = factory.createTypeAliasDeclaration(
     [factory.createToken(SyntaxKind.ExportKeyword)],
-    factory.createIdentifier(strategy.formatTypeName(structure.name)),
+    factory.createIdentifier(
+      strategy.formatTypeName(`${structure.name}-marshalled`)
+    ),
     typeParameter,
     properties
   );

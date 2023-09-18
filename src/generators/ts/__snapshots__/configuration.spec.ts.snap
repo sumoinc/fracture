@@ -86,6 +86,85 @@ export const configurations = {
     {
       \\"name\\": \\"user\\",
       \\"shortName\\": \\"user\\",
+      \\"pluralName\\": \\"users\\",
+      \\"comments\\": [],
+      \\"tenantEnabled\\": false,
+      \\"dynamoTable\\": {
+        \\"name\\": \\"my-service-table\\",
+        \\"pk\\": {
+          \\"name\\": \\"pk\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"HASH\\"
+        },
+        \\"sk\\": {
+          \\"name\\": \\"sk\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"RANGE\\"
+        },
+        \\"idx\\": {
+          \\"name\\": \\"idx\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"NONE\\"
+        },
+        \\"keyGsi\\": {
+          \\"name\\": \\"key\\",
+          \\"pk\\": {
+            \\"name\\": \\"pk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"HASH\\"
+          },
+          \\"sk\\": {
+            \\"name\\": \\"sk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"RANGE\\"
+          },
+          \\"type\\": \\"PRIMARY\\"
+        },
+        \\"lookupGsi\\": {
+          \\"name\\": \\"loookup\\",
+          \\"pk\\": {
+            \\"name\\": \\"sk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"RANGE\\"
+          },
+          \\"sk\\": {
+            \\"name\\": \\"idx\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"NONE\\"
+          },
+          \\"type\\": \\"SECONDARY\\"
+        },
+        \\"gsi\\": [
+          {
+            \\"name\\": \\"key\\",
+            \\"pk\\": {
+              \\"name\\": \\"pk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"HASH\\"
+            },
+            \\"sk\\": {
+              \\"name\\": \\"sk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"RANGE\\"
+            },
+            \\"type\\": \\"PRIMARY\\"
+          },
+          {
+            \\"name\\": \\"loookup\\",
+            \\"pk\\": {
+              \\"name\\": \\"sk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"RANGE\\"
+            },
+            \\"sk\\": {
+              \\"name\\": \\"idx\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"NONE\\"
+            },
+            \\"type\\": \\"SECONDARY\\"
+          }
+        ]
+      },
       \\"attributes\\": [
         {
           \\"name\\": \\"pk\\",
@@ -270,11 +349,217 @@ export const configurations = {
           \\"updateGenerator\\": \\"None\\",
           \\"deleteGenerator\\": \\"None\\"
         }
-      ]
+      ],
+      \\"dataStructure\\": {
+        \\"name\\": \\"user\\",
+        \\"comments\\": [
+          \\"Public facing data structure for this record.\\"
+        ],
+        \\"persistant\\": true,
+        \\"attributes\\": [
+          {
+            \\"name\\": \\"pk\\",
+            \\"shortName\\": \\"pk\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Partition Key for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"sk\\",
+            \\"shortName\\": \\"sk\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Sort Key for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"lookup\\",
+            \\"shortName\\": \\"idx\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Lookup value for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"id\\",
+            \\"shortName\\": \\"id\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [
+              \\"Identifier for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"type\\",
+            \\"shortName\\": \\"t\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [
+              \\"Type of record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"version\\",
+            \\"shortName\\": \\"v\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [
+              \\"Version for record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"created-timestamp\\",
+            \\"shortName\\": \\"ct\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was created.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"modified-timestamp\\",
+            \\"shortName\\": \\"mt\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was last modified.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"deleted-timestamp\\",
+            \\"shortName\\": \\"dt\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was marked as deleted.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"name\\",
+            \\"shortName\\": \\"name\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"USER_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          }
+        ]
+      }
     },
     {
       \\"name\\": \\"widget\\",
       \\"shortName\\": \\"widget\\",
+      \\"pluralName\\": \\"widgets\\",
+      \\"comments\\": [],
+      \\"tenantEnabled\\": true,
+      \\"dynamoTable\\": {
+        \\"name\\": \\"my-service-table\\",
+        \\"pk\\": {
+          \\"name\\": \\"pk\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"HASH\\"
+        },
+        \\"sk\\": {
+          \\"name\\": \\"sk\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"RANGE\\"
+        },
+        \\"idx\\": {
+          \\"name\\": \\"idx\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"NONE\\"
+        },
+        \\"keyGsi\\": {
+          \\"name\\": \\"key\\",
+          \\"pk\\": {
+            \\"name\\": \\"pk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"HASH\\"
+          },
+          \\"sk\\": {
+            \\"name\\": \\"sk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"RANGE\\"
+          },
+          \\"type\\": \\"PRIMARY\\"
+        },
+        \\"lookupGsi\\": {
+          \\"name\\": \\"loookup\\",
+          \\"pk\\": {
+            \\"name\\": \\"sk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"RANGE\\"
+          },
+          \\"sk\\": {
+            \\"name\\": \\"idx\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"NONE\\"
+          },
+          \\"type\\": \\"SECONDARY\\"
+        },
+        \\"gsi\\": [
+          {
+            \\"name\\": \\"key\\",
+            \\"pk\\": {
+              \\"name\\": \\"pk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"HASH\\"
+            },
+            \\"sk\\": {
+              \\"name\\": \\"sk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"RANGE\\"
+            },
+            \\"type\\": \\"PRIMARY\\"
+          },
+          {
+            \\"name\\": \\"loookup\\",
+            \\"pk\\": {
+              \\"name\\": \\"sk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"RANGE\\"
+            },
+            \\"sk\\": {
+              \\"name\\": \\"idx\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"NONE\\"
+            },
+            \\"type\\": \\"SECONDARY\\"
+          }
+        ]
+      },
       \\"attributes\\": [
         {
           \\"name\\": \\"pk\\",
@@ -479,7 +764,146 @@ export const configurations = {
           \\"updateGenerator\\": \\"None\\",
           \\"deleteGenerator\\": \\"None\\"
         }
-      ]
+      ],
+      \\"dataStructure\\": {
+        \\"name\\": \\"widget\\",
+        \\"comments\\": [
+          \\"Public facing data structure for this record.\\"
+        ],
+        \\"persistant\\": true,
+        \\"attributes\\": [
+          {
+            \\"name\\": \\"pk\\",
+            \\"shortName\\": \\"pk\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Partition Key for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"sk\\",
+            \\"shortName\\": \\"sk\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Sort Key for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"lookup\\",
+            \\"shortName\\": \\"idx\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Lookup value for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"tenant-id\\",
+            \\"shortName\\": \\"tid\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"Tenant identifier for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"id\\",
+            \\"shortName\\": \\"id\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [
+              \\"Identifier for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"type\\",
+            \\"shortName\\": \\"t\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [
+              \\"Type of record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"version\\",
+            \\"shortName\\": \\"v\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [
+              \\"Version for record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"created-timestamp\\",
+            \\"shortName\\": \\"ct\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was created.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"modified-timestamp\\",
+            \\"shortName\\": \\"mt\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was last modified.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"deleted-timestamp\\",
+            \\"shortName\\": \\"dt\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"SYSTEM_MANAGED\\",
+            \\"visibility\\": \\"HIDDEN\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was marked as deleted.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"name\\",
+            \\"shortName\\": \\"name\\",
+            \\"type\\": \\"String\\",
+            \\"management\\": \\"USER_MANAGED\\",
+            \\"visibility\\": \\"USER_VISIBLE\\",
+            \\"comments\\": [],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          }
+        ]
+      }
     }
   ],
   \\"operations\\": []
