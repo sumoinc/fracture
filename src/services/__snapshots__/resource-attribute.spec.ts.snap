@@ -64,12 +64,6 @@ export type Address = {
 };
 
 /**
- * Private data structure for this record.
- * Used internally in Dynamo, SQS and other native services.
-*/
-export type AddressData = {};
-
-/**
  * Public facing data structure for this record.
 */
 export type User = {
@@ -99,11 +93,5 @@ export type User = {
     addresses: Array<Address>;
     addressMap: Record<string, Address>;
 };
-
-/**
- * Private data structure for this record.
- * Used internally in Dynamo, SQS and other native services.
-*/
-export type UserData = {};
 "
 `;

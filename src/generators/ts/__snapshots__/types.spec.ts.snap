@@ -62,11 +62,5 @@ export type User = {
     firstName: string;
     lastName: string;
 };
-
-/**
- * Private data structure for this record.
- * Used internally in Dynamo, SQS and other native services.
-*/
-export type UserData = {};
 "
 `;

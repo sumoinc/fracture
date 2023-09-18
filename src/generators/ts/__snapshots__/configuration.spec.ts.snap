@@ -86,6 +86,85 @@ export const configurations = {
     {
       \\"name\\": \\"user\\",
       \\"shortName\\": \\"user\\",
+      \\"pluralName\\": \\"users\\",
+      \\"comments\\": [],
+      \\"tenantEnabled\\": false,
+      \\"dynamoTable\\": {
+        \\"name\\": \\"my-service-table\\",
+        \\"pk\\": {
+          \\"name\\": \\"pk\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"HASH\\"
+        },
+        \\"sk\\": {
+          \\"name\\": \\"sk\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"RANGE\\"
+        },
+        \\"idx\\": {
+          \\"name\\": \\"idx\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"NONE\\"
+        },
+        \\"keyGsi\\": {
+          \\"name\\": \\"key\\",
+          \\"pk\\": {
+            \\"name\\": \\"pk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"HASH\\"
+          },
+          \\"sk\\": {
+            \\"name\\": \\"sk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"RANGE\\"
+          },
+          \\"type\\": \\"PRIMARY\\"
+        },
+        \\"lookupGsi\\": {
+          \\"name\\": \\"loookup\\",
+          \\"pk\\": {
+            \\"name\\": \\"sk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"RANGE\\"
+          },
+          \\"sk\\": {
+            \\"name\\": \\"idx\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"NONE\\"
+          },
+          \\"type\\": \\"SECONDARY\\"
+        },
+        \\"gsi\\": [
+          {
+            \\"name\\": \\"key\\",
+            \\"pk\\": {
+              \\"name\\": \\"pk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"HASH\\"
+            },
+            \\"sk\\": {
+              \\"name\\": \\"sk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"RANGE\\"
+            },
+            \\"type\\": \\"PRIMARY\\"
+          },
+          {
+            \\"name\\": \\"loookup\\",
+            \\"pk\\": {
+              \\"name\\": \\"sk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"RANGE\\"
+            },
+            \\"sk\\": {
+              \\"name\\": \\"idx\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"NONE\\"
+            },
+            \\"type\\": \\"SECONDARY\\"
+          }
+        ]
+      },
       \\"attributes\\": [
         {
           \\"name\\": \\"pk\\",
@@ -270,11 +349,156 @@ export const configurations = {
           \\"updateGenerator\\": \\"None\\",
           \\"deleteGenerator\\": \\"None\\"
         }
-      ]
+      ],
+      \\"dataStructure\\": {
+        \\"name\\": \\"user\\",
+        \\"comments\\": [
+          \\"Public facing data structure for this record.\\"
+        ],
+        \\"attributes\\": [
+          {
+            \\"name\\": \\"id\\",
+            \\"shortName\\": \\"id\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [
+              \\"Identifier for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"type\\",
+            \\"shortName\\": \\"type\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [
+              \\"Type of record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"version\\",
+            \\"shortName\\": \\"version\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [
+              \\"Version for record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"created-timestamp\\",
+            \\"shortName\\": \\"created-timestamp\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was created.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"modified-timestamp\\",
+            \\"shortName\\": \\"modified-timestamp\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was last modified.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"name\\",
+            \\"shortName\\": \\"name\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          }
+        ]
+      }
     },
     {
       \\"name\\": \\"widget\\",
       \\"shortName\\": \\"widget\\",
+      \\"pluralName\\": \\"widgets\\",
+      \\"comments\\": [],
+      \\"tenantEnabled\\": true,
+      \\"dynamoTable\\": {
+        \\"name\\": \\"my-service-table\\",
+        \\"pk\\": {
+          \\"name\\": \\"pk\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"HASH\\"
+        },
+        \\"sk\\": {
+          \\"name\\": \\"sk\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"RANGE\\"
+        },
+        \\"idx\\": {
+          \\"name\\": \\"idx\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"NONE\\"
+        },
+        \\"keyGsi\\": {
+          \\"name\\": \\"key\\",
+          \\"pk\\": {
+            \\"name\\": \\"pk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"HASH\\"
+          },
+          \\"sk\\": {
+            \\"name\\": \\"sk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"RANGE\\"
+          },
+          \\"type\\": \\"PRIMARY\\"
+        },
+        \\"lookupGsi\\": {
+          \\"name\\": \\"loookup\\",
+          \\"pk\\": {
+            \\"name\\": \\"sk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"RANGE\\"
+          },
+          \\"sk\\": {
+            \\"name\\": \\"idx\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"NONE\\"
+          },
+          \\"type\\": \\"SECONDARY\\"
+        },
+        \\"gsi\\": [
+          {
+            \\"name\\": \\"key\\",
+            \\"pk\\": {
+              \\"name\\": \\"pk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"HASH\\"
+            },
+            \\"sk\\": {
+              \\"name\\": \\"sk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"RANGE\\"
+            },
+            \\"type\\": \\"PRIMARY\\"
+          },
+          {
+            \\"name\\": \\"loookup\\",
+            \\"pk\\": {
+              \\"name\\": \\"sk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"RANGE\\"
+            },
+            \\"sk\\": {
+              \\"name\\": \\"idx\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"NONE\\"
+            },
+            \\"type\\": \\"SECONDARY\\"
+          }
+        ]
+      },
       \\"attributes\\": [
         {
           \\"name\\": \\"pk\\",
@@ -479,7 +703,73 @@ export const configurations = {
           \\"updateGenerator\\": \\"None\\",
           \\"deleteGenerator\\": \\"None\\"
         }
-      ]
+      ],
+      \\"dataStructure\\": {
+        \\"name\\": \\"widget\\",
+        \\"comments\\": [
+          \\"Public facing data structure for this record.\\"
+        ],
+        \\"attributes\\": [
+          {
+            \\"name\\": \\"id\\",
+            \\"shortName\\": \\"id\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [
+              \\"Identifier for this record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"type\\",
+            \\"shortName\\": \\"type\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [
+              \\"Type of record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"version\\",
+            \\"shortName\\": \\"version\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [
+              \\"Version for record.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"created-timestamp\\",
+            \\"shortName\\": \\"created-timestamp\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was created.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"modified-timestamp\\",
+            \\"shortName\\": \\"modified-timestamp\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [
+              \\"The timestamp representing when this record was last modified.\\"
+            ],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          },
+          {
+            \\"name\\": \\"name\\",
+            \\"shortName\\": \\"name\\",
+            \\"type\\": \\"String\\",
+            \\"comments\\": [],
+            \\"required\\": true,
+            \\"generator\\": \\"None\\"
+          }
+        ]
+      }
     }
   ],
   \\"operations\\": []
