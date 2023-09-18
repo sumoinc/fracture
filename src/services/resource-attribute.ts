@@ -250,7 +250,7 @@ export type ResourceAttributeOptions = {
    *
    * @default '#'
    */
-  readonly compositionsSeperator?: string;
+  readonly compositionSeperator?: string;
 
   /**
    * The generator to use for all operations
@@ -397,7 +397,7 @@ export class ResourceAttribute extends Component {
    *
    * @default: '#'
    */
-  public readonly compositionsSeperator: string;
+  public readonly compositionSeperator: string;
 
   /**
    * The generator to use for create operations
@@ -457,7 +457,7 @@ export class ResourceAttribute extends Component {
     this.management = options.management ?? ManagementType.USER_MANAGED;
     this.visibility = options.visibility ?? VisabilityType.USER_VISIBLE;
     this.identifier = options.identifier ?? IdentifierType.NONE;
-    this.compositionsSeperator = options.compositionsSeperator ?? "#";
+    this.compositionSeperator = options.compositionSeperator ?? "#";
 
     /***************************************************************************
      * Generators
@@ -534,7 +534,7 @@ export class ResourceAttribute extends Component {
       visibility: this.visibility,
       identifier: this.identifier,
       compositionSources: this.compositionSources.map((a) => a.name),
-      compositionsSeperator: this.compositionsSeperator,
+      compositionSeperator: this.compositionSeperator,
       createGenerator: this.createGenerator,
       readGenerator: this.readGenerator,
       updateGenerator: this.updateGenerator,
