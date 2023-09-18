@@ -21,7 +21,7 @@ describe("Operations", () => {
     const content = synthFile(resource.service, "src/dynamodb-types.ts");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
-    //console.log(content);
-    //console.log(JSON.stringify(operation.config(), null, 2));
+    // console.log(content);
+    // console.log(JSON.stringify(operation.config(), null, 2));
   });
 });

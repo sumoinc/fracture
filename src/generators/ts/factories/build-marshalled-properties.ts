@@ -58,7 +58,7 @@ export const buildMarshalledProperty = ({
         return factory.createTypeLiteralNode([
           factory.createPropertySignature(
             undefined,
-            factory.createStringLiteral("S"),
+            factory.createIdentifier("S"),
             undefined,
             factory.createKeywordTypeNode(SyntaxKind.StringKeyword)
           ),
@@ -67,7 +67,7 @@ export const buildMarshalledProperty = ({
         return factory.createTypeLiteralNode([
           factory.createPropertySignature(
             undefined,
-            factory.createStringLiteral("N"),
+            factory.createIdentifier("N"),
             undefined,
             factory.createKeywordTypeNode(SyntaxKind.NumberKeyword)
           ),
@@ -76,7 +76,7 @@ export const buildMarshalledProperty = ({
         return factory.createTypeLiteralNode([
           factory.createPropertySignature(
             undefined,
-            factory.createStringLiteral("BOOL"),
+            factory.createIdentifier("BOOL"),
             undefined,
             factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword)
           ),
@@ -88,9 +88,21 @@ export const buildMarshalledProperty = ({
         return factory.createTypeLiteralNode([
           factory.createPropertySignature(
             undefined,
-            factory.createStringLiteral("L"),
+            factory.createIdentifier("L"),
             undefined,
-            factory.createKeywordTypeNode(SyntaxKind.StringKeyword)
+            factory.createTypeReferenceNode(factory.createIdentifier("Array"), [
+              factory.createTypeReferenceNode(
+                factory.createIdentifier("Partial"),
+                [
+                  factory.createTypeReferenceNode(
+                    factory.createIdentifier(
+                      strategy.formatTypeName(`${typeParameter}-marshalled`)
+                    ),
+                    undefined
+                  ),
+                ]
+              ),
+            ])
           ),
         ]);
       case JsType.MAP:
@@ -100,9 +112,25 @@ export const buildMarshalledProperty = ({
         return factory.createTypeLiteralNode([
           factory.createPropertySignature(
             undefined,
-            factory.createStringLiteral("M"),
+            factory.createIdentifier("M"),
             undefined,
-            factory.createKeywordTypeNode(SyntaxKind.StringKeyword)
+            factory.createTypeReferenceNode(
+              factory.createIdentifier("Record"),
+              [
+                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+                factory.createTypeReferenceNode(
+                  factory.createIdentifier("Partial"),
+                  [
+                    factory.createTypeReferenceNode(
+                      factory.createIdentifier(
+                        strategy.formatTypeName(`${typeParameter}-marshalled`)
+                      ),
+                      undefined
+                    ),
+                  ]
+                ),
+              ]
+            )
           ),
         ]);
       default:
@@ -111,10 +139,25 @@ export const buildMarshalledProperty = ({
 
     // if it's a resource type, use the resource name
     if (typeof type === "string") {
+      return factory.createTypeLiteralNode([
+        factory.createPropertySignature(
+          undefined,
+          factory.createStringLiteral("M"),
+          undefined,
+          factory.createTypeReferenceNode(
+            factory.createIdentifier(
+              strategy.formatTypeName(`${type}-marshalled`)
+            ),
+            undefined
+          )
+        ),
+      ]);
+      /*
       return factory.createTypeReferenceNode(
         factory.createIdentifier(strategy.formatTypeName(type)),
         undefined
       );
+      */
     }
 
     // if we get to here, something is broken.
