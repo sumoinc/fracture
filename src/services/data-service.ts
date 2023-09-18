@@ -1,5 +1,6 @@
 import { Project } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
+import { Operation } from "./operation";
 import { Resource, ResourceOptions } from "./resource";
 import { ResourceAttributeType } from "./resource-attribute";
 import { Service, ServiceOptions } from "./service";
@@ -241,8 +242,9 @@ export class DataService extends Service {
       ...super.config,
       name: this.name,
       tenantEnabled: this.tenantEnabled,
-      resources: Resource.all(this).map((r) => r.config()),
       dynamo: DynamoTable.of(this).config(),
+      resources: Resource.all(this).map((r) => r.config()),
+      operations: Operation.all(this).map((o) => o.config()),
     };
   }
 }

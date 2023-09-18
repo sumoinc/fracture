@@ -358,11 +358,11 @@ export class ResourceAttribute extends Component {
   /**
    * Type parameter for this structure attribute.
    *
-   * @default any
+   * @default undefined
    * @example 'T' for MyType<T> generic
    * @example 'Foo' for Array<Foo>
    */
-  public readonly typeParameter: string;
+  public readonly typeParameter?: string;
 
   /**
    * Is this managed by the end user or the system?
@@ -454,8 +454,6 @@ export class ResourceAttribute extends Component {
     this.typeParameter =
       options.typeParameter instanceof Resource
         ? options.typeParameter.name
-        : !options.typeParameter
-        ? "any"
         : options.typeParameter;
     this.management = options.management ?? ManagementType.USER_MANAGED;
     this.visibility = options.visibility ?? VisabilityType.USER_VISIBLE;

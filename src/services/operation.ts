@@ -5,8 +5,12 @@ import { ValueOf } from "type-fest";
 import { DataService } from "./data-service";
 import { Resource } from "./resource";
 import {
+  IdentifierType,
+  ManagementType,
   ResourceAttribute,
   ResourceAttributeGenerator,
+  ResourceAttributeType,
+  VisabilityType,
 } from "./resource-attribute";
 import { Structure, StructureOptions } from "./structure";
 import { StructureAttributeOptions } from "./structure-attribute";
@@ -69,11 +73,210 @@ export type OperationOptions = {
 
 export class Operation extends Component {
   /**
+   * Returns an attribute by name, or undefined if it doesn't exist
+   */
+  public static byName(
+    resource: Resource,
+    name: string
+  ): Operation | undefined {
+    const isDefined = (c: Component): c is Operation =>
+      c instanceof Operation && c.name === name;
+    return resource.operations.find(isDefined);
+  }
+
+  /**
    * Returns all structures for service
    */
   public static all(project: TypeScriptProject): Array<Operation> {
     const isDefined = (c: Component): c is Operation => c instanceof Operation;
     return project.components.filter(isDefined);
+  }
+
+  /**
+   * Adds a create operation to the provided resource or returns existing
+   * operation, if it exists
+   */
+  public static create(
+    resource: Resource,
+    name?: string
+  ): Operation | undefined {
+    // does one exist al;ready?
+    const isDefined = (c: Component): c is Operation =>
+      c instanceof Operation &&
+      c.operationSubType === OperationSubType.CREATE_ONE &&
+      c.name === name;
+    if (resource.operations.find(isDefined)) {
+      return resource.operations.find(isDefined);
+    }
+
+    // create one, then return it
+    const operationName = name || `create-${resource.name}`;
+    const o = new Operation(resource.service, {
+      name: operationName,
+      resource,
+      operationType: OperationType.MUTATION,
+      operationSubType: OperationSubType.CREATE_ONE,
+      dynamoGsi: DynamoTable.of(resource.project).keyGsi,
+    });
+
+    resource.attributes.forEach((attribute) => {
+      // all identifiers are required
+      if (attribute.identifier === IdentifierType.PRIMARY) {
+        o.addInputAttribute(attribute);
+      }
+      // add all user namaged attributes
+      if (
+        attribute.management === ManagementType.USER_MANAGED &&
+        attribute.type !== ResourceAttributeType.ARRAY &&
+        attribute.type !== ResourceAttributeType.MAP
+      ) {
+        o.addInputAttribute(attribute);
+      }
+
+      // output includes anything visible
+      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
+        // all outputs get everything visible
+        o.addOutputAttribute(attribute);
+      }
+    });
+
+    return o;
+  }
+
+  /**
+   * Adds a read operation to the provided resource or returns existing
+   * operation, if it exists
+   */
+  public static read(resource: Resource, name?: string): Operation | undefined {
+    // does one exist al;ready?
+    const isDefined = (c: Component): c is Operation =>
+      c instanceof Operation &&
+      c.operationSubType === OperationSubType.READ_ONE &&
+      c.name === name;
+    if (resource.operations.find(isDefined)) {
+      return resource.operations.find(isDefined);
+    }
+
+    // create one, then return it
+    const operationName = name || `get-${resource.name}`;
+    const o = new Operation(resource.service, {
+      name: operationName,
+      resource,
+      operationType: OperationType.QUERY,
+      operationSubType: OperationSubType.READ_ONE,
+      dynamoGsi: DynamoTable.of(resource.project).keyGsi,
+    });
+
+    resource.attributes.forEach((attribute) => {
+      // all identifiers are required
+      if (attribute.identifier === IdentifierType.PRIMARY) {
+        o.addInputAttribute(attribute);
+      }
+
+      // output includes anything visible
+      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
+        // all outputs get everything visible
+        o.addOutputAttribute(attribute);
+      }
+    });
+
+    return o;
+  }
+
+  /**
+   * Adds a update operation to the provided resource or returns existing
+   * operation, if it exists
+   */
+  public static update(
+    resource: Resource,
+    name?: string
+  ): Operation | undefined {
+    // does one exist al;ready?
+    const isDefined = (c: Component): c is Operation =>
+      c instanceof Operation &&
+      c.operationSubType === OperationSubType.UPDATE_ONE &&
+      c.name === name;
+    if (resource.operations.find(isDefined)) {
+      return resource.operations.find(isDefined);
+    }
+
+    // create one, then return it
+    const operationName = name || `get-${resource.name}`;
+    const o = new Operation(resource.service, {
+      name: operationName,
+      resource,
+      operationType: OperationType.QUERY,
+      operationSubType: OperationSubType.READ_ONE,
+      dynamoGsi: DynamoTable.of(resource.project).keyGsi,
+    });
+
+    resource.attributes.forEach((attribute) => {
+      // all identifiers are required
+      if (attribute.identifier === IdentifierType.PRIMARY) {
+        o.addInputAttribute(attribute);
+      }
+      // add all user namaged attributes
+      if (
+        attribute.management === ManagementType.USER_MANAGED &&
+        attribute.type !== ResourceAttributeType.ARRAY &&
+        attribute.type !== ResourceAttributeType.MAP
+      ) {
+        o.addInputAttribute(attribute, {
+          required: false,
+        });
+      }
+
+      // output includes anything visible
+      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
+        // all outputs get everything visible
+        o.addOutputAttribute(attribute);
+      }
+    });
+
+    return o;
+  }
+
+  /**
+   * Adds a delete operation to the provided resource or returns existing
+   * operation, if it exists
+   */
+  public static delete(
+    resource: Resource,
+    name?: string
+  ): Operation | undefined {
+    // does one exist al;ready?
+    const isDefined = (c: Component): c is Operation =>
+      c instanceof Operation &&
+      c.operationSubType === OperationSubType.DELETE_ONE &&
+      c.name === name;
+    if (resource.operations.find(isDefined)) {
+      return resource.operations.find(isDefined);
+    }
+
+    // create one, then return it
+    const operationName = name || `get-${resource.name}`;
+    const o = new Operation(resource.service, {
+      name: operationName,
+      resource,
+      operationType: OperationType.QUERY,
+      operationSubType: OperationSubType.READ_ONE,
+      dynamoGsi: DynamoTable.of(resource.project).keyGsi,
+    });
+
+    resource.attributes.forEach((attribute) => {
+      // all identifiers are required
+      if (attribute.identifier === IdentifierType.PRIMARY) {
+        o.addInputAttribute(attribute);
+      }
+
+      // output includes anything visible
+      if (attribute.visibility === VisabilityType.USER_VISIBLE) {
+        // all outputs get everything visible
+        o.addOutputAttribute(attribute);
+      }
+    });
+
+    return o;
   }
 
   /**
@@ -141,6 +344,18 @@ export class Operation extends Component {
       attributeOptions: options.outputAttributeOptions ?? [],
     });
 
+    /***************************************************************************
+     * Add to Resource
+     **************************************************************************/
+
+    if (Operation.byName(this.resource, this.name)) {
+      throw new Error(
+        `Resource "${this.resource.name}" already has an operation named "${this.name}"`
+      );
+    }
+
+    this.resource.operations.push(this);
+
     return this;
   }
 
@@ -195,5 +410,20 @@ export class Operation extends Component {
 
   public get service() {
     return this.project;
+  }
+
+  /***************************************************************************
+   * Configuration export for this operation
+   **************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      name: this.name,
+      dynamoGsi: this.dynamoGsi,
+      operationType: this.operationType,
+      operationSubType: this.operationSubType,
+      inputStructure: this.inputStructure.config(),
+      outputStructure: this.outputStructure.config(),
+    };
   }
 }

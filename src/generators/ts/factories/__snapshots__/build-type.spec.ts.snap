@@ -16,9 +16,9 @@ exports[`All attribute types should match snapshot 1`] = `
     phone: string;
     url: string;
     ipaddress: string;
-    array: Array<any>;
+    array: Array<Any>;
     map: Record<string, Any>;
-    any: any;
+    any: Any;
     count: number;
     average: number;
     sum: number;

@@ -19,7 +19,7 @@ describe("success conditions", () => {
     ).toBeGreaterThanOrEqual(0);
   });
 
-  test("Smoke test with  helper", () => {
+  test("Smoke test with helper", () => {
     const resource = testResource();
     const operation = resource.addOperation({
       name: "save-user",
@@ -35,3 +35,95 @@ describe("success conditions", () => {
     ).toBeGreaterThanOrEqual(0);
   });
 });
+
+describe("crud operations", () => {
+  test("Create Operation", () => {
+    const operation = Operation.create(testOperationResource());
+
+    // proper input
+    expect(operation?.inputStructure).toBeTruthy();
+    expect(
+      JSON.stringify(operation?.inputStructure.config(), null, 2)
+    ).toMatchSnapshot();
+
+    // proper output
+    expect(operation?.outputStructure).toBeTruthy();
+    expect(
+      JSON.stringify(operation?.outputStructure.config(), null, 2)
+    ).toMatchSnapshot();
+
+    //console.log(operation?.inputStructure.config());
+    //console.log(operation?.outputStructure.config());
+  });
+
+  test("Read Operation", () => {
+    const operation = Operation.read(testOperationResource());
+
+    // proper input
+    expect(operation?.inputStructure).toBeTruthy();
+    expect(
+      JSON.stringify(operation?.inputStructure.config(), null, 2)
+    ).toMatchSnapshot();
+
+    // proper output
+    expect(operation?.outputStructure).toBeTruthy();
+    expect(
+      JSON.stringify(operation?.outputStructure.config(), null, 2)
+    ).toMatchSnapshot();
+
+    //console.log(operation?.inputStructure.config());
+    //console.log(operation?.outputStructure.config());
+  });
+
+  test("Update Operation", () => {
+    const operation = Operation.update(testOperationResource());
+
+    // proper input
+    expect(operation?.inputStructure).toBeTruthy();
+    expect(
+      JSON.stringify(operation?.inputStructure.config(), null, 2)
+    ).toMatchSnapshot();
+
+    // proper output
+    expect(operation?.outputStructure).toBeTruthy();
+    expect(
+      JSON.stringify(operation?.outputStructure.config(), null, 2)
+    ).toMatchSnapshot();
+
+    // console.log(operation?.inputStructure.config());
+    // console.log(operation?.outputStructure.config());
+  });
+
+  test("Delete Operation", () => {
+    const operation = Operation.delete(testOperationResource());
+
+    // proper input
+    expect(operation?.inputStructure).toBeTruthy();
+    expect(
+      JSON.stringify(operation?.inputStructure.config(), null, 2)
+    ).toMatchSnapshot();
+
+    // proper output
+    expect(operation?.outputStructure).toBeTruthy();
+    expect(
+      JSON.stringify(operation?.outputStructure.config(), null, 2)
+    ).toMatchSnapshot();
+
+    // console.log(operation?.inputStructure.config());
+    // console.log(operation?.outputStructure.config());
+  });
+});
+
+// semi complext resource for testing CRUD operations
+const testOperationResource = () => {
+  const resource = testResource();
+  resource.addAttribute({
+    name: "required-name",
+    required: true,
+  });
+  resource.addAttribute({
+    name: "optional-name",
+    required: false,
+  });
+  return resource;
+};
