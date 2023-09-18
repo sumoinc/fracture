@@ -27,5 +27,5 @@ test("Smoke test", () => {
   const content = synthFile(service, "src/configuration.ts");
   expect(content).toBeTruthy();
   expect(content).toMatchSnapshot();
-  console.log(content);
+  // console.log(content);
 });
