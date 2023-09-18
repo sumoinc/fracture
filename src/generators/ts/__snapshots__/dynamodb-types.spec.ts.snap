@@ -63,8 +63,36 @@ export type MyResource = {
     lastName: string;
     height: number;
     isFrog: boolean;
+    oneDoug: Doug;
     arrayOfDoug: Array<Doug>;
     mapOfDoug: Record<string, Doug>;
+};
+
+/**
+ * Public facing data structure for this record.
+*/
+export type Doug = {
+    /**
+     * Identifier for this record.
+    */
+    id: string;
+    /**
+     * Type of record.
+    */
+    type: string;
+    /**
+     * Version for record.
+    */
+    version: string;
+    /**
+     * The timestamp representing when this record was created.
+    */
+    createdTimestamp: string;
+    /**
+     * The timestamp representing when this record was last modified.
+    */
+    modifiedTimestamp: string;
+    name: string;
 };
 
 export type CreateMyResourceInput = {
@@ -72,6 +100,7 @@ export type CreateMyResourceInput = {
     lastName: string;
     height: number;
     isFrog: boolean;
+    oneDoug: Doug;
 };
 "
 `;
@@ -149,11 +178,77 @@ export type MyResourceMarshalled = {
     if: {
         \\"BOOL\\": boolean;
     };
+    od: {
+        \\"M\\": DougMarshalled;
+    };
     ad: {
-        \\"L\\": string;
+        \\"L\\": Array<DougMarshalled>;
     };
     md: {
-        \\"M\\": string;
+        \\"M\\": Record<string, DougMarshalled>;
+    };
+};
+
+/**
+ * Public facing data structure for this record.
+*/
+export type DougMarshalled = {
+    /**
+     * Partition Key for this record.
+    */
+    pk: {
+        \\"S\\": string;
+    };
+    /**
+     * Sort Key for this record.
+    */
+    sk: {
+        \\"S\\": string;
+    };
+    /**
+     * Lookup value for this record.
+    */
+    idx: {
+        \\"S\\": string;
+    };
+    /**
+     * Identifier for this record.
+    */
+    id: {
+        \\"S\\": string;
+    };
+    /**
+     * Type of record.
+    */
+    t: {
+        \\"S\\": string;
+    };
+    /**
+     * Version for record.
+    */
+    v: {
+        \\"S\\": string;
+    };
+    /**
+     * The timestamp representing when this record was created.
+    */
+    ct: {
+        \\"S\\": string;
+    };
+    /**
+     * The timestamp representing when this record was last modified.
+    */
+    mt: {
+        \\"S\\": string;
+    };
+    /**
+     * The timestamp representing when this record was marked as deleted.
+    */
+    dt: {
+        \\"S\\": string;
+    };
+    name: {
+        \\"S\\": string;
     };
 };
 
@@ -212,6 +307,9 @@ export type CreateMyResourceInputMarshalled = {
     if: {
         \\"BOOL\\": boolean;
     };
+    od: {
+        \\"M\\": DougMarshalled;
+    };
 };
 
 /**
@@ -258,8 +356,52 @@ export type MyResourceUnmarshalled = {
     ln: string;
     ht: number;
     if: boolean;
+    od: Doug;
     ad: Array<DougUnmarshalled>;
     md: Record<string, DougUnmarshalled>;
+};
+
+/**
+ * Public facing data structure for this record.
+*/
+export type DougUnmarshalled = {
+    /**
+     * Partition Key for this record.
+    */
+    pk: string;
+    /**
+     * Sort Key for this record.
+    */
+    sk: string;
+    /**
+     * Lookup value for this record.
+    */
+    idx: string;
+    /**
+     * Identifier for this record.
+    */
+    id: string;
+    /**
+     * Type of record.
+    */
+    t: string;
+    /**
+     * Version for record.
+    */
+    v: string;
+    /**
+     * The timestamp representing when this record was created.
+    */
+    ct: string;
+    /**
+     * The timestamp representing when this record was last modified.
+    */
+    mt: string;
+    /**
+     * The timestamp representing when this record was marked as deleted.
+    */
+    dt: string;
+    name: string;
 };
 
 export type CreateMyResourceInputUnmarshalled = {
@@ -295,6 +437,7 @@ export type CreateMyResourceInputUnmarshalled = {
     ln: string;
     ht: number;
     if: boolean;
+    od: Doug;
 };
 "
 `;
@@ -362,8 +505,36 @@ export type MyResource = {
     lastName: string;
     height: number;
     isFrog: boolean;
+    oneDoug: Doug;
     arrayOfDoug: Array<Doug>;
     mapOfDoug: Record<string, Doug>;
+};
+
+/**
+ * Public facing data structure for this record.
+*/
+export type Doug = {
+    /**
+     * Identifier for this record.
+    */
+    id: string;
+    /**
+     * Type of record.
+    */
+    type: string;
+    /**
+     * Version for record.
+    */
+    version: string;
+    /**
+     * The timestamp representing when this record was created.
+    */
+    createdTimestamp: string;
+    /**
+     * The timestamp representing when this record was last modified.
+    */
+    modifiedTimestamp: string;
+    name: string;
 };
 "
 `;
@@ -441,11 +612,77 @@ export type MyResourceMarshalled = {
     if: {
         \\"BOOL\\": boolean;
     };
+    od: {
+        \\"M\\": DougMarshalled;
+    };
     ad: {
-        \\"L\\": string;
+        \\"L\\": Array<DougMarshalled>;
     };
     md: {
-        \\"M\\": string;
+        \\"M\\": Record<string, DougMarshalled>;
+    };
+};
+
+/**
+ * Public facing data structure for this record.
+*/
+export type DougMarshalled = {
+    /**
+     * Partition Key for this record.
+    */
+    pk: {
+        \\"S\\": string;
+    };
+    /**
+     * Sort Key for this record.
+    */
+    sk: {
+        \\"S\\": string;
+    };
+    /**
+     * Lookup value for this record.
+    */
+    idx: {
+        \\"S\\": string;
+    };
+    /**
+     * Identifier for this record.
+    */
+    id: {
+        \\"S\\": string;
+    };
+    /**
+     * Type of record.
+    */
+    t: {
+        \\"S\\": string;
+    };
+    /**
+     * Version for record.
+    */
+    v: {
+        \\"S\\": string;
+    };
+    /**
+     * The timestamp representing when this record was created.
+    */
+    ct: {
+        \\"S\\": string;
+    };
+    /**
+     * The timestamp representing when this record was last modified.
+    */
+    mt: {
+        \\"S\\": string;
+    };
+    /**
+     * The timestamp representing when this record was marked as deleted.
+    */
+    dt: {
+        \\"S\\": string;
+    };
+    name: {
+        \\"S\\": string;
     };
 };
 
@@ -493,8 +730,52 @@ export type MyResourceUnmarshalled = {
     ln: string;
     ht: number;
     if: boolean;
+    od: Doug;
     ad: Array<DougUnmarshalled>;
     md: Record<string, DougUnmarshalled>;
+};
+
+/**
+ * Public facing data structure for this record.
+*/
+export type DougUnmarshalled = {
+    /**
+     * Partition Key for this record.
+    */
+    pk: string;
+    /**
+     * Sort Key for this record.
+    */
+    sk: string;
+    /**
+     * Lookup value for this record.
+    */
+    idx: string;
+    /**
+     * Identifier for this record.
+    */
+    id: string;
+    /**
+     * Type of record.
+    */
+    t: string;
+    /**
+     * Version for record.
+    */
+    v: string;
+    /**
+     * The timestamp representing when this record was created.
+    */
+    ct: string;
+    /**
+     * The timestamp representing when this record was last modified.
+    */
+    mt: string;
+    /**
+     * The timestamp representing when this record was marked as deleted.
+    */
+    dt: string;
+    name: string;
 };
 "
 `;

@@ -90,7 +90,14 @@ export const buildMarshalledProperty = ({
             undefined,
             factory.createStringLiteral("L"),
             undefined,
-            factory.createKeywordTypeNode(SyntaxKind.StringKeyword)
+            factory.createTypeReferenceNode(factory.createIdentifier("Array"), [
+              factory.createTypeReferenceNode(
+                factory.createIdentifier(
+                  strategy.formatTypeName(`${typeParameter}-marshalled`)
+                ),
+                undefined
+              ),
+            ])
           ),
         ]);
       case JsType.MAP:
@@ -102,7 +109,23 @@ export const buildMarshalledProperty = ({
             undefined,
             factory.createStringLiteral("M"),
             undefined,
-            factory.createKeywordTypeNode(SyntaxKind.StringKeyword)
+            factory.createTypeReferenceNode(
+              factory.createIdentifier("Record"),
+              [
+                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+                factory.createTypeReferenceNode(
+                  factory.createIdentifier("Partial"),
+                  [
+                    factory.createTypeReferenceNode(
+                      factory.createIdentifier(
+                        strategy.formatTypeName(`${typeParameter}-marshalled`)
+                      ),
+                      undefined
+                    ),
+                  ]
+                ),
+              ]
+            )
           ),
         ]);
       default:
@@ -111,10 +134,25 @@ export const buildMarshalledProperty = ({
 
     // if it's a resource type, use the resource name
     if (typeof type === "string") {
+      return factory.createTypeLiteralNode([
+        factory.createPropertySignature(
+          undefined,
+          factory.createStringLiteral("M"),
+          undefined,
+          factory.createTypeReferenceNode(
+            factory.createIdentifier(
+              strategy.formatTypeName(`${type}-marshalled`)
+            ),
+            undefined
+          )
+        ),
+      ]);
+      /*
       return factory.createTypeReferenceNode(
         factory.createIdentifier(strategy.formatTypeName(type)),
         undefined
       );
+      */
     }
 
     // if we get to here, something is broken.

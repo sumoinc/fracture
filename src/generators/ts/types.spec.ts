@@ -1,5 +1,5 @@
 import { Types } from "./types";
-import { Operation, ResourceAttributeType } from "../../services";
+import { Operation, Resource, ResourceAttributeType } from "../../services";
 import { synthFile, testResource } from "../../util/test-util";
 
 test("Resource formatting test", () => {
@@ -45,17 +45,34 @@ export const complexResource = () => {
     shortName: "if",
     type: ResourceAttributeType.BOOLEAN,
   });
+
+  // related resource
+  const dougResource = new Resource(resource.service, {
+    name: "doug",
+    attributeOptions: [
+      {
+        name: "name",
+      },
+    ],
+  });
+
+  resource.addAttribute({
+    name: "one-doug",
+    shortName: "od",
+    type: dougResource,
+  });
   resource.addAttribute({
     name: "array-of-doug",
     shortName: "ad",
     type: ResourceAttributeType.ARRAY,
-    typeParameter: "Doug",
+    typeParameter: dougResource,
   });
   resource.addAttribute({
     name: "map-of-doug",
     shortName: "md",
     type: ResourceAttributeType.MAP,
-    typeParameter: "Doug",
+    typeParameter: dougResource,
   });
+
   return resource;
 };

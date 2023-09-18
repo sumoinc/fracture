@@ -63,8 +63,36 @@ export type MyResource = {
     lastName: string;
     height: number;
     isFrog: boolean;
+    oneDoug: Doug;
     arrayOfDoug: Array<Doug>;
     mapOfDoug: Record<string, Doug>;
+};
+
+/**
+ * Public facing data structure for this record.
+*/
+export type Doug = {
+    /**
+     * Identifier for this record.
+    */
+    id: string;
+    /**
+     * Type of record.
+    */
+    type: string;
+    /**
+     * Version for record.
+    */
+    version: string;
+    /**
+     * The timestamp representing when this record was created.
+    */
+    createdTimestamp: string;
+    /**
+     * The timestamp representing when this record was last modified.
+    */
+    modifiedTimestamp: string;
+    name: string;
 };
 
 export type CreateMyResourceInput = {
@@ -72,6 +100,7 @@ export type CreateMyResourceInput = {
     lastName: string;
     height: number;
     isFrog: boolean;
+    oneDoug: Doug;
 };
 "
 `;
@@ -139,8 +168,36 @@ export type MyResource = {
     lastName: string;
     height: number;
     isFrog: boolean;
+    oneDoug: Doug;
     arrayOfDoug: Array<Doug>;
     mapOfDoug: Record<string, Doug>;
+};
+
+/**
+ * Public facing data structure for this record.
+*/
+export type Doug = {
+    /**
+     * Identifier for this record.
+    */
+    id: string;
+    /**
+     * Type of record.
+    */
+    type: string;
+    /**
+     * Version for record.
+    */
+    version: string;
+    /**
+     * The timestamp representing when this record was created.
+    */
+    createdTimestamp: string;
+    /**
+     * The timestamp representing when this record was last modified.
+    */
+    modifiedTimestamp: string;
+    name: string;
 };
 "
 `;
