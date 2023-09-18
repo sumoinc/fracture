@@ -55,7 +55,7 @@ export const configurations = {
           \\"deleteGenerator\\": \\"Composition\\"
         },
         {
-          \\"name\\": \\"idx\\",
+          \\"name\\": \\"lookup\\",
           \\"shortName\\": \\"idx\\",
           \\"required\\": true,
           \\"comments\\": [
@@ -256,7 +256,7 @@ export const configurations = {
           \\"deleteGenerator\\": \\"Composition\\"
         },
         {
-          \\"name\\": \\"idx\\",
+          \\"name\\": \\"lookup\\",
           \\"shortName\\": \\"idx\\",
           \\"required\\": true,
           \\"comments\\": [

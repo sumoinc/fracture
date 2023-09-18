@@ -67,168 +67,22 @@ export type User = {
  * Private data structure for this record.
  * Used internally in Dynamo, SQS and other native services.
 */
-export type UserData = {
-    /**
-     * Partition Key for this record.
-    */
-    pk: string;
-    /**
-     * Sort Key for this record.
-    */
-    sk: string;
-    /**
-     * Lookup value for this record.
-    */
-    idx: string;
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    t: string;
-    /**
-     * Version for record.
-    */
-    v: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    ct: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    mt: string;
-    /**
-     * The timestamp representing when this record was marked as deleted.
-    */
-    dt: string;
-    fn: string;
-    ln: string;
-};
+export type UserData = {};
 
 export type CreateUserInput = {};
 
-export type CreateUserOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    firstName: string;
-    lastName: string;
-};
+export type CreateUserOutput = {};
 
-export type GetUserInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type GetUserInput = {};
 
-export type GetUserOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    firstName: string;
-    lastName: string;
-};
+export type GetUserOutput = {};
 
-export type UpdateUserInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type UpdateUserInput = {};
 
-export type UpdateUserOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    firstName: string;
-    lastName: string;
-};
+export type UpdateUserOutput = {};
 
-export type DeleteUserInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type DeleteUserInput = {};
 
-export type DeleteUserOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    firstName: string;
-    lastName: string;
-};
+export type DeleteUserOutput = {};
 "
 `;

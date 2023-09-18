@@ -245,7 +245,8 @@ export class Resource extends Component {
      **************************************************************************/
 
     this.idx = this.addAttribute({
-      name: DynamoTable.of(this.project).idx.name,
+      name: "lookup",
+      shortName: DynamoTable.of(this.project).idx.name,
       comments: [`Lookup value for this record.`],
       management: ManagementType.SYSTEM_MANAGED,
       visibility: VisabilityType.HIDDEN,
@@ -365,9 +366,9 @@ export class Resource extends Component {
       ...options,
     });
 
-    /***************************************************************************
-     * Update data structures
-     **************************************************************************/
+    // /***************************************************************************
+    //  * Update data structures
+    //  **************************************************************************/
 
     // if user visible, add to public data structure
     if (attribute.visibility === VisabilityType.USER_VISIBLE) {
@@ -380,46 +381,46 @@ export class Resource extends Component {
       });
     }
 
-    // everything goes into private data structure
-    this.privateDataStructure.addAttribute({
-      name: attribute.shortName,
-      type: attribute.type,
-      typeParameter: attribute.typeParameter,
-      comments: attribute.comments,
-      required: attribute.required,
-    });
+    // // everything goes into private data structure
+    // this.privateDataStructure.addAttribute({
+    //   name: attribute.shortName,
+    //   type: attribute.type,
+    //   typeParameter: attribute.typeParameter,
+    //   comments: attribute.comments,
+    //   required: attribute.required,
+    // });
 
-    /***************************************************************************
-     * Operation inputs / outputs
-     **************************************************************************/
+    // /***************************************************************************
+    //  * Operation inputs / outputs
+    //  **************************************************************************/
 
-    // if user visible it might be an input or output
-    if (attribute.visibility === VisabilityType.USER_VISIBLE) {
-      // all outputs get everything visible
-      this.createOperation.addOutputAttribute(attribute);
-      this.readOperation.addOutputAttribute(attribute);
-      this.updateOperation.addOutputAttribute(attribute);
-      this.deleteOperation.addOutputAttribute(attribute);
+    // // if user visible it might be an input or output
+    // if (attribute.visibility === VisabilityType.USER_VISIBLE) {
+    //   // all outputs get everything visible
+    //   this.createOperation.addOutputAttribute(attribute);
+    //   this.readOperation.addOutputAttribute(attribute);
+    //   this.updateOperation.addOutputAttribute(attribute);
+    //   this.deleteOperation.addOutputAttribute(attribute);
 
-      // read / update / delete need identifiers
-      if (attribute.identifier === IdentifierType.PRIMARY) {
-        this.createOperation.addInputAttribute(attribute);
-        this.readOperation.addInputAttribute(attribute);
-        this.updateOperation.addInputAttribute(attribute);
-        this.deleteOperation.addInputAttribute(attribute);
-      }
+    //   // read / update / delete need identifiers
+    //   if (attribute.identifier === IdentifierType.PRIMARY) {
+    //     this.createOperation.addInputAttribute(attribute);
+    //     this.readOperation.addInputAttribute(attribute);
+    //     this.updateOperation.addInputAttribute(attribute);
+    //     this.deleteOperation.addInputAttribute(attribute);
+    //   }
 
-      // create / update get all user managed
-      if (
-        attribute.management === ManagementType.USER_MANAGED &&
-        attribute.type !== ResourceAttributeType.ARRAY &&
-        attribute.type !== ResourceAttributeType.MAP &&
-        attribute.type === typeof ResourceAttributeType
-      ) {
-        this.createOperation.addInputAttribute(attribute);
-        this.updateOperation.addInputAttribute(attribute);
-      }
-    }
+    //   // create / update get all user managed
+    //   if (
+    //     attribute.management === ManagementType.USER_MANAGED &&
+    //     attribute.type !== ResourceAttributeType.ARRAY &&
+    //     attribute.type !== ResourceAttributeType.MAP &&
+    //     attribute.type === typeof ResourceAttributeType
+    //   ) {
+    //     this.createOperation.addInputAttribute(attribute);
+    //     this.updateOperation.addInputAttribute(attribute);
+    //   }
+    // }
 
     return attribute;
   }

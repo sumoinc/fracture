@@ -69,179 +69,23 @@ export type Foo = {
  * Private data structure for this record.
  * Used internally in Dynamo, SQS and other native services.
 */
-export type FooData = {
-    /**
-     * Partition Key for this record.
-    */
-    pk: string;
-    /**
-     * Sort Key for this record.
-    */
-    sk: string;
-    /**
-     * Lookup value for this record.
-    */
-    idx: string;
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    t: string;
-    /**
-     * Version for record.
-    */
-    v: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    ct: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    mt: string;
-    /**
-     * The timestamp representing when this record was marked as deleted.
-    */
-    dt: string;
-    /**
-     * Array of bar records.
-    */
-    z: Array<Bar>;
-};
+export type FooData = {};
 
 export type CreateFooInput = {};
 
-export type CreateFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Array of bar records.
-    */
-    bazzes: Array<Bar>;
-};
+export type CreateFooOutput = {};
 
-export type GetFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type GetFooInput = {};
 
-export type GetFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Array of bar records.
-    */
-    bazzes: Array<Bar>;
-};
+export type GetFooOutput = {};
 
-export type UpdateFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type UpdateFooInput = {};
 
-export type UpdateFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Array of bar records.
-    */
-    bazzes: Array<Bar>;
-};
+export type UpdateFooOutput = {};
 
-export type DeleteFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type DeleteFooInput = {};
 
-export type DeleteFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Array of bar records.
-    */
-    bazzes: Array<Bar>;
-};
+export type DeleteFooOutput = {};
 
 /**
  * Public facing data structure for this record.
@@ -273,159 +117,23 @@ export type Bar = {
  * Private data structure for this record.
  * Used internally in Dynamo, SQS and other native services.
 */
-export type BarData = {
-    /**
-     * Partition Key for this record.
-    */
-    pk: string;
-    /**
-     * Sort Key for this record.
-    */
-    sk: string;
-    /**
-     * Lookup value for this record.
-    */
-    idx: string;
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    t: string;
-    /**
-     * Version for record.
-    */
-    v: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    ct: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    mt: string;
-    /**
-     * The timestamp representing when this record was marked as deleted.
-    */
-    dt: string;
-};
+export type BarData = {};
 
 export type CreateBarInput = {};
 
-export type CreateBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type CreateBarOutput = {};
 
-export type GetBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type GetBarInput = {};
 
-export type GetBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type GetBarOutput = {};
 
-export type UpdateBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type UpdateBarInput = {};
 
-export type UpdateBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type UpdateBarOutput = {};
 
-export type DeleteBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type DeleteBarInput = {};
 
-export type DeleteBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type DeleteBarOutput = {};
 "
 `;
 
@@ -498,179 +206,23 @@ export type Foo = {
  * Private data structure for this record.
  * Used internally in Dynamo, SQS and other native services.
 */
-export type FooData = {
-    /**
-     * Partition Key for this record.
-    */
-    pk: string;
-    /**
-     * Sort Key for this record.
-    */
-    sk: string;
-    /**
-     * Lookup value for this record.
-    */
-    idx: string;
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    t: string;
-    /**
-     * Version for record.
-    */
-    v: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    ct: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    mt: string;
-    /**
-     * The timestamp representing when this record was marked as deleted.
-    */
-    dt: string;
-    /**
-     * Array of bar records.
-    */
-    bars: Array<Bar>;
-};
+export type FooData = {};
 
 export type CreateFooInput = {};
 
-export type CreateFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Array of bar records.
-    */
-    bars: Array<Bar>;
-};
+export type CreateFooOutput = {};
 
-export type GetFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type GetFooInput = {};
 
-export type GetFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Array of bar records.
-    */
-    bars: Array<Bar>;
-};
+export type GetFooOutput = {};
 
-export type UpdateFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type UpdateFooInput = {};
 
-export type UpdateFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Array of bar records.
-    */
-    bars: Array<Bar>;
-};
+export type UpdateFooOutput = {};
 
-export type DeleteFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type DeleteFooInput = {};
 
-export type DeleteFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Array of bar records.
-    */
-    bars: Array<Bar>;
-};
+export type DeleteFooOutput = {};
 
 /**
  * Public facing data structure for this record.
@@ -702,159 +254,23 @@ export type Bar = {
  * Private data structure for this record.
  * Used internally in Dynamo, SQS and other native services.
 */
-export type BarData = {
-    /**
-     * Partition Key for this record.
-    */
-    pk: string;
-    /**
-     * Sort Key for this record.
-    */
-    sk: string;
-    /**
-     * Lookup value for this record.
-    */
-    idx: string;
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    t: string;
-    /**
-     * Version for record.
-    */
-    v: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    ct: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    mt: string;
-    /**
-     * The timestamp representing when this record was marked as deleted.
-    */
-    dt: string;
-};
+export type BarData = {};
 
 export type CreateBarInput = {};
 
-export type CreateBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type CreateBarOutput = {};
 
-export type GetBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type GetBarInput = {};
 
-export type GetBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type GetBarOutput = {};
 
-export type UpdateBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type UpdateBarInput = {};
 
-export type UpdateBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type UpdateBarOutput = {};
 
-export type DeleteBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type DeleteBarInput = {};
 
-export type DeleteBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type DeleteBarOutput = {};
 "
 `;
 
@@ -927,179 +343,23 @@ export type Foo = {
  * Private data structure for this record.
  * Used internally in Dynamo, SQS and other native services.
 */
-export type FooData = {
-    /**
-     * Partition Key for this record.
-    */
-    pk: string;
-    /**
-     * Sort Key for this record.
-    */
-    sk: string;
-    /**
-     * Lookup value for this record.
-    */
-    idx: string;
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    t: string;
-    /**
-     * Version for record.
-    */
-    v: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    ct: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    mt: string;
-    /**
-     * The timestamp representing when this record was marked as deleted.
-    */
-    dt: string;
-    /**
-     * Map of bar records.
-    */
-    bars: Record<string, Bar>;
-};
+export type FooData = {};
 
 export type CreateFooInput = {};
 
-export type CreateFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Map of bar records.
-    */
-    bars: Record<string, Bar>;
-};
+export type CreateFooOutput = {};
 
-export type GetFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type GetFooInput = {};
 
-export type GetFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Map of bar records.
-    */
-    bars: Record<string, Bar>;
-};
+export type GetFooOutput = {};
 
-export type UpdateFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type UpdateFooInput = {};
 
-export type UpdateFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Map of bar records.
-    */
-    bars: Record<string, Bar>;
-};
+export type UpdateFooOutput = {};
 
-export type DeleteFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type DeleteFooInput = {};
 
-export type DeleteFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    /**
-     * Map of bar records.
-    */
-    bars: Record<string, Bar>;
-};
+export type DeleteFooOutput = {};
 
 /**
  * Public facing data structure for this record.
@@ -1131,159 +391,23 @@ export type Bar = {
  * Private data structure for this record.
  * Used internally in Dynamo, SQS and other native services.
 */
-export type BarData = {
-    /**
-     * Partition Key for this record.
-    */
-    pk: string;
-    /**
-     * Sort Key for this record.
-    */
-    sk: string;
-    /**
-     * Lookup value for this record.
-    */
-    idx: string;
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    t: string;
-    /**
-     * Version for record.
-    */
-    v: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    ct: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    mt: string;
-    /**
-     * The timestamp representing when this record was marked as deleted.
-    */
-    dt: string;
-};
+export type BarData = {};
 
 export type CreateBarInput = {};
 
-export type CreateBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type CreateBarOutput = {};
 
-export type GetBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type GetBarInput = {};
 
-export type GetBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type GetBarOutput = {};
 
-export type UpdateBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type UpdateBarInput = {};
 
-export type UpdateBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type UpdateBarOutput = {};
 
-export type DeleteBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type DeleteBarInput = {};
 
-export type DeleteBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type DeleteBarOutput = {};
 "
 `;
 
@@ -1353,164 +477,23 @@ export type Foo = {
  * Private data structure for this record.
  * Used internally in Dynamo, SQS and other native services.
 */
-export type FooData = {
-    /**
-     * Partition Key for this record.
-    */
-    pk: string;
-    /**
-     * Sort Key for this record.
-    */
-    sk: string;
-    /**
-     * Lookup value for this record.
-    */
-    idx: string;
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    t: string;
-    /**
-     * Version for record.
-    */
-    v: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    ct: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    mt: string;
-    /**
-     * The timestamp representing when this record was marked as deleted.
-    */
-    dt: string;
-    bar: Bar;
-};
+export type FooData = {};
 
 export type CreateFooInput = {};
 
-export type CreateFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    bar: Bar;
-};
+export type CreateFooOutput = {};
 
-export type GetFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type GetFooInput = {};
 
-export type GetFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    bar: Bar;
-};
+export type GetFooOutput = {};
 
-export type UpdateFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type UpdateFooInput = {};
 
-export type UpdateFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    bar: Bar;
-};
+export type UpdateFooOutput = {};
 
-export type DeleteFooInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type DeleteFooInput = {};
 
-export type DeleteFooOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-    bar: Bar;
-};
+export type DeleteFooOutput = {};
 
 /**
  * Public facing data structure for this record.
@@ -1542,158 +525,22 @@ export type Bar = {
  * Private data structure for this record.
  * Used internally in Dynamo, SQS and other native services.
 */
-export type BarData = {
-    /**
-     * Partition Key for this record.
-    */
-    pk: string;
-    /**
-     * Sort Key for this record.
-    */
-    sk: string;
-    /**
-     * Lookup value for this record.
-    */
-    idx: string;
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    t: string;
-    /**
-     * Version for record.
-    */
-    v: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    ct: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    mt: string;
-    /**
-     * The timestamp representing when this record was marked as deleted.
-    */
-    dt: string;
-};
+export type BarData = {};
 
 export type CreateBarInput = {};
 
-export type CreateBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type CreateBarOutput = {};
 
-export type GetBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type GetBarInput = {};
 
-export type GetBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type GetBarOutput = {};
 
-export type UpdateBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type UpdateBarInput = {};
 
-export type UpdateBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type UpdateBarOutput = {};
 
-export type DeleteBarInput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-};
+export type DeleteBarInput = {};
 
-export type DeleteBarOutput = {
-    /**
-     * Identifier for this record.
-    */
-    id: string;
-    /**
-     * Type of record.
-    */
-    type: string;
-    /**
-     * Version for record.
-    */
-    version: string;
-    /**
-     * The timestamp representing when this record was created.
-    */
-    createdTimestamp: string;
-    /**
-     * The timestamp representing when this record was last modified.
-    */
-    modifiedTimestamp: string;
-};
+export type DeleteBarOutput = {};
 "
 `;
