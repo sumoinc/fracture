@@ -131,4 +131,17 @@ export class Structure extends Component {
   public get service() {
     return this.project;
   }
+
+  /***************************************************************************
+   * Configuration export for this structure
+   **************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      name: this.name,
+      typeParameter: this.typeParameter,
+      comments: this.comments,
+      attributes: this.attributes.map((attribute) => attribute.config()),
+    };
+  }
 }

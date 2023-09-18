@@ -66,7 +66,16 @@ test("All attribute types should match snapshot", () => {
   const service = testDataService();
   const attributeOptions = Object.entries(ResourceAttributeType).map(
     ([key, value]) => {
-      return { name: key, type: value };
+      return {
+        name: key,
+        type: value,
+        typeParameter:
+          value === ResourceAttributeType.ARRAY ||
+          value === ResourceAttributeType.MAP ||
+          value === ResourceAttributeType.ANY
+            ? "any"
+            : undefined,
+      };
     }
   );
   const structure = new Structure(service, {

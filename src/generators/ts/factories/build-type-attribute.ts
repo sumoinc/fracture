@@ -75,20 +75,22 @@ export const buildTypeProperty = ({
       case ResourceAttributeType.BOOLEAN:
         return factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword);
       case ResourceAttributeType.ARRAY:
+        if (!typeParameter) {
+          throw new Error("Array type must have a type parameter");
+        }
         return factory.createTypeReferenceNode(
           factory.createIdentifier("Array"),
-          typeParameter === "any"
-            ? [factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)]
-            : [
-                factory.createTypeReferenceNode(
-                  factory.createIdentifier(
-                    strategy.formatTypeName(typeParameter)
-                  ),
-                  undefined
-                ),
-              ]
+          [
+            factory.createTypeReferenceNode(
+              factory.createIdentifier(strategy.formatTypeName(typeParameter)),
+              undefined
+            ),
+          ]
         );
-      case ResourceAttributeType.MAP: // todo
+      case ResourceAttributeType.MAP:
+        if (!typeParameter) {
+          throw new Error("Map type must have a type parameter");
+        }
         return factory.createTypeReferenceNode(
           factory.createIdentifier("Record"),
           [
@@ -100,12 +102,13 @@ export const buildTypeProperty = ({
           ]
         );
       case ResourceAttributeType.ANY:
-        return typeParameter === "any"
-          ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
-          : factory.createTypeReferenceNode(
-              factory.createIdentifier(strategy.formatTypeName(typeParameter)),
-              undefined
-            );
+        if (!typeParameter) {
+          throw new Error("Any type must have a type parameter");
+        }
+        return factory.createTypeReferenceNode(
+          factory.createIdentifier(strategy.formatTypeName(typeParameter)),
+          undefined
+        );
 
       default:
       // do nothing by default

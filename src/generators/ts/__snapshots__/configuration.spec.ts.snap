@@ -6,427 +6,6 @@ exports[`Smoke test 1`] = `
 export const configurations = {
   \\"name\\": \\"my-service\\",
   \\"tenantEnabled\\": false,
-  \\"resources\\": [
-    {
-      \\"name\\": \\"user\\",
-      \\"shortName\\": \\"user\\",
-      \\"attributes\\": [
-        {
-          \\"name\\": \\"pk\\",
-          \\"shortName\\": \\"pk\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Partition Key for this record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"HIDDEN\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [
-            \\"id\\"
-          ],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"Composition\\",
-          \\"readGenerator\\": \\"Composition\\",
-          \\"updateGenerator\\": \\"Composition\\",
-          \\"deleteGenerator\\": \\"Composition\\"
-        },
-        {
-          \\"name\\": \\"sk\\",
-          \\"shortName\\": \\"sk\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Sort Key for this record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"HIDDEN\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [
-            \\"type\\",
-            \\"version\\"
-          ],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"Composition\\",
-          \\"readGenerator\\": \\"Composition\\",
-          \\"updateGenerator\\": \\"Composition\\",
-          \\"deleteGenerator\\": \\"Composition\\"
-        },
-        {
-          \\"name\\": \\"lookup\\",
-          \\"shortName\\": \\"idx\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Lookup value for this record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"HIDDEN\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\" \\",
-          \\"createGenerator\\": \\"Composition\\",
-          \\"readGenerator\\": \\"Composition\\",
-          \\"updateGenerator\\": \\"Composition\\",
-          \\"deleteGenerator\\": \\"Composition\\"
-        },
-        {
-          \\"name\\": \\"id\\",
-          \\"shortName\\": \\"id\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Identifier for this record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"PRIMARY\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"Guid\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"None\\",
-          \\"deleteGenerator\\": \\"None\\"
-        },
-        {
-          \\"name\\": \\"type\\",
-          \\"shortName\\": \\"t\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Type of record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"Type\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"None\\",
-          \\"deleteGenerator\\": \\"None\\"
-        },
-        {
-          \\"name\\": \\"version\\",
-          \\"shortName\\": \\"v\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Version for record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"VersionDateTimeStamp\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"None\\",
-          \\"deleteGenerator\\": \\"None\\"
-        },
-        {
-          \\"name\\": \\"created-timestamp\\",
-          \\"shortName\\": \\"ct\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"The timestamp representing when this record was created.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"CurrentDateTimeStamp\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"CurrentDateTimeStamp\\",
-          \\"deleteGenerator\\": \\"None\\"
-        },
-        {
-          \\"name\\": \\"modified-timestamp\\",
-          \\"shortName\\": \\"mt\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"The timestamp representing when this record was last modified.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"None\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"CurrentDateTimeStamp\\",
-          \\"deleteGenerator\\": \\"None\\"
-        },
-        {
-          \\"name\\": \\"deleted-timestamp\\",
-          \\"shortName\\": \\"dt\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"The timestamp representing when this record was marked as deleted.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"HIDDEN\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"None\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"None\\",
-          \\"deleteGenerator\\": \\"CurrentDateTimeStamp\\"
-        },
-        {
-          \\"name\\": \\"name\\",
-          \\"shortName\\": \\"name\\",
-          \\"required\\": true,
-          \\"comments\\": [],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"USER_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"None\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"None\\",
-          \\"deleteGenerator\\": \\"None\\"
-        }
-      ]
-    },
-    {
-      \\"name\\": \\"widget\\",
-      \\"shortName\\": \\"widget\\",
-      \\"attributes\\": [
-        {
-          \\"name\\": \\"pk\\",
-          \\"shortName\\": \\"pk\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Partition Key for this record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"HIDDEN\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [
-            \\"tenant-id\\",
-            \\"id\\"
-          ],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"Composition\\",
-          \\"readGenerator\\": \\"Composition\\",
-          \\"updateGenerator\\": \\"Composition\\",
-          \\"deleteGenerator\\": \\"Composition\\"
-        },
-        {
-          \\"name\\": \\"sk\\",
-          \\"shortName\\": \\"sk\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Sort Key for this record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"HIDDEN\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [
-            \\"tenant-id\\",
-            \\"type\\",
-            \\"version\\"
-          ],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"Composition\\",
-          \\"readGenerator\\": \\"Composition\\",
-          \\"updateGenerator\\": \\"Composition\\",
-          \\"deleteGenerator\\": \\"Composition\\"
-        },
-        {
-          \\"name\\": \\"lookup\\",
-          \\"shortName\\": \\"idx\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Lookup value for this record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"HIDDEN\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\" \\",
-          \\"createGenerator\\": \\"Composition\\",
-          \\"readGenerator\\": \\"Composition\\",
-          \\"updateGenerator\\": \\"Composition\\",
-          \\"deleteGenerator\\": \\"Composition\\"
-        },
-        {
-          \\"name\\": \\"tenant-id\\",
-          \\"shortName\\": \\"tid\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Tenant identifier for this record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"HIDDEN\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"Tenant\\",
-          \\"readGenerator\\": \\"Tenant\\",
-          \\"updateGenerator\\": \\"Tenant\\",
-          \\"deleteGenerator\\": \\"Tenant\\"
-        },
-        {
-          \\"name\\": \\"id\\",
-          \\"shortName\\": \\"id\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Identifier for this record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"PRIMARY\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"Guid\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"None\\",
-          \\"deleteGenerator\\": \\"None\\"
-        },
-        {
-          \\"name\\": \\"type\\",
-          \\"shortName\\": \\"t\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Type of record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"Type\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"None\\",
-          \\"deleteGenerator\\": \\"None\\"
-        },
-        {
-          \\"name\\": \\"version\\",
-          \\"shortName\\": \\"v\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"Version for record.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"VersionDateTimeStamp\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"None\\",
-          \\"deleteGenerator\\": \\"None\\"
-        },
-        {
-          \\"name\\": \\"created-timestamp\\",
-          \\"shortName\\": \\"ct\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"The timestamp representing when this record was created.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"CurrentDateTimeStamp\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"CurrentDateTimeStamp\\",
-          \\"deleteGenerator\\": \\"None\\"
-        },
-        {
-          \\"name\\": \\"modified-timestamp\\",
-          \\"shortName\\": \\"mt\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"The timestamp representing when this record was last modified.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"None\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"CurrentDateTimeStamp\\",
-          \\"deleteGenerator\\": \\"None\\"
-        },
-        {
-          \\"name\\": \\"deleted-timestamp\\",
-          \\"shortName\\": \\"dt\\",
-          \\"required\\": true,
-          \\"comments\\": [
-            \\"The timestamp representing when this record was marked as deleted.\\"
-          ],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"SYSTEM_MANAGED\\",
-          \\"visibility\\": \\"HIDDEN\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"None\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"None\\",
-          \\"deleteGenerator\\": \\"CurrentDateTimeStamp\\"
-        },
-        {
-          \\"name\\": \\"name\\",
-          \\"shortName\\": \\"name\\",
-          \\"required\\": true,
-          \\"comments\\": [],
-          \\"type\\": \\"String\\",
-          \\"typeParameter\\": \\"any\\",
-          \\"management\\": \\"USER_MANAGED\\",
-          \\"visibility\\": \\"USER_VISIBLE\\",
-          \\"identifier\\": \\"NONE\\",
-          \\"compositionSources\\": [],
-          \\"compositionsSeperator\\": \\"#\\",
-          \\"createGenerator\\": \\"None\\",
-          \\"readGenerator\\": \\"None\\",
-          \\"updateGenerator\\": \\"None\\",
-          \\"deleteGenerator\\": \\"None\\"
-        }
-      ]
-    }
-  ],
   \\"dynamo\\": {
     \\"name\\": \\"my-service-table\\",
     \\"pk\\": {
@@ -502,6 +81,407 @@ export const configurations = {
         \\"type\\": \\"SECONDARY\\"
       }
     ]
-  }
+  },
+  \\"resources\\": [
+    {
+      \\"name\\": \\"user\\",
+      \\"shortName\\": \\"user\\",
+      \\"attributes\\": [
+        {
+          \\"name\\": \\"pk\\",
+          \\"shortName\\": \\"pk\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Partition Key for this record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"HIDDEN\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [
+            \\"id\\"
+          ],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"Composition\\",
+          \\"readGenerator\\": \\"Composition\\",
+          \\"updateGenerator\\": \\"Composition\\",
+          \\"deleteGenerator\\": \\"Composition\\"
+        },
+        {
+          \\"name\\": \\"sk\\",
+          \\"shortName\\": \\"sk\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Sort Key for this record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"HIDDEN\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [
+            \\"type\\",
+            \\"version\\"
+          ],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"Composition\\",
+          \\"readGenerator\\": \\"Composition\\",
+          \\"updateGenerator\\": \\"Composition\\",
+          \\"deleteGenerator\\": \\"Composition\\"
+        },
+        {
+          \\"name\\": \\"lookup\\",
+          \\"shortName\\": \\"idx\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Lookup value for this record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"HIDDEN\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\" \\",
+          \\"createGenerator\\": \\"Composition\\",
+          \\"readGenerator\\": \\"Composition\\",
+          \\"updateGenerator\\": \\"Composition\\",
+          \\"deleteGenerator\\": \\"Composition\\"
+        },
+        {
+          \\"name\\": \\"id\\",
+          \\"shortName\\": \\"id\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Identifier for this record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"PRIMARY\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"Guid\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"None\\",
+          \\"deleteGenerator\\": \\"None\\"
+        },
+        {
+          \\"name\\": \\"type\\",
+          \\"shortName\\": \\"t\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Type of record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"Type\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"None\\",
+          \\"deleteGenerator\\": \\"None\\"
+        },
+        {
+          \\"name\\": \\"version\\",
+          \\"shortName\\": \\"v\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Version for record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"VersionDateTimeStamp\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"None\\",
+          \\"deleteGenerator\\": \\"None\\"
+        },
+        {
+          \\"name\\": \\"created-timestamp\\",
+          \\"shortName\\": \\"ct\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"The timestamp representing when this record was created.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"CurrentDateTimeStamp\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"CurrentDateTimeStamp\\",
+          \\"deleteGenerator\\": \\"None\\"
+        },
+        {
+          \\"name\\": \\"modified-timestamp\\",
+          \\"shortName\\": \\"mt\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"The timestamp representing when this record was last modified.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"None\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"CurrentDateTimeStamp\\",
+          \\"deleteGenerator\\": \\"None\\"
+        },
+        {
+          \\"name\\": \\"deleted-timestamp\\",
+          \\"shortName\\": \\"dt\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"The timestamp representing when this record was marked as deleted.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"HIDDEN\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"None\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"None\\",
+          \\"deleteGenerator\\": \\"CurrentDateTimeStamp\\"
+        },
+        {
+          \\"name\\": \\"name\\",
+          \\"shortName\\": \\"name\\",
+          \\"required\\": true,
+          \\"comments\\": [],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"USER_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"None\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"None\\",
+          \\"deleteGenerator\\": \\"None\\"
+        }
+      ]
+    },
+    {
+      \\"name\\": \\"widget\\",
+      \\"shortName\\": \\"widget\\",
+      \\"attributes\\": [
+        {
+          \\"name\\": \\"pk\\",
+          \\"shortName\\": \\"pk\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Partition Key for this record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"HIDDEN\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [
+            \\"tenant-id\\",
+            \\"id\\"
+          ],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"Composition\\",
+          \\"readGenerator\\": \\"Composition\\",
+          \\"updateGenerator\\": \\"Composition\\",
+          \\"deleteGenerator\\": \\"Composition\\"
+        },
+        {
+          \\"name\\": \\"sk\\",
+          \\"shortName\\": \\"sk\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Sort Key for this record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"HIDDEN\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [
+            \\"tenant-id\\",
+            \\"type\\",
+            \\"version\\"
+          ],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"Composition\\",
+          \\"readGenerator\\": \\"Composition\\",
+          \\"updateGenerator\\": \\"Composition\\",
+          \\"deleteGenerator\\": \\"Composition\\"
+        },
+        {
+          \\"name\\": \\"lookup\\",
+          \\"shortName\\": \\"idx\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Lookup value for this record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"HIDDEN\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\" \\",
+          \\"createGenerator\\": \\"Composition\\",
+          \\"readGenerator\\": \\"Composition\\",
+          \\"updateGenerator\\": \\"Composition\\",
+          \\"deleteGenerator\\": \\"Composition\\"
+        },
+        {
+          \\"name\\": \\"tenant-id\\",
+          \\"shortName\\": \\"tid\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Tenant identifier for this record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"HIDDEN\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"Tenant\\",
+          \\"readGenerator\\": \\"Tenant\\",
+          \\"updateGenerator\\": \\"Tenant\\",
+          \\"deleteGenerator\\": \\"Tenant\\"
+        },
+        {
+          \\"name\\": \\"id\\",
+          \\"shortName\\": \\"id\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Identifier for this record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"PRIMARY\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"Guid\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"None\\",
+          \\"deleteGenerator\\": \\"None\\"
+        },
+        {
+          \\"name\\": \\"type\\",
+          \\"shortName\\": \\"t\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Type of record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"Type\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"None\\",
+          \\"deleteGenerator\\": \\"None\\"
+        },
+        {
+          \\"name\\": \\"version\\",
+          \\"shortName\\": \\"v\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"Version for record.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"VersionDateTimeStamp\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"None\\",
+          \\"deleteGenerator\\": \\"None\\"
+        },
+        {
+          \\"name\\": \\"created-timestamp\\",
+          \\"shortName\\": \\"ct\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"The timestamp representing when this record was created.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"CurrentDateTimeStamp\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"CurrentDateTimeStamp\\",
+          \\"deleteGenerator\\": \\"None\\"
+        },
+        {
+          \\"name\\": \\"modified-timestamp\\",
+          \\"shortName\\": \\"mt\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"The timestamp representing when this record was last modified.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"None\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"CurrentDateTimeStamp\\",
+          \\"deleteGenerator\\": \\"None\\"
+        },
+        {
+          \\"name\\": \\"deleted-timestamp\\",
+          \\"shortName\\": \\"dt\\",
+          \\"required\\": true,
+          \\"comments\\": [
+            \\"The timestamp representing when this record was marked as deleted.\\"
+          ],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"SYSTEM_MANAGED\\",
+          \\"visibility\\": \\"HIDDEN\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"None\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"None\\",
+          \\"deleteGenerator\\": \\"CurrentDateTimeStamp\\"
+        },
+        {
+          \\"name\\": \\"name\\",
+          \\"shortName\\": \\"name\\",
+          \\"required\\": true,
+          \\"comments\\": [],
+          \\"type\\": \\"String\\",
+          \\"management\\": \\"USER_MANAGED\\",
+          \\"visibility\\": \\"USER_VISIBLE\\",
+          \\"identifier\\": \\"NONE\\",
+          \\"compositionSources\\": [],
+          \\"compositionsSeperator\\": \\"#\\",
+          \\"createGenerator\\": \\"None\\",
+          \\"readGenerator\\": \\"None\\",
+          \\"updateGenerator\\": \\"None\\",
+          \\"deleteGenerator\\": \\"None\\"
+        }
+      ]
+    }
+  ],
+  \\"operations\\": []
 }"
 `;

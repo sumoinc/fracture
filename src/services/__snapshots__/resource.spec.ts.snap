@@ -71,22 +71,6 @@ export type Foo = {
 */
 export type FooData = {};
 
-export type CreateFooInput = {};
-
-export type CreateFooOutput = {};
-
-export type GetFooInput = {};
-
-export type GetFooOutput = {};
-
-export type UpdateFooInput = {};
-
-export type UpdateFooOutput = {};
-
-export type DeleteFooInput = {};
-
-export type DeleteFooOutput = {};
-
 /**
  * Public facing data structure for this record.
 */
@@ -118,22 +102,6 @@ export type Bar = {
  * Used internally in Dynamo, SQS and other native services.
 */
 export type BarData = {};
-
-export type CreateBarInput = {};
-
-export type CreateBarOutput = {};
-
-export type GetBarInput = {};
-
-export type GetBarOutput = {};
-
-export type UpdateBarInput = {};
-
-export type UpdateBarOutput = {};
-
-export type DeleteBarInput = {};
-
-export type DeleteBarOutput = {};
 "
 `;
 
@@ -208,22 +176,6 @@ export type Foo = {
 */
 export type FooData = {};
 
-export type CreateFooInput = {};
-
-export type CreateFooOutput = {};
-
-export type GetFooInput = {};
-
-export type GetFooOutput = {};
-
-export type UpdateFooInput = {};
-
-export type UpdateFooOutput = {};
-
-export type DeleteFooInput = {};
-
-export type DeleteFooOutput = {};
-
 /**
  * Public facing data structure for this record.
 */
@@ -255,22 +207,6 @@ export type Bar = {
  * Used internally in Dynamo, SQS and other native services.
 */
 export type BarData = {};
-
-export type CreateBarInput = {};
-
-export type CreateBarOutput = {};
-
-export type GetBarInput = {};
-
-export type GetBarOutput = {};
-
-export type UpdateBarInput = {};
-
-export type UpdateBarOutput = {};
-
-export type DeleteBarInput = {};
-
-export type DeleteBarOutput = {};
 "
 `;
 
@@ -345,22 +281,6 @@ export type Foo = {
 */
 export type FooData = {};
 
-export type CreateFooInput = {};
-
-export type CreateFooOutput = {};
-
-export type GetFooInput = {};
-
-export type GetFooOutput = {};
-
-export type UpdateFooInput = {};
-
-export type UpdateFooOutput = {};
-
-export type DeleteFooInput = {};
-
-export type DeleteFooOutput = {};
-
 /**
  * Public facing data structure for this record.
 */
@@ -392,22 +312,6 @@ export type Bar = {
  * Used internally in Dynamo, SQS and other native services.
 */
 export type BarData = {};
-
-export type CreateBarInput = {};
-
-export type CreateBarOutput = {};
-
-export type GetBarInput = {};
-
-export type GetBarOutput = {};
-
-export type UpdateBarInput = {};
-
-export type UpdateBarOutput = {};
-
-export type DeleteBarInput = {};
-
-export type DeleteBarOutput = {};
 "
 `;
 
@@ -479,22 +383,6 @@ export type Foo = {
 */
 export type FooData = {};
 
-export type CreateFooInput = {};
-
-export type CreateFooOutput = {};
-
-export type GetFooInput = {};
-
-export type GetFooOutput = {};
-
-export type UpdateFooInput = {};
-
-export type UpdateFooOutput = {};
-
-export type DeleteFooInput = {};
-
-export type DeleteFooOutput = {};
-
 /**
  * Public facing data structure for this record.
 */
@@ -526,21 +414,5 @@ export type Bar = {
  * Used internally in Dynamo, SQS and other native services.
 */
 export type BarData = {};
-
-export type CreateBarInput = {};
-
-export type CreateBarOutput = {};
-
-export type GetBarInput = {};
-
-export type GetBarOutput = {};
-
-export type UpdateBarInput = {};
-
-export type UpdateBarOutput = {};
-
-export type DeleteBarInput = {};
-
-export type DeleteBarOutput = {};
 "
 `;

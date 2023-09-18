@@ -2,12 +2,7 @@ import { paramCase } from "change-case";
 import { Component } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { DataService } from "./data-service";
-import {
-  Operation,
-  OperationOptions,
-  OperationSubType,
-  OperationType,
-} from "./operation";
+import { Operation, OperationOptions } from "./operation";
 import {
   IdentifierType,
   ManagementType,
@@ -141,10 +136,6 @@ export class Resource extends Component {
    * All structures for this resource.
    */
   public structures: Structure[] = [];
-  public createOperation: Operation;
-  public readOperation: Operation;
-  public updateOperation: Operation;
-  public deleteOperation: Operation;
 
   /**
    * All operations for this resource.
@@ -190,36 +181,36 @@ export class Resource extends Component {
      **************************************************************************/
 
     // Create
-    this.createOperation = this.addOperation({
-      name: `create-${this.name}`,
-      dynamoGsi: DynamoTable.of(this.project).keyGsi,
-      operationType: OperationType.MUTATION,
-      operationSubType: OperationSubType.CREATE_ONE,
-    });
+    // this.createOperation = this.addOperation({
+    //   name: `create-${this.name}`,
+    //   dynamoGsi: DynamoTable.of(this.project).keyGsi,
+    //   operationType: OperationType.MUTATION,
+    //   operationSubType: OperationSubType.CREATE_ONE,
+    // });
 
-    // Read
-    this.readOperation = this.addOperation({
-      name: `get-${this.name}`,
-      dynamoGsi: DynamoTable.of(this.project).keyGsi,
-      operationType: OperationType.QUERY,
-      operationSubType: OperationSubType.READ_ONE,
-    });
+    // // Read
+    // this.readOperation = this.addOperation({
+    //   name: `get-${this.name}`,
+    //   dynamoGsi: DynamoTable.of(this.project).keyGsi,
+    //   operationType: OperationType.QUERY,
+    //   operationSubType: OperationSubType.READ_ONE,
+    // });
 
-    // Update
-    this.updateOperation = this.addOperation({
-      name: `update-${this.name}`,
-      dynamoGsi: DynamoTable.of(this.project).keyGsi,
-      operationType: OperationType.MUTATION,
-      operationSubType: OperationSubType.UPDATE_ONE,
-    });
+    // // Update
+    // this.updateOperation = this.addOperation({
+    //   name: `update-${this.name}`,
+    //   dynamoGsi: DynamoTable.of(this.project).keyGsi,
+    //   operationType: OperationType.MUTATION,
+    //   operationSubType: OperationSubType.UPDATE_ONE,
+    // });
 
-    // Delete
-    this.deleteOperation = this.addOperation({
-      name: `delete-${this.name}`,
-      dynamoGsi: DynamoTable.of(this.project).keyGsi,
-      operationType: OperationType.MUTATION,
-      operationSubType: OperationSubType.DELETE_ONE,
-    });
+    // // Delete
+    // this.deleteOperation = this.addOperation({
+    //   name: `delete-${this.name}`,
+    //   dynamoGsi: DynamoTable.of(this.project).keyGsi,
+    //   operationType: OperationType.MUTATION,
+    //   operationSubType: OperationSubType.DELETE_ONE,
+    // });
 
     /***************************************************************************
      * PArtition and Sort Key

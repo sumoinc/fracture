@@ -68,21 +68,5 @@ export type User = {
  * Used internally in Dynamo, SQS and other native services.
 */
 export type UserData = {};
-
-export type CreateUserInput = {};
-
-export type CreateUserOutput = {};
-
-export type GetUserInput = {};
-
-export type GetUserOutput = {};
-
-export type UpdateUserInput = {};
-
-export type UpdateUserOutput = {};
-
-export type DeleteUserInput = {};
-
-export type DeleteUserOutput = {};
 "
 `;

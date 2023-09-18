@@ -69,22 +69,6 @@ export type Address = {
 */
 export type AddressData = {};
 
-export type CreateAddressInput = {};
-
-export type CreateAddressOutput = {};
-
-export type GetAddressInput = {};
-
-export type GetAddressOutput = {};
-
-export type UpdateAddressInput = {};
-
-export type UpdateAddressOutput = {};
-
-export type DeleteAddressInput = {};
-
-export type DeleteAddressOutput = {};
-
 /**
  * Public facing data structure for this record.
 */
@@ -121,21 +105,5 @@ export type User = {
  * Used internally in Dynamo, SQS and other native services.
 */
 export type UserData = {};
-
-export type CreateUserInput = {};
-
-export type CreateUserOutput = {};
-
-export type GetUserInput = {};
-
-export type GetUserOutput = {};
-
-export type UpdateUserInput = {};
-
-export type UpdateUserOutput = {};
-
-export type DeleteUserInput = {};
-
-export type DeleteUserOutput = {};
 "
 `;

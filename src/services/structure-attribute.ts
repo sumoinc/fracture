@@ -39,7 +39,7 @@ export type StructureAttributeOptions = {
   /**
    * Type parameter for this structure attribute.
    *
-   * @default any
+   * @default undefined
    * @example 'T' for MyType<T> generic
    */
   readonly typeParameter?: string;
@@ -109,7 +109,7 @@ export class StructureAttribute extends Component {
   /**
    * Type parameter for this structure attribute.
    *
-   * @default any
+   * @default undefined
    * @example 'T' for MyType<T> generic
    */
   public readonly typeParameter?: string;
@@ -149,7 +149,7 @@ export class StructureAttribute extends Component {
     this.name = paramCase(options.name);
     this.shortName = options.shortName ?? this.name;
     this.type = options.type ?? ResourceAttributeType.STRING;
-    this.typeParameter = options.typeParameter ?? "any";
+    this.typeParameter = options.typeParameter;
     this.comments = options.comments ?? [];
     this.required = options.required ?? true;
     this.generator = options.generator ?? ResourceAttributeGenerator.NONE;
@@ -167,5 +167,21 @@ export class StructureAttribute extends Component {
     this.structure.attributes.push(this);
 
     return this;
+  }
+
+  /***************************************************************************
+   * Configuration export for this structure
+   **************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      name: this.name,
+      shortName: this.shortName,
+      type: this.type,
+      typeParameter: this.typeParameter,
+      comments: this.comments,
+      required: this.required,
+      generator: this.generator,
+    };
   }
 }
