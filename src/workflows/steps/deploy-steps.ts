@@ -23,7 +23,7 @@ export const renderDeploySteps = (deployJob: DeployJob): Array<JobStep> => {
         name: "Configure AWS Credentials",
         uses: "aws-actions/configure-aws-credentials@v2",
         with: {
-          "role-to-assume": `arn:aws:iam::${deployJob.environment.accountNumber}:role/${deployJob.environment.gitHubDeploymentOIDCRoleName}`,
+          "role-to-assume": `arn:aws:iam::${deployJob.environment.account}:role/${deployJob.environment.gitHubDeploymentOIDCRoleName}`,
           "aws-region": deployJob.environment.region,
           "role-duration-seconds":
             deployJob.environment.gitHubDeploymentOIDCRoleDurationSeconds,

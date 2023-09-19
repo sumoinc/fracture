@@ -190,7 +190,7 @@ export class Resource extends Component {
       management: ManagementType.SYSTEM_MANAGED,
       visibility: VisabilityType.HIDDEN,
       generator: ResourceAttributeGenerator.COMPOSITION,
-      compositionsSeperator: " ",
+      compositionSeperator: " ",
     });
 
     // if tenant tracking is on, add it to pk and sk
@@ -260,7 +260,6 @@ export class Resource extends Component {
       management: ManagementType.SYSTEM_MANAGED,
       visibility: VisabilityType.USER_VISIBLE,
       createGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
-      updateGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
     });
     this.dateModified = this.addAttribute({
       name: "modified-timestamp",
@@ -270,6 +269,7 @@ export class Resource extends Component {
       ],
       management: ManagementType.SYSTEM_MANAGED,
       visibility: VisabilityType.USER_VISIBLE,
+      createGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
       updateGenerator: ResourceAttributeGenerator.CURRENT_DATE_TIME_STAMP,
     });
     this.dateDeleted = this.addAttribute({

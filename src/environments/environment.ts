@@ -91,4 +91,15 @@ export class Environment extends Component {
     this.name = options.name;
     this.authProviderType = options.authProviderType ?? AuthProviderType.NONE;
   }
+
+  /*****************************************************************************
+   * Configuration export for this environment
+   ****************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      name: this.name,
+      authProviderType: this.authProviderType,
+    };
+  }
 }

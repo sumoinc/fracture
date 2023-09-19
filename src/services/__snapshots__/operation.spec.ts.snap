@@ -91,6 +91,18 @@ exports[`crud operations Create Operation 1`] = `
       \\"generator\\": \\"CurrentDateTimeStamp\\"
     },
     {
+      \\"name\\": \\"modified-timestamp\\",
+      \\"shortName\\": \\"mt\\",
+      \\"type\\": \\"String\\",
+      \\"management\\": \\"SYSTEM_MANAGED\\",
+      \\"visibility\\": \\"USER_VISIBLE\\",
+      \\"comments\\": [
+        \\"The timestamp representing when this record was last modified.\\"
+      ],
+      \\"required\\": true,
+      \\"generator\\": \\"CurrentDateTimeStamp\\"
+    },
+    {
       \\"name\\": \\"required-name\\",
       \\"shortName\\": \\"required-name\\",
       \\"type\\": \\"String\\",

@@ -295,6 +295,12 @@ export type CreateMyResourceInputMarshalled = {
     ct: {
         S: string;
     };
+    /**
+     * The timestamp representing when this record was last modified.
+    */
+    mt: {
+        S: string;
+    };
     fn: {
         S: string;
     };
@@ -433,6 +439,10 @@ export type CreateMyResourceInputUnmarshalled = {
      * The timestamp representing when this record was created.
     */
     ct: string;
+    /**
+     * The timestamp representing when this record was last modified.
+    */
+    mt: string;
     fn: string;
     ln: string;
     ht: number;

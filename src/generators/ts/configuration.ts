@@ -1,8 +1,9 @@
+import { App } from "../../apps";
 import { Service } from "../../services/service";
 import { GeneratedTypescriptFile } from "../generated-typescript-file";
 
 export class Configuration extends GeneratedTypescriptFile {
-  constructor(public readonly project: Service) {
+  constructor(public readonly project: Service | App) {
     super(project, "configuration.ts");
   }
 

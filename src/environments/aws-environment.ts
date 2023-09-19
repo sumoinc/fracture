@@ -15,7 +15,7 @@ export interface AwsEnvironmentOptions
   /**
    * Account number for this environment.
    */
-  readonly accountNumber: string;
+  readonly account: string;
 
   /**
    * Region for this envirnoment.
@@ -43,7 +43,7 @@ export class AwsEnvironment extends Environment {
   /**
    * Account for this environment.
    */
-  public readonly accountNumber: string;
+  public readonly account: string;
 
   /**
    * Region for this envirnoment.
@@ -57,14 +57,14 @@ export class AwsEnvironment extends Environment {
    *
    * @default - uses default from Settings()
    */
-  readonly gitHubDeploymentOIDCRoleName: string;
+  public readonly gitHubDeploymentOIDCRoleName: string;
 
   /**
    * The duration of the role session in seconds.
    *
    * @default - uses default from Settings()
    */
-  readonly gitHubDeploymentOIDCRoleDurationSeconds: number;
+  public readonly gitHubDeploymentOIDCRoleDurationSeconds: number;
 
   constructor(
     public readonly project: TypeScriptProject,
@@ -81,7 +81,7 @@ export class AwsEnvironment extends Environment {
     super(project, { authProviderType, ...options });
 
     // defaults
-    this.accountNumber = options.accountNumber;
+    this.account = options.account;
     this.region = options.region ?? region;
     //this.authProviderType = options.authProviderType ?? authProviderType;
     this.gitHubDeploymentOIDCRoleName =
@@ -89,5 +89,20 @@ export class AwsEnvironment extends Environment {
     this.gitHubDeploymentOIDCRoleDurationSeconds =
       options.gitHubDeploymentOIDCRoleDurationSeconds ??
       gitHubDeploymentOIDCRoleDurationSeconds;
+  }
+
+  /*****************************************************************************
+   * Configuration export for this environment
+   ****************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      ...super.config(),
+      account: this.account,
+      region: this.region,
+      gitHubDeploymentOIDCRoleName: this.gitHubDeploymentOIDCRoleName,
+      gitHubDeploymentOIDCRoleDurationSeconds:
+        this.gitHubDeploymentOIDCRoleDurationSeconds,
+    };
   }
 }

@@ -9,7 +9,7 @@ describe("success conditions", () => {
     });
     const environment = new AwsEnvironment(project, {
       name: "foo",
-      accountNumber: "0000000000",
+      account: "0000000000",
     });
     expect(environment).toBeTruthy();
   });
@@ -21,7 +21,7 @@ describe("success conditions", () => {
     });
     const environment = new AwsEnvironment(project, {
       name: "foo",
-      accountNumber: "123",
+      account: "123",
       region: "us-east-1",
     });
     expect(environment).toBeTruthy();
@@ -37,12 +37,12 @@ describe("failure conditions", () => {
     expect(() => {
       new AwsEnvironment(project, {
         name: "foo",
-        accountNumber: "123",
+        account: "123",
         region: "us-east-1",
       });
       new AwsEnvironment(project, {
         name: "foo",
-        accountNumber: "123",
+        account: "123",
         region: "us-east-1",
       });
     }).toThrow("Duplicate environment name");

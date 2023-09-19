@@ -6,11 +6,13 @@ import {
 } from "projen/lib/awscdk";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { SetRequired } from "type-fest";
+import { AwsEnvironment } from "../environments";
 import {
   FractureSubProjectOptions,
   fractureProjectInit,
   fractureProjectOptions,
 } from "../fracture-project";
+import { DataService } from "../services";
 import { Settings } from "../settings";
 import { TurboRepo } from "../turborepo";
 import { DeployJobOptions, Workflow } from "../workflows";
@@ -25,7 +27,22 @@ export class App extends AwsCdkTypeScriptApp {
   /**
    *
    */
-  readonly parent: TypeScriptProject;
+  public readonly parent: TypeScriptProject;
+
+  /**
+   * Location where this app can be found
+   */
+  public readonly appDirectory: string;
+
+  /**
+   * Services this app includes.
+   */
+  public readonly services: Array<DataService> = [];
+
+  /**
+   * Environments we deploy this app into.
+   */
+  public readonly deployEnvironments: Array<AwsEnvironment> = [];
 
   constructor(options: AppOptions) {
     // All apps must have a parent project.
@@ -59,6 +76,7 @@ export class App extends AwsCdkTypeScriptApp {
     });
 
     this.parent = options.parent;
+    this.appDirectory = outdir;
 
     // init some common things we need here
     fractureProjectInit(this);
@@ -87,6 +105,10 @@ export class App extends AwsCdkTypeScriptApp {
     options: Pick<DeployJobOptions, "branchPrefix" | "environment">
   ) {
     const branchPrefix = options.branchPrefix ?? "main";
+
+    // add environment to this app
+    this.deployEnvironments.push(options.environment as AwsEnvironment);
+
     // add to deployment workflow
     return Workflow.deploy(this.parent).addDeployJob({
       ...options,
@@ -101,5 +123,25 @@ export class App extends AwsCdkTypeScriptApp {
       ],
       artifactsDirectory: this.artifactsDirectory,
     });
+  }
+
+  public addService(service: DataService) {
+    // add service to this app
+    this.services.push(service);
+    this.addDeps(service.name);
+    return this;
+  }
+
+  /*****************************************************************************
+   * Configuration export for this app
+   ****************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      name: this.name,
+      appDirectory: this.appDirectory,
+      environments: this.deployEnvironments.map((e) => e.config()),
+      services: this.services.map((s) => s.config()),
+    };
   }
 }
