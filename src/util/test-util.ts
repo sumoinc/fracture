@@ -7,6 +7,7 @@ import {
   Operation,
   Resource,
   ResourceAttribute,
+  ResourceAttributeType,
   Structure,
 } from "../services";
 import { NuxtJsSite, VitePressSite } from "../sites";
@@ -86,6 +87,61 @@ export const testDataService = () => {
  */
 export const testResource = () => {
   return new Resource(testDataService(), { name: "my-resource" });
+};
+
+/**
+ * A more complicated resource configuration
+ */
+export const complexService = () => {
+  const service = testDataService();
+
+  const person = new Resource(service, { name: "person" });
+  const club = new Resource(service, {
+    name: "club",
+    comments: ["A club"],
+    attributeOptions: [{ name: "name" }],
+  });
+
+  person.addAttribute({
+    name: "first-name",
+    shortName: "fn",
+  });
+  person.addAttribute({
+    name: "last-name",
+    shortName: "ln",
+  });
+  person.addAttribute({
+    name: "height",
+    shortName: "ht",
+    type: ResourceAttributeType.INT,
+  });
+  person.addAttribute({
+    name: "is-frog",
+    shortName: "if",
+    type: ResourceAttributeType.BOOLEAN,
+    comments: ["Is this person a frog?"],
+  });
+  // one specific club
+  person.addAttribute({
+    name: "one-club",
+    type: club,
+  });
+  // an array of clubs
+  person.addAttribute({
+    name: "array-of-doug",
+    shortName: "ad",
+    type: ResourceAttributeType.ARRAY,
+    typeParameter: club,
+  });
+  // object containing clubs
+  person.addAttribute({
+    name: "map-of-doug",
+    shortName: "md",
+    type: ResourceAttributeType.MAP,
+    typeParameter: club,
+  });
+
+  return service;
 };
 
 /**

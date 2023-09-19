@@ -52,6 +52,18 @@ export interface ResourceOptions {
 
 export class Resource extends Component {
   /**
+   * Returns a resource by name, or undefined if it doesn't exist
+   */
+  public static byName(
+    service: DataService,
+    name: string
+  ): Resource | undefined {
+    const isDefined = (c: Component): c is Resource =>
+      c instanceof Resource && c.name === name;
+    return service.components.find(isDefined);
+  }
+
+  /**
    * Returns all resourcesa for service
    */
   public static all(project: TypeScriptProject): Array<Resource> {
