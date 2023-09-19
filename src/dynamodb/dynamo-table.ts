@@ -108,7 +108,9 @@ export class DynamoTable extends Component {
 
   public addGsi(options: DynamoGsiOptions) {
     const gsi = new DynamoGsi(this.project, options);
-    this.gsi.push(gsi);
+    if (gsi.name !== "key") {
+      this.gsi.push(gsi);
+    }
     return gsi;
   }
 

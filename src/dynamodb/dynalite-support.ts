@@ -35,15 +35,18 @@ export class DynaliteConfig extends TypeScriptSource {
     const { gsi, keyGsi } = table;
     const otherGsi = gsi.filter((g: DynamoGsi) => g.name !== keyGsi.name);
     const serviceIndex = 1;
-    const allAttributes = gsi.reduce((acc, g) => {
-      if (acc.indexOf(g.pk) === -1) {
-        acc.push(g.pk);
-      }
-      if (acc.indexOf(g.sk) === -1) {
-        acc.push(g.sk);
-      }
-      return acc;
-    }, [] as DynamoAttribute[]);
+    const allAttributes = gsi.reduce(
+      (acc, g) => {
+        if (acc.indexOf(g.pk) === -1) {
+          acc.push(g.pk);
+        }
+        if (acc.indexOf(g.sk) === -1) {
+          acc.push(g.sk);
+        }
+        return acc;
+      },
+      [keyGsi.pk, keyGsi.sk] as DynamoAttribute[]
+    );
 
     const config = {
       tables: [

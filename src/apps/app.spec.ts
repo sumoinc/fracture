@@ -26,7 +26,10 @@ describe("validate generated project files", () => {
 
   test(".github/workflows/deploy.yml", () => {
     const appOne = testApp();
-    const appTwo = new App({ parent: appOne.parent, name: "my-other-app" });
+    const appTwo = new App({
+      parent: appOne.parent,
+      name: "@scope/my-other-app",
+    });
     const usEast = new AwsEnvironment(appOne.parent, {
       name: "us-east",
       account: "0000000000",
