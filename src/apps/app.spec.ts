@@ -21,7 +21,7 @@ describe("validate generated project files", () => {
     const content = synthFile(testApp().parent, "turbo.json");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();
-    //console.log(JSON.stringify(content, null, 2));
+    // console.log(JSON.stringify(content, null, 2));
   });
 
   test(".github/workflows/deploy.yml", () => {
@@ -44,7 +44,7 @@ describe("validate generated project files", () => {
 
     const content = synthFile(appOne.parent, `.github/workflows/deploy.yml`);
     expect(content).toBeTruthy();
-    //expect(content).toMatchSnapshot();
-    //console.log(content);
+    expect(content).toMatchSnapshot();
+    // console.log(content);
   });
 });

@@ -27,7 +27,7 @@ describe("success conditions", () => {
     });
     expect(deployJob).toBeTruthy();
     expect(deployJob.render()).toMatchSnapshot();
-    // console.log(deployJob.render());
+    //console.log(JSON.stringify(deployJob.render(), null, 2));
   });
 
   test("Two deploys depend on each other", () => {

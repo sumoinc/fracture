@@ -71,14 +71,14 @@ jobs:
         with:
           name: build-artifact-acbd18db
           path: foo
-  deploy-my-app-main-my-environment:
-    name: Deploy my-app main my-environment
+  deploy-my-app-to-my-environment:
+    name: Deploy my-app to my-environment
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
-    concurrency: deploy-my-app-main-my-environment
+    concurrency: deploy-my-app-to-my-environment
     env:
       CI: \\"true\\"
     if: startsWith( github.ref, 'refs/heads/main' )

@@ -2,12 +2,12 @@
 
 exports[`success conditions Smoke test 1`] = `
 Object {
-  "concurrency": "deploy-my-app-main-my-environment",
+  "concurrency": "deploy-my-app-to-my-environment",
   "env": Object {
     "CI": "true",
   },
   "if": "startsWith( github.ref, 'refs/heads/main' )",
-  "name": "Deploy my-app main my-environment",
+  "name": "Deploy my-app to my-environment",
   "needs": Array [
     "build",
   ],
@@ -59,12 +59,12 @@ Object {
 
 exports[`success conditions Two deploys depend on each other 1`] = `
 Object {
-  "concurrency": "deploy-app-one-main-my-environment",
+  "concurrency": "deploy-app-one-to-my-environment",
   "env": Object {
     "CI": "true",
   },
   "if": "startsWith( github.ref, 'refs/heads/main' )",
-  "name": "Deploy App One main my-environment",
+  "name": "Deploy App One to my-environment",
   "needs": Array [
     "build",
   ],
@@ -116,15 +116,15 @@ Object {
 
 exports[`success conditions Two deploys depend on each other 2`] = `
 Object {
-  "concurrency": "deploy-app-two-main-my-environment",
+  "concurrency": "deploy-app-two-to-my-environment",
   "env": Object {
     "CI": "true",
   },
   "if": "startsWith( github.ref, 'refs/heads/main' )",
-  "name": "Deploy App Two main my-environment",
+  "name": "Deploy App Two to my-environment",
   "needs": Array [
     "build",
-    "deploy-app-one-main-my-environment",
+    "deploy-app-one-to-my-environment",
   ],
   "permissions": Object {
     "contents": "read",

@@ -196,14 +196,14 @@ jobs:
         with:
           name: build-artifact-e3157ffc
           path: sites/my-site/.vitepress/dist
-  deploy-my-site-feature-us-east:
-    name: Deploy my-site feature us-east
+  deploy-my-site-to-us-east:
+    name: Deploy my-site to us-east
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
-    concurrency: deploy-my-site-feature-us-east
+    concurrency: deploy-my-site-to-us-east
     env:
       CI: \\"true\\"
     if: startsWith( github.ref, 'refs/heads/feature' )

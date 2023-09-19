@@ -40,13 +40,13 @@ jobs:
         with:
           name: build-artifact-7a1a4772
           path: sites/docs/.vitepress/dist
-  deploy-docs-main-netlify:
-    name: Deploy docs main netlify
+  deploy-docs-to-netlify:
+    name: Deploy docs to netlify
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    concurrency: deploy-docs-main-netlify
+    concurrency: deploy-docs-to-netlify
     env:
       CI: "true"
     if: startsWith( github.ref, 'refs/heads/main' )

@@ -52,15 +52,6 @@ export const renderDeploySteps = (deployJob: DeployJob): Array<JobStep> => {
       },
     });
   }
-  /*
-  authProviderType: awsEnvironment.authProviderType,
-      awsCredentialsOidc: {
-        roleToAssume: ,
-        roleDurationSeconds:
-          awsEnvironment.gitHubDeploymentOIDCRoleDurationSeconds,
-        awsRegion: awsEnvironment.region,
-      },
-  */
 
   deployJob.deploySteps.forEach((step) => {
     steps.push(step);
