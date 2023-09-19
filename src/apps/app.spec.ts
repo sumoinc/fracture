@@ -29,7 +29,7 @@ describe("validate generated project files", () => {
     const appTwo = new App({ parent: appOne.parent, name: "my-other-app" });
     const usEast = new AwsEnvironment(appOne.parent, {
       name: "us-east",
-      accountNumber: "0000000000",
+      account: "0000000000",
     });
 
     // deploy both apps

@@ -15,7 +15,7 @@ export interface AwsEnvironmentOptions
   /**
    * Account number for this environment.
    */
-  readonly accountNumber: string;
+  readonly account: string;
 
   /**
    * Region for this envirnoment.
@@ -43,7 +43,7 @@ export class AwsEnvironment extends Environment {
   /**
    * Account for this environment.
    */
-  public readonly accountNumber: string;
+  public readonly account: string;
 
   /**
    * Region for this envirnoment.
@@ -81,7 +81,7 @@ export class AwsEnvironment extends Environment {
     super(project, { authProviderType, ...options });
 
     // defaults
-    this.accountNumber = options.accountNumber;
+    this.account = options.account;
     this.region = options.region ?? region;
     //this.authProviderType = options.authProviderType ?? authProviderType;
     this.gitHubDeploymentOIDCRoleName =

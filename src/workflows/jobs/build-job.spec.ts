@@ -34,7 +34,7 @@ describe("success conditions", () => {
     });
     const environment = new AwsEnvironment(project, {
       name: "my-environment",
-      accountNumber: "0000000000",
+      account: "0000000000",
     });
     new DeployJob(project, {
       appName: "App One",

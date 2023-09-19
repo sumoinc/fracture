@@ -82,7 +82,7 @@ describe("validate generated project files", () => {
     const nuxtSite = testNuxtJsSite();
     const usEast = new AwsEnvironment(nuxtSite.parent, {
       name: "us-east",
-      accountNumber: "0000000000",
+      account: "0000000000",
     });
 
     // site options

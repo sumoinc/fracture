@@ -201,7 +201,7 @@ describe("validate generated project files", () => {
     const vitePressSite = testVitePressSite();
     const usEast = new AwsEnvironment(vitePressSite.parent, {
       name: "us-east",
-      accountNumber: "0000000000",
+      account: "0000000000",
     });
 
     // deployment options
