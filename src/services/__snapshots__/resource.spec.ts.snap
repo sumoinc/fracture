@@ -680,20 +680,6 @@ Object {
   "dynamoTable": Object {
     "gsi": Array [
       Object {
-        "name": "key",
-        "pk": Object {
-          "attributeType": "S",
-          "keyType": "HASH",
-          "name": "pk",
-        },
-        "sk": Object {
-          "attributeType": "S",
-          "keyType": "RANGE",
-          "name": "sk",
-        },
-        "type": "PRIMARY",
-      },
-      Object {
         "name": "loookup",
         "pk": Object {
           "attributeType": "S",

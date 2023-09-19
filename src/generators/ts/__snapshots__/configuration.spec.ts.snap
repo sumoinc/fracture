@@ -78,20 +78,6 @@ export const configurations = {
         },
         \\"gsi\\": [
           {
-            \\"name\\": \\"key\\",
-            \\"pk\\": {
-              \\"name\\": \\"pk\\",
-              \\"attributeType\\": \\"S\\",
-              \\"keyType\\": \\"HASH\\"
-            },
-            \\"sk\\": {
-              \\"name\\": \\"sk\\",
-              \\"attributeType\\": \\"S\\",
-              \\"keyType\\": \\"RANGE\\"
-            },
-            \\"type\\": \\"PRIMARY\\"
-          },
-          {
             \\"name\\": \\"loookup\\",
             \\"pk\\": {
               \\"name\\": \\"sk\\",
@@ -169,20 +155,6 @@ export const configurations = {
     },
     \\"gsi\\": [
       {
-        \\"name\\": \\"key\\",
-        \\"pk\\": {
-          \\"name\\": \\"pk\\",
-          \\"attributeType\\": \\"S\\",
-          \\"keyType\\": \\"HASH\\"
-        },
-        \\"sk\\": {
-          \\"name\\": \\"sk\\",
-          \\"attributeType\\": \\"S\\",
-          \\"keyType\\": \\"RANGE\\"
-        },
-        \\"type\\": \\"PRIMARY\\"
-      },
-      {
         \\"name\\": \\"loookup\\",
         \\"pk\\": {
           \\"name\\": \\"sk\\",
@@ -251,20 +223,6 @@ export const configurations = {
           \\"type\\": \\"SECONDARY\\"
         },
         \\"gsi\\": [
-          {
-            \\"name\\": \\"key\\",
-            \\"pk\\": {
-              \\"name\\": \\"pk\\",
-              \\"attributeType\\": \\"S\\",
-              \\"keyType\\": \\"HASH\\"
-            },
-            \\"sk\\": {
-              \\"name\\": \\"sk\\",
-              \\"attributeType\\": \\"S\\",
-              \\"keyType\\": \\"RANGE\\"
-            },
-            \\"type\\": \\"PRIMARY\\"
-          },
           {
             \\"name\\": \\"loookup\\",
             \\"pk\\": {
@@ -646,20 +604,6 @@ export const configurations = {
           \\"type\\": \\"SECONDARY\\"
         },
         \\"gsi\\": [
-          {
-            \\"name\\": \\"key\\",
-            \\"pk\\": {
-              \\"name\\": \\"pk\\",
-              \\"attributeType\\": \\"S\\",
-              \\"keyType\\": \\"HASH\\"
-            },
-            \\"sk\\": {
-              \\"name\\": \\"sk\\",
-              \\"attributeType\\": \\"S\\",
-              \\"keyType\\": \\"RANGE\\"
-            },
-            \\"type\\": \\"PRIMARY\\"
-          },
           {
             \\"name\\": \\"loookup\\",
             \\"pk\\": {
