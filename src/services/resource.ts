@@ -190,7 +190,7 @@ export class Resource extends Component {
       management: ManagementType.SYSTEM_MANAGED,
       visibility: VisabilityType.HIDDEN,
       generator: ResourceAttributeGenerator.COMPOSITION,
-      compositionsSeperator: " ",
+      compositionSeperator: " ",
     });
 
     // if tenant tracking is on, add it to pk and sk

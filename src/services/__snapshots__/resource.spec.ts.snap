@@ -376,10 +376,10 @@ Object {
       "comments": Array [
         "Partition Key for this record.",
       ],
+      "compositionSeperator": "#",
       "compositionSources": Array [
         "id",
       ],
-      "compositionsSeperator": "#",
       "createGenerator": "Composition",
       "deleteGenerator": "Composition",
       "identifier": "NONE",
@@ -397,11 +397,11 @@ Object {
       "comments": Array [
         "Sort Key for this record.",
       ],
+      "compositionSeperator": "#",
       "compositionSources": Array [
         "type",
         "version",
       ],
-      "compositionsSeperator": "#",
       "createGenerator": "Composition",
       "deleteGenerator": "Composition",
       "identifier": "NONE",
@@ -419,8 +419,8 @@ Object {
       "comments": Array [
         "Lookup value for this record.",
       ],
+      "compositionSeperator": " ",
       "compositionSources": Array [],
-      "compositionsSeperator": " ",
       "createGenerator": "Composition",
       "deleteGenerator": "Composition",
       "identifier": "NONE",
@@ -438,8 +438,8 @@ Object {
       "comments": Array [
         "Identifier for this record.",
       ],
+      "compositionSeperator": "#",
       "compositionSources": Array [],
-      "compositionsSeperator": "#",
       "createGenerator": "Guid",
       "deleteGenerator": "None",
       "identifier": "PRIMARY",
@@ -457,8 +457,8 @@ Object {
       "comments": Array [
         "Type of record.",
       ],
+      "compositionSeperator": "#",
       "compositionSources": Array [],
-      "compositionsSeperator": "#",
       "createGenerator": "Type",
       "deleteGenerator": "None",
       "identifier": "NONE",
@@ -476,8 +476,8 @@ Object {
       "comments": Array [
         "Version for record.",
       ],
+      "compositionSeperator": "#",
       "compositionSources": Array [],
-      "compositionsSeperator": "#",
       "createGenerator": "VersionDateTimeStamp",
       "deleteGenerator": "None",
       "identifier": "NONE",
@@ -495,8 +495,8 @@ Object {
       "comments": Array [
         "The timestamp representing when this record was created.",
       ],
+      "compositionSeperator": "#",
       "compositionSources": Array [],
-      "compositionsSeperator": "#",
       "createGenerator": "CurrentDateTimeStamp",
       "deleteGenerator": "None",
       "identifier": "NONE",
@@ -507,16 +507,16 @@ Object {
       "shortName": "ct",
       "type": "String",
       "typeParameter": undefined,
-      "updateGenerator": "CurrentDateTimeStamp",
+      "updateGenerator": "None",
       "visibility": "USER_VISIBLE",
     },
     Object {
       "comments": Array [
         "The timestamp representing when this record was last modified.",
       ],
+      "compositionSeperator": "#",
       "compositionSources": Array [],
-      "compositionsSeperator": "#",
-      "createGenerator": "None",
+      "createGenerator": "CurrentDateTimeStamp",
       "deleteGenerator": "None",
       "identifier": "NONE",
       "management": "SYSTEM_MANAGED",
@@ -533,8 +533,8 @@ Object {
       "comments": Array [
         "The timestamp representing when this record was marked as deleted.",
       ],
+      "compositionSeperator": "#",
       "compositionSources": Array [],
-      "compositionsSeperator": "#",
       "createGenerator": "None",
       "deleteGenerator": "CurrentDateTimeStamp",
       "identifier": "NONE",
