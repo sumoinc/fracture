@@ -30,6 +30,11 @@ export class Service extends AwsCdkTypeScriptApp {
    */
   public readonly serviceDirectory: string;
 
+  /**
+   * Name for service, without any package scope
+   */
+  public readonly serviceName: string;
+
   constructor(options: ServiceOptions) {
     // All services must have a parent project.
     if (!options.parent) {
@@ -63,6 +68,7 @@ export class Service extends AwsCdkTypeScriptApp {
 
     this.parent = options.parent;
     this.serviceDirectory = outdir;
+    this.serviceName = options.name.split("/").pop() as string;
 
     // init some common things we need here
     fractureProjectInit(this);
@@ -76,6 +82,7 @@ export class Service extends AwsCdkTypeScriptApp {
     return {
       name: this.name,
       serviceDirectory: this.serviceDirectory,
+      serviceName: this.serviceName,
     };
   }
 }

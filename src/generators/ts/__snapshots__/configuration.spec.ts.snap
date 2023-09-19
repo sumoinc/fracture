@@ -6,6 +6,7 @@ exports[`Success Conditions App Configuration 1`] = `
 export const configurations = {
   \\"name\\": \\"my-app\\",
   \\"appDirectory\\": \\"apps/my-app\\",
+  \\"appName\\": \\"my-app\\",
   \\"environments\\": [
     {
       \\"name\\": \\"dev-east\\",
@@ -28,6 +29,7 @@ export const configurations = {
     {
       \\"name\\": \\"my-service\\",
       \\"serviceDirectory\\": \\"services/my-service\\",
+      \\"serviceName\\": \\"my-service\\",
       \\"tenantEnabled\\": false,
       \\"dynamo\\": {
         \\"name\\": \\"my-service-table\\",
@@ -118,6 +120,7 @@ exports[`Success Conditions Service Configuration 1`] = `
 export const configurations = {
   \\"name\\": \\"my-service\\",
   \\"serviceDirectory\\": \\"services/my-service\\",
+  \\"serviceName\\": \\"my-service\\",
   \\"tenantEnabled\\": false,
   \\"dynamo\\": {
     \\"name\\": \\"my-service-table\\",

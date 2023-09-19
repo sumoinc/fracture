@@ -35,6 +35,11 @@ export class App extends AwsCdkTypeScriptApp {
   public readonly appDirectory: string;
 
   /**
+   * Name for app, without any package scope
+   */
+  public readonly appName: string;
+
+  /**
    * Services this app includes.
    */
   public readonly services: Array<DataService> = [];
@@ -77,6 +82,7 @@ export class App extends AwsCdkTypeScriptApp {
 
     this.parent = options.parent;
     this.appDirectory = outdir;
+    this.appName = options.name.split("/").pop() as string;
 
     // init some common things we need here
     fractureProjectInit(this);
@@ -113,7 +119,7 @@ export class App extends AwsCdkTypeScriptApp {
     return Workflow.deploy(this.parent).addDeployJob({
       ...options,
       branchPrefix,
-      appName: this.name,
+      appName: this.appName,
       deploySteps: [
         {
           name: "deploy",
@@ -139,6 +145,7 @@ export class App extends AwsCdkTypeScriptApp {
     return {
       name: this.name,
       appDirectory: this.appDirectory,
+      appName: this.appName,
       environments: this.deployEnvironments.map((e) => e.config()),
       services: this.services.map((s) => s.config()),
     };
