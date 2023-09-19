@@ -39,13 +39,13 @@ jobs:
         with:
           name: build-artifact-7a1a4772
           path: sites/docs/.vitepress/dist
-  deploy-docs-feature-foo:
-    name: Deploy docs feature foo
+  deploy-docs-to-foo:
+    name: Deploy docs to foo
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    concurrency: deploy-docs-feature-foo
+    concurrency: deploy-docs-to-foo
     env:
       CI: \\"true\\"
     if: startsWith( github.ref, 'refs/heads/feature' )

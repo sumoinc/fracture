@@ -117,8 +117,7 @@ export class App extends AwsCdkTypeScriptApp {
       deploySteps: [
         {
           name: "deploy",
-          run: `npx aws-cdk deploy --require-approval never --app ${this.artifactsDirectory} *-${branchPrefix}-${options.environment.name}`,
-          // inlineScript: $(PACKAGE_MANAGER.PACKAGE_MANAGER_TYPE) cdk deploy --require-approval never --app 'cdk.out/${{ parameters.target_environment }}' ${{ parameters.cdk_stack_names }}
+          run: `npx aws-cdk deploy --require-approval never --app ${this.artifactsDirectory} *-${options.environment.name}`,
         },
       ],
       artifactsDirectory: this.artifactsDirectory,
@@ -129,7 +128,7 @@ export class App extends AwsCdkTypeScriptApp {
     // add service to this app
     this.services.push(service);
     this.addDeps(service.name);
-    return this;
+    return service;
   }
 
   /*****************************************************************************

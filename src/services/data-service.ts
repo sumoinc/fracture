@@ -245,6 +245,7 @@ export class DataService extends Service {
   public config(): Record<string, any> {
     return {
       ...super.config(),
+      name: this.name,
       tenantEnabled: this.tenantEnabled,
       dynamo: DynamoTable.of(this).config(),
       resources: Resource.all(this).map((r) => r.config()),
