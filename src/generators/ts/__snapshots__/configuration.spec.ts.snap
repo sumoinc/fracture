@@ -177,68 +177,6 @@ export const configurations = {
       \\"pluralName\\": \\"users\\",
       \\"comments\\": [],
       \\"tenantEnabled\\": false,
-      \\"dynamoTable\\": {
-        \\"name\\": \\"my-service-table\\",
-        \\"pk\\": {
-          \\"name\\": \\"pk\\",
-          \\"attributeType\\": \\"S\\",
-          \\"keyType\\": \\"HASH\\"
-        },
-        \\"sk\\": {
-          \\"name\\": \\"sk\\",
-          \\"attributeType\\": \\"S\\",
-          \\"keyType\\": \\"RANGE\\"
-        },
-        \\"idx\\": {
-          \\"name\\": \\"idx\\",
-          \\"attributeType\\": \\"S\\",
-          \\"keyType\\": \\"NONE\\"
-        },
-        \\"keyGsi\\": {
-          \\"name\\": \\"key\\",
-          \\"pk\\": {
-            \\"name\\": \\"pk\\",
-            \\"attributeType\\": \\"S\\",
-            \\"keyType\\": \\"HASH\\"
-          },
-          \\"sk\\": {
-            \\"name\\": \\"sk\\",
-            \\"attributeType\\": \\"S\\",
-            \\"keyType\\": \\"RANGE\\"
-          },
-          \\"type\\": \\"PRIMARY\\"
-        },
-        \\"lookupGsi\\": {
-          \\"name\\": \\"loookup\\",
-          \\"pk\\": {
-            \\"name\\": \\"sk\\",
-            \\"attributeType\\": \\"S\\",
-            \\"keyType\\": \\"RANGE\\"
-          },
-          \\"sk\\": {
-            \\"name\\": \\"idx\\",
-            \\"attributeType\\": \\"S\\",
-            \\"keyType\\": \\"NONE\\"
-          },
-          \\"type\\": \\"SECONDARY\\"
-        },
-        \\"gsi\\": [
-          {
-            \\"name\\": \\"loookup\\",
-            \\"pk\\": {
-              \\"name\\": \\"sk\\",
-              \\"attributeType\\": \\"S\\",
-              \\"keyType\\": \\"RANGE\\"
-            },
-            \\"sk\\": {
-              \\"name\\": \\"idx\\",
-              \\"attributeType\\": \\"S\\",
-              \\"keyType\\": \\"NONE\\"
-            },
-            \\"type\\": \\"SECONDARY\\"
-          }
-        ]
-      },
       \\"attributes\\": [
         {
           \\"name\\": \\"pk\\",
@@ -558,68 +496,6 @@ export const configurations = {
       \\"pluralName\\": \\"widgets\\",
       \\"comments\\": [],
       \\"tenantEnabled\\": true,
-      \\"dynamoTable\\": {
-        \\"name\\": \\"my-service-table\\",
-        \\"pk\\": {
-          \\"name\\": \\"pk\\",
-          \\"attributeType\\": \\"S\\",
-          \\"keyType\\": \\"HASH\\"
-        },
-        \\"sk\\": {
-          \\"name\\": \\"sk\\",
-          \\"attributeType\\": \\"S\\",
-          \\"keyType\\": \\"RANGE\\"
-        },
-        \\"idx\\": {
-          \\"name\\": \\"idx\\",
-          \\"attributeType\\": \\"S\\",
-          \\"keyType\\": \\"NONE\\"
-        },
-        \\"keyGsi\\": {
-          \\"name\\": \\"key\\",
-          \\"pk\\": {
-            \\"name\\": \\"pk\\",
-            \\"attributeType\\": \\"S\\",
-            \\"keyType\\": \\"HASH\\"
-          },
-          \\"sk\\": {
-            \\"name\\": \\"sk\\",
-            \\"attributeType\\": \\"S\\",
-            \\"keyType\\": \\"RANGE\\"
-          },
-          \\"type\\": \\"PRIMARY\\"
-        },
-        \\"lookupGsi\\": {
-          \\"name\\": \\"loookup\\",
-          \\"pk\\": {
-            \\"name\\": \\"sk\\",
-            \\"attributeType\\": \\"S\\",
-            \\"keyType\\": \\"RANGE\\"
-          },
-          \\"sk\\": {
-            \\"name\\": \\"idx\\",
-            \\"attributeType\\": \\"S\\",
-            \\"keyType\\": \\"NONE\\"
-          },
-          \\"type\\": \\"SECONDARY\\"
-        },
-        \\"gsi\\": [
-          {
-            \\"name\\": \\"loookup\\",
-            \\"pk\\": {
-              \\"name\\": \\"sk\\",
-              \\"attributeType\\": \\"S\\",
-              \\"keyType\\": \\"RANGE\\"
-            },
-            \\"sk\\": {
-              \\"name\\": \\"idx\\",
-              \\"attributeType\\": \\"S\\",
-              \\"keyType\\": \\"NONE\\"
-            },
-            \\"type\\": \\"SECONDARY\\"
-          }
-        ]
-      },
       \\"attributes\\": [
         {
           \\"name\\": \\"pk\\",

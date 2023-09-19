@@ -381,7 +381,6 @@ export class Resource extends Component {
       pluralName: this.pluralName,
       comments: this.comments,
       tenantEnabled: this.tenantEnabled,
-      dynamoTable: DynamoTable.of(this.project).config(),
       attributes: this.attributes.map((a) => a.config()),
       dataStructure: this.dataStructure.config(),
     };

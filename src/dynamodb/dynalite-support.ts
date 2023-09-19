@@ -1,26 +1,26 @@
-import { TypeScriptProject } from "projen/lib/typescript";
 import { DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi } from "./dynamo-gsi";
 import { DynamoTable } from "./dynamo-table";
 import { TypeScriptSource } from "../generators/ts/source";
+import { DataService } from "../services";
 
-export const addDynaliteSupport = (project: TypeScriptProject) => {
+export const addDynaliteSupport = (service: DataService) => {
   // add setup to the jest config
-  project.jest!.addSetupFile("./setupBeforeEnv.ts");
+  service.jest!.addSetupFile("./setupBeforeEnv.ts");
 
   // build root level config (jest-dynalite-config.js) file
-  new DynaliteConfig(project);
+  new DynaliteConfig(service);
 
   // setup file to allow jest to run tests against dynalite
-  new DynaliteJestSupport(project);
+  new DynaliteJestSupport(service);
 };
 
 export class DynaliteConfig extends TypeScriptSource {
-  constructor(public readonly project: TypeScriptProject) {
-    super(project, "jest-dynalite-config.js");
+  constructor(public readonly service: DataService) {
+    super(service, "jest-dynalite-config.js");
 
     // add dynalite
-    project.addDeps("jest-dynalite");
+    service.addDeps("jest-dynalite");
     // dynalite wants this specific peer version for marshalling
     //service.addPeerDeps("aws-sdk@^2.1336.0");
 
@@ -31,7 +31,7 @@ export class DynaliteConfig extends TypeScriptSource {
   synthesize() {
     super.synthesize();
 
-    const table = DynamoTable.of(this.project);
+    const table = DynamoTable.of(this.service);
     const { gsi, keyGsi } = table;
     const otherGsi = gsi.filter((g: DynamoGsi) => g.name !== keyGsi.name);
     const serviceIndex = 1;
@@ -108,8 +108,8 @@ export class DynaliteConfig extends TypeScriptSource {
 }
 
 export class DynaliteJestSupport extends TypeScriptSource {
-  constructor(project: TypeScriptProject) {
-    super(project, "setupBeforeEnv.ts");
+  constructor(service: DataService) {
+    super(service, "setupBeforeEnv.ts");
 
     this.line(`import { setup } from "jest-dynalite";`);
     this.line("");

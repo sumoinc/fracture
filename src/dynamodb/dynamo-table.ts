@@ -3,6 +3,7 @@ import { Component } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { AttributeType, DynamoAttribute } from "./dynamo-attribute";
 import { DynamoGsi, DynamoGsiOptions, DynamoGsiType } from "./dynamo-gsi";
+import { DataService } from "../services";
 
 export interface DynamoTableOptions {
   /**
@@ -31,15 +32,15 @@ export interface DynamoTableOptions {
 
 export class DynamoTable extends Component {
   /**
-   * Returns the dynamo table for a project or creates one if it
+   * Returns the dynamo table for a service or creates one if it
    * doesn't exist yet. Singleton?
    */
-  public static of(project: TypeScriptProject): DynamoTable {
+  public static of(service: DataService): DynamoTable {
     const isDefined = (c: Component): c is DynamoTable =>
       c instanceof DynamoTable;
     return (
-      project.components.find(isDefined) ??
-      new DynamoTable(project, { name: `${project.name}-table` })
+      service.components.find(isDefined) ??
+      new DynamoTable(service, { name: `${service.serviceName}-table` })
     );
   }
 
