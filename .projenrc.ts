@@ -77,6 +77,7 @@ project.addDeps(
   "@faker-js/faker",
   "@types/aws-lambda",
   "change-case",
+  "graphql",
   "projen",
   "type-fest",
   "typescript",
