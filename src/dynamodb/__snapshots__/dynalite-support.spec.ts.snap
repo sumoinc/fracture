@@ -6,7 +6,7 @@ exports[`Smoke test config 1`] = `
 module.exports = {
   \\"tables\\": [
     {
-      \\"TableName\\": \\"my-project-table\\",
+      \\"TableName\\": \\"my-service-table\\",
       \\"KeySchema\\": [
         {
           \\"AttributeName\\": \\"pk\\",
