@@ -76,14 +76,17 @@ export type PersonMarshalled = {
     if: {
         BOOL: boolean;
     };
+    /**
+     * List opf favorite colors
+    */
+    favColors: {
+        L: Array<Partial<StringMarshalled>>;
+    };
     oneClub: {
         \\"M\\": ClubMarshalled;
     };
     ad: {
         L: Array<Partial<ClubMarshalled>>;
-    };
-    md: {
-        M: Record<string, Partial<ClubMarshalled>>;
     };
 };
 
@@ -150,6 +153,36 @@ export type ClubMarshalled = {
     };
 };
 
+export type CreatePersonInputMarshalled = {
+    fn: {
+        S: string;
+    };
+    ln: {
+        S: string;
+    };
+    ht: {
+        N: number;
+    };
+    /**
+     * Is this person a frog?
+    */
+    if: {
+        BOOL: boolean;
+    };
+    /**
+     * List opf favorite colors
+    */
+    favColors: {
+        L: Array<Partial<StringMarshalled>>;
+    };
+    oneClub: {
+        \\"M\\": ClubMarshalled;
+    };
+    ad: {
+        L: Array<Partial<ClubMarshalled>>;
+    };
+};
+
 /**
  * Public facing data structure for this record.
 */
@@ -197,9 +230,12 @@ export type PersonUnmarshalled = {
      * Is this person a frog?
     */
     if: boolean;
+    /**
+     * List opf favorite colors
+    */
+    favColors: Array<Partial<StringUnmarshalled>>;
     oneClub: Club;
     ad: Array<Partial<ClubUnmarshalled>>;
-    md: Record<Partial<ClubUnmarshalled>>;
 };
 
 /**
@@ -243,6 +279,22 @@ export type ClubUnmarshalled = {
     */
     dt: string;
     name: string;
+};
+
+export type CreatePersonInputUnmarshalled = {
+    fn: string;
+    ln: string;
+    ht: number;
+    /**
+     * Is this person a frog?
+    */
+    if: boolean;
+    /**
+     * List opf favorite colors
+    */
+    favColors: Array<Partial<StringUnmarshalled>>;
+    oneClub: Club;
+    ad: Array<Partial<ClubUnmarshalled>>;
 };
 "
 `;

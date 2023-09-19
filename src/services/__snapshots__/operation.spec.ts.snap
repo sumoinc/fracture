@@ -7,102 +7,6 @@ exports[`crud operations Create Operation 1`] = `
   \\"persistant\\": true,
   \\"attributes\\": [
     {
-      \\"name\\": \\"pk\\",
-      \\"shortName\\": \\"pk\\",
-      \\"type\\": \\"String\\",
-      \\"management\\": \\"SYSTEM_MANAGED\\",
-      \\"visibility\\": \\"HIDDEN\\",
-      \\"comments\\": [
-        \\"Partition Key for this record.\\"
-      ],
-      \\"required\\": true,
-      \\"generator\\": \\"Composition\\"
-    },
-    {
-      \\"name\\": \\"sk\\",
-      \\"shortName\\": \\"sk\\",
-      \\"type\\": \\"String\\",
-      \\"management\\": \\"SYSTEM_MANAGED\\",
-      \\"visibility\\": \\"HIDDEN\\",
-      \\"comments\\": [
-        \\"Sort Key for this record.\\"
-      ],
-      \\"required\\": true,
-      \\"generator\\": \\"Composition\\"
-    },
-    {
-      \\"name\\": \\"lookup\\",
-      \\"shortName\\": \\"idx\\",
-      \\"type\\": \\"String\\",
-      \\"management\\": \\"SYSTEM_MANAGED\\",
-      \\"visibility\\": \\"HIDDEN\\",
-      \\"comments\\": [
-        \\"Lookup value for this record.\\"
-      ],
-      \\"required\\": true,
-      \\"generator\\": \\"Composition\\"
-    },
-    {
-      \\"name\\": \\"id\\",
-      \\"shortName\\": \\"id\\",
-      \\"type\\": \\"String\\",
-      \\"management\\": \\"SYSTEM_MANAGED\\",
-      \\"visibility\\": \\"USER_VISIBLE\\",
-      \\"comments\\": [
-        \\"Identifier for this record.\\"
-      ],
-      \\"required\\": true,
-      \\"generator\\": \\"Guid\\"
-    },
-    {
-      \\"name\\": \\"type\\",
-      \\"shortName\\": \\"t\\",
-      \\"type\\": \\"String\\",
-      \\"management\\": \\"SYSTEM_MANAGED\\",
-      \\"visibility\\": \\"USER_VISIBLE\\",
-      \\"comments\\": [
-        \\"Type of record.\\"
-      ],
-      \\"required\\": true,
-      \\"generator\\": \\"Type\\"
-    },
-    {
-      \\"name\\": \\"version\\",
-      \\"shortName\\": \\"v\\",
-      \\"type\\": \\"String\\",
-      \\"management\\": \\"SYSTEM_MANAGED\\",
-      \\"visibility\\": \\"USER_VISIBLE\\",
-      \\"comments\\": [
-        \\"Version for record.\\"
-      ],
-      \\"required\\": true,
-      \\"generator\\": \\"VersionDateTimeStamp\\"
-    },
-    {
-      \\"name\\": \\"created-timestamp\\",
-      \\"shortName\\": \\"ct\\",
-      \\"type\\": \\"String\\",
-      \\"management\\": \\"SYSTEM_MANAGED\\",
-      \\"visibility\\": \\"USER_VISIBLE\\",
-      \\"comments\\": [
-        \\"The timestamp representing when this record was created.\\"
-      ],
-      \\"required\\": true,
-      \\"generator\\": \\"CurrentDateTimeStamp\\"
-    },
-    {
-      \\"name\\": \\"modified-timestamp\\",
-      \\"shortName\\": \\"mt\\",
-      \\"type\\": \\"String\\",
-      \\"management\\": \\"SYSTEM_MANAGED\\",
-      \\"visibility\\": \\"USER_VISIBLE\\",
-      \\"comments\\": [
-        \\"The timestamp representing when this record was last modified.\\"
-      ],
-      \\"required\\": true,
-      \\"generator\\": \\"CurrentDateTimeStamp\\"
-    },
-    {
       \\"name\\": \\"required-name\\",
       \\"shortName\\": \\"required-name\\",
       \\"type\\": \\"String\\",
@@ -141,7 +45,7 @@ exports[`crud operations Create Operation 2`] = `
 
 exports[`crud operations Delete Operation 1`] = `
 "{
-  \\"name\\": \\"get-my-resource-input\\",
+  \\"name\\": \\"delete-my-resource-input\\",
   \\"comments\\": [],
   \\"persistant\\": true,
   \\"attributes\\": [
@@ -211,7 +115,7 @@ exports[`crud operations Read Operation 2`] = `
 
 exports[`crud operations Update Operation 1`] = `
 "{
-  \\"name\\": \\"get-my-resource-input\\",
+  \\"name\\": \\"update-my-resource-input\\",
   \\"comments\\": [],
   \\"persistant\\": true,
   \\"attributes\\": [

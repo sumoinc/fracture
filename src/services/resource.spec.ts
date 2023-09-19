@@ -30,19 +30,6 @@ describe("success conditions", () => {
     //console.log(content);
   });
 
-  test("Able to add related map", () => {
-    const service = testDataService();
-    const fooResource = new Resource(service, { name: "foo" });
-    const barResource = new Resource(service, { name: "bar" });
-    fooResource.addMapOf(barResource);
-
-    new Types(service);
-    const content = synthFile(service, "src/types.ts");
-    expect(content).toBeTruthy();
-    expect(content).toMatchSnapshot();
-    // console.log(content);
-  });
-
   test("Able to add related resource", () => {
     const service = testDataService();
     const fooResource = new Resource(service, { name: "foo" });

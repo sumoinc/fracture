@@ -83,19 +83,13 @@ describe("success conditions", () => {
           type: ResourceAttributeType.ARRAY,
           typeParameter: "t",
         },
-        {
-          name: "customType",
-          required: true,
-          type: ResourceAttributeType.MAP,
-          typeParameter: "map-value",
-        },
       ],
     });
 
     // exists
     expect(structure).toBeTruthy();
-    // should only have two mattributes
-    expect(structure.attributes.length).toBe(2);
+    // should only have one attribute
+    expect(structure.attributes.length).toBe(1);
     // contained in service array
     expect(
       structure.service.structures.findIndex((s) => {

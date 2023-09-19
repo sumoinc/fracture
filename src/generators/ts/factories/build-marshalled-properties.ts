@@ -105,6 +105,7 @@ export const buildMarshalledProperty = ({
             ])
           ),
         ]);
+      /*
       case JsType.MAP:
         if (!typeParameter) {
           throw new Error("Map type must have a type parameter");
@@ -133,6 +134,7 @@ export const buildMarshalledProperty = ({
             )
           ),
         ]);
+        */
       default:
       // do nothing by default
     }

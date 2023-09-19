@@ -17,7 +17,6 @@ exports[`All attribute types should match snapshot 1`] = `
     url: string;
     ipaddress: string;
     array: Array<Any>;
-    map: Record<string, Any>;
     count: number;
     average: number;
     sum: number;
@@ -28,7 +27,6 @@ exports[`All attribute types should match snapshot 1`] = `
 exports[`Generic and type param support 1`] = `
 "export type MyType<T> = {
     arrayType: Array<T>;
-    customType: Record<string, MapValue>;
 };
 "
 `;

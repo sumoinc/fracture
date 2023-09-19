@@ -96,6 +96,7 @@ export const complexService = () => {
   const service = testDataService();
 
   const person = new Resource(service, { name: "person" });
+
   const club = new Resource(service, {
     name: "club",
     comments: ["A club"],
@@ -121,6 +122,13 @@ export const complexService = () => {
     type: ResourceAttributeType.BOOLEAN,
     comments: ["Is this person a frog?"],
   });
+  person.addAttribute({
+    name: "fav-colors",
+    type: ResourceAttributeType.ARRAY,
+    typeParameter: ResourceAttributeType.STRING,
+    comments: ["List opf favorite colors"],
+  });
+
   // one specific club
   person.addAttribute({
     name: "one-club",
@@ -128,18 +136,17 @@ export const complexService = () => {
   });
   // an array of clubs
   person.addAttribute({
-    name: "array-of-doug",
+    name: "array-of-clubs",
     shortName: "ad",
     type: ResourceAttributeType.ARRAY,
     typeParameter: club,
   });
-  // object containing clubs
-  person.addAttribute({
-    name: "map-of-doug",
-    shortName: "md",
-    type: ResourceAttributeType.MAP,
-    typeParameter: club,
-  });
+
+  // operation
+  Operation.create(person);
+  //Operation.read(person);
+  //Operation.update(person);
+  //Operation.delete(person);
 
   return service;
 };

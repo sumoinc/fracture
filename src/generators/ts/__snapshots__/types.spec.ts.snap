@@ -66,9 +66,12 @@ export type Person = {
      * Is this person a frog?
     */
     isFrog: boolean;
+    /**
+     * List opf favorite colors
+    */
+    favColors: Array<String>;
     oneClub: Club;
-    arrayOfDoug: Array<Club>;
-    mapOfDoug: Record<string, Club>;
+    arrayOfClubs: Array<Club>;
 };
 
 /**
@@ -96,6 +99,22 @@ export type Club = {
     */
     modifiedTimestamp: string;
     name: string;
+};
+
+export type CreatePersonInput = {
+    firstName: string;
+    lastName: string;
+    height: number;
+    /**
+     * Is this person a frog?
+    */
+    isFrog: boolean;
+    /**
+     * List opf favorite colors
+    */
+    favColors: Array<String>;
+    oneClub: Club;
+    arrayOfClubs: Array<Club>;
 };
 "
 `;

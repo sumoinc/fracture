@@ -350,21 +350,6 @@ export class Resource extends Component {
     return attribute;
   }
 
-  public addMapOf(
-    resource: Resource,
-    options: Partial<ResourceAttributeOptions> = {}
-  ) {
-    const attribute = this.addAttribute({
-      name: resource.pluralName,
-      shortName: `${resource.shortName}s`,
-      type: ResourceAttributeType.MAP,
-      typeParameter: resource.name,
-      comments: [`Map of ${resource.name} records.`],
-      ...options,
-    });
-    return attribute;
-  }
-
   public addOneOf(
     resource: Resource,
     options: Partial<ResourceAttributeOptions> = {}
