@@ -57,14 +57,14 @@ export class AwsEnvironment extends Environment {
    *
    * @default - uses default from Settings()
    */
-  readonly gitHubDeploymentOIDCRoleName: string;
+  public readonly gitHubDeploymentOIDCRoleName: string;
 
   /**
    * The duration of the role session in seconds.
    *
    * @default - uses default from Settings()
    */
-  readonly gitHubDeploymentOIDCRoleDurationSeconds: number;
+  public readonly gitHubDeploymentOIDCRoleDurationSeconds: number;
 
   constructor(
     public readonly project: TypeScriptProject,
@@ -89,5 +89,20 @@ export class AwsEnvironment extends Environment {
     this.gitHubDeploymentOIDCRoleDurationSeconds =
       options.gitHubDeploymentOIDCRoleDurationSeconds ??
       gitHubDeploymentOIDCRoleDurationSeconds;
+  }
+
+  /*****************************************************************************
+   * Configuration export for this environment
+   ****************************************************************************/
+
+  public config(): Record<string, any> {
+    return {
+      ...super.config(),
+      account: this.account,
+      region: this.region,
+      gitHubDeploymentOIDCRoleName: this.gitHubDeploymentOIDCRoleName,
+      gitHubDeploymentOIDCRoleDurationSeconds:
+        this.gitHubDeploymentOIDCRoleDurationSeconds,
+    };
   }
 }

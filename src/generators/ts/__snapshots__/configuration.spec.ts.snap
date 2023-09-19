@@ -5,7 +5,110 @@ exports[`Success Conditions App Configuration 1`] = `
 
 export const configurations = {
   \\"name\\": \\"my-app\\",
-  \\"environments\\": {}
+  \\"appDirectory\\": \\"apps/my-app\\",
+  \\"environments\\": [
+    {
+      \\"name\\": \\"dev-east\\",
+      \\"authProviderType\\": \\"AWS_GITHUB_OIDC\\",
+      \\"account\\": \\"000000000000\\",
+      \\"region\\": \\"us-east-1\\",
+      \\"gitHubDeploymentOIDCRoleName\\": \\"GitHubDeploymentOIDCRole\\",
+      \\"gitHubDeploymentOIDCRoleDurationSeconds\\": 900
+    },
+    {
+      \\"name\\": \\"prod-east\\",
+      \\"authProviderType\\": \\"AWS_GITHUB_OIDC\\",
+      \\"account\\": \\"111111111111\\",
+      \\"region\\": \\"us-east-1\\",
+      \\"gitHubDeploymentOIDCRoleName\\": \\"GitHubDeploymentOIDCRole\\",
+      \\"gitHubDeploymentOIDCRoleDurationSeconds\\": 900
+    }
+  ],
+  \\"services\\": [
+    {
+      \\"name\\": \\"my-service\\",
+      \\"serviceDirectory\\": \\"services/my-service\\",
+      \\"tenantEnabled\\": false,
+      \\"dynamo\\": {
+        \\"name\\": \\"my-service-table\\",
+        \\"pk\\": {
+          \\"name\\": \\"pk\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"HASH\\"
+        },
+        \\"sk\\": {
+          \\"name\\": \\"sk\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"RANGE\\"
+        },
+        \\"idx\\": {
+          \\"name\\": \\"idx\\",
+          \\"attributeType\\": \\"S\\",
+          \\"keyType\\": \\"NONE\\"
+        },
+        \\"keyGsi\\": {
+          \\"name\\": \\"key\\",
+          \\"pk\\": {
+            \\"name\\": \\"pk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"HASH\\"
+          },
+          \\"sk\\": {
+            \\"name\\": \\"sk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"RANGE\\"
+          },
+          \\"type\\": \\"PRIMARY\\"
+        },
+        \\"lookupGsi\\": {
+          \\"name\\": \\"loookup\\",
+          \\"pk\\": {
+            \\"name\\": \\"sk\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"RANGE\\"
+          },
+          \\"sk\\": {
+            \\"name\\": \\"idx\\",
+            \\"attributeType\\": \\"S\\",
+            \\"keyType\\": \\"NONE\\"
+          },
+          \\"type\\": \\"SECONDARY\\"
+        },
+        \\"gsi\\": [
+          {
+            \\"name\\": \\"key\\",
+            \\"pk\\": {
+              \\"name\\": \\"pk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"HASH\\"
+            },
+            \\"sk\\": {
+              \\"name\\": \\"sk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"RANGE\\"
+            },
+            \\"type\\": \\"PRIMARY\\"
+          },
+          {
+            \\"name\\": \\"loookup\\",
+            \\"pk\\": {
+              \\"name\\": \\"sk\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"RANGE\\"
+            },
+            \\"sk\\": {
+              \\"name\\": \\"idx\\",
+              \\"attributeType\\": \\"S\\",
+              \\"keyType\\": \\"NONE\\"
+            },
+            \\"type\\": \\"SECONDARY\\"
+          }
+        ]
+      },
+      \\"resources\\": [],
+      \\"operations\\": []
+    }
+  ]
 }"
 `;
 
@@ -14,6 +117,7 @@ exports[`Success Conditions Service Configuration 1`] = `
 
 export const configurations = {
   \\"name\\": \\"my-service\\",
+  \\"serviceDirectory\\": \\"services/my-service\\",
   \\"tenantEnabled\\": false,
   \\"dynamo\\": {
     \\"name\\": \\"my-service-table\\",
