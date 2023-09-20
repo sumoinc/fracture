@@ -171,6 +171,15 @@ Object {
         },
       ],
     },
+    "deploy:local:us-east": Object {
+      "description": "Deploy to us-east from local environment",
+      "name": "deploy:local:us-east",
+      "steps": Array [
+        Object {
+          "exec": "cdk deploy *-us-east --profile Integration-0000000000 --require-approval never",
+        },
+      ],
+    },
     "destroy": Object {
       "description": "Destroys your cdk app in the AWS cloud",
       "name": "destroy",
@@ -314,6 +323,18 @@ Object {
         },
         Object {
           "exec": "cdk watch",
+        },
+      ],
+    },
+    "watch:local:us-east": Object {
+      "description": "Deploy app to us-east and watch for changes",
+      "name": "watch:local:us-east",
+      "steps": Array [
+        Object {
+          "exec": "cdk deploy *-us-east --profile Integration-0000000000 --require-approval never",
+        },
+        Object {
+          "exec": "cdk watch *-us-east --profile Integration-0000000000",
         },
       ],
     },
