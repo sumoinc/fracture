@@ -52,6 +52,18 @@ export interface ResourceOptions {
 
 export class Resource extends Component {
   /**
+   * Returns a resource by name, or undefined if it doesn't exist
+   */
+  public static byName(
+    service: DataService,
+    name: string
+  ): Resource | undefined {
+    const isDefined = (c: Component): c is Resource =>
+      c instanceof Resource && c.name === name;
+    return service.components.find(isDefined);
+  }
+
+  /**
    * Returns all resourcesa for service
    */
   public static all(project: TypeScriptProject): Array<Resource> {
@@ -333,21 +345,6 @@ export class Resource extends Component {
       type: ResourceAttributeType.ARRAY,
       typeParameter: resource.name,
       comments: [`Array of ${resource.name} records.`],
-      ...options,
-    });
-    return attribute;
-  }
-
-  public addMapOf(
-    resource: Resource,
-    options: Partial<ResourceAttributeOptions> = {}
-  ) {
-    const attribute = this.addAttribute({
-      name: resource.pluralName,
-      shortName: `${resource.shortName}s`,
-      type: ResourceAttributeType.MAP,
-      typeParameter: resource.name,
-      comments: [`Map of ${resource.name} records.`],
       ...options,
     });
     return attribute;

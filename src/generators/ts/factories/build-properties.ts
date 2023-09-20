@@ -73,6 +73,7 @@ export const buildProperty = ({
             ),
           ]
         );
+      /*
       case JsType.MAP:
         if (!typeParameter) {
           throw new Error("Map type must have a type parameter");
@@ -87,7 +88,7 @@ export const buildProperty = ({
             ),
           ]
         );
-
+*/
       default:
       // do nothing by default
     }

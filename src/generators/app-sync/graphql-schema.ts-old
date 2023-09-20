@@ -1,0 +1,167 @@
+import { camelCase, pascalCase } from 'change-case';
+import { ensureDirSync, writeFileSync } from 'fs-extra';
+import {
+  GraphQLInputObjectType,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLSchemaConfig,
+  GraphQLType,
+  printSchema,
+} from 'graphql';
+import { resolve } from 'path';
+import { Attribute } from '../../classes/Attribute';
+import { Fracture } from '../../classes/Fracture';
+import { OperationType } from '../../classes/Operation';
+import { Structure } from '../../classes/Structure';
+import { isBatchTrait } from '../../lib/shapeTarget/isBatchTrait';
+import { isRequiredTrait } from '../../lib/shapeTarget/isRequiredTrait';
+import { getGraphQLScalar } from './scalars';
+
+export const buildSchema = (fracture: Fracture, dstDir: string) => {
+  // some containers for types
+  const queries = {};
+  const mutations = {};
+  const types: { [key: string]: GraphQLObjectType } = {};
+  const inputs: { [key: string]: GraphQLInputObjectType } = {};
+  const fields = {};
+
+  // make sure main schema dir exists
+  const schemaDir = resolve(dstDir, 'schema');
+  const schemaFilename = resolve(schemaDir, 'schema.graphql');
+  ensureDirSync(schemaDir);
+
+  const getField = (attribute: Attribute) => {
+    const fieldName = camelCase(attribute.shape.attributeName);
+
+    // required or not required?
+    if (isRequiredTrait(attribute.shape.traits)) {
+      return {
+        [fieldName]: {
+          type: GraphQLNonNull(getGraphQLScalar(attribute.shape.attributeType)),
+        },
+      };
+    } else {
+      return {
+        [fieldName]: { type: getGraphQLScalar(attribute.shape.attributeType) },
+      };
+    }
+  };
+
+  const getType = (structure: Structure) => {
+    // GraphQl name for this type
+    const typeName = pascalCase(structure.shape.structureName);
+
+    // need to build it?
+    if (!(typeName in types)) {
+      // build fields
+      const fields = {};
+      structure.attributes.map((attribute) => {
+        Object.assign(fields, getField(attribute));
+      });
+
+      const type = new GraphQLObjectType({
+        name: typeName,
+        fields,
+      });
+      Object.assign(types, { [typeName]: type });
+    }
+    return types[typeName];
+  };
+
+  const getInput = (structure: Structure) => {
+    // GraphQl name for this type
+    const inputName = pascalCase(structure.shape.structureName);
+
+    // need to build it?
+    if (!(inputName in inputs)) {
+      // build fields
+      const fields = {};
+      structure.attributes.map((attribute) => {
+        Object.assign(fields, getField(attribute));
+      });
+
+      let input: GraphQLType = new GraphQLInputObjectType({
+        name: inputName,
+        fields,
+      });
+
+      Object.assign(inputs, { [inputName]: input });
+    }
+
+    // pull cached value and see if we need to decorate it
+    let theInput: GraphQLType = inputs[inputName];
+
+    // batch / array?
+    if (isBatchTrait(structure.shape.traits)) {
+      theInput = GraphQLList(theInput);
+    }
+
+    // required?
+    if (isRequiredTrait(structure.shape.traits)) {
+      theInput = GraphQLNonNull(theInput);
+    }
+
+    return theInput;
+  };
+
+  // loop services
+  fracture.services.map((service) => {
+    service.resources.map((resource) => {
+      resource.operations.map((operation) => {
+        const operationName = camelCase(operation.shape.operationName);
+
+        // mutation
+        if (operation.shape.operationType === OperationType.MUTATION) {
+          Object.assign(mutations, {
+            [operationName]: {
+              type: getType(operation.outputStructure),
+              args: {
+                input: {
+                  type: getInput(operation.inputStructure),
+                },
+              },
+            },
+          });
+        }
+
+        // queries
+        if (operation.shape.operationType === OperationType.QUERY) {
+          Object.assign(queries, {
+            [operationName]: {
+              type: getType(operation.outputStructure),
+              args: {
+                input: {
+                  type: getInput(operation.inputStructure),
+                },
+              },
+            },
+          });
+        }
+      });
+    });
+  });
+
+  // console.log(mutations);
+
+  // build and return full type
+  const mutationTypes = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: mutations,
+  });
+  const queryTypes = new GraphQLObjectType({
+    name: 'Query',
+    fields: queries,
+  });
+
+  const schemaConfig: GraphQLSchemaConfig = {
+    types: [mutationTypes, queryTypes],
+  };
+  const schema = new GraphQLSchema(schemaConfig);
+  // this.schemaString = stripScalars(printSchema(schema));
+  const schemaString = printSchema(schema);
+
+  // write schema file
+  writeFileSync(schemaFilename, schemaString);
+};

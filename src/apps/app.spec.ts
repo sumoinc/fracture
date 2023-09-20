@@ -11,6 +11,17 @@ describe("success conditions", () => {
 describe("validate generated project files", () => {
   test(".projen/tasks.json", () => {
     const app = testApp();
+    // make sure deployment tasks get added correctly
+    const usEast = new AwsEnvironment(app.parent, {
+      name: "us-east",
+      account: "0000000000",
+    });
+    // deploy both apps
+    app.deploy({
+      branchPrefix: "feature",
+      environment: usEast,
+    });
+
     const content = synthFile(app, ".projen/tasks.json");
     expect(content).toBeTruthy();
     expect(content).toMatchSnapshot();

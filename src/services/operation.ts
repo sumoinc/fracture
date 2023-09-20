@@ -9,7 +9,6 @@ import {
   ManagementType,
   ResourceAttribute,
   ResourceAttributeGenerator,
-  ResourceAttributeType,
   VisabilityType,
 } from "./resource-attribute";
 import { Structure, StructureOptions } from "./structure";
@@ -121,20 +120,8 @@ export class Operation extends Component {
     });
 
     resource.attributes.forEach((attribute) => {
-      // anything generated on create
-      if (
-        attribute.createGenerator &&
-        attribute.createGenerator !== ResourceAttributeGenerator.NONE
-      ) {
-        o.addInputAttribute(attribute);
-      }
-
       // add all user namaged attributes
-      if (
-        attribute.management === ManagementType.USER_MANAGED &&
-        attribute.type !== ResourceAttributeType.ARRAY &&
-        attribute.type !== ResourceAttributeType.MAP
-      ) {
+      if (attribute.management === ManagementType.USER_MANAGED) {
         o.addInputAttribute(attribute);
       }
     });
@@ -193,11 +180,11 @@ export class Operation extends Component {
     }
 
     // create one, then return it
-    const operationName = name || `get-${resource.name}`;
+    const operationName = name || `update-${resource.name}`;
     const o = new Operation(resource.service, {
       name: operationName,
       resource,
-      operationType: OperationType.QUERY,
+      operationType: OperationType.MUTATION,
       operationSubType: OperationSubType.READ_ONE,
       dynamoGsi: DynamoTable.of(resource.project).keyGsi,
     });
@@ -208,11 +195,7 @@ export class Operation extends Component {
         o.addInputAttribute(attribute);
       }
       // add all user namaged attributes
-      if (
-        attribute.management === ManagementType.USER_MANAGED &&
-        attribute.type !== ResourceAttributeType.ARRAY &&
-        attribute.type !== ResourceAttributeType.MAP
-      ) {
+      if (attribute.management === ManagementType.USER_MANAGED) {
         o.addInputAttribute(attribute, {
           required: false,
         });
@@ -238,11 +221,11 @@ export class Operation extends Component {
     }
 
     // create one, then return it
-    const operationName = name || `get-${resource.name}`;
+    const operationName = name || `delete-${resource.name}`;
     const o = new Operation(resource.service, {
       name: operationName,
       resource,
-      operationType: OperationType.QUERY,
+      operationType: OperationType.MUTATION,
       operationSubType: OperationSubType.READ_ONE,
       dynamoGsi: DynamoTable.of(resource.project).keyGsi,
     });

@@ -112,8 +112,59 @@ export class App extends AwsCdkTypeScriptApp {
   ) {
     const branchPrefix = options.branchPrefix ?? "main";
 
+    const environment = options.environment as AwsEnvironment;
+
+    /***************************************************************************
+     *
+     * DEVELOPMENT TASK
+     *
+     * Add the ability to deploy from local dev environments to support development.
+     * This task assumes that a profile exists in ~/.aws/config that matches the
+     * naming convention of Integration-${accountnumber}.
+     *
+     **************************************************************************/
+
+    const deployLocal = this.addTask(`deploy:local:${environment.name}`, {
+      description: `Deploy to ${environment.name} from local environment`,
+      receiveArgs: true,
+    });
+
+    deployLocal.exec(
+      `cdk deploy *-${environment.name} --profile Integration-${environment.account} --require-approval never`
+    );
+
+    /*****************************************************************************
+     *
+     * WATCH TASK
+     *
+     * Deploy to a specific environment, then watch for changes and deploy again.
+     *
+     ****************************************************************************/
+
+    const watchLocal = this.addTask(`watch:local:${environment.name}`, {
+      description: `Deploy app to ${environment.name} and watch for changes`,
+      receiveArgs: true,
+    });
+
+    // deploy first because surprisingly watch is not deploying first
+    // see https://github.com/aws/aws-cdk/issues/17776
+    watchLocal.exec(
+      `cdk deploy *-${environment.name} --profile Integration-${environment.account} --require-approval never`
+    );
+    watchLocal.exec(
+      `cdk watch *-${environment.name} --profile Integration-${environment.account}`
+    );
+
+    /*****************************************************************************
+     *
+     * ADD TO WORKFLOW
+     *
+     * Add to the workflow for deployments.
+     *
+     ****************************************************************************/
+
     // add environment to this app
-    this.deployEnvironments.push(options.environment as AwsEnvironment);
+    this.deployEnvironments.push(environment as AwsEnvironment);
 
     // add to deployment workflow
     return Workflow.deploy(this.parent).addDeployJob({
@@ -123,7 +174,7 @@ export class App extends AwsCdkTypeScriptApp {
       deploySteps: [
         {
           name: "deploy",
-          run: `npx aws-cdk deploy --require-approval never --app ${this.artifactsDirectory} *-${options.environment.name}`,
+          run: `npx aws-cdk deploy --require-approval never --app ${this.artifactsDirectory} *-${environment.name}`,
         },
       ],
       artifactsDirectory: this.artifactsDirectory,

@@ -36,8 +36,6 @@ export const jsType = (
       return JsType.BOOLEAN;
     case ResourceAttributeType.ARRAY:
       return JsType.ARRAY;
-    case ResourceAttributeType.MAP:
-      return JsType.MAP;
     default:
       return JsType.OTHER;
   }

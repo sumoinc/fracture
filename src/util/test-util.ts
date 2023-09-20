@@ -7,6 +7,7 @@ import {
   Operation,
   Resource,
   ResourceAttribute,
+  ResourceAttributeType,
   Structure,
 } from "../services";
 import { NuxtJsSite, VitePressSite } from "../sites";
@@ -86,6 +87,68 @@ export const testDataService = () => {
  */
 export const testResource = () => {
   return new Resource(testDataService(), { name: "my-resource" });
+};
+
+/**
+ * A more complicated resource configuration
+ */
+export const complexService = () => {
+  const service = testDataService();
+
+  const person = new Resource(service, { name: "person" });
+
+  const club = new Resource(service, {
+    name: "club",
+    comments: ["A club"],
+    attributeOptions: [{ name: "name" }],
+  });
+
+  person.addAttribute({
+    name: "first-name",
+    shortName: "fn",
+  });
+  person.addAttribute({
+    name: "last-name",
+    shortName: "ln",
+  });
+  person.addAttribute({
+    name: "height",
+    shortName: "ht",
+    type: ResourceAttributeType.INT,
+  });
+  person.addAttribute({
+    name: "is-frog",
+    shortName: "if",
+    type: ResourceAttributeType.BOOLEAN,
+    comments: ["Is this person a frog?"],
+  });
+  person.addAttribute({
+    name: "fav-colors",
+    type: ResourceAttributeType.ARRAY,
+    typeParameter: ResourceAttributeType.STRING,
+    comments: ["List opf favorite colors"],
+  });
+
+  // one specific club
+  person.addAttribute({
+    name: "one-club",
+    type: club,
+  });
+  // an array of clubs
+  person.addAttribute({
+    name: "array-of-clubs",
+    shortName: "ad",
+    type: ResourceAttributeType.ARRAY,
+    typeParameter: club,
+  });
+
+  // operation
+  Operation.create(person);
+  //Operation.read(person);
+  //Operation.update(person);
+  //Operation.delete(person);
+
+  return service;
 };
 
 /**

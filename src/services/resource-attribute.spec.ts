@@ -61,13 +61,6 @@ describe("success conditions", () => {
       typeParameter: address,
     });
 
-    // user has a map of addresses
-    user.addAttribute({
-      name: "address-map",
-      type: ResourceAttributeType.MAP,
-      typeParameter: address,
-    });
-
     expect(address).toBeTruthy();
     expect(user).toBeTruthy();
 

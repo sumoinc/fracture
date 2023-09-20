@@ -25,12 +25,6 @@ test("Generic and type param support", () => {
         type: ResourceAttributeType.ARRAY,
         typeParameter: "t",
       },
-      {
-        name: "customType",
-        required: true,
-        type: ResourceAttributeType.MAP,
-        typeParameter: "map-value",
-      },
     ],
   });
 
@@ -70,10 +64,7 @@ test("All attribute types should match snapshot", () => {
         name: key,
         type: value,
         typeParameter:
-          value === ResourceAttributeType.ARRAY ||
-          value === ResourceAttributeType.MAP
-            ? "any"
-            : undefined,
+          value === ResourceAttributeType.ARRAY ? "any" : undefined,
       };
     }
   );

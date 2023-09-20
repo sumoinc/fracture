@@ -91,7 +91,6 @@ export type User = {
     lastName: string;
     primaryAddress: Address;
     addresses: Array<Address>;
-    addressMap: Record<string, Address>;
 };
 "
 `;
