@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@aws-sdk/client-dynamodb':
-        specifier: ^3.415.0
-        version: 3.415.0
+        specifier: ^3.417.0
+        version: 3.417.0
       '@aws-sdk/lib-dynamodb':
-        specifier: ^3.415.0
-        version: 3.415.0(@aws-sdk/client-dynamodb@3.415.0)
+        specifier: ^3.417.0
+        version: 3.417.0(@aws-sdk/client-dynamodb@3.417.0)
       '@aws-sdk/util-dynamodb':
-        specifier: ^3.415.0
-        version: 3.415.0(@aws-sdk/client-dynamodb@3.415.0)
+        specifier: ^3.417.0
+        version: 3.417.0(@aws-sdk/client-dynamodb@3.417.0)
       '@faker-js/faker':
         specifier: ^8.1.0
         version: 8.1.0
@@ -30,8 +30,8 @@ importers:
         specifier: ^16.8.1
         version: 16.8.1
       projen:
-        specifier: ^0.73.26
-        version: 0.73.26
+        specifier: ^0.73.27
+        version: 0.73.27
       type-fest:
         specifier: ^2.19.0
         version: 2.19.0
@@ -404,15 +404,15 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@aws-sdk/client-dynamodb@3.415.0:
-    resolution: {integrity: sha512-ID1zZurSlISjfue3lxzbcTymWzuY2wsMgVjEKhAb+KwjsmfHubY4FsKETRw9xwsNBqhfkPxV/55ypx82AFPr3Q==}
+  /@aws-sdk/client-dynamodb@3.417.0:
+    resolution: {integrity: sha512-32+CQzRSCqTWIJ8rvdLm3761svrJvKjSEXax+BJ6U7fnQD3jpU0OfBks6ra8J5W8mGCiyICMLJmaN6joao9Plg==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 3.0.0
       '@aws-crypto/sha256-js': 3.0.0
       '@aws-sdk/client-sts': 3.414.0
       '@aws-sdk/credential-provider-node': 3.414.0
-      '@aws-sdk/middleware-endpoint-discovery': 3.415.0
+      '@aws-sdk/middleware-endpoint-discovery': 3.417.0
       '@aws-sdk/middleware-host-header': 3.413.0
       '@aws-sdk/middleware-logger': 3.413.0
       '@aws-sdk/middleware-recursion-detection': 3.413.0
@@ -648,19 +648,19 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@aws-sdk/lib-dynamodb@3.415.0(@aws-sdk/client-dynamodb@3.415.0):
-    resolution: {integrity: sha512-INRY3COC5PzQbh4ULQrLwWal8TSbXyjEhL3dgiXUsD2oUOaN8U8H9F28GiHDXdZ+xAeYhk7u6lvKP7axRQW7pg==}
+  /@aws-sdk/lib-dynamodb@3.417.0(@aws-sdk/client-dynamodb@3.417.0):
+    resolution: {integrity: sha512-+8ewIPwf4uvgan0/MGpz8dqfrLPEQxCbz/R3rU37ZoE4ELt8lF6RFXibZN83+PcDhSL/myfchg4cWNR2v/mghQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@aws-sdk/client-dynamodb': ^3.0.0
     dependencies:
-      '@aws-sdk/client-dynamodb': 3.415.0
-      '@aws-sdk/util-dynamodb': 3.415.0(@aws-sdk/client-dynamodb@3.415.0)
+      '@aws-sdk/client-dynamodb': 3.417.0
+      '@aws-sdk/util-dynamodb': 3.417.0(@aws-sdk/client-dynamodb@3.417.0)
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/middleware-endpoint-discovery@3.415.0:
-    resolution: {integrity: sha512-N6KXkSA7Ag0/Ld27MUKdb7TyV9nAW5M04j+eLy7IW1yQwZjkfrMt7qcaLIMtDBlkeZaPSy1AaBKwx333d4Yi4A==}
+  /@aws-sdk/middleware-endpoint-discovery@3.417.0:
+    resolution: {integrity: sha512-ujJTi/ChvmZmlbUs3jzOYiL5j5L2Z23HQVkikIRZnBXy0cylMNr4KFXgEt5VSUpSpeyxYF7xmCKnHNvn+Xbmtw==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-sdk/endpoint-cache': 3.310.0
@@ -865,13 +865,13 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@aws-sdk/util-dynamodb@3.415.0(@aws-sdk/client-dynamodb@3.415.0):
-    resolution: {integrity: sha512-tdqMe8YnckJFBddV6yJFREe5bpn9YLKm1NWfKI0RpKkJZeidXuwBsON7UtcNpH2hiOzz0VA7WFD0aPXmF45GnA==}
+  /@aws-sdk/util-dynamodb@3.417.0(@aws-sdk/client-dynamodb@3.417.0):
+    resolution: {integrity: sha512-IWB2aoRdZSqlwZPjFisXpOZVKNaKIwbOK77LhlY8WYp3ZNYJITFKzKxYmuWuCYkeSO3aGM8gp3JzofTkmiQhEw==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@aws-sdk/client-dynamodb': ^3.0.0
     dependencies:
-      '@aws-sdk/client-dynamodb': 3.415.0
+      '@aws-sdk/client-dynamodb': 3.417.0
       tslib: 2.6.2
     dev: false
 
@@ -7649,8 +7649,8 @@ packages:
       - yaml
       - yargs
 
-  /projen@0.73.26:
-    resolution: {integrity: sha512-IPErx9JMuplLVunwdL7ctW8cuS0NSrJjF1p44B+fZJkWyCbSx/x8RO+KFRN+q2J4Bruv1P1OIFhf5g3OraF6FQ==}
+  /projen@0.73.27:
+    resolution: {integrity: sha512-GHKmZ6LPrbNiyWBGSXS8R8QYOZSqRleerYZpSL3sOfvf1If9kjDgojc68gm2nPQfnrqDQaMEbgsRj7U+bnGnBw==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
