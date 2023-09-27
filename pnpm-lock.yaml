@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@aws-sdk/client-dynamodb':
-        specifier: ^3.418.0
-        version: 3.418.0
+        specifier: ^3.420.0
+        version: 3.420.0
       '@aws-sdk/lib-dynamodb':
-        specifier: ^3.418.0
-        version: 3.418.0(@aws-sdk/client-dynamodb@3.418.0)
+        specifier: ^3.420.0
+        version: 3.420.0(@aws-sdk/client-dynamodb@3.420.0)
       '@aws-sdk/util-dynamodb':
-        specifier: ^3.418.0
-        version: 3.418.0(@aws-sdk/client-dynamodb@3.418.0)
+        specifier: ^3.420.0
+        version: 3.420.0(@aws-sdk/client-dynamodb@3.420.0)
       '@faker-js/faker':
         specifier: ^8.1.0
         version: 8.1.0
@@ -30,8 +30,8 @@ importers:
         specifier: ^16.8.1
         version: 16.8.1
       projen:
-        specifier: ^0.73.32
-        version: 0.73.32
+        specifier: ^0.73.33
+        version: 0.73.33
       type-fest:
         specifier: ^2.19.0
         version: 2.19.0
@@ -404,8 +404,8 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@aws-sdk/client-dynamodb@3.418.0:
-    resolution: {integrity: sha512-xoxWNsUO2NfUrf4qKeoJY2wEQr50E8hQcEElIuDsX5h7EzXBdORABri+BAQC8pEBqrMg6NUW1kdXrgaAM9Algg==}
+  /@aws-sdk/client-dynamodb@3.420.0:
+    resolution: {integrity: sha512-0XkCoSezXUGIbWmgJ94JAjaXeJbtsQk8XgHcuAX9oyVClGmeJ2cZ/Ss0S9x/mz5mzNWFdgKDchurrX8cFa33CA==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 3.0.0
@@ -545,7 +545,7 @@ packages:
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-sdk/types': 3.418.0
-      '@smithy/property-provider': 2.0.8
+      '@smithy/property-provider': 2.0.10
       '@smithy/types': 2.3.3
       tslib: 2.6.2
     dev: false
@@ -559,9 +559,9 @@ packages:
       '@aws-sdk/credential-provider-sso': 3.418.0
       '@aws-sdk/credential-provider-web-identity': 3.418.0
       '@aws-sdk/types': 3.418.0
-      '@smithy/credential-provider-imds': 2.0.10
-      '@smithy/property-provider': 2.0.8
-      '@smithy/shared-ini-file-loader': 2.0.9
+      '@smithy/credential-provider-imds': 2.0.12
+      '@smithy/property-provider': 2.0.10
+      '@smithy/shared-ini-file-loader': 2.0.11
       '@smithy/types': 2.3.3
       tslib: 2.6.2
     transitivePeerDependencies:
@@ -578,9 +578,9 @@ packages:
       '@aws-sdk/credential-provider-sso': 3.418.0
       '@aws-sdk/credential-provider-web-identity': 3.418.0
       '@aws-sdk/types': 3.418.0
-      '@smithy/credential-provider-imds': 2.0.10
-      '@smithy/property-provider': 2.0.8
-      '@smithy/shared-ini-file-loader': 2.0.9
+      '@smithy/credential-provider-imds': 2.0.12
+      '@smithy/property-provider': 2.0.10
+      '@smithy/shared-ini-file-loader': 2.0.11
       '@smithy/types': 2.3.3
       tslib: 2.6.2
     transitivePeerDependencies:
@@ -592,8 +592,8 @@ packages:
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-sdk/types': 3.418.0
-      '@smithy/property-provider': 2.0.8
-      '@smithy/shared-ini-file-loader': 2.0.9
+      '@smithy/property-provider': 2.0.10
+      '@smithy/shared-ini-file-loader': 2.0.11
       '@smithy/types': 2.3.3
       tslib: 2.6.2
     dev: false
@@ -605,8 +605,8 @@ packages:
       '@aws-sdk/client-sso': 3.418.0
       '@aws-sdk/token-providers': 3.418.0
       '@aws-sdk/types': 3.418.0
-      '@smithy/property-provider': 2.0.8
-      '@smithy/shared-ini-file-loader': 2.0.9
+      '@smithy/property-provider': 2.0.10
+      '@smithy/shared-ini-file-loader': 2.0.11
       '@smithy/types': 2.3.3
       tslib: 2.6.2
     transitivePeerDependencies:
@@ -618,7 +618,7 @@ packages:
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-sdk/types': 3.418.0
-      '@smithy/property-provider': 2.0.8
+      '@smithy/property-provider': 2.0.10
       '@smithy/types': 2.3.3
       tslib: 2.6.2
     dev: false
@@ -648,14 +648,14 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@aws-sdk/lib-dynamodb@3.418.0(@aws-sdk/client-dynamodb@3.418.0):
-    resolution: {integrity: sha512-XHY4HeedF8g1q46c9fiknj2iBEEH0SE9gAJIOojQaWzmLLgVs2Rlpr7SfuHWBt5stqDjxphhQYKORSBMhbxauA==}
+  /@aws-sdk/lib-dynamodb@3.420.0(@aws-sdk/client-dynamodb@3.420.0):
+    resolution: {integrity: sha512-CwFGnpQqncLMnZapezxT4HO9QFHexM5d/upmItmfj04kq/vlXfS3uQMHxpvc6Os/uAvx+iC0u/oNtg4+bsjcnA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@aws-sdk/client-dynamodb': ^3.0.0
     dependencies:
-      '@aws-sdk/client-dynamodb': 3.418.0
-      '@aws-sdk/util-dynamodb': 3.418.0(@aws-sdk/client-dynamodb@3.418.0)
+      '@aws-sdk/client-dynamodb': 3.420.0
+      '@aws-sdk/util-dynamodb': 3.420.0(@aws-sdk/client-dynamodb@3.420.0)
       tslib: 2.6.2
     dev: false
 
@@ -715,7 +715,7 @@ packages:
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-sdk/types': 3.418.0
-      '@smithy/property-provider': 2.0.8
+      '@smithy/property-provider': 2.0.10
       '@smithy/protocol-http': 3.0.5
       '@smithy/signature-v4': 2.0.5
       '@smithy/types': 2.3.3
@@ -816,9 +816,9 @@ packages:
       '@smithy/middleware-stack': 2.0.3
       '@smithy/node-config-provider': 2.0.12
       '@smithy/node-http-handler': 2.1.5
-      '@smithy/property-provider': 2.0.8
+      '@smithy/property-provider': 2.0.10
       '@smithy/protocol-http': 3.0.5
-      '@smithy/shared-ini-file-loader': 2.0.9
+      '@smithy/shared-ini-file-loader': 2.0.11
       '@smithy/smithy-client': 2.1.7
       '@smithy/types': 2.3.3
       '@smithy/url-parser': 2.0.9
@@ -865,13 +865,13 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@aws-sdk/util-dynamodb@3.418.0(@aws-sdk/client-dynamodb@3.418.0):
-    resolution: {integrity: sha512-5DI0m9ipb6yPfWm9DmXCPJrXttLeioWpHQMGbE+MmvAsNy2AmUJZ4kzmmUEE6YazseL78OtNmA7Pm4Bqs5T/lg==}
+  /@aws-sdk/util-dynamodb@3.420.0(@aws-sdk/client-dynamodb@3.420.0):
+    resolution: {integrity: sha512-eDD0HZoNUXiZIsoxDG7nimOFqijMPngZGOA1vU9v43xsQlAvpezkYk8IcXO3vuUqgW7LEhMkJcKWSpXqIfYcrg==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@aws-sdk/client-dynamodb': ^3.0.0
     dependencies:
-      '@aws-sdk/client-dynamodb': 3.418.0
+      '@aws-sdk/client-dynamodb': 3.420.0
       tslib: 2.6.2
     dev: false
 
@@ -2419,17 +2419,6 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@smithy/credential-provider-imds@2.0.10:
-    resolution: {integrity: sha512-may2/gYlDip2rjlU1Z5fcCEWY0Fu3tSu/HykgZrLfb2/171P6OYuz7dGNKBOCS1W57vP4W5wmUhm0WGehrixig==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      '@smithy/node-config-provider': 2.0.12
-      '@smithy/property-provider': 2.0.8
-      '@smithy/types': 2.3.3
-      '@smithy/url-parser': 2.0.9
-      tslib: 2.6.2
-    dev: false
-
   /@smithy/credential-provider-imds@2.0.12:
     resolution: {integrity: sha512-S3lUNe+2fEFwKcmiQniXGPXt69vaHvQCw8kYQOBL4OvJsgwfpkIYDZdroHbTshYi0M6WaKL26Mw+hvgma6dZqA==}
     engines: {node: '>=14.0.0'}
@@ -2563,14 +2552,6 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@smithy/property-provider@2.0.8:
-    resolution: {integrity: sha512-oaaP/i7bGG8XbxG9Kx4PZh83iJ2jo/vt8RmJdi9hmc8APBaW1HGDperVXDCyPQdVYXmiqrtxc/rPImyBma1G3A==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      '@smithy/types': 2.3.3
-      tslib: 2.6.2
-    dev: false
-
   /@smithy/protocol-http@3.0.5:
     resolution: {integrity: sha512-3t3fxj+ip4EPHRC2fQ0JimMxR/qCQ1LSQJjZZVZFgROnFLYWPDgUZqpoi7chr+EzatxJVXF/Rtoi5yLHOWCoZQ==}
     engines: {node: '>=14.0.0'}
@@ -2605,14 +2586,6 @@ packages:
 
   /@smithy/shared-ini-file-loader@2.0.11:
     resolution: {integrity: sha512-Sf0u5C5px6eykXi6jImDTp+edvG3REtPjXnFWU/J+b7S2wkXwUqFXqBL5DdM4zC1F+M8u57ZT7NRqDwMOw7/Tw==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      '@smithy/types': 2.3.3
-      tslib: 2.6.2
-    dev: false
-
-  /@smithy/shared-ini-file-loader@2.0.9:
-    resolution: {integrity: sha512-vBLgJI+Qpz1TZ0W2kUBOmG2Q+geVEhiXE99UX02+UFag2WzOQ6frvV6rpadwJu0uwF02GG620NbiKGboqZ19YA==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@smithy/types': 2.3.3
@@ -7724,8 +7697,8 @@ packages:
       - yaml
       - yargs
 
-  /projen@0.73.32:
-    resolution: {integrity: sha512-9O9fXi4lmS32jRc2jtUvx/KONqkMleURjLymLDsb3nS7Y4jCzxBuK/EwLU9DGV86Hr2Tbh5OtmNOII6zsowABQ==}
+  /projen@0.73.33:
+    resolution: {integrity: sha512-STc60WJQsBQQ3AQXhElBHmzb+C4Za1nTrE/RAmzaoxKjCMkPF3I318C09teLlSVAtAGmIC8+GGH02QCEoIvyKA==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
