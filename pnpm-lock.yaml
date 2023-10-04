@@ -21,8 +21,8 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0
       '@types/aws-lambda':
-        specifier: ^8.10.122
-        version: 8.10.122
+        specifier: ^8.10.123
+        version: 8.10.123
       change-case:
         specifier: ^4.1.2
         version: 4.1.2
@@ -30,8 +30,8 @@ importers:
         specifier: ^16.8.1
         version: 16.8.1
       projen:
-        specifier: ^0.73.38
-        version: 0.73.38
+        specifier: ^0.73.39
+        version: 0.73.39
       type-fest:
         specifier: ^2.19.0
         version: 2.19.0
@@ -2805,8 +2805,8 @@ packages:
       minimatch: 9.0.3
     dev: true
 
-  /@types/aws-lambda@8.10.122:
-    resolution: {integrity: sha512-vBkIh9AY22kVOCEKo5CJlyCgmSWvasC+SWUxL/x/vOwRobMpI/HG1xp/Ae3AqmSiZeLUbOhW0FCD3ZjqqUxmXw==}
+  /@types/aws-lambda@8.10.123:
+    resolution: {integrity: sha512-YBxxrA5fZzt1UFslJFBXH4AJUjkxu5ePv9RPjrpq5Tif5Xi2YhG3P8RAJfXXWL5/M6wPrlzlAMqaMM5ysci/EQ==}
     dev: false
 
   /@types/babel__core@7.20.1:
@@ -7697,8 +7697,8 @@ packages:
       - yaml
       - yargs
 
-  /projen@0.73.38:
-    resolution: {integrity: sha512-hENVmSXAEiauS/kuVJwBump0UjonLcYxOWH9c81b3ssboNk2Aec034od8BxqXhG5PPnCKiEvbE1BcF1bHrHnVA==}
+  /projen@0.73.39:
+    resolution: {integrity: sha512-6pxE1/8vG+ptKwc6hl75MG0ukFuXN48CKcDfJiZvm9eGtj7fUGNw2o9+RGPDXCdpKwqN9tRbG5bD7MRWvnwOXQ==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
