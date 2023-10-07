@@ -1,14 +1,6 @@
 {
   "dependencies": [
     {
-      "name": "@aws-sdk/smithy-client",
-      "type": "build"
-    },
-    {
-      "name": "@aws-sdk/types",
-      "type": "build"
-    },
-    {
       "name": "@types/jest",
       "type": "build"
     },
