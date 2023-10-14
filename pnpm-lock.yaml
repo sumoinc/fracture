@@ -30,8 +30,8 @@ importers:
         specifier: ^16.8.1
         version: 16.8.1
       projen:
-        specifier: ^0.74.10
-        version: 0.74.10
+        specifier: ^0.74.11
+        version: 0.74.11
       type-fest:
         specifier: ^2.19.0
         version: 2.19.0
@@ -46,8 +46,8 @@ importers:
         specifier: 3.370.0
         version: 3.370.0
       '@aws-sdk/types':
-        specifier: 3.425.0
-        version: 3.425.0
+        specifier: 3.428.0
+        version: 3.428.0
       '@types/jest':
         specifier: ^27.5.2
         version: 27.5.2
@@ -842,21 +842,12 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@aws-sdk/types@3.425.0:
-    resolution: {integrity: sha512-6lqbmorwerN4v+J5dqbHPAsjynI0mkEF+blf+69QTaKKGaxBBVaXgqoqul9RXYcK5MMrrYRbQIMd0zYOoy90kA==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      '@smithy/types': 2.3.4
-      tslib: 2.6.2
-    dev: true
-
   /@aws-sdk/types@3.428.0:
     resolution: {integrity: sha512-4T0Ps2spjg3qbWE6ZK13Vd3FnzpfliaiotqjxUK5YhjDrKXeT36HJp46JhDupElQuHtTkpdiJOSYk2lvY2H4IA==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@smithy/types': 2.3.5
       tslib: 2.6.2
-    dev: false
 
   /@aws-sdk/util-base64@3.310.0:
     resolution: {integrity: sha512-v3+HBKQvqgdzcbL+pFswlx5HQsd9L6ZTlyPVL2LS9nNXnCcR3XgGz9jRskikRUuUvUXtkSG1J88GAOnJ/apTPg==}
@@ -2661,19 +2652,11 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@smithy/types@2.3.4:
-    resolution: {integrity: sha512-D7xlM9FOMFyFw7YnMXn9dK2KuN6+JhnrZwVt1fWaIu8hCk5CigysweeIT/H/nCo4YV+s8/oqUdLfexbkPZtvqw==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      tslib: 2.6.2
-    dev: true
-
   /@smithy/types@2.3.5:
     resolution: {integrity: sha512-ehyDt8M9hehyxrLQGoA1BGPou8Js1Ocoh5M0ngDhJMqbFmNK5N6Xhr9/ZExWkyIW8XcGkiMPq3ZUEE0ScrhbuQ==}
     engines: {node: '>=14.0.0'}
     dependencies:
       tslib: 2.6.2
-    dev: false
 
   /@smithy/url-parser@2.0.11:
     resolution: {integrity: sha512-h89yXMCCF+S5k9XIoKltMIWTYj+FcEkU/IIFZ6RtE222fskOTL4Iak6ZRG+ehSvZDt8yKEcxqheTDq7JvvtK3g==}
@@ -7748,8 +7731,8 @@ packages:
       - yaml
       - yargs
 
-  /projen@0.74.10:
-    resolution: {integrity: sha512-6tZtj2EDq2OxbctaHT0f5Q4O2YVWrz6RFZoJPYTOu5kctCQT9UIMADJQWNf0Rz394ncek63AuPL1oEz+NKcnxg==}
+  /projen@0.74.11:
+    resolution: {integrity: sha512-Nu4jUKtlY1JJ3X7UPVqyWT78MEI2vzJQ0WUtV35ZkVX+aqYRV7ssF4b8bCMcSlQab1fP7Gx9WQWqKrImFUDeSw==}
     engines: {node: '>= 16.0.0'}
     hasBin: true
     dependencies:
