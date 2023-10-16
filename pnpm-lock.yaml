@@ -18,8 +18,8 @@ importers:
         specifier: ^3.428.0
         version: 3.428.0(@aws-sdk/client-dynamodb@3.428.0)
       '@faker-js/faker':
-        specifier: ^8.1.0
-        version: 8.1.0
+        specifier: ^8.2.0
+        version: 8.2.0
       '@types/aws-lambda':
         specifier: ^8.10.124
         version: 8.10.124
@@ -30,8 +30,8 @@ importers:
         specifier: ^16.8.1
         version: 16.8.1
       projen:
-        specifier: ^0.74.12
-        version: 0.74.12
+        specifier: ^0.74.17
+        version: 0.74.17
       type-fest:
         specifier: ^2.19.0
         version: 2.19.0
@@ -1930,8 +1930,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@faker-js/faker@8.1.0:
-    resolution: {integrity: sha512-38DT60rumHfBYynif3lmtxMqMqmsOQIxQgEuPZxCk2yUYN0eqWpTACgxi0VpidvsJB8CRxCpvP7B3anK85FjtQ==}
+  /@faker-js/faker@8.2.0:
+    resolution: {integrity: sha512-VacmzZqVxdWdf9y64lDOMZNDMM/FQdtM9IsaOPKOm2suYwEatb8VkdHqOzXcDnZbk7YDE2BmsJmy/2Hmkn563g==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
     dev: false
 
@@ -7731,8 +7731,8 @@ packages:
       - yaml
       - yargs
 
-  /projen@0.74.12:
-    resolution: {integrity: sha512-byqKXt8r7K2WtsYmyE9C49Ud5OYNCFMafS4Ei88IyfzG1OfkjYUdvu5ToYjKR4WcIa4nlrDWwCjWpYPIGAjXrQ==}
+  /projen@0.74.17:
+    resolution: {integrity: sha512-5TWAuj9okHUiahp4ao9czf1scBZyT8qjDUfZbxb6hcTQmacSabq/SsF2SZrbM3r+OD162YVWizDoIoE15vMhgQ==}
     engines: {node: '>= 16.0.0'}
     hasBin: true
     dependencies:
