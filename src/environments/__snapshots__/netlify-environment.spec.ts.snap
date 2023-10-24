@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: latest
-          cache: yarn
+          cache: npm
       - name: Install dependencies
         run: yarn install --check-files --frozen-lockfile
       - name: build
