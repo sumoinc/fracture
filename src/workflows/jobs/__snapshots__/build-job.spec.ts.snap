@@ -23,7 +23,7 @@ Object {
       "name": "Setup Node.js",
       "uses": "actions/setup-node@v3",
       "with": Object {
-        "cache": "yarn",
+        "cache": "npm",
         "node-version": "latest",
       },
     },
@@ -62,7 +62,7 @@ Object {
       "name": "Setup Node.js",
       "uses": "actions/setup-node@v3",
       "with": Object {
-        "cache": "yarn",
+        "cache": "npm",
         "node-version": "latest",
       },
     },
