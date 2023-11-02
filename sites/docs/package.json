@@ -40,7 +40,6 @@
     "typescript": "^4.9.5",
     "vitepress": "^1.0.0-rc.10"
   },
-  "pnpm": {},
   "main": "lib/index.js",
   "license": "UNLICENSED",
   "version": "0.0.0",
