@@ -859,7 +859,6 @@ Object {
   "license": "UNLICENSED",
   "main": "lib/index.js",
   "name": "my-site",
-  "pnpm": Object {},
   "scripts": Object {
     "build": "npx projen build",
     "compile": "npx projen compile",
