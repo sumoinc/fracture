@@ -30,8 +30,8 @@ importers:
         specifier: ^16.8.1
         version: 16.8.1
       projen:
-        specifier: ^0.76.16
-        version: 0.76.16(constructs@10.3.0)
+        specifier: ^0.76.17
+        version: 0.76.17(constructs@10.3.0)
       type-fest:
         specifier: ^2.19.0
         version: 2.19.0
@@ -101,7 +101,7 @@ importers:
         version: 9.5.0
       ts-jest:
         specifier: ^27.1.5
-        version: 27.1.5(@babel/core@7.22.15)(@types/jest@27.5.2)(jest@27.5.1)(typescript@4.9.5)
+        version: 27.1.5(@babel/core@7.23.2)(@types/jest@27.5.2)(jest@27.5.1)(typescript@4.9.5)
       ts-node:
         specifier: ^10.9.1
         version: 10.9.1(@types/node@16.18.60)(typescript@4.9.5)
@@ -161,7 +161,7 @@ importers:
         version: 0.73.11
       ts-jest:
         specifier: ^27.1.5
-        version: 27.1.5(@babel/core@7.23.2)(@types/jest@27.5.2)(jest@27.5.1)(typescript@4.9.5)
+        version: 27.1.5(@babel/core@7.22.15)(@types/jest@27.5.2)(jest@27.5.1)(typescript@4.9.5)
       typescript:
         specifier: ^4.9.5
         version: 4.9.5
@@ -7810,8 +7810,8 @@ packages:
       - yaml
       - yargs
 
-  /projen@0.76.16(constructs@10.3.0):
-    resolution: {integrity: sha512-+p6ZNVvDICn2lskDofSOgUSTI8Or0aAqyiKf9RhSaE2nTqwoObbf1b4wmw44hjiQWa1/pVP+IGUzCienDIA+Jw==}
+  /projen@0.76.17(constructs@10.3.0):
+    resolution: {integrity: sha512-i+n1l/kMeLV8ZvTNi7BGIiaCOnSouaiF/tkA6e36l2Fgzj9mYnsRvnZGxYQrobSrap3hzQEiGtKfDm5U8XgkeQ==}
     engines: {node: '>= 16.0.0'}
     hasBin: true
     peerDependencies:
