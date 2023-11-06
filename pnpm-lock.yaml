@@ -30,8 +30,8 @@ importers:
         specifier: ^16.8.1
         version: 16.8.1
       projen:
-        specifier: ^0.76.18
-        version: 0.76.18(constructs@10.3.0)
+        specifier: ^0.76.21
+        version: 0.76.21(constructs@10.3.0)
       type-fest:
         specifier: ^2.19.0
         version: 2.19.0
@@ -7827,8 +7827,8 @@ packages:
       - yaml
       - yargs
 
-  /projen@0.76.18(constructs@10.3.0):
-    resolution: {integrity: sha512-nzDhs4GUuiKjgkhDrMA/QFjlBnYUstuth3AfLgp2C5rUofDzLHu3cWVnIq2E/qXxE9FS9VP4bTlQgBZV3C3+/Q==}
+  /projen@0.76.21(constructs@10.3.0):
+    resolution: {integrity: sha512-FAQ2Y3A3Sn5VJ0Rns9vWiA+c/V32VKJYsnm9lMrumuLTOnWy4rkOj/OQdPXHgMDd94EJ2dEyCYgvqFfBJTjjdQ==}
     engines: {node: '>= 16.0.0'}
     hasBin: true
     peerDependencies:
