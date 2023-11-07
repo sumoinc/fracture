@@ -266,7 +266,7 @@ Object {
     Object {
       "name": "@types/node",
       "type": "build",
-      "version": "^16",
+      "version": "^18",
     },
     Object {
       "name": "@typescript-eslint/eslint-plugin",
@@ -602,7 +602,7 @@ Object {
   },
   "devDependencies": Object {
     "@types/jest": "*",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^6",
     "@typescript-eslint/parser": "^6",
     "aws-cdk": "^2.94.0",
