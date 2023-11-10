@@ -187,10 +187,6 @@ Object {
       "type": "build",
     },
     Object {
-      "name": "eslint-import-resolver-node",
-      "type": "build",
-    },
-    Object {
       "name": "eslint-import-resolver-typescript",
       "type": "build",
     },
@@ -436,13 +432,13 @@ Object {
           "exec": "pnpm update npm-check-updates",
         },
         Object {
-          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@nuxtjs/tailwindcss,@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,constructs,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,nuxt,prettier,projen,tailwindcss,ts-jest,typescript,@headlessui/vue,@heroicons/vue",
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@nuxtjs/tailwindcss,@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,constructs,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,nuxt,prettier,projen,tailwindcss,ts-jest,typescript,@headlessui/vue,@heroicons/vue",
         },
         Object {
           "exec": "pnpm i --no-frozen-lockfile",
         },
         Object {
-          "exec": "pnpm update @nuxtjs/tailwindcss @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates nuxt prettier projen tailwindcss ts-jest typescript @headlessui/vue @heroicons/vue",
+          "exec": "pnpm update @nuxtjs/tailwindcss @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates nuxt prettier projen tailwindcss ts-jest typescript @headlessui/vue @heroicons/vue",
         },
         Object {
           "exec": "npx projen",
@@ -720,13 +716,13 @@ Object {
           "exec": "pnpm update npm-check-updates",
         },
         Object {
-          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,constructs,eslint-config-prettier,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,turbo,typescript,@sumoc/fracture",
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,constructs,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,npm-check-updates,prettier,projen,standard-version,ts-jest,ts-node,turbo,typescript,@sumoc/fracture",
         },
         Object {
           "exec": "pnpm i --no-frozen-lockfile",
         },
         Object {
-          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node turbo typescript @sumoc/fracture",
+          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node turbo typescript @sumoc/fracture",
         },
         Object {
           "exec": "npx projen",
@@ -801,7 +797,6 @@ Object {
     "constructs": "^10.0.0",
     "eslint": "^8",
     "eslint-config-prettier": "*",
-    "eslint-import-resolver-node": "*",
     "eslint-import-resolver-typescript": "*",
     "eslint-plugin-import": "*",
     "eslint-plugin-prettier": "*",
