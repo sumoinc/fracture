@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@aws-sdk/smithy-client": "3.370.0",
-    "@aws-sdk/types": "3.433.0",
+    "@aws-sdk/types": "3.449.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^18",
     "@types/uuid": "^9.0.7",
