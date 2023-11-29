@@ -8,7 +8,6 @@ Object {
   },
   "extends": Array [
     "plugin:import/typescript",
-    "prettier",
     "plugin:prettier/recommended",
   ],
   "ignorePatterns": Array [
@@ -28,7 +27,6 @@ Object {
   "plugins": Array [
     "@typescript-eslint",
     "import",
-    "prettier",
   ],
   "root": true,
   "rules": Object {
@@ -109,9 +107,6 @@ Object {
       "off",
     ],
     "no-trailing-spaces": Array [
-      "error",
-    ],
-    "prettier/prettier": Array [
       "error",
     ],
   },
