@@ -46,8 +46,8 @@ importers:
         specifier: 3.370.0
         version: 3.370.0
       '@aws-sdk/types':
-        specifier: 3.460.0
-        version: 3.460.0
+        specifier: 3.465.0
+        version: 3.465.0
       '@types/jest':
         specifier: ^27.5.2
         version: 27.5.2
@@ -854,21 +854,12 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@aws-sdk/types@3.460.0:
-    resolution: {integrity: sha512-MyZSWS/FV8Bnux5eD9en7KLgVxevlVrGNEP3X2D7fpnUlLhl0a7k8+OpSI2ozEQB8hIU2DLc/XXTKRerHSefxQ==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      '@smithy/types': 2.5.0
-      tslib: 2.6.2
-    dev: true
-
   /@aws-sdk/types@3.465.0:
     resolution: {integrity: sha512-Clqu2eD50OOzwSftGpzJrIOGev/7VJhJpc02SeS4cqFgI9EVd+rnFKS/Ux0kcwjLQBMiPcCLtql3KAHApFHAIA==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@smithy/types': 2.5.0
       tslib: 2.6.2
-    dev: false
 
   /@aws-sdk/util-base64@3.310.0:
     resolution: {integrity: sha512-v3+HBKQvqgdzcbL+pFswlx5HQsd9L6ZTlyPVL2LS9nNXnCcR3XgGz9jRskikRUuUvUXtkSG1J88GAOnJ/apTPg==}
