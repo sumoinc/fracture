@@ -44,7 +44,7 @@
     "eslint": "^8",
     "eslint-config-prettier": "^8.10.0",
     "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^27.5.1",
     "jest-junit": "^15",
@@ -61,9 +61,9 @@
     "@aws-sdk/types": "^3.468.0"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.473.0",
-    "@aws-sdk/lib-dynamodb": "^3.473.0",
-    "@aws-sdk/util-dynamodb": "^3.473.0",
+    "@aws-sdk/client-dynamodb": "^3.474.0",
+    "@aws-sdk/lib-dynamodb": "^3.474.0",
+    "@aws-sdk/util-dynamodb": "^3.474.0",
     "@faker-js/faker": "^8.3.1",
     "@types/aws-lambda": "^8.10.130",
     "change-case": "^4.1.2",
