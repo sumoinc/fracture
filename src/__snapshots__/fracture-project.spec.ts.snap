@@ -40,12 +40,6 @@ Object {
       "cobertura",
       "text",
     ],
-    "globals": Object {
-      "ts-jest": Object {
-        "tsconfig": "tsconfig.dev.json",
-      },
-    },
-    "preset": "ts-jest",
     "reporters": Array [
       "default",
       Array [
@@ -62,6 +56,14 @@ Object {
     "testPathIgnorePatterns": Array [
       "/node_modules/",
     ],
+    "transform": Object {
+      "^.+\\\\.[t]sx?$": Array [
+        "ts-jest",
+        Object {
+          "tsconfig": "tsconfig.dev.json",
+        },
+      ],
+    },
     "watchPathIgnorePatterns": Array [
       "/node_modules/",
     ],
@@ -273,12 +275,6 @@ Object {
       "cobertura",
       "text",
     ],
-    "globals": Object {
-      "ts-jest": Object {
-        "tsconfig": "tsconfig.dev.json",
-      },
-    },
-    "preset": "ts-jest",
     "reporters": Array [
       "default",
       Array [
@@ -295,6 +291,14 @@ Object {
     "testPathIgnorePatterns": Array [
       "/node_modules/",
     ],
+    "transform": Object {
+      "^.+\\\\.[t]sx?$": Array [
+        "ts-jest",
+        Object {
+          "tsconfig": "tsconfig.dev.json",
+        },
+      ],
+    },
     "watchPathIgnorePatterns": Array [
       "/node_modules/",
     ],
