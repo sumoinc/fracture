@@ -118,7 +118,7 @@ export class PackageProject extends TypeScriptProject {
 
     /***************************************************************************
      *
-     * PROJEN SETUP
+     * SETUP IGNORES
      *
      **************************************************************************/
 
@@ -133,7 +133,10 @@ export class PackageProject extends TypeScriptProject {
     ].forEach((f) => {
       this.addPackageIgnore(f);
     });
-    this.addGitIgnore(".DS_Store");
+
+    [".DS_Store"].forEach((f) => {
+      this.addGitIgnore(f);
+    });
 
     /***************************************************************************
      *
