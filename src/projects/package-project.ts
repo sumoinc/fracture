@@ -65,15 +65,10 @@ export class PackageProject extends TypeScriptProject {
        */
       licensed: false,
 
-      /*************************************************************************
-       * INPUTS
-       ************************************************************************/
-
-      ...options,
-
-      /*************************************************************************
-       * FORCED OPTIONS
-       ************************************************************************/
+      /**
+       * Use Node 18.x by default for package builds
+       */
+      workflowNodeVersion: "18",
 
       /**
        * Use main branch. It's 2023 by the way.
@@ -113,6 +108,12 @@ export class PackageProject extends TypeScriptProject {
        */
       // artifactsDirectory: buildOutputPath("dist"),
       artifactsDirectory,
+
+      /*************************************************************************
+       * INPUTS
+       ************************************************************************/
+
+      ...options,
     });
 
     /***************************************************************************
@@ -126,6 +127,9 @@ export class PackageProject extends TypeScriptProject {
       ".gitattributes",
       ".prettierignore",
       ".prettierrc.json",
+      ".projenrc.ts",
+      "node_modules",
+      "/**/*.spec.*",
     ].forEach((f) => {
       this.addPackageIgnore(f);
     });

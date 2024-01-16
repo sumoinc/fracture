@@ -1,7 +1,4 @@
-import {
-  NodePackageManager,
-  UpgradeDependenciesSchedule,
-} from "projen/lib/javascript";
+import { UpgradeDependenciesSchedule } from "projen/lib/javascript";
 import { PackageProject } from "./src/projects/package-project";
 import { VsCodeConfig } from "./src/vscode";
 
@@ -21,9 +18,6 @@ const project = new PackageProject({
   deps: [],
   peerDeps: [],
   projenrcTs: true,
-
-  // use node 18
-  workflowNodeVersion: "18",
 
   // use the default Apache 2 license
   licensed: true,
@@ -47,12 +41,6 @@ const project = new PackageProject({
 
 // prevent docs and tests from being bundled with NPM
 project.addPackageIgnore("/sites");
-project.addPackageIgnore("node_modules");
-project.addPackageIgnore("/**/*.spec.*");
-project.addPackageIgnore(".gitattributes");
-project.addPackageIgnore(".prettierignore");
-project.addPackageIgnore(".prettierrc.json");
-project.addPackageIgnore(".projenrc.ts");
 
 // make sure inline tests work
 // project.jest!.addTestMatch("<rootDir>/(test|src)/**/*.(spec|test).ts?(x)");

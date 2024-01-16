@@ -19,6 +19,12 @@ dist
 tsconfig.tsbuildinfo
 /.eslintrc.json
 .DS_Store
+.gitattributes
+.prettierignore
+.prettierrc.json
+.projenrc.ts
+node_modules
+/**/*.spec.*
 *.spec.d.ts
 *.spec.js
 /test-reports/
@@ -26,9 +32,3 @@ junit.xml
 /jest.config.json
 /coverage/
 /sites
-node_modules
-/**/*.spec.*
-.gitattributes
-.prettierignore
-.prettierrc.json
-.projenrc.ts
