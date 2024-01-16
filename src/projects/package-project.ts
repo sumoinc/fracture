@@ -1,14 +1,13 @@
 import { Project } from "projen";
-import { NodePackageManager } from "projen/lib/javascript";
+import { TypeScriptProject } from "projen/lib/typescript";
 import {
-  TypeScriptProject,
-  TypeScriptProjectOptions,
-} from "projen/lib/typescript";
-import { commonProjectSetup } from "./common";
+  CommonProjectOptions,
+  commonProjectConfiguration,
+  setupCommonProjectOptions,
+} from "./common";
 import { Jest } from "../tests/jest";
 
-export interface PackageProjectOptions
-  extends Omit<TypeScriptProjectOptions, "defaultReleaseBranch"> {
+export interface PackageProjectOptions extends CommonProjectOptions {
   // readonly parent: MonorepoProject;
   // readonly testingOptions?: TestingOptions;
 }
@@ -60,39 +59,6 @@ export class PackageProject extends TypeScriptProject {
       /*************************************************************************
        * DEFAULTS
        ************************************************************************/
-
-      /**
-       * No license by default.
-       */
-      licensed: false,
-
-      /**
-       * Use Node 18.x by default for package builds
-       */
-      workflowNodeVersion: "18",
-
-      /**
-       * Use main branch. It's 2023 by the way.
-       */
-      defaultReleaseBranch: "main",
-
-      /**
-       * Enable prettier for some great formatting.
-       */
-      prettier: true,
-
-      /**
-       * PNPM 8 all the way baby!
-       */
-      packageManager: NodePackageManager.PNPM,
-      pnpmVersion: "8",
-
-      /**
-       * Turn off the native jest support, we will be adding our own Jest
-       * config beflow.
-       */
-      jest: false,
-
       /**
        * All package projects are placed into the packages path structure.
        */
@@ -114,7 +80,7 @@ export class PackageProject extends TypeScriptProject {
        * INPUTS
        ************************************************************************/
 
-      ...options,
+      ...setupCommonProjectOptions(options),
     });
 
     /***************************************************************************
@@ -123,7 +89,7 @@ export class PackageProject extends TypeScriptProject {
      *
      **************************************************************************/
 
-    commonProjectSetup(this);
+    commonProjectConfiguration(this);
 
     /***************************************************************************
      *

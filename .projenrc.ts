@@ -13,10 +13,7 @@ const project = new PackageProject({
   authorOrganization: true,
   authorEmail: authorAddress,
   releaseToNpm: true,
-  devDeps: [],
-  deps: [],
-  peerDeps: [],
-  projenrcTs: true,
+  // projenrcTs: true,
 
   // use the default Apache 2 license
   licensed: true,
