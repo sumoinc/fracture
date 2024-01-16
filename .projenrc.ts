@@ -58,7 +58,6 @@ const project = new TypeScriptProject({
 
 // prevent docs and tests from being bundled with NPM
 project.addPackageIgnore("/sites");
-project.addPackageIgnore("/apps");
 project.addPackageIgnore("node_modules");
 project.addPackageIgnore("/**/*.spec.*");
 project.addPackageIgnore(".gitattributes");
