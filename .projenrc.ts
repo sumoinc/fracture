@@ -3,9 +3,7 @@ import {
   UpgradeDependenciesSchedule,
 } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
-import { NetlifyEnvironment } from "./src/environments/netlify-environment";
-import { VsCodeConfiguration } from "./src/projen/vscode";
-import { VitePressSite } from "./src/sites/vitepress/vitepress-site";
+import { VsCodeConfig } from "./src/vscode";
 
 const authorName = "Cameron Childress";
 const authorAddress = "cameronc@sumoc.com";
@@ -58,7 +56,6 @@ const project = new TypeScriptProject({
 
 // prevent docs and tests from being bundled with NPM
 project.addPackageIgnore("/sites");
-project.addPackageIgnore("/apps");
 project.addPackageIgnore("node_modules");
 project.addPackageIgnore("/**/*.spec.*");
 project.addPackageIgnore(".gitattributes");
@@ -70,21 +67,7 @@ project.addPackageIgnore(".projenrc.ts");
 project.jest!.addTestMatch("<rootDir>/(test|src)/**/*.(spec|test).ts?(x)");
 
 // dependancies fracture needs
-project.addDeps(
-  "@aws-sdk/client-dynamodb",
-  "@aws-sdk/lib-dynamodb",
-  "@aws-sdk/util-dynamodb",
-  "@faker-js/faker",
-  "@types/aws-lambda",
-  "change-case",
-  "graphql",
-  "projen",
-  "type-fest",
-  "typescript",
-  "uuid"
-);
-project.addDevDeps("@types/uuid");
-project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
+project.addDeps("change-case", "projen", "type-fest");
 
 /*******************************************************************************
  *
@@ -93,27 +76,27 @@ project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
  ******************************************************************************/
 
 // configure vs code
-new VsCodeConfiguration(project);
+new VsCodeConfig(project);
 
-// build out documentation site
-const site = new VitePressSite({
-  parent: project,
-  name: "docs",
-});
+// // build out documentation site
+// const site = new VitePressSite({
+//   parent: project,
+//   name: "docs",
+// });
 
 /*******************************************************************************
  * NETLIFY DEPLOYMENT TARGET
  ******************************************************************************/
-const netlifyTarget = new NetlifyEnvironment(project, {
-  name: "netlify",
-  siteId: "e69db060-d613-414c-9964-4a5a5e0e32ea",
-});
+// const netlifyTarget = new NetlifyEnvironment(project, {
+//   name: "netlify",
+//   siteId: "e69db060-d613-414c-9964-4a5a5e0e32ea",
+// });
 
-// deployment target for docs
-site.deploy({
-  branchPrefix: "main",
-  environment: netlifyTarget,
-});
+// // deployment target for docs
+// site.deploy({
+//   branchPrefix: "main",
+//   environment: netlifyTarget,
+// });
 
 /*******************************************************************************
  * AWS SERVICE

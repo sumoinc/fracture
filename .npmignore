@@ -22,13 +22,9 @@ dist
 tsconfig.tsbuildinfo
 /.eslintrc.json
 /sites
-/apps
 node_modules
 /**/*.spec.*
 .gitattributes
 .prettierignore
 .prettierrc.json
 .projenrc.ts
-.turbo
-turbo.json
-pnpm-workspace.yaml
