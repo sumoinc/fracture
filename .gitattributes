@@ -21,6 +21,7 @@
 /.projen/tasks.json linguist-generated
 /.vscode/extensions.json linguist-generated
 /.vscode/settings.json linguist-generated
+/jest.config.json linguist-generated
 /LICENSE linguist-generated
 /package.json linguist-generated
 /pnpm-lock.yaml linguist-generated
