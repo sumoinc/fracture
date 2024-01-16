@@ -4,6 +4,7 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
+import { commonProjectSetup } from "./common";
 import { Jest } from "../tests/jest";
 
 export interface PackageProjectOptions
@@ -115,6 +116,14 @@ export class PackageProject extends TypeScriptProject {
 
       ...options,
     });
+
+    /***************************************************************************
+     *
+     * COMMON SETUP
+     *
+     **************************************************************************/
+
+    commonProjectSetup(this);
 
     /***************************************************************************
      *

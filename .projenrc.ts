@@ -1,6 +1,5 @@
 import { UpgradeDependenciesSchedule } from "projen/lib/javascript";
 import { PackageProject } from "./src/projects/package-project";
-import { VsCodeConfig } from "./src/vscode";
 
 const authorName = "Cameron Childress";
 const authorAddress = "cameronc@sumoc.com";
@@ -42,9 +41,6 @@ const project = new PackageProject({
 // prevent docs and tests from being bundled with NPM
 project.addPackageIgnore("/sites");
 
-// make sure inline tests work
-// project.jest!.addTestMatch("<rootDir>/(test|src)/**/*.(spec|test).ts?(x)");
-
 // dependancies fracture needs
 project.addDeps("change-case", "projen", "type-fest");
 
@@ -53,10 +49,6 @@ project.addDeps("change-case", "projen", "type-fest");
  * Dogfooding for local development and documantation site.
  *
  ******************************************************************************/
-
-// configure vs code
-new VsCodeConfig(project);
-
 // // build out documentation site
 // const site = new VitePressSite({
 //   parent: project,
