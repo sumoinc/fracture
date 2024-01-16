@@ -2,21 +2,19 @@ import {
   NodePackageManager,
   UpgradeDependenciesSchedule,
 } from "projen/lib/javascript";
-import { TypeScriptProject } from "projen/lib/typescript";
+import { PackageProject } from "./src/projects/package-project";
 import { VsCodeConfig } from "./src/vscode";
 
 const authorName = "Cameron Childress";
 const authorAddress = "cameronc@sumoc.com";
 const repository = "https://github.com/sumoinc/fracture";
 
-const project = new TypeScriptProject({
-  defaultReleaseBranch: "main",
+const project = new PackageProject({
   name: "@sumoc/fracture",
   description: "The fracture library.",
-  repository: repository,
+  repository,
   authorName,
   authorOrganization: true,
-  // copyrightOwner: authorName,
   authorEmail: authorAddress,
   releaseToNpm: true,
   devDeps: [],
@@ -27,15 +25,8 @@ const project = new TypeScriptProject({
   // use node 18
   workflowNodeVersion: "18",
 
-  // use prettier for linting
-  prettier: true,
-
-  // pnpm configs
-  packageManager: NodePackageManager.PNPM,
-  pnpmVersion: "8",
-
-  // send code coverage to codecov
-  codeCov: true,
+  // use the default Apache 2 license
+  licensed: true,
 
   // autoapproval of auto update PRs
   autoApproveUpgrades: true,
@@ -64,7 +55,7 @@ project.addPackageIgnore(".prettierrc.json");
 project.addPackageIgnore(".projenrc.ts");
 
 // make sure inline tests work
-project.jest!.addTestMatch("<rootDir>/(test|src)/**/*.(spec|test).ts?(x)");
+// project.jest!.addTestMatch("<rootDir>/(test|src)/**/*.(spec|test).ts?(x)");
 
 // dependancies fracture needs
 project.addDeps("change-case", "projen", "type-fest");

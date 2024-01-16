@@ -61,7 +61,7 @@ export class PackageProject extends TypeScriptProject {
        ************************************************************************/
 
       /**
-       * No license for now.
+       * No license by default.
        */
       licensed: false,
 

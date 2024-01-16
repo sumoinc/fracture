@@ -32,9 +32,6 @@ jspm_packages/
 .yarn-integrity
 .cache
 !/.projenrc.js
-/test-reports/
-junit.xml
-/coverage/
 !/.github/workflows/build.yml
 /dist/changelog.md
 /dist/version.txt
@@ -52,5 +49,10 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
+.DS_Store
+/test-reports/
+junit.xml
+!/jest.config.json
+/coverage/
 !/.vscode/settings.json
 !/.vscode/extensions.json
