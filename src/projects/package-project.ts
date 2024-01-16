@@ -57,6 +57,15 @@ export class PackageProject extends TypeScriptProject {
 
     super({
       /*************************************************************************
+       * DEFAULTS
+       ************************************************************************/
+
+      /**
+       * No license for now.
+       */
+      licensed: false,
+
+      /*************************************************************************
        * INPUTS
        ************************************************************************/
 
@@ -83,11 +92,6 @@ export class PackageProject extends TypeScriptProject {
       pnpmVersion: "8",
 
       /**
-       * No license for now.
-       */
-      licensed: false,
-
-      /**
        * Turn off the native jest support, we will be adding our own Jest
        * config beflow.
        */
@@ -100,7 +104,7 @@ export class PackageProject extends TypeScriptProject {
       outdir,
 
       /**
-       * Always package things in packages folder
+       * Always package assets for distribution.
        */
       package: true,
 
