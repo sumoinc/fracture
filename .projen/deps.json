@@ -80,10 +80,6 @@
       "type": "build"
     },
     {
-      "name": "turbo",
-      "type": "build"
-    },
-    {
       "name": "typescript",
       "type": "build"
     },

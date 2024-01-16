@@ -20,8 +20,6 @@
     "release": "npx projen release",
     "test": "npx projen test",
     "test:watch": "npx projen test:watch",
-    "turbo:build": "npx projen turbo:build",
-    "turbo:eslint": "npx projen turbo:eslint",
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "watch": "npx projen watch",
@@ -53,7 +51,6 @@
     "standard-version": "^9",
     "ts-jest": "^27.1.5",
     "ts-node": "^10.9.2",
-    "turbo": "^1.11.2",
     "typescript": "^4.9.5"
   },
   "peerDependencies": {

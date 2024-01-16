@@ -3,9 +3,6 @@ import {
   UpgradeDependenciesSchedule,
 } from "projen/lib/javascript";
 import { TypeScriptProject } from "projen/lib/typescript";
-import { NetlifyEnvironment } from "./src/environments/netlify-environment";
-import { VsCodeConfiguration } from "./src/projen/vscode";
-import { VitePressSite } from "./src/sites/vitepress/vitepress-site";
 
 const authorName = "Cameron Childress";
 const authorAddress = "cameronc@sumoc.com";
@@ -92,27 +89,27 @@ project.addPeerDeps("@aws-sdk/smithy-client", "@aws-sdk/types");
  ******************************************************************************/
 
 // configure vs code
-new VsCodeConfiguration(project);
+// new VsCodeConfiguration(project);
 
-// build out documentation site
-const site = new VitePressSite({
-  parent: project,
-  name: "docs",
-});
+// // build out documentation site
+// const site = new VitePressSite({
+//   parent: project,
+//   name: "docs",
+// });
 
 /*******************************************************************************
  * NETLIFY DEPLOYMENT TARGET
  ******************************************************************************/
-const netlifyTarget = new NetlifyEnvironment(project, {
-  name: "netlify",
-  siteId: "e69db060-d613-414c-9964-4a5a5e0e32ea",
-});
+// const netlifyTarget = new NetlifyEnvironment(project, {
+//   name: "netlify",
+//   siteId: "e69db060-d613-414c-9964-4a5a5e0e32ea",
+// });
 
-// deployment target for docs
-site.deploy({
-  branchPrefix: "main",
-  environment: netlifyTarget,
-});
+// // deployment target for docs
+// site.deploy({
+//   branchPrefix: "main",
+//   environment: netlifyTarget,
+// });
 
 /*******************************************************************************
  * AWS SERVICE
