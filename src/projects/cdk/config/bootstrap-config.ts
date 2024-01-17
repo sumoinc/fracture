@@ -186,11 +186,9 @@ export class BootstrapConfig extends Component {
   }
 
   public get bootstrapCommand() {
-    const cdkCommand =
-      this.cdkVersion === "latest" ? "cdk" : `cdk@${this.cdkVersion}`;
     return [
       "npx",
-      cdkCommand,
+      `cdk@${this.cdkVersion}`,
       "bootstrap",
       `aws://${this.account}/${this.region}`,
 

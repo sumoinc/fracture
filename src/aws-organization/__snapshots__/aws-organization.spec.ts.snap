@@ -40,7 +40,7 @@ Object {
       "name": "bootstrap:000000000000:us-east-1:hnb659fds",
       "steps": Array [
         Object {
-          "exec": "npx cdk bootstrap aws://000000000000/us-east-1 --no-bootstrap-customer-key=true --profile=bootstrap-000000000000-us-east-1 --qualifier=hnb659fds",
+          "exec": "npx cdk@latest bootstrap aws://000000000000/us-east-1 --no-bootstrap-customer-key=true --profile=bootstrap-000000000000-us-east-1 --qualifier=hnb659fds",
         },
       ],
     },
