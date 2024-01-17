@@ -49,10 +49,10 @@ jspm_packages/
 /lib
 /dist/
 !/.eslintrc.json
-.DS_Store
 /test-reports/
 junit.xml
 !/jest.config.json
 /coverage/
+.DS_Store
 !/.vscode/settings.json
 !/.vscode/extensions.json

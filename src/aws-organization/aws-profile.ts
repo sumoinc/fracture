@@ -1,9 +1,9 @@
 import { paramCase } from "change-case";
 import { Component } from "projen";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
 import { AwsOrganization } from "./aws-organization";
 import { AwsRegionIdentifier } from "./aws-region";
-import { CdkProject } from "../projects";
 
 export const AwsProfileType = {
   SSO_LOGIN: "sso-login",
@@ -25,7 +25,7 @@ export interface AwsProfileOptions {
 }
 
 export class AwsProfile extends Component {
-  public static all(project: CdkProject): Array<AwsProfile> {
+  public static all(project: TypeScriptProject): Array<AwsProfile> {
     const isDefined = (c: Component): c is AwsProfile =>
       c instanceof AwsProfile;
     return project.components.filter(isDefined);
@@ -45,7 +45,10 @@ export class AwsProfile extends Component {
   readonly ssoRegion: ValueOf<typeof AwsRegionIdentifier>;
   readonly ssoRoleName: ValueOf<typeof AwsProfileRole>;
 
-  constructor(public readonly project: CdkProject, options: AwsProfileOptions) {
+  constructor(
+    public readonly project: TypeScriptProject,
+    options: AwsProfileOptions
+  ) {
     super(project);
 
     /***************************************************************************

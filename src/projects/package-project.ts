@@ -88,7 +88,7 @@ export class PackageProject extends TypeScriptProject {
      *
      **************************************************************************/
 
-    commonProjectConfiguration(this, options);
+    commonProjectConfiguration(this);
 
     /***************************************************************************
      *

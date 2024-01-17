@@ -1,13 +1,7 @@
 import { Component } from "projen";
 import { ValueOf } from "type-fest";
 import { AwsRegionIdentifier } from "./aws-region";
-import { CdkProject } from "../cdk";
-
-export interface IAwsEnvironment {
-  readonly orgId: string;
-  readonly account: string;
-  readonly region: ValueOf<typeof AwsRegionIdentifier>;
-}
+import { CdkProject } from "../projects";
 
 export interface AwsEnvironmentOptions {
   readonly orgId: string;
@@ -66,13 +60,5 @@ export class AwsEnvironment extends Component {
     this.orgId = options.orgId;
     this.account = options.account;
     this.region = options.region;
-  }
-
-  public config(): IAwsEnvironment {
-    return {
-      orgId: this.orgId,
-      account: this.account,
-      region: this.region,
-    };
   }
 }

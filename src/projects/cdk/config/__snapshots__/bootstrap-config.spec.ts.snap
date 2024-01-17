@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Command output With CDK Version 1`] = `"npx cdk@2.210.0 bootstrap aws://123456789012/us-east-1 --no-bootstrap-customer-key=true --profile=foo --qualifier=hnb659fds"`;
+
+exports[`Command output Without CDK Version 1`] = `"npx cdk bootstrap aws://123456789012/us-east-1 --no-bootstrap-customer-key=true --profile=foo --qualifier=hnb659fds"`;

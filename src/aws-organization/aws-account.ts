@@ -1,23 +1,9 @@
 import { Component } from "projen";
 import { ValueOf } from "type-fest";
-import { AwsEnvironment, IAwsEnvironment } from "./aws-environment";
-import { AwsOrganization } from "./aws-organization";
-import { AwsRegionIdentifier } from "./aws-region";
-import { CdkProject } from "../cdk";
-import { DeployTarget } from "../cdk/config/deploy-target";
-import {
-  GithubOidcRole,
-  GithubOidcRoleOptions,
-  IGithubOidcRole,
-} from "../github/github-oidc-role";
+import { AwsEnvironment } from "./aws-environment";
 
-export interface IAwsAccount {
-  readonly orgId: string;
-  readonly account: string;
-  readonly environments: Array<IAwsEnvironment>;
-  //readonly deployTargets: Array<IDeployTarget>;
-  readonly githubOidcRoles: Array<IGithubOidcRole>;
-}
+import { AwsRegionIdentifier } from "./aws-region";
+import { CdkProject } from "../projects";
 
 export interface AwsAccountOptions {
   readonly orgId?: string;
@@ -26,12 +12,14 @@ export interface AwsAccountOptions {
   /**
    * Define the of releases allowed into this account.
    */
+  /*
   readonly githubOidcRoleOptions?: Array<
     Omit<GithubOidcRoleOptions, "account">
   >;
+  */
 }
 
-export class AwsAccount extends Component implements IAwsAccount {
+export class AwsAccount extends Component {
   public static all(project: CdkProject): Array<AwsAccount> {
     const isDefined = (c: Component): c is AwsAccount =>
       c instanceof AwsAccount;
@@ -60,7 +48,7 @@ export class AwsAccount extends Component implements IAwsAccount {
     );
   }
 
-  public readonly orgId: string;
+  //public readonly orgId: string;
   public readonly account: string;
 
   constructor(public readonly project: CdkProject, options: AwsAccountOptions) {
@@ -71,12 +59,14 @@ export class AwsAccount extends Component implements IAwsAccount {
      * DEFAULTS
      *
      **************************************************************************/
-
+    /*
     this.orgId =
       options.orgId ??
       AwsOrganization.byAccount(project, options.account).orgId;
+      */
     this.account = options.account;
 
+    /*
     options.regions?.forEach((region) => {
       AwsEnvironment.ensureExists(this.project, {
         orgId: this.orgId,
@@ -84,6 +74,7 @@ export class AwsAccount extends Component implements IAwsAccount {
         region,
       });
     });
+    */
   }
 
   public get environments() {
@@ -91,7 +82,7 @@ export class AwsAccount extends Component implements IAwsAccount {
       (env) => env.account === this.account
     );
   }
-
+  /*
   public get deployTargets() {
     return DeployTarget.all(this.project).filter(
       (env) => env.account === this.account
@@ -103,14 +94,5 @@ export class AwsAccount extends Component implements IAwsAccount {
       (env) => env.account === this.account
     );
   }
-
-  public config(): IAwsAccount {
-    return {
-      account: this.account,
-      orgId: this.orgId,
-      environments: this.environments.map((e) => e.config()),
-      //deployTargets: this.deployTargets.map((t) => t.config()),
-      githubOidcRoles: this.githubOidcRoles.map((r) => r.config()),
-    };
-  }
+  */
 }

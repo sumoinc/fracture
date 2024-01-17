@@ -1,5 +1,4 @@
 import { TypeScriptProject } from "projen/lib/typescript";
-import { Jest } from "../../tests/jest";
 import {
   CommonProjectOptions,
   commonProjectConfiguration,
@@ -44,9 +43,12 @@ export class CdkProject extends TypeScriptProject {
      *
      * COMMON SETUP
      *
+     * - Jest
+     * - Repository information
+     *
      **************************************************************************/
 
-    commonProjectConfiguration(this, options);
+    commonProjectConfiguration(this);
 
     /***************************************************************************
      *
@@ -61,13 +63,5 @@ export class CdkProject extends TypeScriptProject {
     [].forEach((f) => {
       this.addGitIgnore(f);
     });
-
-    /***************************************************************************
-     *
-     * SETUP TESTING
-     *
-     **************************************************************************/
-
-    new Jest(this);
   }
 }

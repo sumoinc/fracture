@@ -1,50 +1,27 @@
 import { Component, Task } from "projen";
-import { CdkProject } from "../../cdk";
-import { localOnlyOptions } from "../../tasks/options";
-import { findOrCreateTask } from "../../tasks/util";
-import { AwsProfile } from "../aws-profile";
+import { TypeScriptProject } from "projen/lib/typescript";
+import { AwsProfile } from "../../../aws-organization";
+import { findOrCreateTask, localOnlyTaskCondition } from "../../../tasks/utils";
 
 export type ProfileTaskOptions = {
-  /**
-   * The profile to create tasks for.
-   */
   readonly profile: AwsProfile;
 };
 
 export class ProfileTask extends Component {
-  public static SCRIPTNAMEBASE = "profile";
-
-  public static ensureExists(
-    project: CdkProject,
-    options: ProfileTaskOptions
-  ): ProfileTask {
-    /**
-     * Find function
-     */
-    const isDefined = (c: Component): c is ProfileTask =>
-      c instanceof ProfileTask && c.profileName === options.profile.profileName;
-
-    return (
-      project.components.find(isDefined) ?? new ProfileTask(project, options)
-    );
-  }
-
-  public readonly profileName: string;
+  public static SCRIPTNAMEBASE = "profiles";
 
   /**
    * The task
    */
   readonly task: Task;
 
-  constructor(project: CdkProject, options: ProfileTaskOptions) {
+  constructor(
+    public readonly project: TypeScriptProject,
+    options: ProfileTaskOptions
+  ) {
     super(project);
 
-    /***************************************************************************
-     * DEFAULT OPTIONS
-     **************************************************************************/
-
     const { profile } = options;
-    this.profileName = profile.profileName;
 
     /***************************************************************************
      * PROFILE TASK
@@ -54,7 +31,7 @@ export class ProfileTask extends Component {
       [ProfileTask.SCRIPTNAMEBASE, profile.profileName].join(":"),
       {
         description: `Write profile for ${profile.profileName}`,
-        ...localOnlyOptions,
+        ...localOnlyTaskCondition,
         exec: [
           `aws configure set sso_start_url ${profile.ssoStartUrl} --profile ${profile.profileName}`,
           `aws configure set sso_region ${profile.ssoRegion} --profile ${profile.profileName}`,

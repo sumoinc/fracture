@@ -7,12 +7,6 @@ export interface RepositoryOptions {
 }
 
 export class Repository extends Component {
-  public static of(project: TypeScriptProject): Repository | undefined {
-    return project.node.children.find(
-      (c) => c instanceof Repository
-    ) as Repository;
-  }
-
   public readonly url: string;
   public readonly org: string;
   public readonly name: string;
