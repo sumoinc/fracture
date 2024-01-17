@@ -3,10 +3,16 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
+import { SetRequired } from "type-fest";
+import { Repository } from "../github/repository";
+import { Jest } from "../tests/jest";
 import { VsCodeConfig } from "../vscode";
 
 export interface CommonProjectOptions
-  extends Omit<TypeScriptProjectOptions, "defaultReleaseBranch"> {}
+  extends Omit<
+    SetRequired<TypeScriptProjectOptions, "repository">,
+    "defaultReleaseBranch"
+  > {}
 
 export const setupCommonProjectOptions = (
   options: CommonProjectOptions
@@ -69,7 +75,17 @@ export const setupCommonProjectOptions = (
   };
 };
 
-export const commonProjectConfiguration = (project: TypeScriptProject) => {
+export const commonProjectConfiguration = (
+  project: TypeScriptProject,
+  options: CommonProjectOptions
+) => {
+  /**
+   * Check required options
+   */
+  if (!options.repository) {
+    throw new Error(`You must provide a repository option to the project.`);
+  }
+
   /**
    * ROOT PROJECT SETUP
    *
@@ -79,4 +95,14 @@ export const commonProjectConfiguration = (project: TypeScriptProject) => {
     // add vs code configuration
     new VsCodeConfig(project);
   }
+
+  /**
+   * ALL PROJECTS SETUP
+   */
+
+  // setup jest for testing.
+  new Jest(project);
+
+  // track metadata for the repo we're using for this
+  new Repository(project, { repository: options.repository });
 };

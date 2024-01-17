@@ -1,31 +1,27 @@
 import { TypeScriptProject } from "projen/lib/typescript";
+import { Jest } from "../../tests/jest";
 import {
   CommonProjectOptions,
   commonProjectConfiguration,
   setupCommonProjectOptions,
-} from "./common";
-import { Jest } from "../tests/jest";
+} from "../common";
 
-export interface BootstrapProjectOptions extends CommonProjectOptions {}
+export interface CdkProjectOptions extends CommonProjectOptions {}
 
 /**
- * Bootstrap Project
- *
- * This project type is used to setup initial CDK bootstraping and set initial
- * OIDC Roles into AWS for CI deployment scripts.
- *
- * This project type is designed to be run locally by an admin and not via CI.
+ * CDK Project Project
  */
-export class BootstrapProject extends TypeScriptProject {
-  constructor(options: BootstrapProjectOptions) {
+export class CdkProject extends TypeScriptProject {
+  constructor(options: CdkProjectOptions) {
     super({
       /*************************************************************************
        * DEFAULTS
        ************************************************************************/
+
       /**
        * All package projects are placed into the packages path structure.
        */
-      outdir: options.parent ? `bootstrap` : "",
+      outdir: options.parent ? `apps/${options.name}` : "",
 
       /**
        * Always package assets for distribution.
@@ -50,7 +46,7 @@ export class BootstrapProject extends TypeScriptProject {
      *
      **************************************************************************/
 
-    commonProjectConfiguration(this);
+    commonProjectConfiguration(this, options);
 
     /***************************************************************************
      *

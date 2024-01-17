@@ -3,7 +3,10 @@ import { synthFiles } from "../util";
 
 describe("Success conditions", () => {
   test("Smoke Test", () => {
-    const project = new PackageProject({ name: "my-project" });
+    const project = new PackageProject({
+      name: "my-project",
+      repository: "https://github.com/sumoinc/my-repo",
+    });
     expect(project).toBeTruthy();
     //console.log(project);
   });
@@ -13,6 +16,7 @@ describe("Files", () => {
   test("All generated files", () => {
     const packageProject = new PackageProject({
       name: "my-project",
+      repository: "https://github.com/sumoinc/my-repo",
     });
     const content = synthFiles(packageProject);
     expect(content).toBeTruthy();

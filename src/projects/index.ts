@@ -1,2 +1,2 @@
-export * from "./bootstrap-project";
+export * from "./cdk/cdk-project";
 export * from "./package-project";

@@ -5,7 +5,6 @@ import {
   commonProjectConfiguration,
   setupCommonProjectOptions,
 } from "./common";
-import { Jest } from "../tests/jest";
 
 export interface PackageProjectOptions extends CommonProjectOptions {
   // readonly parent: MonorepoProject;
@@ -89,7 +88,7 @@ export class PackageProject extends TypeScriptProject {
      *
      **************************************************************************/
 
-    commonProjectConfiguration(this);
+    commonProjectConfiguration(this, options);
 
     /***************************************************************************
      *
@@ -112,14 +111,6 @@ export class PackageProject extends TypeScriptProject {
     [".DS_Store"].forEach((f) => {
       this.addGitIgnore(f);
     });
-
-    /***************************************************************************
-     *
-     * SETUP TESTING
-     *
-     **************************************************************************/
-
-    new Jest(this);
 
     /***************************************************************************
      *
