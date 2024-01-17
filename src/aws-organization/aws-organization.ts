@@ -1,9 +1,12 @@
 import { Component } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
-import { ValueOf } from "type-fest";
+import { SetOptional, ValueOf } from "type-fest";
 import { AwsProfile, AwsProfileType } from "./aws-profile";
 import { AwsRegionIdentifier } from "./aws-region";
-import { BootstrapConfig } from "../projects/cdk/config/bootstrap-config";
+import {
+  BootstrapConfig,
+  BootstrapConfigOptions,
+} from "../projects/cdk/config/bootstrap-config";
 import { BootstrapTask } from "../projects/cdk/tasks/bootstrap-task";
 import { ProfileTask } from "../projects/cdk/tasks/profile-task";
 import { SsoLoginTask } from "../projects/cdk/tasks/sso-login-task";
@@ -54,16 +57,9 @@ export class AwsOrganization extends Component {
    *
    * @param options
    */
-  public bootstrap = (options: {
-    account: string;
-    region: ValueOf<typeof AwsRegionIdentifier>;
-    /**
-     * What version to use when bootstrapping?
-     *
-     * @default latest
-     */
-    cdkVersion?: string;
-  }) => {
+  public bootstrap = (
+    options: SetOptional<BootstrapConfigOptions, "profileName">
+  ) => {
     const profile = new AwsProfile(this.project, {
       org: this,
       account: options.account,
