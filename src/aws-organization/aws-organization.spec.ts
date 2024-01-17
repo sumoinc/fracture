@@ -1,11 +1,11 @@
 import { AwsOrganization } from "./aws-organization";
 import { AwsRegionIdentifier } from "./aws-region";
-import { CdkProject, PackageProject } from "../projects";
+import { PackageProject } from "../projects";
 import { synthFiles } from "../util";
 
 describe("Success conditions", () => {
   test("Smoke Test", () => {
-    const project = new CdkProject({
+    const project = new PackageProject({
       name: "my-project",
     });
 
@@ -21,7 +21,7 @@ describe("Success conditions", () => {
 
 describe("Files", () => {
   test("All generated files", () => {
-    const project = new CdkProject({
+    const project = new PackageProject({
       name: "my-project",
     });
     const content = synthFiles(project);
