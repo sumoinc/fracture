@@ -55,17 +55,3 @@ export class JsiiFaker extends Component {
     };
   }
 }
-
-/*
-"@sumoc/fracture.CommonProject": {
-  "assembly": "@sumoc/fracture",
-  "base": "projen.typescript.TypeScriptProject",
-  "fqn": "@sumoc/fracture.CommonProject",
-  "initializer": {
-    "parameters": []
-  },
-  "kind": "class",
-  "name": "CommonProject"
-}
-}
-*/
