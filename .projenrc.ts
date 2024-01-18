@@ -34,7 +34,7 @@ const project = new PackageProject({
   },
 
   // deps
-  deps: ["change-case", "projen", "type-fest"],
+  peerDeps: ["change-case", "projen", "type-fest", "constructs"],
 });
 
 // prevent docs and tests from being bundled with NPM
