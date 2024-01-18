@@ -30,6 +30,7 @@ interface JsiiType {
   kind: string;
   base?: string;
   fqn: string;
+  parameters: Array<any>;
 }
 
 export class JsiiFaker extends Component {
@@ -52,6 +53,14 @@ export class JsiiFaker extends Component {
       kind: "class",
       base: options.basePath,
       fqn: options.classPath,
+      parameters: [
+        {
+          name: "options",
+          type: {
+            fqn: `${options.basePath}Options`,
+          },
+        },
+      ],
     };
   }
 }
