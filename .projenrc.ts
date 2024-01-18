@@ -1,3 +1,4 @@
+import * as inventory from "projen/lib/inventory";
 import { UpgradeDependenciesSchedule } from "projen/lib/javascript";
 import { PackageProject } from "./src/projects/package-project";
 
@@ -39,6 +40,15 @@ const project = new PackageProject({
 
 // prevent docs and tests from being bundled with NPM
 project.addPackageIgnore("/sites");
+
+// Build fake JSII file
+// new JsiiFaker(project);
+
+const foo = inventory
+  .discover(__dirname)
+  .filter((x) => x.moduleName === "@sumoc/fracture");
+
+console.log(JSON.stringify(foo, null, 2));
 
 // generate
 project.synth();
