@@ -1,3 +1,143 @@
 {
-
+  "author": {
+    "name": "me",
+    "roles": [
+      "author"
+    ],
+    "url": "https://github.com/mrgrain"
+  },
+  "dependencies": {
+    "projen": "^0.79.2"
+  },
+  "dependencyClosure": {
+    "constructs": {
+      "targets": {
+        "dotnet": {
+          "namespace": "Constructs",
+          "packageId": "Constructs"
+        },
+        "go": {
+          "moduleName": "github.com/aws/constructs-go"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "constructs",
+            "groupId": "software.constructs"
+          },
+          "package": "software.constructs"
+        },
+        "js": {
+          "npm": "constructs"
+        },
+        "python": {
+          "distName": "constructs",
+          "module": "constructs"
+        }
+      }
+    },
+    "projen": {
+      "submodules": {
+        "projen.awscdk": {},
+        "projen.build": {},
+        "projen.cdk": {},
+        "projen.cdk8s": {},
+        "projen.cdktf": {},
+        "projen.circleci": {},
+        "projen.github": {},
+        "projen.github.workflows": {},
+        "projen.gitlab": {},
+        "projen.java": {},
+        "projen.javascript": {},
+        "projen.python": {},
+        "projen.release": {},
+        "projen.typescript": {},
+        "projen.vscode": {},
+        "projen.web": {}
+      },
+      "targets": {
+        "go": {
+          "moduleName": "github.com/projen/projen-go"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "projen",
+            "groupId": "io.github.cdklabs"
+          },
+          "package": "io.github.cdklabs.projen"
+        },
+        "js": {
+          "npm": "projen"
+        },
+        "python": {
+          "distName": "projen",
+          "module": "projen"
+        }
+      }
+    }
+  },
+  "description": "@mrgrain/mini",
+  "docs": {
+    "stability": "stable"
+  },
+  "homepage": "https://github.com/mrgrain/mini",
+  "jsiiVersion": "5.1.12 (build 0675712)",
+  "license": "MIT",
+  "metadata": {
+    "jsii": {
+      "pacmak": {
+        "hasDefaultInterfaces": true
+      }
+    },
+    "tscRootDir": "src"
+  },
+  "name": "@mrgrain/mini",
+  "readme": {
+    "markdown": "# replace this"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mrgrain/mini.git"
+  },
+  "schema": "jsii/0.10.0",
+  "targets": {
+    "js": {
+      "npm": "@mrgrain/mini"
+    }
+  },
+  "types": {
+    "@mrgrain/mini.MiniProject": {
+      "assembly": "@mrgrain/mini",
+      "base": "projen.typescript.TypeScriptProject",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "@mrgrain/mini.MiniProject",
+      "initializer": {
+        "docs": {
+          "stability": "experimental"
+        },
+        "locationInModule": {
+          "filename": "src/typescript/typescript.ts",
+          "line": 403
+        },
+        "parameters": [
+          {
+            "name": "options",
+            "type": {
+              "fqn": "projen.typescript.TypeScriptProjectOptions"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "src/index.ts",
+        "line": 3
+      },
+      "name": "MiniProject",
+      "symbolId": "src/index:MiniProject"
+    }
+  },
+  "version": "0.0.0",
+  "fingerprint": "q9P5hGPmuHZH2PQ3x5bCYttkqTxJBwp/R1y3cvi8Wg8="
 }
