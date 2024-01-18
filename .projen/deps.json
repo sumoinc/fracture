@@ -80,15 +80,11 @@
       "type": "build"
     },
     {
-      "name": "constructs",
-      "type": "peer"
+      "name": "change-case",
+      "type": "runtime"
     },
     {
       "name": "projen",
-      "type": "peer"
-    },
-    {
-      "name": "change-case",
       "type": "runtime"
     },
     {

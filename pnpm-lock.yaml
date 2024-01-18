@@ -11,6 +11,9 @@ importers:
       change-case:
         specifier: ^4.1.2
         version: 4.1.2
+      projen:
+        specifier: ^0.78.5
+        version: 0.78.5(constructs@10.3.0)
       type-fest:
         specifier: ^2.19.0
         version: 2.19.0
@@ -54,9 +57,6 @@ importers:
       prettier:
         specifier: ^2.8.8
         version: 2.8.8
-      projen:
-        specifier: ^0.78.5
-        version: 0.78.5(constructs@10.3.0)
       standard-version:
         specifier: ^9
         version: 9.5.0
@@ -2859,7 +2859,6 @@ packages:
   /constructs@10.3.0:
     resolution: {integrity: sha512-vbK8i3rIb/xwZxSpTjz3SagHn1qq9BChLEfy5Hf6fB3/2eFbrwt2n9kHwQcS0CPTRBesreeAcsJfMq2229FnbQ==}
     engines: {node: '>= 16.14.0'}
-    dev: true
 
   /conventional-changelog-angular@5.0.13:
     resolution: {integrity: sha512-i/gipMxs7s8L/QeuavPF2hLnJgH6pEZAttySB6aiQLWcX3puWDL3ACVmvBhJGxnAy52Qc15ua26BufY6KpmrVA==}
@@ -5814,7 +5813,7 @@ packages:
       constructs: ^10.0.0
     dependencies:
       constructs: 10.3.0
-    dev: true
+    dev: false
     bundledDependencies:
       - '@iarna/toml'
       - case
