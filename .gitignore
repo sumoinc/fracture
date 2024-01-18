@@ -43,14 +43,12 @@ jspm_packages/
 !/.prettierrc.json
 !/.npmrc
 !/test/
+!/tsconfig.json
 !/tsconfig.dev.json
 !/src/
 /lib
 /dist/
 !/.eslintrc.json
-.jsii
-tsconfig.json
-!/API.md
 /test-reports/
 junit.xml
 !/jest.config.json
