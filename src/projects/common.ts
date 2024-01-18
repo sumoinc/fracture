@@ -93,4 +93,8 @@ export const commonProjectConfiguration = (
 
   // track metadata for the repo we're using for this
   // new Repository(project, { repository: options.repository });
+  // never check these files into git
+  [".DS_Store"].forEach((f) => {
+    project.addGitIgnore(f);
+  });
 };

@@ -1,11 +1,11 @@
 import { AwsOrganization } from "./aws-organization";
 import { AwsRegionIdentifier } from "./aws-region";
-import { PackageProject } from "../projects";
+import { CommonProject } from "../projects/common-project";
 import { synthFiles } from "../util";
 
 describe("Success conditions", () => {
   test("Smoke Test", () => {
-    const project = new PackageProject({
+    const project = new CommonProject({
       name: "my-project",
     });
 
@@ -21,7 +21,7 @@ describe("Success conditions", () => {
 
 describe("Files", () => {
   test("All generated files", () => {
-    const project = new PackageProject({
+    const project = new CommonProject({
       name: "my-project",
     });
     const content = synthFiles(project);
@@ -32,7 +32,7 @@ describe("Files", () => {
 
   test("Bootstrapping Environments", () => {
     // base project
-    const project = new PackageProject({
+    const project = new CommonProject({
       name: "my-project",
     });
 
@@ -57,7 +57,7 @@ describe("Files", () => {
 
   test("With Deploy Profiles", () => {
     // base project
-    const project = new PackageProject({
+    const project = new CommonProject({
       name: "my-project",
     });
 
@@ -83,7 +83,7 @@ describe("Files", () => {
 
   test("With Login Profile", () => {
     // base project
-    const project = new PackageProject({
+    const project = new CommonProject({
       name: "my-project",
     });
 

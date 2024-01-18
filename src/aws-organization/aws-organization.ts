@@ -77,14 +77,13 @@ export class AwsOrganization extends Component {
   };
 
   /**
-   * Add a deployment profile for this organization
+   * Add a deployment profile for this organization.
    *
    * @param options
    */
-  public addDeploymentProfile = (options: {
-    account: string;
-    region: ValueOf<typeof AwsRegionIdentifier>;
-  }) => {
+  public addDeploymentProfile = (
+    options: SetOptional<BootstrapConfigOptions, "profileName">
+  ) => {
     const profile = new AwsProfile(this.project, {
       org: this,
       account: options.account,
