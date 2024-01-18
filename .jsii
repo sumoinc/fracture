@@ -4,7 +4,7 @@
     "roles": [
       "author"
     ],
-    "url": "https://github.com/mrgrain"
+    "url": "https://github.com/sumoinc"
   },
   "dependencies": {
     "projen": "^0.79.2"
@@ -75,11 +75,11 @@
       }
     }
   },
-  "description": "@mrgrain/mini",
+  "description": "@sumoc/fracture",
   "docs": {
     "stability": "stable"
   },
-  "homepage": "https://github.com/mrgrain/mini",
+  "homepage": "https://github.com/sumoinc/fracture",
   "jsiiVersion": "5.1.12 (build 0675712)",
   "license": "MIT",
   "metadata": {
@@ -90,28 +90,28 @@
     },
     "tscRootDir": "src"
   },
-  "name": "@mrgrain/mini",
+  "name": "@sumoc/fracture",
   "readme": {
     "markdown": "# replace this"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:mrgrain/mini.git"
+    "url": "git@github.com:sumoinc/fracture.git"
   },
   "schema": "jsii/0.10.0",
   "targets": {
     "js": {
-      "npm": "@mrgrain/mini"
+      "npm": "@sumoc/fracture"
     }
   },
   "types": {
-    "@mrgrain/mini.MiniProject": {
-      "assembly": "@mrgrain/mini",
+    "@sumoc/fracture.CommonProject": {
+      "assembly": "@sumoc/fracture",
       "base": "projen.typescript.TypeScriptProject",
       "docs": {
         "stability": "stable"
       },
-      "fqn": "@mrgrain/mini.MiniProject",
+      "fqn": "@sumoc/fracture.CommonProject",
       "initializer": {
         "docs": {
           "stability": "experimental"
@@ -134,8 +134,8 @@
         "filename": "src/index.ts",
         "line": 3
       },
-      "name": "MiniProject",
-      "symbolId": "src/index:MiniProject"
+      "name": "CommonProject",
+      "symbolId": "src/index:CommonProject"
     }
   },
   "version": "0.0.0",
