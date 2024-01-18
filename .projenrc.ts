@@ -32,13 +32,13 @@ const project = new PackageProject({
       schedule: UpgradeDependenciesSchedule.expressions(["0 6 * * *"]),
     },
   },
+
+  // deps
+  peerDeps: ["change-case", "projen", "type-fest", "constructs"],
 });
 
 // prevent docs and tests from being bundled with NPM
 project.addPackageIgnore("/sites");
-
-// dependancies fracture needs
-project.addDeps("change-case", "projen", "type-fest");
 
 // generate
 project.synth();
