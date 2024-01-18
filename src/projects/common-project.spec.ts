@@ -1,11 +1,10 @@
-import { PackageProject } from "./package-project";
+import { CommonProject } from "./common-project";
 import { synthFiles } from "../util";
 
 describe("Success conditions", () => {
   test("Smoke Test", () => {
-    const project = new PackageProject({
+    const project = new CommonProject({
       name: "my-project",
-      repository: "https://github.com/sumoinc/my-repo",
     });
     expect(project).toBeTruthy();
     //console.log(project);
@@ -14,9 +13,8 @@ describe("Success conditions", () => {
 
 describe("Files", () => {
   test("All generated files", () => {
-    const packageProject = new PackageProject({
+    const packageProject = new CommonProject({
       name: "my-project",
-      repository: "https://github.com/sumoinc/my-repo",
     });
     const content = synthFiles(packageProject);
     expect(content).toBeTruthy();
