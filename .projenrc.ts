@@ -43,17 +43,10 @@ project.addPackageIgnore("/sites");
 
 // Build our own fake JSII file
 const jsiiFaker = new JsiiFaker(project);
-jsiiFaker.addClass({
-  classPath: "@sumoc/fracture.CommonProject",
-  basePath: "projen.typescript.TypeScriptProject",
-});
-
-/*
-const foo = inventory
-  .discover(__dirname)
-  .filter((x) => x.moduleName === "@sumoc/fracture");
-console.log(JSON.stringify(foo, null, 2));
-*/
+const basePath = "projen.typescript.TypeScriptProject";
+["@sumoc/fracture.CommonProject", "@sumoc/fracture.PackageProject"].forEach(
+  (classPath) => jsiiFaker.addProjectType({ classPath, basePath })
+);
 
 // generate
 project.synth();

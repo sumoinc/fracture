@@ -45,7 +45,7 @@ export class JsiiFaker extends Component {
     });
   }
 
-  public addClass(options: { classPath: string; basePath: string }) {
+  public addProjectType(options: { classPath: string; basePath: string }) {
     this._types[options.classPath] = {
       name: options.classPath.split(".")[1],
       assembly: options.classPath.split(".")[0],
