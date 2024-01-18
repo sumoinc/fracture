@@ -1,7 +1,7 @@
 import { Component, Task } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { AwsProfile } from "../../../aws-organization";
-import { findOrCreateTask, localOnlyTaskCondition } from "../../../tasks/utils";
+import { findOrCreateTask, localOnlyTaskCondition } from "../../../tasks/task-utils";
 
 export type ProfileTaskOptions = {
   readonly profile: AwsProfile;
