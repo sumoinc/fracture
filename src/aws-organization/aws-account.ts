@@ -1,9 +1,8 @@
 import { Component } from "projen";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
 import { AwsEnvironment } from "./aws-environment";
-
 import { AwsRegionIdentifier } from "./aws-region";
-import { CdkProject } from "../projects";
 
 export interface AwsAccountOptions {
   readonly orgId?: string;
@@ -20,7 +19,7 @@ export interface AwsAccountOptions {
 }
 
 export class AwsAccount extends Component {
-  public static all(project: CdkProject): Array<AwsAccount> {
+  public static all(project: TypeScriptProject): Array<AwsAccount> {
     const isDefined = (c: Component): c is AwsAccount =>
       c instanceof AwsAccount;
     return project.components.filter(isDefined);
@@ -30,7 +29,7 @@ export class AwsAccount extends Component {
    * Create account if needed or return it if not.
    */
   public static ensureExists(
-    project: CdkProject,
+    project: TypeScriptProject,
     options: AwsAccountOptions
   ): AwsAccount {
     /**
@@ -51,7 +50,10 @@ export class AwsAccount extends Component {
   //public readonly orgId: string;
   public readonly account: string;
 
-  constructor(public readonly project: CdkProject, options: AwsAccountOptions) {
+  constructor(
+    public readonly project: TypeScriptProject,
+    options: AwsAccountOptions
+  ) {
     super(project);
 
     /***************************************************************************

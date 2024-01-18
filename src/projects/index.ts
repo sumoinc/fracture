@@ -1,2 +1,2 @@
-export * from "./cdk/cdk-project";
+export * from "./common-project";
 export * from "./package-project";

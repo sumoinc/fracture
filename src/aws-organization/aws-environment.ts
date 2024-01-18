@@ -1,7 +1,7 @@
 import { Component } from "projen";
+import { TypeScriptProject } from "projen/lib/typescript";
 import { ValueOf } from "type-fest";
 import { AwsRegionIdentifier } from "./aws-region";
-import { CdkProject } from "../projects";
 
 export interface AwsEnvironmentOptions {
   readonly orgId: string;
@@ -10,7 +10,7 @@ export interface AwsEnvironmentOptions {
 }
 
 export class AwsEnvironment extends Component {
-  public static all(project: CdkProject): Array<AwsEnvironment> {
+  public static all(project: TypeScriptProject): Array<AwsEnvironment> {
     const isDefined = (c: Component): c is AwsEnvironment =>
       c instanceof AwsEnvironment;
     return project.components.filter(isDefined);
@@ -20,7 +20,7 @@ export class AwsEnvironment extends Component {
    * Make sure this environment is configured for the organization.
    */
   public static ensureExists(
-    project: CdkProject,
+    project: TypeScriptProject,
     options: AwsEnvironmentOptions
   ): AwsEnvironment {
     /**
@@ -46,7 +46,7 @@ export class AwsEnvironment extends Component {
   public readonly region: ValueOf<typeof AwsRegionIdentifier>;
 
   constructor(
-    public readonly project: CdkProject,
+    public readonly project: TypeScriptProject,
     options: AwsEnvironmentOptions
   ) {
     super(project);
