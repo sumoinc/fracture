@@ -96,18 +96,18 @@ export const AwsEnvironmentBootstrapQualifier = {
 } as const;
 
 export interface BootstrapFlags {
-  [BootstrapFlag.NO_BOOTSTRAP_CUSTOMER_KEY]?: boolean;
-  [BootstrapFlag.BOOTSTRAP_BUCKET_NAME]?: string;
-  [BootstrapFlag.BOOTSTRAP_KMS_KEY_ID]?: string;
-  [BootstrapFlag.CLOUDFORMATION_EXECUTION_POLICIES]?: string;
-  [BootstrapFlag.QUALIFIER]:
+  readonly [BootstrapFlag.NO_BOOTSTRAP_CUSTOMER_KEY]?: boolean;
+  readonly [BootstrapFlag.BOOTSTRAP_BUCKET_NAME]?: string;
+  readonly [BootstrapFlag.BOOTSTRAP_KMS_KEY_ID]?: string;
+  readonly [BootstrapFlag.CLOUDFORMATION_EXECUTION_POLICIES]?: string;
+  readonly [BootstrapFlag.QUALIFIER]:
     | ValueOf<typeof AwsEnvironmentBootstrapQualifier>
     | string;
-  [BootstrapFlag.PROFILE]: string;
-  [BootstrapFlag.TAGS]?: string;
-  [BootstrapFlag.TRUST]?: string;
-  [BootstrapFlag.TRUST_FOR_LOOKUP]?: string;
-  [BootstrapFlag.TERMINATION_PROTECTION]?: boolean;
+  readonly [BootstrapFlag.PROFILE]: string;
+  readonly [BootstrapFlag.TAGS]?: string;
+  readonly [BootstrapFlag.TRUST]?: string;
+  readonly [BootstrapFlag.TRUST_FOR_LOOKUP]?: string;
+  readonly [BootstrapFlag.TERMINATION_PROTECTION]?: boolean;
 }
 
 export type BootstrapConfigOptions = {
