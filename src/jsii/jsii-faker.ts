@@ -1,4 +1,4 @@
-import { Component } from "projen";
+import { Component, JsonFile } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
 
 /**
@@ -24,8 +24,48 @@ import { TypeScriptProject } from "projen/lib/typescript";
  *
  */
 
+interface JsiiType {
+  name: string;
+  assembly: string;
+  kind: string;
+  base?: string;
+  fqn: string;
+}
+
 export class JsiiFaker extends Component {
+  private _types: { [name: string]: JsiiType } = {};
+
   constructor(public readonly project: TypeScriptProject) {
     super(project);
+
+    new JsonFile(project, ".jsii", {
+      obj: () => {
+        return { types: this._types };
+      },
+    });
+  }
+
+  public addClass(options: { classPath: string; basePath: string }) {
+    this._types[options.classPath] = {
+      name: options.classPath.split(".")[1],
+      assembly: options.classPath.split(".")[0],
+      kind: "class",
+      base: options.basePath,
+      fqn: options.classPath,
+    };
   }
 }
+
+/*
+"@sumoc/fracture.CommonProject": {
+  "assembly": "@sumoc/fracture",
+  "base": "projen.typescript.TypeScriptProject",
+  "fqn": "@sumoc/fracture.CommonProject",
+  "initializer": {
+    "parameters": []
+  },
+  "kind": "class",
+  "name": "CommonProject"
+}
+}
+*/

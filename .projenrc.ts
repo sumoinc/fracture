@@ -1,5 +1,5 @@
-import * as inventory from "projen/lib/inventory";
 import { UpgradeDependenciesSchedule } from "projen/lib/javascript";
+import { JsiiFaker } from "./src/jsii/jsii-faker";
 import { PackageProject } from "./src/projects/package-project";
 
 const authorName = "Cameron Childress";
@@ -41,14 +41,19 @@ const project = new PackageProject({
 // prevent docs and tests from being bundled with NPM
 project.addPackageIgnore("/sites");
 
-// Build fake JSII file
-// new JsiiFaker(project);
+// Build our own fake JSII file
+const jsiiFaker = new JsiiFaker(project);
+jsiiFaker.addClass({
+  classPath: "@sumoc/fracture.CommonProject",
+  basePath: "projen.typescript.TypeScriptProject",
+});
 
+/*
 const foo = inventory
   .discover(__dirname)
   .filter((x) => x.moduleName === "@sumoc/fracture");
-
 console.log(JSON.stringify(foo, null, 2));
+*/
 
 // generate
 project.synth();
