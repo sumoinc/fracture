@@ -1,6 +1,9 @@
 import { Component, Task } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
-import { findOrCreateTask, localOnlyTaskCondition } from "../../../tasks/task-utils";
+import {
+  findOrCreateTask,
+  localOnlyTaskCondition,
+} from "../../../tasks/task-utils";
 import { BootstrapConfig, BootstrapFlag } from "../config/bootstrap-config";
 
 export type BootstrapTaskOptions = {

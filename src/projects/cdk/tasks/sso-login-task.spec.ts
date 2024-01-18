@@ -6,11 +6,11 @@ import {
   AwsRegionIdentifier,
 } from "../../../aws-organization";
 import { synthFiles } from "../../../util";
-import { PackageProject } from "../../package-project";
+import { CommonProject } from "../../common-project";
 
 describe("Success conditions", () => {
   test("Smoke Test", () => {
-    const project = new PackageProject({
+    const project = new CommonProject({
       name: "my-project",
     });
 
@@ -37,7 +37,7 @@ describe("Success conditions", () => {
 
 describe("Files", () => {
   test(".projen/tasks.json", () => {
-    const project = new PackageProject({
+    const project = new CommonProject({
       name: "my-project",
     });
 

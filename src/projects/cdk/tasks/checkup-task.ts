@@ -2,7 +2,10 @@ import { Component, Task } from "projen";
 import { TypeScriptProject } from "projen/lib/typescript";
 import { BootstrapTask } from "./bootstrap-task";
 import { ProfileTask } from "./profile-task";
-import { findOrCreateTask, localOnlyTaskCondition } from "../../../tasks/task-utils";
+import {
+  findOrCreateTask,
+  localOnlyTaskCondition,
+} from "../../../tasks/task-utils";
 
 export class CheckupTask extends Component {
   public static SCRIPTNAME = "checkup";
