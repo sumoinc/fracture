@@ -1,4 +1,5 @@
 {
+  "name": "@sumoc/fracture",
   "types": {
     "@sumoc/fracture.CommonProject": {
       "name": "CommonProject",

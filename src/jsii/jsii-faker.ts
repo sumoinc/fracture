@@ -41,7 +41,7 @@ export class JsiiFaker extends Component {
 
     new JsonFile(project, ".jsii", {
       obj: () => {
-        return { types: this._types };
+        return { name: "@sumoc/fracture", types: this._types };
       },
     });
   }
