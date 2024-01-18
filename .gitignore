@@ -31,7 +31,6 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
-!/.projenrc.js
 !/.github/workflows/build.yml
 /dist/changelog.md
 /dist/version.txt
@@ -54,5 +53,6 @@ junit.xml
 !/jest.config.json
 /coverage/
 .DS_Store
+!/.projenrc.ts
 !/.vscode/settings.json
 !/.vscode/extensions.json
