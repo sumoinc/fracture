@@ -41,12 +41,5 @@ const project = new PackageProject({
 // prevent docs and tests from being bundled with NPM
 project.addPackageIgnore("/sites");
 
-// Build our own fake JSII file
-const jsiiFaker = new JsiiFaker(project);
-const basePath = "projen.typescript.TypeScriptProject";
-["@sumoc/fracture.CommonProject", "@sumoc/fracture.PackageProject"].forEach(
-  (classPath) => jsiiFaker.addProjectType({ classPath, basePath })
-);
-
 // generate
 project.synth();
