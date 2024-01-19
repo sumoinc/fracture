@@ -1,6 +1,23 @@
 {
   "name": "@sumoc/fracture",
   "types": {
+    "@sumoc/fracture.CommonProject": {
+      "assembly": "@sumoc/fracture",
+      "base": "projen.typescript.TypeScriptProject",
+      "fqn": "@sumoc/fracture.CommonProject",
+      "kind": "class",
+      "name": "CommonProject",
+      "initializer": {
+        "parameters": [
+          {
+            "name": "options",
+            "type": {
+              "fqn": "projen.typescript.TypeScriptProjectOptions"
+            }
+          }
+        ]
+      }
+    },
     "@sumoc/fracture.PackageProject": {
       "assembly": "@sumoc/fracture",
       "base": "projen.typescript.TypeScriptProject",

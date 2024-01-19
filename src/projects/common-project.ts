@@ -4,7 +4,6 @@ import {
   TypeScriptProject,
   TypeScriptProjectOptions,
 } from "projen/lib/typescript";
-import { JsiiFaker } from "../jsii";
 import { Jest } from "../tests/jest";
 import { VsCodeConfig } from "../vscode";
 
@@ -63,17 +62,6 @@ export class CommonProject extends TypeScriptProject {
      **************************************************************************/
 
     commonProjectConfiguration(this);
-
-    /***************************************************************************
-     *
-     * JSII REGISTRATION
-     *
-     **************************************************************************/
-
-    const jsii = JsiiFaker.of(this) ?? new JsiiFaker(this);
-    jsii.addClassType({
-      name: "CommonProject",
-    });
   }
 }
 
