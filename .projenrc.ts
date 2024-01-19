@@ -1,5 +1,4 @@
 import { UpgradeDependenciesSchedule } from "projen/lib/javascript";
-import { JsiiFaker } from "./src/jsii/jsii-faker";
 import { PackageProject } from "./src/projects/package-project";
 
 const authorName = "Cameron Childress";
