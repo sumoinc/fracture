@@ -1,5 +1,4 @@
 import { UpgradeDependenciesSchedule } from "projen/lib/javascript";
-import { JsiiFaker } from "./src/jsii/jsii-faker";
 import { PackageProject } from "./src/projects/package-project";
 
 const authorName = "Cameron Childress";
@@ -35,18 +34,11 @@ const project = new PackageProject({
   },
 
   // deps
-  deps: ["constructs", "projen", "change-case", "type-fest"],
+  deps: ["@jsii/spec", "constructs", "projen", "change-case", "type-fest"],
 });
 
 // prevent docs and tests from being bundled with NPM
 project.addPackageIgnore("/sites");
-
-// Build our own fake JSII file
-const jsiiFaker = new JsiiFaker(project);
-const basePath = "projen.typescript.TypeScriptProject";
-["@sumoc/fracture.CommonProject", "@sumoc/fracture.PackageProject"].forEach(
-  (classPath) => jsiiFaker.addProjectType({ classPath, basePath })
-);
 
 // generate
 project.synth();

@@ -80,6 +80,10 @@
       "type": "build"
     },
     {
+      "name": "@jsii/spec",
+      "type": "runtime"
+    },
+    {
       "name": "change-case",
       "type": "runtime"
     },

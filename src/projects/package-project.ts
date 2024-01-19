@@ -5,6 +5,7 @@ import {
   setupCommonProjectOptions,
   commonProjectConfiguration,
 } from "./common-project";
+import { JsiiFaker } from "../jsii";
 
 export interface PackageProjectOptions extends CommonProjectOptions {}
 
@@ -66,6 +67,17 @@ export class PackageProject extends TypeScriptProject {
      **************************************************************************/
 
     commonProjectConfiguration(this);
+
+    /***************************************************************************
+     *
+     * JSII REGISTRATION
+     *
+     **************************************************************************/
+
+    const jsii = JsiiFaker.of(this) ?? new JsiiFaker(this);
+    jsii.addClassType({
+      name: "PackageProject",
+    });
 
     /***************************************************************************
      *

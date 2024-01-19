@@ -1,28 +1,12 @@
 {
+  "name": "@sumoc/fracture",
   "types": {
-    "@sumoc/fracture.CommonProject": {
-      "name": "CommonProject",
-      "assembly": "@sumoc/fracture",
-      "kind": "class",
-      "base": "projen.typescript.TypeScriptProject",
-      "fqn": "@sumoc/fracture.CommonProject",
-      "initializer": {
-        "parameters": [
-          {
-            "name": "options",
-            "type": {
-              "fqn": "projen.typescript.TypeScriptProjectOptions"
-            }
-          }
-        ]
-      }
-    },
     "@sumoc/fracture.PackageProject": {
-      "name": "PackageProject",
       "assembly": "@sumoc/fracture",
-      "kind": "class",
       "base": "projen.typescript.TypeScriptProject",
       "fqn": "@sumoc/fracture.PackageProject",
+      "kind": "class",
+      "name": "PackageProject",
       "initializer": {
         "parameters": [
           {
