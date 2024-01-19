@@ -19,9 +19,9 @@ describe("Files", () => {
 
     const content = synthFiles(project);
     expect(content[".jsii"]).toBeTruthy();
-    // expect(content[".jsii"]).toMatchSnapshot();
+    expect(content[".jsii"]).toMatchSnapshot();
 
-    console.log(content[".jsii"]);
+    //console.log(content[".jsii"]);
   });
 
   test("Assembly name should match package name", () => {
@@ -34,6 +34,7 @@ describe("Files", () => {
     //console.log(content);
   });
 });
+
 /**
  * Simple test project type as test harness
  */
