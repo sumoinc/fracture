@@ -21,12 +21,4 @@ describe("Files", () => {
     expect(content).toMatchSnapshot();
     // console.log(JSON.stringify(content, null, 2));
   });
-
-  test("Should self register with Jsii", () => {
-    const project = new CommonProject({
-      name: "my-project",
-    });
-    const content = synthFiles(project);
-    expect(content[".jsii"]).toBeDefined();
-  });
 });

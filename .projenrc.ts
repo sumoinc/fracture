@@ -1,4 +1,5 @@
 import { UpgradeDependenciesSchedule } from "projen/lib/javascript";
+import { JsiiFaker } from "./src/jsii/jsii-faker";
 import { PackageProject } from "./src/projects/package-project";
 
 const authorName = "Cameron Childress";
@@ -39,6 +40,17 @@ const project = new PackageProject({
 
 // prevent docs and tests from being bundled with NPM
 project.addPackageIgnore("/sites");
+
+/*******************************************************************************
+ *
+ * JSII REGISTRATION
+ *
+ ******************************************************************************/
+
+const jsii = JsiiFaker.of(project) ?? new JsiiFaker(project);
+["CommonProject", "PackageProject"].forEach((name) =>
+  jsii.addClassType({ name })
+);
 
 // generate
 project.synth();

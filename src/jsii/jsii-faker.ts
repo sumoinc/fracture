@@ -10,7 +10,7 @@ import { ValueOf } from "type-fest";
  * find to generate a minimal `.jsii` file so that Projen can then consume this
  * package when called similar to:
  *
- *  `npx projen new @my-scope/my-package my-project-type`
+ *  `npx projen new --from @my-scope/my-package my-project-type`
  *
  * What you are missing by not using the projen built in JsiiProject type:
  *
