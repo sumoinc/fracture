@@ -26,27 +26,25 @@ export class CommonProject extends TypeScriptProject {
   }
 
   constructor(options: CommonProjectOptions) {
-    const outdir: string = options.parent ? options.name : "";
-    const artifactsDirectory: string = options.parent ? "dist" : "dist";
-
     super({
       /*************************************************************************
        * DEFAULTS
        ************************************************************************/
+
       /**
        * All package projects are placed into the packages path structure.
        */
-      outdir,
+      outdir: options.parent ? options.name : "",
 
       /**
-       * Always package assets for distribution.
+       * Don't package common projects
        */
-      package: true,
+      package: false,
 
       /**
        * Final distributable assets go to a common directory in the root.
        */
-      artifactsDirectory,
+      artifactsDirectory: options.parent ? "dist" : "dist",
 
       /*************************************************************************
        * INPUTS
@@ -147,8 +145,6 @@ export const commonProjectConfiguration = (
   // setup jest for testing.
   new Jest(project);
 
-  // track metadata for the repo we're using for this
-  // new Repository(project, { repository: options.repository });
   // never check these files into git
   [".DS_Store"].forEach((f) => {
     project.addGitIgnore(f);

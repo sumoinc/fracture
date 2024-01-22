@@ -6,13 +6,8 @@ export const TEST_ORG_ONE = "org-123456";
 export const TEST_REGION_ONE = "us-east-1";
 
 /**
- *
- * Helper to generate and return one file from fracture.
+ * Helper to generate and return files.
  * Useful when trying to test the final output of generated files.
- *
- * @param fracture
- * @param filepath
- * @returns collection of files starting with supplied filepath
  */
 export const synthFiles = (project: Project, filepath: string = ""): any => {
   const snapshot = synthSnapshot(project);
