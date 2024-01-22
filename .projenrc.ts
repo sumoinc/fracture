@@ -38,7 +38,7 @@ const project = new PackageProject({
   deps: ["@jsii/spec", "constructs", "projen", "change-case", "type-fest"],
 });
 
-// prevent docs and tests from being bundled with NPM
+// prevent docs from being bundled with NPM
 project.addPackageIgnore("/sites");
 
 /*******************************************************************************

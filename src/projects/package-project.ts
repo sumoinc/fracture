@@ -12,7 +12,7 @@ export interface PackageProjectOptions extends CommonProjectOptions {}
  */
 export class PackageProject extends TypeScriptProject {
   /**
-   * Returns all packages in the monorepo.
+   * Returns all "PackageProjects" in a monorepo.
    */
   public static all(project: Project): Array<PackageProject> {
     const isDefined = (p: Project): p is PackageProject =>
@@ -20,16 +20,7 @@ export class PackageProject extends TypeScriptProject {
     return project.root.subprojects.filter(isDefined);
   }
 
-  /**
-   * The testing settings for this project.
-   */
-  // public testing?: Testing;
-
   constructor(options: PackageProjectOptions) {
-    const outdir: string = options.parent ? `packages/${options.name}` : "";
-
-    const artifactsDirectory: string = options.parent ? "dist" : "dist";
-
     super({
       /*************************************************************************
        * DEFAULTS
@@ -37,8 +28,7 @@ export class PackageProject extends TypeScriptProject {
       /**
        * All package projects are placed into the packages path structure.
        */
-      // outdir: `packages/${options.name}`,
-      outdir,
+      outdir: options.parent ? `packages/${options.name}` : "",
 
       /**
        * Always package assets for distribution.
@@ -48,8 +38,7 @@ export class PackageProject extends TypeScriptProject {
       /**
        * Final distributable assets go to a common directory in the root.
        */
-      // artifactsDirectory: buildOutputPath("dist"),
-      artifactsDirectory,
+      artifactsDirectory: options.parent ? "dist" : "dist",
 
       /*************************************************************************
        * INPUTS
